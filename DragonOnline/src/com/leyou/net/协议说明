@@ -1,0 +1,82 @@
+1：先写好枚举值
+	注意：按照命名规则，且值必须为小写，按模块放置、写好模块注释
+2：再写对应的协议函数
+	注意：如果是2进制协议，且协议参数较多，一定要考虑自定义数据结构
+		所以协议都写到相应模块里，无论简单复杂，ui使用时直接调用传参即可
+		协议可以不写注释，到时候查看协议文档即可
+3：注册协议
+	注意：按模块放置、写好模块注释
+	
+	
+	
+	
+	
+		/**
+		 * 协议枚举命名规则
+		 * 		变量：?m_模块_2级指令 大写
+		 * 		    值：模块_2级指令	必须全部小写，否则报错
+		 */
+		 
+		 协议函数命名规则
+		 	驼峰命名方式，但是结构要与协议枚举相对应，
+		 	
+
+		 	
+		 	
+int CTermSocket::ReceiveCmd()
+{
+	static char buff[65536];
+	static char lpBuf[65536];
+	char * pbuff = buff;
+	int nBytes = Receive(buff, 65536);
+	CTTermDlg *pDlg = CTTermDlg::GetDlg();
+	if (nBytes<=0) 
+	{
+		pDlg->DealData(NULL, nBytes);
+		return -1;
+	}
+
+	// 解码
+	while (nBytes >= 4) {
+		char header[4];
+		memcpy(header, pbuff, 4);
+		int temp = header[3];//解密用的变量，存储heade[3]的密文
+		header[0] ^= 0xA5;
+		header[3] ^= header[2];
+		header[2] ^= header[1];
+		header[1] ^= header[0];
+
+		int length = (header[2] & 0xff) + (header[3] & 0xff) * 256;
+		lpBuf[0] = pbuff[4] ^ temp;
+		if (nBytes - 4 >= length) {//包含完整的数据包
+			for (int i = 1; i < length ; i++){
+				lpBuf[i] = pbuff[4 + i] ^ pbuff[4 + i - 1];	
+			}
+
+			// 分割指令
+			int cur = 0;  
+			while (cur < length)
+			{
+				int len = (unsigned char)lpBuf[cur];
+				if (len >= 128) 
+				{
+					len = (len-128) * 256 + (unsigned char)lpBuf[cur+1];
+					cur += 1;
+				}
+				static char cmd[4096];
+				memcpy(cmd, &lpBuf[cur+1], len);
+				cmd[len] = 0;
+				cur += len+1;
+				// 处理收到的数据
+				pDlg->DealData(cmd, len);
+			}
+			
+			pbuff += (length + 4);
+			nBytes -= (length + 4);
+		}
+		else{
+			break;
+		}
+	}
+	return 0;
+}

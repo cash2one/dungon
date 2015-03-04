@@ -1,0 +1,54 @@
+基本原则
+在无歧义的前提下，命名力求简洁
+命名＝表义词语＋类型，名称表义为先
+坚持使用强类型
+写注释优先极大于写代码
+1：变量相关
+        局部变量、private，public命名规则 驼峰命名法
+        函数变量在函数顶部统一声明
+        全局变量、函数引用时，之前+this     比如：this.player;
+        不要声明没有类型的变量，不要使用＊使用类型修饰符
+       定义变量时，考虑好适合的数据类型， 颜色变量使用uint；时间变量使用Number； 不用使用Object作为HashMap，使用Dictionary代替 ， 优先使用Vector
+2：常量
+        命名范式：常量名称单词大宇，间以下划线，常量值使用驼峰命名法  【比如：ACT_STAND ＝ "actStand"】
+3：函数
+        函数功能要单一，避免重复代码，如果有重复，可以提出来写为函数
+        函数参数用$开头(事件函数、set函数等除外)       【 比如：findPlayer($x:int,$y:int):void】
+        set的参数使用默认value 作为参数名
+        避免返回Object、*等不确定的类型
+4：事件相关
+        显示对象禁用鼠标事件【this.mouseEnabled=this.mouseChildren=false;】
+        addEventListener函数参数写全（弱引为true），处理完毕事件后及时停止冒泡
+        onClick(e :MouseEvent) :void
+        btnClose_onClick(evt:MouseEvent) :void
+        mouseEventHandler(evt :MouseEvent) :void
+        mcName_mouseEventHandler(evt :MouseEvent) :void
+5：类
+        命名采用大驼峰命名法（首单词首字母大写），接口类的话+前缀I
+        控制好类的代码行数，如果实在是复杂的类，可以按功能分开，依次继承来写
+        构造函数内尽量少些内容，可以定义个init()初始化函数，把要初始化的内容写到该函数内
+        如果该类里面有事件监听，统一写到一个函数释放
+        每个类确保有个die()释放函数
+        尽量减少层次的使用
+ 6：语句、语法
+        避免使用try..catch；在for循环中，使用i、j、k、m、n作为循环数字；
+7：注释
+        类注释=大概功能
+        函数上=功能+参数说明  使用ASDoc注释 【比如 /**  */】
+       存储型变量注释=存储的数据类型+意思 【比如：bulletDic :  Dictionary  //(id=BulletInfo)子弹数据字典】，同理数组
+
+8：文件组织结构
+        安装功能模块分结构目录
+                数据——data
+                视图——ui+模块英文名称
+                子视图——child
+        工具目录utils
+        枚举目录enum
+
+9：常用的缩写
+         bmp:Bitmap；bmd:BitmapData；evt : Event；ui: UI；srv: Service；btn:Button；mc:MovieClip；spt:Sprite
+10：垃圾回收
+        事件、引用、loader、urlLoader、BitmapData、	ByteArray
+        
+
+

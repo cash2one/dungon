@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<flexLibProperties includeAllClasses="true" useMultiPlatformConfig="false" version="3">
+  <includeClasses>
+    <classEntry path="com.leyou.enum.CmdEnum"/>
+    <classEntry path="com.leyou.data.net.login.TQUERYCHR"/>
+    <classEntry path="com.leyou.data.net.login.TCM_NEWCHR"/>
+    <classEntry path="com.leyou.data.net.login.TSM_CHARINFO_TMP"/>
+    <classEntry path="com.leyou.data.friend.FriendInfo"/>
+    <classEntry path="com.leyou.data.mail.MailInfo"/>
+    <classEntry path="com.leyou.data.market.MarketItemInfo"/>
+    <classEntry path="com.leyou.data.market.MarketPageInfo"/>
+    <classEntry path="com.leyou.data.aution.AutionItemData"/>
+    <classEntry path="com.leyou.enum.QualityEnum"/>
+    <classEntry path="com.leyou.enum.PkMode"/>
+    <classEntry path="com.leyou.enum.RoleEnum"/>
+    <classEntry path="com.leyou.data.playerSkill.TipSkillInfo"/>
+    <classEntry path="com.leyou.enum.MoldEnum"/>
+    <classEntry path="com.leyou.data.convenient.ConvenientItem"/>
+    <classEntry path="com.leyou.enum.FarmEnum"/>
+    <classEntry path="com.leyou.enum.CopyEnum"/>
+    <classEntry path="com.leyou.data.copy.CopyData"/>
+    <classEntry path="com.leyou.data.copy.BossCopyData"/>
+    <classEntry path="com.leyou.data.calendar.DayInfo"/>
+    <classEntry path="com.leyou.enum.CalendarEnum"/>
+    <classEntry path="com.leyou.data.calendar.MonthInfo"/>
+    <classEntry path="com.leyou.util.DateUtil"/>
+    <classEntry path="com.leyou.data.quickBuy.QuickBuyInfo"/>
+    <classEntry path="com.leyou.data.achievement.AchievementData"/>
+    <classEntry path="com.leyou.data.achievement.AchievementEraData"/>
+    <classEntry path="com.leyou.data.achievement.AchieveRoleData"/>
+    <classEntry path="com.leyou.data.vip.VipData"/>
+    <classEntry path="com.leyou.util.ZDLUtil"/>
+    <classEntry path="com.leyou.data.vip.TipVipEquipInfo"/>
+    <classEntry path="com.leyou.data.vip.TipVipBlessInfo"/>
+    <classEntry path="com.leyou.data.vip.TipVipSkillInfo"/>
+    <classEntry path="com.leyou.data.luckDraw.LuckDrawData"/>
+    <classEntry path="com.leyou.data.friend.FriendData"/>
+    <classEntry path="com.leyou.data.luckDraw.LuckDrawRewardInfo"/>
+    <classEntry path="com.leyou.data.luckDraw.LuckDrawLogInfo"/>
+    <classEntry path="com.leyou.data.achievement.AchievementRoleProgressData"/>
+    <classEntry path="com.leyou.data.fieldboss.FieldBossData"/>
+    <classEntry path="com.leyou.data.fieldboss.FieldBossInfo"/>
+    <classEntry path="com.leyou.data.fieldboss.FBRankInfo"/>
+    <classEntry path="com.leyou.data.fieldboss.FieldBossTipInfo"/>
+    <classEntry path="com.leyou.data.achievement.AchievementTipInfo"/>
+    <classEntry path="com.ace.ui.window.children.PopRadioWnd"/>
+    <classEntry path="com.leyou.data.paypromotion.PayPromotionData"/>
+    <classEntry path="com.leyou.data.paypromotion.PayPromotionItem"/>
+    <classEntry path="com.leyou.data.tobestrong.TobeStrongData"/>
+    <classEntry path="com.leyou.data.sevenDay.SevenDayData"/>
+    <classEntry path="com.leyou.data.sevenDay.SevenDayTaskData"/>
+    <classEntry path="com.leyou.data.sevenDay.SevenDayTask"/>
+    <classEntry path="com.leyou.data.invest.InvestData"/>
+    <classEntry path="com.leyou.data.invest.InvestRewardInfo"/>
+    <classEntry path="com.leyou.data.celebrate.AreaCelebrateData"/>
+    <classEntry path="com.leyou.data.celebrate.AreaCelebrateTaskData"/>
+    <classEntry path="com.leyou.data.celebrate.AreaCelebrateTask"/>
+    <classEntry path="com.leyou.data.payrank.PayRankData"/>
+    <classEntry path="com.leyou.data.payrank.PayRankChildItem"/>
+    <classEntry path="com.leyou.data.payrank.PayRankChildData"/>
+    <classEntry path="com.leyou.data.online.OnlineRewardData"/>
+    <classEntry path="com.leyou.data.guildBattle.GuildBattleData"/>
+    <classEntry path="com.leyou.data.guildBattle.GuildBattleFirstGuildData"/>
+    <classEntry path="com.leyou.data.guildBattle.GuildBattleTrackData"/>
+    <classEntry path="com.leyou.data.guildBattle.children.GuildBattleTrackItemData"/>
+    <classEntry path="com.leyou.data.guildBattle.GuildBattleResultData"/>
+    <classEntry path="com.leyou.data.qqvip.QQVipData"/>
+    <classEntry path="com.leyou.data.collectioin.CollectionData"/>
+    <classEntry path="com.leyou.data.collectioin.CollectionTaskData"/>
+    <classEntry path="com.leyou.data.collectioin.CollectionGroupTaskData"/>
+    <classEntry path="com.leyou.data.integral.IntegralData"/>
+    <classEntry path="com.leyou.data.abidePay.AbidePayData"/>
+    <classEntry path="com.leyou.data.sinfo.ServerData"/>
+    <classEntry path="com.leyou.data.bossCopy.BossCopyData"/>
+    <classEntry path="com.leyou.data.bossCopy.BossCopyBossData"/>
+  </includeClasses>
+  <includeResources/>
+  <namespaceManifests/>
+</flexLibProperties>

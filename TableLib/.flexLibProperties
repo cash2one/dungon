@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<flexLibProperties includeAllClasses="true" useMultiPlatformConfig="false" version="3">
+  <includeClasses>
+    <classEntry path="com.ace.gameData.table.TActInfo"/>
+    <classEntry path="com.ace.gameData.table.TActsInfo"/>
+    <classEntry path="com.ace.gameData.table.TBulletInfo"/>
+    <classEntry path="com.ace.gameData.table.TDecorate"/>
+    <classEntry path="com.ace.gameData.table.TLivingInfo"/>
+    <classEntry path="com.ace.gameData.table.TPnfInfo"/>
+    <classEntry path="com.ace.gameData.table.TPointInfo"/>
+    <classEntry path="com.ace.gameData.table.TSceneInfo"/>
+    <classEntry path="com.ace.gameData.table.TSkillEffectInfo"/>
+    <classEntry path="com.ace.gameData.table.TSkillInfo"/>
+    <classEntry path="com.ace.gameData.table.TTransInfo"/>
+    <classEntry path="com.ace.gameData.table.TFarmPlantInfo"/>
+    <classEntry path="com.ace.gameData.table.TFarmLandInfo"/>
+    <classEntry path="com.ace.gameData.table.TFarmLvInfo"/>
+    <classEntry path="com.ace.gameData.table.TCopyInfo"/>
+    <classEntry path="com.ace.gameData.table.TExpCopyInfo"/>
+    <classEntry path="com.ace.gameData.table.TLZItemInfo"/>
+    <classEntry path="com.ace.gameData.table.TSignGiftInfo"/>
+    <classEntry path="com.ace.gameData.table.TLevelGiftInfo"/>
+    <classEntry path="com.ace.gameData.table.TFunForcastInfo"/>
+    <classEntry path="com.ace.gameData.table.TActiveInfo"/>
+    <classEntry path="com.ace.gameData.table.TActiveRewardInfo"/>
+    <classEntry path="com.ace.gameData.table.TGuideInfo"/>
+    <classEntry path="com.ace.gameData.table.TPromptInfo"/>
+    <classEntry path="com.ace.gameData.table.TZdlElement"/>
+    <classEntry path="com.ace.gameData.table.TAchievementInfo"/>
+    <classEntry path="com.ace.gameData.table.TVIPInfo"/>
+    <classEntry path="com.ace.gameData.table.TVIPDetailInfo"/>
+    <classEntry path="com.ace.gameData.table.TVIPAttribute"/>
+    <classEntry path="com.ace.gameData.table.TPassivitySkillInfo"/>
+    <classEntry path="com.ace.gameData.table.TEquipBlessInfo"/>
+    <classEntry path="com.ace.gameData.table.TFieldBossInfo"/>
+    <classEntry path="com.ace.gameData.table.TPayPromotion"/>
+    <classEntry path="com.ace.gameData.table.TTobeStrongInfo"/>
+    <classEntry path="com.ace.gameData.table.TTobeStrongLevelInfo"/>
+    <classEntry path="com.ace.gameData.table.TSevenDayInfo"/>
+    <classEntry path="com.ace.gameData.table.TSevenDayRewardInfo"/>
+    <classEntry path="com.ace.gameData.table.TInvestInfo"/>
+    <classEntry path="com.ace.gameData.table.TAreaCelebrateInfo"/>
+    <classEntry path="com.ace.gameData.table.TRankRewardInfo"/>
+    <classEntry path="com.ace.gameData.table.TGuildBattleInfo"/>
+    <classEntry path="com.ace.gameData.table.TQQVipNewRewardInfo"/>
+    <classEntry path="com.ace.gameData.table.TQQVipDayRewardInfo"/>
+    <classEntry path="com.ace.gameData.table.TQQVipLvRewardInfo"/>
+    <classEntry path="com.ace.gameData.table.TCollectionPreciousInfo"/>
+    <classEntry path="com.ace.gameData.table.TAbidePayInfo"/>
+    <classEntry path="com.ace.gameData.table.TWing_Trade"/>
+  </includeClasses>
+  <includeResources/>
+  <namespaceManifests/>
+</flexLibProperties>

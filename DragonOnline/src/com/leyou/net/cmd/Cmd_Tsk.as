@@ -130,9 +130,10 @@ mk(“A” --接受任务 , "D" --交付任务 , "T" --任务追踪面板 )
 		 * 完成日常任务
 		 * tsk|Ktype
    type (1 快速完成一次,2 完成全部)
+   * 快速完成日常任务  tsk|Ktype,btype (0钻石 1绑定钻石)
 	*/
-		public static function cmTaskDailySuccess(type:int=1):void {
-			NetGate.getInstance().send("tsk|K" + type);
+		public static function cmTaskDailySuccess(type:int=1,btype:int=0):void {
+			NetGate.getInstance().send("tsk|K" + type+","+btype);
 		}
 
 

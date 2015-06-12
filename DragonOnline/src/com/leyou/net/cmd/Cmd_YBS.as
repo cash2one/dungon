@@ -14,6 +14,7 @@ package com.leyou.net.cmd
 	import com.leyou.enum.CmdEnum;
 	import com.leyou.enum.TaskEnum;
 	import com.leyou.net.NetGate;
+	import com.leyou.utils.PropUtils;
 	
 	import flash.geom.Point;
 
@@ -88,16 +89,16 @@ package com.leyou.net.cmd
 					UILayoutManager.getInstance().show(WindowEnum.FIELD_BOSS_REMIND);
 					UIManager.getInstance().fieldBossRemind.loadInfo(bossId);
 					
-					content="        {1}<font color='#ff00'><u><a href='event:other_ycp--{2}'>前往击杀</a></u></font>";
+					content="        {1}<font color='#ff00'><u><a href='event:other_ycp--{2}'>"+PropUtils.getStringById(1570)+"</a></u></font>";
 					content=StringUtil.substitute(content, monsterInfo.name, bossId);
-					arr = ["[野外BOSS]", content, "", "", callBack, "", callBack];
+					arr = [PropUtils.getStringById(1571), content, "", "", callBack, "", callBack];
 					UIManager.getInstance().taskTrack.updateOhterTrack(TaskEnum.taskLevel_fieldbossCopyLine, arr);
 				}else{
 					UILayoutManager.getInstance().hide(WindowEnum.FIELD_BOSS_REMIND);
 					
-					content="        {1}<font color='#ff0000'><u><a href='event:other_ycp--{2}'>未刷新</a></u></font>";
+					content="        {1}<font color='#ff0000'><u><a href='event:other_ycp--{2}'>"+PropUtils.getStringById(1572)+"</a></u></font>";
 					content=StringUtil.substitute(content, monsterInfo.name, bossId);
-					arr = ["[野外BOSS]", content, "", "", callBack, "", callBack];
+					arr = [PropUtils.getStringById(1571), content, "", "", callBack, "", callBack];
 					UIManager.getInstance().taskTrack.updateOhterTrack(TaskEnum.taskLevel_fieldbossCopyLine, arr);
 				}
 			}

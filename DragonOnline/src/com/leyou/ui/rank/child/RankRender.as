@@ -1,5 +1,4 @@
-package com.leyou.ui.rank.child
-{
+package com.leyou.ui.rank.child {
 	import com.ace.ICommon.IMenu;
 	import com.ace.manager.LibManager;
 	import com.ace.manager.MenuManager;
@@ -14,69 +13,69 @@ package com.leyou.ui.rank.child
 	import com.leyou.net.cmd.Cmd_Friend;
 	import com.leyou.net.cmd.Cmd_Guild;
 	import com.leyou.net.cmd.Cmd_Tm;
-	
+	import com.leyou.utils.PropUtils;
+
 	import flash.events.MouseEvent;
-	
-	public class RankRender extends AutoSprite implements IMenu
-	{
+
+	public class RankRender extends AutoSprite implements IMenu {
 		private var bgImg:Image;
-		
+
 		private var rankImg:Image;
-		
+
 		private var nameLbl:Label;
-		
+
 		private var rankLbl:Label;
-		
+
 		private var typeLbl:Label;
-		
+
 		private var numLbl:Label;
-		
+
 		private var _locked:Boolean;
-		
+
 		public var avaStr:String;
-		
+
 		public var gender:int;
-		
+
 		public var vocation:int;
-		
+
 		public var type:int;
-		
+
 		private var menuArr:Vector.<MenuInfo>;
-		
+
 		public var free:Boolean;
-		
+
 		private var _isSelf:Boolean;
-		
-		public function RankRender(){
+
+		public function RankRender() {
 			super(LibManager.getInstance().getXML("config/ui/rank/rankListBar.xml"));
 			init();
 		}
-		
-		public function get isSelf():Boolean{
+
+		public function get isSelf():Boolean {
 			return _isSelf;
 		}
 
-		public function get locked():Boolean{
+		public function get locked():Boolean {
 			return _locked;
 		}
 
-		public function set locked(value:Boolean):void{
-			_locked = value;
+		public function set locked(value:Boolean):void {
+			_locked=value;
 		}
-		
-		private function init():void{
-			mouseEnabled = true;
-			bgImg = getUIbyID("bgImg") as Image;
-			rankImg = getUIbyID("rankImg") as Image;
-			nameLbl = getUIbyID("nameLbl") as Label;
-			rankLbl = getUIbyID("rankLbl") as Label;
-			typeLbl = getUIbyID("typeLbl") as Label;
-			numLbl = getUIbyID("numLbl") as Label;
+
+		private function init():void {
+			mouseEnabled=true;
+			bgImg=getUIbyID("bgImg") as Image;
+			rankImg=getUIbyID("rankImg") as Image;
+			nameLbl=getUIbyID("nameLbl") as Label;
+			rankLbl=getUIbyID("rankLbl") as Label;
+			typeLbl=getUIbyID("typeLbl") as Label;
+			numLbl=getUIbyID("numLbl") as Label;
 			addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
 			addEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
-			bgImg.alpha = 0;
-			
-			menuArr = new Vector.<MenuInfo>();
+			bgImg.alpha=0;
+
+			menuArr=new Vector.<MenuInfo>();
 			menuArr.push(new MenuInfo(ChatEnum.CLICK_MENU[ChatEnum.PRIVATE_CHAT], ChatEnum.PRIVATE_CHAT));
 			menuArr.push(new MenuInfo(ChatEnum.CLICK_MENU[ChatEnum.CHECK_STATUS], ChatEnum.CHECK_STATUS));
 			menuArr.push(new MenuInfo(ChatEnum.CLICK_MENU[ChatEnum.ADD_FRIEND], ChatEnum.ADD_FRIEND));
@@ -84,119 +83,120 @@ package com.leyou.ui.rank.child
 			menuArr.push(new MenuInfo(ChatEnum.CLICK_MENU[ChatEnum.ADD_GUILD], ChatEnum.ADD_GUILD));
 			menuArr.push(new MenuInfo(ChatEnum.CLICK_MENU_II[10], ChatEnum.DUEL));
 		}
-		
-		public function onMouseOut(event:MouseEvent):void{
-			if(!free && !locked){
-				TweenLite.to(bgImg, 0.5, {alpha:0});
+
+		public function onMouseOut(event:MouseEvent):void {
+			if (!free && !locked) {
+				TweenLite.to(bgImg, 0.5, {alpha: 0});
 			}
 		}
-		
-		public function onMouseOver(event:MouseEvent):void{
-			if(!free && !locked){
-				TweenLite.to(bgImg, 0.5, {alpha:1});
+
+		public function onMouseOver(event:MouseEvent):void {
+			if (!free && !locked) {
+				TweenLite.to(bgImg, 0.5, {alpha: 1});
 			}
 		}
-		
-		public function getName():String{
+
+		public function getName():String {
 			return nameLbl.text;
 		}
-		
-		public function showFunMenu():void{
-			if(!free && locked){
+
+		public function showFunMenu():void {
+			if (!free && locked) {
 				MenuManager.getInstance().show(menuArr, this);
 			}
 		}
-		
-		public function updateInfo(data:Array, self:Boolean=false):void{
-			_isSelf = self;
-			free = false;
-			var rankNum:int = data[0];
-			nameLbl.text = data[1];
-			vocation = data[2];
-			gender = data[3];
-			avaStr = data[4];
-			var var1:int = data[5];
-			numLbl.text = data[6];
+
+		public function updateInfo(data:Array, self:Boolean=false):void {
+			_isSelf=self;
+			free=false;
+			var rankNum:int=data[0];
+			nameLbl.text=data[1];
+			vocation=data[2];
+			gender=data[3];
+			avaStr=data[4];
+			var var1:int=data[5];
+			numLbl.text=data[6];
 //			var onLine:Boolean = data[7];
 //			filters = onLine ? null : [FilterEnum.enable];
-			typeLbl.text = getVocationLabel(vocation, var1);
-			if((rankNum > 0) && (rankNum < 4)){
-				rankLbl.visible = false;
-				rankImg.visible = true;
-				rankImg.updateBmp("ui/rank/"+rankNum+".png");
-			}else if(rankNum >= 4){
-				rankLbl.visible = true;
-				rankImg.visible = false;
-				rankLbl.text = rankNum+"";
-			}else{
-				rankLbl.visible = true;
-				rankImg.visible = false;
-				rankLbl.text = "未上榜";
+			typeLbl.text=getVocationLabel(vocation, var1);
+			if ((rankNum > 0) && (rankNum < 4)) {
+				rankLbl.visible=false;
+				rankImg.visible=true;
+				rankImg.updateBmp("ui/rank/" + rankNum + ".png");
+			} else if (rankNum >= 4) {
+				rankLbl.visible=true;
+				rankImg.visible=false;
+				rankLbl.text=rankNum + "";
+			} else {
+				rankLbl.visible=true;
+				rankImg.visible=false;
+				rankLbl.text=PropUtils.getStringById(1821);
 			}
 		}
+
 		// (1总战斗力 2坐骑 3翅膀 4装备 5军衔 6等级 7财富)
-		private function getVocationLabel(vocation:int, var1:int):String{
-			if((1 == type) || (4 == type) || (6 == type) || (7 == type)){
-				switch(vocation){
+		private function getVocationLabel(vocation:int, var1:int):String {
+			if ((1 == type) || (4 == type) || (6 == type) || (7 == type)) {
+				switch (vocation) {
 					case 1:
-						return "战士";
+						return PropUtils.getStringById(1528);
 					case 2:
-						return "法师";
+						return PropUtils.getStringById(1526);
 					case 3:
-						return "术士";
+						return PropUtils.getStringById(1529);
 					case 4:
-						return "游侠";
+						return PropUtils.getStringById(1527);
 				}
-			}else if(2 == type || 3 == type){
-				switch(var1){
+			} else if (2 == type || 3 == type) {
+				switch (var1) {
 					case 1:
-						return "一阶";
+						return PropUtils.getStringById(1862);
 					case 2:
-						return "二阶";
+						return PropUtils.getStringById(1863);
 					case 3:
-						return "三阶";
+						return PropUtils.getStringById(1839);
 					case 4:
-						return "四阶";
+						return PropUtils.getStringById(1840);
 					case 5:
-						return "五阶";
+						return PropUtils.getStringById(1841);
 					case 6:
-						return "六阶";
+						return PropUtils.getStringById(1842);
 					case 7:
-						return "七阶";
+						return PropUtils.getStringById(1843);
 					case 8:
-						return "八阶";
+						return PropUtils.getStringById(1844);
 					case 9:
-						return "九阶";
+						return PropUtils.getStringById(1845);
 					case 10:
-						return "十阶";
+						return PropUtils.getStringById(1846);
 				}
-			}else if(5 == type){
-				switch(var1){
+			} else if (5 == type) {
+				switch (var1) {
 					case 1:
-						return "民兵";
+						return PropUtils.getStringById(1864);
 					case 2:
-						return "列兵";
+						return PropUtils.getStringById(1849);
 					case 3:
-						return "中尉";
+						return PropUtils.getStringById(1850);
 					case 4:
-						return "上尉";
+						return PropUtils.getStringById(1851);
 					case 5:
-						return "中校";
+						return PropUtils.getStringById(1852);
 					case 6:
-						return "上校";
+						return PropUtils.getStringById(1853);
 					case 7:
-						return "中将";
+						return PropUtils.getStringById(1854);
 					case 8:
-						return "上将";
+						return PropUtils.getStringById(1855);
 					case 9:
-						return "元帅";
+						return PropUtils.getStringById(1856);
 					case 10:
-						return "大元帅";
+						return PropUtils.getStringById(1857);
 				}
 			}
 			return "";
 		}
-		
+
 		/**
 		 * <T>处理菜单的操作</T>
 		 *
@@ -225,14 +225,14 @@ package com.leyou.ui.rank.child
 					break;
 			}
 		}
-		
-		public function clear():void{
-			free = true;
-			rankImg.visible = false;
-			nameLbl.text = "";
-			rankLbl.text = "";
-			typeLbl.text = "";
-			numLbl.text = "";
+
+		public function clear():void {
+			free=true;
+			rankImg.visible=false;
+			nameLbl.text="";
+			rankLbl.text="";
+			typeLbl.text="";
+			numLbl.text="";
 		}
 	}
 }

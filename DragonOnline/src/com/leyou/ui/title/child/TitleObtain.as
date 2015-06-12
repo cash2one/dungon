@@ -157,7 +157,7 @@ package com.leyou.ui.title.child {
 
 			for (var i:int=0; i < 3; i++) {
 				if (tinfo["attribute" + (i + 1)] > 0) {
-					this.propKeyLbl[i].text=PropUtils.prop2Arr[int(tinfo["attribute" + (i + 1)]) - 1] + ":";
+					this.propKeyLbl[i].text="      " + PropUtils.propArr[int(tinfo["attribute" + (i + 1)]) - 1] + ":";
 					this.propValLbl[i].text="+" + tinfo["value" + (i + 1)];
 					this.propValLbl[i].textColor=0x00ff00;
 				} else {
@@ -170,7 +170,7 @@ package com.leyou.ui.title.child {
 
 		override public function hide():void {
 			super.hide();
-			
+
 			this.close();
 		}
 

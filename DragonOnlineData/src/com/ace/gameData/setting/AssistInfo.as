@@ -29,6 +29,11 @@ package com.ace.gameData.setting {
 		public var isAutoBuyMP:Boolean=false; //自动买MP
 		public var isAutoPickupEquip:Boolean=false; //自动拾取装备
 		public var isAutopickupItem:Boolean=false; //自动拾取道具
+		
+		
+		public var isAutoPickupFirst:Boolean=false;//拾取优先
+		public var isAutoAttackFirst:Boolean=true;//战斗优先
+		public var autoPickQuality:int=0;//拾取品质之上
 
 		public var isAutoTask:Boolean=false; //是否任务打怪
 		private var _isAuto:Boolean=false; //是否开启自动挂机
@@ -257,13 +262,19 @@ package com.ace.gameData.setting {
 			data.push(value);
 			value=isAutopickupItem ? 2 : 1;
 			data.push(value);
-			var length:int=skills.length
+			var length:int=skills.length;
+			data.push(length);
 			for (var n:int=0; n < length; n++) {
 				var skId:int=skills[n];
 				value=(0 == skId) ? -1 : skId;
 				data.push(value);
 				skills[n]=value;
 			}
+			value=isAutoPickupFirst ? 2 : 1;
+			data.push(value);
+			value=isAutoAttackFirst ? 2 : 1;
+			data.push(value);
+			data.push(autoPickQuality);
 			return data.join(",");
 		}
 
@@ -290,11 +301,15 @@ package com.ace.gameData.setting {
 			mpItem=data[index++];
 			isAutoPickupEquip=(2 == data[index++]);
 			isAutopickupItem=(2 == data[index++]);
-			skills.length=0;
-			var length:int=data.length;
-			for (var n:int=index; n < length; n++) {
-				skills.push(data[n]);
+			skills.length=data[index++];
+			var length:int=skills.length;
+			for (var n:int=index; n < index+length; n++) {
+				skills[n-index] = data[n];
 			}
+			index += length;
+			isAutoPickupFirst=(2 == data[index++]);
+			isAutoAttackFirst=(2 == data[index++]);
+			autoPickQuality=data[index++];
 			//			skills[0]=data[index++];
 			//			skills[1]=data[index++];
 			//			skills[2]=data[index++];

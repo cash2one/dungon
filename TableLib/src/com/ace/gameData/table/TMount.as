@@ -8,6 +8,8 @@ package com.ace.gameData.table
 		*	坐骑级别lv--id
 		*/
 		public var lv:int;
+		
+		public var lv2:int;
 
 		/**
 		*	名字
@@ -68,6 +70,7 @@ package com.ace.gameData.table
 			if(data==null) return ;
 			
 			this.lv=data.@lv;
+			this.lv2=data.@lv2;
 			this.des=data.@des;
 			this.ModeId=data.@ModeId;
 			this.UI_ModeId=data.@UI_ModeId;

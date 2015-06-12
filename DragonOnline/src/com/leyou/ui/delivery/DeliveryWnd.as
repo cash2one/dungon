@@ -18,6 +18,7 @@ package com.leyou.ui.delivery {
 	import com.leyou.net.cmd.Cmd_Assist;
 	import com.leyou.net.cmd.Cmd_Yct;
 	import com.leyou.ui.delivery.childs.DeliveryRender;
+	import com.leyou.utils.PropUtils;
 	import com.leyou.utils.TimeUtil;
 
 	import flash.events.MouseEvent;
@@ -117,7 +118,7 @@ package com.leyou.ui.delivery {
 				this.refreshTimeLbl.text=TimeUtil.getIntToDateTime(this.timer - i);
 			} else {
 				this.timer=0;
-				this.refreshTimeLbl.text="0时0分0秒";
+				this.refreshTimeLbl.text=StringUtil.substitute(PropUtils.getStringById(2144), [0, 0, 0]);
 				this.nowRefreshBtn.updataBmd("ui/delivery/btn_shuaxin2.png");
 				TimerManager.getInstance().remove(exeTime);
 			}
@@ -130,8 +131,15 @@ package com.leyou.ui.delivery {
 			if (this.timer == 0)
 				Cmd_Yct.cm_DeliveryRefresh();
 			else {
-				prop=PopupManager.showConfirm(StringUtil.substitute(TableManager.getInstance().getSystemNotice(4501).content, [ConfigEnum.delivery10]), function():void {
-					Cmd_Yct.cm_DeliveryRefresh();
+				var str:String;
+				if (Core.isSF)
+					str=StringUtil.substitute(TableManager.getInstance().getSystemNotice(4518).content, [ConfigEnum.delivery10.split("|")[0]])
+				else
+					str=StringUtil.substitute(TableManager.getInstance().getSystemNotice(4501).content, [ConfigEnum.delivery10.split("|")[0]])
+
+				prop=PopupManager.showRadioConfirm(str, ConfigEnum.delivery10.split("|")[0], ConfigEnum.delivery10.split("|")[1], function(i:int):void {
+
+					Cmd_Yct.cm_DeliveryRefresh((i == 1 ? 0 : 1));
 				}, null, false, "deliveryNowRefresh");
 			}
 
@@ -145,8 +153,6 @@ package com.leyou.ui.delivery {
 			super.show(toTop, $layer, toCenter);
 			this.resise();
 			Cmd_Yct.cm_DeliveryInit();
-
-
 		}
 
 		override public function get width():Number {

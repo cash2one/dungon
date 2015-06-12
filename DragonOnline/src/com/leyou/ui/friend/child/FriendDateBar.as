@@ -1,4 +1,5 @@
 package com.leyou.ui.friend.child {
+	import com.ace.config.Core;
 	import com.ace.enum.PlatformEnum;
 	import com.ace.enum.PlayerEnum;
 	import com.ace.enum.TipEnum;
@@ -15,6 +16,7 @@ package com.leyou.ui.friend.child {
 	import com.ace.utils.StringUtil;
 	import com.leyou.data.friend.FriendInfo;
 	import com.leyou.utils.FilterUtil;
+	import com.leyou.utils.PropUtils;
 	
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
@@ -102,16 +104,16 @@ package com.leyou.ui.friend.child {
 				var content:String;
 				switch(info.vocation){
 					case PlayerEnum.PRO_MASTER:
-						content = "法师";
+						content = PropUtils.getStringById(1526);
 						break;
 					case PlayerEnum.PRO_RANGER:
-						content = "游侠";
+						content = PropUtils.getStringById(1527);
 						break;
 					case PlayerEnum.PRO_SOLDIER:
-						content = "战士";
+						content = PropUtils.getStringById(1528);
 						break;
 					case PlayerEnum.PRO_WARLOCK:
-						content = "术士";
+						content = PropUtils.getStringById(1529);
 						break;
 				}
 				ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, content, new Point(stage.mouseX, stage.mouseY));
@@ -186,7 +188,7 @@ package com.leyou.ui.friend.child {
 			var pfVipType:int = o[6];
 			var pfVipLv:int = o[7];
 			//平台VIP
-			if(UIEnum.PLAT_FORM_ID == PlatformEnum.ID_TENCENT){
+			if(Core.isTencent){
 				pfImg.visible = (0 != pfVipType);
 				var url:String;
 				// 腾讯

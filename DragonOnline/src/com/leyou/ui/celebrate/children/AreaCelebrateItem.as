@@ -12,6 +12,7 @@ package com.leyou.ui.celebrate.children
 	import com.leyou.data.celebrate.AreaCelebrateTask;
 	import com.leyou.net.cmd.Cmd_KF;
 	import com.leyou.ui.mail.child.MaillGrid;
+	import com.leyou.utils.PropUtils;
 	
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
@@ -90,7 +91,7 @@ package com.leyou.ui.celebrate.children
 			}else if(1 == task.receiveStatus){
 				receivedImg.visible = false;
 				receiveBtn.visible = true;
-				receiveBtn.text = "领取奖励";
+				receiveBtn.text = PropUtils.getStringById(1575);
 				receiveBtn.setActive(true, 1, true);
 				progressBImg.visible = false;
 				progressCImg.visible = false;
@@ -98,14 +99,14 @@ package com.leyou.ui.celebrate.children
 			}else if(2 == task.receiveStatus){
 				receivedImg.visible = true;
 				receiveBtn.visible = true;
-				receiveBtn.text = "已领取";
+				receiveBtn.text = PropUtils.getStringById(1574);
 				receiveBtn.setActive(false, 1, true);
 				progressBImg.visible = false;
 				progressCImg.visible = false;
 				progressLbl.visible = false;
 			}
 			if(task.remainC <= 0){
-				receiveBtn.text = "无次数";
+				receiveBtn.text = PropUtils.getStringById(1654);
 				receiveBtn.setActive(false, 1, true);
 			}
 			var ttask:TAreaCelebrateInfo = TableManager.getInstance().getAreaCelebrateInfo(task.id);

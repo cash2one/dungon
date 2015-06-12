@@ -76,7 +76,7 @@ package com.leyou.utils {
 
 			if (i > 10000) {
 				var rate:Number=parseFloat(((i / 10000) - int(i / 10000)).toPrecision(1));
-				return (int(i / 10000) + int(rate * 10) / 10) + "万";
+				return (int(i / 10000) + int(rate * 10) / 10) + PropUtils.getStringById(1532);
 			}
 
 			return i + "";

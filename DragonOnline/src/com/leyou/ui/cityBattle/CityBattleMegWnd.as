@@ -14,6 +14,7 @@ package com.leyou.ui.cityBattle
 	import com.ace.utils.StringUtil;
 	import com.leyou.data.cityBattle.CityBattleFinalData;
 	import com.leyou.ui.market.child.MarketGrid;
+	import com.leyou.utils.PropUtils;
 	
 	import flash.events.MouseEvent;
 	
@@ -80,16 +81,18 @@ package com.leyou.ui.cityBattle
 			energyLbl.text = data.energy+"";
 			var rewardInfo:TCityBattleRewardInfo = TableManager.getInstance().getCityBattleRewardInfo(data.wid);
 			var content:String;
+			
 			if(1 == rewardInfo.type){
 				// 获胜奖励
-				rewardTitleLbl.text = "获胜奖励";
+				rewardTitleLbl.text = PropUtils.getStringById(1657);
 				content = TableManager.getInstance().getSystemNotice(6715).content;
 				content = StringUtil.substitute(content, data.winGName, data.winPName);
 			}else　if(2 == rewardInfo.type){
 				// 参与奖励
-				rewardTitleLbl.text = "参与奖励";
+				rewardTitleLbl.text = PropUtils.getStringById(1658);
 				content = TableManager.getInstance().getSystemNotice(6716).content;
 			}
+			
 			desLbl.htmlText = content;
 			
 			var index:int = 0;

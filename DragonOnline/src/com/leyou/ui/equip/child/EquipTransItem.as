@@ -91,15 +91,15 @@ package com.leyou.ui.equip.child {
 		private function onMouseClick(e:MouseEvent):void {
 
 			if (e.target is EquipStrengGrid) {
-				if (DragManager.getInstance().grid == null || DragManager.getInstance().grid.isEmpty || DragManager.getInstance().grid.dataId==1 || DragManager.getInstance().grid.dataId==2)
+				if (DragManager.getInstance().grid == null || DragManager.getInstance().grid.isEmpty || DragManager.getInstance().grid.dataId == 1 || DragManager.getInstance().grid.dataId == 2)
 					return;
 
 				var g:GridBase=DragManager.getInstance().grid;
 				var d:Object=g.data;
-				
-				if(d==null || !d.hasOwnProperty("tips"))
-					return ;
-				
+
+				if (d == null || !d.hasOwnProperty("tips"))
+					return;
+
 				var info:Object=d.tips;
 				var einfo:TEquipInfo=TableManager.getInstance().getEquipInfo(info.itemid);
 
@@ -160,14 +160,14 @@ package com.leyou.ui.equip.child {
 					this.view1Arr[i].text="" + info.p[key];
 
 					if (info.p.hasOwnProperty("qh_" + key)) {
-						this.view2Arr[i].text="(强化+" + info.p["qh_" + key] + ")";
+						this.view2Arr[i].text="(" + PropUtils.getStringById(1696) + "+" + info.p["qh_" + key] + ")";
 					}
 
 					i++;
 				}
 			}
 
-			this.viewTxtArr[i].text="星级:";
+			this.viewTxtArr[i].text=PropUtils.getStringById(1697) + ":";
 			this.view1Arr[i].text="" + info.qh;
 
 

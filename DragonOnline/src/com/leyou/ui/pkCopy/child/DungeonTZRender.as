@@ -2,13 +2,12 @@ package com.leyou.ui.pkCopy.child {
 
 	import com.ace.gameData.table.TTzActiive;
 	import com.ace.manager.LibManager;
-	import com.ace.manager.ToolTipManager;
 	import com.ace.ui.auto.AutoSprite;
 	import com.ace.ui.button.children.ImgButton;
 	import com.ace.ui.img.child.Image;
 	import com.ace.ui.lable.Label;
 	import com.leyou.utils.FilterUtil;
-
+	
 	import flash.events.MouseEvent;
 
 	public class DungeonTZRender extends AutoSprite {
@@ -25,7 +24,8 @@ package com.leyou.ui.pkCopy.child {
 		public var state:int=0;
 
 		public function DungeonTZRender() {
-			super(LibManager.getInstance().getXML("config/ui/pkCopy/dungeonTZRender.xml"));
+//			super(LibManager.getInstance().getXML("config/ui/pkCopy/dungeonTZRender.xml"));
+			super(LibManager.getInstance().getXML("config/ui/pkCopy/bossTZLable.xml"));
 			this.init();
 			this.mouseChildren=true;
 			this.mouseEnabled=true;

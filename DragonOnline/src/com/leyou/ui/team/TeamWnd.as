@@ -28,6 +28,7 @@ package com.leyou.ui.team {
 	import com.leyou.net.cmd.Cmd_Tm;
 	import com.leyou.ui.team.child.TeamPlayerRender;
 	import com.leyou.utils.FilterUtil;
+	import com.leyou.utils.PropUtils;
 	
 	import flash.display.DisplayObject;
 	import flash.display.Sprite;
@@ -264,7 +265,7 @@ package com.leyou.ui.team {
 					break;
 				case "exitTeamBtn":
 
-					wnd=PopupManager.showConfirm("你确定要退出队伍么?", function():void {
+					wnd=PopupManager.showConfirm(PropUtils.getStringById(1915), function():void {
 						Cmd_Tm.cm_teamQuit();
 					}, null, false, "teamExit");
 
@@ -307,12 +308,12 @@ package com.leyou.ui.team {
 					return;
 
 				var menuVec:Vector.<MenuInfo>=new Vector.<MenuInfo>();
-				menuVec.push(new MenuInfo("查看资料", 1));
-				menuVec.push(new MenuInfo("加为好友", 2));
+				menuVec.push(new MenuInfo(PropUtils.getStringById(1916), 1));
+				menuVec.push(new MenuInfo(PropUtils.getStringById(1711), 2));
 
 				if (this.bossCross) {
-					menuVec.push(new MenuInfo("任命队长", 3));
-					menuVec.push(new MenuInfo("开除队友", 4));
+					menuVec.push(new MenuInfo(PropUtils.getStringById(1917), 3));
+					menuVec.push(new MenuInfo(PropUtils.getStringById(1918), 4));
 				}
 
 				MenuManager.getInstance().show(menuVec, this, new Point(e.stageX - 35, e.stageY));
@@ -505,14 +506,11 @@ package com.leyou.ui.team {
 
 		override public function show(toTop:Boolean=true, $layer:int=1, toCenter:Boolean=true):void {
 			super.show(toTop, $layer, toCenter);
-			
 		}
 		
 		override public function sendOpenPanelProtocol(...parameters):void{
 			this.dataModel=parameters;
-			
 			Cmd_Tm.cm_teamInit();
-			
 		}
 
 		public function teamAddPlayPanel():TeamAddPlayerWnd {

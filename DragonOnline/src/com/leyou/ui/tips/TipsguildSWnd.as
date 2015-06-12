@@ -2,6 +2,7 @@ package com.leyou.ui.tips {
 
 
 	import com.ace.ICommon.ITip;
+	import com.ace.config.Core;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.table.TUnion_attribute;
 	import com.ace.manager.LibManager;
@@ -9,6 +10,7 @@ package com.leyou.ui.tips {
 	import com.ace.ui.auto.AutoSprite;
 	import com.ace.ui.img.child.Image;
 	import com.ace.ui.lable.Label;
+	import com.ace.utils.StringUtil;
 	import com.leyou.utils.PropUtils;
 
 	public class TipsguildSWnd extends AutoSprite implements ITip {
@@ -69,24 +71,27 @@ package com.leyou.ui.tips {
 				this.value1Lbl.text="";
 				this.priceLbl.text="";
 				this.bgLbl.text="";
-				
+
 				this.moneyNameLbl.visible=false;
 				this.moneyIco.visible=false;
 				this.bgico.visible=false;
 				return;
 			}
 
-			if (UIManager.getInstance().guildWnd.guildLv < info1.uLv)
-				this.lockLbl.text="行会" + info1.uLv + "级解锁";
+			if (Core.me.info.level<info1.uLv)
+				this.lockLbl.text=StringUtil.substitute(PropUtils.getStringById(1942), [info1.uLv]);
 			else
 				this.lockLbl.text="";
 
-			this.key1Lbl.text=PropUtils.prop2Arr[int(info1.att) - 1] + ":";
+			this.key1Lbl.text=PropUtils.propArr[int(info1.att) - 1] + ":";
 			this.value1Lbl.text=info1.uAtt + "";
 
 			this.priceLbl.text=info1.uMoney + "";
-			this.bgLbl.text=info1.uCon + "";
+			this.bgLbl.text=info1.uEnergy + "";
+//			this.bgLbl.text="";
 
+			this.bgico.updateBmp("");
+			
 			this.moneyNameLbl.visible=true;
 			this.moneyIco.visible=true;
 			this.bgico.visible=true;

@@ -28,6 +28,8 @@ package com.ace.ui.loading.child {
 		
 		private var logoImg:Image;
 		
+		private var isFirst:Boolean = true;
+		
 		private var proressBgImg:Image;
 		
 		private var progressCoverImg:Image;
@@ -66,7 +68,7 @@ package com.ace.ui.loading.child {
 			noticeLbl = getUIbyID("noticeLbl") as Label;
 			linkLbl = getUIbyID("linkLbl") as Label;
 			progressLbl.text = "0%";
-			logoEffect.x = progressCoverImg.x - 75
+			logoEffect.x = progressCoverImg.x - 75;
 			logoEffect.y = progressCoverImg.y - 78;
 			progressCoverImg.scrollRect = new Rectangle(0, 0, PROGRESS_OFFSET, progressCoverImg.bitmapData.height);
 			linkLbl.mouseEnabled = true;
@@ -74,8 +76,10 @@ package com.ace.ui.loading.child {
 			
 			bgImg = new Image();
 			addChildAt(bgImg, 0);
+			addChildAt(logoImg, 1);
 			logoImg.x = 0;
 			logoImg.y = 0;
+			logoImg.visible = false;
 		}
 		
 		protected function onMouseClick(event:MouseEvent):void{
@@ -106,8 +110,12 @@ package com.ace.ui.loading.child {
 		}
 		
 		private function getBgUrl():String{
-			var ranNum:String = StringUtil.fillTheStr(int(Math.random()*10000)%2+1, 2, "0", true);
+			var ranNum:String = StringUtil.fillTheStr(int(Math.random()*10000)%4+1, 2, "0", true);
 			var surl:String = "ui/wallpaper/loding_bg_{index}.jpg";
+			if(isFirst){
+				ranNum = "01";
+				isFirst = false;
+			}
 			surl = StringUtil.substitute(surl, ranNum);
 			return surl;
 		}

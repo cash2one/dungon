@@ -17,6 +17,7 @@ package com.leyou.data.payrank
 		}
 		
 		public function getData(index:int):PayRankChildItem{
+			items[index].type = type;
 			return items[index];
 		}
 

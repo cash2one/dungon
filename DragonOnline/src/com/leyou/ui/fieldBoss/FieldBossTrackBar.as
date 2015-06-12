@@ -49,7 +49,7 @@ package com.leyou.ui.fieldBoss
 				pane.addChild(item);
 				item.y = 28 + 28 * n;
 			}
-//			addChild(hideBtn);
+			addChild(hideBtn);
 			resize();
 		}
 		

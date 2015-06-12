@@ -28,18 +28,21 @@ package com.leyou.ui.invest
 		}
 		
 		public function init():void{
+			hideBg();
 			tabBar = getUIbyID("investTabBar") as TabBar;
 			
 			tzRender = new InvestTZRender();
 			jjRender = new InvestJJRender();
 			addChild(tzRender);
 			addChild(jjRender);
-			tzRender.x = -7;
-			jjRender.x = -15;
+			tzRender.x = -5;
+			jjRender.x = -14;
 			tabBar.addToTab(tzRender, 0);
 			tabBar.addToTab(jjRender, 1);
 			tabBar.addEventListener(TabbarModel.changeTurnOnIndex, onTabBarChangeIndex);
 			tabBar.turnToTab(0);
+			clsBtn.x += 3;
+			clsBtn.y += 14;
 		}
 		
 		protected function onTabBarChangeIndex(event:Event):void{
@@ -87,6 +90,14 @@ package com.leyou.ui.invest
 		
 		public function updateInfoJJ():void{
 			jjRender.updateInfo(DataManager.getInstance().investData);
+		}
+		
+		public override function get width():Number{
+			return 698;
+		}
+		
+		public override function get height():Number{
+			return 403;
 		}
 		
 		public function resize():void{

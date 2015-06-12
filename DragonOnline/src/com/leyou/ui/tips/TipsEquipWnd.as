@@ -7,6 +7,7 @@ package com.leyou.ui.tips {
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.table.TEquipInfo;
 	import com.ace.gameData.table.TItemInfo;
+	import com.ace.gameData.table.TSuit;
 	import com.ace.manager.LibManager;
 	import com.ace.tools.ScaleBitmap;
 	import com.ace.ui.auto.AutoSprite;
@@ -52,6 +53,20 @@ package com.leyou.ui.tips {
 		private var nameLbl6:Label;
 		private var nameLbl5:Label;
 		private var nameLbl3:Label;
+
+		private var nameLbl7:Label;
+		private var nameLbl8:Label;
+		private var nameLbl9:Label;
+		private var nameLbl10:Label;
+
+		private var onUseLbl:Label;
+
+		private var suitpropNameArr:Array=[];
+		private var suitpropKeyArr:Array=[];
+
+		private var suitTypeArr:Array=[];
+		private var suitEffectArr:Array=[];
+
 		private var moneyNameLbl:Label;
 		private var moneyIco:Image;
 		private var priceSc:ScaleBitmap;
@@ -90,6 +105,7 @@ package com.leyou.ui.tips {
 		private var fightlineImg:Image;
 		private var desclineImg:Image;
 		private var gemlineImg:Image;
+		private var standlineImg:Image;
 
 		/**
 		 * 基础模型
@@ -117,6 +133,9 @@ package com.leyou.ui.tips {
 
 		private var isfirst:Boolean=false;
 
+		private var labelHeight:Number=16;
+		private var lineHeight:Number=5;
+
 		public function TipsEquipWnd() {
 			super(LibManager.getInstance().getXML("config/ui/tips/TipsEquipWnd.xml"));
 			this.init();
@@ -141,6 +160,8 @@ package com.leyou.ui.tips {
 			this.priceSc=this.getUIbyID("priceSc") as ScaleBitmap;
 			this.bgSc=this.getUIbyID("bgSc") as ScaleBitmap;
 
+			this.onUseLbl=this.getUIbyID("onUseLbl") as Label;
+
 			this.nameLbl1=this.getUIbyID("nameLbl1") as Label;
 			this.nameLbl2=this.getUIbyID("nameLbl2") as Label;
 			this.nameLbl4=this.getUIbyID("nameLbl4") as Label;
@@ -148,6 +169,11 @@ package com.leyou.ui.tips {
 			this.nameLbl3=this.getUIbyID("nameLbl3") as Label;
 			this.nameLbl6=this.getUIbyID("nameLbl6") as Label;
 			this.nameLbl5=this.getUIbyID("nameLbl5") as Label;
+
+			this.nameLbl7=this.getUIbyID("nameLbl7") as Label;
+			this.nameLbl8=this.getUIbyID("nameLbl8") as Label;
+			this.nameLbl9=this.getUIbyID("nameLbl9") as Label;
+			this.nameLbl10=this.getUIbyID("nameLbl10") as Label;
 
 			this.tdataLbl=this.getUIbyID("tdataLbl") as Label;
 			this.dateLbl=this.getUIbyID("dateLbl") as Label;
@@ -164,6 +190,7 @@ package com.leyou.ui.tips {
 			this.fightlineImg=this.getUIbyID("fightlineImg") as Image;
 			this.desclineImg=this.getUIbyID("desclineImg") as Image;
 			this.gemlineImg=this.getUIbyID("gemlineImg") as Image;
+			this.standlineImg=this.getUIbyID("standlineImg") as Image;
 
 			this.starImg0=this.getUIbyID("starImg0") as Image;
 			this.starImg1=this.getUIbyID("starImg1") as Image;
@@ -189,8 +216,8 @@ package com.leyou.ui.tips {
 			this.dtimeLbl.x=10;
 
 			var pname:Number=24;
-			var pvalue:Number=65;
-			var padd:Number=144;
+			var pvalue:Number=78;
+			var padd:Number=141;
 
 			var py:Number=153;
 			var py2:Number=253;
@@ -231,6 +258,7 @@ package com.leyou.ui.tips {
 				this.addChild(lb);
 				this.propsKeyAddArr.push(lb);
 
+
 				lb=new Label();
 				lb.x=pvalue + 15;
 				lb.y=py2 + this.propsValAddArr.length * 20;
@@ -254,13 +282,55 @@ package com.leyou.ui.tips {
 
 				lb.defaultTextFormat=FontEnum.getTextFormat("White12");
 				this.propsValueAddArr.push(lb);
+
 			}
 
-			for (var k:int=0; k < 12; k++) {
+			var k:int=0;
+
+			for (k=0; k < 8; k++) {
+
+				if (k < 2) {
+					lb=new Label();
+					lb.x=pname;
+//					lb.y=py + this.suitpropNameArr.length * 20;
+					this.addChild(lb);
+					this.suitpropNameArr.push(lb);
+
+					lb=new Label();
+					lb.x=pvalue;
+//					lb.y=py + this.suitpropKeyArr.length * 20;
+
+					this.addChild(lb);
+
+					lb.defaultTextFormat=FontEnum.getTextFormat("White12");
+					this.suitpropKeyArr.push(lb);
+				}
+
+				if (k < 3) {
+					lb=new Label();
+					lb.x=pname;
+					this.addChild(lb);
+					lb.width=231;
+					lb.wordWrap=true;
+					lb.defaultTextFormat=FontEnum.getTextFormat("Green12");
+					this.suitEffectArr.push(lb);
+				}
+
+				lb=new Label();
+				lb.x=pname;
+				this.addChild(lb);
+				this.suitTypeArr.push(lb);
+
+			}
+
+
+			for (k=0; k < 12; k++) {
 				this.ArrawDownOrUp[k]=new Image("ui/common/icon_down.png");
-				this.ArrawDownOrUp[k].x=pvalue + 50;
+				this.ArrawDownOrUp[k].x=pvalue + 45;
 				this.ArrawDownOrUp[k].visible=false;
+				this.ArrawDownOrUp[k].height=14;
 				this.addChild(this.ArrawDownOrUp[k]);
+
 			}
 
 			var star:Image;
@@ -301,7 +371,7 @@ package com.leyou.ui.tips {
 					this.addChild(lb);
 
 					lb.defaultTextFormat=FontEnum.getTextFormat("Green12");
-					
+
 					valueArr.push(lb);
 				}
 
@@ -312,8 +382,8 @@ package com.leyou.ui.tips {
 			this.grid=new TipsGrid();
 			this.addChild(this.grid);
 
-			this.grid.x=13;
-			this.grid.y=43;
+			this.grid.x=11;
+			this.grid.y=29;
 
 			this.addChild(this.bindImg);
 		}
@@ -374,32 +444,35 @@ package com.leyou.ui.tips {
 
 			this.strengLv.x=this.nameLbl.x + this.nameLbl.width + 5;
 
-			if (this.tipsInfo.qh != 0)
+			if (this.tipsInfo.qh != 0) {
 				this.strengLv.text="+" + this.tipsInfo.qh;
-			else
+				this.onUseLbl.x=this.strengLv.x + this.strengLv.textWidth;
+			} else {
 				this.strengLv.text="";
+				this.onUseLbl.x=this.nameLbl.x + this.nameLbl.textWidth;
+			}
 
 			this.equipImg.visible=false;
 			this.bindImg.visible=false;
+			this.onUseLbl.visible=false;
 
-			if (this.tipsInfo.isUse)
-				this.equipImg.visible=PlayerUtil.getEquipToBody(info);
-			else {
-
-				if (int(info.bind) == 1) {
-					this.bindImg.visible=true;
-				} else {
-					this.bindImg.visible=false;
-				}
-
+			if (this.tipsInfo.isUse) {
+//				this.equipImg.visible=PlayerUtil.getEquipToBody(info);
+				this.onUseLbl.visible=true;
 			}
 
-			if (info.subclassid > 12)
-				this.lvkeyLbl.text="坐骑等级";
-			else
-				this.lvkeyLbl.text="等级需求";
+			if (int(info.bind) == 1) {
+				this.bindImg.visible=true;
+			} else {
+				this.bindImg.visible=false;
+			}
 
-			this.partkeyLbl.text="装备部位";
+//			if (info.subclassid > 12)
+//				this.lvkeyLbl.text=PropUtils.getStringById(1931);
+//			else
+				this.lvkeyLbl.text=PropUtils.getStringById(1938);
+
+			this.partkeyLbl.text=PropUtils.getStringById(1932);
 		}
 
 		/**
@@ -411,6 +484,7 @@ package com.leyou.ui.tips {
 				return;
 
 			this.equipImg.visible=false;
+			this.onUseLbl.visible=false;
 
 			this.strengLv.text="";
 			this.grid.updataInfo(info);
@@ -421,7 +495,7 @@ package com.leyou.ui.tips {
 			this.proLbl.text=PlayerUtil.getPlayerRaceByIdx(int(info.limit));
 			this.lvType.text=info.level + "";
 			this.partLbl.text=info.maxgroup + "";
-			this.partkeyLbl.text="堆叠数量";
+			this.partkeyLbl.text=PropUtils.getStringById(1933);
 
 			if (int(info.bind) == 1) {
 				this.bindImg.visible=true;
@@ -460,7 +534,7 @@ package com.leyou.ui.tips {
 
 			}
 
-			this.scrollRect=new Rectangle(0, 0, this.width, this.priceSc.y + this.priceSc.height);
+			this.scrollRect=new Rectangle(0, 0, this.width, this.height);
 		}
 
 		/**
@@ -473,7 +547,7 @@ package com.leyou.ui.tips {
 			this.tdataLbl.visible=false;
 			this.dateLbl.visible=false;
 
-			this.titleLineImg.y=133;
+			this.titleLineImg.y=97;
 
 			this.setStarState(true);
 			this.clearData();
@@ -481,9 +555,9 @@ package com.leyou.ui.tips {
 			this.updateStarLv(this.tipsInfo.qh, int(tinfo.maxlevel));
 
 			if (int(tinfo.maxlevel) <= 8)
-				this.nameLbl0.y=170;
+				this.nameLbl0.y=115;
 			else
-				this.nameLbl0.y=188;
+				this.nameLbl0.y=133;
 
 			this.nameLbl0.visible=true;
 			this.nameLbl1.visible=true;
@@ -492,17 +566,23 @@ package com.leyou.ui.tips {
 			this.nameLbl4.visible=true;
 			this.nameLbl6.visible=true;
 
+			this.nameLbl7.visible=true;
+			this.nameLbl8.visible=true;
+			this.nameLbl9.visible=true;
+			this.nameLbl10.visible=true;
+
 			this.currentfightLbl.visible=true;
 			this.fullfightLbl.visible=true;
 			this.qhlvLbl.visible=true;
 			this.fightlineImg.visible=true;
+			this.standlineImg.visible=true;
 			this.desclineImg.visible=true;
 
 			this.desc1Lbl.width=245;
 			this.getFunLbl.width=245;
 			this.desc1Lbl.wordWrap=true;
 			this.getFunLbl.wordWrap=true;
-			
+
 			this.updateEquipProps(tinfo);
 
 			this.updateDesc(tinfo.des, tinfo.desSource, this.desclineImg.y);
@@ -513,7 +593,7 @@ package com.leyou.ui.tips {
 
 				var d:Date=new Date();
 				d.time=this.tipsInfo.dtime * 1000;
-				this.dtimeLbl.text="道具有效期至:" + TimeUtil.getDateToString(d);
+				this.dtimeLbl.text=PropUtils.getStringById(1939) + ":" + TimeUtil.getDateToString(d);
 			} else {
 				this.dtimeLbl.visible=false;
 				this.dtimeLbl.y=this.getFunLbl.y + this.getFunLbl.height - this.dtimeLbl.height;
@@ -525,6 +605,12 @@ package com.leyou.ui.tips {
 			}
 
 			this.updatePrice(num, this.tipsInfo.moneyType);
+
+			if (tinfo.Suit_Group > 0) {
+				this.priceSc.visible=false;
+			} else {
+				this.priceSc.visible=this.tipsInfo.isShowPrice;
+			}
 
 			this.bgSc.height=this.priceSc.y;
 		}
@@ -579,7 +665,7 @@ package com.leyou.ui.tips {
 						this.propsValueArr[_x].text=this.tipsInfo.p[(i + 1)] + "";
 						this.propsRectArr[_x].text="(" + info[PropUtils.getEquipColumnByIndex(i)[0]] + " ~ " + info[PropUtils.getEquipColumnByIndex(i)[1]] + ")";
 
-						this.ArrawDownOrUp[_a].y=this.propsNameArr[_x].y=this.propsValueArr[_x].y=this.propsRectArr[_x].y=this.nameLbl0.y + this.nameLbl0.height + this.nameLbl0.height * _x;
+						this.ArrawDownOrUp[_a].y=this.propsNameArr[_x].y=this.propsValueArr[_x].y=this.propsRectArr[_x].y=this.nameLbl0.y + this.labelHeight + this.labelHeight * _x;
 
 						if (this.tipsInfo.isdiff) {
 							if (this.tipsInfo.p[(i + 1)] < einfo.tips.p[(i + 1)])
@@ -594,7 +680,7 @@ package com.leyou.ui.tips {
 				}
 			}
 
-			this.nameLbl3.y=this.qhlvLbl.y=this.nameLbl0.y + this.nameLbl0.height + this.nameLbl0.height * _x;
+			this.nameLbl3.y=this.qhlvLbl.y=this.nameLbl0.y + this.labelHeight + this.labelHeight * _x;
 			this.qhlvLbl.text="(" + this.tipsInfo.qh + "/" + info.maxlevel + ")";
 
 			var qh:int=0;
@@ -602,10 +688,10 @@ package com.leyou.ui.tips {
 				for (i=0; i < 7; i++) {
 
 					if (this.tipsInfo.p.hasOwnProperty("qh_" + (i + 1))) {
-						this.propsKeyAddArr[qh].text="强化" + PropUtils.propArr[int(i)] + ":";
+						this.propsKeyAddArr[qh].text=PropUtils.getStringById(1696) + PropUtils.propArr[int(i)] + ":";
 						this.propsValAddArr[qh].text=this.tipsInfo.p["qh_" + (i + 1)] + "";
 
-						this.ArrawDownOrUp[_a].y=this.propsKeyAddArr[qh].y=this.propsValAddArr[qh].y=this.nameLbl3.y + this.nameLbl3.height + this.nameLbl3.height * qh;
+						this.ArrawDownOrUp[_a].y=this.propsKeyAddArr[qh].y=this.propsValAddArr[qh].y=this.nameLbl3.y + this.labelHeight + this.labelHeight * qh;
 
 						if (this.tipsInfo.isdiff) {
 							if (this.tipsInfo.p["qh_" + (i + 1)] < einfo.tips.p["qh_" + (i + 1)])
@@ -627,18 +713,26 @@ package com.leyou.ui.tips {
 			} else {
 				this.qhlvLbl.visible=true;
 				this.nameLbl3.visible=true;
-				this.nameLbl1.y=this.nameLbl3.y + this.nameLbl3.height + this.nameLbl1.height * qh;
+				this.nameLbl1.y=this.nameLbl3.y + this.labelHeight + this.labelHeight * qh;
 			}
 
 			//附加
 			var _y:int=0;
 			if (this.tipsInfo.p != null) {
 				for (i=7; i < PropUtils.propArr.length; i++) {
+
 					if (this.tipsInfo.p[i + 1]) {
 						this.propsNameAddArr[_y].text=PropUtils.propArr[int(i)] + ":";
 						this.propsValueAddArr[_y].text="" + this.tipsInfo.p[(i + 1)];
 
-						this.ArrawDownOrUp[_a].y=this.propsNameAddArr[_y].y=this.propsValueAddArr[_y].y=this.nameLbl1.y + this.nameLbl1.height + _y * this.nameLbl1.height;
+						if (_y % 2 != 0) {
+//							this.ArrawDownOrUp[_a].y=this.propsNameAddArr[_y].y=this.propsValueAddArr[_y].y
+							this.ArrawDownOrUp[_a].x=240;
+							this.propsNameAddArr[_y].x=141;
+							this.propsValueAddArr[_y].x=195;
+						}
+
+						this.ArrawDownOrUp[_a].y=this.propsNameAddArr[_y].y=this.propsValueAddArr[_y].y=this.nameLbl1.y + this.labelHeight + Math.floor(_y / 2) * this.labelHeight;
 
 						if (this.tipsInfo.isdiff) {
 							if (this.tipsInfo.p[(i + 1)] < einfo.tips.p[(i + 1)])
@@ -650,6 +744,7 @@ package com.leyou.ui.tips {
 						_y++;
 						_a++;
 					}
+
 				}
 			}
 
@@ -659,24 +754,153 @@ package com.leyou.ui.tips {
 				this.propsNameAddArr[_y].text=PropUtils.propArr[int(i)] + ":";
 				this.propsValueAddArr[_y].text="" + this.tipsInfo.p[(i + 1)];
 
-				this.propsNameAddArr[_y].y=this.propsValueAddArr[_y].y=this.nameLbl1.y + this.nameLbl1.height + _y * this.nameLbl1.height;
+				if (_y % 2 != 0) {
+//					this.ArrawDownOrUp[_a].y=this.propsNameAddArr[_y].y=this.propsValueAddArr[_y].y
+//					this.ArrawDownOrUp[_a].x=240;
+					this.propsNameAddArr[_y].x=141;
+					this.propsValueAddArr[_y].x=195;
+				}
+
+				this.propsNameAddArr[_y].y=this.propsValueAddArr[_y].y=this.nameLbl1.y + this.labelHeight + Math.floor(_y / 2) * this.labelHeight;
 				_y++;
 			}
 
 
 			if (_y == 0) {
 				this.nameLbl1.visible=false;
-				this.gemlineImg.y=this.nameLbl1.y + 10;
+				this.nameLbl7.y=this.nameLbl1.y;
 			} else {
 				this.nameLbl1.visible=true;
-				this.gemlineImg.y=this.nameLbl1.y + this.nameLbl1.height + this.nameLbl1.height * _y + 10;
+				this.nameLbl7.y=this.nameLbl1.y + this.labelHeight + this.labelHeight * (_y % 2 == 0 ? Math.floor(_y / 2) : Math.floor(_y / 2) + 1);
 			}
 
-			this.nameLbl5.y=this.gemlineImg.y + 10;
+
+			//神装
+			_y=0;
+			if (info.fixed_attack > 0) {
+				this.suitpropNameArr[0].text="" + PropUtils.propArr[40] + ":";
+				this.suitpropKeyArr[0].text="" + info.fixed_attack;
+
+				this.suitpropNameArr[0].y=this.suitpropKeyArr[0].y=this.nameLbl7.y + this.labelHeight;
+				_y++;
+			}
+
+			if (info.fixed_defense > 0) {
+				this.suitpropNameArr[1].text="" + PropUtils.propArr[41] + ":";
+				this.suitpropKeyArr[1].text="" + info.fixed_defense;
+
+				this.suitpropNameArr[1].y=this.suitpropKeyArr[1].y=this.nameLbl7.y + this.labelHeight + this.labelHeight * _y;
+				_y++;
+			}
+
+
+			if (_y == 0) {
+				this.nameLbl7.visible=false;
+				this.standlineImg.y=this.nameLbl7.y + this.lineHeight;
+			} else {
+				this.nameLbl7.visible=true;
+				this.standlineImg.y=this.nameLbl7.y + this.labelHeight + this.labelHeight * _y + this.lineHeight;
+			}
+
+			this.nameLbl8.y=this.standlineImg.y + this.lineHeight;
+			this.nameLbl9.y=this.standlineImg.y + this.lineHeight;
+
+			_y=0;
+
+			var tEquip:TEquipInfo;
+			var u:int=0;
+			if (info.Suit_Group > 0) {
+				var suitArr:Array=TableManager.getInstance().getEquipListArrBySuitGroup(info.Suit_Group);
+
+				if (suitArr != null) {
+
+					for each (tEquip in suitArr) {
+						this.suitTypeArr[_y].text="" + tEquip.name;
+
+						if (PlayerUtil.getEquipToBody(tEquip, true)) {
+							this.suitTypeArr[_y].textColor=ItemUtil.getColorByQuality(tEquip.quality);
+							u++;
+						} else {
+							this.suitTypeArr[_y].textColor=0xcccccc;
+						}
+
+						if (_y % 2 != 0) {
+							this.suitTypeArr[_y].x=141;
+						}
+
+						this.suitTypeArr[_y].y=this.nameLbl8.y + this.labelHeight + this.labelHeight * Math.floor(_y / 2);
+						_y++;
+					}
+
+					this.nameLbl9.text="(" + u + "/" + suitArr.length + ")";
+				}
+			}
+
+
+
+			if (_y == 0) {
+				this.nameLbl8.visible=false;
+				this.nameLbl9.visible=false;
+				this.nameLbl10.y=this.nameLbl8.y;
+			} else {
+				this.nameLbl8.visible=true;
+				this.nameLbl9.visible=true;
+				this.nameLbl10.y=this.nameLbl8.y + this.labelHeight + this.labelHeight * Math.ceil(_y / 2);
+			}
+
+			_y=0;
+			if (info.Suit_Group > 0) {
+				var tsuit:TSuit;
+				suitArr.length=0;
+				suitArr=TableManager.getInstance().getSuitByGroup(info.Suit_Group);
+
+				var _yy:int=0;
+				if (suitArr != null) {
+
+					for each (tsuit in suitArr) {
+						if (tsuit.SA_Num > 0)
+							this.suitEffectArr[_yy].htmlText=tsuit.Suit_Num + PropUtils.getStringById(1936) + "：" + PropUtils.propArr[tsuit.Suit_Att - 1] + " +" + tsuit.SA_Num;
+						else
+							this.suitEffectArr[_yy].htmlText=tsuit.Suit_Num + PropUtils.getStringById(1936) + "： " + tsuit.SA_txt;
+
+						this.suitEffectArr[_yy].y=this.nameLbl10.y + this.labelHeight + this.labelHeight * _yy;
+
+						if (u < tsuit.Suit_Num)
+							this.suitEffectArr[_yy].textColor=0xcccccc;
+						else
+							this.suitEffectArr[_yy].textColor=0x00ff00;
+
+						_y+=this.suitEffectArr[_yy].height - 5;
+						_yy++;
+
+					}
+
+				}
+			}
+
+
+
+			if (_y == 0) {
+				this.nameLbl10.visible=false;
+
+				if (this.nameLbl8.visible)
+					this.gemlineImg.y=this.nameLbl10.y + this.lineHeight;
+				else {
+					this.standlineImg.visible=false;
+					this.gemlineImg.y=this.standlineImg.y;
+				}
+
+			} else {
+				this.nameLbl10.visible=true;
+				this.gemlineImg.y=this.nameLbl10.y + this.labelHeight + _y + this.lineHeight;
+			}
+
+
+			this.nameLbl5.y=this.gemlineImg.y + this.lineHeight;
 
 			var j:int=0;
 			i=0;
-			var tEquip:TEquipInfo;
+
 			var lv:int=0;
 			var slist:Array=[];
 			var tmp:Image;
@@ -696,14 +920,14 @@ package com.leyou.ui.tips {
 
 					this.gemStarArr[j].visible=true;
 
-					this.gemNameArr[j].y=this.nameLbl5.y + this.nameLbl5.height + j * this.nameLbl5.height;
+					this.gemNameArr[j].y=this.nameLbl5.y + this.labelHeight + j * this.labelHeight;
 					this.gemStarArr[j].y=this.gemNameArr[j].y + 1;
 
 					if (tEquip == null) {
 
 						this.gemStarArr[j].updateBmp("ui/tips/icon_xxx.png");
 
-						this.gemNameArr[j].text="未镶嵌";
+						this.gemNameArr[j].text=PropUtils.getStringById(1940);
 						this.gemNameArr[j].textColor=0xff0000
 						this.gemNameArr[j].filters=[FilterUtil.enablefilter];
 
@@ -752,7 +976,7 @@ package com.leyou.ui.tips {
 			} else {
 				this.nameLbl5.visible=true;
 				this.gemlineImg.visible=true;
-				this.fightlineImg.y=this.nameLbl5.y + this.nameLbl5.height + this.nameLbl5.height * j + 10;
+				this.fightlineImg.y=this.nameLbl5.y + this.labelHeight + this.labelHeight * j + this.lineHeight;
 			}
 
 			this.currentfightLbl.text="" + this.tipsInfo.zdl;
@@ -766,12 +990,12 @@ package com.leyou.ui.tips {
 				this.nameLbl4.setTextFormat(FontEnum.getTextFormat("grey12"));
 			}
 
-			this.currentfightLbl.y=this.fightlineImg.y + 10;
-			this.fullfightLbl.y=this.currentfightLbl.y + this.currentfightLbl.height;
+			this.currentfightLbl.y=this.fightlineImg.y + this.lineHeight - 4;
+			this.fullfightLbl.y=this.currentfightLbl.y + this.labelHeight;
 
 			this.nameLbl2.y=this.currentfightLbl.y + 4
 			this.nameLbl4.y=this.fullfightLbl.y + 4
-			this.desclineImg.y=this.fullfightLbl.y + this.fullfightLbl.height + 10;
+			this.desclineImg.y=this.fullfightLbl.y + this.labelHeight + this.lineHeight * 2;
 		}
 
 		/**
@@ -792,14 +1016,14 @@ package com.leyou.ui.tips {
 				this.tdataLbl.visible=false;
 				this.dateLbl.visible=false;
 
-				this.titleLineImg.y=133;
+				this.titleLineImg.y=97;
 			}
 
 			this.desc1Lbl.width=245;
 			this.getFunLbl.width=245;
 			this.desc1Lbl.wordWrap=true;
 			this.getFunLbl.wordWrap=true;
-			
+
 			this.updateDesc(tinfo.des, tinfo.desSource, this.titleLineImg.y);
 
 			if (tinfo.limitTime != 0) {
@@ -808,7 +1032,7 @@ package com.leyou.ui.tips {
 
 				var d:Date=new Date();
 				d.time=this.tipsInfo.dtime * 1000;
-				this.dtimeLbl.text="道具有效期至:" + TimeUtil.getDateToString(d);
+				this.dtimeLbl.text=PropUtils.getStringById(1939)+":" + TimeUtil.getDateToString(d);
 			} else {
 				this.dtimeLbl.visible=false;
 				this.dtimeLbl.y=this.getFunLbl.y + this.getFunLbl.height - this.dtimeLbl.height;
@@ -834,11 +1058,14 @@ package com.leyou.ui.tips {
 			this.nameLbl5.visible=false;
 			this.nameLbl6.visible=false;
 			this.gemlineImg.visible=false;
+			this.standlineImg.visible=false;
 			this.currentfightLbl.visible=false;
 			this.fullfightLbl.visible=false;
 			this.qhlvLbl.visible=false;
 			this.fightlineImg.visible=false;
 			this.desclineImg.visible=false;
+
+			this.priceSc.visible=this.tipsInfo.isShowPrice;
 
 			this.bgSc.height=this.priceSc.y;
 
@@ -879,7 +1106,7 @@ package com.leyou.ui.tips {
 
 			this.getFunLbl.htmlText="" + ds;
 
-			this.desc1Lbl.y=pos + 8;
+			this.desc1Lbl.y=pos + this.lineHeight;
 			this.getFunLbl.y=this.desc1Lbl.y + this.desc1Lbl.height;
 		}
 
@@ -894,9 +1121,9 @@ package com.leyou.ui.tips {
 			this.priceLbl.text="" + price;
 
 			if (isshop == 1) {
-				this.moneyNameLbl.text="购买价格:";
+				this.moneyNameLbl.text=PropUtils.getStringById(1919)+":";
 			} else {
-				this.moneyNameLbl.text="出售价格:";
+				this.moneyNameLbl.text=PropUtils.getStringById(1937)+":";
 			}
 
 			this.priceSc.y=this.dtimeLbl.y + this.dtimeLbl.height + 10;
@@ -923,16 +1150,18 @@ package com.leyou.ui.tips {
 
 		private function clearData():void {
 
-			for (var i:int=0; i < 6; i++) {
-				this.propsNameArr[i].text="";
-				this.propsValueArr[i].text="";
-				this.propsRectArr[i].text="";
+			for (var i:int=0; i < 8; i++) {
+				if (i < 6) {
+					this.propsNameArr[i].text="";
+					this.propsValueArr[i].text="";
+					this.propsRectArr[i].text="";
 
-				this.propsKeyAddArr[i].text="";
-				this.propsValAddArr[i].text="";
+					this.propsKeyAddArr[i].text="";
+					this.propsValAddArr[i].text="";
 
-				this.propsNameAddArr[i].text=""
-				this.propsValueAddArr[i].text=""
+					this.propsNameAddArr[i].text=""
+					this.propsValueAddArr[i].text=""
+				}
 
 				if (i < 3) {
 
@@ -944,9 +1173,18 @@ package com.leyou.ui.tips {
 					this.gemPropsValueArr[i][0].text="";
 					this.gemPropsValueArr[i][1].text="";
 
+					this.suitEffectArr[i].text="";
 				}
-			}
 
+				if (i < 2) {
+					this.suitpropKeyArr[i].text="";
+					this.suitpropNameArr[i].text="";
+				}
+
+				this.suitTypeArr[i].filters=[];
+				this.suitTypeArr[i].text="";
+
+			}
 
 
 			this.setArrawDown(false);
@@ -964,5 +1202,11 @@ package com.leyou.ui.tips {
 			return 265;
 		}
 
+		override public function get height():Number {
+			if (this.priceSc.visible)
+				return this.bgSc.height + this.priceSc.height;
+			else
+				return this.bgSc.height;
+		}
 	}
 }

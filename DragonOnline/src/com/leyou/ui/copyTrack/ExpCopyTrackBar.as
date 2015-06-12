@@ -13,6 +13,7 @@ package com.leyou.ui.copyTrack
 	import com.ace.ui.lable.Label;
 	import com.leyou.net.cmd.Cmd_EXPC;
 	import com.leyou.ui.market.child.MarketGrid;
+	import com.leyou.utils.PropUtils;
 	import com.leyou.utils.StringUtil_II;
 	
 	import flash.events.MouseEvent;
@@ -26,7 +27,7 @@ package com.leyou.ui.copyTrack
 		
 		protected var doubleExpLbl:Label;
 		
-		protected var costLbl:Label;
+//		protected var costLbl:Label;
 		
 		protected var expLbl:Label;
 		
@@ -58,7 +59,7 @@ package com.leyou.ui.copyTrack
 			doubleBtn = getUIbyID("doubleBtn") as ImgButton;
 			doubleExpLbl = getUIbyID("doubleExpLbl") as Label;
 			expLbl = getUIbyID("expLbl") as Label;
-			costLbl = getUIbyID("costLbl") as Label;
+//			costLbl = getUIbyID("costLbl") as Label;
 //			boxLbl = getUIbyID("boxLbl") as Label;
 			timeLbl = getUIbyID("timeLbl") as Label;
 			addLbl = getUIbyID("addLbl") as Label;
@@ -102,8 +103,8 @@ package com.leyou.ui.copyTrack
 			tick = getTimer();
 			stayTime = obj.csec;
 			expRemain = obj.expsec;
-			expLbl.text = obj.cexp?obj.cexp:"";
-			costLbl.htmlText = (0 == obj.emoney) ? "无金币消耗" : "<Font size='12' color='#FFD200'>"+obj.cmoney +"</Font><Font size='12' color='#FF00'>(" + obj.emoney + "/分)</Font>";
+			expLbl.text = obj.cexp ? obj.cexp : "0";
+//			costLbl.htmlText = (0 == obj.emoney) ? PropUtils.getStringById(1673) : "<Font size='12' color='#FFD200'>"+obj.cmoney +"</Font><Font size='12' color='#FF00'>(" + obj.emoney + "/"+PropUtils.getStringById(2147)+")</Font>";
 //			boxLbl.text = obj.box.cc + "/" + obj.box.cm;
 			doubleCostLbl.text = obj.bprice;
 		}

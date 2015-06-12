@@ -24,6 +24,7 @@ package com.leyou.ui.guild.child {
 	import com.leyou.enum.GuildEnum;
 	import com.leyou.manager.PopupManager;
 	import com.leyou.net.cmd.Cmd_Guild;
+	import com.leyou.utils.PropUtils;
 	
 	import flash.display.Sprite;
 	import flash.events.Event;
@@ -74,8 +75,8 @@ package com.leyou.ui.guild.child {
 			this.numLbl=this.getUIbyID("numLbl") as Label;
 			this.bossLbl=this.getUIbyID("bossLbl") as Label;
 			this.topLbl=this.getUIbyID("topLbl") as Label;
-			this.saveCostLbl=this.getUIbyID("saveCostLbl") as Label;
-			this.saveCostTxt=this.getUIbyID("saveCostTxt") as Label;
+//			this.saveCostLbl=this.getUIbyID("saveCostLbl") as Label;
+//			this.saveCostTxt=this.getUIbyID("saveCostTxt") as Label;
 			this.upgradeCostLbl=this.getUIbyID("upgradeCostLbl") as Label;
 			this.upgradeCostTxt=this.getUIbyID("upgradeCostTxt") as Label;
 			this.pkBossLbl=this.getUIbyID("pkBossLbl") as Label;
@@ -114,7 +115,7 @@ package com.leyou.ui.guild.child {
 
 			this.mainTabber.addEventListener(TabbarModel.changeTurnOnIndex, onChangeIndex);
 
-			this.saveCostTxt.setToolTip(TableManager.getInstance().getSystemNotice(3048).content);
+//			this.saveCostTxt.setToolTip(TableManager.getInstance().getSystemNotice(3048).content);
 			this.upgradeCostTxt.setToolTip(TableManager.getInstance().getSystemNotice(3049).content);
 
 			var spr:Sprite=new Sprite();
@@ -182,14 +183,14 @@ package com.leyou.ui.guild.child {
 					break;
 				case "nameLbl":
 					menuVec=new Vector.<MenuInfo>();
-					menuVec.push(new MenuInfo("复制名字", 1));
+					menuVec.push(new MenuInfo(PropUtils.getStringById(1726), 1));
 
 					p=new Point(e.stageX - 30, e.stageY);
 					MenuManager.getInstance().show(menuVec, this, p);
 					break;
 				case "bossLbl":
 					menuVec=new Vector.<MenuInfo>();
-					menuVec.push(new MenuInfo("复制名字", 2));
+					menuVec.push(new MenuInfo(PropUtils.getStringById(1726), 2));
 
 					p=new Point(e.stageX - 30, e.stageY);
 					MenuManager.getInstance().show(menuVec, this, p);
@@ -277,8 +278,8 @@ package com.leyou.ui.guild.child {
 				this.progressSc.scaleX=(int(o.vnum) / int(o.xnum) > 1 ? 1 : int(o.vnum) / int(o.xnum));
 			}
 
-			if (o.hasOwnProperty("mnum"))
-				this.saveCostLbl.text="" + o.mnum;
+//			if (o.hasOwnProperty("mnum"))
+//				this.saveCostLbl.text="" + o.mnum;
 
 			UIManager.getInstance().guildWnd.guildLiveness=this.upgradeBtn.visible=(int(o.vnum) >= int(o.mnum));
 
@@ -290,7 +291,7 @@ package com.leyou.ui.guild.child {
 
 			if (o.hasOwnProperty("lnum")) {
 				if (o.lnum == -1) {
-					this.upgradeCostLbl.text="无";
+					this.upgradeCostLbl.text=PropUtils.getStringById(1594);
 				} else
 					this.upgradeCostLbl.text="" + o.lnum;
 			}

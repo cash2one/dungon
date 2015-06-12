@@ -1,4 +1,5 @@
 package com.leyou.enum {
+	import com.leyou.utils.PropUtils;
 
 
 
@@ -34,72 +35,83 @@ package com.leyou.enum {
 		 */
 		public static var taskLevel_factionLine:int=6;
 
+		/**
+		 *7.佣兵经验
+		 */
+		public static var taskLevel_mercenaryExpLine:int=7;
+
+		/**
+		 *8佣兵亲密
+		 */
+		public static var taskLevel_mercenaryCloseLine:int=8;
+
+
 		/***************************************************************************************************************/
 
 		/**
 		 *剧情副本 ------------附加
 		 */
-		public static var taskLevel_storeCopyLine:int=7;
+		public static var taskLevel_storeCopyLine:int=9;
 
 		/**
 		 *boss ------------附加
 		 */
-		public static var taskLevel_bossCopyLine:int=8;
-		
+		public static var taskLevel_bossCopyLine:int=10;
+
 		/**
 		 *野外boss ------------附加
 		 */
-		public static var taskLevel_fieldbossCopyLine:int=9;
+		public static var taskLevel_fieldbossCopyLine:int=11;
 
 		/**
 		 *押运 ------------附加
 		 */
-		public static var taskLevel_deliveryLine:int=10;
+		public static var taskLevel_deliveryLine:int=12;
 
 		/**
 		 *农场 ------------附加
 		 */
-		public static var taskLevel_farmLine:int=11;
+		public static var taskLevel_farmLine:int=13;
 
 		/**
 		 *竞技场 ------------附加
 		 */
-		public static var taskLevel_arenaLine:int=12;
+		public static var taskLevel_arenaLine:int=14;
 
 		/**
 		 *答题 ------------附加
 		 */
-		public static var taskLevel_questLine:int=13;
+		public static var taskLevel_questLine:int=15;
 
 		/**
 		 *龙穴 ------------附加
 		 */
-		public static var taskLevel_dragonLine:int=14;
+		public static var taskLevel_dragonLine:int=16;
 
 		/**
 		 *恶魔 ------------附加
 		 */
-		public static var taskLevel_monsterLine:int=15;
+		public static var taskLevel_monsterLine:int=17;
 
 		/**
 		 *练级 ------------附加
 		 */
-		public static var taskLevel_levelingLine:int=16;
+		public static var taskLevel_levelingLine:int=18;
 
 		/**
 		 *双倍 ------------附加
 		 */
-		public static var taskLevel_doubleLine:int=17;
+		public static var taskLevel_doubleLine:int=19;
 
 		/**
 		 *签到 ------------附加
 		 */
-		public static var taskLevel_signInLine:int=18;
-		
+		public static var taskLevel_signInLine:int=20;
+
 		/**
 		 * 收集----------------附加
-		 */		
-		public static var taskLevel_collectLine:int=19;
+		 */
+		public static var taskLevel_collectLine:int=21;
 
 
 		/**=============================================================================================================*/
@@ -201,7 +213,24 @@ package com.leyou.enum {
 </pre>
 */
 		public static var taskTypeDesc:Array=["和##对话", "击败####", "击败##获得####", "采集##取得####", "将##送给##", "收集####", "等级达到##", "", "完成##个<font color='#00ff00'><u><a href='event:todayTask'>日常任务</a></u></font>", "参与##次<font color='#00ff00'><u><a href='event:arena'>竞技场</a></u></font>", "开启##个<font color='#00ff00'><u><a href='event:badge'>纹章</a></u></font>节点", "<font color='#00ff00'><u><a href='event:mount'>坐骑</a></u></font>等阶达到或超过##", "进入剧情副本##", "将任意<font color='#00ff00'><u><a href='event:equip'>装备</a></u></font>的强化至##级", "进行##次<font color='#00ff00'><u><a href='event:elements'>元素</a></u></font>经验抽取"];
+		
+		taskTypeDesc[0]=PropUtils.getStringById(2089);
+		taskTypeDesc[1]=PropUtils.getStringById(2090);
+		taskTypeDesc[2]=PropUtils.getStringById(2091);
+		taskTypeDesc[3]=PropUtils.getStringById(2092);
+		taskTypeDesc[4]=PropUtils.getStringById(2093);
+		taskTypeDesc[5]=PropUtils.getStringById(2094);
+		taskTypeDesc[6]=PropUtils.getStringById(2095);
+		taskTypeDesc[7]="";
+		taskTypeDesc[8]=PropUtils.getStringById(2096);
+		taskTypeDesc[9]=PropUtils.getStringById(2097);
+		taskTypeDesc[10]=PropUtils.getStringById(2098);
+		taskTypeDesc[11]=PropUtils.getStringById(2099);
+		taskTypeDesc[12]=PropUtils.getStringById(2100);
+		taskTypeDesc[13]=PropUtils.getStringById(2101);
+		taskTypeDesc[14]=PropUtils.getStringById(2102);
 
+		
 		/**
 		 * <pre>
 A读取npc_id
@@ -212,7 +241,7 @@ A读取npc_id	B读取item_id
 A读取item_id	B读取x
 A读取minlevel
 </pre>
- */
+*/
 		public static var taskTypeNpcField:Array=[["npc_name"], ["monster_name", "monster_num"], ["monster_name", "item_name", "item_number"], ["box_name", "item_name", "item_number"], ["item_name", "npc_name"], ["item_name", "item_number"], ["minlevel"], ["npc_name"], ["N_OBJ_Num"], ["NJJC_Num"], ["Y_Blood_Num"], ["Y_Mount_lv"], ["Y_Dungeon_ID"], ["Y_ST_lv"], ["Y_Ele_Time"]];
 
 
@@ -237,20 +266,20 @@ A读取minlevel
 		public static var NPC_FUNC_ESCORT:int=4;
 
 		/**
-		 * 行会 
-		 */		
+		 * 行会
+		 */
 		public static var NPC_FUNC_GUILD:int=5;
-		
+
 		/**
-		 * 锻造 
-		 */		
+		 * 锻造
+		 */
 		public static var NPC_FUNC_EQUIT:int=6;
-		
+
 		/**
-		 * 寄售 
-		 */		
+		 * 寄售
+		 */
 		public static var NPC_FUNC_AUTION:int=7;
-		
+
 		public function TaskEnum() {
 
 		}

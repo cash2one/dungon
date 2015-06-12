@@ -125,7 +125,8 @@ package com.leyou.ui.equip.child {
 			einfo.onMouseMove=onTipsMouseOver;
 			einfo.onMouseOut=onTipsMouseOut;
 
-			MouseManagerII.getInstance().addEvents(this.goldImg, einfo);
+			if (!MouseManagerII.getInstance().hasEvents(this.goldImg))
+				MouseManagerII.getInstance().addEvents(this.goldImg, einfo);
 
 			einfo=new MouseEventInfo();
 			einfo.onMouseMove=onTipsMouseOver;
@@ -155,26 +156,26 @@ package com.leyou.ui.equip.child {
 //			this.useGoldCb.turnOn();
 
 //			if (succData == null) {
-				this.strenghptxtLbl.text="";
-				this.strengatttxtLbl.text="";
-				this.strenghp1Lbl.text="";
-				this.strengatt1Lbl.text="";
-				this.strengatt2Lbl.text="";
-				this.hp2Lbl.text="";
-				this.att2Lbl.text="";
-				this.strenghp2Lbl.text="";
+			this.strenghptxtLbl.text="";
+			this.strengatttxtLbl.text="";
+			this.strenghp1Lbl.text="";
+			this.strengatt1Lbl.text="";
+			this.strengatt2Lbl.text="";
+			this.hp2Lbl.text="";
+			this.att2Lbl.text="";
+			this.strenghp2Lbl.text="";
 
-				this.attImg.visible=false;
-				this.att1Img.visible=false;
+			this.attImg.visible=false;
+			this.att1Img.visible=false;
 
-				this.hpImg.visible=false;
-				this.hp1img.visible=false;
+			this.hpImg.visible=false;
+			this.hp1img.visible=false;
 
-				this.strenghpImg.visible=false;
-				this.strenghp1Img.visible=false;
+			this.strenghpImg.visible=false;
+			this.strenghp1Img.visible=false;
 
-				this.strengattImg.visible=false;
-				this.strengatt1Img.visible=false;
+			this.strengattImg.visible=false;
+			this.strengatt1Img.visible=false;
 
 //			}
 
@@ -212,7 +213,7 @@ package com.leyou.ui.equip.child {
 
 			arr=PropUtils.getEquipColumnByIndex(int(pArr[0]) - 1);
 
-			this.atttxtLbl.text="原始" + PropUtils.propArr[int(pArr[0]) - 1] + ":";
+			this.atttxtLbl.text=PropUtils.getStringById(1695) + PropUtils.propArr[int(pArr[0]) - 1] + ":";
 			this.att1Lbl.text="" + info.p[pArr[0]];
 
 			if (succData != null) {
@@ -236,7 +237,7 @@ package com.leyou.ui.equip.child {
 
 			if (info.p.hasOwnProperty("qh_" + pArr[0])) {
 
-				this.strengatttxtLbl.text="强化" + PropUtils.propArr[int(pArr[0]) - 1] + ":";
+				this.strengatttxtLbl.text=PropUtils.getStringById(1696) + PropUtils.propArr[int(pArr[0]) - 1] + ":";
 				this.strengatt1Lbl.text="" + info.p["qh_" + pArr[0]];
 
 				if (succData != null) {
@@ -260,7 +261,7 @@ package com.leyou.ui.equip.child {
 
 			} else {
 
-				this.strengatttxtLbl.text="强化" + PropUtils.propArr[int(pArr[0]) - 1] + ":";
+				this.strengatttxtLbl.text=PropUtils.getStringById(1696) + PropUtils.propArr[int(pArr[0]) - 1] + ":";
 				this.strengatt1Lbl.text="0";
 
 				if (succData != null) {
@@ -284,7 +285,7 @@ package com.leyou.ui.equip.child {
 
 			arr=PropUtils.getEquipColumnByIndex(int(pArr[1]) - 1);
 
-			this.hptxtLbl.text="原始" + PropUtils.propArr[int(pArr[1]) - 1] + ":";
+			this.hptxtLbl.text=PropUtils.getStringById(1695) + PropUtils.propArr[int(pArr[1]) - 1] + ":";
 			this.hp1Lbl.text="" + info.p[pArr[1]];
 
 			if (succData != null) {
@@ -306,7 +307,7 @@ package com.leyou.ui.equip.child {
 			}
 
 			if (info.p.hasOwnProperty("qh_" + pArr[1])) {
-				this.strenghptxtLbl.text="强化" + PropUtils.propArr[int(pArr[1]) - 1] + ":";
+				this.strenghptxtLbl.text=PropUtils.getStringById(1696) + PropUtils.propArr[int(pArr[1]) - 1] + ":";
 				this.strenghp1Lbl.text="" + info.p["qh_" + pArr[1]];
 
 				if (succData != null) {
@@ -328,16 +329,16 @@ package com.leyou.ui.equip.child {
 				}
 			} else {
 
-				this.strenghptxtLbl.text="强化" + PropUtils.propArr[int(pArr[1]) - 1] + ":";
+				this.strenghptxtLbl.text=PropUtils.getStringById(1696) + PropUtils.propArr[int(pArr[1]) - 1] + ":";
 				this.strenghp1Lbl.text="0";
 
 				if (succData != null) {
 					this.strenghp2Lbl.text="0";
-					
+
 					this.strenghp1Img.visible=true;
 					this.strenghp2Lbl.setTextFormat(FontEnum.getTextFormat("White12"));
 				}
-				
+
 			}
 
 		}

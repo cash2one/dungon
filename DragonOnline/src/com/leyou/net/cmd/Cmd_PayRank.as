@@ -6,6 +6,7 @@ package com.leyou.net.cmd
 	import com.ace.manager.UIOpenBufferManager;
 	import com.leyou.enum.CmdEnum;
 	import com.leyou.net.NetGate;
+	import com.leyou.utils.PropUtils;
 
 	public class Cmd_PayRank
 	{
@@ -27,7 +28,7 @@ package com.leyou.net.cmd
 				UIManager.getInstance().rightTopWnd.deactive("payRankBtn");
 			}else{
 				UIManager.getInstance().rightTopWnd.active("payRankBtn");
-				UIManager.getInstance().rightTopWnd.setTime("payRankBtn", obj.stime, "活动结束");
+				UIManager.getInstance().rightTopWnd.setTime("payRankBtn", obj.stime, PropUtils.getStringById(1568));
 			}
 		}
 	}

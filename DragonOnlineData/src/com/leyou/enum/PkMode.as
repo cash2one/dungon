@@ -1,5 +1,7 @@
 package com.leyou.enum
 {
+	import com.leyou.utils.PropUtils;
+
 	public class PkMode
 	{
 		// 新手模式
@@ -20,16 +22,20 @@ package com.leyou.enum
 		// 狂暴模式
 		public static const PK_MODE_HYSTERICAL:int = 6;
 		
+		// 阵营模式
+		public static const PK_MODE_CAMP:int = 7;
+		
 		// 模式数量
-		public static const PK_MODE_COUNT:int = 6;
+		public static const PK_MODE_COUNT:int = 8;
 		
 		// 菜单
-		public static const PK_MODE_MENU:Array = [ "新手模式", 
-											 	   "和平模式", 
-											 	   "善恶模式", 
-											 	   "组队模式", 
-											 	   "行会模式", 
-											 	   "全体模式" ];
+		public static const PK_MODE_MENU:Array = [ PropUtils.getStringById(2082), 
+			PropUtils.getStringById(2083), 
+			PropUtils.getStringById(2084), 
+			PropUtils.getStringById(2085), 
+			PropUtils.getStringById(2086), 
+			PropUtils.getStringById(2087),
+			PropUtils.getStringById(2088) ];
 		
 		public static const PK_COLOR_WHITE:int = 0;
 		

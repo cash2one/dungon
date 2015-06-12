@@ -5,6 +5,7 @@ package com.leyou.ui.wing {
 	import com.ace.enum.PlayerEnum;
 	import com.ace.enum.TipEnum;
 	import com.ace.enum.WindowEnum;
+	import com.ace.game.scene.ui.effect.StarChangeEffect;
 	import com.ace.gameData.manager.MyInfoManager;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.table.TItemInfo;
@@ -29,7 +30,8 @@ package com.leyou.ui.wing {
 	import com.leyou.net.cmd.Cmd_Wig;
 	import com.leyou.ui.quickBuy.QuickBuyWnd;
 	import com.leyou.utils.EffectUtil;
-	
+	import com.leyou.utils.PropUtils;
+
 	import flash.display.DisplayObject;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
@@ -58,6 +60,7 @@ package com.leyou.ui.wing {
 		private var info:Object;
 
 		private var win:SimpleWindow;
+		private var starEffect:StarChangeEffect;
 
 		private var infoxml:XML;
 
@@ -121,6 +124,11 @@ package com.leyou.ui.wing {
 
 			this.allowDrag=false;
 
+			this.starEffect=new StarChangeEffect(10, true);
+			this.addChild(this.starEffect);
+			this.starEffect.x=52;
+			this.starEffect.y=363.25;
+
 //			this.effectBg=new SwfLoader();
 //			this.addChildAt(this.effectBg,this.getChildIndex(this.tipImg)-1);
 //			this.effectBg.parent.addChildAt(this.effectBg, 3);
@@ -172,7 +180,7 @@ package com.leyou.ui.wing {
 				UILayoutManager.getInstance().show(WindowEnum.ROLE, WindowEnum.QUICK_BUY, UILayoutManager.SPACE_X, UILayoutManager.SPACE_Y + 40);
 				UIManager.getInstance().quickBuyWnd.pushItem(ConfigEnum.WingItem, ConfigEnum.WingbindItem, arr[1]);
 
-				NoticeManager.getInstance().broadcast(TableManager.getInstance().getSystemNotice(1203), ["道具"]);
+				NoticeManager.getInstance().broadcast(TableManager.getInstance().getSystemNotice(1203), [PropUtils.getStringById(1610)]);
 				return true;
 			} else {
 
@@ -192,15 +200,17 @@ package com.leyou.ui.wing {
 
 			if (evt.target.name == "autoUpBtn") {
 
-				if (this.autoUpBtn.text.indexOf("自动升阶") > -1) {
-					win=PopupManager.showConfirm("自动升阶会自行消耗背包中的升阶道具与金钱，是否开始自动升阶？", startEvo, null, false, "wingLv");
+				if (this.autoUpBtn.text.indexOf(PropUtils.getStringById(1986)) > -1) {
+					win=PopupManager.showConfirm(PropUtils.getStringById(1987), startEvo, function():void{
+					trace("ffeeeeeeeeeeee");
+					}, false, "wingLv");
 				} else {
 
 					clearInterval(this.autoTimeID);
-					autoUpBtn.text="自动升阶";
+					autoUpBtn.text=PropUtils.getStringById(1986);
 					win=null;
 					this.autoTimeID=0;
-					upBtn.mouseChildren=upBtn.mouseEnabled=true;
+					upBtn.setActive(true, 1, true);
 
 				}
 
@@ -211,11 +221,11 @@ package com.leyou.ui.wing {
 		}
 
 		private function startEvo():void {
-			autoUpBtn.text="停止升阶";
-			upBtn.mouseChildren=upBtn.mouseEnabled=false;
-			autoTimeID=setInterval(updateAutoLv, 2000);
+			autoUpBtn.text=PropUtils.getStringById(1988);
+			upBtn.setActive(false, .6, true);
+			autoTimeID=setInterval(updateAutoLv, 1000);
 			updateAutoLv();
-			autoLv=info.lv;
+			autoLv=info.wlv;
 
 		}
 
@@ -234,16 +244,16 @@ package com.leyou.ui.wing {
 				if (autoTimeID != 0) {
 					NoticeManager.getInstance().broadcast(TableManager.getInstance().getSystemNotice(1205));
 					clearInterval(this.autoTimeID);
-					autoUpBtn.text="自动升阶";
+					autoUpBtn.text=PropUtils.getStringById(1986);
 					this.autoTimeID=0;
 				}
 
-				this.upBtn.mouseChildren=this.upBtn.mouseEnabled=true;
+				upBtn.setActive(true, 1, true);
 				win=null;
 				return;
 			}
 
-			this.upBtn.mouseChildren=this.upBtn.mouseEnabled=false;
+			upBtn.setActive(false, .6, true);
 
 			if (MyInfoManager.getInstance().getBagItemNumByName(this.itemNameLbl.text) < int(arr[1]) && UIManager.getInstance().quickBuyWnd.isAutoBuy(ConfigEnum.WingItem, ConfigEnum.WingbindItem)) {
 				Cmd_Wig.cm_WigUpgrade((UIManager.getInstance().quickBuyWnd.getCost(ConfigEnum.WingItem, ConfigEnum.WingbindItem) == 0 ? 2 : 1));
@@ -258,11 +268,11 @@ package com.leyou.ui.wing {
 				NoticeManager.getInstance().broadcast(TableManager.getInstance().getSystemNotice(1205));
 				if (autoTimeID != 0) {
 					clearInterval(this.autoTimeID);
-					autoUpBtn.text="自动升阶";
+					autoUpBtn.text=PropUtils.getStringById(1986);
 					this.autoTimeID=0;
 				}
 
-				this.upBtn.mouseChildren=this.upBtn.mouseEnabled=true;
+				upBtn.setActive(true, 1, true);
 			}
 		}
 
@@ -300,27 +310,27 @@ package com.leyou.ui.wing {
 				this.wishLbl.text=o.exp; // + "/" + xml.@Wish_Exp;
 				var diff:int=int(o.exp - this.currentExp);
 
-				if (o.hasOwnProperty("lv") && int(o.lv) != this.autoLv && this.autoLv != 0 && this.autoTimeID != 0) {
+				if (o.hasOwnProperty("wlv") && int(o.wlv) != this.autoLv && this.autoLv != 0 && this.autoTimeID != 0) {
 					this.autoUpBtn.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
 					diff=int(xml.@Wish_Exp) - int(this.currentExp);
 
 					this.successEffect.visible=true;
 
 //					if (successEffect.isLoaded)
-						successEffect.playAct(PlayerEnum.ACT_STAND, -1, false, function():void {
-							successEffect.visible=false;
-						});
+					successEffect.playAct(PlayerEnum.ACT_STAND, -1, false, function():void {
+						successEffect.visible=false;
+					});
 
 
 					SoundManager.getInstance().play(23);
 				}
 
 				if (this.autoTimeID == 0)
-					upBtn.mouseChildren=upBtn.mouseEnabled=true;
+					upBtn.setActive(true, 1, true);
 
 				if (this.visible) {
 					var p:Point=this.localToGlobal(new Point(130, 380));
-					EffectUtil.flyWordEffect("+ " + diff + " 祝福值", p);
+					EffectUtil.flyWordEffect("+ " + diff + " " + PropUtils.getStringById(1989), p);
 				}
 
 				this.currentExp=o.exp;
@@ -331,13 +341,26 @@ package com.leyou.ui.wing {
 			this.itemNumLbl.htmlText=" x " + xml.@WingOL_Num;
 			this.moneyNumLbl.text="" + xml.@money;
 
+			if (o.hasOwnProperty("wlv"))
+				this.starEffect.setStarPos(o.wlv % 10 - 1);
+
 			if (o.hasOwnProperty("lv")) {
-				this.jieImg.updateBmp("ui/horse/horse_lv" + (int(o.lv) + 1) + ".png");
-				this.wingNameImg.updateBmp("ui/wing/wing_lv" + (int(o.lv) + 1) + "_name.png");
-				var pnid:int=38000 + int(o.lv);
+
+				var wlv:int=o.lv;
+				if (o.wlv % 10 == 9)
+					wlv=wlv + 1;
+
+				if (o.lv == 10)
+					wlv=10;
+
+				this.jieImg.updateBmp("ui/horse/horse_lv" + (wlv) + ".png");
+				this.wingNameImg.updateBmp("ui/wing/wing_lv" + (wlv) + "_name.png");
+
+				var pnid:int=38000 + (wlv - 1);
+
 				this.modeSwf.update(pnid);
 				this.modeSwf.mouseChildren=this.modeSwf.mouseEnabled=false;
-				this.autoLv=o.lv;
+				this.autoLv=o.wlv;
 			}
 		}
 
@@ -349,13 +372,14 @@ package com.leyou.ui.wing {
 			}
 
 			clearInterval(this.autoTimeID);
-			autoUpBtn.text="自动升阶";
+			autoUpBtn.text=PropUtils.getStringById(1986);
 
 			if (win != null) {
 				win.hide();
 				win=null;
 			}
 
+			upBtn.setActive(true, 1, true);
 			this.autoTimeID=0;
 		}
 

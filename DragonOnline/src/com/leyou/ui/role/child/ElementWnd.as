@@ -33,8 +33,9 @@ package com.leyou.ui.role.child {
 	import com.leyou.net.cmd.Cmd_Element;
 	import com.leyou.ui.quickBuy.QuickBuyWnd;
 	import com.leyou.ui.role.child.children.ImgRolling;
+	import com.leyou.utils.PropUtils;
 	import com.leyou.utils.StringUtil_II;
-
+	
 	import flash.display.Bitmap;
 	import flash.display.Loader;
 	import flash.display.MovieClip;
@@ -413,11 +414,11 @@ package com.leyou.ui.role.child {
 			if (info.freeCount <= 0) //免费次数用完 花费道具的描述显示
 				this.freeDecLbl.text="";
 			else {
-				this.freeDecLbl.text="免费:" + info.freeCount + "次";
+				this.freeDecLbl.text=StringUtil.substitute(PropUtils.getStringById(1869),[info.freeCount]);
 				this.costLbl.htmlText="<font color='#00ff00'><u><a href='event:--'>" + item.name + "</a></u></font> x 0";
 			}
 
-			this.tiemsLbl.text=info.count + "次";
+			this.tiemsLbl.text=info.count + PropUtils.getStringById(1977);
 
 			var i:int=0;
 
@@ -631,7 +632,7 @@ package com.leyou.ui.role.child {
 					}
 
 					var arr1:Array=this.costLbl.text.split(" x ");
-					if (MyInfoManager.getInstance().getBagItemNumByName("元素之心") < int(arr1[1]) && UIManager.getInstance().quickBuyWnd.isAutoBuy(this.info.cItemId, this.info.bItemId)) {
+					if (MyInfoManager.getInstance().getBagItemNumByName(PropUtils.getStringById(1865)) < int(arr1[1]) && UIManager.getInstance().quickBuyWnd.isAutoBuy(this.info.cItemId, this.info.bItemId)) {
 						this.begainBtn.setActive(false, .6, true);
 						Cmd_Element.cm_ele_l(arr, (UIManager.getInstance().quickBuyWnd.getCost(this.info.cItemId, this.info.bItemId) == 0 ? 2 : 1));
 					} else {
@@ -942,22 +943,22 @@ package com.leyou.ui.role.child {
 			this.clickIdx=idx;
 			var str:String=new String();
 
-			var center:String=com.leyou.utils.StringUtil_II.addEventString(this.info.cItemId + "", "元素之心", true);
+			var center:String=com.leyou.utils.StringUtil_II.addEventString(this.info.cItemId + "", PropUtils.getStringById(1865), true);
 			center=com.leyou.utils.StringUtil_II.getColorStr(center, ElementEnum.COLOR_GREEN);
 
 			var title:String;
 			var f:Boolean=false;
 			if (this.guildElement == -1) {
-				str="将选择" + getElementNameByIdx(idx, ElementEnum.COLOR_YELLOW) + "为您的守护元素，本次操作不消耗" + center + "，是否确定这样做？";
+				str=StringUtil.substitute(PropUtils.getStringById(1870),[getElementNameByIdx(idx, ElementEnum.COLOR_YELLOW),center]);
 //				f=true;
 			} else {
-				str="将守护元素从" + getElementNameByIdx(this.guildElement, ElementEnum.COLOR_YELLOW) + "切换为" + getElementNameByIdx(idx, ElementEnum.COLOR_YELLOW) + "需要花费" + com.leyou.utils.StringUtil_II.getColorStr("1", ElementEnum.COLOR_YELLOW) + "个" + center + "，是否确定这样做？";
+				str=StringUtil.substitute(PropUtils.getStringById(1871),[getElementNameByIdx(this.guildElement, ElementEnum.COLOR_YELLOW),getElementNameByIdx(idx, ElementEnum.COLOR_YELLOW), com.leyou.utils.StringUtil_II.getColorStr("1", ElementEnum.COLOR_YELLOW) ,center]);
 //				f=true;
 			}
 
 			PopupManager.showConfirm(str, function():void {
 
-				if (guildElement == -1 || MyInfoManager.getInstance().getBagItemNumByName("元素之心") > 0) {
+				if (guildElement == -1 || MyInfoManager.getInstance().getBagItemNumByName(PropUtils.getStringById(1865)) > 0) {
 					UIManager.getInstance().roleWnd.elementWnd.setGuildElement();
 				} else { //背包中没有
 
@@ -971,7 +972,7 @@ package com.leyou.ui.role.child {
 					}
 
 				}
-			}, null, false, "changeElement", "元素切换");
+			}, null, false, "changeElement", PropUtils.getStringById(1872));
 		}
 
 		private function getElementNameByIdx(idx:int, color:String=null):String {
@@ -979,19 +980,19 @@ package com.leyou.ui.role.child {
 			var str:String;
 			switch (idx) {
 				case ElementEnum.GOLD:
-					str="金元素";
+					str=PropUtils.getStringById(1301);
 					break;
 				case ElementEnum.WOOD:
-					str="木元素";
+					str=PropUtils.getStringById(1302);
 					break;
 				case ElementEnum.WATER:
-					str="水元素";
+					str=PropUtils.getStringById(1303);
 					break;
 				case ElementEnum.FIRE:
-					str="火元素";
+					str=PropUtils.getStringById(1304);
 					break;
 				case ElementEnum.SOIL:
-					str="土元素";
+					str=PropUtils.getStringById(1305);
 					break;
 			}
 
@@ -1036,7 +1037,7 @@ package com.leyou.ui.role.child {
 			for (var i:int=0; i < this.info.preExp.length; i++) {
 
 				if (this.info.preExp[i] != 0) {
-					this.flyLblArr[i].text="经验 +" + this.info.preExp[i];
+					this.flyLblArr[i].text=PropUtils.getStringById(20)+" +" + this.info.preExp[i];
 					this.flyLblArr[i].textColor=0xffff00;
 
 					switch (i) {

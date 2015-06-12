@@ -1,5 +1,6 @@
 package com.leyou.ui.dungeonTeam {
 
+	import com.ace.config.Core;
 	import com.ace.enum.UIEnum;
 	import com.ace.enum.WindowEnum;
 	import com.ace.gameData.manager.MapInfoManager;
@@ -9,20 +10,20 @@ package com.leyou.ui.dungeonTeam {
 	import com.ace.manager.UILayoutManager;
 	import com.ace.manager.UIManager;
 	import com.ace.ui.auto.AutoWindow;
-	import com.ace.ui.button.children.ImgButton;
 	import com.ace.ui.tabbar.TabbarModel;
 	import com.ace.ui.tabbar.children.TabBar;
-	import com.ace.utils.StringUtil;
-	import com.leyou.manager.LastTimeImageManager;
+	import com.leyou.enum.ConfigEnum;
 	import com.leyou.manager.PopupManager;
-	import com.leyou.net.NetGate;
+	import com.leyou.net.cmd.Cmd_BCP;
 	import com.leyou.net.cmd.Cmd_CpTm;
+	import com.leyou.net.cmd.Cmd_SCP;
 	import com.leyou.net.cmd.Cmd_Ucp;
+	import com.leyou.ui.boss.children.BossCopyRender;
+	import com.leyou.ui.copy.StoryCopyWnd;
 	import com.leyou.ui.dungeonTeam.childs.DungeonTGuildRender;
 	import com.leyou.ui.dungeonTeam.childs.DungeonTeamBtn;
 	import com.leyou.ui.dungeonTeam.childs.DungeonTeamCopy;
-	import com.leyou.ui.guild.child.GuildDungeon;
-	import com.leyou.utils.StringUtil_II;
+	import com.leyou.ui.expCopy.ExpCopyWnd;
 
 	import flash.events.Event;
 	import flash.events.MouseEvent;
@@ -42,6 +43,17 @@ package com.leyou.ui.dungeonTeam {
 
 		public var leftBtn:DungeonTeamBtn;
 
+		//------------------------------------------------------------
+		// WFH添加
+
+		public var storyCopy:StoryCopyWnd;
+
+		public var bossCopy:BossCopyRender;
+
+		public var expCopy:ExpCopyWnd;
+
+		//------------------------------------------------------------
+
 		public function DungeonTeamWnd() {
 			super(LibManager.getInstance().getXML("config/ui/dungeonTeamWnd.xml"));
 			this.init();
@@ -56,14 +68,17 @@ package com.leyou.ui.dungeonTeam {
 			this.dungeonTeamTabbar=this.getUIbyID("dungeonTeamTabbar") as TabBar;
 
 			this.teamCopy=new DungeonTeamCopy();
-			this.dungeonTeamTabbar.addToTab(this.teamCopy, 0);
+			this.dungeonTeamTabbar.addToTab(this.teamCopy, 2);
 
 			this.guildCopy=new DungeonTGuildRender();
-			this.dungeonTeamTabbar.addToTab(this.guildCopy, 1);
+			this.dungeonTeamTabbar.addToTab(this.guildCopy, 3);
 
 			this.teamStart=new DungeonTeamStart();
 
 			this.dungeonTeamTabbar.addEventListener(TabbarModel.changeTurnOnIndex, onChange);
+
+//			this.dungeonTeamTabbar.getTabButton(0).addEventListener(MouseEvent.MOUSE_OVER
+//			this.dungeonTeamTabbar.getTabButton(0).addEventListener(MouseEvent.MOUSE_OUT
 
 			this.leftBtn=new DungeonTeamBtn();
 			LayerManager.getInstance().windowLayer.addChild(this.leftBtn);
@@ -71,6 +86,25 @@ package com.leyou.ui.dungeonTeam {
 			this.leftBtn.addEventListener(MouseEvent.CLICK, onClick);
 
 			this.leftBtn.visible=false;
+
+			//------------------------------------------------------------
+			// WFH添加
+			storyCopy=new StoryCopyWnd();
+			dungeonTeamTabbar.addToTab(storyCopy, 0);
+			bossCopy=new BossCopyRender();
+			dungeonTeamTabbar.addToTab(bossCopy, 1);
+			expCopy=new ExpCopyWnd();
+			dungeonTeamTabbar.addToTab(expCopy, 4);
+			
+			dungeonTeamTabbar.setTabVisible(1, false);
+			dungeonTeamTabbar.setTabVisible(4, false);
+			if (Core.me.info.level >= ConfigEnum.BossCopyOpenLevel) {
+				dungeonTeamTabbar.setTabVisible(1, true);
+			}
+			if(Core.me.info.level >= ConfigEnum.ExpCopyOpenLevel){
+				dungeonTeamTabbar.setTabVisible(4, true);
+			}
+			//------------------------------------------------------------
 		}
 
 		private function onClick(e:MouseEvent):void {
@@ -84,10 +118,45 @@ package com.leyou.ui.dungeonTeam {
 				PopupManager.closeConfirm("teamCopyPassword");
 			}
 
+			//------------------------------------------------------------
+			// WFH添加
+			switch (dungeonTeamTabbar.turnOnIndex) {
+				case 0:
+					Cmd_SCP.cm_SCP_I();
+					break;
+				case 1:
+					Cmd_BCP.cm_BCP_I();
+					break;
+			}
+ 
+			//------------------------------------------------------------
 		}
+		
+		//------------------------------------------------------------
+		// WFH添加
+		public function updatePage():void{
+			dungeonTeamTabbar.setTabVisible(1, false);
+			dungeonTeamTabbar.setTabVisible(4, false);
+			if (Core.me.info.level >= ConfigEnum.BossCopyOpenLevel) {
+				dungeonTeamTabbar.setTabVisible(1, true);
+			}
+			if(Core.me.info.level >= ConfigEnum.ExpCopyOpenLevel){
+				dungeonTeamTabbar.setTabVisible(4, true);
+			}
+		}
+		//------------------------------------------------------------
 
 		override public function show(toTop:Boolean=true, $layer:int=1, toCenter:Boolean=true):void {
 			super.show(toTop, $layer, toCenter);
+			Cmd_SCP.cm_SCP_I();
+
+			if (Core.me.info.level >= ConfigEnum.TeamDungeon1) {
+				this.dungeonTeamTabbar.setTabVisible(2, true)
+			} else {
+				this.dungeonTeamTabbar.setTabVisible(2, false)
+			}
+
+			this.dungeonTeamTabbar.setTabVisible(3, false);
 		}
 
 		override public function sendOpenPanelProtocol(... parameters):void {
@@ -151,10 +220,10 @@ package com.leyou.ui.dungeonTeam {
 
 		public function updateGuildCopy(o:Object):void {
 			if (o.cl[0].hasOwnProperty("st")) {
-				this.dungeonTeamTabbar.setTabVisible(1, true);
+				this.dungeonTeamTabbar.setTabVisible(3, false);
 				this.guildCopy.updateInfo(o);
 			} else {
-				this.dungeonTeamTabbar.setTabVisible(1, false);
+				this.dungeonTeamTabbar.setTabVisible(3, false);
 			}
 		}
 

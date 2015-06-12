@@ -1,5 +1,6 @@
 package com.leyou.ui.payrank.children
 {
+	import com.ace.config.Core;
 	import com.ace.manager.LibManager;
 	import com.ace.ui.auto.AutoSprite;
 	import com.ace.ui.lable.Label;
@@ -28,9 +29,13 @@ package com.leyou.ui.payrank.children
 		}
 		
 		public function updateInfo(item:PayRankChildItem):void{
+//			if(Core.isSF && (1 == item.type) && (item.rank <= 10)){
+//				itemLbl.text = "???";
+//			}else{
+			itemLbl.text = item.value+"";
+//			}
 			rankLbl.text = item.rank+"";
 			nameLbl.text = item.name;
-			itemLbl.text = item.value+"";
 		}
 	}
 }

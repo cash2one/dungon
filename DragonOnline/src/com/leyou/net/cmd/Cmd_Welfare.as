@@ -21,8 +21,8 @@ package com.leyou.net.cmd
 			NetGate.getInstance().send(CmdEnum.CM_SIGN_I);
 		}
 		
-		public static function cm_SIGN_S(day:int):void{
-			NetGate.getInstance().send(CmdEnum.CM_SIGN_S + day);
+		public static function cm_SIGN_S(day:int, currency:int):void{
+			NetGate.getInstance().send(CmdEnum.CM_SIGN_S + day + ","+currency);
 		}
 		
 		public static function cm_SIGN_J(sc:int):void{

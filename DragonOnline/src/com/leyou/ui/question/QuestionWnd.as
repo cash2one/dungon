@@ -14,6 +14,7 @@ package com.leyou.ui.question {
 	import com.ace.gameData.table.TQuestion;
 	import com.ace.loader.child.SwfLoader;
 	import com.ace.manager.EventManager;
+	import com.ace.manager.GuideManager;
 	import com.ace.manager.LayerManager;
 	import com.ace.manager.SoundManager;
 	import com.ace.manager.UIManager;
@@ -21,6 +22,7 @@ package com.leyou.ui.question {
 	import com.ace.ui.map.MapWnd;
 	import com.ace.ui.notice.NoticeManager;
 	import com.ace.ui.window.children.SimpleWindow;
+	import com.ace.utils.StringUtil;
 	import com.greensock.TweenLite;
 	import com.leyou.enum.ConfigEnum;
 	import com.leyou.manager.PopupManager;
@@ -30,6 +32,7 @@ package com.leyou.ui.question {
 	import com.leyou.ui.question.childs.QuestionMWnd;
 	import com.leyou.ui.question.childs.QuestionQBtn;
 	import com.leyou.ui.question.childs.QuestionRWnd;
+	import com.leyou.utils.PropUtils;
 	
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
@@ -104,7 +107,7 @@ package com.leyou.ui.question {
 				var ctx:String;
 				if (this.QuestCount < ConfigEnum.question2) {
 
-					ctx="当前还有题目未答,离开答题会让你损失部分收益,确认离开吗?";
+					ctx=PropUtils.getStringById(1833);
 
 					wnd=PopupManager.showConfirm(ctx, function():void {
 						Cmd_Qa.cmQaExit();
@@ -145,7 +148,7 @@ package com.leyou.ui.question {
 					var ctx:String;
 					if (this.QuestCount < ConfigEnum.question2) {
 
-						ctx="当前还有题目未答,离开答题会让你损失部分收益,确认离开吗?";
+						ctx=PropUtils.getStringById(1833);
 
 						wnd=PopupManager.showConfirm(ctx, function():void {
 							Cmd_Qa.cmQaExit();
@@ -178,7 +181,7 @@ package com.leyou.ui.question {
 
 			this.QuestCount=o.qindex;
 
-			this.middtitle.setTitleNameTxt("第" + o.qindex + "/" + ConfigEnum.question2 + "题");
+			this.middtitle.setTitleNameTxt(StringUtil.substitute(PropUtils.getStringById(1834),[o.qindex + "/" + ConfigEnum.question2]));
 			this.middtitle.setContentTxt(qinfo.des);
 			this.middtitle.setTimeTxt();
 			this.middtitle.startTimer(o.stime);
@@ -250,7 +253,7 @@ package com.leyou.ui.question {
 				TweenLite.delayedCall(5, function():void {
 
 					middtitle.setTitleNameTxt("");
-					middtitle.setContentTxt("答题活动已结束，感谢您的参与，期待再次与您见面。请点击右上角'退出'按钮离开");
+					middtitle.setContentTxt(PropUtils.getStringById(1835));
 					middtitle.setTimerTxt("");
 					middtitle.setNoticeTxt("");
 
@@ -310,13 +313,15 @@ package com.leyou.ui.question {
 			UIManager.getInstance().hideWindow(WindowEnum.PKCOPY);
 
 			LayerManager.getInstance().mainLayer.addChild(UIManager.getInstance().chatWnd);
+			
+			LayerManager.getInstance().guildeLayer.visible=false;
 		}
 
 		/**
 		 *更新开始答题剩余时间:
 		 */
 		public function updateStartLastTime(str:String):void {
-			this.middtitle.setContentTxt("距离答题活动开启");
+			this.middtitle.setContentTxt(PropUtils.getStringById(1836));
 			this.middtitle.setTimeTxt();
 			this.middtitle.setTimerTxt(str);
 
@@ -362,7 +367,8 @@ package com.leyou.ui.question {
 			UIManager.getInstance().taskTrack.show();
 //			OtherHead.getInstance().show();
 			NoticeManager.getInstance().setMsgVisible(NoticeEnum.TYPE_MESSAGER8, true);
-
+			LayerManager.getInstance().guildeLayer.visible=true;
+			
 			if (wnd != null) {
 				wnd.hide();
 				wnd=null;

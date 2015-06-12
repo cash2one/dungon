@@ -6,7 +6,8 @@ package com.leyou.net.cmd {
 	import com.ace.ui.window.children.SimpleWindow;
 	import com.ace.utils.StringUtil;
 	import com.leyou.manager.PopupManager;
-	
+	import com.leyou.utils.PropUtils;
+
 	import flash.net.URLRequest;
 	import flash.net.navigateToURL;
 
@@ -75,13 +76,13 @@ ftime -- 已经防沉迷累计时间 秒
 					pid=9706;
 			}
 
-			if (pid != 0){
-				
+			if (pid != 0) {
+
 //				var tn:TNoticeInfo=TableManager.getInstance().getSystemNotice(9710);
 //				trace(tn.content);
 				UIManager.getInstance().fcmWnd.updateInfo(StringUtil.substitute(TableManager.getInstance().getSystemNotice(pid).content, [int(o.ftime / 3600)]), (o.st == 1));
 			}
-			
+
 			if (o.ftime < 5 * 3600)
 				return;
 
@@ -98,9 +99,9 @@ ftime -- 已经防沉迷累计时间 秒
 
 			if (notice != null) {
 				if (o.st == 2) {
-					wnd=PopupManager.showAlert(notice.content, quitFunc, true, "fcm1", "防沉迷");
+					wnd=PopupManager.showAlert(notice.content, quitFunc, true, "fcm1", PropUtils.getStringById(1566));
 				} else if (o.st == 1) {
-					wnd=PopupManager.showAlert(notice.content, okFunc, true, "fcm2", "防沉迷");
+					wnd=PopupManager.showAlert(notice.content, okFunc, true, "fcm2", PropUtils.getStringById(1566));
 				}
 			}
 

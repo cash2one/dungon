@@ -40,14 +40,23 @@ package com.ace.gameData.table
 		
 		public var firstItemCount2:int;
 		
-		public var item1:int;
-		public var item2:int;
-		public var item3:int;
-		public var item4:int;
-		public var item5:int;
-		public var item6:int;
-		public var item7:int;
-		public var item8:int;
+		public var item1Data:Array;
+		public var item2Data:Array;
+		public var item3Data:Array;
+		public var item4Data:Array;
+		public var item5Data:Array;
+		public var item6Data:Array;
+		public var item7Data:Array;
+		public var item8Data:Array;
+		
+		public var ticket1:int;
+		public var ticket2:int;
+		public var ticket3:int;
+		public var ticket4:int;
+		public var ticketC1:int;
+		public var ticketC2:int;
+		public var ticketC3:int;
+		public var ticketC4:int;
 		
 		public function TCopyInfo(xml:XML=null){
 			if(xml == null)
@@ -72,23 +81,31 @@ package com.ace.gameData.table
 			this.firstItem2 = xml.@First_Item2;
 			this.firstItemCount2 = xml.@Fitem_Num2;
 			
-			var itemV:String;
-			itemV = xml.@DBC_ITEM1;
-			this.item1 = itemV.split(",")[0];
+			var itemV:String = xml.@DBC_ITEM1;
+			item1Data = itemV.split(",");
 			itemV = xml.@DBC_ITEM2;
-			this.item2 = itemV.split(",")[0];
+			item2Data = itemV.split(",");
 			itemV = xml.@DBC_ITEM3;
-			this.item3 = itemV.split(",")[0];
+			item3Data = itemV.split(",");
 			itemV = xml.@DBC_ITEM4;
-			this.item4 = itemV.split(",")[0];
+			item4Data = itemV.split(",");
 			itemV = xml.@DBC_ITEM5;
-			this.item5 = itemV.split(",")[0];
+			item5Data = itemV.split(",");
 			itemV = xml.@DBC_ITEM6;
-			this.item6 = itemV.split(",")[0];
+			item6Data = itemV.split(",");
 			itemV = xml.@DBC_ITEM7;
-			this.item7 = itemV.split(",")[0];
+			item7Data = itemV.split(",");
 			itemV = xml.@DBC_ITEM8;
-			this.item8 = itemV.split(",")[0];
+			item8Data = itemV.split(",");
+
+			ticket1 = xml.@D_ticket1;
+			ticket2 = xml.@D_ticket2;
+			ticket3 = xml.@D_ticket3;
+			ticket4 = xml.@D_ticket4;
+			ticketC1 = xml.@DT_Num1;
+			ticketC2 = xml.@DT_Num2;
+			ticketC3 = xml.@DT_Num3;
+			ticketC4 = xml.@DT_Num4;
 		}
 	}
 }

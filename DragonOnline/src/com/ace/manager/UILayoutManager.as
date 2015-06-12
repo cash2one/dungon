@@ -6,7 +6,7 @@ package com.ace.manager {
 	import com.greensock.TweenLite;
 	import com.leyou.ui.tools.RightTopWnd;
 	import com.leyou.ui.tools.ToolsWnd;
-
+	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.DisplayObject;
@@ -96,14 +96,15 @@ package com.ace.manager {
 			StartObjs[WindowEnum.FRIEND]=toolsWnd.getUIbyID("friendBtn");
 			StartObjs[WindowEnum.MAILL]=UIManager.getInstance().smallMapWnd.getUIbyID("mailBtn");
 			StartObjs[WindowEnum.FARM]=rightTopWnd.getWidget("farmBtn");
-			StartObjs[WindowEnum.STORYCOPY]=rightTopWnd.getWidget("storyCopyBtn");
+//			StartObjs[WindowEnum.STORYCOPY]=rightTopWnd.getWidget("storyCopyBtn");
 //			StartObjs[WindowEnum.BOSSCOPY]=rightTopWnd.getWidget("bossCopyBtn");
 			StartObjs[WindowEnum.BOSS]=rightTopWnd.getWidget("bossCopyBtn");
 			StartObjs[WindowEnum.ARENA]=rightTopWnd.getWidget("arenaBtn");
 			StartObjs[WindowEnum.MYSTORE]=rightTopWnd.getWidget("shopBtn");
 			StartObjs[WindowEnum.TOPUP]=rightTopWnd.getWidget("firstPayBtn");
 //			StartObjs[WindowEnum.FIELDBOSS]=rightTopWnd.getWidget("fieldBossBtn");
-			StartObjs[WindowEnum.EXPCOPY]=rightTopWnd.getWidget("expCopyBtn");
+			StartObjs[WindowEnum.DRAGON_BALL]=rightTopWnd.getWidget("fieldBossBtn");
+//			StartObjs[WindowEnum.EXPCOPY]=rightTopWnd.getWidget("expCopyBtn");
 			StartObjs[WindowEnum.WELFARE]=rightTopWnd.getWidget("welfareBtn");
 			StartObjs[WindowEnum.PKCOPY]=rightTopWnd.getWidget("deliveryBtn");
 			StartObjs[WindowEnum.RANK]=rightTopWnd.getWidget("rankBtn");
@@ -114,7 +115,7 @@ package com.ace.manager {
 			StartObjs[WindowEnum.CDKEY]=rightTopWnd.getWidget("keyBtn");
 			StartObjs[WindowEnum.PAY_PROMOTION]=rightTopWnd.getWidget("promotionBtn");
 			StartObjs[WindowEnum.TOBE_STRONG]=rightTopWnd.getWidget("tobeStrong");
-			StartObjs[WindowEnum.FIRST_PAY]=rightTopWnd.getWidget("firstPayBtn");
+//			StartObjs[WindowEnum.FIRST_PAY]=rightTopWnd.getWidget("firstPayBtn");
 			StartObjs[WindowEnum.SEVENDAY]=rightTopWnd.getWidget("sevenDBtn");
 			StartObjs[WindowEnum.AREA_CELEBRATE]=rightTopWnd.getWidget("areaCelebrate");
 			StartObjs[WindowEnum.INVEST]=rightTopWnd.getWidget("investBtn");
@@ -130,6 +131,11 @@ package com.ace.manager {
 			StartObjs[WindowEnum.DUNGEON_TEAM]=rightTopWnd.getWidget("teamCopyBtn");
 			StartObjs[WindowEnum.GROUP_BUY]=rightTopWnd.getWidget("groupBuyBtn");
 			StartObjs[WindowEnum.VENDUE]=rightTopWnd.getWidget("saleBtn");
+			StartObjs[WindowEnum.LEGENDAREY_WEAPON]=rightTopWnd.getWidget("legendaryBtn");
+			StartObjs[WindowEnum.BLACK_STROE]=rightTopWnd.getWidget("blackStoreBtn");
+			StartObjs[WindowEnum.PET]=rightTopWnd.getWidget("petBtn");
+			StartObjs[WindowEnum.TASK_MARKET]=rightTopWnd.getWidget("taskMarketBtn");
+			StartObjs[WindowEnum.KEEP_7]=rightTopWnd.getWidget("sevenDayBtn");
 
 			//------------------------------------------------------------
 			// 关联界面注册,格式:
@@ -145,10 +151,10 @@ package com.ace.manager {
 
 			//------------------------------------------------------------
 			// 子界面注册,格式:
-			//					界面枚举:[子界面枚举数组]
+			//				  界面枚举:[子界面枚举数组]
 			//------------------------------------------------------------
 			ChildrenWnds={};
-			ChildrenWnds[WindowEnum.ROLE]=[WindowEnum.MOUTLVUP, WindowEnum.MOUTTRADEUP, WindowEnum.WING_FLY, WindowEnum.WINGLVUP, WindowEnum.GEM_LV, WindowEnum.QUICK_BUY];
+			ChildrenWnds[WindowEnum.ROLE]=[WindowEnum.MOUTLVUP, WindowEnum.MOUTTRADEUP,WindowEnum.MEDIC,WindowEnum.WING_FLY, WindowEnum.WINGLVUP, WindowEnum.GEM_LV, WindowEnum.QUICK_BUY];
 			ChildrenWnds[WindowEnum.SKILL]=[WindowEnum.RUNE, WindowEnum.QUICK_BUY];
 			ChildrenWnds[WindowEnum.EQUIP]=[WindowEnum.QUICK_BUY];
 			ChildrenWnds[WindowEnum.MAILL]=[WindowEnum.MAILL_READ];

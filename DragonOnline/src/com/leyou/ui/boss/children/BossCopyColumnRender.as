@@ -26,8 +26,8 @@ package com.leyou.ui.boss.children
 					renders[n] = render;
 					addChild(render);
 				}
-				render.x = 10;
-				render.y = 12 + n * 107;
+				render.x = 5;
+				render.y = 5 + n * 93;
 			}
 		}
 		
@@ -38,12 +38,15 @@ package com.leyou.ui.boss.children
 			}
 		}
 		
-		public function getRender(index:int):BossCopyItemRender{
-			return renders[index];
+		public function getCurrentItem():BossCopyItemRender{
+			var lRender:BossCopyItemRender;
+			for each(var render:BossCopyItemRender in renders){
+				if(render.lock()){
+					return lRender;
+				}
+				lRender = render;
+			}
+			return lRender;
 		}
-		
-//		public function setSelect(index:int):void{
-//			renders[index].select = true;
-//		}
 	}
 }

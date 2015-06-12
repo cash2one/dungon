@@ -38,6 +38,8 @@ package com.leyou.ui.cityBattle.children
 				if(null == grid){
 					grid = new MarketGrid();
 					grids[n] = grid;
+					grid.isShowPrice = true; 
+					
 				}
 				grid.x = 118 + 73*n;
 				grid.y = 13;

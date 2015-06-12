@@ -40,7 +40,7 @@ package com.leyou.ui.chat
 		protected function onMouseClick(event:MouseEvent):void{
 			var target:DisplayObject = event.target as DisplayObject;
 			var globalPoint:Point = new Point(event.stageX, event.stageY);
-			var screenPoint:Point = UIManager.getInstance().gameScene.globalToLocal(globalPoint);
+			var screenPoint:Point = UIManager.getInstance().gameScene.foreground.globalToLocal(globalPoint);
 			var targetPoint:Point = SceneUtil.screenToTile(screenPoint.x, screenPoint.y);
 			if(target is ChatMessageView){
 				Core.me.gotoMap(targetPoint,"",false);

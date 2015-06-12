@@ -6,6 +6,7 @@ package com.leyou.manager {
 	import com.ace.ui.window.children.SimpleWindow;
 	import com.ace.ui.window.children.WindInfo;
 	import com.ace.utils.DebugUtil;
+	import com.leyou.utils.PropUtils;
 
 	public class PopupManager {
 		
@@ -16,7 +17,7 @@ package com.leyou.manager {
 		public static function showAlert(txt:String, okfunc:Function=null, ismodel:Boolean=false, id:String="", title:String=""):SimpleWindow {
 			var w:WindInfo=WindInfo.getAlertInfo(txt, okfunc);
 			if(null == title || "" == title){
-				title = "警告框";
+				title = PropUtils.getStringById(1549);
 			}
 			w.title=title;
 			w.isModal=ismodel;

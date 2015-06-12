@@ -25,6 +25,7 @@ package com.leyou.ui.cityBattle.children
 				var grid:MarketGrid = grids[n];
 				if(null == grid){
 					grid = new MarketGrid();
+					grid.isShowPrice = true;
 					grids[n] = grid;
 				}
 				grid.x = 118 + 73*n;

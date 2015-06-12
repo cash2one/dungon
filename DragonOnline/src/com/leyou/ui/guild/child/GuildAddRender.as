@@ -5,6 +5,7 @@ package com.leyou.ui.guild.child {
 	import com.ace.ui.img.child.Image;
 	import com.ace.ui.lable.Label;
 	import com.leyou.utils.PlayerUtil;
+	import com.leyou.utils.PropUtils;
 
 	public class GuildAddRender extends AutoSprite {
 
@@ -46,7 +47,7 @@ package com.leyou.ui.guild.child {
 		 */
 		public function updateInfo(o:Array):void {
 
-			this.NumLbl.text="" + (o[1] == "" ? "无" : o[1]);
+			this.NumLbl.text="" + (o[1] == "" ? PropUtils.getStringById(1594) : o[1]);
 			this.proLbl.text="" + PlayerUtil.getPlayerRaceByIdx(o[2]);
 			this.lvLbl.text="" + o[3];
 			this.attLbl.text="" + o[4];

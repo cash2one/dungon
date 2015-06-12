@@ -65,21 +65,5 @@ package com.ace.gameData.table
 			this.effectId=xml.@eft;
 			this.color=xml.@colour;
 		}
-		
-		public function getEarnName():String{
-			switch(plantId){
-				case 0:
-					return "金钱";
-				case 1:
-					return "绑定钻石";
-				case 2:
-					return "钻石";
-				case 3:
-					return "魂力";
-				case 4:
-					return "经验";
-			}
-			return "";
-		}
 	}
 }

@@ -8,10 +8,11 @@ package com.leyou.utils {
 	import com.ace.gameData.table.TEquipInfo;
 	import com.ace.gameData.table.TItemInfo;
 	import com.ace.manager.ToolTipManager;
+	import com.ace.utils.StringUtil;
 	import com.leyou.data.role.EquipInfo;
 	import com.leyou.data.tips.TipsInfo;
 	import com.leyou.enum.QualityEnum;
-	
+
 	import flash.geom.Point;
 	import flash.globalization.NumberFormatter;
 
@@ -21,8 +22,8 @@ package com.leyou.utils {
 		 *物品使用过滤, ----复活
 		 */
 		public static var itemFilter:Array=[31500, 31501];
-		
-		
+
+
 
 		public function ItemUtil() {
 		}
@@ -36,9 +37,9 @@ package com.leyou.utils {
 3 真气
 4 荣耀
 *
-   * @param i
-		   * @return
-		 *
+* @param i
+	   * @return
+			*
 		 */
 		public static function getExchangeIcon(i:int):String {
 
@@ -54,7 +55,7 @@ package com.leyou.utils {
 				return "ui/backpack/honor.png";
 			}
 
-			
+
 			return "";
 		}
 
@@ -85,11 +86,11 @@ package com.leyou.utils {
 2	蓝
 3	紫
 4	金
-
+5   红
 * @param i
-   * @return
-		   *
-		 */
+* @return
+	   *
+			*/
 		public static function getColorByQuality(i:int):uint {
 
 			switch (i) {
@@ -103,6 +104,8 @@ package com.leyou.utils {
 					return 0xcc54ea;
 				case QualityEnum.QUA_LEGEND:
 					return 0xf6d654;
+				case QualityEnum.QUA_ARTIFACT:
+					return 0xee2211;
 			}
 			return 0xffffff;
 		}
@@ -117,11 +120,11 @@ package com.leyou.utils {
 		public static function parseCurrencyStr(type:int):String {
 			switch (type) {
 				case 0:
-					return "金币";
+					return PropUtils.getStringById(32);
 				case 1:
-					return "绑定钻石";
+					return PropUtils.getStringById(33);
 				case 2:
-					return "钻石";
+					return PropUtils.getStringById(40);
 			}
 			return null;
 		}
@@ -139,61 +142,104 @@ package com.leyou.utils {
 				case 0:
 					break;
 				case 1:
-					return "70级时自行开启，点击可花费" + num + "钻石提前开启";
+					return StringUtil.substitute(PropUtils.getStringById(2017), [num]);
 				case 2:
-					return "75级时自行开启，点击可花费" + num + "钻石提前开启";
+					return StringUtil.substitute(PropUtils.getStringById(2018), [num]);
 				case 3:
-					return "点击花费" + num + "钻石开启";
+					return StringUtil.substitute(PropUtils.getStringById(2019), [num]);
 				case 4:
-					return "点击花费" + num + "钻石开启";
+					return StringUtil.substitute(PropUtils.getStringById(2019), [num]);
 				case 5:
-					return "点击花费" + num + "钻石开启";
+					return StringUtil.substitute(PropUtils.getStringById(2019), [num]);
 			}
 
 			return "";
 		}
 
 		/**
-		 * 
+		 *
 		 * @param type
 		 * @param tips
 		 * @param p
-		 * @return 
-		 * 
-		 */ 
-		public static function showDiffTips(type:int,tips:TipsInfo, p:Point):Boolean {
+		 * @return
+		 *
+		 */
+		public static function showDiffTips(type:int, tips:TipsInfo, p:Point):Boolean {
 
 
 			var binfo:TEquipInfo=TableManager.getInstance().getEquipInfo(tips.itemid);
 
+//			if (binfo.classid == 1) {
+//
+//				var olist:Array=ItemEnum.ItemToRolePos[binfo.subclassid];
+//
+//				var roleIndex:int;
+//				var einfo:EquipInfo;
+//
+//				for each (roleIndex in olist) {
+//					einfo=MyInfoManager.getInstance().equips[roleIndex];
+//					if (einfo != null) {
+//						break;
+//					}
+//				}
+//			 
+//			}
+
 			if (binfo.classid == 1) {
 
-				var olist:Array=ItemEnum.ItemToRolePos[binfo.subclassid];
+				var einfo:Object;
+				var index:int=0;
+				if (binfo.subclassid < 13) {
+					var olist:Array=ItemEnum.ItemToRolePos[binfo.subclassid];
 
-				var roleIndex:int;
-				var einfo:EquipInfo;
+					var st:Boolean=false;
+					var roleIndex:int=olist[0];
+					einfo=MyInfoManager.getInstance().equips[olist[0]];
 
-				for each (roleIndex in olist) {
-					einfo=MyInfoManager.getInstance().equips[roleIndex];
 					if (einfo != null) {
-						break;
+
+						if (olist.length == 2) {
+							var einfo1:EquipInfo=MyInfoManager.getInstance().equips[olist[1]];
+
+							if (einfo1 != null) {
+
+								if (einfo.tips.zdl > einfo1.tips.zdl) {
+									einfo=einfo1;
+									roleIndex=olist[1];
+								}
+
+							}
+
+						}
+
+					} else {
+						if (olist.length == 2)
+							einfo=MyInfoManager.getInstance().equips[olist[1]];
+						roleIndex=olist[1];
 					}
+				} else {
+					einfo=MyInfoManager.getInstance().mountEquipArr[binfo.subclassid - 13];
 				}
 			}
+
 
 			if (einfo != null) {
 				tips.isdiff=true;
 				einfo.tips.isUse=true;
 				einfo.tips.isdiff=false;
+
+				if (binfo.subclassid < 13)
+					einfo.tips.playPosition=roleIndex;
+
 				ToolTipManager.getInstance().showII([type, TipEnum.TYPE_EQUIP_ITEM_DIFF], [tips, einfo.tips], PlayerEnum.DIR_E, new Point(2, 0), p);
 				return true;
 			}
 
 			return false;
 		}
- 
-		public static function getColorName(id:int, size:int=14):String{
-			var item:TItemInfo = TableManager.getInstance().getItemInfo(id);
+
+		public static function getColorName(id:int, size:int=14):String {
+			var item:TItemInfo=TableManager.getInstance().getItemInfo(id);
 			var color:String="#" + getColorByQuality(item.quality).toString(16).replace("0x");
 			return StringUtil_II.getColorStrByFace(item.name, color, "微软雅黑", size);
 		}

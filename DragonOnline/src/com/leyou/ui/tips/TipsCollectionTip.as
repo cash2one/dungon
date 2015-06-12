@@ -13,6 +13,7 @@ package com.leyou.ui.tips
 	import com.ace.utils.StringUtil;
 	import com.leyou.data.collectioin.CollectionGroupTaskData;
 	import com.leyou.ui.market.child.MarketGrid;
+	import com.leyou.utils.PropUtils;
 	
 	public class TipsCollectionTip extends AutoSprite implements ITip
 	{
@@ -52,25 +53,25 @@ package com.leyou.ui.tips
 		
 		private var hpLbl:Label;
 		
-		private var mpTLbl:Label;
+//		private var mpTLbl:Label;
 		
-		private var mpLbl:Label;
+//		private var mpLbl:Label;
 		
 		private var phyAttTLbl:Label;
 		
 		private var phyAttLbl:Label;
 		
-		private var magicAttTLbl:Label;
+//		private var magicAttTLbl:Label;
 		
-		private var magicAttLbl:Label;
+//		private var magicAttLbl:Label;
 		
 		private var phyDefTLbl:Label;
 		
 		private var phyDefLbl:Label;
 		
-		private var magicDefTLbl:Label;
+//		private var magicDefTLbl:Label;
 		
-		private var magicDefLbl:Label;
+//		private var magicDefLbl:Label;
 		
 		private var critTLbl:Label;
 		
@@ -128,16 +129,16 @@ package com.leyou.ui.tips
 			
 			hpTLbl = getUIbyID("hpTLbl") as Label;
 			hpLbl = getUIbyID("hpLbl") as Label;
-			mpTLbl = getUIbyID("mpTLbl") as Label;
-			mpLbl = getUIbyID("mpLbl") as Label;
+//			mpTLbl = getUIbyID("mpTLbl") as Label;
+//			mpLbl = getUIbyID("mpLbl") as Label;
 			phyAttTLbl = getUIbyID("phyAttTLbl") as Label;
 			phyAttLbl = getUIbyID("phyAttLbl") as Label;
-			magicAttTLbl = getUIbyID("magicAttTLbl") as Label;
-			magicAttLbl = getUIbyID("magicAttLbl") as Label;
+//			magicAttTLbl = getUIbyID("magicAttTLbl") as Label;
+//			magicAttLbl = getUIbyID("magicAttLbl") as Label;
 			phyDefTLbl = getUIbyID("phyDefTLbl") as Label;
 			phyDefLbl = getUIbyID("phyDefLbl") as Label;
-			magicDefTLbl = getUIbyID("magicDefTLbl") as Label;
-			magicDefLbl = getUIbyID("magicDefLbl") as Label;
+//			magicDefTLbl = getUIbyID("magicDefTLbl") as Label;
+//			magicDefLbl = getUIbyID("magicDefLbl") as Label;
 			critTLbl = getUIbyID("critTLbl") as Label;
 			critLbl = getUIbyID("critLbl") as Label;
 			tenacityTLbl = getUIbyID("tenacityTLbl") as Label;
@@ -165,7 +166,7 @@ package com.leyou.ui.tips
 			icon.updateBmp(url);
 			nameLbl.text = tData.toProName;
 			progressLbl.text = data.getTask(id).cNum +"/"+tData.proMax;
-			mapLbl.text = StringUtil.substitute("{1}地图{2}掉落", tData.mapName, tData.monsterName);
+			mapLbl.text = StringUtil.substitute(PropUtils.getStringById(1929), tData.mapName, tData.monsterName);
 			var beginY:int = rewardLbl.y;
 			rewardLbl.visible = tData.hasReward();
 			//			if(tData.hasReward()){
@@ -225,14 +226,14 @@ package com.leyou.ui.tips
 				hpTLbl.y = beginY;
 				hpLbl.text = "+"+tData.hp;
 			}
-			mpLbl.visible = (tData.mp > 0);
-			mpTLbl.visible = (tData.mp > 0);
-			if(tData.mp > 0){
-				beginY += 20;
-				mpLbl.y = beginY;
-				mpTLbl.y = beginY;
-				mpLbl.text = "+"+tData.mp;
-			}
+//			mpLbl.visible = (tData.mp > 0);
+//			mpTLbl.visible = (tData.mp > 0);
+//			if(tData.mp > 0){
+//				beginY += 20;
+//				mpLbl.y = beginY;
+//				mpTLbl.y = beginY;
+//				mpLbl.text = "+"+tData.mp;
+//			}
 			phyAttLbl.visible = (tData.phyAtt > 0);
 			phyAttTLbl.visible = (tData.phyAtt > 0);
 			if(tData.phyAtt > 0){
@@ -241,14 +242,14 @@ package com.leyou.ui.tips
 				phyAttTLbl.y = beginY;
 				phyAttLbl.text = "+"+tData.phyAtt;
 			}
-			magicAttLbl.visible = (tData.magicAtt > 0);
-			magicAttTLbl.visible = (tData.magicAtt > 0);
-			if(tData.magicAtt > 0){
-				beginY += 20;
-				magicAttLbl.y = beginY;
-				magicAttTLbl.y = beginY;
-				magicAttLbl.text = "+"+tData.magicAtt;
-			}
+//			magicAttLbl.visible = (tData.magicAtt > 0);
+//			magicAttTLbl.visible = (tData.magicAtt > 0);
+//			if(tData.magicAtt > 0){
+//				beginY += 20;
+//				magicAttLbl.y = beginY;
+//				magicAttTLbl.y = beginY;
+//				magicAttLbl.text = "+"+tData.magicAtt;
+//			}
 			phyDefLbl.visible = (tData.phyDef > 0);
 			phyDefTLbl.visible = (tData.phyDef > 0);
 			if(tData.phyDef > 0){
@@ -257,14 +258,14 @@ package com.leyou.ui.tips
 				phyDefTLbl.y = beginY;
 				phyDefLbl.text = "+"+tData.phyDef
 			}
-			magicDefLbl.visible = (tData.magicDef > 0);
-			magicDefTLbl.visible = (tData.magicDef > 0);
-			if(tData.magicDef > 0){
-				beginY += 20;
-				magicDefLbl.y = beginY;
-				magicDefTLbl.y = beginY;
-				magicDefLbl.text = "+"+tData.magicDef;
-			}
+//			magicDefLbl.visible = (tData.magicDef > 0);
+//			magicDefTLbl.visible = (tData.magicDef > 0);
+//			if(tData.magicDef > 0){
+//				beginY += 20;
+//				magicDefLbl.y = beginY;
+//				magicDefTLbl.y = beginY;
+//				magicDefLbl.text = "+"+tData.magicDef;
+//			}
 			critLbl.visible = (tData.crit > 0);
 			critTLbl.visible = (tData.crit > 0);
 			if(tData.crit > 0){

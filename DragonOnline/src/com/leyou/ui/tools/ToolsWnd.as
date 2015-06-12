@@ -37,7 +37,7 @@ package com.leyou.ui.tools {
 	import com.leyou.ui.tools.child.ShortcutsGrid;
 	import com.leyou.ui.tools.child.ToolsGridItemRender;
 	import com.leyou.ui.tools.child.ToolsHpAndMpProgress;
-	
+
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import flash.events.MouseEvent;
@@ -69,6 +69,9 @@ package com.leyou.ui.tools {
 		public var daZBtn:ImgButton;
 		public var mountBtn:ImgButton;
 		private var guaJBtn:ImgButton;
+		private var mercenaryBtn:ImgButton;
+		private var framBtn:ImgButton;
+		private var collectBtn:ImgButton;
 
 		private var expImg:Image;
 		private var hunImg:Image;
@@ -114,6 +117,9 @@ package com.leyou.ui.tools {
 			this.duanZBtn=this.getUIbyID("duanZBtn") as ImgButton;
 			this.shiCBtn=this.getUIbyID("shiCBtn") as ImgButton;
 			this.shopBtn=this.getUIbyID("shopBtn") as ImgButton;
+			this.mercenaryBtn=this.getUIbyID("mercenaryBtn") as ImgButton;
+			this.framBtn=this.getUIbyID("framBtn") as ImgButton;
+			this.collectBtn=this.getUIbyID("collectBtn") as ImgButton;
 
 			this.friendBtn=this.getUIbyID("friendBtn") as ImgButton;
 			this.teamBtn=this.getUIbyID("teamBtn") as ImgButton;
@@ -127,7 +133,7 @@ package com.leyou.ui.tools {
 
 			this.bbsBtn1.addEventListener(MouseEvent.CLICK, onClick);
 			this.bbsBtn2.addEventListener(MouseEvent.CLICK, onClick);
-			
+
 			this.bbsBtn1.visible=false;
 			this.bbsBtn2.visible=false;
 
@@ -139,14 +145,14 @@ package com.leyou.ui.tools {
 			this.expBg=this.getUIbyID("expBg") as Image;
 			this.hunBg=this.getUIbyID("hunBg") as Image;
 
-			var arr:Array=[this.playerBtn, this.backpackBtn, this.skillBtn, this.missionBtn, // 
-				this.wenZBtn, this.duanZBtn, this.shiCBtn, this.shopBtn, //
-				this.friendBtn, this.teamBtn, this.guildBtn, this.daZBtn, //
-				this.mountBtn, this.guaJBtn];
+			var arr:Array=[this.teamBtn, this.guildBtn, this.friendBtn, this.daZBtn, this.mountBtn, this.guaJBtn, this.playerBtn, this.backpackBtn, this.skillBtn, this.missionBtn, // 
+				this.duanZBtn, this.wenZBtn, this.shiCBtn, this.shopBtn, this.mercenaryBtn, this.framBtn, this.collectBtn,];
 
 			for (var i:int=0; i < arr.length; i++) {
-				if (arr[i] != null)
+				if (arr[i] != null) {
 					ImgButton(arr[i]).addEventListener(MouseEvent.CLICK, onBtnClick);
+					ImgButton(arr[i]).setToolTip(TableManager.getInstance().getSystemNotice(10017 + i).content);
+				}
 			}
 
 //			this.jingliBtn.addEventListener(MouseEvent.CLICK, onJinliClick);
@@ -155,13 +161,9 @@ package com.leyou.ui.tools {
 //
 //			this.jingliBtn.mouseChildren=this.jingliBtn.mouseEnabled=true;
 
-			this.addShoruCutKey();
-
-			this.addChild(this.quickImg);
-
 			this.addChild(this.expBg);
 			this.addChild(this.hunBg);
-
+			
 			var einfo:MouseEventInfo=new MouseEventInfo();
 			einfo.onMouseMove=onExpMouseOver;
 			einfo.onMouseOut=onExpMouseOut;
@@ -179,6 +181,8 @@ package com.leyou.ui.tools {
 
 			this.hpAndmp=new ToolsHpAndMpProgress();
 			this.addChild(this.hpAndmp);
+			this.addShoruCutKey();
+			this.addChild(this.quickImg);
 
 			this.hpAndmp.x=349;
 
@@ -324,6 +328,12 @@ package com.leyou.ui.tools {
 					return wenZBtn;
 				case MoldEnum.STRENGTHEN:
 					return duanZBtn;
+				case MoldEnum.SERVENT:
+					return mercenaryBtn;
+				case MoldEnum.COLLECTION:
+					return collectBtn;
+				case MoldEnum.FARM:
+					return framBtn;
 				default:
 					return null;
 //				case MoldEnum.SHOP:
@@ -712,7 +722,7 @@ package com.leyou.ui.tools {
 					if (sk == null)
 						continue;
 
-					if (keyGrid.autoMagic) {
+					if (keyGrid.autoMagic || int(sk.id) == arr[0].id) {
 
 						if (sk.auto == 0) {
 							NoticeManager.getInstance().broadcast(TableManager.getInstance().getSystemNotice(2118))
@@ -733,20 +743,26 @@ package com.leyou.ui.tools {
 
 			if (this.autoMagicArr.length == 0) {
 
+				var skNum:int=0;
+
 				for each (keyGrid in this.shortCutDic) {
 					if (keyGrid != null && keyGrid.cloneGridType == ItemEnum.TYPE_GRID_SKILL) {
 
 						sk=UIManager.getInstance().skillWnd.getOpenSkill(keyGrid.dataId);
+						skNum=TableManager.getInstance().getSkillArr(keyGrid.dataId).length;
+
 						if (sk == null)
 							continue;
 
-						if (int(sk.id) >= arr[0].id && int(sk.id) <= int(arr[0].id) + 3) {
+						if (int(sk.id) >= arr[0].id && int(sk.id) <= int(arr[0].id) + skNum) {
+//						if (int(sk.id) == arr[0].id) {
 
 							keyGrid.setAutoMagic(true);
 							NoticeManager.getInstance().broadcast(TableManager.getInstance().getSystemNotice(2113), [sk.name]);
 
 							if (this.autoMagicArr.indexOf(int(sk.id)) == -1) {
 								this.autoMagicArr.push(int(sk.id));
+								break;
 							}
 
 						}
@@ -818,34 +834,34 @@ package com.leyou.ui.tools {
 					UIOpenBufferManager.getInstance().open(WindowEnum.MARKET);
 					break;
 				case "wenZBtn":
- 
+
 					UILayoutManager.getInstance().open_II(WindowEnum.BADAGE);
- 
+
 					break;
 				case "duanZBtn":
- 
+
 					UILayoutManager.getInstance().open_II(WindowEnum.EQUIP);
- 
+
 					break;
 				case "guildBtn":
- 
+
 					UILayoutManager.getInstance().open_II(WindowEnum.GUILD);
- 
+
 					break;
 				case "playerBtn":
- 
+
 					UILayoutManager.getInstance().open_II(WindowEnum.ROLE)
- 
+
 					break;
 				case "backpackBtn":
- 
+
 					UILayoutManager.getInstance().open_II(WindowEnum.BACKPACK);
- 
+
 					break;
 				case "skillBtn":
- 
+
 					UILayoutManager.getInstance().open_II(WindowEnum.SKILL);
- 
+
 					break;
 				case "friendBtn":
 					UIOpenBufferManager.getInstance().open(WindowEnum.FRIEND);
@@ -856,25 +872,34 @@ package com.leyou.ui.tools {
 					break;
 				case "teamBtn":
 					//UIManager.getInstance().teamWnd.open();
- 
+
 					UILayoutManager.getInstance().open_II(WindowEnum.TEAM)
- 
+
 					break;
 				case "missionBtn":
- 
+
 					UILayoutManager.getInstance().open_II(WindowEnum.TASK)
- 
+
 					break;
 				case "tradeBtn":
 					break;
 				case "mountBtn":
 					UIManager.getInstance().roleWnd.mountUpAndDown();
 					break;
+				case "mercenaryBtn": //佣兵
+					UIOpenBufferManager.getInstance().open(WindowEnum.PET);
+					break;
+				case "framBtn": //农场
+					UIOpenBufferManager.getInstance().open(WindowEnum.FARM);
+					break;
+				case "collectBtn": //采集
+					UIOpenBufferManager.getInstance().open(WindowEnum.COLLECTION);
+					break;
 				case "biGBtn":
 					Cmd_Wig.cm_WigOverLoad();
 					break;
 				case "guaJBtn":
-					var mod:int = AssistWnd.getInstance().visible ? 2 : 1;
+					var mod:int=AssistWnd.getInstance().visible ? 2 : 1;
 					UILayoutManager.getInstance().singleMove(AssistWnd.getInstance(), "assistWnd", mod, evt.target.localToGlobal(new Point(0, 0)));
 //					AssistWnd.getInstance().open();
 					break;
@@ -1236,7 +1261,7 @@ package com.leyou.ui.tools {
 			var i:int=-1;
 			for each (grid in this.shortCutDic) {
 				i++;
-				if (grid != null && grid.cloneGridType==ItemEnum.TYPE_GRID_SKILL && grid.dataId == int(sk.skillId))
+				if (grid != null && grid.cloneGridType == ItemEnum.TYPE_GRID_SKILL && grid.dataId == int(sk.skillId))
 					break;
 			}
 

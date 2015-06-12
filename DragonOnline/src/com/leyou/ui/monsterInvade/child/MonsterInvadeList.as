@@ -5,6 +5,7 @@ package com.leyou.ui.monsterInvade.child {
 	import com.ace.ui.img.child.Image;
 	import com.ace.ui.lable.Label;
 	import com.leyou.utils.FilterUtil;
+	import com.leyou.utils.PropUtils;
 
 	public class MonsterInvadeList extends AutoSprite {
 
@@ -29,18 +30,18 @@ package com.leyou.ui.monsterInvade.child {
 			this.nameLbl.text="" + o[0];
 			this.nameLbl.filters=[FilterUtil.showBorder(0x000000)]
 			var mstr:String="";
-			
+
 			if (int(o[1]) > 100000000) {
-				mstr=int(int(o[1]) / 100000000) + "亿";
+				mstr=int(int(o[1]) / 100000000) + PropUtils.getStringById(1531);
 			} else if (int(o[1]) > 10000) {
-				mstr=int(int(o[1]) / 10000) + "万";
+				mstr=int(int(o[1]) / 10000) + PropUtils.getStringById(1532);
 			} else {
 				if (int(o[1]) != 0)
 					mstr=int(o[1]) + "";
 			}
 
 			this.damLbl.text="" + mstr;
-			this.damLbl.setToolTip("伤害:" + o[1]);
+			this.damLbl.setToolTip(PropUtils.getStringById(1795) + o[1]);
 		}
 
 		public function setIconState(v:Boolean):void {

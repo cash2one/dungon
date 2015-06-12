@@ -149,6 +149,12 @@ package com.leyou.data.net.scene {
 			tmpArr=tmpStr.split(",");
 			info.pfVipType=tmpArr[0];
 			info.pfVipLv=tmpArr[1];
+			
+			//Z
+			tmpStr=arr[15];
+			tmpStr=tmpStr.substr(1);
+			tmpArr=tmpStr.split(",");
+			info.camp=tmpArr[0];
 
 //			//A
 //			tmpStr=arr[13];

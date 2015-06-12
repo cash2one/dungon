@@ -7,8 +7,10 @@ package com.leyou.net.cmd
 	import com.leyou.enum.CmdEnum;
 	import com.leyou.net.NetGate;
 	import com.leyou.utils.PayUtil;
+	import com.leyou.utils.PropUtils;
 	
 	import flash.external.ExternalInterface;
+	import flash.system.Capabilities;
 
 	public class Cmd_QQVip
 	{
@@ -61,7 +63,7 @@ package com.leyou.net.cmd
 		
 		public static function cm_TX_B(type:int):void{
 			var count:int = PayUtil.getCountByType(type);
-			var goodsmeta:String = StringUtil.substitute("{num}钻石*{num}钻石", count, count);
+			var goodsmeta:String = StringUtil.substitute(PropUtils.getStringById(1569), count, count);
 			var goodsurl:String = PayUtil.getIconUrl(type);
 			NetGate.getInstance().send(CmdEnum.CM_TX_B+count+","+1+","+goodsmeta+","+goodsurl);
 		}
@@ -79,7 +81,9 @@ package com.leyou.net.cmd
 		}
 		
 		public static function sm_TX_R(obj:Object):void{
-			ExternalInterface.call("fusion2.dialog.relogin");
+			if("StandAlone" != Capabilities.playerType){
+				ExternalInterface.call("fusion2.dialog.relogin");
+			}
 		}
 		
 		public static function sm_TX_M(obj:Object):void{

@@ -13,12 +13,14 @@ package com.leyou.ui.wing {
 	import com.ace.ui.lable.Label;
 	import com.ace.ui.notice.NoticeManager;
 	import com.ace.ui.window.children.SimpleWindow;
+	import com.ace.utils.StringUtil;
 	import com.leyou.data.bag.Baginfo;
 	import com.leyou.data.tips.TipsInfo;
 	import com.leyou.manager.PopupManager;
 	import com.leyou.net.cmd.Cmd_Wig;
 	import com.leyou.utils.ItemUtil;
-	
+	import com.leyou.utils.PropUtils;
+
 	import flash.geom.Point;
 
 	public class WingGrid extends GridBase {
@@ -101,13 +103,13 @@ package com.leyou.ui.wing {
 					return;
 				}
 
-				var s:String="确定消耗" + goldNum + "钻石开启该槽位？";
+				var s:String=StringUtil.substitute(PropUtils.getStringById(1983), [goldNum]);
 				if (Core.me.info.level < this.openLv)
-					s="你的等级不足,是否消耗" + goldNum + "钻石开启该槽位？"
+					s=StringUtil.substitute(PropUtils.getStringById(1984), [goldNum]);
 
 				wnd=PopupManager.showConfirm(s, function():void {
 					Cmd_Wig.cm_WigOpenSlot(dataId + 1);
-				},null,false,"openWingSlot");
+				}, null, false, "openWingSlot");
 			}
 
 		}
@@ -122,7 +124,7 @@ package com.leyou.ui.wing {
 					var tipsinfo:TipsInfo=new TipsInfo(this.tips);
 					ToolTipManager.getInstance().show(TipEnum.TYPE_EQUIP_ITEM, tipsinfo, new Point($x, $y));
 				} else {
-					ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, "翅膀装备" + (this.dataId + 1), new Point($x, $y));
+					ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, PropUtils.getStringById(1985) + (this.dataId + 1), new Point($x, $y));
 				}
 			}
 		}

@@ -29,26 +29,33 @@ package com.leyou.net.cmd {
 			var remianT:int = o.kf_stime;
 			var isVip:Boolean = (int(o.vst) == 1);
 			var isReceived:Boolean = (int(o.fst) == 2);
-			UIManager.getInstance().roleHeadWnd.setFirstGift((remianT > 0) && !isReceived);
-			if(remianT > 0){
+//			UIManager.getInstance().leftTopWnd.setFirstGift((remianT > 0) && !isReceived, remianT);
+			if(UIManager.getInstance().isCreate(WindowEnum.FIRSTGIFT)){
+				(UIManager.getInstance().creatWindow(WindowEnum.FIRSTGIFT) as FirstGiftWnd).updateInfo(o);
+			}
+			if(remianT > 0 && !isReceived){
 				if(UIManager.getInstance().isCreate(WindowEnum.FIRSTGIFT) && isReceived){
 					UIManager.getInstance().firstGiftWnd.flyItem();
 					return;
 				}
 				(UIManager.getInstance().creatWindow(WindowEnum.FIRSTGIFT) as FirstGiftWnd).updateInfo(o);
 				return;
+			}else if((remianT > 0) && (remianT > 48*60*60)){
+				return;
 			}
 			
 			if (UIManager.getInstance().isCreate(WindowEnum.FIRST_PAY)) {
 				if (UIManager.getInstance().firstPay.flyItem()) {
-					UIManager.getInstance().rightTopWnd.deactive("areaFirstPayBtn");
+//					UIManager.getInstance().rightTopWnd.deactive("areaFirstPayBtn");
+					UIManager.getInstance().leftTopWnd.setFirstGift(false);
 					return;
 				}
 			}
 
 			if (0 == o.vst || ((1 == o.vst) && (1 == o.fst))) {
 
-				UIManager.getInstance().rightTopWnd.active("areaFirstPayBtn");
+//				UIManager.getInstance().rightTopWnd.active("areaFirstPayBtn");
+				UIManager.getInstance().leftTopWnd.setFirstGift(true);
 
 				if (!UIManager.getInstance().isCreate(WindowEnum.FIRST_PAY)) {
 					UIManager.getInstance().creatWindow(WindowEnum.FIRST_PAY);
@@ -71,7 +78,8 @@ package com.leyou.net.cmd {
 					UIManager.getInstance().marketWnd.setADStateVip(true);
 				}
 				 			
-				UIManager.getInstance().rightTopWnd.deactive("areaFirstPayBtn");
+//				UIManager.getInstance().rightTopWnd.deactive("areaFirstPayBtn");
+				UIManager.getInstance().leftTopWnd.setFirstGift(false);
 
 				if (!o.hasOwnProperty("jlist"))
 					return;

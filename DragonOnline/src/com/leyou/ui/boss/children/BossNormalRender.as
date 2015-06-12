@@ -66,7 +66,7 @@ package com.leyou.ui.boss.children
 			tipInfo = new FieldBossTipInfo();
 			big = new SwfLoader();
 			big.x = 730;
-			big.y = 250;
+			big.y = 230;
 			addChild(big);
 			big.mouseEnabled = true;
 //			big.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
@@ -137,29 +137,29 @@ package com.leyou.ui.boss.children
 				grids[n].clear();
 			}
 			var index:int = 0;
-			if(bossInfo.showItem1 > 0){
-				grids[index++].updataInfo({itemId:bossInfo.showItem1, count:0});
+			if(bossInfo.showItem1[0] > 0){
+				grids[index++].updataInfo({itemId:bossInfo.showItem1[0], count:bossInfo.showItem1[1]});
 			}
-			if(bossInfo.showItem2 > 0){
-				grids[index++].updataInfo({itemId:bossInfo.showItem2, count:0});
+			if(bossInfo.showItem2[0] > 0){
+				grids[index++].updataInfo({itemId:bossInfo.showItem2[0], count:bossInfo.showItem2[1]});
 			}
-			if(bossInfo.showItem3 > 0){
-				grids[index++].updataInfo({itemId:bossInfo.showItem3, count:0});
+			if(bossInfo.showItem3[0] > 0){
+				grids[index++].updataInfo({itemId:bossInfo.showItem3[0], count:bossInfo.showItem3[1]});
 			}
-			if(bossInfo.showItem4 > 0){
-				grids[index++].updataInfo({itemId:bossInfo.showItem4, count:0});
+			if(bossInfo.showItem4[0] > 0){
+				grids[index++].updataInfo({itemId:bossInfo.showItem4[0], count:bossInfo.showItem4[1]});
 			}
-			if(bossInfo.showItem5 > 0){
-				grids[index++].updataInfo({itemId:bossInfo.showItem5, count:0});
+			if(bossInfo.showItem5[0] > 0){
+				grids[index++].updataInfo({itemId:bossInfo.showItem5[0], count:bossInfo.showItem5[1]});
 			}
-			if(bossInfo.showItem6 > 0){
-				grids[index++].updataInfo({itemId:bossInfo.showItem6, count:0});
+			if(bossInfo.showItem6[0] > 0){
+				grids[index++].updataInfo({itemId:bossInfo.showItem6[0], count:bossInfo.showItem6[1]});
 			}
-			if(bossInfo.showItem7 > 0){
-				grids[index++].updataInfo({itemId:bossInfo.showItem7, count:0});
+			if(bossInfo.showItem7[0] > 0){
+				grids[index++].updataInfo({itemId:bossInfo.showItem7[0], count:bossInfo.showItem7[1]});
 			}
-			if(bossInfo.showItem8 > 0){
-				grids[index++].updataInfo({itemId:bossInfo.showItem8, count:0});
+			if(bossInfo.showItem8[0] > 0){
+				grids[index++].updataInfo({itemId:bossInfo.showItem8[0], count:bossInfo.showItem8[1]});
 			}
 		}
 		

@@ -14,8 +14,9 @@ package com.leyou.ui.guild.child {
 	import com.leyou.enum.ConfigEnum;
 	import com.leyou.manager.TimerManager;
 	import com.leyou.net.cmd.Cmd_Unw;
+	import com.leyou.utils.PropUtils;
 	import com.leyou.utils.TimeUtil;
-	
+
 	import flash.events.MouseEvent;
 
 	public class GuildWar2 extends AutoSprite {
@@ -242,12 +243,12 @@ package com.leyou.ui.guild.child {
 				}
 
 				if (o.rlist.length > 0) {
-					
+
 					this.rnextBtn.visible=true;
 					this.rpreBtn.visible=true;
 
-					this.currentItem1Page=int(o.rlist[0][0])%10==0?int(o.rlist[0][0])/10:int(o.rlist[0][0])/10+1;
-					this.rpageLbl.text=this.currentItem1Page+ "/" + int(this.item2Count % 10 == 0 ? this.item2Count / 10 : this.item2Count / 10 + 1);
+					this.currentItem1Page=int(o.rlist[0][0]) % 10 == 0 ? int(o.rlist[0][0]) / 10 : int(o.rlist[0][0]) / 10 + 1;
+					this.rpageLbl.text=this.currentItem1Page + "/" + int(this.item2Count % 10 == 0 ? this.item2Count / 10 : this.item2Count / 10 + 1);
 
 				} else {
 					this.rnextBtn.visible=false;
@@ -267,11 +268,11 @@ package com.leyou.ui.guild.child {
 				}
 
 				if (o.rlist.length > 0) {
-					
+
 					this.lnextBtn.visible=true;
 					this.lpreBtn.visible=true;
-					
-					this.currentItem2Page=int(o.rlist[0][0])%10==0?int(o.rlist[0][0])/10:int(o.rlist[0][0])/10+1;
+
+					this.currentItem2Page=int(o.rlist[0][0]) % 10 == 0 ? int(o.rlist[0][0]) / 10 : int(o.rlist[0][0]) / 10 + 1;
 					this.lpageLbl.text=this.currentItem2Page + "/" + int(this.item1Count % 10 == 0 ? this.item1Count / 10 : this.item1Count / 10 + 1);
 
 				} else {
@@ -288,7 +289,7 @@ package com.leyou.ui.guild.child {
 			this.pkstate=o.st;
 
 			if (this.pkstate == 2) {
-				
+
 				this.lpkStImg.visible=true;
 				this.rpkStimg.visible=true;
 				this.viewCk.turnOff();
@@ -307,7 +308,7 @@ package com.leyou.ui.guild.child {
 				}
 
 				this.lastTime=o.stime;
-				this.lastTimeLbl.text="冷却时间: " + TimeUtil.getIntToTime(this.lastTime) + "";
+				this.lastTimeLbl.text=PropUtils.getStringById(1748) + TimeUtil.getIntToTime(this.lastTime) + "";
 
 			} else {
 
@@ -317,7 +318,7 @@ package com.leyou.ui.guild.child {
 				this.viewCk.visible=true;
 
 				this.lastTime=o.stime;
-				this.lastTimeLbl.text="剩余时间: " + TimeUtil.getIntToTime(this.lastTime) + "";
+				this.lastTimeLbl.text=PropUtils.getStringById(1749) + ": " + TimeUtil.getIntToTime(this.lastTime) + "";
 			}
 
 			if (this.lastTime > 0)
@@ -346,21 +347,21 @@ package com.leyou.ui.guild.child {
 
 		private function exeTime(i:int):void {
 
-			if (this.lastTime-i > 0) {
-				
+			if (this.lastTime - i > 0) {
+
 				if (this.pkstate == 2)
-					this.lastTimeLbl.text="冷却时间: " + TimeUtil.getIntToTime(this.lastTime-i) + "";
+					this.lastTimeLbl.text=PropUtils.getStringById(1748) + ": " + TimeUtil.getIntToTime(this.lastTime - i) + "";
 				else
-					this.lastTimeLbl.text="剩余时间: " + TimeUtil.getIntToTime(this.lastTime-i) + "";
+					this.lastTimeLbl.text=PropUtils.getStringById(1749) + ": " + TimeUtil.getIntToTime(this.lastTime - i) + "";
 
 			} else {
 				this.lastTime=0;
 				TimerManager.getInstance().remove(exeTime);
 
 				if (this.pkstate == 2)
-					this.lastTimeLbl.text="冷却时间: 00:00:00";
+					this.lastTimeLbl.text=PropUtils.getStringById(1748) + ": 00:00:00";
 				else
-					this.lastTimeLbl.text="剩余时间: 00:00:00";
+					this.lastTimeLbl.text=PropUtils.getStringById(1749) + ": 00:00:00";
 			}
 
 		}

@@ -14,8 +14,9 @@ package com.leyou.ui.guild.child {
 	import com.ace.utils.StringUtil;
 	import com.leyou.enum.ConfigEnum;
 	import com.leyou.utils.PayUtil;
+	import com.leyou.utils.PropUtils;
 	import com.leyou.utils.ShopUtil;
-	
+
 	import flash.events.MouseEvent;
 	import flash.net.URLRequest;
 	import flash.net.navigateToURL;
@@ -148,7 +149,7 @@ package com.leyou.ui.guild.child {
 					break;
 			}
 
-			this.rateLbl.text="(" + this.currentRate + "倍收益)";
+			this.rateLbl.text="(" + this.currentRate + PropUtils.getStringById(1751) + ")";
 			this.rateLbl.x=this.progressLbl.x + this.progressLbl.textWidth + 3;
 
 			this.meLbl.text="" + o.mzc;

@@ -18,6 +18,8 @@ package com.leyou.ui.moldOpen
 	import com.ace.ui.img.child.Image;
 	import com.greensock.TweenMax;
 	import com.greensock.easing.Expo;
+	import com.leyou.enum.ConfigEnum;
+	import com.leyou.enum.MoldEnum;
 	import com.leyou.ui.tools.ToolsWnd;
 	
 	import flash.display.MovieClip;
@@ -72,9 +74,25 @@ package com.leyou.ui.moldOpen
 			var toolWnd:ToolsWnd = UIManager.getInstance().toolsWnd;
 			for(var n:int = 0; n < MOLD_COUNT; n++){
 				var info:TFunForcastInfo = TableManager.getInstance().getFunForcstInfoById(n+1);
+				if(null == info) continue;
 				if(info.openLevel > Core.me.info.level){
 					toolWnd.lockButton(info.id);
 				}
+			}
+			toolWnd.lockButton(MoldEnum.FARM);
+			toolWnd.lockButton(MoldEnum.COLLECTION);
+			toolWnd.lockButton(MoldEnum.SERVENT);
+			// 佣兵
+			if(Core.me.info.level >= ConfigEnum.servent1){
+				UIManager.getInstance().toolsWnd.unlockButton(MoldEnum.SERVENT);
+			}
+			// 搜集
+			if (Core.me.info.level >= ConfigEnum.setin1) {
+				UIManager.getInstance().toolsWnd.unlockButton(MoldEnum.COLLECTION);
+			}
+			// 农场
+			if (Core.me.info.level >= ConfigEnum.FarmOpenLevel) {
+				UIManager.getInstance().toolsWnd.unlockButton(MoldEnum.FARM);
 			}
 		}
 		
@@ -194,6 +212,7 @@ package com.leyou.ui.moldOpen
 			var toolWnd:ToolsWnd = UIManager.getInstance().toolsWnd;
 			for(var n:int = 0; n < MOLD_COUNT; n++){
 				var info:TFunForcastInfo = TableManager.getInstance().getFunForcstInfoById(n+1);
+				if(null == info) continue;
 				if(info.openLevel == level){
 					toolWnd.unlockButton(info.id);
 					var index:int = queue.indexOf(info.id);

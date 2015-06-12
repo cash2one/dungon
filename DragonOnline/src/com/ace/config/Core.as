@@ -14,7 +14,6 @@ package com.ace.config {
 		public static var serverIp:String="192.168.10.88";
 		public static var loginPort:int=9932;
  
-
 //		public static var serverName:String="S3";
 		public static var serverName:String="dev1";
  
@@ -37,8 +36,9 @@ package com.ace.config {
 		public static var URL_HELP:String; //帮助
 		public static var URL_BUG:String="http://bbs.360safe.com/forum.php?mod=post&action=newthread&fid=2457"; //问题提交
 		public static var URL_BBS:String="http://bbs.no2.cn/forumdisplay.php?fid=66"; //论坛
+		public static var IS_RE_LOGIN:Boolean=false; //重复登录
 
-//		上行：tx|Iopenid,openkey,appid,sig,pf,pfkey,zoneid
+		//		上行：tx|Iopenid,openkey,appid,sig,pf,pfkey,zoneid
 		public static var TX_OPENID:String;
 		public static var TX_OPENKEY:String;
 		public static var TX_APPID:String;
@@ -46,6 +46,8 @@ package com.ace.config {
 		public static var TX_PF:String;
 		public static var TX_PFKey:String;
 		public static var TX_ZONEID:String;
+		public static var TX_SANDBOX:Boolean;
+		public static var TX_VIPTIP:Boolean;
 
 		public static function setup(obj:Object):void {
 			if (obj.hasOwnProperty("version")) {
@@ -72,17 +74,19 @@ package com.ace.config {
 				Core.TX_PF=obj.pf;
 				Core.TX_PFKey=obj.pfkey;
 				Core.TX_ZONEID=obj.zoneid;
+				Core.TX_SANDBOX=(obj.sandbox == 1) ? true : false;
+				Core.TX_VIPTIP=(obj.vipTip == 1) ? true : false;
 			} else {
-				UIEnum.PLAT_FORM_ID=PlatformEnum.ID_E7E7PK;
+				UIEnum.PLAT_FORM_ID=PlatformEnum.ID_AOYI;
 				//调试要登陆的服务器和ip
-//				(!UIEnum.IS_USE_CDN) && UIEnum.DATAROOT="http://sogres.oss-cn-hangzhou.aliyuncs.com/webData/dragonResII/";
+				//				(!UIEnum.IS_USE_CDN) && UIEnum.DATAROOT="http://sogres.oss-cn-hangzhou.aliyuncs.com/webData/dragonResII/";
 				(!UIEnum.IS_USE_CDN) && (UIEnum.DATAROOT="http://192.168.10.16/webData/dragonRes/");
-//				(!UIEnum.IS_USE_CDN) && (UIEnum.DATAROOT="http://sogres2.leyou365.com/webData/dragonResEn/");
-//				(!UIEnum.IS_USE_CDN) && (UIEnum.DATAROOT="http://1251243446.cdn.myqcloud.com/1251243446/sogres/webData/dragonResEn/");
-//				(!UIEnum.IS_USE_CDN) && (UIEnum.DATAROOT="http://192.168.10.106/webData/dragonResEn/");
-//				Core.serverIp="192.168.10.88";
-//				Core.serverIp="s2.1360.leyou365.com";
-//				Core.loginPort=9932;
+					//				(!UIEnum.IS_USE_CDN) && (UIEnum.DATAROOT="http://sogres2.leyou365.com/webData/dragonResEn/");
+					//				(!UIEnum.IS_USE_CDN) && (UIEnum.DATAROOT="http://1251243446.cdn.myqcloud.com/1251243446/sogres/webData/dragonResEn/");
+					//				(!UIEnum.IS_USE_CDN) && (UIEnum.DATAROOT="http://192.168.10.106/webData/dragonResEn/");
+					//				Core.serverIp="192.168.10.88";
+					//				Core.serverIp="s2.1360.leyou365.com";
+					//				Core.loginPort=9932;
 			}
 
 			//
@@ -103,13 +107,32 @@ package com.ace.config {
 				Core.loginPort=obj.port;
 			} else {
  
+ 
 //				Core.serverIp="120.26.0.110";
 //				Core.loginPort=9932;
  
 //				Core.serverIp="120.26.0.95";
 //				Core.loginPort=9932;
  
+				//				Core.serverIp="119.29.106.221";
+				//				Core.loginPort=9932;
+ 
+ 
 			}
+
+			if (obj.hasOwnProperty("payUrl")) {
+				Core.URL_HOME=obj.homeUrl;
+				Core.URL_REGISTER=obj.resUrl;
+				Core.URL_BBS=obj.bbsUrl;
+				Core.URL_PAY=obj.payUrl;
+				return;
+			}
+
+			Core.URL_HOME=serInfo.homeUrl;
+			Core.URL_REGISTER=serInfo.resUrl;
+			Core.URL_BBS=serInfo.bbsUrl;
+
+
 			if (UIEnum.PLAT_FORM_ID == PlatformEnum.ID_1360) {
 				Core.URL_PAY=StringUtil.substitute(serInfo.payUrl, [gameName, serverName, userId, userId]);
 			} else if (UIEnum.PLAT_FORM_ID == PlatformEnum.ID_KUGOU) {
@@ -120,19 +143,40 @@ package com.ace.config {
 				Core.URL_PAY=StringUtil.substitute(serInfo.payUrl, [serverName.substr(1)]);
 			} else if (UIEnum.PLAT_FORM_ID == PlatformEnum.ID_119WAN) {
 				Core.URL_PAY=StringUtil.substitute(serInfo.payUrl, [serverName.substr(1)]);
+			} else if (UIEnum.PLAT_FORM_ID == PlatformEnum.ID_517KD) {
+				Core.URL_PAY=StringUtil.substitute(serInfo.payUrl, [serverName.substr(1), userId]);
+			} else if (UIEnum.PLAT_FORM_ID == PlatformEnum.ID_76JU) {
+				Core.URL_PAY=StringUtil.substitute(serInfo.payUrl, [userId]);
+				Core.URL_HOME=StringUtil.substitute(serInfo.homeUrl, [userId]);
+				Core.URL_REGISTER=StringUtil.substitute(serInfo.resUrl, [userId]);
+				Core.URL_BBS=StringUtil.substitute(serInfo.bbsUrl, [userId]);
 			} else {
 				Core.URL_PAY=serInfo.payUrl;
 			}
-			Core.URL_HOME=serInfo.homeUrl;
-			Core.URL_REGISTER=serInfo.resUrl;
-			Core.URL_BBS=serInfo.bbsUrl;
 		}
 
 		static public function get isTencent():Boolean {
-			return UIEnum.PLAT_FORM_ID == PlatformEnum.ID_TENCENT;
+			return (UIEnum.PLAT_FORM_ID == PlatformEnum.ID_TENCENT) || (UIEnum.PLAT_FORM_ID == PlatformEnum.ID_AOYI);
 		}
 
+		static public function get isAOYI():Boolean {
+			return (UIEnum.PLAT_FORM_ID == PlatformEnum.ID_AOYI);
+		}
 
+		static public function get isSF():Boolean {
+			return (UIEnum.PLAT_FORM_ID == PlatformEnum.ID_SF) || (UIEnum.PLAT_FORM_ID == PlatformEnum.ID_SF2);
+		}
+		
+		static public function get isSF1():Boolean{
+			return (UIEnum.PLAT_FORM_ID == PlatformEnum.ID_SF);
+		}
+		
+		static public function get isSF2():Boolean{
+			return (UIEnum.PLAT_FORM_ID == PlatformEnum.ID_SF2);
+		}
 
+		static public function resetLogin():void {
+			Core.IS_RE_LOGIN=false;
+		}
 	}
 }

@@ -29,6 +29,8 @@ package {
 //			this.addChild(effectSucc);
 //			return ;
 			
+			
+			
 			if (Core.bugTest) {
 				LayerManager.getInstance().windowLayer.addChild(new UiTester());
 				return;

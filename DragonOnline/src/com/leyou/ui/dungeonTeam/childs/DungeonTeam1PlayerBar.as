@@ -8,6 +8,7 @@ package com.leyou.ui.dungeonTeam.childs {
 	import com.ace.ui.lable.Label;
 	import com.leyou.net.cmd.Cmd_CpTm;
 	import com.leyou.utils.PlayerUtil;
+	import com.leyou.utils.PropUtils;
 
 	import flash.events.MouseEvent;
 
@@ -92,16 +93,16 @@ package com.leyou.ui.dungeonTeam.childs {
 
 				if (MyInfoManager.getInstance().name == bossName) {
 					this.killBtn.visible=true;
-					this.killBtn.text="踢出";
+					this.killBtn.text=PropUtils.getStringById(1682);
 				} else if (MyInfoManager.getInstance().name != o[0]) {
 					this.killBtn.visible=false;
 				} else if (MyInfoManager.getInstance().name == o[0]) {
 					this.killBtn.visible=true;
 
 					if (o[5] == 1) {
-						this.killBtn.text="取消准备";
+						this.killBtn.text=PropUtils.getStringById(1683);
 					} else {
-						this.killBtn.text="准备";
+						this.killBtn.text=PropUtils.getStringById(1684);
 					}
 				}
 
@@ -111,7 +112,7 @@ package com.leyou.ui.dungeonTeam.childs {
 
 			this.nameLbl.text="" + o[0];
 			this.lvLbl.text="LV." + o[3];
-			this.powerLbl.text="战斗力：" + o[4];
+			this.powerLbl.text=PropUtils.getStringById(1685) + "：" + o[4];
 
 		}
 

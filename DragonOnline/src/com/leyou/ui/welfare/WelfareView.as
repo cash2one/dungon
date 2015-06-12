@@ -139,7 +139,9 @@ package com.leyou.ui.welfare
 		}
 		
 		public function showRewardPage():void{
-			if(welfareLogin.hasReward()){
+			if(!welfareLogin.signed()){
+				tabBar.turnToTab(0);
+			}else if(welfareLogin.hasReward()){
 				tabBar.turnToTab(0);
 			}else if(welfareTime.hasReward()){
 				tabBar.turnToTab(1);
@@ -147,8 +149,6 @@ package com.leyou.ui.welfare
 				tabBar.turnToTab(2);
 			}else if(welfareOutline.hasReward()){
 				tabBar.turnToTab(3);
-			}else if(!welfareLogin.signed()){
-				tabBar.turnToTab(0);
 			}
 		}
 		

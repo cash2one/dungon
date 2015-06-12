@@ -177,10 +177,10 @@ package com.leyou.net.cmd {
 		 *
 		 */
 		public static function sm_Wig_N(o:Object):void {
-			if (UIManager.getInstance().isCreate(WindowEnum.MARKET) && UIManager.getInstance().marketWnd.visible)
-				UIManager.getInstance().marketWnd.flyMovie();
-			else
-				UIManager.getInstance().roleWnd.buyWingEffect();
+//			if (UIManager.getInstance().isCreate(WindowEnum.MARKET) && UIManager.getInstance().marketWnd.visible)
+//				UIManager.getInstance().marketWnd.flyMovie();
+//			else
+//				UIManager.getInstance().roleWnd.buyWingEffect();
 		}
 
 		/**

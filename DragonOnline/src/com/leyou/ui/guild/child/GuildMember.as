@@ -23,6 +23,7 @@ package com.leyou.ui.guild.child {
 	import com.leyou.net.cmd.Cmd_Friend;
 	import com.leyou.net.cmd.Cmd_Guild;
 	import com.leyou.net.cmd.Cmd_Tm;
+	import com.leyou.utils.PropUtils;
 	
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
@@ -314,27 +315,27 @@ package com.leyou.ui.guild.child {
 
 				var menuVec:Vector.<MenuInfo>=new Vector.<MenuInfo>();
 
-				menuVec.push(new MenuInfo("发起私聊", 1));
-				menuVec.push(new MenuInfo("查看状态", 2));
-				menuVec.push(new MenuInfo("邀请组队", 3));
-				menuVec.push(new MenuInfo("加为好友", 4));
+				menuVec.push(new MenuInfo(PropUtils.getStringById(1728), 1));
+				menuVec.push(new MenuInfo(PropUtils.getStringById(1729), 2));
+				menuVec.push(new MenuInfo(PropUtils.getStringById(1730), 3));
+				menuVec.push(new MenuInfo(PropUtils.getStringById(1711), 4));
 
 
 				if (UIManager.getInstance().guildWnd.memberPrice[GuildEnum.ADMINI_PRICE_MANAGER] == 1)
-					menuVec.push(new MenuInfo("职务变更", 6));
+					menuVec.push(new MenuInfo(PropUtils.getStringById(1731), 6));
 
-				menuVec.push(new MenuInfo("复制名字", 9));
-				menuVec.push(new MenuInfo("发起决斗", 11));
+				menuVec.push(new MenuInfo(PropUtils.getStringById(1726), 9));
+				menuVec.push(new MenuInfo(PropUtils.getStringById(1732), 11));
 
 				if (UIManager.getInstance().guildWnd.memberPrice[GuildEnum.ADMINI_PRICE_MANAGER] == 1)
-					menuVec.push(new MenuInfo("禅让会长", 7));
+					menuVec.push(new MenuInfo(PropUtils.getStringById(1733), 7));
 
-				menuVec.push(new MenuInfo("拉黑名单", 5));
+				menuVec.push(new MenuInfo(PropUtils.getStringById(1734), 5));
 
-				menuVec.push(new MenuInfo("举报玩家 ", 10));
+				menuVec.push(new MenuInfo(PropUtils.getStringById(1735), 10));
 
 				if (UIManager.getInstance().guildWnd.memberPrice[GuildEnum.ADMINI_PRICE_KILL_PEOPLE] == 1)
-					menuVec.push(new MenuInfo("踢出行会", 8));
+					menuVec.push(new MenuInfo(PropUtils.getStringById(1736), 8));
 
 				var p:Point=new Point(e.stageX - 30, e.stageY);
 				MenuManager.getInstance().show(menuVec, this, p);

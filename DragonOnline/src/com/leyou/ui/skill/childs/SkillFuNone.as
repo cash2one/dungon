@@ -45,6 +45,9 @@ package com.leyou.ui.skill.childs {
 			
 		}
 
+		override public function get height():Number{
+			return 86;
+		}
 
 	}
 }

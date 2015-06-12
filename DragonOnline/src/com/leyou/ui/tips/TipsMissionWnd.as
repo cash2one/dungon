@@ -104,13 +104,13 @@ package com.leyou.ui.tips {
 			this.iconImg.updateBmp("ui/mission/mission_icon" + _i + "_big.png");
 			this.nameImg.updateBmp("ui/mission/n_mission_" + _i + ".png");
 
-			this.progressLbl.text="本章整体进度" + _p;
+			this.progressLbl.text=PropUtils.getStringById(1943) + _p;
 
 			if (_id > int(hallows.Mission_ID) || _p == "100%") {
-				this.getLbl.text="(已获得)";
+				this.getLbl.text=PropUtils.getStringById(1944);
 				this.getLbl.setTextFormat(FontEnum.getTextFormat("Green12"));
 			} else {
-				this.getLbl.text="(未获得)";
+				this.getLbl.text=PropUtils.getStringById(1945);
 				this.getLbl.setTextFormat(FontEnum.getTextFormat("Red12"));
 			}
 		}

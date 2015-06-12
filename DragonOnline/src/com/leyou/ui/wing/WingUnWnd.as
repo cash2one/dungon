@@ -52,7 +52,7 @@ package com.leyou.ui.wing {
 			var infoXml:XML=LibManager.getInstance().getXML("config/table/Wing_Base.xml");
 			var xml:XML=infoXml.data[0];
 
-			for (var i:int=1; i <= 13; i++) {
+			for (var i:int=1; i <= 10; i++) {
 				if (int(xml.attribute("W_AttID" + i)) == 3)
 					continue;
 

@@ -9,7 +9,8 @@ package com.leyou.ui.backpack.child {
 	import com.ace.ui.lable.Label;
 	import com.leyou.net.cmd.Cmd_Bag;
 	import com.leyou.net.cmd.Cmd_CpTm;
-	
+	import com.leyou.utils.PropUtils;
+
 	import flash.events.MouseEvent;
 
 	public class MessageInputWnd extends AutoWindow {
@@ -25,7 +26,7 @@ package com.leyou.ui.backpack.child {
 		private var pos:int=-1;
 
 		private var type:int=0;
-		
+
 		public var param:Array=[];
 
 		public function MessageInputWnd() {
@@ -49,19 +50,19 @@ package com.leyou.ui.backpack.child {
 			this.cancelBtn.addEventListener(MouseEvent.CLICK, onClick);
 		}
 
-		public function showPanel(pos:int, type:int=0,param:Array=null):void {
+		public function showPanel(pos:int, type:int=0, param:Array=null):void {
 
 			this.type=type;
 			this.param=param;
-			
+
 			this.keyTextInput.text="";
 			if (type == 0) {
 				this.pos=pos;
 				this.contentLbl.text="" + TableManager.getInstance().getSystemNotice(4120).content;
-				this.titleNameLbl.text="追踪";
+				this.titleNameLbl.text=PropUtils.getStringById(1634);
 			} else if (type == 1) {
-				this.contentLbl.text="请输入密码:";
-				this.titleNameLbl.text="输入密码";
+				this.contentLbl.text=PropUtils.getStringById(1635);
+				this.titleNameLbl.text=PropUtils.getStringById(1636);
 			}
 
 			this.show();

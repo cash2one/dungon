@@ -109,6 +109,7 @@ package com.leyou.net.cmd {
 		  *
 		 */
 		public static function sm_GuildCp_O(o:Object):void {
+			 
 			if (!UIManager.getInstance().isCreate(WindowEnum.DUNGEON_TEAM))
 				UIManager.getInstance().creatWindow(WindowEnum.DUNGEON_TEAM);
 

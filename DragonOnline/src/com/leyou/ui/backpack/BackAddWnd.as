@@ -43,7 +43,7 @@ package com.leyou.ui.backpack {
 			this.cancelBtn=this.getUIbyID("cancelBtn") as NormalButton;
 
 			this.spaceLbl=this.getUIbyID("spaceLbl") as Label;
-			this.expLbl=this.getUIbyID("expLbl") as Label;
+//			this.expLbl=this.getUIbyID("expLbl") as Label;
 
 			this.hpLbl=this.getUIbyID("hpLbl") as Label;
 
@@ -52,7 +52,7 @@ package com.leyou.ui.backpack {
 
 			this.yb.turnOn();
 
-			this.timeLbl=this.getUIbyID("timeLbl") as Label;
+//			this.timeLbl=this.getUIbyID("timeLbl") as Label;
 
 			this.confirmBtn.addEventListener(MouseEvent.CLICK, onClick);
 			this.cancelBtn.addEventListener(MouseEvent.CLICK, onClick);
@@ -78,7 +78,7 @@ package com.leyou.ui.backpack {
 
 		public function showPanel(obj:Object):void {
 			this.spaceLbl.text=obj.num + "";
-			this.expLbl.text=obj.exp + "";
+//			this.expLbl.text=obj.exp + "";
 
 			this.hpLbl.text=obj.hp + "";
 			this.yb.text="   " + obj.yb + "";
@@ -88,9 +88,9 @@ package com.leyou.ui.backpack {
 
 			this.type=obj.t;
 
-			this.timeLbl.text=TimeUtil.getIntToDateTime(obj.time) + "";
+//			this.timeLbl.text=TimeUtil.getIntToDateTime(obj.time) + "";
 
-			TimerManager.getInstance().add(exeTime);
+//			TimerManager.getInstance().add(exeTime);
 
 			this.show();
 		}

@@ -203,21 +203,21 @@ package com.leyou.ui.achievement
 							case PlatformEnum.ID_KUGOU:
 								serName = StringUtil.substitute(serInfo.name, serId, serId);
 								break;
-							case PlatformEnum.ID_1360:
-								serName = StringUtil.substitute(serInfo.name, serId);
-								break;
-							case PlatformEnum.ID_YINGSU:
-								serName = StringUtil.substitute(serInfo.name, serId);
-								break;
-							case PlatformEnum.ID_TENCENT:
-								serName = StringUtil.substitute(serInfo.name, serId);
-								break;
-							case PlatformEnum.ID_14339:
-								serName = StringUtil.substitute(serInfo.name, serId);
-								break;
-							case PlatformEnum.ID_E7E7PK:
-								serName = StringUtil.substitute(serInfo.name, serId);
-								break;
+//							case PlatformEnum.ID_1360:
+//								serName = StringUtil.substitute(serInfo.name, serId);
+//								break;
+//							case PlatformEnum.ID_YINGSU:
+//								serName = StringUtil.substitute(serInfo.name, serId);
+//								break;
+//							case PlatformEnum.ID_TENCENT:
+//								serName = StringUtil.substitute(serInfo.name, serId);
+//								break;
+//							case PlatformEnum.ID_14339:
+//								serName = StringUtil.substitute(serInfo.name, serId);
+//								break;
+//							case PlatformEnum.ID_E7E7PK:
+//								serName = StringUtil.substitute(serInfo.name, serId);
+//								break;
 							default:
 								serName = StringUtil.substitute(serInfo.name, serId);
 								break;

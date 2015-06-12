@@ -16,6 +16,7 @@ package com.leyou.ui.cityBattle
 	import com.leyou.data.cityBattle.CityBattleTrackData;
 	import com.leyou.enum.ConfigEnum;
 	import com.leyou.ui.cityBattle.children.CityBattleTrackReward;
+	import com.leyou.utils.PropUtils;
 	import com.leyou.utils.StringUtil_II;
 	
 	import flash.events.MouseEvent;
@@ -162,7 +163,7 @@ package com.leyou.ui.cityBattle
 				var content:String = TableManager.getInstance().getSystemNotice(6721).content;
 				timeTitleLbl.text = content;
 			}else{
-				timeTitleLbl.text = "持有时间";
+				timeTitleLbl.text = PropUtils.getStringById(1666);
 			}
 		}
 	}

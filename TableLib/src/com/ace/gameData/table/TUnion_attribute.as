@@ -58,7 +58,12 @@ package com.ace.gameData.table {
 		 */
 		public var uCon:int;
 
+		/**
+		 * 花费行会贡献
 
+			升级该等级所花费的魂力
+		 */
+		public var uEnergy:int;
 
 		public function TUnion_attribute(data:XML=null) {
 			if (data == null)
@@ -73,6 +78,7 @@ package com.ace.gameData.table {
 			this.uAtt=data.@uAtt;
 			this.uMoney=data.@uMoney;
 			this.uCon=data.@uCon;
+			this.uEnergy=data.@uEnergy;
 
 
 		}

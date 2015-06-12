@@ -224,45 +224,45 @@ package com.leyou.utils {
 			var str:String;
 			switch (c) {
 				case ChatEnum.CHANNEL_COMMON:
-					str="【普通】";
+					str=PropUtils.getStringById(2045);
 					str=getColorStr(str, ChatEnum.COLOR_COMMON);
 					break;
 				case ChatEnum.CHANNEL_GUILD:
-//					str="【行会】";
+//					str=PropUtils.getStringById(2046);
 //					str=getColorStr(str, ChatEnum.COLOR_GUILD);
 					str = "\\64 ";
 					break;
 				case ChatEnum.CHANNEL_HORN:
-//					str="【喇叭】";
+//					str=PropUtils.getStringById(2047);
 //					str=getColorStr(str, ChatEnum.COLOR_HORN);
 					str = "\\65 ";
 					break;
 				case ChatEnum.CHANNEL_MAP:
-					str="【地图】";
+					str=PropUtils.getStringById(2048);
 					str=getColorStr(str, ChatEnum.COLOR_MAP);
 					break;
 				case ChatEnum.CHANNEL_PRIVATE:
-//					str="【私聊】";
+//					str=PropUtils.getStringById(2049);
 //					str=getColorStr(str, ChatEnum.COLOR_PRIVATE);
 					str = "\\62 ";
 					break;
 				case ChatEnum.CHANNEL_SYSTEM:
-//					str="【系统】";
+//					str=PropUtils.getStringById(2050);
 //					str=getColorStr(str, ChatEnum.COLOR_SYSTEM);
 					str = "\\60 ";
 					break;
 				case ChatEnum.CHANNEL_TEAM:
-//					str="【组队】";
+//					str=PropUtils.getStringById(2051);
 //					str=getColorStr(str, ChatEnum.COLOR_TEAM);
 					str = "\\63 ";
 					break;
 				case ChatEnum.CHANNEL_WORLD:
-//					str="【世界】";
+//					str=PropUtils.getStringById(2052);
 //					str=getColorStr(str, ChatEnum.COLOR_WORLD);
 					str = "\\61 ";
 					break;
 				default:
-//					str="【系统】";
+//					str=PropUtils.getStringById(2050);
 //					str=getColorStr(str, ChatEnum.COLOR_SYSTEM);
 					str = "\\60 ";
 					break;

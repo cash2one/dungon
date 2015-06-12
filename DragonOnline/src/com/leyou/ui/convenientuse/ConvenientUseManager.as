@@ -2,6 +2,7 @@ package com.leyou.ui.convenientuse
 {
 	import com.ace.config.Core;
 	import com.ace.enum.ItemEnum;
+	import com.ace.gameData.manager.DataManager;
 	import com.ace.gameData.manager.MyInfoManager;
 	import com.ace.manager.UIManager;
 	import com.leyou.data.bag.Baginfo;
@@ -46,6 +47,9 @@ package com.leyou.ui.convenientuse
 		 */		
 		public function checkNewBagId(id:String):void{
 			var bagInfo:Baginfo = MyInfoManager.getInstance().getBagItemByUid(id);
+			if(!DataManager.getInstance().convenientData.isPrompt(bagInfo.info.name)){
+				return;
+			}
 			if(1 == bagInfo.info.classid){
 				// 装备
 				if(currentItem.uid == id){// 是否是当前显示

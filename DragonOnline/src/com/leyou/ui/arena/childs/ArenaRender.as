@@ -20,6 +20,7 @@ package com.leyou.ui.arena.childs {
 	import com.ace.utils.PnfUtil;
 	import com.ace.utils.StringUtil;
 	import com.leyou.net.cmd.Cmd_Arena;
+	import com.leyou.utils.PropUtils;
 	
 	import flash.display.DisplayObject;
 	import flash.display.Sprite;
@@ -118,7 +119,7 @@ package com.leyou.ui.arena.childs {
 			if (tinfo == null)
 				return;
 
-			ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, StringUtil.substitute(TableManager.getInstance().getSystemNotice(4717).content, [tinfo.name, this.mintegral, tinfo.value1, tinfo.value2, tinfo.value3]), new Point(this.stage.mouseX, this.stage.mouseY));
+			ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, StringUtil.substitute(TableManager.getInstance().getSystemNotice(4717).content, [tinfo.name, this.mintegral, tinfo.value1]), new Point(this.stage.mouseX, this.stage.mouseY));
 		}
 
 		private function onTipsMouseOut(e:DisplayObject):void {
@@ -148,7 +149,7 @@ package com.leyou.ui.arena.childs {
 				this.pkImgBtn.visible=false;
 
 				if (v) {
-					this.pkLbl.text="已战胜";
+					this.pkLbl.text=PropUtils.getStringById(1602);
 					this.pkLbl.textColor=0xffffff;
 					pkLbl.x=this.width - pkLbl.width + 20 >> 1;
 					this.pkLbl.y=-130;

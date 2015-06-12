@@ -15,6 +15,7 @@ package com.leyou.ui.friend {
 	import com.leyou.net.cmd.Cmd_Tm;
 	import com.leyou.ui.friend.child.Accordion;
 	import com.leyou.utils.ChatUtil;
+	import com.leyou.utils.PropUtils;
 	
 	import flash.events.MouseEvent;
 	import flash.system.System;
@@ -55,8 +56,8 @@ package com.leyou.ui.friend {
 			menu1Vec.push(new MenuInfo(ChatEnum.CLICK_MENU_II[7], ChatEnum.SUE, sue));
 				
 			menu2Vec = new Vector.<MenuInfo>();
-			menu2Vec.push(new MenuInfo("加为好友", 0, addFriendRequest));
-			menu2Vec.push(new MenuInfo("删除宿敌", 1, removeFriendRequest));
+			menu2Vec.push(new MenuInfo(PropUtils.getStringById(1711), 0, addFriendRequest));
+			menu2Vec.push(new MenuInfo(PropUtils.getStringById(1712), 1, removeFriendRequest));
 			menu2Vec.push(new MenuInfo(ChatEnum.CLICK_MENU_II[6], ChatEnum.COPY, copy));
 			menu2Vec.push(new MenuInfo(ChatEnum.CLICK_MENU_II[10], ChatEnum.DUEL, onDuel));
 			menu2Vec.push(new MenuInfo(ChatEnum.CLICK_MENU_II[9], ChatEnum.TRACK, trackPlayer));
@@ -80,9 +81,9 @@ package com.leyou.ui.friend {
 			acc.x = 25;
 			acc.y = 52;
 			addChild(acc);
-			acc.addItem("好  友", "(0/50)", null, menu1Vec);
-			acc.addItem("宿  敌", "(0/20)", null, menu2Vec);
-			acc.addItem("黑名单", "(0/20)", null, menu3Vec);
+			acc.addItem(PropUtils.getStringById(1713), "(0/50)", null, menu1Vec);
+			acc.addItem(PropUtils.getStringById(1714), "(0/20)", null, menu2Vec);
+			acc.addItem(PropUtils.getStringById(1715), "(0/20)", null, menu3Vec);
 		}
 		
 		private function onDuel(info:FriendInfo):void{

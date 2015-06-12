@@ -55,7 +55,7 @@ package com.leyou.ui.market {
 		private var ybbImg:Image;
 		private var ybImg:Image;
 		
-		private var wingRender:MarketWingRender;
+//		private var wingRender:MarketWingRender;
 		
 		private var wingExist:Boolean;
 		
@@ -138,6 +138,7 @@ package com.leyou.ui.market {
 			}else{
 				tabBar.turnToTab(0);
 			}
+			tabBar.setTabVisible(4, false);
 		}
 		
 		public function updateADState():void{
@@ -207,13 +208,14 @@ package com.leyou.ui.market {
 //			Cmd_Market.cm_Mak_I(1);
 //			Cmd_Market.cm_Mak_L();
 //			tabBar.turnToTab(_currentIdx);
-			if((null != wingRender) && !wingRender.visible){
-				if(Core.isTencent){
-					tabBar.turnToTab(0);
-				}else{
-					tabBar.turnToTab(1);
-				}
-			}
+			
+//			if((null == wingRender) || ((null != wingRender) && !wingRender.visible)){
+//				if(Core.isTencent){
+//					tabBar.turnToTab(0);
+//				}else{
+//					tabBar.turnToTab(1);
+//				}
+//			}
 			updataMoney();
 			GuideManager.getInstance().removeGuide(16);
 		}
@@ -256,9 +258,9 @@ package com.leyou.ui.market {
 			if(index != tabBar.turnOnIndex){
 				tabBar.turnToTab(index);
 			}
-			if(wingRender){
-				wingRender.visible = false;
-			}
+//			if(wingRender){
+//				wingRender.visible = false;
+//			}
 			if(tencentPanel){
 				tencentPanel.visible = false;
 			}
@@ -278,14 +280,14 @@ package com.leyou.ui.market {
 		}
 		
 		private function showWingRender():void{
-			if(null == wingRender){
-				wingRender = new MarketWingRender();
-				wingRender.x = 275;
-				wingRender.y = 93;
-				wingRender.updateInfo();
-				addChild(wingRender);
-			}
-			wingRender.visible = true;
+//			if(null == wingRender){
+//				wingRender = new MarketWingRender();
+//				wingRender.x = 275;
+//				wingRender.y = 93;
+//				wingRender.updateInfo();
+//				addChild(wingRender);
+//			}
+//			wingRender.visible = true;
 		}
 		
 		private function showTencentMarket():void{
@@ -369,9 +371,9 @@ package com.leyou.ui.market {
 		 * 
 		 */		
 		public function onItemListResponse(o:Object):void{
-			if((null != wingRender) && wingRender.visible){
-				return;
-			}
+//			if((null != wingRender) && wingRender.visible){
+//				return;
+//			}
 			var index:int = o.mtype;
 			var itemList:Array = o.list;
 			var page:MarketPageInfo = pageDatas[index-1];
@@ -395,35 +397,39 @@ package com.leyou.ui.market {
 		
 		public function setWingInfo(obj:Object):void{
 //			wingExist = !obj.st && (Core.me.info.level >= ConfigEnum.WingOpenLv);
-			wingExist = obj.st;
-			if(wingExist){
-				if(null == wingRender){
-					wingRender = new MarketWingRender();
-					wingRender.x = 275;
-					wingRender.y = 93;
-					wingRender.updateInfo();
-					wingRender.visible = false;
-					addChild(wingRender);
-				}
-			}else{
-				if(null != wingRender){
-					if(wingRender.visible){
-						wingRender.forbid();
-					}else{
-						var display:DisplayObject = tabBar.getTabButton(4);
-						if(null != display){
-							tabBar.setTabVisible(4, false);
-						}
-						wingRender.die();
-						wingRender = null;
-					}
-				}else{
-					var tb:DisplayObject = tabBar.getTabButton(4);
-					if(null != tb){
-						tabBar.setTabVisible(4, false);
-					}
-				}
-			}
+//			wingExist = obj.st;
+//			if(wingExist){
+//				var td:DisplayObject = tabBar.getTabButton(4);
+//				if(null != td){
+//					tabBar.setTabVisible(4, true);
+//				}
+//				if(null == wingRender){
+//					wingRender = new MarketWingRender();
+//					wingRender.x = 275;
+//					wingRender.y = 93;
+//					wingRender.updateInfo();
+//					wingRender.visible = false;
+//					addChild(wingRender);
+//				}
+//			}else{
+//				if(null != wingRender){
+//					if(wingRender.visible){
+//						wingRender.forbid();
+//					}else{
+//						var display:DisplayObject = tabBar.getTabButton(4);
+//						if(null != display){
+//							tabBar.setTabVisible(4, false);
+//						}
+//						wingRender.die();
+//						wingRender = null;
+//					}
+//				}else{
+//					var tb:DisplayObject = tabBar.getTabButton(4);
+//					if(null != tb){
+//						tabBar.setTabVisible(4, false);
+//					}
+//				}
+//			}
 		}
 		
 		/**
@@ -539,10 +545,10 @@ package com.leyou.ui.market {
 		}
 		
 		public function flyMovie():void{
-			hide();
-			if(null != wingRender){
-				wingRender.flyMovie();
-			}
+//			hide();
+//			if(null != wingRender){
+//				wingRender.flyMovie();
+//			}
 		}
 	}
 }

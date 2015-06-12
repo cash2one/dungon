@@ -1,9 +1,7 @@
-package com.ace.gameData.table
-{
+package com.ace.gameData.table {
 
-	public class TBackpackAdd
-	{
-		
+	public class TBackpackAdd {
+
 		/**
 		*	背包ID
 		*/
@@ -18,6 +16,11 @@ package com.ace.gameData.table
 		*	开启所需元宝
 		*/
 		public var addMoney:int;
+		
+		/**
+		 *开启所需绑定元宝 
+		 */		
+		public var addBMoney:int;
 
 		/**
 		*	获得HP上限
@@ -30,21 +33,22 @@ package com.ace.gameData.table
 		public var addExp:int;
 
 
-		
-		public function TBackpackAdd(data:XML=null)
-		{
-			if(data==null) return ;
-			
+
+		public function TBackpackAdd(data:XML=null) {
+			if (data == null)
+				return;
+
 			this.backId=data.@backId;
 			this.addTime=data.@addTime;
 			this.addMoney=data.@addMoney;
+			this.addBMoney=data.@addBMoney;
 			this.addHP=data.@addHP;
 			this.addExp=data.@addExp;
 
-			
+
 		}
-		
-		
-		
+
+
+
 	}
 }

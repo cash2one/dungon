@@ -32,7 +32,8 @@ package com.leyou.ui.task.child {
 	import com.leyou.net.cmd.Cmd_Qa;
 	import com.leyou.net.cmd.Cmd_Tsk;
 	import com.leyou.utils.FilterUtil;
-
+	import com.leyou.utils.PropUtils;
+	
 	import flash.events.MouseEvent;
 	import flash.events.TextEvent;
 	import flash.geom.Point;
@@ -116,7 +117,10 @@ package com.leyou.ui.task.child {
 			this.ybsuccBtn.addEventListener(MouseEvent.CLICK, onybBtn);
 			this.ybsuccBtn.doubleClickEnabled=false;
 
-			this.ybsuccBtn.setToolTip(StringUtil.substitute(TableManager.getInstance().getSystemNotice(2301).content, [ConfigEnum.taskDailyCost1]));
+			if (Core.isSF)
+				this.ybsuccBtn.setToolTip(StringUtil.substitute(TableManager.getInstance().getSystemNotice(30002).content, [ConfigEnum.taskDailyCost1.split("|")[0]]));
+			else
+				this.ybsuccBtn.setToolTip(StringUtil.substitute(TableManager.getInstance().getSystemNotice(2301).content, [ConfigEnum.taskDailyCost1.split("|")[0]]));
 
 			this.yboneKeyBtn.visible=false;
 			this.ybsuccBtn.visible=false;
@@ -127,11 +131,16 @@ package com.leyou.ui.task.child {
 		private function onTrOverBtn(e:MouseEvent):void {
 
 			if (e.target == this.yboneKeyBtn) {
-				this.yboneKeyBtn.setToolTip(StringUtil.substitute(TableManager.getInstance().getSystemNotice(2302).content, [(ConfigEnum.taskDailySum - int(cloop) + 1) * ConfigEnum.taskDailyCost1, DataManager.getInstance().vipData.taskPrivilegeVipLv()]));
+
+				if (Core.isSF)
+					this.yboneKeyBtn.setToolTip(StringUtil.substitute(TableManager.getInstance().getSystemNotice(30003).content, [(ConfigEnum.taskDailySum - int(cloop) + 1) * int(ConfigEnum.taskDailyCost1.split("|")[0]), DataManager.getInstance().vipData.taskPrivilegeVipLv()]));
+				else
+					this.yboneKeyBtn.setToolTip(StringUtil.substitute(TableManager.getInstance().getSystemNotice(2302).content, [(ConfigEnum.taskDailySum - int(cloop) + 1) * int(ConfigEnum.taskDailyCost1.split("|")[0]), DataManager.getInstance().vipData.taskPrivilegeVipLv()]));
+
 			} else {
 				var count:int=MyInfoManager.getInstance().VipLastTransterCount;
 				if (count < 0)
-					this.trbtn.setToolTip(StringUtil.substitute(TableManager.getInstance().getSystemNotice(9937).content, ["无限"]));
+					this.trbtn.setToolTip(StringUtil.substitute(TableManager.getInstance().getSystemNotice(9937).content, [PropUtils.getStringById(1890)]));
 				else
 					this.trbtn.setToolTip(StringUtil.substitute(TableManager.getInstance().getSystemNotice(9937).content, [count]));
 			}
@@ -175,7 +184,7 @@ package com.leyou.ui.task.child {
 
 			this.ybsuccBtn.visible=true;
 
-			if (!v || this.taskStateLbl.text.indexOf("已完成") > -1) {
+			if (!v || this.taskStateLbl.text.indexOf(PropUtils.getStringById(1584)) > -1) {
 				this.yboneKeyBtn.visible=false;
 				this.ybsuccBtn.visible=false;
 			} else {
@@ -208,15 +217,31 @@ package com.leyou.ui.task.child {
 		}
 
 		private function onyboneKeyBtn(e:MouseEvent):void {
-			PopupManager.showConfirm(StringUtil.substitute(TableManager.getInstance().getSystemNotice(2305).content, [(ConfigEnum.taskDailySum - this.cloop + 1) * ConfigEnum.taskDailyCost1]), function():void {
-				Cmd_Tsk.cmTaskDailySuccess(2);
+			var str:String;
+			if (Core.isSF) {
+				str=StringUtil.substitute(TableManager.getInstance().getSystemNotice(30004).content, [(ConfigEnum.taskDailySum - this.cloop + 1) * int(ConfigEnum.taskDailyCost1.split("|")[0])])
+			} else {
+				str=StringUtil.substitute(TableManager.getInstance().getSystemNotice(2305).content, [(ConfigEnum.taskDailySum - this.cloop + 1) * int(ConfigEnum.taskDailyCost1.split("|")[0])])
+			}
+
+			var i1:int=int(ConfigEnum.taskDailyCost1.split("|")[0]);
+			var i2:int=int(ConfigEnum.taskDailyCost1.split("|")[1]);
+			PopupManager.showRadioConfirm(str, ((ConfigEnum.taskDailySum - this.cloop + 1) * i1)+"", ((ConfigEnum.taskDailySum - this.cloop + 1) * i2)+"", function(i:int):void {
+				Cmd_Tsk.cmTaskDailySuccess(2, (i == 0 ? 1 : 0));
 			}, null, false, "onKeySuccToday");
 
 		}
 
 		private function onybBtn(e:MouseEvent):void {
-			PopupManager.showConfirm(StringUtil.substitute(TableManager.getInstance().getSystemNotice(2306).content, [ConfigEnum.taskDailyCost1]), function():void {
-				Cmd_Tsk.cmTaskDailySuccess();
+			var str:String;
+			if (Core.isSF) {
+				str=StringUtil.substitute(TableManager.getInstance().getSystemNotice(30005).content, [ConfigEnum.taskDailyCost1.split("|")[0]])
+			} else {
+				str=StringUtil.substitute(TableManager.getInstance().getSystemNotice(2306).content, [ConfigEnum.taskDailyCost1.split("|")[0]])
+			}
+
+			PopupManager.showRadioConfirm(str, ConfigEnum.taskDailyCost1.split("|")[0]+"", ConfigEnum.taskDailyCost1.split("|")[1]+"", function(i:int):void {
+				Cmd_Tsk.cmTaskDailySuccess(1, (i == 0 ? 1 : 0));
 			}, null, false, "loopSuccToday");
 		}
 
@@ -326,7 +351,7 @@ package com.leyou.ui.task.child {
 					return;
 				}
 
-				UILayoutManager.getInstance().open(WindowEnum.STORYCOPY);
+				UILayoutManager.getInstance().open_II(WindowEnum.DUNGEON_TEAM);
 //				GuideManager.getInstance().removeGuide(29);
 
 			} else if (str[0].indexOf("equip") > -1) {
@@ -358,7 +383,7 @@ package com.leyou.ui.task.child {
 				if (UIManager.getInstance().isCreate(WindowEnum.ROLE) && UIManager.getInstance().roleWnd.visible) {
 					return;
 				}
-				
+
 				UILayoutManager.getInstance().open_II(WindowEnum.ROLE);
 				TweenLite.delayedCall(.3, UIManager.getInstance().roleWnd.setTabIndex, [3]);
 //				GuideManager.getInstance().removeGuide(10);

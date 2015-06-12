@@ -64,7 +64,8 @@ package com.leyou.ui.arena.childs {
 			this.y=UIEnum.HEIGHT - this.height >> 1;
 
 			this.goldLbl.text=o.money + "";
-			this.expLbl.text=o.exp + "";
+//			this.expLbl.text=o.exp + "";
+			this.expLbl.text=o.honour + "";
 			this.soulLbl.text=o.energy + "";
 			this.integralLbl.text=o.fscore + "";
 

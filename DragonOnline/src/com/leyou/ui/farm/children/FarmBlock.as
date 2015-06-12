@@ -2,18 +2,21 @@ package com.leyou.ui.farm.children
 {
 	import com.ace.enum.CursorEnum;
 	import com.ace.enum.FilterEnum;
+	import com.ace.enum.TipEnum;
 	import com.ace.enum.WindowEnum;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.table.TFarmLandInfo;
 	import com.ace.gameData.table.TFarmPlantInfo;
 	import com.ace.manager.CursorManager;
 	import com.ace.manager.GuideManager;
+	import com.ace.manager.ToolTipManager;
 	import com.ace.manager.UIManager;
 	import com.ace.ui.button.children.ImgButton;
 	import com.ace.ui.img.child.Image;
 	import com.ace.ui.notice.NoticeManager;
 	import com.ace.utils.StringUtil;
 	import com.greensock.TweenLite;
+	import com.leyou.enum.ConfigEnum;
 	import com.leyou.enum.FarmEnum;
 	import com.leyou.manager.PopupManager;
 	import com.leyou.net.cmd.Cmd_Farm;
@@ -21,6 +24,7 @@ package com.leyou.ui.farm.children
 	import com.leyou.utils.StringUtil_II;
 	
 	import flash.display.Sprite;
+	import flash.geom.Point;
 	import flash.text.TextField;
 	
 	/**
@@ -144,8 +148,24 @@ package com.leyou.ui.farm.children
 			}else{
 				CursorManager.getInstance().resetGameCursor();
 			}
-			if(UIManager.getInstance().farmWnd.isOwner() && (FarmEnum.BLOCK_GROWING == _status)){
-				uaContainer.visible = true;
+			if(UIManager.getInstance().farmWnd.isOwner()){
+				var content:String;
+				switch(_status){
+					case FarmEnum.BLOCK_GROWING:
+						uaContainer.visible = true;
+						break;
+					case FarmEnum.BLOCK_LOCK:
+						content = TableManager.getInstance().getSystemNotice(2733).content;
+						var landInfo:TFarmLandInfo = TableManager.getInstance().getLandInfo(blockId);
+						content = StringUtil.substitute(content, landInfo.openLv);
+						ToolTipManager.getInstance().showNoHide(TipEnum.TYPE_DEFAULT, content, new Point(stage.mouseX, stage.mouseY));
+						break;
+					case FarmEnum.BLOCK_UNLOCK:
+						content = TableManager.getInstance().getSystemNotice(2734).content;
+						content = StringUtil.substitute(content, level);
+						ToolTipManager.getInstance().showNoHide(TipEnum.TYPE_DEFAULT, content, new Point(stage.mouseX, stage.mouseY));
+						break;
+				}
 			}
 		}
 		
@@ -159,6 +179,7 @@ package com.leyou.ui.farm.children
 			CursorManager.getInstance().resetGameCursor();
 			if(UIManager.getInstance().farmWnd.isOwner()){
 				uaContainer.visible = false;
+				ToolTipManager.getInstance().hide();
 			}
 		}
 		
@@ -226,6 +247,7 @@ package com.leyou.ui.farm.children
 		 * 
 		 */
 		public function onMouseClick(target:Object):void{
+			ToolTipManager.getInstance().hide();
 			switch(_status){
 				case FarmEnum.BLOCK_LOCK:
 					if(UIManager.getInstance().farmWnd.isOwner()){
@@ -261,8 +283,11 @@ package com.leyou.ui.farm.children
 						uaContainer.visible = false;
 					}else if(accelerateBtn == target){
 						content= TableManager.getInstance().getSystemNotice(2718).content;
-						content = com.ace.utils.StringUtil.substitute(content, plant.accIB, plant.name, plant.growTime/2/3600);
-						PopupManager.showConfirm(content, callbackAccelerate, null, false, "farm.block.accelerate");
+						var remain:int = plant.growTime - (new Date().time / 1000 - growTick);
+						var yb:int = Math.ceil(remain/60/30)*int(ConfigEnum.FarmCatalyticCopeCost.split("|")[0]);
+						var byb:int = Math.ceil(remain/60/30)*int(ConfigEnum.FarmCatalyticCopeCost.split("|")[1]);
+						content = com.ace.utils.StringUtil.substitute(content, plant.name, int(remain/60), plant.growTime/2/3600);
+						PopupManager.showRadioConfirm(content, yb+"", byb+"", callbackAccelerate, null, false, "farm.block.accelerate");
 						uaContainer.visible = false;
 					}
 					break;
@@ -298,8 +323,9 @@ package com.leyou.ui.farm.children
 		 * <T>作物加速回调</T>
 		 * 
 		 */		
-		protected function callbackAccelerate():void{
-			Cmd_Farm.cm_FAM_S(blockId);
+		protected function callbackAccelerate(type:int):void{
+			var rtype:int = (type == 0) ? 2 : 1;
+			Cmd_Farm.cm_FAM_S(blockId, rtype);
 		}
 		
 		/**

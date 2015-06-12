@@ -100,8 +100,8 @@ package com.leyou.ui.tips {
 
 			this.bindImg.visible=ele.flag
 
-			this.nameLbl.text=PropUtils.elementArr[ele.id] + "元素"
-			this.lvLbl.text=ele.lv + "级";
+			this.nameLbl.text=PropUtils.elementArr[ele.id] + PropUtils.getStringById(26)
+			this.lvLbl.text=ele.lv + PropUtils.getStringById(1812);
 
 			this.dateLbl.text=ele.exp + "/" + ele.sumExp;
 			this.progressSc.scaleX=ele.exp / ele.sumExp;

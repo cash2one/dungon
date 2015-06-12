@@ -3,6 +3,7 @@ package com.leyou.ui.role.child.children {
 	import com.ace.enum.ItemEnum;
 	import com.ace.enum.PlayerEnum;
 	import com.ace.enum.TipEnum;
+	import com.ace.enum.UIEnum;
 	import com.ace.game.backpack.GridBase;
 	import com.ace.gameData.manager.MyInfoManager;
 	import com.ace.gameData.manager.TableManager;
@@ -74,7 +75,7 @@ package com.leyou.ui.role.child.children {
 //
 //			if (this.gridType == ItemEnum.TYPE_GRID_OTHER_EQUIP) {
 			this.iconBmp.updateBmp("ico/items/" + info.info.icon + ".png");
-			this.canMove=false;
+//			this.canMove=false;
 //			}
 
 			this.iconBmp.x=(40 - 36) >> 1;
@@ -161,10 +162,10 @@ package com.leyou.ui.role.child.children {
 					einfo.tips.isUse=true;
 					einfo.tips.isdiff=false;
 					einfo.tips.otherPlayer=false;
-					
+
 					if (this.info is EquipInfo)
 						einfo.tips.playPosition=this.info.position;
-					
+
 					ToolTipManager.getInstance().showII([TipEnum.TYPE_EQUIP_ITEM, TipEnum.TYPE_EQUIP_ITEM_DIFF], [tips, einfo.tips], PlayerEnum.DIR_E, new Point(2, 0), new Point(this.stage.mouseX + this.width, this.stage.mouseY + this.height));
 
 				} else {
@@ -175,6 +176,7 @@ package com.leyou.ui.role.child.children {
 			} else {
 
 				tips.otherPlayer=false;
+				tips.isUse=false;
 //				tips=this.info.tips;
 				ToolTipManager.getInstance().show(TipEnum.TYPE_EQUIP_ITEM, tips, this.parent.localToGlobal(new Point(this.x + this.width, this.y + this.height)));
 			}
@@ -184,6 +186,7 @@ package com.leyou.ui.role.child.children {
 		//鼠标离开
 		override public function mouseOutHandler():void {
 			super.mouseOutHandler();
+			ToolTipManager.getInstance().hide();
 		}
 
 		override public function switchHandler(fromItem:GridBase):void {
@@ -282,10 +285,10 @@ package com.leyou.ui.role.child.children {
 
 		override public function mouseUpHandler($x:Number, $y:Number):void {
 			super.mouseUpHandler($x, $y);
-			
-			if(!this.doubleClickEnabled)
-				return ;
-			
+
+			if (!this.doubleClickEnabled)
+				return;
+
 			var pro:String;
 			var arr:Array;
 			for (pro in ItemEnum.ItemToRolePos) {
@@ -294,7 +297,22 @@ package com.leyou.ui.role.child.children {
 				}
 			}
 
+
 			var p:Point=LayerManager.getInstance().windowLayer.globalToLocal(this.parent.localToGlobal(new Point(this.x + 40, this.y)));
+
+			if (ToolTipManager.getInstance().isShow) {
+				var tipPs:Point=ToolTipManager.getInstance().tipPs;
+
+				if (tipPs.x < UIManager.getInstance().selectWnd.width) {
+					p.x=tipPs.x + ToolTipManager.getInstance().getWidth();
+				} else if (UIEnum.WIDTH - tipPs.x < UIManager.getInstance().selectWnd.width) {
+					p.x=tipPs.x - UIManager.getInstance().selectWnd.width;
+				} else {
+					p.x=tipPs.x - UIManager.getInstance().selectWnd.width;
+				}
+
+			}
+
 
 			UIManager.getInstance().selectWnd.type=0;
 			UIManager.getInstance().selectWnd.showPanel(int(pro), this.dataId, p);

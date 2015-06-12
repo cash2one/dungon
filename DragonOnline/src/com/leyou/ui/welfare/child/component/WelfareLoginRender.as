@@ -62,17 +62,17 @@ package com.leyou.ui.welfare.child.component
 			_grids = new Vector.<MarketGrid>();
 			//			vipGrids = new Vector.<MarketGrid>();
 			
-			for(var n:int = 0; n < 6; n++){
+			for(var n:int = 0; n < 4; n++){
 				var grid:MarketGrid = new MarketGrid();
-				grid.x = 19 + n * 72;
+				grid.x = 92 + n * 72;
 				grid.y = 23;
 				grid.isShowPrice = false;
 				addChild(grid);
 				grids.push(grid);
 			}
-			for(var m:int = 0; m < 2; m++){
+			for(var m:int = 0; m < 1; m++){
 				var vg:MarketGrid = new MarketGrid();
-				vg.x = 491 + m * 90;
+				vg.x = 540 + m * 90;
 				vg.y = 23;
 				vg.isShowPrice = false;
 				addChild(vg);
@@ -193,10 +193,10 @@ package com.leyou.ui.welfare.child.component
 			}else{
 				grid.clear();
 			}
-			for(var n:int = index; n < 6; n++){
+			for(var n:int = index; n < 4; n++){
 				grids[n].clear();
 			}
-			index = 6;
+			index = 4;
 			grid = grids[index];
 			if(giftInfo.vipItem1 > 0){
 				index++;
@@ -205,14 +205,14 @@ package com.leyou.ui.welfare.child.component
 			}else{
 				grid.clear();
 			}
-			grid = grids[index];
-			if(giftInfo.vipItem2 > 0){
-				index++;
-				grid.updataInfo({itemId:giftInfo.vipItem2, count:giftInfo.vipItemCount2});
-				grid.filters = vipFilters;
-			}else{
-				grid.clear();
-			}
+//			grid = grids[index];
+//			if(giftInfo.vipItem2 > 0){
+//				index++;
+//				grid.updataInfo({itemId:giftInfo.vipItem2, count:giftInfo.vipItemCount2});
+//				grid.filters = vipFilters;
+//			}else{
+//				grid.clear();
+//			}
 			var length:int = grids.length;
 			for(var m:int = index; m < length; m++){
 				grids[n].clear();

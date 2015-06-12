@@ -71,7 +71,7 @@ package com.leyou.ui.shop.child {
 			this.nameLbl=new Label();
 			this.nameLbl.x=55;
 			this.nameLbl.y=5;
-			this.nameLbl.text="道具名字"
+			this.nameLbl.text=PropUtils.getStringById(1877)
 			this.addChild(this.nameLbl);
 
 			this.priceImg=new Image("ui/backpack/moneyIco.png");

@@ -3,7 +3,6 @@ package com.leyou.net.cmd
 	import com.ace.enum.UIEnum;
 	import com.ace.enum.WindowEnum;
 	import com.ace.manager.UIManager;
-	import com.ace.manager.UIOpenBufferManager;
 	import com.leyou.enum.CmdEnum;
 	import com.leyou.net.NetGate;
 	import com.leyou.ui.copyTrack.StoryCopyTrackBar;
@@ -69,11 +68,12 @@ package com.leyou.net.cmd
 		 * 
 		 */		
 		public static function sm_SCP_I(obj:Object):void{
-			UIOpenBufferManager.getInstance().removeCmd(WindowEnum.STORYCOPY, CmdEnum.SM_SCP_I);
-			if(!UIManager.getInstance().isCreate(WindowEnum.STORYCOPY)){
-				UIManager.getInstance().creatWindow(WindowEnum.STORYCOPY);
+//			UIOpenBufferManager.getInstance().removeCmd(WindowEnum.STORYCOPY, CmdEnum.SM_SCP_I);
+			if(!UIManager.getInstance().isCreate(WindowEnum.DUNGEON_TEAM)){
+				return;
+//				UIManager.getInstance().creatWindow(WindowEnum.DUNGEON_TEAM);
 			}
-			UIManager.getInstance().storyCopyWnd.loadCopy(obj);
+			UIManager.getInstance().teamCopyWnd.storyCopy.loadCopy(obj);
 		}
 		
 		/**
@@ -131,9 +131,9 @@ package com.leyou.net.cmd
 		 * 
 		 */		
 		public static function sm_SCP_U(obj:Object):void{
-			if(UIManager.getInstance().isCreate(WindowEnum.STORYCOPY)){
-				UIManager.getInstance().storyCopyWnd.updateInfo(obj);
-			}
+//			if(UIManager.getInstance().isCreate(WindowEnum.STORYCOPY)){
+				UIManager.getInstance().teamCopyWnd.storyCopy.updateInfo(obj);
+//			}
 		}
 	}
 }

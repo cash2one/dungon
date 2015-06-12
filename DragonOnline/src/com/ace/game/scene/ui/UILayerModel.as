@@ -198,11 +198,11 @@ package com.ace.game.scene.ui {
 
 			this.effctLayer.addChild(this.tmpBubbleEffect);
 			this.tmpBubbleEffect.show(effectType, num, color, str, ico, ptArr, showZero);
-			this.tmpBubbleEffect.x=livingBase.x - this.tmpBubbleEffect.width / 2;
+			this.tmpBubbleEffect.x=livingBase.x - this.tmpBubbleEffect.width * 0.5;
 			var offsetY:Number=(null == ptArr) ? livingBase.bInfo.radius : livingBase.bInfo.radius * 2;
-			this.tmpBubbleEffect.y=livingBase.y - livingBase.bInfo.radius;
+			this.tmpBubbleEffect.y=livingBase.y - livingBase.bInfo.radius - this.tmpBubbleEffect.width *0.5;
 			if (null == ptArr) {
-				this.tmpBubbleEffect.y=livingBase.y - livingBase.bInfo.radius * 2;
+				this.tmpBubbleEffect.y=livingBase.y - livingBase.bInfo.radius * 2 - this.tmpBubbleEffect.width *0.5;
 			}
 			this.tmpBubbleEffect.play(effectType);
 

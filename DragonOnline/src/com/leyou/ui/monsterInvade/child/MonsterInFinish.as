@@ -8,6 +8,7 @@ package com.leyou.ui.monsterInvade.child {
 	import com.ace.ui.lable.Label;
 	import com.ace.utils.StringUtil;
 	import com.leyou.enum.ConfigEnum;
+	import com.leyou.utils.PropUtils;
 	import com.leyou.utils.StringUtil_II;
 	
 	import flash.events.MouseEvent;
@@ -64,13 +65,13 @@ package com.leyou.ui.monsterInvade.child {
 			if (o.jtype == 2) {
 
 				var rank:int=ConfigEnum["DemonInvasion" + (8 + int(o.rank))];
-				this.grid.setNum(int(rank / 10000) + "万");
-				str=com.leyou.utils.StringUtil_II.getBreakLineStringByCharIndex(com.ace.utils.StringUtil.substitute(TableManager.getInstance().getSystemNotice(5605).content, [o.rank, int(rank / 10000) + "万"])) + "";
+				this.grid.setNum(int(rank / 10000) + PropUtils.getStringById(1532));
+				str=com.leyou.utils.StringUtil_II.getBreakLineStringByCharIndex(com.ace.utils.StringUtil.substitute(TableManager.getInstance().getSystemNotice(5605).content, [o.rank, int(rank / 10000) + PropUtils.getStringById(1532)])) + "";
 
 			} else if (o.jtype == 1) {
 
-				this.grid.setNum(int(ConfigEnum.DemonInvasion8 / 10000) + "万");
-				str=com.leyou.utils.StringUtil_II.getBreakLineStringByCharIndex(com.ace.utils.StringUtil.substitute(TableManager.getInstance().getSystemNotice(5604).content, [TableManager.getInstance().getLivingInfo(ConfigEnum.DemonInvasion3).name, int(ConfigEnum.DemonInvasion8 / 10000) + "万"]));
+				this.grid.setNum(int(ConfigEnum.DemonInvasion8 / 10000) + PropUtils.getStringById(1532));
+				str=com.leyou.utils.StringUtil_II.getBreakLineStringByCharIndex(com.ace.utils.StringUtil.substitute(TableManager.getInstance().getSystemNotice(5604).content, [TableManager.getInstance().getLivingInfo(ConfigEnum.DemonInvasion3).name, int(ConfigEnum.DemonInvasion8 / 10000) + PropUtils.getStringById(1532)]));
 
 			}
 			

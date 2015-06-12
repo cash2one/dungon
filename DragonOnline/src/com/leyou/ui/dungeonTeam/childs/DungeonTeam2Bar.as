@@ -130,7 +130,11 @@ package com.leyou.ui.dungeonTeam.childs {
 				this.baseGrid.visible=false;
 			} else {
 				this.baseGrid.visible=true;
-				this.baseGrid.updataInfo(TableManager.getInstance().getItemInfo(int(tcopyinfo.Base_Drop.split("|")[0].split(",")[0])) || TableManager.getInstance().getEquipInfo(int(tcopyinfo.Base_Drop.split("|")[0].split(",")[0])));
+				
+				if(String(tcopyinfo.Base_Drop.split("|")[0].split(",")[0]).length==4)
+				this.baseGrid.updataInfo(TableManager.getInstance().getEquipInfo(int(tcopyinfo.Base_Drop.split("|")[0].split(",")[0])));
+				else
+				this.baseGrid.updataInfo(TableManager.getInstance().getItemInfo(int(tcopyinfo.Base_Drop.split("|")[0].split(",")[0])));
 			}
 
 			var ctx:Array=[];
@@ -141,7 +145,11 @@ package com.leyou.ui.dungeonTeam.childs {
 				ctx=tcopyinfo["DBC_ITEM" + (i + 1)].split(",");
 
 				render=this.dbGridVec[i] as TeamCopyGrid;
-				render.updataInfo(TableManager.getInstance().getItemInfo(int(ctx[0])) || TableManager.getInstance().getEquipInfo(int(ctx[0])));
+				if(String(ctx[0]).length==4)
+				render.updataInfo(TableManager.getInstance().getEquipInfo(int(ctx[0])));
+				else
+				render.updataInfo(TableManager.getInstance().getItemInfo(int(ctx[0])));
+					
 				render.canMove=false;
 
 				if (ctx.length == 2)

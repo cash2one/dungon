@@ -1,5 +1,7 @@
 package com.leyou.data.quickBuy
 {
+	
+
 	public class QuickBuyInfo
 	{
 		public var name:String;
@@ -24,8 +26,8 @@ package com.leyou.data.quickBuy
 		public var select:Boolean;
 		
 		// 偶数是钻石买  奇数是绑定钻石
-		public function get  isBind():Boolean{
-			return (itemId&1) == 1;
+		public function get isBind():Boolean{
+			return _isBind;
 		}
 		
 		public function set isBind(value:Boolean):void{

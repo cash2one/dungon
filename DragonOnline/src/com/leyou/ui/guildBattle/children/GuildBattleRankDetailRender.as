@@ -5,6 +5,7 @@ package com.leyou.ui.guildBattle.children
 	import com.ace.ui.lable.Label;
 	import com.ace.utils.StringUtil;
 	import com.leyou.data.guildBattle.children.GuildBattleTrackItemData;
+	import com.leyou.utils.PropUtils;
 	
 	public class GuildBattleRankDetailRender extends AutoSprite
 	{
@@ -32,7 +33,7 @@ package com.leyou.ui.guildBattle.children
 		}
 		
 		public function updateInfo(data:GuildBattleTrackItemData):void{
-			rankLbl.text = StringUtil.substitute("第{1}名", data.rank);
+			rankLbl.text = StringUtil.substitute(PropUtils.getStringById(1641), data.rank);
 			nameLbl.text = data.name;
 			ryLbl.text = "+"+data.honour;
 			killLbl.text = data.kill+"";

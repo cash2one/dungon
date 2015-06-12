@@ -165,9 +165,9 @@ package com.leyou.ui.title {
 			}
 
 
-			this.titleTree.addItem("人物历程", "", data1);
-			this.titleTree.addItem("身份象征", "", data2);
-			this.titleTree.addItem("竞技排名", "", data3);
+			this.titleTree.addItem(PropUtils.getStringById(1954), "", data1);
+			this.titleTree.addItem(PropUtils.getStringById(1955), "", data2);
+			this.titleTree.addItem(PropUtils.getStringById(1956), "", data3);
 
 			this.titleTree.addEventListener(MouseEvent.CLICK, onClick);
 			this.startBtn.addEventListener(MouseEvent.CLICK, onstartClick);
@@ -188,7 +188,7 @@ package com.leyou.ui.title {
 				this.selectRender.BgState=false;
 				this.selectRender.setState(false);
 
-				if (this.startBtn.text.indexOf("隐藏称号") > -1) {
+				if (this.startBtn.text.indexOf(PropUtils.getStringById(1957)) > -1) {
 					Cmd_Nck.cm_NckUninstall(this.selectId);
 				} else
 					Cmd_Nck.cm_NckStart(this.selectId);
@@ -217,7 +217,7 @@ package com.leyou.ui.title {
 			pos=0;
 			for (var i:int=0; i < 4; i++) {
 				if (i < 3 && tinfo["attribute" + (i + 1)] > 0) {
-					this.properNameArr[i].text=PropUtils.prop2Arr[int(tinfo["attribute" + (i + 1)]) - 1] + ":";
+					this.properNameArr[i].text="      "+PropUtils.propArr[int(tinfo["attribute" + (i + 1)]) - 1] + ":";
 
 //					if (int(tinfo["attribute" + (i + 1)]) - 1 < 7){
 //						this.properkeyArr[i].text="" + tinfo["value" + (i + 1)];
@@ -246,10 +246,10 @@ package com.leyou.ui.title {
 			this.selectRender=render;
 
 			if (render.getState()) {
-				this.startBtn.text="隐藏称号";
+				this.startBtn.text=PropUtils.getStringById(1957);
 				this.startBtn.setToolTip(TableManager.getInstance().getSystemNotice(1402).content);
 			} else {
-				this.startBtn.text="启用称号";
+				this.startBtn.text=PropUtils.getStringById(1958);
 				this.startBtn.setToolTip(TableManager.getInstance().getSystemNotice(1401).content);
 			}
 
@@ -490,7 +490,7 @@ package com.leyou.ui.title {
 		public function updateLastTime(o:Object):void {
 
 			this.currentTime=o.time;
-			this.properNameArr[this.pos].text="剩余时间:";
+			this.properNameArr[this.pos].text=PropUtils.getStringById(1941)+":";
 			this.properkeyArr[this.pos].text="" + TimeUtil.getIntToDateTime(currentTime);
 
 			TimerManager.getInstance().add(exeTimer, "nickTime");
@@ -535,7 +535,7 @@ package com.leyou.ui.title {
 			if (render.getType() != 2)
 				this.updateActiveByType(render.getType());
 
-			this.startBtn.text="启用称号";
+			this.startBtn.text=PropUtils.getStringById(1958);
 			this.startBtn.setToolTip(TableManager.getInstance().getSystemNotice(1401).content);
 
 			render.setState(false);

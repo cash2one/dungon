@@ -9,6 +9,7 @@ package com.leyou.ui.collection.children
 	import com.ace.ui.lable.Label;
 	import com.ace.utils.StringUtil;
 	import com.leyou.data.collectioin.CollectionData;
+	import com.leyou.utils.PropUtils;
 	
 	import flash.events.MouseEvent;
 	
@@ -72,7 +73,7 @@ package com.leyou.ui.collection.children
 			_groupId = info.groupId;
 			if(info.frontGroup > 0){
 				var finfo:TCollectionPreciousInfo = TableManager.getInstance().getPreciousByGroup(info.frontGroup);
-				collectionLbl.text = StringUtil.substitute("收集{1}全部宝藏后开启", finfo.mapName);
+				collectionLbl.text = StringUtil.substitute(PropUtils.getStringById(1669), finfo.mapName);
 			}
 			bgImg.updateBmp(StringUtil.substitute("ui/mine/{1}.png", info.mapPic_S));
 		}

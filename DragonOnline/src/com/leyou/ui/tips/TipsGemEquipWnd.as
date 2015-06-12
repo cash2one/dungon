@@ -15,7 +15,7 @@ package com.leyou.ui.tips {
 	import com.leyou.utils.ItemUtil;
 	import com.leyou.utils.PlayerUtil;
 	import com.leyou.utils.PropUtils;
-	
+
 	import flash.display.BitmapData;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
@@ -29,7 +29,7 @@ package com.leyou.ui.tips {
 		private var name3Lbl:Label;
 
 		private var bindImg:Image;
-		
+
 		private var starImg0:Image;
 		private var starImg1:Image;
 		private var starImg2:Image;
@@ -59,7 +59,7 @@ package com.leyou.ui.tips {
 			this.name3Lbl=this.getUIbyID("name3Lbl") as Label;
 
 			this.bindImg=this.getUIbyID("bindImg") as Image;
-			
+
 			this.starImg0=this.getUIbyID("starImg0") as Image;
 			this.starImg1=this.getUIbyID("starImg1") as Image;
 			this.starImg2=this.getUIbyID("starImg2") as Image;
@@ -110,7 +110,7 @@ package com.leyou.ui.tips {
 			this.posLbl.text="【" + PlayerUtil.PlayPositionStrArr[this.tipsinfo.playPosition] + "】";
 			this.descLbl.width=265;
 			this.descLbl.wordWrap=true;
-			
+
 			this.descLbl.htmlText="" + TableManager.getInstance().getSystemNotice(6401).content;
 
 //			var glist:Array=MyInfoManager.getInstance().gemArr[this.tipsinfo.playPosition];
@@ -128,11 +128,11 @@ package com.leyou.ui.tips {
 				slist=MyInfoManager.getInstance().gemArr[this.tipsinfo.playPosition];
 			else
 				slist=MyInfoManager.getInstance().othergemArr[this.tipsinfo.playPosition];
-			
-			if(slist==null)
-				return ;
-			
-			
+
+			if (slist == null)
+				return;
+
+
 			lv=0;
 			for (j=0; j < slist.length; j++) {
 				tEquip=TableManager.getInstance().getEquipInfo(slist[j]);
@@ -141,12 +141,12 @@ package com.leyou.ui.tips {
 					this["prop" + (j + 1) + "keyArr"][k].text="";
 					this["prop" + (j + 1) + "valueArr"][k].text="";
 				}
-				
+
 				if (tEquip == null) {
 
-					this["starImg" +j].updateBmp("ui/tips/icon_xxx.png");
-					
-					this["name" + (j + 1) + "Lbl"].text="未镶嵌";
+					this["starImg" + j].updateBmp("ui/tips/icon_xxx.png");
+
+					this["name" + (j + 1) + "Lbl"].text=PropUtils.getStringById(1941);
 					this["name" + (j + 1) + "Lbl"].textColor=0xff0000
 					this["name" + (j + 1) + "Lbl"].filters=[FilterUtil.enablefilter];
 
@@ -154,16 +154,16 @@ package com.leyou.ui.tips {
 						this["prop" + (j + 1) + "keyArr"][k].filters=[FilterUtil.enablefilter];
 						this["prop" + (j + 1) + "valueArr"][k].filters=[FilterUtil.enablefilter];
 					}
-					
+
 				} else {
 
-					this["starImg" +j].updateBmp("ui/tips/icon_xx.png");
-					
+					this["starImg" + j].updateBmp("ui/tips/icon_xx.png");
+
 					this["name" + (j + 1) + "Lbl"].text="" + tEquip.name;
 					this["name" + (j + 1) + "Lbl"].textColor=ItemUtil.getColorByQuality(tEquip.quality);
 
 					this["name" + (j + 1) + "Lbl"].filters=[];
-					
+
 					k=0;
 					for (var p:int=0; p < PropUtils.GemEquipTableColumn.length; p++) {
 						if (int(tEquip[PropUtils.GemEquipTableColumn[p]]) != 0) {
@@ -172,7 +172,7 @@ package com.leyou.ui.tips {
 
 							this["prop" + (j + 1) + "keyArr"][k].filters=[];
 							this["prop" + (j + 1) + "valueArr"][k].filters=[];
-							
+
 							k++;
 						}
 					}

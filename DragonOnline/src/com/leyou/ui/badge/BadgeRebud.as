@@ -9,11 +9,12 @@ package com.leyou.ui.badge {
 	import com.ace.ui.button.children.NormalButton;
 	import com.ace.ui.img.child.Image;
 	import com.ace.ui.lable.Label;
+	import com.ace.utils.StringUtil;
 	import com.leyou.manager.PopupManager;
 	import com.leyou.net.cmd.Cmd_Bld;
 	import com.leyou.utils.BadgeUtil;
 	import com.leyou.utils.PropUtils;
-	
+
 	import flash.events.MouseEvent;
 
 	public class BadgeRebud extends AutoWindow {
@@ -45,7 +46,7 @@ package com.leyou.ui.badge {
 
 		private var descData:Object;
 
-		private var color:Array=[0,0,0,0];
+		private var color:Array=[0, 0, 0, 0];
 
 		public function BadgeRebud() {
 			super(LibManager.getInstance().getXML("config/ui/badge/badgeRebud.xml"));
@@ -92,7 +93,7 @@ package com.leyou.ui.badge {
 //			this.titleLbl.text="纹章洗练";
 
 			this.clsBtn.y=5;
-			this.titleNameLbl.text="纹章洗练";
+			this.titleNameLbl.text=PropUtils.getStringById(1637);
 		}
 
 		/**
@@ -101,7 +102,7 @@ package com.leyou.ui.badge {
 		 */
 		public function updateData(o:Object):void {
 
-			color=[0,0,0,0]
+			color=[0, 0, 0, 0]
 			var str:String;
 			for (str in o) {
 				this["prop" + o[str][1] + "Lbl"].text=PropUtils.propArr[int(str) - 1] + ":";
@@ -125,7 +126,7 @@ package com.leyou.ui.badge {
 		 */
 		public function updateUIToUI(o:Array, desc:Object):void {
 
-			color=[0,0,0,0]
+			color=[0, 0, 0, 0]
 			for (var i:int=0; i < o.length; i++) {
 				if (i < 3) {
 					this["prop" + (i + 1) + "Lbl"].text=o[i] + ":";
@@ -144,7 +145,7 @@ package com.leyou.ui.badge {
 			}
 
 			if (UIManager.getInstance().badgeWnd.useCount > 0)
-				this.descLbl.text="每日可免费洗练3次，今日还剩" + UIManager.getInstance().badgeWnd.useCount + "次";
+				this.descLbl.text=StringUtil.substitute(PropUtils.getStringById(1638), [UIManager.getInstance().badgeWnd.useCount]);
 			else {
 				if (desc != null) {
 					this.descData=desc;
@@ -159,7 +160,8 @@ package com.leyou.ui.badge {
 					if (this.lock3Cb.isOn)
 						i++;
 
-					this.descLbl.text="花费金币：" + this.descData["m" + i] + "    魂力：" + this.descData["e" + i];
+//					this.descLbl.text="花费金币：" + this.descData["m" + i] + "    魂力：" + this.descData["e" + i];
+					this.descLbl.text=StringUtil.substitute(PropUtils.getStringById(1639), [this.descData["m" + i]+"    "]) + this.descData["e" + i];
 				}
 			}
 
@@ -228,7 +230,7 @@ package com.leyou.ui.badge {
 			this.descData=o;
 
 			if (UIManager.getInstance().badgeWnd.useCount > 0)
-				this.descLbl.text="每日可免费洗练3次，今日还剩" + UIManager.getInstance().badgeWnd.useCount + "次";
+				this.descLbl.text=StringUtil.substitute(PropUtils.getStringById(1638), [UIManager.getInstance().badgeWnd.useCount]);
 			else {
 				var i:int=1;
 				if (this.lock1Cb.isOn)
@@ -240,7 +242,8 @@ package com.leyou.ui.badge {
 				if (this.lock3Cb.isOn)
 					i++;
 
-				this.descLbl.text="花费金币：" + this.descData["m" + i] + "    魂力：" + this.descData["e" + i];
+//				this.descLbl.text="花费金币：" + this.descData["m" + i] + "    魂力：" + this.descData["e" + i];
+				this.descLbl.text=StringUtil.substitute(PropUtils.getStringById(1639), [this.descData["m" + i]+"    "]) + this.descData["e" + i];
 			}
 		}
 
@@ -292,7 +295,7 @@ package com.leyou.ui.badge {
 			if (UIManager.getInstance().badgeWnd.useCount > 0)
 				return;
 
-			this.descLbl.text="花费金币：" + this.descData["m" + i] + "    魂力：" + this.descData["e" + i];
+			this.descLbl.text=StringUtil.substitute(PropUtils.getStringById(1639), [this.descData["m" + i]+"    "]) + this.descData["e" + i];
 		}
 
 		private function onBtnClick(e:MouseEvent):void {

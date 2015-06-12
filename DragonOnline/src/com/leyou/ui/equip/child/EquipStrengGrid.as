@@ -152,7 +152,7 @@ package com.leyou.ui.equip.child {
 		}
 
 		override public function doubleClickHandler():void {
-			super.doubleClickHandler();
+//			super.doubleClickHandler();
 
 //			if (this.canMove)
 //				this.setChangeState(this);
@@ -288,14 +288,13 @@ package com.leyou.ui.equip.child {
 							return;
 						}
 
-						if (g.data.info.bind == 1) {
+						if (g.data.info.bind == 1 || g.data.info.Suit_Group > 0) {
 							NoticeManager.getInstance().broadcastById(2626);
 							return;
 						}
 
 						EquipStrengGrid.selectState=g;
 					} else if (EquipStrengGrid.selectStateII == null) {
-
 						EquipStrengGrid.selectStateII=g;
 					}
 
@@ -340,12 +339,17 @@ package com.leyou.ui.equip.child {
 
 					if (this.dataId == 51)
 						return;
-					
-					if (g.data.info.quality < 2 || g.data.info.lvup_id==0){
+
+					if (g.data.info.quality < 2 || g.data.info.lvup_id == 0) {
 						NoticeManager.getInstance().broadcastById(2627);
 						return;
 					}
 					
+					if (g.data.info.Suit_Group > 0) {
+						NoticeManager.getInstance().broadcastById(2626);
+						return;
+					}
+
 					if (EquipStrengGrid.selectState == null)
 						EquipStrengGrid.selectState=g;
 					else if (EquipStrengGrid.selectStateII == null) {

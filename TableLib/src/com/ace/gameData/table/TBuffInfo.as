@@ -16,6 +16,7 @@ package com.ace.gameData.table {
 		public var pnfId:int; //中buff时播放特效
 		public var color:uint;
 		public var time:uint;
+		public var isRemoveOnDie:Boolean;
 		public var des:String;
 
 		public function TBuffInfo(info:XML) {
@@ -27,6 +28,7 @@ package com.ace.gameData.table {
 			this.pnfId=info.@effectId;
 			this.color=StringUtil.strToHex(info.@rgb);
 			this.time=info.@buffTime;
+			this.isRemoveOnDie=StringUtil.intToBoolean(info.@buffDis);
 			this.des=info.@buffDes;
 		}
 	}

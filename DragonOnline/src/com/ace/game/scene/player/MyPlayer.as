@@ -1,4 +1,5 @@
 package com.ace.game.scene.player {
+	import com.ace.config.Core;
 	import com.ace.enum.EventEnum;
 	import com.ace.enum.ItemEnum;
 	import com.ace.enum.PlayerEnum;
@@ -124,7 +125,7 @@ package com.ace.game.scene.player {
 
 		override protected function onMoveOver():void {
 			super.onMoveOver();
-			this.checkAutoPick();
+//			this.checkAutoPick();
 			this.checkTrans();
 			this.checkSafe();
 			this.checkExp4();
@@ -157,12 +158,12 @@ package com.ace.game.scene.player {
 		private function checkExp4():void {
 			if (AreaUtil.checkExp4(SceneUtil.screenXToTileX(this.x), SceneUtil.screenYToTileY(this.y))) {
 				if (!this.pInfo.isInExp4) {
-					ModuleProxy.broadcastMsg(3097); //进入安全区域
+					ModuleProxy.broadcastMsg(3097); //进入收益区
 					this.pInfo.isInExp4=true;
 				}
 			} else {
 				if (this.pInfo.isInExp4) {
-					ModuleProxy.broadcastMsg(3098); //离开安全区域
+					ModuleProxy.broadcastMsg(3098); //离开收益区
 					this.pInfo.isInExp4=false;
 				}
 			}
@@ -184,23 +185,40 @@ package com.ace.game.scene.player {
 		/**自动拾取*/
 		override public function checkAutoPick():void {
 			//暂时每一步都循环查找，到时候修改为字典索引
-			var item:Item;
 			if (!SettingManager.getInstance().assitInfo.isAutoPickupEquip && !SettingManager.getInstance().assitInfo.isAutopickupItem)
 				return;
-			item=UIManager.getInstance().gameScene.findItem(this.nowTilePt());
-			if (!item)
-				return;
-			if (SettingManager.getInstance().assitInfo.isAutoPickupEquip && LivingItemInfo(item.bInfo).type == ItemEnum.ITEM_TYPE_EQUIP) {
-				Cmd_Scene.cm_drop(item);
-				return;
-			}
-			if (SettingManager.getInstance().assitInfo.isAutopickupItem && LivingItemInfo(item.bInfo).type != ItemEnum.ITEM_TYPE_EQUIP) {
-				Cmd_Scene.cm_drop(item);
-				return;
-			}
-			if (item.bInfo.tId == 65535) {
-				Cmd_Scene.cm_drop(item);
-				return;
+
+			var item:Item;
+			var pt:Point=this.nowTilePt();
+			for (var i:int=pt.x - 2; i < pt.x + 2; i++) {
+				for (var j:int=pt.y - 2; j < pt.y + 2; j++) {
+					if (i < 0 || i > MapInfoManager.getInstance().tileW || j < 0 || j > MapInfoManager.getInstance().tileH) {
+						continue;
+					}
+
+					item=UIManager.getInstance().gameScene.findItem(new Point(i, j));
+					if (!item || (!this.pInfo.isManualPickUp && LivingItemInfo(item.bInfo).throwOwnerId == this.info.id))
+						continue;
+					if (item.bInfo.tId == 65535 || this.pInfo.isManualPickUp || //
+						LivingItemInfo(item.bInfo).quality >= SettingManager.getInstance().assitInfo.autoPickQuality) {
+
+						this.pInfo.isManualPickUp=false;
+						if (SettingManager.getInstance().assitInfo.isAutoPickupEquip && //
+							LivingItemInfo(item.bInfo).type == ItemEnum.ITEM_TYPE_EQUIP) {
+							Cmd_Scene.cm_drop(item);
+							continue;
+						}
+						if (SettingManager.getInstance().assitInfo.isAutopickupItem //
+							&& LivingItemInfo(item.bInfo).type != ItemEnum.ITEM_TYPE_EQUIP) {
+							Cmd_Scene.cm_drop(item);
+							continue;
+						}
+						if (item.bInfo.tId == 65535) {
+							Cmd_Scene.cm_drop(item);
+							continue;
+						}
+					}
+				}
 			}
 		}
 

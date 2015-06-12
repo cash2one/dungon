@@ -19,13 +19,13 @@ package com.leyou.utils {
 
 			switch (i) {
 				case 1:
-					return "会长";
+					return PropUtils.getStringById(36);
 				case 2:
-					return "副会长";
+					return PropUtils.getStringById(37);
 				case 3:
-					return "长老";
+					return PropUtils.getStringById(38);
 				case 4:
-					return "会员";
+					return PropUtils.propArr[37];
 			}
 
 			return "";

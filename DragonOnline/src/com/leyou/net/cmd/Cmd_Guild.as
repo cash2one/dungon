@@ -67,20 +67,20 @@ un
 ---------------------------------------------------------------------------
 帮会个人信息
    查询信息 上行:un|U|Wname
-																											设置职务 上行:un|U|Jname,job
+																											   设置职务 上行:un|U|Jname,job
    设置备注 上行:un|U|Nname,nname
 
-																										 下行:un|{"mk":"U","info":[name,level,vocation,zbg,bg,job,nname,isonline,av]}
+																											下行:un|{"mk":"U","info":[name,level,vocation,zbg,bg,job,nname,isonline,av]}
 
 
 
    ---------------------------------------------------------------------------
-																										 帮会权限
+																											帮会权限
 	 查询权限  上行:un|P|Wjob
   设置权限  上行:un|P|Sjob,lt,sr,tr,sj,xz,gl
 
 
-																	  下行:un|{"mk":P,job:[lt,sr,tr,sj,xz,gl]}
+																		下行:un|{"mk":P,job:[lt,sr,tr,sj,xz,gl]}
 			sr -- 收人 (0,1)
 		  tr -- 踢人 (0,1)
 		  sj -- 升级 (0,1)
@@ -94,10 +94,10 @@ un
 ---------------------------------------------------------------------------
 帮会公告
   查看公告 上行:un|N|Wunionid,ntype
-																		编辑公告 上行:un|N|Eunionid,ntype,notice
+																		  编辑公告 上行:un|N|Eunionid,ntype,notice
 
   下行:un|{"mk":N,"unionid":str,"ntype":num,"notice":str}
-																			  ntype  --公告类型(1帮会公告, 2帮会宣言)
+																				ntype  --公告类型(1帮会公告, 2帮会宣言)
 		notice --文字内容
 
 
@@ -212,9 +212,9 @@ uset     --是否设置了自动同意入帮(1自动同意,0不自动)
 		public static function sm_Guild_U(o:Object):void {
 			if (!o.hasOwnProperty("info"))
 				return;
-			
-			if(!UIManager.getInstance().isCreate(WindowEnum.GUILD))
-				return ;
+
+			if (!UIManager.getInstance().isCreate(WindowEnum.GUILD))
+				return;
 
 			UIManager.getInstance().guildWnd.updateMemInfo(o);
 		}
@@ -569,10 +569,12 @@ yn (1同意,0拒绝)
 下行:un|{"mk":I,...}
 (num --需要的帮贡值)
 
+* -- 帮会捐献
+-- 上行：un|Dnum,btype (1钻石 2金币)
 *
 */
-		public static function cm_GuildContribute(num:int):void {
-			NetGate.getInstance().send("un|D" + num);
+		public static function cm_GuildContribute(num:int, type:int):void {
+			NetGate.getInstance().send("un|D" + num + "," + type);
 		}
 
 		/**
@@ -671,8 +673,11 @@ mval    --消息提示变量
 			if (!o.hasOwnProperty("jlist"))
 				return;
 
-			if (UIManager.getInstance().isCreate(WindowEnum.GUILD))
-				UIManager.getInstance().guildWnd.updateSkill(o);
+//			if (UIManager.getInstance().isCreate(WindowEnum.GUILD))
+//				UIManager.getInstance().guildWnd.updateSkill(o);
+
+
+			UIManager.getInstance().skillWnd.updateSkill(o);
 
 			var info:TUnion_attribute;
 			for (var i:int=0; i < o.jlist.length; i++) {
@@ -697,9 +702,9 @@ mval    --消息提示变量
 --att 属性id  (0表示查看其它id为升级 1.生命上限 4.物攻 5.物防 6.法攻 7.法防)
 --lv  等级
 
- * @param num
-	   *
-			*/
+* @param num
+   *
+		   */
 		public static function cm_GuildSkill(att:int=0):void {
 			NetGate.getInstance().send("un|J" + att);
 		}
@@ -717,9 +722,9 @@ mval    --消息提示变量
 上行: un|R
 下行：un|{"mk":"R","uzc":num, "bl":num, "mzc":num, "dtime":str, "zclist":[[name,zc],...]}
 -- uzc 行会当前众筹值
-   -- bl   当前倍率
-		   -- mzc  我的众筹值
-		 -- dtime  结算时间
+-- bl   当前倍率
+	   -- mzc  我的众筹值
+			-- dtime  结算时间
 		 -- zclist 众筹列表
 			-- name 玩家名字
 			-- zc   众筹值
@@ -728,7 +733,7 @@ mval    --消息提示变量
 		public static function sm_Guild_R(o:Object):void {
 			if (!o.hasOwnProperty("dtime"))
 				return;
-			
+
 			if (!UIManager.getInstance().isCreate(WindowEnum.GUILD))
 				UIManager.getInstance().creatWindow(WindowEnum.GUILD);
 

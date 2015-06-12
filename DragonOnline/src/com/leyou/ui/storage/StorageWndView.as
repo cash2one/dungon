@@ -25,7 +25,8 @@ package com.leyou.ui.storage {
 	import com.leyou.net.cmd.Cmd_Store;
 	import com.leyou.ui.backpack.child.BackpackGrid;
 	import com.leyou.ui.storage.child.StorageGrid;
-
+	import com.leyou.utils.PropUtils;
+	
 	import flash.display.DisplayObjectContainer;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
@@ -277,7 +278,7 @@ package com.leyou.ui.storage {
 
 					if (isbatchSave) {
 						this.stage.addEventListener(MouseEvent.CLICK, onMouseRoll);
-						this.batchSaveBtn.text="取消批量存取";
+						this.batchSaveBtn.text=PropUtils.getStringById(1885);
 						CursorManager.getInstance().updataCursor(CursorEnum.CURSOR_HAND);
 
 						this.show(true, UIEnum.WND_LAYER_TOP, false);
@@ -289,7 +290,7 @@ package com.leyou.ui.storage {
 					} else {
 
 						this.stage.removeEventListener(MouseEvent.CLICK, onMouseRoll);
-						this.batchSaveBtn.text="批量存取";
+						this.batchSaveBtn.text=PropUtils.getStringById(1886);
 						this.show(true, UIEnum.WND_LAYER_NORMAL, false);
 						UIManager.getInstance().backpackWnd.show(true, UIEnum.WND_LAYER_NORMAL, false);
 						CursorManager.getInstance().resetGameCursor();
@@ -336,15 +337,15 @@ package com.leyou.ui.storage {
 
 		private function neatTime(i:int):void {
 
-			if (this.neatTimer - i == 0) {
+			if (this.neatTimer - i <= 0) {
 				TimerManager.getInstance().remove(neatTime);
-				this.neatenBtn.text="整理";
+				this.neatenBtn.text=PropUtils.getStringById(1623);
 				this.neatenBtn.setActive(true, 1, true);
 				this.neatTimer=0;
 				return;
 			}
 
-			this.neatenBtn.text=(this.neatTimer - i) + "秒";
+			this.neatenBtn.text=(this.neatTimer - i) + PropUtils.getStringById(2146);
 
 		}
 

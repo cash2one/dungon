@@ -1,17 +1,23 @@
 package com.ace.loader.pre {
+	import com.ace.config.Core;
+	import com.ace.delayCall.DelayCallManager;
 	import com.ace.enum.FileEnum;
 	import com.ace.enum.FilterEnum;
 	import com.ace.enum.UIEnum;
 	import com.ace.manager.LibManager;
+	import com.ace.manager.LoopManager;
+	import com.ace.ui.img.child.Image;
 	import com.ace.utils.ImageUtil;
 	import com.ace.utils.LoadUtil;
 
 	import flash.display.Bitmap;
 	import flash.display.Sprite;
 	import flash.geom.Rectangle;
+	import flash.net.drm.AddToDeviceGroupSetting;
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
 	import flash.text.TextFormat;
+	import flash.utils.setTimeout;
 
 	public class PreLoaderImg extends PreLoaderModel {
 		private static const PROGRESS_OFFSET:int=45;
@@ -25,13 +31,15 @@ package com.ace.loader.pre {
 		private var text:TextField;
 		private var progressText:TextField;
 
+		private var logoImg:Image;
+
 		public function PreLoaderImg(root:Sprite, fun:Function) {
 			super(root, fun);
 		}
 
 		override protected function loadListOver():void {
 			super.loadListOver();
-			LibManager.getInstance().load([LoadUtil.libNoCach(FileEnum.PRE_GAME_IMG)], onComplete);
+			LibManager.getInstance().load([LoadUtil.libNoCach(FileEnum.PRE_GAME_IMG), LoadUtil.libNoCach("ui/loading/logo.png")], onComplete);
 		}
 
 		private function onComplete():void {
@@ -80,8 +88,12 @@ package com.ace.loader.pre {
 			text.x=progressCoverImg.x + (progressCoverImg.width - text.width) * 0.5;
 			text.y=proressBgImg.y + proressBgImg.height + 20;
 
+			logoImg=new Image();
+			logoImg.updateBmp("ui/loading/logo.png", onLogo, false, -1, -1, 7);
+
 			contanier=new Sprite();
 			contanier.addChild(bgImg);
+			contanier.addChild(logoImg);
 			contanier.addChild(proressBgImg);
 			contanier.addChild(progressCoverImg);
 			contanier.addChild(logoEffectImg);
@@ -92,9 +104,13 @@ package com.ace.loader.pre {
 			this.gameRoot.addChild(contanier);
 		}
 
+		private function onLogo():void {
+			logoImg.x=(bgImg.width - logoImg.width) * 0.5;
+		}
+
 		override public function onLoading(byteNow:int, byteAll:int):void {
 //			byteAll=2058395;//4439415;
-//			trace(byteAll,"xxxxxxxx")
+//			trace("-----------byteNow = "+byteNow+"--------byteAll = "+byteAll);
 			var progress:Number;
 			if (byteNow == 0 || byteAll == 0) {
 				setProgress(0);
@@ -106,7 +122,14 @@ package com.ace.loader.pre {
 
 		override public function onLoaded():void {
 			setProgress(1);
+			progressText.text="准备资源中....";
 			super.onLoaded();
+//			DelayCallManager.getInstance().add(this, this.onLoaded2, "onLoaded2", 1);
+			setTimeout(this.setUp, 10);
+		}
+
+		override protected function setUp():void {
+			super.setUp();
 			this.die();
 		}
 

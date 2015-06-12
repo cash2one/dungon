@@ -375,6 +375,21 @@ package com.ace.gameData.table {
 		 */		
 		public var StoneUp_Need:int;
 
+		/**
+		 *	绝对伤害
+		 */
+		public var fixed_attack:int;
+		
+		/**
+		 *	绝对防御
+		 */
+		public var fixed_defense:int;
+		
+		/**
+		 *	套装ID
+		 */
+		public var Suit_Group:int;
+		
 		
 		
 		public function TEquipInfo(data:XML=null) {
@@ -450,6 +465,9 @@ package com.ace.gameData.table {
 			this.guard_X=data.@guard_X;
 			this.StoneUp_speed=data.@StoneUp_speed;
 			this.StoneUp_Need=data.@StoneUp_Need;
+			this.fixed_attack=data.@fixed_attack;
+			this.fixed_defense=data.@fixed_defense;
+			this.Suit_Group=data.@Suit_Group;
 		}
 
 

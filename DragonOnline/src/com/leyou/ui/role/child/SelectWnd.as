@@ -7,9 +7,9 @@ package com.leyou.ui.role.child {
 	import com.ace.ui.auto.AutoWindow;
 	import com.ace.ui.button.children.ImgButton;
 	import com.ace.ui.lable.Label;
-	import com.leyou.data.bag.Baginfo;
-	import com.leyou.ui.role.child.children.EquipGrid;
+	import com.leyou.data.celebrate.AreaCelebrateData;
 	import com.leyou.ui.role.child.children.EquipSelectGrid;
+	import com.leyou.utils.PropUtils;
 	
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
@@ -30,15 +30,18 @@ package com.leyou.ui.role.child {
 		private var pro:int=-1;
 
 		/**
-		 *0,人物;1,坐骑;2,宝石
+		 *0,人物;1,坐骑;2,宝石 3-合成指定装备
 		 */
 		public var type:int=0;
 
+		// 合成指定装备ID
+		public var pointId:int;
+
 		private var dataArr:Array=[];
-		
+
 		public var succEffect:Function;
-			
-			
+
+
 
 		public function SelectWnd() {
 			super(LibManager.getInstance().getXML("config/ui/role/selectWnd.xml"));
@@ -130,7 +133,7 @@ package com.leyou.ui.role.child {
 
 			this.pro=pro;
 
-			this.titleNameLbl.text="选择装备";
+			this.titleNameLbl.text=PropUtils.getStringById(1873);
 			this.currentPage=0;
 			this.updateList();
 		}
@@ -152,7 +155,27 @@ package com.leyou.ui.role.child {
 			this.pos=pos;
 			this.pro=pro;
 
-			this.titleNameLbl.text="选择宝石";
+			this.titleNameLbl.text=PropUtils.getStringById(1874);
+			this.currentPage=0;
+			this.updateList();
+		}
+
+		/**
+		 * 神器合成
+		 *
+		 */
+		public function showLegendary($pointId:int, pos:int, p:Point, $type:int):void {
+			super.show();
+
+			this.type=$type;
+
+			this.x=p.x;
+			this.y=p.y - this.height;
+
+			this.pos=pos;
+			this.pointId=$pointId;
+
+			this.titleNameLbl.text=PropUtils.getStringById(1873);
 			this.currentPage=0;
 			this.updateList();
 		}
@@ -172,6 +195,10 @@ package com.leyou.ui.role.child {
 						if (item != null && item.info.classid == 10)
 							return true;
 
+					} else if (type == 3) {
+						if (pointId == item.info.id) {
+							return true;
+						}
 					} else if (item != null && item.info.classid == 1 && item.info.subclassid == pro && item.info.level <= Core.me.info.level && (item.info.limit == 0 || item.info.limit == Core.me.info.profession))
 						return true;
 
@@ -210,6 +237,15 @@ package com.leyou.ui.role.child {
 			super.hide();
 			this.pos=-1;
 			this.pro=-1;
+		}
+
+		public function closePanel(type:Array):void {
+			if (type.indexOf(this.type) > -1)
+				this.hide();
+		}
+
+		override public function get width():Number {
+			return 298;
 		}
 
 	}

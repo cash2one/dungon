@@ -206,7 +206,8 @@ package com.leyou.ui.equip.child {
 			}
 
 			var tmp1Xml:XML=xml.strengthen[int(this.lv1Lbl.text)];
-			this.succLbl.text="" + BadgeUtil.getTypeByRate(tmp1Xml.@sucessRate);
+//			this.succLbl.text="" + BadgeUtil.getTypeByRate(tmp1Xml.@sucessRate);
+			this.succLbl.text="" + tmp1Xml.@sucessRate+"%";
 
 			this.needGoldLbl.text="" + int(tmp1Xml.@money);
 

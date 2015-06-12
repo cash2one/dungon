@@ -196,11 +196,11 @@ package com.leyou.ui.equip.child {
 			this.attrand1Lbl.text="" + einfo[arr[0]] + "~" + einfo[arr[1]];
 //			this.attrand2Lbl.text="" + einfo[arr[1]];
 
-			this.atttxtLbl.text="原始" + PropUtils.propArr[int(pArr[0]) - 1] + ":";
+			this.atttxtLbl.text=PropUtils.getStringById(1695) + PropUtils.propArr[int(pArr[0]) - 1] + ":";
 			this.att1Lbl.text="" + info.p[pArr[0]];
 
 			if (info.p.hasOwnProperty("qh_" + pArr[0])) {
-				this.strengatttxtLbl.text="强化" + PropUtils.propArr[int(pArr[0]) - 1] + ":";
+				this.strengatttxtLbl.text=PropUtils.getStringById(1696) + PropUtils.propArr[int(pArr[0]) - 1] + ":";
 				this.strengatt1Lbl.text="" + info.p["qh_" + pArr[0]];
 
 				this.strengattrand1Lbl.text="" + Math.ceil(rate / 100 * int(einfo[arr[0]])) + "~" + Math.ceil(rate / 100 * int(einfo[arr[1]]));
@@ -239,13 +239,13 @@ package com.leyou.ui.equip.child {
 			this.hprand1Lbl.text="" + einfo[arr[0]] + "~" + einfo[arr[1]];
 //			this.hprand2Lbl.text="" + einfo[arr[1]];
 
-			this.hptxtLbl.text="原始" + PropUtils.propArr[int(pArr[1]) - 1] + ":";
+			this.hptxtLbl.text=PropUtils.getStringById(1695) + PropUtils.propArr[int(pArr[1]) - 1] + ":";
 			this.hp1Lbl.text="" + info.p[pArr[1]];
 //			this.fly2Lbl.text="~";
 
 			if (info.p.hasOwnProperty("qh_" + pArr[1])) {
 
-				this.strenghptxtLbl.text="强化" + PropUtils.propArr[int(pArr[1]) - 1] + ":";
+				this.strenghptxtLbl.text=PropUtils.getStringById(1696) + PropUtils.propArr[int(pArr[1]) - 1] + ":";
 				this.strenghp1Lbl.text="" + info.p["qh_" + pArr[1]];
 
 				this.strenghprand1Lbl.text="" + Math.ceil(rate / 100 * int(einfo[arr[0]]))+"~"+Math.ceil(rate / 100 * int(einfo[arr[1]]));

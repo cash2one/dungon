@@ -10,6 +10,7 @@ package com.leyou.ui.tips {
 	import com.ace.ui.lable.Label;
 	import com.leyou.data.playerSkill.SkillInfo;
 	import com.leyou.ui.skill.childs.SkillGrid;
+	import com.leyou.utils.PropUtils;
 
 	public class TipsSkillWnd extends AutoWindow {
 
@@ -88,15 +89,15 @@ package com.leyou.ui.tips {
 			switch (arr[_pos]) {
 				case 0:
 					this.runeActLbl.textColor=0xaaaaaa;
-					this.runeActLbl.text="未学习";
+					this.runeActLbl.text=PropUtils.getStringById(1946);
 					break;
 				case 1:
 					this.runeActLbl.textColor=0xffd700;
-					this.runeActLbl.text="已学习";
+					this.runeActLbl.text=PropUtils.getStringById(1947);
 					break;
 				case 2:
 					this.runeActLbl.textColor=0x6abd18;
-					this.runeActLbl.text="已激活";
+					this.runeActLbl.text=PropUtils.getStringById(1948);
 					break;
 			}
 

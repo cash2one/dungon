@@ -10,7 +10,8 @@ package com.leyou.ui.loading {
 	import com.ace.ui.auto.AutoSprite;
 	import com.ace.ui.img.child.Image;
 	import com.ace.ui.lable.Label;
-
+	import com.leyou.utils.PropUtils;
+	
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
 	import flash.utils.getTimer;
@@ -96,11 +97,11 @@ package com.leyou.ui.loading {
 			this.progressSwf.x=this.progressImg.x + this.progressImg.width - 20;
 
 			if (type == 0) {
-				this.progressLbl.text="采集中...";
+				this.progressLbl.text=PropUtils.getStringById(1777);
 				PlayerEnum.COLLECT_TIME=t;
 //				Core.me.info.isCollect=true;
 			} else if (type == 1) {
-				this.progressLbl.text="骑乘中...";
+				this.progressLbl.text=PropUtils.getStringById(1778);
 			}
 
 			this.timer.reset();

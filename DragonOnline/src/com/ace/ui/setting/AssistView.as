@@ -22,12 +22,15 @@ package com.ace.ui.setting {
 	import com.ace.ui.auto.AutoWindow;
 	import com.ace.ui.button.children.CheckBox;
 	import com.ace.ui.button.children.ImgButton;
+	import com.ace.ui.button.children.RadioButton;
 	import com.ace.ui.dropMenu.children.ComboBox;
 	import com.ace.ui.dropMenu.event.DropMenuEvent;
 	import com.ace.ui.img.child.Image;
 	import com.ace.ui.scrollBar.event.ScrollBarEvent;
 	import com.ace.ui.slider.children.HSlider;
+	import com.leyou.enum.QualityEnum;
 	import com.leyou.net.cmd.Cmd_Assist;
+	import com.leyou.utils.PropUtils;
 	
 	import flash.events.Event;
 	import flash.events.MouseEvent;
@@ -40,7 +43,7 @@ package com.ace.ui.setting {
 		private static const SKILLS:Array=[100, 104, 108, 112, 300, 304, 308, 312, 500, 504, 508, 512, 700, 704, 708, 712];
 
 		// 默认挂机配置
-		private static const DEFAULT_CONFIG:Array=[1, 2, 0.5, 2, 0.5, 2, 20101, 1, 20401, 1, 1, -1, -1, -1, -1];
+		private static const DEFAULT_CONFIG:Array=[1, 2, 0.5, 2, 0.5, 2, 20101, 1, 20401, 1, 1, 4, -1, -1, -1, -1, 2, 1, QualityEnum.QUA_COMMON];
 
 		public var reliveCheckBox:CheckBox;
 
@@ -71,6 +74,10 @@ package com.ace.ui.setting {
 		private var btnImg:Image;
 
 		private var hpItemArr:Array;
+		
+		private var pickRBtn:RadioButton;
+		private var fightRBtn:RadioButton;
+		private var pickQuality:ComboBox;
 
 		public function AssistView() {
 			//			AutoUtil.autoBuyHp()
@@ -97,7 +104,13 @@ package com.ace.ui.setting {
 			hpCbox=getUIbyID("hpCbox") as ComboBox;
 			mpCbox=getUIbyID("mpCbox") as ComboBox;
 			btnImg=getUIbyID("btnImg") as Image;
+			pickRBtn = getUIbyID("pickRBtn") as RadioButton;
+			fightRBtn = getUIbyID("fightRBtn") as RadioButton;
+			pickQuality = getUIbyID("pickQuality") as ComboBox;
 
+			pickRBtn.addEventListener(MouseEvent.CLICK, onRadioButton);
+			fightRBtn.addEventListener(MouseEvent.CLICK, onRadioButton);
+			pickQuality.addEventListener(DropMenuEvent.Item_Selected, onComboBoxClick);
 			//			autoBtn.addEventListener(MouseEvent.CLICK, onButtonClick);
 			autoBtn.addEventListener(MouseEvent.CLICK, onButtonClick);
 			reliveCheckBox.addEventListener(MouseEvent.CLICK, onCheckBoxClick);
@@ -124,22 +137,36 @@ package com.ace.ui.setting {
 
 //			hpCbox.list.addRends([{label: "轻微治疗药剂", uid: 20101}, {label: "轻型治疗药剂", uid: 20103}, {label: "治疗药剂   ", uid: 20105}, {label: "中型治疗药剂", uid: 20107}]);
 
-			//			mpCbox.list.addRends([{label:"轻微治疗魔剂", uid:20401},
-			//								  {label:"轻型治疗魔剂", uid:20403},
-			//								  {label:"治疗魔剂    ", uid:20405},
-			//								  {label:"中型治疗魔剂", uid:20407}]);
+			var content:String = TableManager.getInstance().getSystemNotice(10034).content;
+			var qarray:Array = [{label:content, uid:QualityEnum.QUA_COMMON}];
+			content = TableManager.getInstance().getSystemNotice(10035).content;
+			qarray.push({label:content, uid:QualityEnum.QUA_EXCELLENT});
+			content = TableManager.getInstance().getSystemNotice(10036).content;
+			qarray.push({label:content, uid:QualityEnum.QUA_TERRIFIC});
+			content = TableManager.getInstance().getSystemNotice(10037).content;
+			qarray.push({label:content, uid:QualityEnum.QUA_INCREDIBLE});
+			pickQuality.list.addRends(qarray);
 
 
 			EventManager.getInstance().addEvent(EventEnum.SETTING_AUTO_MONSTER, this.onButtonClick);
 		}
 		
+		protected function onRadioButton(event:MouseEvent):void{
+			switch(event.target.name){
+				case "pickRBtn":
+				case "fightRBtn":
+					info.isAutoPickupFirst = pickRBtn.isOn;
+					info.isAutoAttackFirst = fightRBtn.isOn;
+					break;
+			}
+		}		
 		
 		public function refreshHpItem():void{
-			var tmpArr:Array = [{label: "轻微治疗药剂", uid: 20101},
-						{label: "轻型治疗药剂", uid: 20103}, 
-						{label: "治疗药剂   ", uid: 20105}, 
-						{label: "中型治疗药剂", uid: 20107},
-						{label: "大型治疗药剂", uid: 20109}];
+			var tmpArr:Array = [{label: PropUtils.getStringById(1540), uid: 20101},
+						{label:PropUtils.getStringById(1541), uid: 20103}, 
+						{label: PropUtils.getStringById(1542), uid: 20105}, 
+						{label: PropUtils.getStringById(1543), uid: 20107},
+						{label: PropUtils.getStringById(1548), uid: 20109}];
 			for(var n:int = tmpArr.length-1; n >= 0; n--){
 				var itemInfo:TItemInfo = TableManager.getInstance().getItemInfo(tmpArr[n].uid);
 				if(Core.me.info.level < int(itemInfo.level)){
@@ -185,9 +212,12 @@ package com.ace.ui.setting {
 			//			configInfo.isAutoBuyMP ? buyMpCheckBox.turnOn() : buyMpCheckBox.turnOff();
 			configInfo.isAutoPickupEquip ? pickEquipCheckBox.turnOn() : pickEquipCheckBox.turnOff();
 			configInfo.isAutopickupItem ? pickItemCheckBox.turnOn() : pickItemCheckBox.turnOff();
+			configInfo.isAutoPickupFirst ? pickRBtn.turnOn() : pickRBtn.turnOff();
+			configInfo.isAutoAttackFirst ? fightRBtn.turnOn() : fightRBtn.turnOff();
 			hpHslider.progress=configInfo.minHP / Core.me.info.baseInfo.maxHp;
 			//			mpHslider.progress = configInfo.minMP/Core.me.info.baseInfo.maxMp;
 			hpCbox.list.selectByUid(configInfo.hpItem + "");
+			pickQuality.list.selectByUid(configInfo.autoPickQuality+"");
 			//			mpCbox.list.selectByUid(configInfo.mpItem+"");
 
 			UIManager.getInstance().toolsWnd.updateAutoMagicList();
@@ -269,6 +299,9 @@ package com.ace.ui.setting {
 //						
 //					}
 					info.hpItem=hpCbox.value.uid;
+					break;
+				case "pickQuality":
+					info.autoPickQuality = pickQuality.value.uid;
 					break;
 //				case "mpCbox":
 //					info.mpItem=mpCbox.value.uid;

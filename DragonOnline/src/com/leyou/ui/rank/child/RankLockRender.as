@@ -9,6 +9,7 @@ package com.leyou.ui.rank.child
 	import com.ace.utils.StringUtil;
 	import com.leyou.enum.ConfigEnum;
 	import com.leyou.ui.achievement.child.AchievementEraItem;
+	import com.leyou.utils.PropUtils;
 	
 	public class RankLockRender extends AutoSprite
 	{
@@ -45,37 +46,37 @@ package com.leyou.ui.rank.child
 			var achievementId:int;
 			switch(_type){
 				case 1:
-					rankType = "战斗力";
+					rankType = PropUtils.getStringById(1528);
 					achievementId = ConfigEnum.rank1;
 					titleUrl = StringUtil.substitute(titleUrl, 2);
 					break;
 				case 2:
-					rankType = "坐骑";
+					rankType = PropUtils.getStringById(1859);
 					achievementId = ConfigEnum.rank3;
 					titleUrl = StringUtil.substitute(titleUrl, 4);
 					break;
 				case 3:
-					rankType = "翅膀";
+					rankType = PropUtils.getStringById(1786);
 					achievementId = ConfigEnum.rank4;
 					titleUrl = StringUtil.substitute(titleUrl, 5);
 					break;
 				case 4:
-					rankType = "装备";
+					rankType = PropUtils.getStringById(1609);
 					achievementId = ConfigEnum.rank2;
 					titleUrl = StringUtil.substitute(titleUrl, 3);
 					break;
 				case 5:
-					rankType = "军衔";
+					rankType = PropUtils.getStringById(1860);
 					achievementId = ConfigEnum.rank5;
 					titleUrl = StringUtil.substitute(titleUrl, 6);
 					break;
 				case 6:
-					rankType = "等级";
+					rankType = PropUtils.getStringById(1868);
 					achievementId = ConfigEnum.rank7;
 					titleUrl = StringUtil.substitute(titleUrl, 1);
 					break;
 				case 7:
-					rankType = "财富";
+					rankType = PropUtils.getStringById(1861);
 					achievementId = ConfigEnum.rank8;
 					titleUrl = StringUtil.substitute(titleUrl, 7);
 					break;

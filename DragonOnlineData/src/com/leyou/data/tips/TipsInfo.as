@@ -1,4 +1,6 @@
 package com.leyou.data.tips {
+	import com.ace.gameData.manager.TableManager;
+	import com.ace.gameData.table.TEquipInfo;
 	import com.leyou.util.ZDLUtil;
 
 	/**
@@ -254,7 +256,8 @@ zdl      --战斗力
 		
 		public function strengthZdl(lv:int):uint{
 //			var zdl:uint = (int(p[4])*zdlElement(4).rate + int(p[6])*zdlElement(6).rate + int(p[5])*zdlElement(5).rate + int(p[7])*zdlElement(7).rate + int(p[1])*zdlElement(1).rate + int(p[2])*zdlElement(2).rate) * Math.pow(1.09, lv) + int(p[11])*zdlElement(11).rate + int(p[10])*zdlElement(10).rate + int(p[8])*zdlElement(8).rate + int(p[9])*zdlElement(9).rate + int(p[12])*zdlElement(12).rate + int(p[13])*zdlElement(13).rate;
-			return ZDLUtil.computation(p[1], p[2], p[4], p[5], p[6], p[7], p[8], p[9], p[10], p[11], p[12], p[13], lv);
+			var info:TEquipInfo = TableManager.getInstance().getEquipInfo(itemid);
+			return ZDLUtil.computation(p[1], p[2], p[4], p[5], p[6], p[7], p[8], p[9], p[10], p[11], p[12], p[13], info.fixed_attack, info.fixed_defense, lv);
 		}
 		
 		public function hasOwner():Boolean{

@@ -17,6 +17,7 @@ package com.leyou.ui.pkCopy {
 	import com.ace.manager.LibManager;
 	import com.ace.manager.UILayoutManager;
 	import com.ace.manager.UIManager;
+	import com.ace.ui.auto.AutoSprite;
 	import com.ace.ui.auto.AutoWindow;
 	import com.ace.ui.button.children.ImgButton;
 	import com.ace.ui.button.children.NormalButton;
@@ -38,11 +39,12 @@ package com.leyou.ui.pkCopy {
 
 	import flash.events.MouseEvent;
 
-	public class DungeonTZWnd extends AutoWindow {
+	public class DungeonTZWnd extends AutoSprite {
 
 		private var itemList:ScrollPane;
 		private var bigImg:Image;
 		private var bgimg:Image;
+		private var titleImg:Image;
 		private var ruleLbl:Label;
 		private var timeLbl:Label;
 		private var timerLbl:Label;
@@ -70,7 +72,8 @@ package com.leyou.ui.pkCopy {
 		private var o:Object;
 
 		public function DungeonTZWnd() {
-			super(LibManager.getInstance().getXML("config/ui/pkCopy/dungeonTZWnd.xml"));
+//			super(LibManager.getInstance().getXML("config/ui/pkCopy/dungeonTZWnd.xml"));
+			super(LibManager.getInstance().getXML("config/ui/pkCopy/bossTZRender.xml"));
 			this.init();
 			this.mouseChildren=true;
 			this.mouseEnabled=true;
@@ -81,6 +84,7 @@ package com.leyou.ui.pkCopy {
 			this.itemList=this.getUIbyID("itemList") as ScrollPane;
 			this.bigImg=this.getUIbyID("bigImg") as Image;
 			this.bgimg=this.getUIbyID("bgimg") as Image;
+			this.titleImg=this.getUIbyID("titleImg") as Image;
 			this.ruleLbl=this.getUIbyID("ruleLbl") as Label;
 			this.timeLbl=this.getUIbyID("timeLbl") as Label;
 			this.accpetBtn=this.getUIbyID("accpetBtn") as NormalButton;
@@ -88,8 +92,8 @@ package com.leyou.ui.pkCopy {
 
 			this.flyBtn.visible=this.bgimg.visible=false;
 
-			this.ruleLbl.height=116;
-			this.ruleLbl.width=290;
+			this.ruleLbl.height=139;
+			this.ruleLbl.width=256;
 			this.ruleLbl.wordWrap=true;
 			this.ruleLbl.multiline=true;
 
@@ -117,8 +121,10 @@ package com.leyou.ui.pkCopy {
 
 			this.timerLbl.visible=true;
 
-			
 			TimerManager.getInstance().add(exePkCopyTime);
+
+			this.x=-13;
+			this.y=3;
 		}
 
 		private function onStartClick(e:MouseEvent):void {
@@ -134,7 +140,7 @@ package com.leyou.ui.pkCopy {
 		}
 
 		private function onFlyClick(e:MouseEvent):void {
-			
+
 			if (ConfigEnum.MarketOpenLevel <= Core.me.info.level) {
 				var tinfo:TItemInfo=TableManager.getInstance().getItemInfo(ConfigEnum.traveItem);
 
@@ -192,7 +198,9 @@ package com.leyou.ui.pkCopy {
 
 			var tinfo:TTzActiive=TableManager.getInstance().getTzActiveByID(selectId);
 
-			this.bigImg.updateBmp("ui/tz/" + tinfo.sImage);
+			this.titleImg.updateBmp("ui/tz/" + tinfo.nameImage);
+			this.bigImg.updateBmp("ui/tz/" + tinfo.bImage);
+//			this.bigImg.updateBmp("ui/dungeon/" + tinfo.sImage);
 			this.ruleLbl.htmlText=tinfo.des1 + "";
 			this.timeLbl.text=tinfo.time.replace("|", "\-").replace(/(\d?\d):(\d\d):(\d\d)/, "$1:$2").replace(/(\d?\d):(\d\d):(\d\d)/, "$1:$2");
 
@@ -212,8 +220,8 @@ package com.leyou.ui.pkCopy {
 				dgrid=new DungeonTzGrid();
 				dgrid.updataInfo(TableManager.getInstance().getItemInfo(tinfo["item" + (i + 1)]));
 
-				dgrid.y=234;
-				dgrid.x=461 + i * dgrid.width;
+				dgrid.y=70;
+				dgrid.x=635 + i * dgrid.width;
 
 				this.addChild(dgrid);
 				this.gridList.push(dgrid);
@@ -233,14 +241,14 @@ package com.leyou.ui.pkCopy {
 
 		public function updateInfo(data:Object):void {
 			this.o=data;
-			
+
 			var render:DungeonTZRender;
-			
+
 			for each (render in this.itemsList) {
 				if (render != null)
 					this.itemList.delFromPane(render);
 			}
-			
+
 			this.itemsList.length=0;
 
 			var obj:Object=TableManager.getInstance().getTzActiveAll();
@@ -274,9 +282,10 @@ package com.leyou.ui.pkCopy {
 				}
 			}
 
+			this.visible=true;
 			this.updateList();
-			
-			UIManager.getInstance().showPanelCallback(WindowEnum.PKCOPY);
+
+//			UIManager.getInstance().showPanelCallback(WindowEnum.PKCOPY);
 		}
 
 		private function sortOnTime(item:TTzActiive, item2:TTzActiive):int {
@@ -394,27 +403,30 @@ package com.leyou.ui.pkCopy {
 			return -1;
 		}
 
-		override public function show(toTop:Boolean=true, $layer:int=1, toCenter:Boolean=true):void {
-			super.show(toTop, $layer, toCenter);
+//		override public function show(toTop:Boolean=true, $layer:int=1, toCenter:Boolean=true):void {
+//			super.show(toTop, $layer, toCenter);
+//
+//
+//			GuideManager.getInstance().removeGuide(8);
+//		}
 
 
-			GuideManager.getInstance().removeGuide(8);
-		}
+//		override public function sendOpenPanelProtocol(... parameters):void {
+//			this.dataModel=parameters;
+//
+//			Cmd_Act.cmActInit();
+//		}
 
 
-		override public function sendOpenPanelProtocol(... parameters):void {
-			this.dataModel=parameters;
 
-			Cmd_Act.cmActInit();
-		}
 
 		public function setTime(t:int):void {
 			this.currentDateTime=t;
 		}
 
 		public function resise():void {
-			this.x=(UIEnum.WIDTH - this.width) / 2;
-			this.y=(UIEnum.HEIGHT - this.height) / 2;
+//			this.x=(UIEnum.WIDTH - this.width) / 2;
+//			this.y=(UIEnum.HEIGHT - this.height) / 2;
 
 			this.startBtn.x=(UIEnum.WIDTH - this.startBtn.width) / 2;
 			this.startBtn.y=UIEnum.HEIGHT - this.startBtn.height - 200;
@@ -433,11 +445,11 @@ package com.leyou.ui.pkCopy {
 			return 482;
 		}
 
-		override public function hide():void {
-			super.hide();
+//		override public function hide():void {
+//			super.hide();
 
 //			TimerManager.getInstance().remove(exePkCopyTime);
-		}
+//		}
 
 	}
 }

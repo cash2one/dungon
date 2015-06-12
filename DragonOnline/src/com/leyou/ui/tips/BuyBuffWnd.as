@@ -10,6 +10,7 @@ package com.leyou.ui.tips {
 	import com.leyou.enum.ConfigEnum;
 	import com.leyou.ui.monsterInvade.child.MonsterInvadeGrid;
 	import com.leyou.ui.tips.childs.TipsGrid;
+	import com.leyou.utils.PropUtils;
 	import com.leyou.utils.StringUtil_II;
 
 	public class BuyBuffWnd extends AutoSprite implements ITip {
@@ -21,7 +22,7 @@ package com.leyou.ui.tips {
 		private var priceLbl:Label;
 
 		private var grid:MonsterInvadeGrid;
-		
+
 		public function BuyBuffWnd() {
 			super(LibManager.getInstance().getXML("config/ui/tips/buyBuffWnd.xml"));
 			this.init();
@@ -36,10 +37,10 @@ package com.leyou.ui.tips {
 
 			this.grid=new MonsterInvadeGrid();
 			this.addChild(this.grid);
-			
+
 			this.grid.x=13;
 			this.grid.y=13;
-			
+
 		}
 
 		public function updateInfo(tips:Object):void {
@@ -47,14 +48,14 @@ package com.leyou.ui.tips {
 			var tipsinfo:TipsInfo=tips as TipsInfo;
 			var buff:TBuffInfo=TableManager.getInstance().getBuffInfo(tipsinfo.itemid);
 
-			if (buff!=null && buff.id == ConfigEnum.DemonInvasion4) {
-				
+			if (buff != null && buff.id == ConfigEnum.DemonInvasion4) {
+
 				this.grid.updataInfo(buff);
-				this.nameLbl.text=""+buff.name;
-				this.descLbl.text=""+buff.des;
-				this.priceLbl.text=""+ConfigEnum.DemonInvasion6;
-				this.moneyNameLbl.text="购买价格:";
-				this.getFunLbl.text=""+StringUtil_II.getBreakLineStringByCharIndex(TableManager.getInstance().getSystemNotice(9936).content);
+				this.nameLbl.text="" + buff.name;
+				this.descLbl.text="" + buff.des;
+				this.priceLbl.text="" + ConfigEnum.DemonInvasion6;
+				this.moneyNameLbl.text=PropUtils.getStringById(1919);
+				this.getFunLbl.text="" + StringUtil_II.getBreakLineStringByCharIndex(TableManager.getInstance().getSystemNotice(9936).content);
 			}
 
 

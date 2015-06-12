@@ -12,6 +12,7 @@ package com.leyou.ui.mail {
 	import com.leyou.manager.PopupManager;
 	import com.leyou.net.cmd.Cmd_Mail;
 	import com.leyou.ui.mail.child.MailLableRender;
+	import com.leyou.utils.PropUtils;
 	
 	import flash.events.MouseEvent;
 
@@ -110,7 +111,7 @@ package com.leyou.ui.mail {
 					var unread:Boolean = hasUnread();
 					var accessory:Boolean = hasAccessory();
 					if(unread || accessory){
-						var warnStr:String = unread ? "删除邮件中有未读邮件，是否确认删除？" : "邮件中有未提取物品，是否确认删除？";
+						var warnStr:String = unread ? PropUtils.getStringById(1785) : PropUtils.getStringById(1784);
 						PopupManager.showConfirm(warnStr, deleteMailRequest, null, false, "wnd.mail.delete");
 //						var pWnd:WindInfo = WindInfo.getConfirmInfo(warnStr, deleteMailRequest);
 //						PopWindow.showWnd(UIEnum.WND_TYPE_CONFIRM, pWnd, "wnd.mail.delete");

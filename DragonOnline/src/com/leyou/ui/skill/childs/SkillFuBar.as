@@ -14,6 +14,7 @@ package com.leyou.ui.skill.childs {
 
 		private var nameLbl:Label;
 		private var lvLbl:Label;
+		private var desLbl0:Label;
 		private var descLbl:TextArea;
 
 		private var bgImg:Image;
@@ -25,7 +26,7 @@ package com.leyou.ui.skill.childs {
 		private var _state:int=1;
 
 		public var index:int=0;
-		
+
 		public function SkillFuBar() {
 			super(LibManager.getInstance().getXML("config/ui/skill/skillFuBar.xml"));
 			this.init();
@@ -36,6 +37,7 @@ package com.leyou.ui.skill.childs {
 
 			this.nameLbl=this.getUIbyID("nameLbl") as Label;
 			this.lvLbl=this.getUIbyID("lvLbl") as Label;
+			this.desLbl0=this.getUIbyID("desLbl0") as Label;
 			this.descLbl=this.getUIbyID("descLbl") as TextArea;
 
 			this.descLbl.visibleOfBg=false;
@@ -47,12 +49,19 @@ package com.leyou.ui.skill.childs {
 
 		public function updateInfo(info:TSkillInfo):void {
 			this.nameLbl.text="" + info.runeName;
-			this.lvLbl.text="" + info.autoLv;
+
+			if (info.autoLv == 0) {
+				this.lvLbl.text="套装解锁";
+				this.desLbl0.visible=false;
+			} else {
+				this.desLbl0.visible=true;
+				this.lvLbl.text="" + info.autoLv;
+			}
 
 			this.descLbl.setText("" + info.runeDes);
 
 			this.fuwenImg1.updateBmp("ico/skills/" + info.runeIcon + ".png");
-			
+
 			//重置状态
 			this.resetState();
 		}
@@ -67,7 +76,7 @@ package com.leyou.ui.skill.childs {
 		}
 
 		public function set hight(v:Boolean):void {
-			if (this._state == 0 || this._state==2)
+			if (this._state == 0 || this._state == 2)
 				return;
 
 			if (v) {
@@ -95,15 +104,19 @@ package com.leyou.ui.skill.childs {
 					this.hight=true;
 					break;
 			}
-			
+
 			_state=s;
 		}
-		
-		
-		public function get state():int{
+
+
+		public function get state():int {
 			return this._state;
 		}
-			
+
+		override public function get height():Number {
+			return 86;
+		}
+
 
 	}
 }

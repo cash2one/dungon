@@ -14,7 +14,8 @@ package com.leyou.ui.guild.child {
 	import com.ace.ui.lable.children.TextArea;
 	import com.leyou.net.cmd.Cmd_Guild;
 	import com.leyou.utils.PlayerUtil;
-
+	import com.leyou.utils.PropUtils;
+	
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
@@ -60,7 +61,7 @@ package com.leyou.ui.guild.child {
 
 			this.editBtn.addEventListener(MouseEvent.CLICK, onClick);
 
-			data=[{label: "会长", uid: 1}, {label: "副会长", uid: 2}, {label: "长老", uid: 3}, {label: "会员", uid: 4}];
+			data=[{label: PropUtils.getStringById(1737), uid: 1}, {label: PropUtils.getStringById(1738), uid: 2}, {label: PropUtils.getStringById(1739), uid: 3}, {label: PropUtils.getStringById(1740), uid: 4}];
 			this.officeCb.addEventListener(DropMenuEvent.Item_Selected, onChangeOffice);
 
 			this.descTxt.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
@@ -86,18 +87,18 @@ package com.leyou.ui.guild.child {
 				if (this.descTxt.text != "")
 					Cmd_Guild.cm_GuildDesc(this.nameLbl.text, this.descTxt.text);
 				else
-					Cmd_Guild.cm_GuildDesc(this.nameLbl.text, "无");
+					Cmd_Guild.cm_GuildDesc(this.nameLbl.text, PropUtils.getStringById(1594));
 
 				Cmd_Guild.cm_GuildOffice(this.nameLbl.text, int(this.officeCb.list.value.uid));
 
-				this.editBtn.text="编辑备注";
+				this.editBtn.text=PropUtils.getStringById(1741);
 				this.descTxt.mouseChildren=this.descTxt.mouseEnabled=false;
 				this.descTxt.tf.type=TextFieldType.DYNAMIC;
 				this.descTxt.editable=false;
 				
 			} else {
 				
-				this.editBtn.text="确定";
+				this.editBtn.text=PropUtils.getStringById(1742);
 				this.descTxt.mouseChildren=this.descTxt.mouseEnabled=true;
 				this.descTxt.tf.type=TextFieldType.INPUT;
 				this.descTxt.editable=true;
@@ -108,7 +109,7 @@ package com.leyou.ui.guild.child {
 		}
 
 		private function onChangeOffice(e:Event):void {
-			this.editBtn.text="确定";
+			this.editBtn.text=PropUtils.getStringById(1742);
 			this.descTxt.mouseChildren=this.descTxt.mouseEnabled=true;
 			this.editState=true;
 		}
@@ -146,7 +147,7 @@ package com.leyou.ui.guild.child {
 			this.show();
 
 			this.editState=false;
-			this.editBtn.text="编辑备注";
+			this.editBtn.text=PropUtils.getStringById(1741);
 			this.descTxt.mouseChildren=this.descTxt.mouseEnabled=false;
 		}
 

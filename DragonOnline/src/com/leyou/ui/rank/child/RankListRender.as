@@ -10,6 +10,7 @@ package com.leyou.ui.rank.child
 	import com.ace.ui.dropMenu.event.DropMenuEvent;
 	import com.ace.ui.lable.Label;
 	import com.leyou.net.cmd.Cmd_Rank;
+	import com.leyou.utils.PropUtils;
 	
 	import flash.events.Event;
 	import flash.events.MouseEvent;
@@ -145,54 +146,54 @@ package com.leyou.ui.rank.child
 			switch(type){
 				case 1:// 战斗力
 				case 4:// 装备
-					typeCbx.list.addRends([{label: "全部", uid: 0},
-						{label: "战士", uid: PlayerEnum.PRO_SOLDIER},
-						{label: "法师", uid: PlayerEnum.PRO_MASTER},
-						{label: "术士", uid: PlayerEnum.PRO_WARLOCK},
-						{label: "游侠", uid: PlayerEnum.PRO_RANGER} ]);
-					desLbl.text = (1 == type) ? "总战斗力" : "装备战斗力";
+					typeCbx.list.addRends([{label: PropUtils.getStringById(2148), uid: 0},
+						{label: PropUtils.getStringById(1528), uid: PlayerEnum.PRO_SOLDIER},
+						{label: PropUtils.getStringById(1526), uid: PlayerEnum.PRO_MASTER},
+						{label: PropUtils.getStringById(1529), uid: PlayerEnum.PRO_WARLOCK},
+						{label: PropUtils.getStringById(1527), uid: PlayerEnum.PRO_RANGER} ]);
+					desLbl.text = (1 == type) ? PropUtils.getStringById(1837) : PropUtils.getStringById(1838);
 					break;
 				case 2:// 坐骑
 				case 3:// 翅膀
-					typeCbx.list.addRends([{label: "全部", uid: 0},
-						{label: "三阶", uid: 3},
-						{label: "四阶", uid: 4},
-						{label: "五阶", uid: 5},
-						{label: "六阶", uid: 6},
-						{label: "七阶", uid: 7},
-						{label: "八阶", uid: 8},
-						{label: "九阶", uid: 9},
-						{label: "十阶", uid: 10} ]);
-					desLbl.text = (2 == type) ? "坐骑战斗力" : "翅膀战斗力";
+					typeCbx.list.addRends([{label: PropUtils.getStringById(2148), uid: 0},
+						{label: PropUtils.getStringById(1839), uid: 3},
+						{label: PropUtils.getStringById(1840), uid: 4},
+						{label: PropUtils.getStringById(1841), uid: 5},
+						{label: PropUtils.getStringById(1842), uid: 6},
+						{label: PropUtils.getStringById(1843), uid: 7},
+						{label: PropUtils.getStringById(1844), uid: 8},
+						{label: PropUtils.getStringById(1845), uid: 9},
+						{label: PropUtils.getStringById(1846), uid: 10} ]);
+					desLbl.text = (2 == type) ? PropUtils.getStringById(1847) : PropUtils.getStringById(1848);
 					break;
 				case 5:// 军衔
-					typeCbx.list.addRends([{label: "全部", uid: 0},
-						{label: "列兵", uid: 2},
-						{label: "中尉", uid: 3},
-						{label: "上尉", uid: 4},
-						{label: "中校", uid: 5},
-						{label: "上校", uid: 6},
-						{label: "中将", uid: 7},
-						{label: "上将", uid: 8},
-						{label: "元帅", uid: 9},
-						{label: "大元帅", uid: 10}]);
-					desLbl.text = "积分";
+					typeCbx.list.addRends([{label: PropUtils.getStringById(2148), uid: 0},
+						{label: PropUtils.getStringById(1849), uid: 2},
+						{label: PropUtils.getStringById(1850), uid: 3},
+						{label: PropUtils.getStringById(1851), uid: 4},
+						{label: PropUtils.getStringById(1852), uid: 5},
+						{label: PropUtils.getStringById(1853), uid: 6},
+						{label: PropUtils.getStringById(1854), uid: 7},
+						{label: PropUtils.getStringById(1855), uid: 8},
+						{label: PropUtils.getStringById(1856), uid: 9},
+						{label: PropUtils.getStringById(1857), uid: 10}]);
+					desLbl.text = PropUtils.getStringById(1858);
 					break;
 				case 6:
-					typeCbx.list.addRends([{label: "全部", uid: 0},
-						{label: "战士", uid: PlayerEnum.PRO_SOLDIER},
-						{label: "法师", uid: PlayerEnum.PRO_MASTER},
-						{label: "术士", uid: PlayerEnum.PRO_WARLOCK},
-						{label: "游侠", uid: PlayerEnum.PRO_RANGER} ]);
-					desLbl.text = "等级";
+					typeCbx.list.addRends([{label: PropUtils.getStringById(2148), uid: 0},
+						{label: PropUtils.getStringById(1528), uid: PlayerEnum.PRO_SOLDIER},
+						{label: PropUtils.getStringById(1526), uid: PlayerEnum.PRO_MASTER},
+						{label: PropUtils.getStringById(1529), uid: PlayerEnum.PRO_WARLOCK},
+						{label: PropUtils.getStringById(1527), uid: PlayerEnum.PRO_RANGER} ]);
+					desLbl.text = PropUtils.getStringById(28);
 					break;
 				case 7:
-					typeCbx.list.addRends([{label: "全部", uid: 0},
-						{label: "战士", uid: PlayerEnum.PRO_SOLDIER},
-						{label: "法师", uid: PlayerEnum.PRO_MASTER},
-						{label: "术士", uid: PlayerEnum.PRO_WARLOCK},
-						{label: "游侠", uid: PlayerEnum.PRO_RANGER} ]);
-					desLbl.text = "金币";
+					typeCbx.list.addRends([{label: PropUtils.getStringById(2148), uid: 0},
+						{label: PropUtils.getStringById(1528), uid: PlayerEnum.PRO_SOLDIER},
+						{label: PropUtils.getStringById(1526), uid: PlayerEnum.PRO_MASTER},
+						{label: PropUtils.getStringById(1529), uid: PlayerEnum.PRO_WARLOCK},
+						{label: PropUtils.getStringById(1527), uid: PlayerEnum.PRO_RANGER} ]);
+					desLbl.text =  PropUtils.getStringById(32);
 					break;
 			}
 		}

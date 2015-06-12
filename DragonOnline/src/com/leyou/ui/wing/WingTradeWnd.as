@@ -29,7 +29,8 @@ package com.leyou.ui.wing {
 	import com.leyou.net.cmd.Cmd_Wig;
 	import com.leyou.ui.quickBuy.QuickBuyWnd;
 	import com.leyou.utils.EffectUtil;
-	
+	import com.leyou.utils.PropUtils;
+
 	import flash.display.DisplayObject;
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
@@ -72,7 +73,10 @@ package com.leyou.ui.wing {
 		private var tipsStr:String;
 
 		private var tweenmax:TweenMax;
-		private var ulevel:int;
+		private var ulevel:int=-1;
+
+		private var pArr:Array=[0, 3, 4];
+		private var flyLv:int=0;
 
 		public function WingTradeWnd() {
 			super(LibManager.getInstance().getXML("config/ui/wing/wingTradeWnd.xml"));
@@ -118,7 +122,7 @@ package com.leyou.ui.wing {
 
 			this.levelroll=new RollNumWidget();
 			this.levelroll.loadSource("ui/num/{num}_zdl.png");
-			this.addChild(this.levelroll);
+//			this.addChild(this.levelroll);
 
 			this.itemNameLbl.styleSheet=FontEnum.DEFAULT_LINK_STYLE;
 
@@ -188,13 +192,20 @@ package com.leyou.ui.wing {
 
 			switch (e.target.name) {
 				case "autoUpBtn":
-					PopupManager.showConfirm(TableManager.getInstance().getSystemNotice(1218).content, function():void {
 
-						upBtn.setActive(true, 1, true);
-						autoUpBtn.setActive(false, .6, true);
-						autoTime=setInterval(updateUpgrade, 2000);
-						updateUpgrade();
-					}, null, false, "wingFly");
+					if (autoTime == 0) {
+						PopupManager.showConfirm(TableManager.getInstance().getSystemNotice(1218).content, function():void {
+
+							autoUpBtn.text=PropUtils.getStringById(1990);
+							upBtn.setActive(false, .6, true);
+//							autoUpBtn.setActive(false, .6, true);
+							autoTime=setInterval(updateUpgrade, 2000);
+							updateUpgrade();
+						}, null, false, "wingFly");
+					} else {
+//						autoUpBtn.text="自动飞升";
+						this.clearBtnState();
+					}
 					break;
 				case "upBtn":
 
@@ -224,38 +235,33 @@ package com.leyou.ui.wing {
 
 		public function updateInfo(o:Object):void {
 
-			for (var i:int=0; i < 5; i++) {
-				this.ptxt[i].text="";
-				this.patxtArr[i].text="";
-			}
+			for (var i:int=0; i < pArr.length; i++) {
 
-			if (tweenmax != null) {
-				tweenmax.pause();
-				tweenmax.kill();
-
-				this.x1ImgArr[this.ulevel - 1].alpha=1;
+				this.ptxt[pArr[i]].text="";
+				this.patxtArr[pArr[i]].text="";
 			}
 
 			var winfo:TWing_Trade;
 			var winfo2:TWing_Trade;
 
-			var flyv:int=o.flyl;
+			var ulv:int=0;
 			var flv:int=o.flyl;
+			var flyv:int=o.flyl;
 			flvv=o.flyv;
 
 			if (flv == 0) {
 
-				this.unitroll.setNum(flv);
+				this.unitroll.setNum(flv + 1);
 				this.levelroll.setNum(flv);
 				this.setEnbaleStar(1);
 
-				this.ulevel=1;
+				ulv=1;
 
 				winfo2=TableManager.getInstance().getWingTradeByID(flv + 1);
 
-				for (i=0; i < 5; i++) {
-					this.ptxt[i].text="+0%";
-					this.patxtArr[i].text="+" + winfo2.rate + "%";
+				for (i=0; i < pArr.length; i++) {
+					this.ptxt[pArr[i]].text="+0%";
+					this.patxtArr[pArr[i]].text="+" + winfo2.rate + "%";
 				}
 
 				flv=1;
@@ -268,13 +274,13 @@ package com.leyou.ui.wing {
 				this.levelroll.setNum(winfo.level);
 
 //				this.ulevel=(winfo.level == 10 ? 10 : winfo.level + 1);
-				this.ulevel=winfo2.level;
+				ulv=winfo2.level;
 
 				this.setEnbaleStar(this.ulevel);
 
-				for (i=0; i < 5; i++) {
-					this.ptxt[i].text="+" + winfo.rate + "%";
-					this.patxtArr[i].text="";
+				for (i=0; i < pArr.length; i++) {
+					this.ptxt[pArr[i]].text="+" + winfo.rate + "%";
+					this.patxtArr[pArr[i]].text="";
 				}
 
 				this.autoUpBtn.setToolTip(TableManager.getInstance().getSystemNotice(1227).content);
@@ -285,15 +291,15 @@ package com.leyou.ui.wing {
 				winfo=TableManager.getInstance().getWingTradeByID(flv);
 				winfo2=TableManager.getInstance().getWingTradeByID(flv + 1);
 
-				this.unitroll.setNum(winfo.unit);
-				this.levelroll.setNum(winfo.level);
-				this.ulevel=winfo2.level;
+				this.unitroll.setNum(winfo2.unit);
+				this.levelroll.setNum(winfo2.level);
+				ulv=winfo2.level;
 
 				this.setEnbaleStar(this.ulevel);
 
-				for (i=0; i < 5; i++) {
-					this.ptxt[i].text="+" + winfo.rate + "%";
-					this.patxtArr[i].text="+" + winfo2.rate + "%";
+				for (i=0; i < pArr.length; i++) {
+					this.ptxt[pArr[i]].text="+" + winfo.rate + "%";
+					this.patxtArr[pArr[i]].text="+" + winfo2.rate + "%";
 				}
 
 				flv+=1;
@@ -302,12 +308,26 @@ package com.leyou.ui.wing {
 			this.spr.scaleY=-(flvv / winfo2.exp);
 			this.tipsStr=StringUtil.substitute(TableManager.getInstance().getSystemNotice(1219).content, [flvv, winfo2.exp, int(flvv / winfo2.exp * 100) + "%"]);
 
-			if (o.flyl!= TableManager.getInstance().getWingTradeMaxIDByID()) {
-				this.x1ImgArr[this.ulevel - 1].alpha=1;
-				tweenmax=TweenMax.to(this.x1ImgArr[this.ulevel - 1], 1.5, {alpha: 0, overwrite: OverwriteManager.ALL_IMMEDIATE, repeat: -1, yoyo: true});
+			if (o.flyl != TableManager.getInstance().getWingTradeMaxIDByID()) {
+				if (ulv != this.ulevel) {
+					
+					if (tweenmax != null) {
+						tweenmax.pause();
+						tweenmax.kill();
+						
+						this.x1ImgArr[this.ulevel - 1].alpha=1;
+					}
+					
+					this.ulevel=ulv;
+					
+					this.x1ImgArr[this.ulevel - 1].alpha=1;
+					tweenmax=TweenMax.to(this.x1ImgArr[this.ulevel - 1], 1.5, {alpha: 0, overwrite: OverwriteManager.ALL_IMMEDIATE, repeat: -1, yoyo: true});
+				}
+				
+				
 			}
 
-			this.unitroll.x=109 + (30 - this.unitroll.width) / 2;
+			this.unitroll.x=140 + (30 - this.unitroll.width) / 2;
 			this.unitroll.y=83;
 
 			this.levelroll.x=169 + (30 - this.levelroll.width) / 2;
@@ -332,10 +352,8 @@ package com.leyou.ui.wing {
 					});
 				}
 
-				
-				
 			} else {
-				if (this.autoTime==0) {
+				if (this.autoTime == 0) {
 					this.upBtn.setActive(true, 1, true);
 					this.autoUpBtn.setActive(true, 1, true);
 				}
@@ -395,7 +413,7 @@ package com.leyou.ui.wing {
 		private function clearBtnState():void {
 			clearInterval(this.autoTime);
 			this.autoTime=0;
-
+			autoUpBtn.text=PropUtils.getStringById(1991);
 			this.upBtn.setActive(true, 1, true);
 			this.autoUpBtn.setActive(true, 1, true);
 		}
@@ -419,12 +437,12 @@ package com.leyou.ui.wing {
 
 			clearInterval(this.autoTime);
 			this.autoTime=0;
-			
+
 			if (this.lv != TableManager.getInstance().getWingTradeMaxIDByID()) {
 				this.upBtn.setActive(true, 1, true);
 				this.autoUpBtn.setActive(true, 1, true);
 			}
-			
+
 //			this.clearBtnState();
 		}
 

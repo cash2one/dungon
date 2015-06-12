@@ -12,10 +12,12 @@ package com.ace.game.scene.ui
 	import com.ace.ui.button.children.NormalButton;
 	import com.ace.ui.component.RollNumWidget;
 	import com.ace.ui.lable.Label;
+	import com.ace.utils.StringUtil;
 	import com.leyou.enum.ChatEnum;
 	import com.leyou.net.cmd.Cmd_EXPC;
 	import com.leyou.util.DateUtil;
 	import com.leyou.utils.ItemUtil;
+	import com.leyou.utils.PropUtils;
 	import com.leyou.utils.StringUtil_II;
 	
 	import flash.events.Event;
@@ -64,7 +66,7 @@ package com.ace.game.scene.ui
 			numWidget.loadSource("ui/num/{num}_lz.png");
 			numWidget.x = 65;
 			numWidget.y = 208;
-			numWidget.alingRound();
+			numWidget.alignRound();
 			addChild(numWidget);
 		}
 		
@@ -99,10 +101,11 @@ package com.ace.game.scene.ui
 			reviveWaitTime = 11000;
 			timeLbl.text = DateUtil.formatDate(new Date(obj.tick*1000), "YYYY-MM-DD HH24:MI:SS");
 			var des:String = "";
-			des += "您在"+obj.mn+"地图被"+ StringUtil_II.getColorStr(StringUtil_II.addEventString(obj.name, "["+obj.name+"]", true), ChatEnum.COLOR_USER) +"击败了";
+//			des += "您在"+obj.mn+"地图被"+ StringUtil_II.getColorStr(StringUtil_II.addEventString(obj.name, "["+obj.name+"]", true), ChatEnum.COLOR_USER) +"击败了";
+			des += StringUtil.substitute(PropUtils.getStringById(1515),[obj.mn,StringUtil_II.getColorStr(StringUtil_II.addEventString(obj.name, "["+obj.name+"]", true), ChatEnum.COLOR_USER)]);
 			var pl:Array = obj.pl;
 			if(pl.length > 0){
-				des+="掉落物品"
+				des+=PropUtils.getStringById(1516);
 				var l:int = pl.length;
 				for(var n:int = 0; n < l; n++){
 					var itemId:int = pl[n][0];
@@ -128,7 +131,7 @@ package com.ace.game.scene.ui
 				}
 				des+="."
 			}else{
-				des+=",没有掉落物品."
+				des+=","+PropUtils.getStringById(1517)
 			}
 			desLbl.htmlText = des;
 			startCount();

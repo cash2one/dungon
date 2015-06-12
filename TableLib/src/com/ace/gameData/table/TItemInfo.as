@@ -227,6 +227,12 @@ package com.ace.gameData.table {
 		 */
 		public var limitTime:int;
 
+		/**
+		 *	道具限定使用次数
+		 *	
+		 *	不填则表示可以无限次使用
+		 */
+		public var Item_degree:int;
 		
 		public function TItemInfo(data:XML=null) {
 			if (data == null)
@@ -269,7 +275,7 @@ package com.ace.gameData.table {
 			this.effect1=data.@effect1;
 			this.pay=data.@pay;
 			this.limitTime=data.@limitTime;
-
+			this.Item_degree=data.@Item_degree;
 		}
 
 

@@ -171,7 +171,13 @@ package com.leyou.ui.dungeonTeam {
 				return;
 
 			this.itemGrid.resetGrid();
-			this.itemGrid.updataInfo(TableManager.getInstance().getItemInfo(tcopyinfo.M_Item1) || TableManager.getInstance().getEquipInfo(tcopyinfo.M_Item1));
+			var t:Object;
+			
+			if(TableManager.getInstance().getItemInfo(tcopyinfo.M_Item1))
+			t=TableManager.getInstance().getItemInfo(tcopyinfo.M_Item1);
+			else
+			t=TableManager.getInstance().getEquipInfo(tcopyinfo.M_Item1)
+			this.itemGrid.updataInfo(t);
 
 			if (tcopyinfo.MI_Num1 > 1)
 				this.itemGrid.setNum(tcopyinfo.MI_Num1 + "");
@@ -204,7 +210,8 @@ package com.leyou.ui.dungeonTeam {
 			}
 
 			for (i=0; i < items.length; i++) {
-				this.itemsGrid[i].updataInfo(TableManager.getInstance().getItemInfo(items[i][0]) || TableManager.getInstance().getEquipInfo(items[i][0]));
+				(t=TableManager.getInstance().getItemInfo(items[i][0])) || (t=TableManager.getInstance().getEquipInfo(items[i][0]))
+				this.itemsGrid[i].updataInfo(t);
 				this.itemsGrid[i].playName=items[i][2];
 
 				if (int(items[i][1]) > 1)
@@ -322,8 +329,11 @@ package com.leyou.ui.dungeonTeam {
 			if (img.parent == this)
 				this.removeChild(img);
 
+			
+			var t:Object;
 			if (i > 3) {
-				this.itemsGrid[i].updataInfo(TableManager.getInstance().getItemInfo(j) || TableManager.getInstance().getEquipInfo(j));
+				(t=TableManager.getInstance().getItemInfo(j) || (t=TableManager.getInstance().getEquipInfo(j)));
+				this.itemsGrid[i].updataInfo(t);
 			} else {
 				this.itemsList[i].updateGridList(j);
 			}

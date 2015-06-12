@@ -84,14 +84,14 @@ package com.leyou.ui.badge.child {
 			this.wfLbl=this.getUIbyID("wfLbl") as Label;
 			this.bjLbl=this.getUIbyID("bjLbl") as Label;
 			this.sxLbl=this.getUIbyID("sxLbl") as Label;
-			this.fgLbl=this.getUIbyID("fgLbl") as Label;
+//			this.fgLbl=this.getUIbyID("fgLbl") as Label;
 			this.mzLbl=this.getUIbyID("mzLbl") as Label;
 			this.spLbl=this.getUIbyID("spLbl") as Label;
-			this.ffLbl=this.getUIbyID("ffLbl") as Label;
+//			this.ffLbl=this.getUIbyID("ffLbl") as Label;
 			this.bsLbl=this.getUIbyID("bsLbl") as Label;
 			this.shLbl=this.getUIbyID("shLbl") as Label;
 			this.smLbl=this.getUIbyID("smLbl") as Label;
-			this.flLbl=this.getUIbyID("flLbl") as Label;
+//			this.flLbl=this.getUIbyID("flLbl") as Label;
 
 			this.imgBg=this.getUIbyID("imgBg") as Image;
 
@@ -198,14 +198,14 @@ package com.leyou.ui.badge.child {
 				this.wfLbl.text=int(info.p_defense) + "";
 				this.bjLbl.text=int(info.crit) + "";
 				this.sxLbl.text=int(info.critReduce) + "";
-				this.fgLbl.text=int(info.m_attack) + "";
+//				this.fgLbl.text=int(info.m_attack) + "";
 				this.mzLbl.text=int(info.hit) + "";
 				this.spLbl.text=int(info.dodge) + "";
-				this.ffLbl.text=int(info.m_defense) + "";
+//				this.ffLbl.text=int(info.m_defense) + "";
 				this.bsLbl.text=int(info.critDam) + "";
 				this.shLbl.text=int(info.critDamReduce) + "";
 				this.smLbl.text=int(info.extraHP) + "";
-				this.flLbl.text=int(info.extraMP) + "";
+//				this.flLbl.text=int(info.extraMP) + "";
 
 			} else {
 
@@ -213,14 +213,14 @@ package com.leyou.ui.badge.child {
 				this.wfLbl.text="0";
 				this.bjLbl.text="0";
 				this.sxLbl.text="0";
-				this.fgLbl.text="0";
+//				this.fgLbl.text="0";
 				this.mzLbl.text="0";
 				this.spLbl.text="0";
-				this.ffLbl.text="0";
+//				this.ffLbl.text="0";
 				this.bsLbl.text="0";
 				this.shLbl.text="0";
 				this.smLbl.text="0";
-				this.flLbl.text="0";
+//				this.flLbl.text="0";
 
 			}
 

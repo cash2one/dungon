@@ -2,6 +2,7 @@ package com.leyou.ui.skill.childs {
 
 	import com.ace.enum.FontEnum;
 	import com.ace.enum.ItemEnum;
+	import com.ace.enum.PlayerEnum;
 	import com.ace.enum.PriorityEnum;
 	import com.ace.enum.TipEnum;
 	import com.ace.game.backpack.GridBase;
@@ -23,7 +24,7 @@ package com.leyou.ui.skill.childs {
 	import com.leyou.manager.PopupManager;
 	import com.leyou.net.cmd.Cmd_Skill;
 	import com.leyou.utils.FilterUtil;
-	
+
 	import flash.display.Sprite;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
@@ -34,6 +35,8 @@ package com.leyou.ui.skill.childs {
 		public var sta:int; //现在处于什么状态
 
 		private var autoEffect:SwfLoader;
+
+		public var skillIndex:int=0;
 
 		public function SkillGrid() {
 
@@ -172,10 +175,40 @@ package com.leyou.ui.skill.childs {
 			if (this.gridType == ItemEnum.TYPE_GRID_SKILL || this.dataId == -1)
 				return;
 
-//			UIManager.getInstance().tipsSkillWnd.updateInfo(SkillBar(this.parent).id, this.dataId);
-//			UIManager.getInstance().tipsSkillWnd.show();
-//			UIManager.getInstance().tipsSkillWnd.x=$x;
-//			UIManager.getInstance().tipsSkillWnd.y=$y;
+			var skill:Array=TableManager.getInstance().getSkillArr(MyInfoManager.getInstance().skilldata.skillItems[this.skillIndex][1]);
+			skill.sortOn("id", Array.CASEINSENSITIVE | Array.NUMERIC);
+
+			var skills:Array=MyInfoManager.getInstance().skilldata.skillItems[this.skillIndex];
+			var k:int=skills.indexOf(2, 3) - 2;
+
+			if (k < 0 && skills.length == 7 && (skills[6]).split("_")[1] == 2) {
+				k=(skills[6]).split("_")[0];
+			}
+
+			k=k < 0 ? 0 : k;
+
+			var tipInfo:TipSkillInfo=new TipSkillInfo();
+			tipInfo.skillInfo=skill[k];
+
+			tipInfo.hasRune=false;
+//			tipInfo.level=MyInfoManager.getInstance().skilldata.skillItems[this.renderArr.indexOf(evt.target)][2];
+			tipInfo.level=int(tipInfo.skillInfo.autoLv);
+
+			if (skills[0] == 1)
+				tipInfo.skillLv=skills[2]; //int(tipInfo.skillInfo.autoLv);
+			else
+				tipInfo.skillLv=0;
+
+//			tipInfo.runde=MyInfoManager.getInstance().skilldata.skillItems[this.renderArr.indexOf(evt.target)].indexOf(2, 3) - 2;
+
+			tipInfo.runde=skill.indexOf(tipInfo.skillInfo);
+
+			if (tipInfo.runde <= 0)
+				ToolTipManager.getInstance().show(TipEnum.TYPE_SKILL, tipInfo, new Point($x + 15, $y+ 15));
+			else
+				ToolTipManager.getInstance().showII([TipEnum.TYPE_SKILL, TipEnum.TYPE_RUNE], [tipInfo, tipInfo], PlayerEnum.DIR_S, new Point(0, 0), new Point($x+ 15, $y+ 15));
+
+
 		}
 
 		override public function mouseOutHandler():void {

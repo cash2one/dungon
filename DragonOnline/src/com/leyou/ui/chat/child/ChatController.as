@@ -25,6 +25,7 @@ package com.leyou.ui.chat.child {
 	import com.ace.ui.notice.NoticeManager;
 	import com.ace.ui.tabbar.TabbarModel;
 	import com.ace.ui.tabbar.children.TabBar;
+	import com.ace.utils.StringUtil;
 	import com.adobe.serialization.json.JSON;
 	import com.greensock.TweenMax;
 	import com.leyou.data.chat_II.ChatChannelInfo;
@@ -42,8 +43,9 @@ package com.leyou.ui.chat.child {
 	import com.leyou.net.cmd.Cmd_Tm;
 	import com.leyou.utils.ChatUtil;
 	import com.leyou.utils.ItemUtil;
+	import com.leyou.utils.PropUtils;
 	import com.leyou.utils.StringUtil_II;
-	
+
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.events.TextEvent;
@@ -51,6 +53,7 @@ package com.leyou.ui.chat.child {
 	import flash.system.System;
 
 	public class ChatController extends AutoSprite implements IMenu {
+
 		private static const PRIVATEBAR_HEIGHT:int=20;
 
 		private var channelCd:ComboBox;
@@ -104,7 +107,7 @@ package com.leyou.ui.chat.child {
 		private var tips:TipsInfo;
 
 		private var currPlayer:String;
-		
+
 		private var input:ChatInputText;
 
 		public function ChatController() {
@@ -157,18 +160,18 @@ package com.leyou.ui.chat.child {
 			menuArr.push(new MenuInfo(ChatEnum.CLICK_MENU_II[9], ChatEnum.TRACK));
 			menuArr.push(new MenuInfo(ChatEnum.CLICK_MENU_II[10], ChatEnum.DUEL));
 			menuArr.push(new MenuInfo(ChatEnum.CLICK_MENU_II[7], ChatEnum.SUE));
-			
-			var index:int = getChildIndex(chatInput);
+
+			var index:int=getChildIndex(chatInput);
 			removeChild(chatInput);
 
 //			chatInput.input.textColor=ChatEnum.COLOR_VAL_WORLD;
 //			chatInput.clearEvent();
 //			chatInput.closeEvent();
-			
-			input = new ChatInputText(chatInput.width, chatInput.height);
-			input.defaultTextFormat = chatInput.input.defaultTextFormat;
-			input.x = chatInput.x;
-			input.y = chatInput.y;
+
+			input=new ChatInputText(chatInput.width, chatInput.height);
+			input.defaultTextFormat=chatInput.input.defaultTextFormat;
+			input.x=chatInput.x;
+			input.y=chatInput.y;
 			addChildAt(input, index);
 			input.input.textColor=ChatEnum.COLOR_VAL_WORLD;
 		}
@@ -196,7 +199,7 @@ package com.leyou.ui.chat.child {
 			_viewChannel=(0 == channelBar.turnOnIndex) ? ChatEnum.CHANNEL_COMPOSITE : channelCd.value.uid;
 			var channel:ChatChannelInfo=messageStore.getChannel(_viewChannel);
 			view.switchToChannel(channel, onLinkClick);
-			if(ChatEnum.CHANNEL_PRIVATE == _viewChannel){
+			if (ChatEnum.CHANNEL_PRIVATE == _viewChannel) {
 				stopFlashing();
 			}
 		}
@@ -346,7 +349,7 @@ package com.leyou.ui.chat.child {
 		 *
 		 */
 		public function sendMsg():void {
-			var cmd:String = input.input.text;
+			var cmd:String=input.input.text;
 			// 临时指引显示指令
 //			if(-1 < cmd.indexOf("@gd|")){
 //				var index:int = cmd.indexOf("|");
@@ -370,9 +373,9 @@ package com.leyou.ui.chat.child {
 			// 若均为不可见字符返回
 			var content:String=input.input.text;
 			content=StringUtil_II.trim(content);
-			
+
 			var context1:String=content;
-			
+
 			content=StringUtil_II.getFilterWord(content);
 			if (0 == content.length) {
 				reset();
@@ -388,28 +391,28 @@ package com.leyou.ui.chat.child {
 
 			// 处理频道CD时间
 			var channel:int=int(channelCd.value.uid);
-			if(ChatEnum.CHANNEL_WORLD == channel){
+			if (ChatEnum.CHANNEL_WORLD == channel) {
 				var o:Object;
 				var chatContent:ChatContentInfo;
-				if(Core.me.info.level < Core.SPEECK_LEVEL){
-					o = {i:"", c:"此频道需要等级达到35级才能发言!"};
-					chatContent = ChatUtil.decode(o);
+				if (Core.me.info.level < Core.SPEECK_LEVEL) {
+					o={i: "", c: StringUtil.substitute(PropUtils.getStringById(1655), [Core.SPEECK_LEVEL])};
+					chatContent=ChatUtil.decode(o);
 					pushContent(chatContent);
 					return;
 				}
 				var tick:Number=tickRecords[channel];
 				var currTick:Number=new Date().time;
 				var dt:Number=currTick - tick;
-				if(dt < 5000){
-					var remain:int = Math.ceil((5000-dt)/1000);
-					o = {i:"", c:"您说话太快,请"+remain+"秒后再试!"};
-					chatContent = ChatUtil.decode(o);
+				if (dt < 5000) {
+					var remain:int=Math.ceil((5000 - dt) / 1000);
+					o={i: "", c: StringUtil.substitute(PropUtils.getStringById(1656), [remain])};
+					chatContent=ChatUtil.decode(o);
 					pushContent(chatContent);
 					return;
 				}
 			}
-			
-			
+
+
 			// 个人聊天记录添加
 			while (myRecord.length >= ChatEnum.MYRECORD_REMAIN) {
 				myRecord.pop();
@@ -454,8 +457,8 @@ package com.leyou.ui.chat.child {
 					break;
 			}
 			// 字符数量限制
-			var charCount:int = content.length;
-			if(charCount > 128){
+			var charCount:int=content.length;
+			if (charCount > 128) {
 				return false;
 			}
 			// 非法信息过滤
@@ -585,35 +588,35 @@ package com.leyou.ui.chat.child {
 		public function onLinkClick(evt:TextEvent):void {
 			var content:String=evt.text;
 			var type:int=int(content.substring(0, content.indexOf("+")));
-			var linkValue:String=content.substring(content.indexOf("{"), content.indexOf("}")+1);
+			var linkValue:String=content.substring(content.indexOf("{"), content.indexOf("}") + 1);
 			var linkData:Object=null;
 			switch (type) {
 				case ChatEnum.LINK_TYPE_ACTIVE:
 					// 格式[type|[value...]]
-					linkValue = linkValue.substr(1, linkValue.length-2);
-					var valueArr:Array = linkValue.split("|");
+					linkValue=linkValue.substr(1, linkValue.length - 2);
+					var valueArr:Array=linkValue.split("|");
 					openUI(valueArr[0], valueArr[1].split(","));
 					break;
 				case ChatEnum.LINK_TYPE_ITEM:
 					linkData=com.adobe.serialization.json.JSON.decode(linkValue);
 					tips.clear();
 					tips.unserialize(linkData);
-					var info:TEquipInfo = TableManager.getInstance().getEquipInfo(tips.itemid);
-					if(null != info){
-						if(10 == info.classid){
+					var info:TEquipInfo=TableManager.getInstance().getEquipInfo(tips.itemid);
+					if (null != info) {
+						if (10 == info.classid) {
 							ToolTipManager.getInstance().show(TipEnum.TYPE_GEM_OTHER, tips, new Point(stage.mouseX, stage.mouseY));
 							return;
 						}
-						var tipType:int = tips.hasOwner() ? TipEnum.TYPE_EQUIP_ITEM : TipEnum.TYPE_EMPTY_ITEM;
-						var wear:Boolean = ItemUtil.showDiffTips(tipType, tips, new Point(stage.mouseX, stage.mouseY));
-						if(!wear){
-							if(tips.hasOwner()){
-								ToolTipManager.getInstance().show(TipEnum.TYPE_EQUIP_ITEM, tips, new Point(stage.mouseX, stage.mouseY));							
-							}else{
+						var tipType:int=tips.hasOwner() ? TipEnum.TYPE_EQUIP_ITEM : TipEnum.TYPE_EMPTY_ITEM;
+						var wear:Boolean=ItemUtil.showDiffTips(tipType, tips, new Point(stage.mouseX, stage.mouseY));
+						if (!wear) {
+							if (tips.hasOwner()) {
+								ToolTipManager.getInstance().show(TipEnum.TYPE_EQUIP_ITEM, tips, new Point(stage.mouseX, stage.mouseY));
+							} else {
 								ToolTipManager.getInstance().show(TipEnum.TYPE_EMPTY_ITEM, tips, new Point(stage.mouseX, stage.mouseY));
 							}
 						}
-					}else{
+					} else {
 						ToolTipManager.getInstance().show(TipEnum.TYPE_EQUIP_ITEM, tips, new Point(stage.mouseX, stage.mouseY));
 					}
 					break;
@@ -628,23 +631,23 @@ package com.leyou.ui.chat.child {
 				case ChatEnum.LINK_TYPE_VIP:
 					break;
 				case ChatEnum.LINK_TYPE_TEAM:
-					if(ConfigEnum.UnionOpenLv > Core.me.info.level){
+					if (ConfigEnum.UnionOpenLv > Core.me.info.level) {
 						NoticeManager.getInstance().broadcastById(4110);
 					}
 					UILayoutManager.getInstance().open(WindowEnum.TEAM);
 					break;
 				case ChatEnum.LINK_TYPE_GUILD:
-					if(Core.me.info.level >= ConfigEnum.union1){
+					if (Core.me.info.level >= ConfigEnum.union1) {
 						UILayoutManager.getInstance().open_II(WindowEnum.GUILD);
 					}
 					break;
 			}
 		}
-		
-		private function openUI(type:String, values:Array):void{
-			switch(type){
+
+		private function openUI(type:String, values:Array):void {
+			switch (type) {
 				case "usp":
-					if(Core.me.info.level >= ConfigEnum.union1){
+					if (Core.me.info.level >= ConfigEnum.union1) {
 						UILayoutManager.getInstance().open_II(WindowEnum.GUILD);
 						UIManager.getInstance().guildWnd.setTabIndex(5)
 					}
@@ -653,20 +656,21 @@ package com.leyou.ui.chat.child {
 					UILayoutManager.getInstance().open_II(WindowEnum.MYSTORE);
 					break;
 				case "scp":
-					if((Core.me.info.level >= ConfigEnum.StoryCopyOpenLevel) && (SceneEnum.SCENE_TYPE_PTCJ == MapInfoManager.getInstance().type)){
-						UIOpenBufferManager.getInstance().open(WindowEnum.STORYCOPY);
+					if ((Core.me.info.level >= ConfigEnum.StoryCopyOpenLevel) && (SceneEnum.SCENE_TYPE_PTCJ == MapInfoManager.getInstance().type)) {
+						UILayoutManager.getInstance().open(WindowEnum.DUNGEON_TEAM);
 					}
 					break;
 				case "ol":
-					if(Core.me.info.level >= ConfigEnum.WelfareOpenLvel){
+					if (Core.me.info.level >= ConfigEnum.WelfareOpenLvel) {
 						UIOpenBufferManager.getInstance().open(WindowEnum.WELFARE);
 						UIManager.getInstance().creatWindow(WindowEnum.WELFARE);
 						UIManager.getInstance().welfareWnd.changeTable(1);
 					}
 					break;
 				case "expc":
-					if((Core.me.info.level >= ConfigEnum.ExpCopyOpenLevel) && (SceneEnum.SCENE_TYPE_PTCJ == MapInfoManager.getInstance().type)){
-						UIOpenBufferManager.getInstance().open(WindowEnum.EXPCOPY);
+					if ((Core.me.info.level >= ConfigEnum.ExpCopyOpenLevel) && (SceneEnum.SCENE_TYPE_PTCJ == MapInfoManager.getInstance().type)) {
+//						UIOpenBufferManager.getInstance().open(WindowEnum.EXPCOPY);
+						UILayoutManager.getInstance().open_II(WindowEnum.DUNGEON_TEAM);
 					}
 					break;
 				case "lbox":
@@ -676,15 +680,19 @@ package com.leyou.ui.chat.child {
 					UILayoutManager.getInstance().open(WindowEnum.VIP);
 					break;
 				case "ddsc":
-					if(Core.me.info.vipLv <= 0){
-						UILayoutManager.getInstance().open(WindowEnum.FIRST_PAY);
+					if (Core.me.info.vipLv <= 0) {
+						if (1 == DataManager.getInstance().commonData.payStatus) {
+							UILayoutManager.getInstance().open(WindowEnum.FIRSTGIFT);
+						} else if (2 == DataManager.getInstance().commonData.payStatus) {
+							UILayoutManager.getInstance().open(WindowEnum.FIRST_PAY);
+						}
 					}
 					break;
 				case "fcz":
 					UIOpenBufferManager.getInstance().open(WindowEnum.FIRST_RETURN);
 					break;
 				case "cptm":
-					if(SceneEnum.SCENE_TYPE_PTCJ == MapInfoManager.getInstance().type){
+					if (SceneEnum.SCENE_TYPE_PTCJ == MapInfoManager.getInstance().type) {
 						Cmd_CpTm.cmTeamCopyAdd(values[0]);
 						UILayoutManager.getInstance().open_II(WindowEnum.DUNGEON_TEAM);
 					}
@@ -693,13 +701,13 @@ package com.leyou.ui.chat.child {
 					UIOpenBufferManager.getInstance().open(WindowEnum.VENDUE);
 					break;
 				case "warc":
-					if(SceneEnum.SCENE_TYPE_PTCJ == MapInfoManager.getInstance().type){
+					if (SceneEnum.SCENE_TYPE_PTCJ == MapInfoManager.getInstance().type) {
 						UIOpenBufferManager.getInstance().open(WindowEnum.GUILD_BATTLE, 1);
 					}
 					break;
 			}
 		}
-		
+
 		/**
 		 * <T>处理菜单的操作</T>
 		 *
@@ -764,18 +772,18 @@ package com.leyou.ui.chat.child {
 		 */
 		public function pushContent(content:ChatContentInfo):void {
 			// 检测是否存在于黑名单
-			if((ChatEnum.CHANNEL_HORN != content.type) && DataManager.getInstance().friendData.testInBlack(content.fromUserName)){
+			if ((ChatEnum.CHANNEL_HORN != content.type) && DataManager.getInstance().friendData.testInBlack(content.fromUserName)) {
 				return;
 			}
 			// 是否是玩家发言
 			if (content.palyerSpeak()) {
 				messageStore.pushContent(content, content.type);
-				if(ChatEnum.CHANNEL_COMPOSITE != content.type){
+				if (ChatEnum.CHANNEL_COMPOSITE != content.type) {
 					messageStore.pushContent(content, ChatEnum.CHANNEL_COMPOSITE);
 				}
 			}
 			// 是否为私聊,私聊标签需要闪烁
-			if((ChatEnum.CHANNEL_PRIVATE == content.type) && (ChatEnum.CHANNEL_PRIVATE != _viewChannel) && (ChatEnum.CHANNEL_COMPOSITE != _viewChannel)){
+			if ((ChatEnum.CHANNEL_PRIVATE == content.type) && (ChatEnum.CHANNEL_PRIVATE != _viewChannel) && (ChatEnum.CHANNEL_COMPOSITE != _viewChannel)) {
 				privateFlashing();
 			}
 			switch (content.type) {
@@ -795,20 +803,20 @@ package com.leyou.ui.chat.child {
 					break;
 			}
 		}
-		
-		private function privateFlashing():void{
-			var btn:TabButton = channelBar.getTabButton(2);
-			if(!TweenMax.isTweening(btn)){
+
+		private function privateFlashing():void {
+			var btn:TabButton=channelBar.getTabButton(2);
+			if (!TweenMax.isTweening(btn)) {
 				TweenMax.to(btn, 1.5, {glowFilter: {color: 0xFFD700, alpha: 1, blurX: 10, blurY: 10, strength: 2}, yoyo: true, repeat: -1});
 			}
 		}
-		
-		private function stopFlashing():void{
-			var btn:TabButton = channelBar.getTabButton(2);
-			if(TweenMax.isTweening(btn)){
+
+		private function stopFlashing():void {
+			var btn:TabButton=channelBar.getTabButton(2);
+			if (TweenMax.isTweening(btn)) {
 				TweenMax.killTweensOf(btn);
 			}
-			btn.filters = [];
+			btn.filters=[];
 		}
 
 		/**
@@ -823,9 +831,9 @@ package com.leyou.ui.chat.child {
 			if (ChatEnum.CHANNEL_COMPOSITE == _viewChannel) {
 				var config:ChatConfig=UIManager.getInstance().chatConfigWnd;
 				// 是否接收该频道消息
-				limit = !config.getLimit(content.type);
+				limit=!config.getLimit(content.type);
 			}
-			return (limit || (_viewChannel == content.type/* || ChatEnum.CHANNEL_PRIVATE == content.type*/) || !content.palyerSpeak());
+			return (limit || (_viewChannel == content.type /* || ChatEnum.CHANNEL_PRIVATE == content.type*/) || !content.palyerSpeak());
 		}
 
 		/**

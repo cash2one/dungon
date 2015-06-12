@@ -18,6 +18,7 @@ package com.leyou.ui.monsterInvade.child {
 	import com.leyou.enum.ConfigEnum;
 	import com.leyou.manager.PopupManager;
 	import com.leyou.net.cmd.Cmd_Wbs;
+	import com.leyou.utils.PropUtils;
 	
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
@@ -74,7 +75,7 @@ package com.leyou.ui.monsterInvade.child {
 			
 			
 			if (SceneEnum.SCENE_TYPE_RQCJ == MapInfoManager.getInstance().type) {
-				wnd=PopupManager.showConfirm("离开副本将导致你的积分清零,\n导致无法领取排名奖励,\n是否确定退出?", function():void {
+				wnd=PopupManager.showConfirm(PropUtils.getStringById(1801), function():void {
 					Cmd_Wbs.cmQuitActive();
 					NoticeManager.getInstance().stopCount();
 				}, null, false, "monsterExit");
@@ -84,7 +85,7 @@ package com.leyou.ui.monsterInvade.child {
 		}
 
 		private function onMouseOver(e:MouseEvent):void {
-			ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, "您将花费金币获取龙神的祝福&#13;祝福有可能失败", new Point(e.stageX, e.stageY));
+			ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, PropUtils.getStringById(1802), new Point(e.stageX, e.stageY));
 		}
 
 		private function onMouseOut(e:MouseEvent):void {
@@ -95,7 +96,7 @@ package com.leyou.ui.monsterInvade.child {
 
 			switch (e.target.name) {
 				case "exitBtn":
-					wnd=PopupManager.showConfirm("离开副本将导致你的积分清零,\n导致无法领取排名奖励,\n是否确定退出?", function():void {
+					wnd=PopupManager.showConfirm(PropUtils.getStringById(1801), function():void {
 						Cmd_Wbs.cmQuitActive();
 					}, null, false, "monsterExit");
 					break;

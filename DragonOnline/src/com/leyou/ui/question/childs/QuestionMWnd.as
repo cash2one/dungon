@@ -7,6 +7,7 @@ package com.leyou.ui.question.childs {
 	import com.leyou.manager.TimerManager;
 	import com.leyou.util.DateUtil;
 	import com.leyou.utils.FilterUtil;
+	import com.leyou.utils.PropUtils;
 	import com.leyou.utils.StringUtil_II;
 	import com.leyou.utils.TimeUtil;
 
@@ -91,14 +92,14 @@ package com.leyou.ui.question.childs {
 			
 			if (v == 2) {
 				
-				this.noticeLbl.text="您答错了，下一题继续努力";
+				this.noticeLbl.text=PropUtils.getStringById(1830);
 				this.timeTxt.visible=false;
 				this.noticeLbl.visible=true;
 				this.timeLbl.visible=false;
 				
 			} else if (v == 1) {
 				
-				this.noticeLbl.text="恭喜你答对了，请再接再厉";
+				this.noticeLbl.text=PropUtils.getStringById(1831);
 				this.timeTxt.visible=false;
 				this.noticeLbl.visible=true;
 
@@ -106,7 +107,7 @@ package com.leyou.ui.question.childs {
 				
 			} else if (v == 0) {
 				
-				this.timeTxt.text="剩余时间:";
+				this.timeTxt.text=PropUtils.getStringById(1832);
 				this.timeTxt.visible=true;
 				this.noticeLbl.visible=false;
 				this.timeLbl.visible=true;

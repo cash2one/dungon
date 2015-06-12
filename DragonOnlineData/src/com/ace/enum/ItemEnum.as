@@ -47,10 +47,10 @@ package com.ace.enum {
 		public static const GRID_SPACE:int=3;
 
 		public static const BACKPACK_GRID_TOTAL:int=70;
-		public static var BACKPACK_GRID_OPEN:int=28;
+		public static var BACKPACK_GRID_OPEN:int=42;
 
 		public static const STORAGE_GRIDE_TOTAL:int=70;
-		public static var STORAGE_GRIDE_OPEN:int=28;
+		public static var STORAGE_GRIDE_OPEN:int=40;
 
 
 		public static const TIP_PX:int=12;
@@ -210,6 +210,9 @@ package com.ace.enum {
 		
 		// 荣誉
 		public static const HONOUR_VIR_ITEM_ID:int = 65526;
+		
+		// 竞技场积分
+		public static const CREDIT_VIR_ITEM_ID:int = 65525;
 
 	}
 }

@@ -65,6 +65,8 @@ package com.leyou.ui.farm
 			landID = landId
 			ybRBtn.text = "    "+info.cost;
 			bybRBtn.text = "    "+ info.bcost;
+			type = 0;
+			bybRBtn.turnOn();
 		}
 	}
 }

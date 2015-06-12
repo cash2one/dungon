@@ -5,6 +5,7 @@ package com.leyou.net.cmd {
 	import com.ace.manager.UIManager;
 	import com.ace.ui.setting.AssistWnd;
 	import com.leyou.data.playerSkill.SkillInfo;
+	import com.leyou.enum.CmdEnum;
 	import com.leyou.net.NetGate;
 
 
@@ -142,6 +143,17 @@ runepos   -- 需要激活的符文位置(从0开始)
 		 */
 		public static function cm_sklChange(index:int, pos:int, etype:int=0):void {
 			NetGate.getInstance().send("skl|C" + index + "," + pos + "," + etype);
+		}
+		
+		/**
+		 *升级人物技能
+上行：skl|Usindex
+ 
+		 * @param index
+		 * 
+		 */		
+		public static function cm_sklUpgrade(index:int):void {
+			NetGate.getInstance().send(CmdEnum.CM_SKL_U+index);
 		}
 
 

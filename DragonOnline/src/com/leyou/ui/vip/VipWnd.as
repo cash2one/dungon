@@ -69,7 +69,7 @@ package com.leyou.ui.vip
 			progressCImg = getUIbyID("progressCImg") as Image;
 			receiveBtn = getUIbyID("receiveBtn") as ImgButton;
 			tecentVipLbl = getUIbyID("tecentVipLbl") as Label;
-			tecentVipLbl.visible = Core.isTencent;
+			tecentVipLbl.visible = Core.TX_VIPTIP;
 			if(!Core.PAY_OPEN){
 				payBtn.setActive(false, 1, true);
 			}else{
@@ -157,11 +157,11 @@ package com.leyou.ui.vip
 			var vipInfo:TVIPDetailInfo = TableManager.getInstance().getVipDetailInfo(vipLv);
 			var nVipInfo:TVIPDetailInfo = TableManager.getInstance().getVipDetailInfo(vipLv+1);
 			var content:String = TableManager.getInstance().getSystemNotice(6002).content;
-			if(Core.isTencent && (vipLv <= 0)){
-				desLbl.visible = false;
-				setVipProgress(0);
-			}else{
-				desLbl.visible = true;
+//			if(Core.isTencent && (vipLv <= 0)){
+//				desLbl.visible = false;
+//				setVipProgress(0);
+//			}else{
+//				desLbl.visible = true;
 				var rate:Number = 0;
 				if((null != vipInfo) && (null != nVipInfo)){
 					content = StringUtil.substitute(content, nVipInfo.cost - data.cnum, vipLv+1);
@@ -181,7 +181,7 @@ package com.leyou.ui.vip
 					desLbl.visible = false;
 					setVipProgress(1);
 				}
-			}
+//			}
 			rightsRender.switchToObtainable();
 		}
 	}

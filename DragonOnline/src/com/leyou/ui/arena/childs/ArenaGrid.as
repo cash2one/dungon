@@ -10,15 +10,16 @@ package com.leyou.ui.arena.childs {
 	import com.leyou.data.tips.TipsInfo;
 	import com.leyou.ui.backpack.child.BackpackGrid;
 	import com.leyou.utils.FilterUtil;
+	import com.leyou.utils.PropUtils;
 
 	import flash.geom.Point;
 
 	public class ArenaGrid extends BackpackGrid {
 
-		private var num:int;
-		private var type:int=0;
+		protected var num:int;
+		protected var type:int=0;
 
-		private var tips:TipsInfo;
+		protected var tips:TipsInfo;
 
 		public function ArenaGrid() {
 			super(-1);
@@ -72,6 +73,7 @@ package com.leyou.ui.arena.childs {
 
 			this.stopMc();
 			var info:TItemInfo=TableManager.getInstance().getItemInfo(65534);
+			
 			if (info.effect != null && info.effect != "0")
 				this.playeMc(int(info.effect));
 
@@ -80,12 +82,27 @@ package com.leyou.ui.arena.childs {
 			this.addChild(this.numLbl);
 		}
 
+		public function updateHounur():void {
+			this.iconBmp.updateBmp("ico/items/honor.png");
+			this.iconBmp.x=this.iconBmp.y=(ItemEnum.ITEM_BG_WIDTH - ItemEnum.ITEM_ICO_WIDTH) / 2;
+			this.iconBmp.setWH(36, 36);
+
+			this.stopMc();
+			var info:TItemInfo=TableManager.getInstance().getItemInfo(65526);
+			if (info.effect != null && info.effect != "0")
+				this.playeMc(int(info.effect));
+
+			this.dataId=65526;
+			this.type=4;
+			this.addChild(this.numLbl);
+		}
+
 		public function setNum(num:int):void {
 			if (num > 10000) {
-				if (num / 10000 > 100)
-					this.numLbl.text=int(num / 10000) + "万";
+				if (num / 10000 > 100 || num % 10000 == 0)
+					this.numLbl.text=int(num / 10000) + PropUtils.getStringById(1532);
 				else
-					this.numLbl.text=(num / 10000).toFixed(1) + "万";
+					this.numLbl.text=(num / 10000).toFixed(1) + PropUtils.getStringById(1532);
 			} else
 				this.numLbl.text=num + "";
 
@@ -125,17 +142,20 @@ package com.leyou.ui.arena.childs {
 //				this.tips.itemid=this.dataId;
 //				ToolTipManager.getInstance().show(TipEnum.TYPE_EQUIP_ITEM, this.tips, new Point($x, $y));
 //			} else {
-				switch (this.type) {
-					case 1:
-						ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, "金币:" + this.num, new Point($x, $y));
-						break;
-					case 2:
-						ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, "魂力:" + this.num, new Point($x, $y));
-						break;
-					case 3:
-						ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, "经验:" + this.num, new Point($x, $y));
-						break;
-				}
+			switch (this.type) {
+				case 1:
+					ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, PropUtils.getStringById(32) + ":" + this.num, new Point($x, $y));
+					break;
+				case 2:
+					ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, PropUtils.getStringById(29) + ":" + this.num, new Point($x, $y));
+					break;
+				case 3:
+					ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, PropUtils.getStringById(20) + ":" + this.num, new Point($x, $y));
+					break;
+				case 4:
+					ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, PropUtils.getStringById(2171) + ":" + this.num, new Point($x, $y));
+					break;
+			}
 //			}
 
 		}

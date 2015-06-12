@@ -34,7 +34,7 @@ package com.leyou.ui.task.child {
 	import com.leyou.net.cmd.Cmd_Go;
 	import com.leyou.net.cmd.Cmd_Tsk;
 	import com.leyou.utils.FilterUtil;
-	
+
 	import flash.events.MouseEvent;
 	import flash.events.TextEvent;
 	import flash.geom.Point;
@@ -127,7 +127,10 @@ package com.leyou.ui.task.child {
 			this.taskTargetLbl.addEventListener(TextEvent.LINK, onLinkClick);
 			this.taskTargetLbl.mouseEnabled=true;
 
-			this.loopAddBtn.setToolTip(StringUtil.substitute(TableManager.getInstance().getSystemNotice(2301).content, [ConfigEnum.taskDailyCost1]));
+			if (Core.isSF)
+				this.loopAddBtn.setToolTip(StringUtil.substitute(TableManager.getInstance().getSystemNotice(30002).content, [ConfigEnum.taskDailyCost1.split("|")[0]]));
+			else
+				this.loopAddBtn.setToolTip(StringUtil.substitute(TableManager.getInstance().getSystemNotice(2301).content, [ConfigEnum.taskDailyCost1.split("|")[0]]));
 
 			this.taskTargeNpctLbl.filters=[FilterUtil.showBorder(0x000000)];
 			this.taskTargetLbl.filters=[FilterUtil.showBorder(0x000000)];
@@ -147,6 +150,8 @@ package com.leyou.ui.task.child {
 
 		private function onClick(e:MouseEvent):void {
 
+			var str:String;
+
 			switch (e.target.name) {
 				case "accpetAwardBtn":
 					Cmd_Tsk.cmTaskDailyReward();
@@ -155,13 +160,29 @@ package com.leyou.ui.task.child {
 					Cmd_Tsk.cmTaskDailyStar();
 					break;
 				case "loopAddBtn":
-					PopupManager.showConfirm(StringUtil.substitute(TableManager.getInstance().getSystemNotice(2306).content, [ConfigEnum.taskDailyCost1]), function():void {
-						Cmd_Tsk.cmTaskDailySuccess();
+
+					if (Core.isSF) {
+						str=StringUtil.substitute(TableManager.getInstance().getSystemNotice(30005).content, [ConfigEnum.taskDailyCost1.split("|")[0]])
+					} else {
+						str=StringUtil.substitute(TableManager.getInstance().getSystemNotice(2306).content, [ConfigEnum.taskDailyCost1.split("|")[0]])
+					}
+
+					PopupManager.showRadioConfirm(str, ConfigEnum.taskDailyCost1.split("|")[0] + "", ConfigEnum.taskDailyCost1.split("|")[1] + "", function(i:int):void {
+						Cmd_Tsk.cmTaskDailySuccess(1, (i == 0 ? 1 : 0));
 					}, null, false, "loopSuccToday");
 					break;
 				case "oneKeySuccBtn":
-					PopupManager.showConfirm(StringUtil.substitute(TableManager.getInstance().getSystemNotice(2305).content, [(ConfigEnum.taskDailySum - this.currentLoop + 1) * ConfigEnum.taskDailyCost1]), function():void {
-						Cmd_Tsk.cmTaskDailySuccess(2);
+
+					if (Core.isSF) {
+						str=StringUtil.substitute(TableManager.getInstance().getSystemNotice(30004).content, [(ConfigEnum.taskDailySum - this.currentLoop + 1) * int(ConfigEnum.taskDailyCost1.split("|")[0])])
+					} else {
+						str=StringUtil.substitute(TableManager.getInstance().getSystemNotice(2305).content, [(ConfigEnum.taskDailySum - this.currentLoop + 1) * int(ConfigEnum.taskDailyCost1.split("|")[0])])
+					}
+
+					var i1:int=int(ConfigEnum.taskDailyCost1.split("|")[0]);
+					var i2:int=int(ConfigEnum.taskDailyCost1.split("|")[1]);
+					PopupManager.showRadioConfirm(str, ((ConfigEnum.taskDailySum - this.currentLoop + 1) * i1) + "", ((ConfigEnum.taskDailySum - this.currentLoop + 1) * i2) + "", function(i:int):void {
+						Cmd_Tsk.cmTaskDailySuccess(2, (i == 0 ? 1 : 0));
 					}, null, false, "onKeySuccToday");
 					break;
 			}
@@ -234,8 +255,13 @@ package com.leyou.ui.task.child {
 				if (ConfigEnum.taskDailySum == this.currentLoop) {
 					this.oneKeySuccBtn.setToolTip("");
 					this.loopAddBtn.setToolTip("");
-				} else
-					this.oneKeySuccBtn.setToolTip(StringUtil.substitute(TableManager.getInstance().getSystemNotice(2302).content, [(ConfigEnum.taskDailySum - int(o.cloop) + 1) * ConfigEnum.taskDailyCost1, DataManager.getInstance().vipData.taskPrivilegeVipLv()]));
+				} else {
+					if (Core.isSF)
+						this.oneKeySuccBtn.setToolTip(StringUtil.substitute(TableManager.getInstance().getSystemNotice(30003).content, [(ConfigEnum.taskDailySum - int(o.cloop) + 1) * int(ConfigEnum.taskDailyCost1.split("|")[0]), DataManager.getInstance().vipData.taskPrivilegeVipLv()]));
+					else
+						this.oneKeySuccBtn.setToolTip(StringUtil.substitute(TableManager.getInstance().getSystemNotice(2302).content, [(ConfigEnum.taskDailySum - int(o.cloop) + 1) * int(ConfigEnum.taskDailyCost1.split("|")[0]), DataManager.getInstance().vipData.taskPrivilegeVipLv()]));
+				}
+
 			}
 
 			if (o.hasOwnProperty("award")) {
@@ -397,13 +423,13 @@ package com.leyou.ui.task.child {
 		public function setonKeySuccState(lv:int=0):void {
 
 			var _lv:int=DataManager.getInstance().vipData.taskPrivilegeVipLv();
- 
-			if (lv >= _lv && !this.isComplete){
+
+			if (lv >= _lv && !this.isComplete) {
 				this.oneKeySuccBtn.setActive(true, 1, true);
-			}else{
+			} else {
 				this.oneKeySuccBtn.setActive(false, .6, true);
 			}
-			
+
 		}
 
 		/**
@@ -565,13 +591,13 @@ package com.leyou.ui.task.child {
 				if (reward.indexOf("|") > -1) {
 					reward=String(dinfo["item" + (i + 1)]).split("|")[Core.me.info.profession - 1];
 				}
-				
+
 				item=TableManager.getInstance().getEquipInfo(int(reward));
 				if (item == null)
 					item=TableManager.getInstance().getItemInfo(int(reward));
-				
+
 				if (item != null)
-				mgrid.updataInfo(item);
+					mgrid.updataInfo(item);
 
 				if (int(dinfo["num" + (i + 1)]) > 1)
 					mgrid.setNum(dinfo["num" + (i + 1)]);

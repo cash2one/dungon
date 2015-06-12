@@ -1,9 +1,11 @@
 package com.leyou.ui.convenientuse
 {
 	import com.ace.enum.UIEnum;
+	import com.ace.gameData.manager.DataManager;
 	import com.ace.manager.GuideManager;
 	import com.ace.manager.LibManager;
 	import com.ace.ui.auto.AutoWindow;
+	import com.ace.ui.button.children.CheckBox;
 	import com.ace.ui.button.children.ImgButton;
 	import com.ace.ui.button.children.NormalButton;
 	import com.ace.ui.input.children.TextInput;
@@ -33,6 +35,8 @@ package com.leyou.ui.convenientuse
 		
 		private var item:ConvenientItem;
 		
+		private var promptChk:CheckBox;
+		
 		public function ConvenientUseWnd(){
 			super(LibManager.getInstance().getXML("config/ui/convenient/itemMessage.xml"));
 			init();
@@ -44,8 +48,10 @@ package com.leyou.ui.convenientuse
 			mouseChildren = true;
 			useBtn = getUIbyID("useBtn") as ImgButton;
 			maxBtn = getUIbyID("maxBtn") as NormalButton;
+			promptChk = getUIbyID("promptChk") as CheckBox;
 			useBtn.addEventListener(MouseEvent.CLICK, onMouseClick);
 			maxBtn.addEventListener(MouseEvent.CLICK, onMouseClick);
+			promptChk.addEventListener(MouseEvent.CLICK, onMouseClick);
 			numLbl = getUIbyID("numLbl") as TextInput;
 			nameLbl = getUIbyID("nameLbl") as Label;
 			numLbl.restrict = "[0-9]";
@@ -94,6 +100,11 @@ package com.leyou.ui.convenientuse
 			numLbl.text = item.bagInfo.num+"";
 			maxCount = item.bagInfo.num;
 			nameLbl.text = item.bagInfo.info.name;
+			if(DataManager.getInstance().convenientData.isPrompt(item.bagInfo.info.name)){
+				promptChk.turnOff(false);
+			}else{
+				promptChk.turnOn(false);
+			}
 		}
 		
 		/**
@@ -111,6 +122,9 @@ package com.leyou.ui.convenientuse
 					break;
 				case "maxBtn":
 					numLbl.text = maxCount+"";
+					break;
+				case "promptChk":
+					DataManager.getInstance().convenientData.setPrompt(item.bagInfo.info.name, promptChk.isOn);
 					break;
 			}
 		}

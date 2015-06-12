@@ -18,6 +18,7 @@ package com.ace.ui.notice.message
 	import com.leyou.enum.ConfigEnum;
 	import com.leyou.util.DateUtil;
 	import com.leyou.utils.ItemUtil;
+	import com.leyou.utils.PropUtils;
 	import com.leyou.utils.StringUtil_II;
 	
 	import flash.display.Sprite;
@@ -135,11 +136,11 @@ package com.ace.ui.notice.message
 				var date:Date = new Date(data[0]*1000);
 				var s:String;
 				if(0 == data[5]){
-					s = DateUtil.formatDate(date, "YYYY-MM-DD HH24:MI:SS") + "\n您在{1}地图,被{2}击败了";
+					s = DateUtil.formatDate(date, "YYYY-MM-DD HH24:MI:SS") + "\n"+PropUtils.getStringById(1525);
 					s = com.leyou.utils.StringUtil_II.translate(s, data[2], com.leyou.utils.StringUtil_II.getColorStr(com.leyou.utils.StringUtil_II.addEventString(data[1], "["+data[1]+"]", true), ChatEnum.COLOR_USER));
 					var pl:Array = data[3];
 					if(pl.length > 0){
-						s+="掉落物品"
+						s+=PropUtils.getStringById(1516);
 						var l:int = pl.length;
 						for(var n:int = 0; n < l; n++){
 							var itemId:int = pl[n][0];
@@ -165,7 +166,7 @@ package com.ace.ui.notice.message
 						}
 						s+="."
 					}else{
-						s+=",没有掉落物品."
+						s+=","+PropUtils.getStringById(1527);
 					}
 				}else if(1 == data[5]){
 					s = TableManager.getInstance().getSystemNotice(3904).content;

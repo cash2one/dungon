@@ -26,8 +26,8 @@ package com.leyou.ui.boss.children
 	{
 		private static const GRID_COUNT:int = 12;
 		
-		private static const VIEW_PANEL_WIDTH:int = 501;
 		
+		private static const VIEW_PANEL_WIDTH:int = 478;
 		private var timeLbl:Label;
 		
 		private var nameLbl:Label;
@@ -78,13 +78,14 @@ package com.leyou.ui.boss.children
 			
 			big = new SwfLoader();
 			big.mouseEnabled = false;
-			big.x = 730;
-			big.y = 220;
+			big.x = 730-65;
+			big.y = 200;
 			addChild(big);
+			swapChildren(nameLbl, big);
 			
 			pannel = new Sprite();
-			pannel.x = 42;
-			pannel.y = 30;
+			pannel.x = 34;
+			pannel.y = 40;
 			pannel.scrollRect = new Rectangle(0, 0, VIEW_PANEL_WIDTH, 327);
 			addChild(pannel);
 			pannel.addEventListener(MouseEvent.CLICK, onBossClick);
@@ -95,16 +96,18 @@ package com.leyou.ui.boss.children
 			for(var n:int = 0; n < GRID_COUNT; n++){
 				var grid:CopyRewardGrid = new CopyRewardGrid();
 				if(n < 4){
-					grid.x = 637 + n%4*50;
-					grid.y = 262;
+					grid.x = 564 + n%4*50;
+					grid.y = 240;
 				}else{
-					grid.x = 637 + n%4*50;
-					grid.y = 324 + (int(n/4)-1)*44;
+					grid.x = 564 + n%4*50;
+					grid.y = 302 + (int(n/4)-1)*44;
 				}
 				addChildAt(grid, 23);
 				grids[n] = grid;
 			}
 			addChild(receiveImg);
+			x = -29;
+			y = 3;
 		}
 		
 		protected function onBossClick(event:MouseEvent):void{
@@ -117,10 +120,11 @@ package com.leyou.ui.boss.children
 		protected function onBtnClick(event:MouseEvent):void{
 			switch(event.target.name){
 				case "addBtn":
-					var cost:int = DataManager.getInstance().bossCopyData.cost;
+					var costyb:int = DataManager.getInstance().bossCopyData.costyb;
+					var costbyb:int = DataManager.getInstance().bossCopyData.costbyb;
 					var content:String = TableManager.getInstance().getSystemNotice(4904).content;
-					content = StringUtil.substitute(content, cost);
-					PopupManager.showConfirm(content, Cmd_BCP.cm_BCP_A, null, false, "bossCpy.add");
+//					content = StringUtil.substitute(content, cost)
+					PopupManager.showRadioConfirm(content, costyb+"", costbyb+"", confirmAdd, null, false, "bossCpy.add");
 					break;
 				case "preBtn":
 					previousColumn();
@@ -132,6 +136,11 @@ package com.leyou.ui.boss.children
 					Cmd_BCP.cm_BCP_E(currentBoss.bossData.id);
 					break;
 			}
+		}
+		
+		private function confirmAdd(type:int):void{
+			var rtype:int = ((0 == type) ? 1 : 0);
+			Cmd_BCP.cm_BCP_A(rtype);
 		}
 		
 		/**
@@ -212,29 +221,29 @@ package com.leyou.ui.boss.children
 				grids[index++].updataInfo({itemId:copyInfo.firstItem2, count:copyInfo.firstItemCount2});
 			}
 			index = 4;
-			if(copyInfo.item1 > 0){
-				grids[index++].updataInfo({itemId:copyInfo.item1, count:0});
+			if(copyInfo.item1Data[0] > 0){
+				grids[index++].updataInfo({itemId:copyInfo.item1Data[0], count:copyInfo.item1Data[1]});
 			}
-			if(copyInfo.item2 > 0){
-				grids[index++].updataInfo({itemId:copyInfo.item2, count:0});
+			if(copyInfo.item2Data[0] > 0){
+				grids[index++].updataInfo({itemId:copyInfo.item2Data[0], count:copyInfo.item2Data[1]});
 			}
-			if(copyInfo.item3 > 0){
-				grids[index++].updataInfo({itemId:copyInfo.item3, count:0});
+			if(copyInfo.item3Data[0] > 0){
+				grids[index++].updataInfo({itemId:copyInfo.item3Data[0], count:copyInfo.item3Data[1]});
 			}
-			if(copyInfo.item4 > 0){
-				grids[index++].updataInfo({itemId:copyInfo.item4, count:0});
+			if(copyInfo.item4Data[0] > 0){
+				grids[index++].updataInfo({itemId:copyInfo.item4Data[0], count:copyInfo.item4Data[1]});
 			}
-			if(copyInfo.item5 > 0){
-				grids[index++].updataInfo({itemId:copyInfo.item5, count:0});
+			if(copyInfo.item5Data[0] > 0){
+				grids[index++].updataInfo({itemId:copyInfo.item5Data[0], count:copyInfo.item5Data[1]});
 			}
-			if(copyInfo.item6 > 0){
-				grids[index++].updataInfo({itemId:copyInfo.item6, count:0});
+			if(copyInfo.item6Data[0] > 0){
+				grids[index++].updataInfo({itemId:copyInfo.item6Data[0], count:copyInfo.item6Data[1]});
 			}
-			if(copyInfo.item7 > 0){
-				grids[index++].updataInfo({itemId:copyInfo.item7, count:0});
+			if(copyInfo.item7Data[0] > 0){
+				grids[index++].updataInfo({itemId:copyInfo.item7Data[0], count:copyInfo.item7Data[1]});
 			}
-			if(copyInfo.item8 > 0){
-				grids[index++].updataInfo({itemId:copyInfo.item8, count:0});
+			if(copyInfo.item8Data[0] > 0){
+				grids[index++].updataInfo({itemId:copyInfo.item8Data[0], count:copyInfo.item8Data[1]});
 			}
 		}
 		
@@ -260,13 +269,21 @@ package com.leyou.ui.boss.children
 					colItem = new BossCopyColumnRender();
 					items[n] = colItem;
 				}
-				colItem.x = n * int(VIEW_PANEL_WIDTH/3);   //int(n/3)*VIEW_PANEL_WIDTH + (n%3)*(VIEW_PANEL_WIDTH/3);
+				colItem.x = n * int(VIEW_PANEL_WIDTH/3+1);   //int(n/3)*VIEW_PANEL_WIDTH + (n%3)*(VIEW_PANEL_WIDTH/3);
 				pannel.addChild(colItem);
 				for(var m:int = 0; m < BossCopyColumnRender.COL_COUNT; m++){
 					colItem.updateInfo(data.getBossData(n*3+m), data.getBossData(n*3+m-1), m);
 				}
+				var currentItem:BossCopyItemRender = colItem.getCurrentItem();
+				if(null != currentItem){
+					showBoss(currentItem);
+					currentIndex = n;
+					if(currentIndex > items.length-3){
+						currentIndex = items.length-3;
+					}
+					scrollToX(currentIndex*(VIEW_PANEL_WIDTH/3));
+				}
 			}
-			showBoss(items[0].getRender(0));
 //			items[0].setSelect(0);
 		}
 		

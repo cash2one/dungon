@@ -10,7 +10,8 @@ package com.leyou.ui.guild.child {
 	import com.ace.ui.dropMenu.event.DropMenuEvent;
 	import com.ace.ui.tabbar.TabbarModel;
 	import com.leyou.net.cmd.Cmd_Guild;
-
+	import com.leyou.utils.PropUtils;
+	
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 
@@ -21,7 +22,7 @@ package com.leyou.ui.guild.child {
 		private var cancelBtn:NormalButton;
 
 		private var cbVec:Vector.<CheckBox>;
-		private var cbName:Array=["新加成员", "开除成员", "行会升级", "行会宣战", "成员管理"];
+		private var cbName:Array=[PropUtils.getStringById(1743), PropUtils.getStringById(1744), PropUtils.getStringById(1745), PropUtils.getStringById(1746), PropUtils.getStringById(1747)];
 
 		private var info:Array=[];
 
@@ -39,7 +40,7 @@ package com.leyou.ui.guild.child {
 			this.saveBtn=this.getUIbyID("saveBtn") as NormalButton;
 			this.cancelBtn=this.getUIbyID("cancelBtn") as NormalButton;
 
-			this.jobCb.list.addRends([{label: "会长", uid: 1}, {label: "副会长", uid: 2}, {label: "长老", uid: 3}, {label: "会员", uid: 4}]);
+			this.jobCb.list.addRends([{label: PropUtils.getStringById(36), uid: 1}, {label: PropUtils.getStringById(37), uid: 2}, {label: PropUtils.getStringById(38), uid: 3}, {label: PropUtils.getStringById(39), uid: 4}]);
 			this.jobCb.addEventListener(DropMenuEvent.Item_Selected, onItemClick);
 
 			this.saveBtn.addEventListener(MouseEvent.CLICK, onClick);

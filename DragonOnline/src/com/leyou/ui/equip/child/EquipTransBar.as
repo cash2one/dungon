@@ -154,7 +154,7 @@ package com.leyou.ui.equip.child {
 			for (key in info.p) {
 				if (info.p[key] != 0 && key.indexOf("_") == -1 && int(key) <= 7) {
 
-					this.lvtxtLbl.text="星级:";
+					this.lvtxtLbl.text=PropUtils.getStringById(1697);
 					this.lv1Lbl.text="" + info.qh;
 
 					this.viewTxtArr[i].text="" + PropUtils.propArr[int(key) - 1] + ":";

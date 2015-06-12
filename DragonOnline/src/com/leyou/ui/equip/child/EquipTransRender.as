@@ -257,6 +257,25 @@ package com.leyou.ui.equip.child {
 			this.CostGrid.updataInfo(beinfo);
 
 			this.updateViewState(d);
+			
+			if (!this.CostGrid.getGridEmpty() && !this.targetGrid.getGridEmpty()) {
+				
+				this.equipTransBar.updateData(this.targetGrid.data.tips, 1);
+				this.equipTransBar.updateData(this.CostGrid.data.tips, 2);
+				
+				this.equipTransBar.visible=true;
+				this.confirmBtn.setActive(true, 1, true);
+				this.confirmBtn.setToolTip("");
+				this.descLbl.visible=false;
+				
+			} else {
+				
+				this.equipTransBar.visible=false;
+				this.descLbl.visible=true;
+				this.confirmBtn.setActive(false, .6, true);
+				this.confirmBtn.setToolTip(TableManager.getInstance().getSystemNotice(2508).content);
+				
+			}
 		}
 
 		public function setDownItem(g:GridBase):void {
@@ -278,10 +297,12 @@ package com.leyou.ui.equip.child {
 
 				this.updateViewState(d);
 			} else {
+				
 				if (info.qh == 0)
 					this.targetGrid.updataInfo(d);
 				else
 					this.CostGrid.updataInfo(d);
+				
 			}
 
 
@@ -296,6 +317,7 @@ package com.leyou.ui.equip.child {
 				this.descLbl.visible=false;
 
 			} else {
+				
 				this.equipTransBar.visible=false;
 				this.descLbl.visible=true;
 				this.confirmBtn.setActive(false, .6, true);

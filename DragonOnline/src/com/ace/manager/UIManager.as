@@ -5,8 +5,10 @@ package com.ace.manager {
 	import com.ace.enum.SceneEnum;
 	import com.ace.enum.UIEnum;
 	import com.ace.enum.WindowEnum;
+	import com.ace.game.manager.SceneKeyManager;
 	import com.ace.game.scene.ui.ReviveWnd;
 	import com.ace.gameData.manager.MapInfoManager;
+	import com.ace.gameData.manager.TableManager;
 	import com.ace.ui.LoadingManager;
 	import com.ace.ui.auto.AutoWindow;
 	import com.ace.ui.map.MapWnd;
@@ -16,14 +18,17 @@ package com.ace.manager {
 	import com.ace.ui.setting.child.AssistSoundConfigWnd;
 	import com.ace.ui.setting.child.AssistViewConfigWnd;
 	import com.ace.ui.smallMap.SmallMapWnd;
+	import com.ace.utils.StringUtil;
 	import com.leyou.enum.ConfigEnum;
 	import com.leyou.enum.PkCopyEnum;
 	import com.leyou.enum.TaskEnum;
 	import com.leyou.manager.LastTimeImageManager;
+	import com.leyou.manager.PopupManager;
 	import com.leyou.net.cmd.Cmd_Act;
 	import com.leyou.net.cmd.Cmd_Duel;
 	import com.leyou.net.cmd.Cmd_GuildBattle;
 	import com.leyou.net.cmd.Cmd_WARC;
+	import com.leyou.net.cmd.Cmd_ZC;
 	import com.leyou.ui.abidePay.AbidePayBoxWnd;
 	import com.leyou.ui.abidePay.AbidePayWnd;
 	import com.leyou.ui.achievement.AchievementWnd;
@@ -47,8 +52,14 @@ package com.ace.manager {
 	import com.leyou.ui.backpack.child.MessageInputWnd;
 	import com.leyou.ui.badge.BadgeRebud;
 	import com.leyou.ui.badge.BadgeWnd;
+	import com.leyou.ui.battlefield.IceBattlefieldEndWnd;
+	import com.leyou.ui.battlefield.IceBattlefieldExplainWnd;
+	import com.leyou.ui.battlefield.IceBattlefieldPauseWnd;
+	import com.leyou.ui.battlefield.IceBattlefieldRewardWnd;
+	import com.leyou.ui.battlefield.IceBattlefieldTrackBar;
+	import com.leyou.ui.battlefield.WarLogWnd;
+	import com.leyou.ui.blackStore.BlackStoreWnd;
 	import com.leyou.ui.boss.BossWnd;
-	import com.leyou.ui.bossCopy.BossCopyWnd;
 	import com.leyou.ui.bossCopy.BossRewardWnd;
 	import com.leyou.ui.celebrate.AreaCelebrateWnd;
 	import com.leyou.ui.chat.ChatWnd;
@@ -68,21 +79,22 @@ package com.ace.manager {
 	import com.leyou.ui.convenientuse.ConvenientUseWnd;
 	import com.leyou.ui.convenientuse.ConvenientWearWnd;
 	import com.leyou.ui.copy.StoryCopyRewarWnd;
-	import com.leyou.ui.copy.StoryCopyWnd;
 	import com.leyou.ui.copyTrack.ExpCopyTrackBar;
 	import com.leyou.ui.copyTrack.StoryCopyTrackBar;
 	import com.leyou.ui.creatUser.CreatUserWnd;
+	import com.leyou.ui.day7.SdayWnd;
 	import com.leyou.ui.delivery.DeliveryFinish;
 	import com.leyou.ui.delivery.DeliveryPanel;
 	import com.leyou.ui.delivery.DeliveryWnd;
 	import com.leyou.ui.die.DieWnd;
+	import com.leyou.ui.dragonBall.DragonBallWnd;
+	import com.leyou.ui.dragonBall.children.DragonBallPreviewWnd;
 	import com.leyou.ui.duel.DuelResultWnd;
 	import com.leyou.ui.dungeonTeam.DungeonTeamFWnd;
 	import com.leyou.ui.dungeonTeam.DungeonTeamWnd;
 	import com.leyou.ui.dungeonTeam.childs.DungeonCreatTeam;
 	import com.leyou.ui.dungeonTeam.childs.DungeonTeamTrack;
 	import com.leyou.ui.equip.EquipWnd;
-	import com.leyou.ui.expCopy.ExpCopyWnd;
 	import com.leyou.ui.expCopy.chlid.ExpMapWnd;
 	import com.leyou.ui.farm.FarmLogWnd;
 	import com.leyou.ui.farm.FarmMessageWnd;
@@ -91,7 +103,6 @@ package com.ace.manager {
 	import com.leyou.ui.fieldBoss.FieldBossRemindWnd;
 	import com.leyou.ui.fieldBoss.FieldBossRewardWnd;
 	import com.leyou.ui.fieldBoss.FieldBossTrackBar;
-	import com.leyou.ui.fieldBoss.FieldBossWnd;
 	import com.leyou.ui.firstGift.FirstGiftWnd;
 	import com.leyou.ui.firstPay.FirstPayWnd;
 	import com.leyou.ui.firstlogin.FirstLoginWnd;
@@ -109,6 +120,7 @@ package com.ace.manager {
 	import com.leyou.ui.guildBattle.GuildBattleWnd;
 	import com.leyou.ui.integral.IntegralWnd;
 	import com.leyou.ui.invest.InvestWnd;
+	import com.leyou.ui.legendary.LegendaryWnd;
 	import com.leyou.ui.login.LoginWnd;
 	import com.leyou.ui.luckDraw.LuckDrawWnd;
 	import com.leyou.ui.luckDraw.LuckPackWnd;
@@ -116,6 +128,8 @@ package com.ace.manager {
 	import com.leyou.ui.mail.MaillReadWnd;
 	import com.leyou.ui.market.MarketWnd;
 	import com.leyou.ui.market.TencentMarketWnd;
+	import com.leyou.ui.medic.RoleMedicWnd;
+	import com.leyou.ui.missionMarket.MissionMarketWnd;
 	import com.leyou.ui.moldOpen.FunForcastWnd;
 	import com.leyou.ui.moldOpen.FunOpenWnd;
 	import com.leyou.ui.moldOpen.MoldOpenWnd;
@@ -125,10 +139,12 @@ package com.ace.manager {
 	import com.leyou.ui.mount.MountTradeWnd;
 	import com.leyou.ui.mysteryStore.MyStoreWnd;
 	import com.leyou.ui.offline.OffLineWnd;
-	import com.leyou.ui.onlineReward.OnlineRewardPanel;
+	import com.leyou.ui.onlineReward.OnlineRewardWnd;
 	import com.leyou.ui.otherPlayer.OtherPlayerWnd;
 	import com.leyou.ui.payfirst.PayFirstWnd;
 	import com.leyou.ui.payrank.PayRankWnd;
+	import com.leyou.ui.pet.PetSkillSelectWnd;
+	import com.leyou.ui.pet.PetWnd;
 	import com.leyou.ui.pkCopy.DungeonBWTrack;
 	import com.leyou.ui.pkCopy.DungeonSGFinish;
 	import com.leyou.ui.pkCopy.DungeonSGTrack;
@@ -147,6 +163,7 @@ package com.ace.manager {
 	import com.leyou.ui.role.child.children.MessageWnd;
 	import com.leyou.ui.selectUser.SelectUserWnd;
 	import com.leyou.ui.sevenDay.SevenDayWnd;
+	import com.leyou.ui.sfirstPay.SuperFirstPayWnd;
 	import com.leyou.ui.shop.BuyWnd;
 	import com.leyou.ui.shop.ShopWnd;
 	import com.leyou.ui.skill.SkillFuWnd;
@@ -158,6 +175,7 @@ package com.ace.manager {
 	import com.leyou.ui.team.TeamWnd;
 	import com.leyou.ui.tips.FcmTips;
 	import com.leyou.ui.tobestrong.TobeStrongWnd;
+	import com.leyou.ui.tools.LeftTopWnd;
 	import com.leyou.ui.tools.RightTopWnd;
 	import com.leyou.ui.tools.ToolsWnd;
 	import com.leyou.ui.tools.child.CDKeyReceiveWnd;
@@ -168,6 +186,7 @@ package com.ace.manager {
 	import com.leyou.ui.wing.WingLvUpWnd;
 	import com.leyou.ui.wing.WingTradeWnd;
 	import com.leyou.ui.worship.WorshipWnd;
+	import com.leyou.utils.PropUtils;
 	
 	import flash.display.DisplayObject;
 	import flash.events.KeyboardEvent;
@@ -251,12 +270,12 @@ package com.ace.manager {
 		public var farmWnd:FarmWnd;
 		public var farmShopWnd:FarmShopWnd;
 		public var farmLogWnd:FarmLogWnd;
-		public var storyCopyWnd:StoryCopyWnd;
+//		public var storyCopyWnd:StoryCopyWnd;
 		public var storyCopyReward:StoryCopyRewarWnd;
 //		public var bossCpyWnd:BossCopyWnd;
 		public var copyTrack:StoryCopyTrackBar;
 		public var continuousWgt:ContinuousWidget;
-		public var expCopyWnd:ExpCopyWnd;
+//		public var expCopyWnd:ExpCopyWnd;
 		public var expMapWnd:ExpMapWnd;
 //		public var fieldBossWnd:FieldBossWnd;
 		public var welfareWnd:WelfareWnd;
@@ -277,10 +296,12 @@ package com.ace.manager {
 		public var teamCopyTrackWnd:DungeonTeamTrack;
 		public var teamCopyRewardWnd:DungeonTeamFWnd;
 		public var teamCopyCreateWnd:DungeonCreatTeam;
+		public var medicWnd:RoleMedicWnd;
+		public var sdayWnd:SdayWnd;
 
 		public var funForcastWnd:FunForcastWnd;
 		//		public var onlineReward:OnlineReward;
-		public var onlinePanel:OnlineRewardPanel;
+		public var onlinePanel:OnlineRewardWnd;
 		public var activeWnd:ActiveWnd;
 		public var arenaMegWnd:ArenaMsgWnd;
 		public var receiveWnd:CDKeyReceiveWnd;
@@ -311,6 +332,7 @@ package com.ace.manager {
 		public var areaCelebrate:AreaCelebrateWnd;
 		public var dieWnd:DieWnd;
 		public var payFirst:PayFirstWnd;
+		public var spayFirst:SuperFirstPayWnd;
 		public var payRankWnd:PayRankWnd;
 		public var guildBattleWnd:GuildBattleWnd;
 		public var guildBattleRankWnd:GuildBattleRankWnd;
@@ -336,6 +358,19 @@ package com.ace.manager {
 		public var cityBattleExplain:CityBattleExplain;
 		public var cityBattleChallenge:CityBattleChallengeWnd;
 		public var bossWnd:BossWnd;
+		public var dragonBallWnd:DragonBallWnd;
+		public var dragonBallPreviewWnd:DragonBallPreviewWnd;
+		public var iceBattlefieldTrack:IceBattlefieldTrackBar;
+		public var iceBattlefieldReward:IceBattlefieldRewardWnd;
+		public var iceBattlefieldEnd:IceBattlefieldEndWnd;
+		public var iceBattlefieldPause:IceBattlefieldPauseWnd;
+		public var iceBattlefieldExplain:IceBattlefieldExplainWnd;
+		public var warLogWnd:WarLogWnd;
+		public var legendaryWnd:LegendaryWnd;
+		public var blackStoreWnd:BlackStoreWnd;
+		public var petWnd:PetWnd;
+		public var petSkillSelectWnd:PetSkillSelectWnd;
+		public var missionMarketWnd:MissionMarketWnd;
 		// 功能开启
 		public var moldWnd:MoldOpenWnd;
 		// 快捷换装
@@ -347,12 +382,14 @@ package com.ace.manager {
 
 		public var rankWnd:RankWnd;
 
+		public var leftTopWnd:LeftTopWnd;
+
 		private var _claDic:Object;
 		private var _keyDic:Object;
 
 		public var soundConfig:AssistSoundConfigWnd;
 		public var viewConfig:AssistViewConfigWnd;
-		
+
 		private var resizeWnds:Vector.<AutoWindow>;
 
 		public var slidesWndArr:Array=[];
@@ -368,7 +405,7 @@ package com.ace.manager {
 		}
 
 		private function init():void {
-			resizeWnds = new Vector.<AutoWindow>();
+			resizeWnds=new Vector.<AutoWindow>();
 			_claDic={};
 			_keyDic={};
 			this.loginWnd=new LoginWnd();
@@ -381,10 +418,10 @@ package com.ace.manager {
 			_claDic[WindowEnum.AUTION]=[AutionWnd, "autionWnd"];
 //			_claDic[WindowEnum.BOSSCOPY]=[BossCopyWnd, "bossCpyWnd"];
 			_claDic[WindowEnum.BOSSCOPY_REWARD]=[BossRewardWnd, "bossCopyReward"];
-			_claDic[WindowEnum.STORYCOPY]=[StoryCopyWnd, "storyCopyWnd"];
+//			_claDic[WindowEnum.STORYCOPY]=[StoryCopyWnd, "storyCopyWnd"];
 			_claDic[WindowEnum.STORYCOPY_REWARD]=[StoryCopyRewarWnd, "storyCopyReward"];
 			_claDic[WindowEnum.COPYTRACK]=[StoryCopyTrackBar, "copyTrack"];
-			_claDic[WindowEnum.EXPCOPY]=[ExpCopyWnd, "expCopyWnd"];
+//			_claDic[WindowEnum.EXPCOPY]=[ExpCopyWnd, "expCopyWnd"];
 			_claDic[WindowEnum.EXPCOPY_MAP]=[ExpMapWnd, "expMapWnd"];
 			_claDic[WindowEnum.EXP_COPY_TRACK]=[ExpCopyTrackBar, "expCopyTrack"];
 			_claDic[WindowEnum.FARM]=[FarmWnd, "farmWnd"];
@@ -426,6 +463,7 @@ package com.ace.manager {
 			_claDic[WindowEnum.TEAM]=[TeamWnd, "teamWnd"];
 			_claDic[WindowEnum.TASK]=[TaskWnd, "taskWnd"];
 			_claDic[WindowEnum.RUNE]=[SkillFuWnd, "skillFuWnd"];
+			_claDic[WindowEnum.MEDIC]=[RoleMedicWnd, "medicWnd"];
 
 			_claDic[WindowEnum.ROLE]=[roleWnd, "roleWnd"];
 			_claDic[WindowEnum.MOUTLVUP]=[MountLvUpWnd, "mountLvUpwnd"];
@@ -445,6 +483,7 @@ package com.ace.manager {
 			_claDic[WindowEnum.DUNGEON_TEAM_CREATE]=[DungeonCreatTeam, "teamCopyCreateWnd"];
 			_claDic[WindowEnum.DUNGEON_TEAM_REWARD]=[DungeonTeamFWnd, "teamCopyRewardWnd"];
 			_claDic[WindowEnum.DUNGEON_TEAM_TRACK]=[DungeonTeamTrack, "teamCopyTrackWnd"];
+			_claDic[WindowEnum.KEEP_7]=[SdayWnd, "sdayWnd"];
 
 			_claDic[WindowEnum.ARENA_NOTICE]=[ArenaMsgWnd, "arenaMegWnd"];
 			_claDic[WindowEnum.CDKEY]=[CDKeyReceiveWnd, "receiveWnd"];
@@ -458,8 +497,9 @@ package com.ace.manager {
 			_claDic[WindowEnum.FIELD_BOSS_TRACK]=[FieldBossTrackBar, "fieldBossTrack"];
 			_claDic[WindowEnum.FIELD_BOSS_REMIND]=[FieldBossRemindWnd, "fieldBossRemind"];
 			_claDic[WindowEnum.FIELD_BOSS_REWARD]=[FieldBossRewardWnd, "fieldBossReward"];
-			_claDic[WindowEnum.ONLINDREWARD]=[OnlineRewardPanel, "onlinePanel"];
+			_claDic[WindowEnum.ONLINDREWARD]=[OnlineRewardWnd, "onlinePanel"];
 			_claDic[WindowEnum.FIRST_LOGIN]=[FirstLoginWnd, "firstloginWnd"];
+			_claDic[WindowEnum.SUPER_FIRST_RETURN]=[SuperFirstPayWnd, "spayFirst"];
 			_claDic[WindowEnum.FIRST_PAY]=[FirstPayWnd, "firstPay"];
 			_claDic[WindowEnum.FUN_OPEN]=[FunOpenWnd, "funOpenWnd"];
 			_claDic[WindowEnum.PAY_PROMOTION]=[PromotionPayWnd, "payPormotion"];
@@ -494,6 +534,19 @@ package com.ace.manager {
 			_claDic[WindowEnum.CITY_BATTLE_EXPLAIN]=[CityBattleExplain, "cityBattleExplain"];
 			_claDic[WindowEnum.CITY_BATTLE_CHALLENGE]=[CityBattleChallengeWnd, "cityBattleChallenge"];
 			_claDic[WindowEnum.BOSS]=[BossWnd, "bossWnd"];
+			_claDic[WindowEnum.DRAGON_BALL]=[DragonBallWnd, "dragonBallWnd"];
+			_claDic[WindowEnum.DRAGON_PROVIEW]=[DragonBallPreviewWnd, "dragonBallPreviewWnd"];
+			_claDic[WindowEnum.ICE_BATTLE_END]=[IceBattlefieldEndWnd, "iceBattlefieldEnd"];
+			_claDic[WindowEnum.ICE_BATTLE_PAUSE]=[IceBattlefieldPauseWnd, "iceBattlefieldPause"];
+			_claDic[WindowEnum.ICE_BATTLE_REWARD]=[IceBattlefieldRewardWnd, "iceBattlefieldReward"];
+			_claDic[WindowEnum.ICE_BATTLE_TRACK]=[IceBattlefieldTrackBar, "iceBattlefieldTrack"];
+			_claDic[WindowEnum.WAR_LOG]=[WarLogWnd, "warLogWnd"];
+			_claDic[WindowEnum.ICE_BATTLE_RULE]=[IceBattlefieldExplainWnd, "iceBattlefieldExplain"];
+			_claDic[WindowEnum.LEGENDAREY_WEAPON]=[LegendaryWnd, "legendaryWnd"];
+			_claDic[WindowEnum.BLACK_STROE]=[BlackStoreWnd, "blackStoreWnd"];
+			_claDic[WindowEnum.PET]=[PetWnd, "petWnd"];
+			_claDic[WindowEnum.PET_SKILL_SELECT]=[PetSkillSelectWnd, "petSkillSelectWnd"];
+			_claDic[WindowEnum.TASK_MARKET]=[MissionMarketWnd, "missionMarketWnd"];
 			//			this.mountLvUpwnd=new MountLvUpWnd();
 			//			this.mountTradeWnd=new MountTradeWnd();
 			//			this.wingLvUpWnd=new WingLvUpWnd();
@@ -514,6 +567,9 @@ package com.ace.manager {
 			_keyDic[Keyboard.G]=[ConfigEnum.UnionOpenLv, WindowEnum.GUILD];
 			_keyDic[Keyboard.S]=[0, WindowEnum.SKILL];
 			_keyDic[Keyboard.V]=[ConfigEnum.BadgeOpenLv, WindowEnum.BADAGE];
+//			_keyDic[Keyboard.Y]=[ConfigEnum.servent1, WindowEnum.PET];
+			_keyDic[Keyboard.R]=[ConfigEnum.FarmOpenLevel, WindowEnum.FARM];
+			_keyDic[Keyboard.K]=[ConfigEnum.setin1, WindowEnum.COLLECTION];
 
 			EventManager.getInstance().addEvent(EventEnum.SCENE_LOADED, onSceneLoaed);
 		}
@@ -579,15 +635,19 @@ package com.ace.manager {
 						this.bltTrack.hide()
 					}
 
+					if (isCreate(WindowEnum.ICE_BATTLE_TRACK)) {
+						iceBattlefieldTrack.hide();
+					}
+
 					taskTrack.show();
 					smallMapWnd.switchToType(1);
-
+					SceneKeyManager.getInstance().sceneInput(true);
 					NoticeManager.getInstance().stopCount();
 					break;
 				case SceneEnum.SCENE_TYPE_BSFB: // boss副本
 					smallMapWnd.switchToType(2);
 					if (!isCreate(WindowEnum.COPYTRACK)) {
-						creatWindow(WindowEnum.COPYTRACK)
+						creatWindow(WindowEnum.COPYTRACK);
 					}
 					MapWnd.getInstance().hideSwitch();
 					copyTrack.show();
@@ -607,7 +667,7 @@ package com.ace.manager {
 					copyTrack.addExitEvent();
 					taskTrack.hide();
 					rightTopWnd.hideBar(1);
-					hideWindow(WindowEnum.STORYCOPY);
+					hideWindow(WindowEnum.DUNGEON_TEAM);
 					if (null != Core.me) {
 						Core.me.onAutoMonster();
 					}
@@ -623,7 +683,7 @@ package com.ace.manager {
 					expCopyTrack.addExitEvent();
 					taskTrack.hide();
 					rightTopWnd.hideBar(1);
-					hideWindow(WindowEnum.EXPCOPY);
+					hideWindow(WindowEnum.DUNGEON_TEAM);
 					hideWindow(WindowEnum.EXPCOPY_MAP);
 					GuideManager.getInstance().showGuide(42, UIManager.getInstance().toolsWnd);
 					break;
@@ -641,8 +701,8 @@ package com.ace.manager {
 					MapWnd.getInstance().hideSwitch();
 					taskTrack.hide();
 					rightTopWnd.hideBar(1);
-					if (!EventManager.getInstance().hasEvent(EventEnum.COPY_QUIT, Cmd_GuildBattle.cm_UNZ_Q)) {
-						EventManager.getInstance().addEvent(EventEnum.COPY_QUIT, Cmd_GuildBattle.cm_UNZ_Q);
+					if (!EventManager.getInstance().hasEvent(EventEnum.COPY_QUIT, quitScene)) {
+						EventManager.getInstance().addEvent(EventEnum.COPY_QUIT, quitScene);
 					}
 					break;
 				case SceneEnum.SCENE_TYPE_CYCJ:
@@ -650,10 +710,67 @@ package com.ace.manager {
 					MapWnd.getInstance().hideSwitch();
 					taskTrack.hide();
 					rightTopWnd.hideBar(1);
-					if (!EventManager.getInstance().hasEvent(EventEnum.COPY_QUIT, Cmd_WARC.cm_WARC_Q)) {
-						EventManager.getInstance().addEvent(EventEnum.COPY_QUIT, Cmd_WARC.cm_WARC_Q);
+					if (!EventManager.getInstance().hasEvent(EventEnum.COPY_QUIT, quitScene)) {
+						EventManager.getInstance().addEvent(EventEnum.COPY_QUIT, quitScene);
 					}
 					break;
+				case SceneEnum.SCENE_TYPE_LZCJ:
+					smallMapWnd.switchToType(2);
+					if (!isCreate(WindowEnum.COPYTRACK)) {
+						creatWindow(WindowEnum.COPYTRACK)
+					}
+					MapWnd.getInstance().hideSwitch();
+					copyTrack.show();
+					copyTrack.addExitEvent();
+					taskTrack.hide();
+					rightTopWnd.hideBar(1);
+					break;
+				case SceneEnum.SCENE_TYPE_SYCJ:
+					smallMapWnd.switchToType(2);
+					if (!isCreate(WindowEnum.ICE_BATTLE_TRACK)) {
+						creatWindow(WindowEnum.ICE_BATTLE_TRACK)
+					}
+					MapWnd.getInstance().hideSwitch();
+//					iceBattlefieldTrack.show();
+					taskTrack.hide();
+					rightTopWnd.hideBar(1);
+					if (!EventManager.getInstance().hasEvent(EventEnum.COPY_QUIT, quitScene)) {
+						EventManager.getInstance().addEvent(EventEnum.COPY_QUIT, quitScene);
+					}
+					break;
+
+			}
+		}
+
+		private function quitScene():void {
+			var id:int=0;
+			var type:int=MapInfoManager.getInstance().type;
+			switch (type) {
+				case SceneEnum.SCENE_TYPE_GUCJ: // 帮战
+					id=3099;
+					break;
+				case SceneEnum.SCENE_TYPE_CYCJ: // 城战
+					id=6745;
+					break;
+				case SceneEnum.SCENE_TYPE_SYCJ: // 战场
+					id=21004;
+					break;
+			}
+			var content:String=TableManager.getInstance().getSystemNotice(id).content;
+			content=StringUtil.substitute(content, ConfigEnum.Opbattle22 / 60);
+			PopupManager.showConfirm(content, quit, null, false, "quit.copy,scene");
+			function quit():void {
+				switch (type) {
+					case SceneEnum.SCENE_TYPE_GUCJ: // 帮战
+						Cmd_GuildBattle.cm_UNZ_Q();
+						break;
+					case SceneEnum.SCENE_TYPE_CYCJ: // 城战
+						Cmd_WARC.cm_WARC_Q();
+						break;
+					case SceneEnum.SCENE_TYPE_SYCJ: // 战场
+						Cmd_ZC.cm_ZC_Q();
+						break;
+				}
 			}
 		}
 
@@ -831,6 +948,7 @@ package com.ace.manager {
 			this.slidesWnd=new SlidesWnd();
 			this.selectWnd=new SelectWnd();
 			this.messageBoxWnd=new MessageInputWnd();
+			this.leftTopWnd=new LeftTopWnd();
 
 			LayerManager.getInstance().windowLayer.addChild(this.messageBoxWnd);
 			LayerManager.getInstance().windowLayer.addChild(this.slidesWnd);
@@ -841,12 +959,14 @@ package com.ace.manager {
 			LayerManager.getInstance().mainLayer.addChild(this.rightTopWnd);
 			LayerManager.getInstance().mainLayer.addChild(this.chatWnd);
 			LayerManager.getInstance().mainLayer.addChild(this.taskTrack);
+			LayerManager.getInstance().mainLayer.addChild(this.leftTopWnd);
 			this.chatWnd.addKeyDownFun();
 			//			if (!Core.isTencent)
 			LayerManager.getInstance().mainLayer.addChild(this.adWnd);
 
 
 
+			this.leftTopWnd.resize();
 			this.smallMapWnd.resize();
 			this.toolsWnd.resize();
 			this.rightTopWnd.resize();
@@ -950,7 +1070,7 @@ package com.ace.manager {
 			LayerManager.getInstance().windowLayer.addChild(this.soundConfig);
 			LayerManager.getInstance().windowLayer.addChild(this.viewConfig);
 			LayerManager.getInstance().windowLayer.addChild(this.postWnd);
-			LayerManager.getInstance().windowLayer.addChild(this.pkCopyWnd);
+//			LayerManager.getInstance().windowLayer.addChild(this.pkCopyWnd);
 
 			this.loadingWnd=new SlidesWnd();
 			this.loadingWnd.setEffectVisiable(true);
@@ -984,7 +1104,9 @@ package com.ace.manager {
 
 			KeysManager.getInstance().addKeyFun(Keyboard.D, onKeyDown); //商城面板	S
 			KeysManager.getInstance().addKeyFun(Keyboard.P, onKeyDown); //寄售面板	S
-//			KeysManager.getInstance().addKeyFun(Keyboard.Y, onKeyDown); //寄售面板	S
+			KeysManager.getInstance().addKeyFun(Keyboard.Y, onKeyDown); 
+			KeysManager.getInstance().addKeyFun(Keyboard.R, onKeyDown); 
+			KeysManager.getInstance().addKeyFun(Keyboard.K, onKeyDown); 
 
 			//			KeysManager.getInstance().addKeyFun(Keyboard.M, this.mapWnd.open); //地图面板	M
 			//			KeysManager.getInstance().addKeyFun(Keyboard.O, this.settingWnd.open); //系统设置	O
@@ -1003,9 +1125,18 @@ package com.ace.manager {
 		private function onKeyDown(event:KeyboardEvent):void {
 			var code:int=event.keyCode;
 //			if (code == Keyboard.Y) {
-//				UILayoutManager.getInstance().open_II(WindowEnum.DUNGEON_TEAM);
+//				UILayoutManager.getInstance().open_II(WindowEnum.KEEP_7);
 //				return;
 //			}
+//			showWindow(WindowEnum.ICE_BATTLE_PAUSE);
+//			DataManager.getInstance().iceBattleData.creatData1();
+//			iceBattlefieldPause.updateInfo();
+//			DataManager.getInstance().iceBattleData.creatData2();
+//			iceBattlefieldPause.updateInfo();
+//			return;
+			if (null == _keyDic[code]) {
+				return;
+			}
 			var openLevel:int=_keyDic[code][0];
 			var wndEnum:int=_keyDic[code][1];
 			if (Core.me.info.level >= openLevel) {
@@ -1021,7 +1152,7 @@ package com.ace.manager {
 		public function updateMonster(act:int):void {
 
 			if (act == 1) {
-				this.taskTrack.updateOhterTrack(TaskEnum.taskLevel_monsterLine, ["[恶魔]", "恶魔入侵活动开启  <font color='#00ff00'><u><a href='event:other_wbs--'>立即参与</a></u></font>", "", "", wbscallback]);
+				this.taskTrack.updateOhterTrack(TaskEnum.taskLevel_monsterLine, [PropUtils.getStringById(1522), StringUtil.substitute(PropUtils.getStringById(1523), ["other_wbs--"]), "", "", wbscallback]);
 			} else if (act == 0)
 				this.taskTrack.delOtherTrack(TaskEnum.taskLevel_monsterLine);
 
@@ -1061,9 +1192,15 @@ package com.ace.manager {
 			this.viewConfig.resize();
 
 			this.continuousWgt.resize();
+			for (var key:String in _claDic) {
+				var wnd:AutoWindow=getWindow(int(key)) as AutoWindow;
+				if (null != wnd) {
+					wnd.setToCenter();
+				}
+			}
 
 			if (this.backpackWnd != null)
-				this.backpackWnd.resise();
+				this.backpackWnd.resize();
 
 			this.rightTopWnd.resize();
 
@@ -1097,61 +1234,7 @@ package com.ace.manager {
 				this.funOpenWnd.resize();
 			}
 
-			if (null != friendWnd) {
-				friendWnd.setToCenter();
-			}
-			if (null != friendAddWnd) {
-				friendAddWnd.setToCenter();
-			}
-			if (null != marketWnd) {
-				marketWnd.setToCenter();
-			}
-			if (null != activeWnd) {
-				activeWnd.setToCenter();
-			}
-			if (null != expCopyWnd) {
-				expCopyWnd.setToCenter();
-			}
-			if (null != expMapWnd) {
-				expMapWnd.setToCenter();
-			}
-//			if (null != fieldBossWnd) {
-//				fieldBossWnd.setToCenter();
-//			}
-//			if (null != bossCpyWnd) {
-//				bossCpyWnd.setToCenter();
-//			}
-			if (null != storyCopyWnd) {
-				storyCopyWnd.setToCenter();
-			}
-			if (null != farmWnd) {
-				farmWnd.setToCenter();
-			}
-			if (null != worshipWnd) {
-				worshipWnd.setToCenter();
-			}
-			if (null != welfareWnd) {
-				welfareWnd.setToCenter();
-			}
-			if (null != luckDrawWnd) {
-				luckDrawWnd.setToCenter();
-			}
-			if (null != rankWnd) {
-				rankWnd.setToCenter();
-			}
-			if (null != achievementWnd) {
-				achievementWnd.setToCenter();
-			}
-			if (null != vipWnd) {
-				vipWnd.setToCenter();
-			}
-
-			//			this.titleObTain.reSize();
 			this.funForcastWnd.resize();
-			if (null != this.onlinePanel) {
-				this.onlinePanel.resize();
-			}
-
 			this.fcmWnd.reSize();
 
 			if (null != this.monsterInvadeWnd) {
@@ -1204,24 +1287,8 @@ package com.ace.manager {
 				this.bltTrack.reSize();
 			}
 
-			if (null != this.tobeStrong) {
-				this.tobeStrong.resize();
-			}
-
 			if (null != this.attackHeadWnd) {
 				this.attackHeadWnd.resize();
-			}
-
-			if (null != this.sevenDay) {
-				this.sevenDay.resize();
-			}
-
-			if (null != this.investWnd) {
-				this.investWnd.resize();
-			}
-
-			if (null != this.areaCelebrate) {
-				this.areaCelebrate.resize();
 			}
 
 			if (null != this.payRankWnd) {
@@ -1232,10 +1299,6 @@ package com.ace.manager {
 				this.guildBattleRankTrack.resize();
 			}
 
-			if (null != this.guildBattleWnd) {
-				this.guildBattleWnd.resize();
-			}
-
 			if (null != this.loadingWnd) {
 				this.loadingWnd.reSize();
 			}
@@ -1244,21 +1307,6 @@ package com.ace.manager {
 				this.qqVipWnd.resize();
 			}
 
-			if (null != this.guildBattleExplain) {
-				this.guildBattleExplain.resize();
-			}
-
-			if (null != this.collectionWnd) {
-				this.collectionWnd.resize();
-			}
-
-			if (null != this.integralWnd) {
-				this.integralWnd.resize();
-			}
-
-			if (null != this.abidePayWnd) {
-				this.abidePayWnd.resize();
-			}
 
 			if (null != this.teamCopyTrackWnd) {
 				this.teamCopyTrackWnd.resize();
@@ -1275,22 +1323,22 @@ package com.ace.manager {
 			if (null != this.groupBuyWnd) {
 				this.groupBuyWnd.resize();
 			}
-			
-			if (null != this.bossWnd) {
-				this.bossWnd.resize();
-			}
-			
-			if (null != this.vendueWnd) {
-				this.vendueWnd.resize();
-			}
 
 			if (null != this.cityBattleTrack) {
 				this.cityBattleTrack.resize();
 			}
 
+			if (null != this.iceBattlefieldTrack) {
+				this.iceBattlefieldTrack.resize();
+			}
+
 			LastTimeImageManager.getInstance().reSize();
 			NoticeManager.getInstance().resize();
 			GuideManager.getInstance().resize();
+		}
+
+		public function isCreateAndVisible(wndEnum:int):Boolean {
+			return (isCreate(wndEnum) && getWindow(wndEnum).visible);
 		}
 	}
 }

@@ -12,6 +12,7 @@ package com.leyou.ui.active.child
 	import com.ace.ui.auto.AutoSprite;
 	import com.ace.ui.lable.Label;
 	import com.leyou.net.cmd.Cmd_Go;
+	import com.leyou.utils.PropUtils;
 	import com.leyou.utils.StringUtil_II;
 	
 	import flash.events.TextEvent;
@@ -84,7 +85,7 @@ package com.leyou.ui.active.child
 					UIOpenBufferManager.getInstance().open(WindowEnum.BOSS);
 					break;
 				case 5:
-					UIOpenBufferManager.getInstance().open(WindowEnum.STORYCOPY);
+					UILayoutManager.getInstance().open_II(WindowEnum.DUNGEON_TEAM);
 					break;
 				case 6:
 					UILayoutManager.getInstance().open_II(WindowEnum.PKCOPY);
@@ -110,13 +111,13 @@ package com.leyou.ui.active.child
 			activeInfo = TableManager.getInstance().getActiveInfo($id);
 			nameLbl.text = activeInfo.des;
 			rateLbl.text = cc + "/" + activeInfo.value;
-			activeLbl.text = "活跃度"+activeInfo.reward;
+			activeLbl.text = PropUtils.getStringById(1582)+activeInfo.reward;
 			finishLbl.visible = (activeInfo.openId > 0);
 			_complete = (cc >= activeInfo.value);
 			filters = _complete ? [FilterEnum.enable] : null;
 			
 			if(activeInfo.level > Core.me.info.level){
-				finishLbl.htmlText = StringUtil_II.getColorStr(activeInfo.level+"级开启", "#FF0000");
+				finishLbl.htmlText = StringUtil_II.getColorStr(activeInfo.level+PropUtils.getStringById(1583), "#FF0000");
 				return;
 			}
 			
@@ -126,7 +127,7 @@ package com.leyou.ui.active.child
 				finishLbl.addEventListener(TextEvent.LINK, linkHandler);
 			}else{
 				finishLbl.styleSheet = null;
-				finishLbl.htmlText = StringUtil_II.getColorStr("已完成", "#8B8989");
+				finishLbl.htmlText = StringUtil_II.getColorStr(PropUtils.getStringById(1584), "#8B8989");
 			}
 		}
 	}

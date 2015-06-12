@@ -138,7 +138,8 @@ package com.ace.gameData.table
 			this.m_attack=data.@m_attack;
 			this.m_defense=data.@m_defense;
 			this.extraHP=data.@extraHP;
-			this.extraMP=data.@extraMP;
+//			this.extraMP=data.@extraMP;
+			this.extraMP="0";
 			this.crit=data.@crit;
 			this.critReduce=data.@critReduce;
 			this.hit=data.@hit;

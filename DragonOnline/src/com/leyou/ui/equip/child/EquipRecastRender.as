@@ -136,7 +136,7 @@ package com.leyou.ui.equip.child {
 
 		private function startRecast():void {
 			if (this.EquipGrid.data.hasOwnProperty("pos") && this.CostGrid.data.hasOwnProperty("pos")) {
-				
+
 				if (this.EquipGrid.data.num == 0 && this.CostGrid.data.num == 0)
 					Cmd_Equip.cm_EquipRecast(40, this.EquipGrid.data.info.subclassid - 13, 40, this.CostGrid.data.info.subclassid - 13, (this.recastBar2.getUseGold() ? 1 : 0));
 				else if (this.EquipGrid.data.num == 0)
@@ -344,13 +344,22 @@ package com.leyou.ui.equip.child {
 //				return;
 
 			if (bagpos == -1 && bodypos == -1 && mountypos == -1 && data == null) {
+
 				UIManager.getInstance().equipWnd.BagRender.updateBag([bagpos]);
 				UIManager.getInstance().equipWnd.BagRender.updateMount([mountypos]);
 				UIManager.getInstance().equipWnd.BagRender.updatebody([bodypos]);
+
 			} else {
+
 				UIManager.getInstance().equipWnd.BagRender.updateBag([bagpos], 0, 0, [int(info.info.quality), "<"], int(info.info.level));
 				UIManager.getInstance().equipWnd.BagRender.updateMount([mountypos], 0, 0, [int(info.info.quality), "<"], int(info.info.level));
-				UIManager.getInstance().equipWnd.BagRender.updatebody([bodypos], false, 0, 0, [int(info.info.quality), "<"], int(info.info.level));
+
+				if (!this.EquipGrid.isEmpty){
+					UIManager.getInstance().equipWnd.BagRender.updatebody([bodypos], true);
+				}else
+					UIManager.getInstance().equipWnd.BagRender.updatebody([bodypos], false, 0, 0, [int(info.info.quality), "<"], int(info.info.level));
+
+
 			}
 
 		}
@@ -363,7 +372,7 @@ package com.leyou.ui.equip.child {
 			var data:Object;
 			if (this.EquipGrid.data.hasOwnProperty("pos")) {
 				if (this.EquipGrid.data.num == 0)
-					data=MyInfoManager.getInstance().mountEquipArr[this.EquipGrid.data.info.subclassid-13];
+					data=MyInfoManager.getInstance().mountEquipArr[this.EquipGrid.data.info.subclassid - 13];
 				else
 					data=MyInfoManager.getInstance().bagItems[this.EquipGrid.data.pos];
 			} else {

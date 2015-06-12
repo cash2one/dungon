@@ -241,7 +241,7 @@ package com.ace.gameData.table {
 		/**
 		 *	技能附带额外最大伤害
 		 */
-		public var addtion4:int;
+		public var addition4:int;
 
 		/**
 		 *	子弹速度
@@ -323,7 +323,7 @@ package com.ace.gameData.table {
 		 *	1 自动
 		 */
 		public var auto:int;
-
+		
 
 		public function TSkillInfo(data:XML=null) {
 			if (data == null)
@@ -363,7 +363,7 @@ package com.ace.gameData.table {
 			this.addition1=data.@addition1;
 			this.addition2=data.@addition2;
 			this.addition3=data.@addition3;
-			this.addtion4=data.@addtion4;
+			this.addition4=data.@addtion4;
 			this.buSpeed=data.@buSpeed;
 			this.penetrate=data.@penetrate;
 			this.buWide=data.@buWide;

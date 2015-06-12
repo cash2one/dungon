@@ -91,6 +91,8 @@ el  -- 元素 (0当前守护元素 1金 2木 3水 4火 5土) {"0":1,"1":1,"2":1,
 			info.guildName=o.un; //---行会
 			info.vipLv=o.vip; //----vip
 			info.avt=o.avt;
+			info.absAttLbl=o.f_a;
+			info.absDefLbl=o.f_d;
 			
 			var obj:Object=o.el; //  -- 元素 (0当前守护元素 1金 2木 3水 4火 5土) {"0":1,"1":1,"2":1,"3":1,"4":1,"5":1}  "element":num
 			info.currentElement=obj["0"];

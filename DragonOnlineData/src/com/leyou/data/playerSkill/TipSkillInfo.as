@@ -13,6 +13,9 @@ package com.leyou.data.playerSkill
 		// 装备的符文
 		public var runde:int;
 		
+		// 技能等级
+		public var skillLv:int = 1;
+		
 		// 技能信息
 		public var skillInfo:TSkillInfo;
 	}

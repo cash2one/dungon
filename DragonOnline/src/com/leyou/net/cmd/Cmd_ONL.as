@@ -5,6 +5,7 @@ package com.leyou.net.cmd
 	import com.ace.manager.UIManager;
 	import com.leyou.enum.CmdEnum;
 	import com.leyou.net.NetGate;
+	import com.leyou.utils.PropUtils;
 
 	public class Cmd_ONL
 	{
@@ -16,7 +17,7 @@ package com.leyou.net.cmd
 //			UIManager.getInstance().onlineReward.updateInfo(obj);
 			DataManager.getInstance().onlineRewardData.loadData_I(obj);
 			UIManager.getInstance().rightTopWnd.active("onlineBtn");
-			UIManager.getInstance().rightTopWnd.setTime("onlineBtn", obj.stime, "可领取");
+			UIManager.getInstance().rightTopWnd.setTime("onlineBtn", obj.stime, PropUtils.getStringById(1567));
 			if(UIManager.getInstance().isCreate(WindowEnum.ONLINDREWARD)){
 				UIManager.getInstance().onlinePanel.updateInfo();
 			}

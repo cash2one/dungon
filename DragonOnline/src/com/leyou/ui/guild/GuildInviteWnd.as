@@ -11,6 +11,7 @@ package com.leyou.ui.guild {
 	import com.leyou.net.cmd.Cmd_Guild;
 	import com.leyou.utils.GuildUtil;
 	import com.leyou.utils.PlayerUtil;
+	import com.leyou.utils.PropUtils;
 	
 	import flash.events.MouseEvent;
 
@@ -108,26 +109,26 @@ package com.leyou.ui.guild {
 				this.fightLbl.text="";
 
 			if (type == 1) {
-				this.titleNameLbl.text="行会邀请";
-				this.invLbl.text="邀请你加入其行会，是否同意？";
+				this.titleNameLbl.text=PropUtils.getStringById(1754);
+				this.invLbl.text=PropUtils.getStringById(1755);
 				
 				this.fightTxt.visible=false;
 				this.proTxt.visible=false;
 				this.viewDataBtn.visible=false;
 				this.proLbl.text="";
 				
-				this.playNameTxt.text="行会名:";
+				this.playNameTxt.text=PropUtils.getStringById(1756);
 				this.playNameLbl.text="" + info[1];
 			} else {
 				
-				this.titleNameLbl.text="行会申请";
-				this.invLbl.text="申请加入你的行会，是否同意？";
+				this.titleNameLbl.text=PropUtils.getStringById(1757);
+				this.invLbl.text=PropUtils.getStringById(1758);
 				
 				this.fightTxt.visible=true;
 				this.proTxt.visible=true;
 				this.viewDataBtn.visible=true;
 				
-				this.playNameTxt.text="玩家名:";
+				this.playNameTxt.text=PropUtils.getStringById(1759);
 				this.proLbl.text=""+PlayerUtil.getPlayerRaceByIdx(info[1]);
 				this.playNameLbl.text="" + info[0];
 			}

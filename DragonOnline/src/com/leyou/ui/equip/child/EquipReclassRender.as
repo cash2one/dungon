@@ -205,6 +205,7 @@ package com.leyou.ui.equip.child {
 
 			this.targetGrid.updataInfo(d);
 			EquipStrengGrid.selectState.updataInfo(d);
+			EquipStrengGrid.selectState.setSelectState(true);
 
 		}
 

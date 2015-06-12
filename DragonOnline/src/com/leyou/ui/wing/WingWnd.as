@@ -1,10 +1,9 @@
 package com.leyou.ui.wing {
 
-	import com.ace.config.Core;
 	import com.ace.enum.WindowEnum;
+	import com.ace.game.scene.ui.effect.StarChangeEffect;
 	import com.ace.gameData.manager.MyInfoManager;
 	import com.ace.gameData.manager.TableManager;
-	import com.ace.gameData.table.TWing_Trade;
 	import com.ace.loader.child.SwfLoader;
 	import com.ace.manager.LibManager;
 	import com.ace.manager.UILayoutManager;
@@ -16,12 +15,11 @@ package com.leyou.ui.wing {
 	import com.ace.ui.component.RollNumWidget;
 	import com.ace.ui.img.child.Image;
 	import com.ace.ui.lable.Label;
-	import com.ace.utils.PnfUtil;
 	import com.ace.utils.StringUtil;
 	import com.leyou.enum.ConfigEnum;
 	import com.leyou.net.cmd.Cmd_Wig;
 	import com.leyou.utils.PropUtils;
-
+	
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 
@@ -74,6 +72,7 @@ package com.leyou.ui.wing {
 		private var gridVec:Vector.<WingGrid>;
 
 		private var lv:int=0;
+		private var wlv:int=0;
 		private var st:int=0;
 		private var swfIndex:int=1;
 
@@ -85,9 +84,11 @@ package com.leyou.ui.wing {
 		private var infoXml:XML;
 		private var effectBg:SwfLoader;
 
+		private var starEffect:StarChangeEffect;
+
 		private var otherPlay:Boolean=false;
 		//3
-		private var propArrKey:Array=[4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 1, 2];
+		private var propArrKey:Array=[4, 5, 8, 9, 10, 11, 12, 13, 1, 2,24];
 
 		public function WingWnd(otherPlayer:Boolean=false) {
 			super(LibManager.getInstance().getXML("config/ui/wing/wingWnd.xml"));
@@ -165,8 +166,8 @@ package com.leyou.ui.wing {
 
 			this.viewList[PropUtils.getIndexByStr("物理攻击")]=this.phAttLbl;
 			this.viewList[PropUtils.getIndexByStr("物理防御")]=this.phDefLbl;
-			this.viewList[PropUtils.getIndexByStr("法术攻击")]=this.magicAttLbl;
-			this.viewList[PropUtils.getIndexByStr("法术防御")]=this.magicDefLbl;
+//			this.viewList[PropUtils.getIndexByStr("法术攻击")]=this.magicAttLbl;
+//			this.viewList[PropUtils.getIndexByStr("法术防御")]=this.magicDefLbl;
 			this.viewList[PropUtils.getIndexByStr("生命上限")]=this.hpLbl;
 			this.viewList[PropUtils.getIndexByStr("法力上限")]=this.mpLbl;
 			this.viewList[PropUtils.getIndexByStr("暴击等级")]=this.critLvLbl;
@@ -174,13 +175,13 @@ package com.leyou.ui.wing {
 			this.viewList[PropUtils.getIndexByStr("闪避等级")]=this.dodgeLvLbl;
 			this.viewList[PropUtils.getIndexByStr("韧性等级")]=this.toughLvLbl;
 			this.viewList[PropUtils.getIndexByStr("守护等级")]=this.guaidLvLbl;
-//			this.viewList[PropUtils.getIndexByStr("精力上限")]=this.reikiUpLbl;
+			this.viewList[PropUtils.getIndexByStr("精力上限")]=this.reikiUpLbl;
 			this.viewList[PropUtils.getIndexByStr("必杀等级")]=this.killLvLbl;
 
 			this.viewAddList[PropUtils.getIndexByStr("物理攻击")]=this.phAttAddLbl;
 			this.viewAddList[PropUtils.getIndexByStr("物理防御")]=this.phDefAddLbl;
-			this.viewAddList[PropUtils.getIndexByStr("法术攻击")]=this.magicAttAddLbl;
-			this.viewAddList[PropUtils.getIndexByStr("法术防御")]=this.magicDefAddLbl;
+//			this.viewAddList[PropUtils.getIndexByStr("法术攻击")]=this.magicAttAddLbl;
+//			this.viewAddList[PropUtils.getIndexByStr("法术防御")]=this.magicDefAddLbl;
 			this.viewAddList[PropUtils.getIndexByStr("生命上限")]=this.hpAddLbl;
 			this.viewAddList[PropUtils.getIndexByStr("法力上限")]=this.mpAddLbl;
 			this.viewAddList[PropUtils.getIndexByStr("暴击等级")]=this.critLvAddLbl;
@@ -188,7 +189,7 @@ package com.leyou.ui.wing {
 			this.viewAddList[PropUtils.getIndexByStr("闪避等级")]=this.dodgeLvAddLbl;
 			this.viewAddList[PropUtils.getIndexByStr("韧性等级")]=this.toughLvAddLbl;
 			this.viewAddList[PropUtils.getIndexByStr("守护等级")]=this.guaidLvAddLbl;
-//			this.viewAddList[PropUtils.getIndexByStr("精力上限")]=this.reikiUpAddLbl;
+			this.viewAddList[PropUtils.getIndexByStr("精力上限")]=this.reikiUpAddLbl;
 			this.viewAddList[PropUtils.getIndexByStr("必杀等级")]=this.killLvAddLbl;
 
 			this.reikiUpLbl.visible=this.reikiUpAddLbl.visible=false;
@@ -229,6 +230,11 @@ package com.leyou.ui.wing {
 			this.setPropAddVisible(false);
 			this.wingUpBtn.setToolTip(TableManager.getInstance().getSystemNotice(1210).content);
 
+			this.starEffect=new StarChangeEffect(10, true);
+			this.addChild(this.starEffect);
+			this.starEffect.x=35;
+			this.starEffect.y=4;
+
 			this.y=1;
 			this.x=-12;
 		}
@@ -258,15 +264,15 @@ package com.leyou.ui.wing {
 //					this.rightImgBtn.visible=false;
 			}
 
-			var xml:XML=infoXml.data[int(info.lv) - 1];
-			var xml2:XML=infoXml.data[(int(info.lv) < 10 ? int(info.lv) : 9)];
+			var xml:XML=infoXml.data[int(info.wlv) - 1];
+			var xml2:XML=infoXml.data[(int(info.wlv) < 100 ? int(info.wlv) : 99)];
 
 			var twRate:int=0;
 
 			if (info.flyl != 0)
 				twRate=TableManager.getInstance().getWingTradeByID(info.flyl).rate;
 
-			for (var i:int=1; i <= 13; i++) {
+			for (var i:int=1; i <= 10; i++) {
 				if (int(xml.attribute("W_AttID" + i)) == 3)
 					continue;
 
@@ -283,7 +289,7 @@ package com.leyou.ui.wing {
 			if (info.hasOwnProperty("zdl")) {
 
 				if (this.rollPower.number != info.zdl) {
-					
+
 					if (this.otherPlay)
 						this.rollPower.setNum(info.zdl);
 					else
@@ -318,11 +324,18 @@ package com.leyou.ui.wing {
 				return;
 			}
 
-			if (this.lv >= 10) {
+			if (info.hasOwnProperty("wlv"))
+				this.starEffect.setStarPos(info.wlv % 10 - 1);
+
+			this.wlv=info.wlv;
+			
+			if (info.wlv >= 100) {
 				this.wingUpBtn.setActive(false, .6, true);
 				this.wingUpBtn.setToolTip(TableManager.getInstance().getSystemNotice(1213).content);
 				this.arrowImg.visible=false;
 				UIManager.getInstance().wingLvUpWnd.hide();
+				
+				this.starEffect.setStarPos(9);
 			} else {
 				this.wingUpBtn.setActive(true, 1, true);
 				this.wingUpBtn.setToolTip(TableManager.getInstance().getSystemNotice(1210).content);
@@ -330,6 +343,7 @@ package com.leyou.ui.wing {
 				UIManager.getInstance().wingLvUpWnd.update(xml, info);
 			}
 
+			
 			if (this.lv >= ConfigEnum.wing17) {
 
 				this.wingTradeBtn.setActive(true, 1, true);
@@ -343,7 +357,7 @@ package com.leyou.ui.wing {
 			} else {
 
 				this.wingTradeBtn.setActive(false, .6, true);
-				this.wingTradeBtn.setToolTip(TableManager.getInstance().getSystemNotice(1217).content);
+				this.wingTradeBtn.setToolTip(StringUtil.substitute(TableManager.getInstance().getSystemNotice(1217).content,[ConfigEnum.wing17]));
 				this.arrow1Img.visible=false;
 			}
 		}
@@ -390,6 +404,10 @@ package com.leyou.ui.wing {
 
 		public function get Lv():int {
 			return this.lv;
+		}
+		
+		public function get wLv():int {
+			return this.wlv;
 		}
 
 		private function onRollClick(e:MouseEvent):void {
@@ -443,9 +461,9 @@ package com.leyou.ui.wing {
 
 			if (swfIndex == this.lv) {
 				if (swfIndex == this.lv && this.st > 0) {
-					this.showBtn.text="隐  藏";
+					this.showBtn.text=PropUtils.getStringById(1993);
 				} else
-					this.showBtn.text="显  示";
+					this.showBtn.text=PropUtils.getStringById(1994);
 			}
 
 			if ((swfIndex) > this.lv) {

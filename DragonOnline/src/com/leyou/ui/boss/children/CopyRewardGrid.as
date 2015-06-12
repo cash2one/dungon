@@ -12,6 +12,7 @@ package com.leyou.ui.boss.children
 	import com.ace.tools.ScaleBitmap;
 	import com.ace.ui.lable.Label;
 	import com.leyou.data.tips.TipsInfo;
+	import com.leyou.utils.PropUtils;
 	
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
@@ -112,16 +113,16 @@ package com.leyou.ui.boss.children
 				//					sourceName = itemInfo.icon + ".png";
 				//				}
 			}
-			if(info.count > 1 && info.count < 10000){
-				numLbl.text = info.count+"";
-			}else if(info.count >= 10000 && info.count < 1000000){
-				numLbl.text = (info.count/10000).toFixed(1) + "万";
-			}else if(info.count >= 1000000){
-				numLbl.text = int(info.count/10000) + "万";
-			}else if(info.count <= 0){
+			count = info.count;
+			if(count > 1 && count < 10000){
+				numLbl.text = count+"";
+			}else if(count >= 10000 && count < 1000000){
+				numLbl.text = (count/10000).toFixed(1) + PropUtils.getStringById(1532);
+			}else if(count >= 1000000){
+				numLbl.text = int(count/10000) + PropUtils.getStringById(1532);
+			}else if(count <= 0){
 				numLbl.text = "";
 			}
-			count = info.count;
 			var iconUrl:String = GameFileEnum.URL_ITEM_ICO + sourceName;
 			iconBmp.updateBmp(iconUrl, null, false, 35, 35);
 			numLbl.x = ItemEnum.ITEM_BG_WIDTH - numLbl.width;

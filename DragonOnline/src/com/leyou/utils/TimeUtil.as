@@ -71,13 +71,13 @@ package com.leyou.utils {
 
 			return d.fullYear + "-" + (d.month + 1) + "-" + d.date + " " + hh + ":" + mm + ":" + ss;
 		}
-		
+
 		/**
-		 * 
+		 *
 		 * @param d
-		 * @return 
-		 * 
-		 */		
+		 * @return
+		 *
+		 */
 		public static function getTimeToString(d:Date):String {
 
 			var ss:String="";
@@ -173,43 +173,43 @@ package com.leyou.utils {
 			var d:int=_i / 60 / 60 / 24; // % int(month[mon]);
 
 			if (d > 0) {
-				return d + "天" + h + "时" + m + "分" + s + "秒";
+				return d + PropUtils.getStringById(1783) + h + PropUtils.getStringById(2062) + m + PropUtils.getStringById(2147) + s + PropUtils.getStringById(2146);
 			}
 
 			if (h > 0) {
-				return h + "时" + m + "分" + s + "秒";
+				return h + PropUtils.getStringById(2062) + m + PropUtils.getStringById(2147) + s + PropUtils.getStringById(2146);
 			}
 
 			if (m > 0) {
-				return m + "分" + s + "秒";
+				return m + PropUtils.getStringById(2147) + s + PropUtils.getStringById(2146);
 			}
 
 			if (s > 0) {
-				return s + "秒";
+				return s + PropUtils.getStringById(2146);
 			}
 
-			return "0秒";
+			return "0" + PropUtils.getStringById(2146);
 		}
 
 		public static function getWeekStringByInt(i:int):String {
 
 			switch (i) {
 				case 0:
-					return "周日";
+					return PropUtils.getStringById(2063);
 				case 1:
-					return "周一";
+					return PropUtils.getStringById(2064);
 				case 2:
-					return "周二";
+					return PropUtils.getStringById(2065);
 				case 3:
-					return "周三";
+					return PropUtils.getStringById(2066);
 				case 4:
-					return "周四";
+					return PropUtils.getStringById(2067);
 				case 5:
-					return "周五";
+					return PropUtils.getStringById(2068);
 				case 6:
-					return "周六";
+					return PropUtils.getStringById(2069);
 				case 7:
-					return "周日";
+					return PropUtils.getStringById(2063);
 			}
 
 			return "";

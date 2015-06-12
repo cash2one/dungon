@@ -14,11 +14,13 @@ package com.leyou.ui.pkCopy.child {
 	import com.ace.ui.img.child.Image;
 	import com.ace.ui.lable.Label;
 	import com.ace.ui.lable.children.TextArea;
+	import com.ace.utils.StringUtil;
 	import com.leyou.enum.PkCopyEnum;
 	import com.leyou.enum.TaskEnum;
 	import com.leyou.net.cmd.Cmd_Act;
 	import com.leyou.ui.task.child.TaskTrackBtn;
-
+	import com.leyou.utils.PropUtils;
+	
 	import flash.events.MouseEvent;
 
 	public class DungeonTZPanel extends AutoWindow {
@@ -72,7 +74,8 @@ package com.leyou.ui.pkCopy.child {
 		private function onClick(e:MouseEvent):void {
 
 			if (this.serverId == 0) {
-				UIManager.getInstance().openWindow(WindowEnum.EXPCOPY);
+				UILayoutManager.getInstance().open_II(WindowEnum.DUNGEON_TEAM);
+//				UIManager.getInstance().openWindow(WindowEnum.EXPCOPY);
 				this.hide();
 				return;
 			}
@@ -119,8 +122,8 @@ package com.leyou.ui.pkCopy.child {
 //				UIManager.getInstance().rightTopWnd.active("questBtn")
 			} else if (tinfo.serverId == 0) {
 				if (1 == o.state) {
-					var wc:String="双倍经验怪物入侵<font color='#ff00'><u><a href='event:other_doubleExp--doubleExp'>立即参与</a></u></font>"
-					var arr:Array=["[双倍]", wc, "", "", callback];
+					var wc:String=StringUtil.substitute(PropUtils.getStringById(1823),["<font color='#ff00'><u><a href='event:other_doubleExp--doubleExp'>"])+"</a></u></font>"
+					var arr:Array=[PropUtils.getStringById(1824), wc, "", "", callback];
 					UIManager.getInstance().taskTrack.updateOhterTrack(TaskEnum.taskLevel_doubleLine, arr);
 
 					this.show();
@@ -139,7 +142,8 @@ package com.leyou.ui.pkCopy.child {
 		}
 
 		private function callback(tag:String):void {
-			UILayoutManager.getInstance().open(WindowEnum.EXPCOPY);
+			UILayoutManager.getInstance().open_II(WindowEnum.DUNGEON_TEAM);
+//			UILayoutManager.getInstance().open(WindowEnum.EXPCOPY);
 		}
 
 	}

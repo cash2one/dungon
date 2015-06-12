@@ -45,7 +45,7 @@ package com.leyou.ui.cityBattle
 					vectoryItem = new CityBattleRewardCommonItem();
 					vectoryItems[m] = vectoryItem;
 				}
-				info = TableManager.getInstance().getCityBattleRewardInfo(REWARD_MAX*0+m+1);
+				info = TableManager.getInstance().getCityBattleRewardInfo(REWARD_MAX*0+(REWARD_MAX-m));
 				vectoryItem.updateTable(info);
 			}
 			
@@ -55,7 +55,7 @@ package com.leyou.ui.cityBattle
 					rankItem = new CityBattleRewardCommonItem();
 					rankItems[k] = rankItem;
 				}
-				info = TableManager.getInstance().getCityBattleRewardInfo(REWARD_MAX*1+k+1);
+				info = TableManager.getInstance().getCityBattleRewardInfo(REWARD_MAX*1+(REWARD_MAX-k));
 				rankItem.updateTable(info);
 			}
 			
@@ -66,7 +66,7 @@ package com.leyou.ui.cityBattle
 					dayItem = new CityBattleRewardReceiveItem();
 					dayRewardItems[n] = dayItem;
 				}
-				info = TableManager.getInstance().getCityBattleRewardInfo(REWARD_MAX*2+n+1);
+				info = TableManager.getInstance().getCityBattleRewardInfo(REWARD_MAX*2+(REWARD_MAX-n));
 				dayItem.updateTable(info);
 			}
 			

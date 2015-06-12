@@ -33,7 +33,7 @@ package com.ace.game.proxy {
 	import com.leyou.ui.convenientuse.ConvenientUseManager;
 	import com.test.Test200;
 	import com.test.TestScene;
-
+	
 	import flash.geom.Point;
 	import flash.utils.setTimeout;
 
@@ -65,6 +65,10 @@ package com.ace.game.proxy {
 			// 刷新野外BOSS
 			if (UIManager.getInstance().isCreate(WindowEnum.BOSS)) {
 				UIManager.getInstance().bossWnd.refreshBossItem();
+			}
+			
+			if(UIManager.getInstance().isCreate(WindowEnum.DUNGEON_TEAM)){
+				UIManager.getInstance().teamCopyWnd.updatePage();
 			}
 
 			UIManager.getInstance().roleWnd.openWingBuy();

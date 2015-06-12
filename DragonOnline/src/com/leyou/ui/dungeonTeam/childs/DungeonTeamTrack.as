@@ -19,6 +19,7 @@ package com.leyou.ui.dungeonTeam.childs {
 	import com.leyou.manager.PopupManager;
 	import com.leyou.manager.TimerManager;
 	import com.leyou.net.cmd.Cmd_CpTm;
+	import com.leyou.utils.PropUtils;
 	import com.leyou.utils.TimeUtil;
 
 	public class DungeonTeamTrack extends AutoSprite {
@@ -67,7 +68,7 @@ package com.leyou.ui.dungeonTeam.childs {
 			for (var i:int=0; i < m.length; i++) {
 				lb=new Label();
 
-				lb.text="击杀:" + TableManager.getInstance().getLivingInfo(m[i].mid).name
+				lb.text=PropUtils.getStringById(1674)+":" + TableManager.getInstance().getLivingInfo(m[i].mid).name
 
 				this.addChild(lb);
 
@@ -112,7 +113,7 @@ package com.leyou.ui.dungeonTeam.childs {
 
 			UIManager.getInstance().taskTrack.hide();
 			UIManager.getInstance().hideWindow(WindowEnum.DUNGEON_TEAM);
-			UIManager.getInstance().hideWindow(WindowEnum.STORYCOPY);
+//			UIManager.getInstance().hideWindow(WindowEnum.STORYCOPY);
 			UIManager.getInstance().hideWindow(WindowEnum.COPYTRACK);
 
 			

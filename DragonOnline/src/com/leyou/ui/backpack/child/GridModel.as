@@ -15,7 +15,8 @@ package com.leyou.ui.backpack.child {
 	import com.leyou.ui.tips.childs.TipsGrid;
 	import com.leyou.utils.ColorUtil;
 	import com.leyou.utils.FilterUtil;
-	
+	import com.leyou.utils.PropUtils;
+
 	import flash.display.Bitmap;
 
 	public class GridModel extends GridBase {
@@ -55,7 +56,7 @@ package com.leyou.ui.backpack.child {
 			this.limitTimeLbl.defaultTextFormat=FontEnum.getTextFormat("Red12");
 			this.limitTimeLbl.filters=[FilterUtil.showBorder(0x000000)];
 
-			this.limitTimeLbl.text="限时";
+			this.limitTimeLbl.text=PropUtils.getStringById(1632);
 			this.limitTimeLbl.visible=false;
 
 			this.topBmp=new Image();
@@ -121,9 +122,9 @@ package com.leyou.ui.backpack.child {
 				if (info is TItemInfo || info is TEquipInfo) {
 
 					if (this is TipsGrid && TipsGrid(this).tips != null && TimerManager.CurrentTime >= TipsGrid(this).tips.dtime)
-						this.limitTimeLbl.text="过期";
+						this.limitTimeLbl.text=PropUtils.getStringById(1633);
 					else
-						this.limitTimeLbl.text="限时";
+						this.limitTimeLbl.text=PropUtils.getStringById(1632);
 
 					this.limitTimeLbl.visible=(int(info.limitTime) != 0)
 				} else if (info is TShop) {
@@ -133,20 +134,20 @@ package com.leyou.ui.backpack.child {
 						return;
 
 					this.limitTimeLbl.visible=(int(tinfo.limitTime) != 0);
-						
+
 				} else {
-					
+
 					if (info is Baginfo || info is StoreInfo) {
 						if (TimerManager.CurrentTime >= info.tips.dtime)
-							this.limitTimeLbl.text="过期";
+							this.limitTimeLbl.text=PropUtils.getStringById(1633);
 						else
-							this.limitTimeLbl.text="限时";
+							this.limitTimeLbl.text=PropUtils.getStringById(1632);
 					}
 
 					this.limitTimeLbl.visible=(int(info.info.limitTime) != 0)
 				}
 
-				if (int(this.width / 10)==6)
+				if (int(this.width / 10) == 6)
 					this.limitTimeLbl.x=60 - 25;
 				else
 					this.limitTimeLbl.x=40 - 25;

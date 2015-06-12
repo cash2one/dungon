@@ -16,7 +16,7 @@ package com.ace.enum {
 		public static const FARM_LOG:int=4;
 
 		// 剧情副本   ------即时加载
-		public static const STORYCOPY:int=5;
+//		public static const STORYCOPY:int=5;
 
 		// 剧情副本奖励   ------即时加载
 		public static const STORYCOPY_REWARD:int=6;
@@ -31,7 +31,7 @@ package com.ace.enum {
 //		public static const FIELDBOSS:int=9;
 
 		// 经验副本   ------即时加载
-		public static const EXPCOPY:int=10;
+//		public static const EXPCOPY:int=10;
 
 		// 经验副本小地图   ------即时加载
 		public static const EXPCOPY_MAP:int=11;
@@ -424,5 +424,57 @@ package com.ace.enum {
 		
 		// BOSS整合界面
 		public static const BOSS:int = 113;
+		
+		// 龙珠
+		public static const DRAGON_BALL:int = 114;
+		
+		// 龙珠宝物预览界面
+		public static const DRAGON_PROVIEW:int = 115;
+
+		/**
+		 * 魔盒 
+		 */		 
+		public static const MEDIC:int = 116;
+		
+		// 霜炎战场奖励
+		public static const ICE_BATTLE_REWARD:int = 117;
+		
+		// 霜炎战场结算
+		public static const ICE_BATTLE_END:int = 118;
+		
+		// 霜炎战场暂停
+		public static const ICE_BATTLE_PAUSE:int = 119;
+		
+		// 霜炎战场追踪
+		public static const ICE_BATTLE_TRACK:int = 120;
+		
+		// 争霸历史记录
+		public static const WAR_LOG:int = 121;
+		
+		// 霜炎规则
+		public static const ICE_BATTLE_RULE:int = 122;
+		
+		// 神器锻造
+		public static const LEGENDAREY_WEAPON:int = 123;
+		
+		// 超级反钻
+		public static const SUPER_FIRST_RETURN:int = 124;
+		
+		// 黑市
+		public static const BLACK_STROE:int = 125;
+		
+		// 宠物(佣兵)
+		public static const PET:int = 126;
+		
+		// 宠物技能选择
+		public static const PET_SKILL_SELECT:int = 127;
+		
+		// 任务集市
+		public static const TASK_MARKET:int = 128;
+		
+		/**
+		 * 7日登陆 
+		 */		
+		public static const KEEP_7:int = 129;
 	}
 }

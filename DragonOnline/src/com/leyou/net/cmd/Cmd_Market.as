@@ -94,7 +94,8 @@ package com.leyou.net.cmd
 //				throw new Error("角色尚未初始化");
 //				return;
 //			}
-			UIManager.getInstance().roleHeadWnd.updateWingInfo(o);
+//			UIManager.getInstance().roleHeadWnd.updateWingInfo(o);
+			UIManager.getInstance().leftTopWnd.updateWingInfo(o);
 			if(UIManager.getInstance().marketWnd){
 				UIManager.getInstance().marketWnd.setWingInfo(o);
 			}

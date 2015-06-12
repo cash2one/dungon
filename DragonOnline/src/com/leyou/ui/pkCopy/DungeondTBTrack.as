@@ -13,6 +13,7 @@ package com.leyou.ui.pkCopy {
 	import com.ace.ui.lable.Label;
 	import com.ace.ui.map.MapWnd;
 	import com.ace.ui.notice.NoticeManager;
+	import com.ace.utils.StringUtil;
 	import com.leyou.enum.ConfigEnum;
 	import com.leyou.manager.PopupManager;
 	import com.leyou.manager.TimerManager;
@@ -29,6 +30,7 @@ package com.leyou.ui.pkCopy {
 		private var timeLbl:Label;
 		private var ruleLbl:Label;
 		private var lvupLbl:Label;
+		private var descLbl:Label;
 
 		private var keyLblArr:Array=[];
 		private var valueLblArr:Array=[];
@@ -52,8 +54,10 @@ package com.leyou.ui.pkCopy {
 			this.timeLbl=this.getUIbyID("timeLbl") as Label;
 			this.ruleLbl=this.getUIbyID("ruleLbl") as Label;
 			this.lvupLbl=this.getUIbyID("lvupLbl") as Label;
+			this.descLbl=this.getUIbyID("descLbl") as Label;
 
 			this.ruleLbl.setToolTip(TableManager.getInstance().getSystemNotice(5506).content);
+			this.descLbl.htmlText="" + StringUtil.substitute(TableManager.getInstance().getSystemNotice(5507).content,[ConfigEnum.dungeonTB15]);
 
 			EventManager.getInstance().addEvent(EventEnum.COPY_QUIT, onClick);
 		}
@@ -82,7 +86,8 @@ package com.leyou.ui.pkCopy {
 
 			this.countLbl.text=o.open + "/" + ConfigEnum.dungeonTB11;
 			this.hunLbl.text="" + o.energy;
-			this.equipLbl.text="" + o.qhs;
+//			this.equipLbl.text="" + o.qhs;
+			this.equipLbl.text="" + o.exp;
 //			this.eleLbl.text="" + o.ele;
 			this.wingLbl.text="" + o.wing;
 			this.lvupLbl.text="" + o.jsdw;

@@ -61,7 +61,7 @@ package com.leyou.ui.equip {
 			this.bagTabBar.addToTab(this.equipIntensifyRender, 0);
 			this.bagTabBar.addToTab(this.equipTransRender, 1);
 			this.bagTabBar.addToTab(this.equipRecastRender, 2);
-			this.bagTabBar.addToTab(this.equipReclassRender, 3);
+//			this.bagTabBar.addToTab(this.equipReclassRender, 3);
 			this.bagTabBar.addToTab(this.equipBreakRender, 4);
 			this.bagTabBar.addToTab(this.equipLvupRender, 5);
 
@@ -218,7 +218,7 @@ package com.leyou.ui.equip {
 			if (ConfigEnum.EquipReclassOpenLv > Core.me.info.level) {
 				this.bagTabBar.setTabVisible(3, false);
 			} else {
-				this.bagTabBar.setTabVisible(3, true);
+				this.bagTabBar.setTabVisible(3, false);
 			}
 
 			if (ConfigEnum.EquipBreakOpenLv > Core.me.info.level) {

@@ -144,7 +144,7 @@ package com.leyou.ui.firstPay
 		
 		public function updateInfo(obj:Object):void{
 			st = obj.st;
-			var rewardList:Array = obj.jlist;
+			var rewardList:Array = obj.fjlist;
 			var isVip:Boolean = (int(obj.vst) == 1);
 			var count:int = rewardList.length;
 			for(var n:int = 0; n < count; n++){
@@ -158,7 +158,8 @@ package com.leyou.ui.firstPay
 			}else if(1 == st){
 				payBtn.updataBmd("ui/ttsc/btn_lqjl.jpg");
 				payBtn.setActive(true, 1, true);
-				UIManager.getInstance().rightTopWnd.active("areaFirstPayBtn", 1);
+				UIManager.getInstance().leftTopWnd.setFirstGift(true);
+//				UIManager.getInstance().rightTopWnd.active("areaFirstPayBtn", 1);
 			}else if(2 == st){
 				payBtn.updataBmd("ui/ttsc/btn_lqjl.jpg");
 				payBtn.setActive(false, 1, true);

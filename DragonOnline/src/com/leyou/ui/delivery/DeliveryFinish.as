@@ -9,7 +9,9 @@ package com.leyou.ui.delivery {
 	import com.ace.ui.button.children.NormalButton;
 	import com.ace.ui.img.child.Image;
 	import com.ace.ui.lable.Label;
+	import com.ace.utils.StringUtil;
 	import com.leyou.net.cmd.Cmd_Yct;
+	import com.leyou.utils.PropUtils;
 
 	import flash.events.MouseEvent;
 
@@ -87,7 +89,7 @@ package com.leyou.ui.delivery {
 				this.confirmBtn.visible=true;
 				this.cencelBtn.visible=true;
 
-				this.freeCountLbl.text="今日还剩" + o.synum + "次，是否继续护镖？";
+				this.freeCountLbl.text=StringUtil.substitute(PropUtils.getStringById(1676), [o.synum]);
 			} else {
 				this.confirmNpcBtn.visible=true;
 				this.confirmBtn.visible=false;
@@ -106,7 +108,7 @@ package com.leyou.ui.delivery {
 			UIManager.getInstance().deliveryPanel.updateEndDesc(TableManager.getInstance().getSystemNotice(4515).content);
 		}
 
-		override public function get width():Number{
+		override public function get width():Number {
 			return 574;
 		}
 

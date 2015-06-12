@@ -30,12 +30,18 @@ package com.leyou.ui.backpack {
 	import com.ace.ui.tabbar.TabbarModel;
 	import com.ace.ui.tabbar.children.TabBar;
 	import com.greensock.TweenMax;
+	import com.greensock.data.TransformAroundPointVars;
+	import com.greensock.plugins.TransformAroundCenterPlugin;
+	import com.greensock.plugins.TransformAroundPointPlugin;
+	import com.greensock.plugins.TweenPlugin;
+	import com.greensock.transform.utils.MatrixTools;
 	import com.leyou.data.bag.Baginfo;
 	import com.leyou.manager.TimerManager;
 	import com.leyou.net.cmd.Cmd_Bag;
 	import com.leyou.ui.backpack.child.BackpackGrid;
 	import com.leyou.utils.ItemUtil;
 	import com.leyou.utils.PayUtil;
+	import com.leyou.utils.PropUtils;
 
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
@@ -43,7 +49,11 @@ package com.leyou.ui.backpack {
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.events.TextEvent;
+	import flash.geom.Matrix;
+	import flash.geom.Matrix3D;
 	import flash.geom.Point;
+	import flash.geom.Rectangle;
+	import flash.geom.Vector3D;
 	import flash.utils.getTimer;
 
 	public class BackpackWndView extends AutoWindow {
@@ -136,6 +146,9 @@ package com.leyou.ui.backpack {
 
 		private var currData:Array=[];
 
+		private var tweenArr:Array=[];
+
+
 		public function BackpackWndView() {
 			super(LibManager.getInstance().getXML("config/ui/BackpackWnd.xml"));
 			this.init();
@@ -172,7 +185,7 @@ package com.leyou.ui.backpack {
 			this.shopBtn.addEventListener(MouseEvent.CLICK, onClick);
 
 //			this.goldbuyLbl.addEventListener(TextEvent.LINK, onTextLink);
-			this.ybBuyLbl.htmlText="<u><a href='event:url_pay' target='_blank'>购买钻石</a></u>";
+			this.ybBuyLbl.htmlText="<u><a href='event:url_pay' target='_blank'>" + PropUtils.getStringById(1620) + "</a></u>";
 			this.ybBuyLbl.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
 			this.ybBuyLbl.addEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
 			this.ybBuyLbl.addEventListener(TextEvent.LINK, onTextLink);
@@ -219,6 +232,11 @@ package com.leyou.ui.backpack {
 			einfo.onMouseOut=onTipsMouseOut;
 
 			MouseManagerII.getInstance().addEvents(this.ybImg, einfo);
+
+			this.neatenBtn.scrollRect=new Rectangle(0, 0, 101, 31);
+
+			TweenPlugin.activate([TransformAroundCenterPlugin, TransformAroundPointPlugin]);
+
 		}
 
 		private function onMouseOver(e:MouseEvent):void {
@@ -297,7 +315,7 @@ package com.leyou.ui.backpack {
 						this.shopBtn.setActive(false, .6, true);
 						this.storageBtn.setActive(false, .6, true);
 						this.neatenBtn.setActive(false, .6, true);
-						this.fastShopBtn.text="取消卖出";
+						this.fastShopBtn.text=PropUtils.getStringById(1621);
 
 						CursorManager.getInstance().updataCursor(CursorEnum.CURSOR_SELL);
 
@@ -310,7 +328,7 @@ package com.leyou.ui.backpack {
 
 						this.stage.removeEventListener(MouseEvent.CLICK, onMouseRoll);
 						this.show(true, 1, false);
-						this.fastShopBtn.text="快速卖出";
+						this.fastShopBtn.text=PropUtils.getStringById(1622);
 
 						this.shopBtn.setActive(true, 1, true);
 						this.storageBtn.setActive(true, 1, true);
@@ -349,6 +367,7 @@ package com.leyou.ui.backpack {
 
 						}
 					}
+
 					break;
 			}
 		}
@@ -474,6 +493,16 @@ package com.leyou.ui.backpack {
 		//填充数据
 		public function initData(arr:Array):void {
 
+			var tw:TweenMax;
+			for (var t:int=0; i < this.tweenArr.length; i++) {
+				tw=this.tweenArr[i] as TweenMax;
+				tw.pause();
+				tw.kill();
+				tw=null;
+			}
+
+			this.tweenArr.length=0;
+
 			var carr:Array=[];
 			var ctime:int=0;
 			var ctx:String;
@@ -526,6 +555,11 @@ package com.leyou.ui.backpack {
 
 					g.visible=true;
 				}
+
+				g.scaleX=g.scaleY=1;
+
+				g.x=4 + (i % ItemEnum.GRID_HORIZONTAL) * (ItemEnum.ITEM_BG_WIDTH + ItemEnum.GRID_SPACE);
+				g.y=3 + int(i / ItemEnum.GRID_HORIZONTAL) * (ItemEnum.ITEM_BG_HEIGHT + ItemEnum.GRID_SPACE);
 			}
 
 			var p:Number=this.gridList.scrollBar_Y.progress;
@@ -689,7 +723,7 @@ package com.leyou.ui.backpack {
 
 			if (this.neatTimer - i <= 0) {
 				TimerManager.getInstance().remove(neatTime);
-				this.neatenBtn.text="整理";
+				this.neatenBtn.text=PropUtils.getStringById(1623);
 
 				if (this.bagbg.alpha == 0)
 					this.neatenBtn.setActive(true, 1, true);
@@ -700,7 +734,30 @@ package com.leyou.ui.backpack {
 				this.neatenBtn.setActive(false, .6, true);
 			}
 
-			this.neatenBtn.text=(this.neatTimer - i) + "秒";
+			this.neatenBtn.text=(this.neatTimer - i) + PropUtils.getStringById(2146);
+
+		}
+
+		public function updateGridEffect(oldArr:Array, newArr:Array):void {
+
+			var arr:Array=[];
+
+			for (var i:int=0; i < ItemEnum.BACKPACK_GRID_TOTAL; i++) {
+
+				if ((newArr[i] != null && (oldArr[i] == null || oldArr[i].aid != newArr[i].aid || oldArr[i].num != newArr[i].num))) {
+					arr.push(newArr[i].pos);
+				}
+
+			}
+
+			for (i=0; i < arr.length; i++) {
+//				this.gridVec[arr[i]].scaleX=this.gridVec[arr[i]].scaleY=1;
+//
+//				this.gridVec[arr[i]].x=4 + (this.gridVec[arr[i]].dataId % ItemEnum.GRID_HORIZONTAL) * (ItemEnum.ITEM_BG_WIDTH + ItemEnum.GRID_SPACE);
+//				this.gridVec[arr[i]].y=3 + int(this.gridVec[arr[i]].dataId / ItemEnum.GRID_HORIZONTAL) * (ItemEnum.ITEM_BG_HEIGHT + ItemEnum.GRID_SPACE);
+
+				this.tweenArr.push(TweenMax.to(this.gridVec[arr[i]], 0.3, {transformAroundCenter: {scaleX: 1.2, scaleY: 1.2}, repeat: 3, yoyo: true}));
+			}
 
 		}
 
@@ -725,7 +782,10 @@ package com.leyou.ui.backpack {
 							UIManager.getInstance().toolsWnd.updateCD(binfo.info.classid + "_" + binfo.info.subclassid, int(carr[1]) - (ctime - int(carr[0])));
 						}
 					}
+
+//					TweenMax.to(this.gridVec[pos], 1, {transformAroundCenter: {scaleX: 1.2,scaleY: 1.2},repeat:3,yoyo:true});
 				}
+
 
 			} else {
 				this.updateTab();

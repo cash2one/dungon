@@ -7,7 +7,7 @@ package com.ace.manager
 	import com.leyou.net.cmd.Cmd_Achievement;
 	import com.leyou.net.cmd.Cmd_Active;
 	import com.leyou.net.cmd.Cmd_Aution;
-	import com.leyou.net.cmd.Cmd_BCP;
+	import com.leyou.net.cmd.Cmd_BlackStore;
 	import com.leyou.net.cmd.Cmd_CCZ;
 	import com.leyou.net.cmd.Cmd_CLI;
 	import com.leyou.net.cmd.Cmd_Collection;
@@ -21,13 +21,16 @@ package com.ace.manager
 	import com.leyou.net.cmd.Cmd_Invest;
 	import com.leyou.net.cmd.Cmd_KF;
 	import com.leyou.net.cmd.Cmd_LDW;
+	import com.leyou.net.cmd.Cmd_Longz;
 	import com.leyou.net.cmd.Cmd_Mail;
 	import com.leyou.net.cmd.Cmd_Market;
 	import com.leyou.net.cmd.Cmd_PM;
 	import com.leyou.net.cmd.Cmd_PayRank;
+	import com.leyou.net.cmd.Cmd_Pet;
 	import com.leyou.net.cmd.Cmd_Rank;
 	import com.leyou.net.cmd.Cmd_SCP;
 	import com.leyou.net.cmd.Cmd_Seven;
+	import com.leyou.net.cmd.Cmd_TaskMarket;
 	import com.leyou.net.cmd.Cmd_TobeStrong;
 	import com.leyou.net.cmd.Cmd_Vip;
 	import com.leyou.net.cmd.Cmd_Welfare;
@@ -59,7 +62,7 @@ package com.ace.manager
 			var wnd:Object=UIManager.getInstance().creatWindow(wndKey);
 			if(wnd.visible) {
 				UILayoutManager.getInstance().hide(wndKey);
-				trace("-----------wnd visible is true");
+//				trace("-----------wnd visible is true");
 				return;
 			}
 			if(-1 != pageIndex){
@@ -104,12 +107,12 @@ package com.ace.manager
 						addCmd(wndKey, CmdEnum.SM_UNZ_I);
 					}
 					break;
-				case WindowEnum.EXPCOPY:
-					if(!contains(wndKey, CmdEnum.SM_EXPC_I)){
-						Cmd_EXPC.cm_Exp_I();
-						addCmd(wndKey, CmdEnum.SM_EXPC_I);
-					}
-					break;
+//				case WindowEnum.EXPCOPY:
+//					if(!contains(wndKey, CmdEnum.SM_EXPC_I)){
+//						Cmd_EXPC.cm_Exp_I();
+//						addCmd(wndKey, CmdEnum.SM_EXPC_I);
+//					}
+//					break;
 //				case WindowEnum.FIELDBOSS:
 //					if(!contains(wndKey, CmdEnum.SM_YBS_I)){
 //						Cmd_YBS.cm_YBS_I();
@@ -122,12 +125,12 @@ package com.ace.manager
 //						addCmd(wndKey, CmdEnum.SM_BCP_I);
 //					}
 //					break;
-				case WindowEnum.STORYCOPY:
-					if(!contains(wndKey, CmdEnum.SM_SCP_I)){
-						Cmd_SCP.cm_SCP_I();
-						addCmd(wndKey, CmdEnum.SM_SCP_I);
-					}
-					break;
+//				case WindowEnum.STORYCOPY:
+//					if(!contains(wndKey, CmdEnum.SM_SCP_I)){
+//						Cmd_SCP.cm_SCP_I();
+//						addCmd(wndKey, CmdEnum.SM_SCP_I);
+//					}
+//					break;
 				case WindowEnum.TOBE_STRONG:
 					if(!contains(wndKey, CmdEnum.SM_RISE_I)){
 						Cmd_TobeStrong.cm_RISE_I();
@@ -264,6 +267,30 @@ package com.ace.manager
 					if(!contains(WindowEnum.BOSS, CmdEnum.SM_YBS_L)){
 						Cmd_YBS.cm_YBS_L();
 						addCmd(wndKey, CmdEnum.SM_YBS_L);
+					}
+					break;
+				case WindowEnum.DRAGON_BALL:
+					if(!contains(WindowEnum.DRAGON_BALL, CmdEnum.SM_LONGZ_I)){
+						Cmd_Longz.cm_Longz_I();
+						addCmd(wndKey, CmdEnum.SM_LONGZ_I);
+					}
+					break;
+				case WindowEnum.BLACK_STROE:
+					if(!contains(WindowEnum.BLACK_STROE, CmdEnum.SM_BMAK_I)){
+						Cmd_BlackStore.cm_BMAK_I(0);
+						addCmd(wndKey, CmdEnum.SM_BMAK_I);
+					}
+					break;
+				case WindowEnum.PET:
+					if(!contains(WindowEnum.PET, CmdEnum.SM_PET_L)){
+						Cmd_Pet.cm_PET_L();
+						addCmd(wndKey, CmdEnum.SM_PET_L);
+					}
+					break;
+				case WindowEnum.TASK_MARKET:
+					if(!contains(WindowEnum.TASK_MARKET, CmdEnum.SM_YD_I)){
+						Cmd_TaskMarket.cm_TaskMarket_I();
+						addCmd(wndKey, CmdEnum.SM_YD_I);
 					}
 					break;
 			}

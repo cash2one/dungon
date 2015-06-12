@@ -3,6 +3,7 @@ package com.leyou.ui.arena.childs {
 	import com.ace.enum.TipEnum;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.table.TTitle;
+	import com.ace.loader.child.SwfLoader;
 	import com.ace.manager.LibManager;
 	import com.ace.manager.MouseManagerII;
 	import com.ace.manager.ToolTipManager;
@@ -12,7 +13,8 @@ package com.leyou.ui.arena.childs {
 	import com.ace.ui.img.child.Image;
 	import com.ace.ui.lable.Label;
 	import com.ace.utils.StringUtil;
-	
+	import com.leyou.utils.PropUtils;
+
 	import flash.display.DisplayObject;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
@@ -30,6 +32,8 @@ package com.leyou.ui.arena.childs {
 		private var itemIcon:Image;
 		private var mName:String;
 
+		private var effSwf:SwfLoader;
+
 		public function ArenaAwardRender() {
 			super(LibManager.getInstance().getXML("config/ui/arena/arenaAwardRender.xml"));
 			this.init();
@@ -43,12 +47,20 @@ package com.leyou.ui.arena.childs {
 
 			this.gridVec=new Vector.<ArenaGrid>();
 
+			this.effSwf=new SwfLoader(99989);
+			this.addChild(this.effSwf);
+			this.effSwf.y=this.iconImg.y + 7;
+			this.effSwf.x=337;
+
+
 			this.itemIcon=new Image();
 			this.addChild(this.itemIcon);
 			this.itemIcon.y=this.iconImg.y + 7;
 			this.itemIcon.x=337;
 
 			this.mouseChildren=true;
+
+
 
 			var einfo:MouseEventInfo=new MouseEventInfo();
 			einfo.onMouseMove=onTipsMouseOver;
@@ -59,7 +71,7 @@ package com.leyou.ui.arena.childs {
 
 		private function onTipsMouseOver(e:DisplayObject):void {
 			var tinfo:TTitle=TableManager.getInstance().getTitleByName(this.mName);
-			ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, StringUtil.substitute(TableManager.getInstance().getSystemNotice(4718).content, [tinfo.name, tinfo.value3, tinfo.value2, tinfo.value1]), new Point(this.stage.mouseX, this.stage.mouseY));
+			ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, StringUtil.substitute(TableManager.getInstance().getSystemNotice(4718).content, [tinfo.name,  tinfo.value1]), new Point(this.stage.mouseX, this.stage.mouseY));
 		}
 
 		private function onTipsMouseOut(e:DisplayObject):void {
@@ -84,35 +96,25 @@ package com.leyou.ui.arena.childs {
 			this.mName=xml.@MR_Name;
 
 			this.integralLbl.text="" + xml.@MR_Integral;
-			this.numTopLbl.text="" + xml.@MR_PNum;
+//			this.numTopLbl.text="" + xml.@MR_PNum;
 
 			var _x:Number=208;
 			var _w:Number=43;
 
 			if (xml.@MR_Level == "1") {
 
-				var lb:Label=new Label("升级至 列兵 军衔即可获得奖励");
+				var lb:Label=new Label(PropUtils.getStringById(1593));
 				this.addChild(lb);
 
 				lb.x=_x;
 				lb.y=10;
 
-				this.numTopLbl.text="无";
+//				this.numTopLbl.text=PropUtils.getStringById(1594);
+				this.effSwf.visible=false;
 			} else {
 
 				var grid:ArenaGrid=new ArenaGrid();
 
-				grid.x=_x + this.gridVec.length * _w;
-				grid.y=8;
-
-				grid.updateExp();
-				grid.setNum(xml.@MR_Exp);
-				grid.dataId=65534
-				
-				this.addChild(grid);
-				this.gridVec.push(grid);
-
-				grid=new ArenaGrid();
 				grid.x=_x + this.gridVec.length * _w;
 				grid.y=8;
 
@@ -128,6 +130,17 @@ package com.leyou.ui.arena.childs {
 
 				grid.updateHun();
 				grid.setNum(xml.@MR_Energy);
+
+				this.addChild(grid);
+				this.gridVec.push(grid);
+
+				grid=new ArenaGrid();
+				grid.x=_x + this.gridVec.length * _w;
+				grid.y=8;
+
+				grid.updateHounur();
+				grid.setNum(xml.@MR_Honor);
+				grid.dataId=65526
 
 				this.addChild(grid);
 				this.gridVec.push(grid);
@@ -167,7 +180,7 @@ package com.leyou.ui.arena.childs {
 				this.gridVec.push(grid);
 			}
 
-			
+
 //			this.scrollRect=new Rectangle(0,0,386,57);
 		}
 
@@ -187,7 +200,7 @@ package com.leyou.ui.arena.childs {
 			this.bgHightImg.visible=v;
 		}
 
-		override public function get height():Number{
+		override public function get height():Number {
 			return 57;
 		}
 

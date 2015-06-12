@@ -6,7 +6,9 @@ package com.ace.gameData.manager {
 	import com.ace.gameData.table.TActiveRewardInfo;
 	import com.ace.gameData.table.TAd;
 	import com.ace.gameData.table.TAreaCelebrateInfo;
+	import com.ace.gameData.table.TAttributeInfo;
 	import com.ace.gameData.table.TBackpackAdd;
+	import com.ace.gameData.table.TBlackStoreInfo;
 	import com.ace.gameData.table.TBuffAward;
 	import com.ace.gameData.table.TCityBattleRewardInfo;
 	import com.ace.gameData.table.TCollectionPreciousInfo;
@@ -24,16 +26,27 @@ package com.ace.gameData.manager {
 	import com.ace.gameData.table.TGuideInfo;
 	import com.ace.gameData.table.TGuildBattleInfo;
 	import com.ace.gameData.table.THallows;
+	import com.ace.gameData.table.TIcebattleReward;
 	import com.ace.gameData.table.TInvestInfo;
 	import com.ace.gameData.table.TItemInfo;
+	import com.ace.gameData.table.TKeep_7;
 	import com.ace.gameData.table.TLZItemInfo;
+	import com.ace.gameData.table.TLegendaryWeaponInfo;
 	import com.ace.gameData.table.TLevelGiftInfo;
+	import com.ace.gameData.table.TMarketInfo;
 	import com.ace.gameData.table.TMissionDate;
+	import com.ace.gameData.table.TMissionMarketInfo;
+	import com.ace.gameData.table.TMissionMarketRewardInfo;
 	import com.ace.gameData.table.TMount;
 	import com.ace.gameData.table.TMountLv;
 	import com.ace.gameData.table.TNpcFunction;
 	import com.ace.gameData.table.TPassivitySkillInfo;
 	import com.ace.gameData.table.TPayPromotion;
+	import com.ace.gameData.table.TPetAttackInfo;
+	import com.ace.gameData.table.TPetFriendlyInfo;
+	import com.ace.gameData.table.TPetInfo;
+	import com.ace.gameData.table.TPetSkillInfo;
+	import com.ace.gameData.table.TPetStarInfo;
 	import com.ace.gameData.table.TPointInfo;
 	import com.ace.gameData.table.TPromptInfo;
 	import com.ace.gameData.table.TQQVipDayRewardInfo;
@@ -46,7 +59,9 @@ package com.ace.gameData.manager {
 	import com.ace.gameData.table.TShop;
 	import com.ace.gameData.table.TSignGiftInfo;
 	import com.ace.gameData.table.TSkillInfo;
+	import com.ace.gameData.table.TSkillLvInfo;
 	import com.ace.gameData.table.TStorageAdd;
+	import com.ace.gameData.table.TSuit;
 	import com.ace.gameData.table.TTitle;
 	import com.ace.gameData.table.TTobeStrongInfo;
 	import com.ace.gameData.table.TTobeStrongLevelInfo;
@@ -59,6 +74,7 @@ package com.ace.gameData.manager {
 	import com.ace.gameData.table.TWing_Trade;
 	import com.ace.gameData.table.TZdlElement;
 	import com.ace.manager.LibManager;
+	import com.leyou.utils.PropUtils;
 
 
 	//单例类
@@ -128,6 +144,21 @@ package com.ace.gameData.manager {
 		private var vendueDic:Object;
 		private var cityBattleRewardDic:Object;
 		private var wingTrade:Object;
+		private var iceBattleReward:Object;
+		private var suitGroupDic:Object;
+		private var legendaryDic:Object;
+		private var attributeDic:Object;
+		private var marketDic:Object;
+		private var petDic:Object;
+		private var petAttackDic:Object;
+		private var petFriendDic:Object;
+		private var petSkillDic:Object;
+		private var petStarDic:Object;
+		private var blackStoreDic:Object;
+		private var skillLvDic:Object;
+		private var missionMarketDic:Object;
+		private var missionRewardDic:Object;
+		private var keep7Dic:Object;
 
 		public function TableManager() {
 			super();
@@ -215,8 +246,22 @@ package com.ace.gameData.manager {
 			this.vendueDic={};
 			this.cityBattleRewardDic={};
 			this.wingTrade={};
-
-
+			this.iceBattleReward={};
+			this.suitGroupDic={};
+			this.legendaryDic={};
+			this.attributeDic={};
+			this.marketDic={};
+			this.petDic={};
+			this.petAttackDic={};
+			this.petFriendDic={};
+			this.petSkillDic={};
+			this.petStarDic={};
+			this.blackStoreDic={};
+			this.skillLvDic={};
+			this.missionMarketDic={};
+			this.missionRewardDic={};
+			this.keep7Dic={};
+			
 			var info:XML;
 			var render:XML;
 
@@ -277,7 +322,7 @@ package com.ace.gameData.manager {
 			//称号
 			info=LibManager.getInstance().getXML("config/table/mount.xml");
 			for each (render in info.children()) {
-				this.mountDic[render.@lv]=new TMount(render);
+				this.mountDic[render.@lv2]=new TMount(render);
 			}
 
 			//称号
@@ -579,19 +624,180 @@ package com.ace.gameData.manager {
 			for each (render in info.children()) {
 				this.wingTrade[render.@id]=new TWing_Trade(render);
 			}
+			
+			// 属性表
+			info=LibManager.getInstance().getXML("config/table/dic_num.xml");
+			for each(render in info.children()){
+				this.attributeDic[render.@id]=new TAttributeInfo(render);
+			}
+			// 神器
+			info=LibManager.getInstance().getXML("config/table/Artifact_suit.xml");
+			for each (render in info.children()) {
+				this.legendaryDic[render.@Formula_ID]=new TLegendaryWeaponInfo(render);
+			}
+
+			// 霜炎战场奖励
+			info=LibManager.getInstance().getXML("config/table/Op_Battle.xml");
+			for each (render in info.children()) {
+				var rewardInfo:TIcebattleReward=new TIcebattleReward(render);
+				this.iceBattleReward[render.@GB_group]=rewardInfo;
+				this.iceBattleReward[render.@GB_Ranking]=rewardInfo;
+			}
+
+			info=LibManager.getInstance().getXML("config/table/Suit.xml");
+			var i:int=0;
+			for each (render in info.children()) {
+				this.suitGroupDic[i]=new TSuit(render);
+				i++;
+			}
+			
+			info=LibManager.getInstance().getXML("config/table/dic_num.xml");
+			for each (render in info.children()) {
+				PropUtils.setPropsArr(render);
+			}
+
+			// 商城表
+			info=LibManager.getInstance().getXML("config/table/market.xml");
+			for each (render in info.children()) {
+				this.marketDic[render.@id]=new TMarketInfo(render);
+			}
+			
+			// 宠物表
+			info=LibManager.getInstance().getXML("config/table/servent.xml");
+			for each (render in info.children()) {
+				this.petDic[render.@id]=new TPetInfo(render);
+			}
+			
+			// 宠物友好度
+			info=LibManager.getInstance().getXML("config/table/servent_friend.xml");
+			for each (render in info.children()) {
+				this.petFriendDic[render.@friId]=new TPetFriendlyInfo(render);
+			}
+			
+			// 宠物战斗属性
+			info=LibManager.getInstance().getXML("config/table/servent_att.xml");
+			for each (render in info.children()) {
+				this.petAttackDic[render.@starLv+"|"+render.@lv]=new TPetAttackInfo(render);
+			}
+			
+			// 宠物技能
+			info=LibManager.getInstance().getXML("config/table/servent_skill.xml");
+			for each (render in info.children()) {
+				this.petSkillDic[render.@id]=new TPetSkillInfo(render);
+			}
+			
+			// 宠物星级
+			info=LibManager.getInstance().getXML("config/table/servent_star.xml");
+			for each (render in info.children()) {
+				this.petStarDic[render.@serId+"|"+render.@starLv]=new TPetStarInfo(render);
+			}
+			
+			// 黑市
+			info=LibManager.getInstance().getXML("config/table/Discount.xml");
+			for each (render in info.children()) {
+				this.blackStoreDic[render.@Ds_ID]=new TBlackStoreInfo(render);
+			}
+			
+			// 任务集市
+			info=LibManager.getInstance().getXML("config/table/TaskMarket.xml");
+			for each(render in info.children()){
+				this.missionMarketDic[render.@Task_ID]=new TMissionMarketInfo(render);
+			}
+			
+			// 任务集市奖励
+			info=LibManager.getInstance().getXML("config/table/Task_Reward.xml");
+			for each(render in info.children()){
+				this.missionRewardDic[render.@Task_Type]=new TMissionMarketRewardInfo(render);
+			}
+			
+			// 技能等级消耗
+			info=LibManager.getInstance().getXML("config/table/skillLv.xml");
+			for each (render in info.children()) {
+				this.skillLvDic[render.@lv]=new TSkillLvInfo(render);
+			}
+			
+			// 技能等级消耗
+			info=LibManager.getInstance().getXML("config/table/keep_7.xml");
+			for each (render in info.children()) {
+				this.keep7Dic[render.@Keep_day]=new TKeep_7(render);
+			}
 		}
 
 		//=====================================获取===================================================================
+		override public function getLanguage(id:int):String {
+			if(!this.attributeDic.hasOwnProperty(id))
+				return　"";
+			return this.getAttributeInfo(id).attibuteDes;
+		}
+		
+		public function getMissionMarketRewardInfo(type:int):TMissionMarketRewardInfo{
+			return this.missionRewardDic[type];
+		}
+		
+		public function getMissionMarketInfo(id:int):TMissionMarketInfo{
+			return this.missionMarketDic[id];
+		}
+		
 		public function getShopDic():Object {
 			return this.shopDic;
 		}
-
+		
+		public function getPetSkillDic():Object{
+			return this.petSkillDic;
+		}
+		
+		public function getSkillLvInfo(lv:int):TSkillLvInfo{
+			return this.skillLvDic[lv];
+		}
+		
+		public function getPetDic():Object{
+			return this.petDic;
+		}
+		
+		public function getPetSkill(id:int):TPetSkillInfo{
+			return this.petSkillDic[id];
+		}
+		
+		public function getPetInfo(id:int):TPetInfo{
+			return this.petDic[id];
+		}
+		
+		public function getPetFriendlyInfo(lv:int):TPetFriendlyInfo{
+			return this.petFriendDic[lv];
+		}
+		
+		public function getPetStarLvInfo(id:int, starLv:int):TPetStarInfo{
+			return this.petStarDic[id+"|"+starLv];
+		}
+		
+		public function getPetLvInfo(starLv:int, level:int):TPetAttackInfo{
+			return this.petAttackDic[starLv+"|"+level]
+		}
+		
 		public function getVendueInfo(id:int):TVendueInfo {
 			return this.vendueDic[id];
 		}
-
+		
+		public function getMarketItem(id:int):TMarketInfo{
+			for(var key:String in marketDic){
+				var minfo:TMarketInfo = marketDic[key];
+				if(minfo.itemId == id){
+					return minfo;
+				}
+			}
+			return null;
+		}
+		
+		public function getBlackStoreInfo(id:int):TBlackStoreInfo{
+			return this.blackStoreDic[id];
+		}
+		
 		public function getCityBattleRewardInfo(id:int):TCityBattleRewardInfo {
 			return this.cityBattleRewardDic[id];
+		}
+		
+		public function getAttributeInfo(id:int):TAttributeInfo{
+			return this.attributeDic[id];
 		}
 
 		public function getGroupbuyItemInfo(id:int):TGroupBuyItemInfo {
@@ -622,6 +828,18 @@ package com.ace.gameData.manager {
 			return this.areaCelebrateDic[id];
 		}
 
+		
+		public function getSuitByGroup(g:int):Array {
+			var arr:Array=[];
+			var tsuit:TSuit;
+			for each (tsuit in this.suitGroupDic) {
+				if (tsuit.Suit_Group == g)
+					arr.push(tsuit);
+			}
+
+			return arr;
+		}
+
 		public function getUniteCelebrateTypList():Array {
 			var arr:Array=[];
 			for (var key:String in areaCelebrateDic) {
@@ -636,6 +854,14 @@ package com.ace.gameData.manager {
 
 		public function getGuileBattleDic():Object {
 			return this.guildBattleDic;
+		}
+
+		public function getIceBattleDic():Object {
+			return this.iceBattleReward;
+		}
+
+		public function getIceBattleReward(id:int):TIcebattleReward {
+			return this.iceBattleReward[id];
 		}
 
 		public function getGuildBattleInfo(id:String):TGuildBattleInfo {
@@ -678,6 +904,17 @@ package com.ace.gameData.manager {
 				}
 			}
 			return null;
+		}
+		
+		public function getLegendaryInfo(pro:int, type:int):Array{
+			var arr:Array = [];
+			for (var key:String in this.legendaryDic) {
+				var info:TLegendaryWeaponInfo=this.legendaryDic[key];
+				if ((info.profession == pro) && (info.type == type)) {
+					arr.push(info);
+				}
+			}
+			return arr;
 		}
 
 		public function getTobeStrongLevelInfo(lv:int):TTobeStrongLevelInfo {
@@ -919,6 +1156,24 @@ package com.ace.gameData.manager {
 
 			for each (o in this.equipDic) {
 				if (int(o.classid) == classid && (subclass == -1 || int(o.subclassid) == subclass))
+					vec.push(o);
+			}
+
+			return vec;
+		}
+
+		/**
+		 *获取套装
+		 * @param g
+		 * @return
+		 *
+		 */
+		public function getEquipListArrBySuitGroup(g:int):Array {
+			var vec:Array=[];
+			var o:TEquipInfo;
+
+			for each (o in this.equipDic) {
+				if (int(o.Suit_Group) == g)
 					vec.push(o);
 			}
 
@@ -1311,6 +1566,10 @@ package com.ace.gameData.manager {
 			}
 
 			return i;
+		}
+
+		public function getKeep7ByDay(d:int):TKeep_7{
+			return this.keep7Dic[d];
 		}
 
 	}

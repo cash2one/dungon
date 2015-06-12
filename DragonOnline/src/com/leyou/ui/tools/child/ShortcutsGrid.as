@@ -24,7 +24,7 @@ package com.leyou.ui.tools.child {
 	import com.leyou.data.playerSkill.TipSkillInfo;
 	import com.leyou.data.tips.TipsInfo;
 	import com.leyou.net.cmd.Cmd_Link;
-	
+
 	import flash.geom.Point;
 
 	public class ShortcutsGrid extends GridBase {
@@ -578,6 +578,7 @@ package com.leyou.ui.tools.child {
 
 				tipInfo.hasRune=false;
 				tipInfo.level=int(tipInfo.skillInfo.autoLv);
+				tipInfo.skillLv=UIManager.getInstance().skillWnd.getSkillArrByID(this.dataId)[2];
 
 				var tarr:Array=TableManager.getInstance().getSkillArr(this.dataId);
 				tipInfo.runde=tarr.indexOf(tipInfo.skillInfo);

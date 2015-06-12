@@ -278,7 +278,7 @@ package com.leyou.ui.task.child {
 						mrender.taskStateText(TaskUtil.getStringByState(1));
 						mrender.setChangeState(1);
 					} else {
-						mrender.taskStateText("待领取");
+						mrender.taskStateText(PropUtils.getStringById(1889));
 						mrender.setChangeState(2);
 					}
 				}

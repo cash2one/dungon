@@ -11,7 +11,7 @@ package com.leyou.net {
 	import com.adobe.serialization.json.JSON;
 	import com.leyou.enum.CmdEnum;
 	import com.leyou.net.cmd.Cmd_Login;
-
+	
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
 	import flash.events.TimerEvent;
@@ -63,6 +63,14 @@ package com.leyou.net {
 			ReConnectionWnd.getInstance().show();
 			return;
 			super.disConn(e);
+		}
+		
+		public function sendIII(code:String, ...params):void{
+			var cmd:String = code;
+			for each(var p:String in params){
+				cmd += ("," + p);
+			}
+			send(cmd);
 		}
 
 		//发送

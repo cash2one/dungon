@@ -17,6 +17,8 @@ package com.leyou.enum {
 		public static const SM_COV_L:String="cov_l";
 		public static const CM_COV_U:String="cov|U";
 		public static const CM_COV_C:String="cov|C";
+		
+		public static const SM_ALOGIN_A:String="alogin_a";
 
 		//
 		public static const SYS_CLK:String="clk"; //心跳o
@@ -113,6 +115,7 @@ package com.leyou.enum {
 		public static const SM_SKL_R:String="skl_r";
 		public static const SM_SKL_C:String="skl_c";
 		public static const SM_SKL_L:String="skl_l";
+		public static const CM_SKL_U:String="skl|U";
 
 		//血脉
 		public static const SM_BLD_O:String="bld_o";
@@ -462,6 +465,35 @@ package com.leyou.enum {
 		public static const SM_YBS_X:String="ybs_x";
 		public static const SM_YBS_L:String="ybs_l";
 		public static const CM_YBS_L:String="ybs|L";
+		
+		// 龙珠
+		public static const SM_LONGZ_I:String="longz_i";
+		public static const CM_LONGZ_I:String="longz|I";
+//		public static const CM_LONGZ_F:String="longz|F";
+		public static const SM_LONGZ_W:String="longz_w";
+		public static const CM_LONGZ_W:String="longz|W";
+		public static const SM_LONGZ_C:String="longz_c";
+		public static const CM_LONGZ_C:String="longz|C";
+		public static const CM_LONGZ_E:String="longz|E";
+		public static const CM_LONGZ_L:String="longz|L";
+		public static const SM_LONGZ_T:String="longz_t";
+		public static const CM_LONGZ_D:String="longz|D";
+		public static const SM_LONGZ_D:String="longz_d";
+		
+		// 霜炎战场
+		public static const SM_ZC_L:String="zc_l";
+		public static const CM_ZC_L:String="zc|L";
+		public static const SM_ZC_U:String="zc_u";
+		public static const SM_ZC_C:String="zc_c";
+		public static const SM_ZC_N:String="zc_n";
+		public static const CM_ZC_E:String="zc|E";
+		public static const CM_ZC_Q:String="zc|Q";
+		public static const CM_ZC_B:String="zc|B";
+		public static const SM_ZC_B:String="zc_b";
+		public static const CM_ZC_I:String="zc|I";
+		public static const SM_ZC_I:String="zc_i";
+		public static const CM_ZC_H:String="zc|H";
+		public static const SM_ZC_H:String="zc_h";
 
 		//答题
 		public static const CM_QA_E:String="qa|E";
@@ -634,6 +666,18 @@ package com.leyou.enum {
 		public static const SM_FCZ_J:String="fcz_j";
 		public static const CM_FCZ_J:String="fcz|J";
 		public static const SM_FCZ_A:String="fcz_a";
+		
+		// 黑市
+		public static const SM_BMAK_A:String="bmak_a";
+		public static const CM_BMAK_A:String="bmak|A";
+		public static const SM_BMAK_I:String="bmak_i";
+		public static const CM_BMAK_I:String="bmak|I";
+		public static const SM_BMAK_B:String="bmak_b";
+		public static const CM_BMAK_B:String="bmak|B";
+		public static const CM_BMAK_F:String="bmak|F";
+		
+		// 超级返利
+		public static const SM_SFCZ_A:String="sfcz_a";
 
 		// 抽奖
 		public static const SM_LBOX_I:String="lbox_i";
@@ -672,7 +716,41 @@ package com.leyou.enum {
 		public static const CM_WARC_B:String="warc|B";
 		public static const CM_WARC_M:String="warc|M";
 		public static const SM_WARC_M:String="warc_m";
+		public static const CM_WARC_S:String="warc|S";
 		
+		// 神器锻造
+		public static const SM_SQ_M:String="sq_m";
+		public static const CM_SQ_M:String="sq|M";
+		
+		// 宠物
+		public static const SM_PET_L:String="pet_l";
+		public static const CM_PET_L:String="pet|L";
+		public static const SM_PET_I:String="pet_i";
+		public static const CM_PET_I:String="pet|I";
+		public static const SM_PET_E:String="pet_e";
+		public static const CM_PET_E:String="pet|E";
+		public static const SM_PET_C:String="pet_c";
+		public static const CM_PET_C:String="pet|C";
+		public static const SM_PET_B:String="pet_b";
+		public static const CM_PET_B:String="pet|B";
+		public static const SM_PET_T:String="pet_t";
+		public static const CM_PET_T:String="pet|T";
+		public static const CM_PET_A:String="pet|A";
+		public static const CM_PET_D:String="pet|D";
+		public static const CM_PET_U:String="pet|U";
+		public static const CM_PET_G:String="pet|G";
+		public static const CM_PET_S:String="pet|S";
+		public static const CM_PET_F:String="pet|F";
+		
+		// 任务集市
+		public static const SM_YD_I:String="yd_i";
+		public static const CM_YD_I:String="yd|I";
+		public static const SM_YD_L:String="yd_l";
+		public static const CM_YD_L:String="yd|L";
+		public static const SM_YD_J:String="yd_j";
+		public static const CM_YD_J:String="yd|J";
+		public static const SM_YD_T:String="yd_t";
+		public static const CM_YD_T:String="yd|T";
 		
 		// 拍卖
 		public static const SM_PM_I:String="pm_i";
@@ -742,7 +820,11 @@ package com.leyou.enum {
 		public static const SM_TEAM_COPY_G:String="cptm_g";
 		public static const CM_TEAM_COPY_F:String="cptm|F";
 		
-		
+		//七日奖励
+		public static const CM_DAY7_I:String="lday|I";
+		public static const SM_DAY7_I:String="lday_i";
+		public static const SM_DAY7_J:String="lday_j";
+		public static const CM_DAY7_J:String="lday|J";
 		
 		/**
 		 *背包

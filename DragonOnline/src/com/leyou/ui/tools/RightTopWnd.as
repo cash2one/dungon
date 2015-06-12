@@ -17,9 +17,11 @@ package com.leyou.ui.tools {
 	import com.ace.utils.StringUtil;
 	import com.greensock.TweenLite;
 	import com.leyou.enum.ConfigEnum;
+	import com.leyou.enum.MoldEnum;
 	import com.leyou.enum.PkCopyEnum;
 	import com.leyou.enum.TaskEnum;
 	import com.leyou.ui.tools.child.RightTopWidget;
+	import com.leyou.utils.PropUtils;
 	
 	import flash.display.DisplayObject;
 	import flash.display.Graphics;
@@ -38,7 +40,9 @@ package com.leyou.ui.tools {
 		
 		private var widgets3:Dictionary;
 		
-		private var _spacing:int;
+		private var _spacing:int = 0;
+		
+		private var _hspacing:int = 75;
 		
 		private var sortArr:Vector.<RightTopWidget>;
 		
@@ -84,69 +88,77 @@ package com.leyou.ui.tools {
 			switchBtn1.x=59;
 			switchBtn1.y=(59 - 17) / 2;
 			switchBtn2.x=59;
-			switchBtn2.y=switchBtn1.y + 60;
+			switchBtn2.y=switchBtn1.y + _hspacing;
 			switchBtn3.x=59;
-			switchBtn3.y=switchBtn2.y + 60;
+			switchBtn3.y=switchBtn2.y + _hspacing;
 			panel1=new Sprite();
-			addChild(panel1);
 			panel2=new Sprite();
-			addChild(panel2);
 			panel3=new Sprite();
 			addChild(panel3);
+			addChild(panel2);
+			addChild(panel1);
 			widgets1=new Dictionary();
 			widgets2=new Dictionary();
 			widgets3=new Dictionary();
 			sortArr=new Vector.<RightTopWidget>();
 			addEventListener(MouseEvent.CLICK, onClick);
 			
-			var btnIdx:int = 1;
-			packButton("deliveryBtn", btnIdx++, 1);
-			packButton("storyCopyBtn", btnIdx++, 1);
+			var btnIdx:int = 0;
+			btnIdx = 1;
+			packButton("achievementBtn", btnIdx++, 1);
+			packButton("rankBtn", btnIdx++, 1);
 			packButton("bossCopyBtn", btnIdx++, 1);
-			packButton("arenaBtn", btnIdx++, 1);
-			packButton("fieldBossBtn", btnIdx++, 1);
-			packButton("expCopyBtn", btnIdx++, 1);
-			packButton("collectBtn", btnIdx++, 1);
 			packButton("teamCopyBtn", btnIdx++, 1);
+			packButton("arenaBtn", btnIdx++, 1);
 			packButton("guildBattleBtn", btnIdx++, 1);
+			packButton("taskMarketBtn", btnIdx++, 1);
+			packButton("fieldBossBtn", btnIdx++, 1);
 			packButton("questBtn", btnIdx++, 1);
-			packButton("activityBtn", btnIdx++, 1);
+			//			packButton("guildBattleBtn", btnIdx++, 1);
+			//			packButton("questBtn", btnIdx++, 1);
+			//			packButton("activityBtn", btnIdx++, 1);
+			//			packButton("petBtn", btnIdx++, 1);
 			
-			btnIdx = 1;
+			btnIdx=1;
 			packButton("keyBtn", btnIdx++, 2);
-			packButton("achievementBtn", btnIdx++, 2);
-			packButton("rankBtn", btnIdx++, 2);
-			packButton("farmBtn", btnIdx++, 2);
 			packButton("shopBtn", btnIdx++, 2);
-			packButton("lotteryBtn", btnIdx++, 2);
 			packButton("worshipBtn", btnIdx++, 2);
-			packButton("tecentVipBtn", btnIdx++, 2);
-			packButton("guildBtn", btnIdx++, 2);
 			packButton("welfareBtn", btnIdx++, 2);
+			packButton("activityBtn", btnIdx++, 2);
 			packButton("tobeStrong", btnIdx++, 2);
+			packButton("sevenDBtn", btnIdx++, 2);
+			packButton("guildBtn", btnIdx++, 2);
+			packButton("areaCelebrate", btnIdx++, 2);
+			packButton("tecentVipBtn", btnIdx++, 2);
+			packButton("sevenDayBtn", btnIdx++, 2);
+			packButton("onlineBtn", btnIdx++, 2);
+			//			packButton("tobeStrong", btnIdx++, 2);
 			
-			btnIdx = 1;
-			packButton("firstPayBtn", btnIdx++, 3);
+			btnIdx=1;
 			packButton("areaFirstPayBtn", btnIdx++, 3);
-			packButton("investBtn", btnIdx++, 3);
-			packButton("promotionBtn", btnIdx++, 3);
-			packButton("sevenDBtn", btnIdx++, 3);
-			packButton("payRankBtn", btnIdx++, 3);
-			packButton("areaCelebrate", btnIdx++, 3);
+			packButton("firstPayBtn", btnIdx++, 3);
+			packButton("abidePayBtn", btnIdx++, 3);
+			packButton("superReturnBtn", btnIdx++, 3);
 			packButton("firstReturnBtn", btnIdx++, 3);
-			packButton("qqYellowBtn", btnIdx++, 3);
 			packButton("groupBuyBtn", btnIdx++, 3);
 			packButton("saleBtn", btnIdx++, 3);
-			packButton("abidePayBtn", btnIdx++, 3);
+			packButton("investBtn", btnIdx++, 3);
+			packButton("blackStoreBtn", btnIdx++, 3);
+			packButton("lotteryBtn", btnIdx++, 3);
+			packButton("payRankBtn", btnIdx++, 3);
+			packButton("qqYellowBtn", btnIdx++, 3);
 			packButton("costBtn", btnIdx++, 3);
-			packButton("onlineBtn", btnIdx++, 3);
+			//			packButton("saleBtn", btnIdx++, 3);
+			//			packButton("abidePayBtn", btnIdx++, 3);
+			//			packButton("costBtn", btnIdx++, 3);
+			//			packButton("onlineBtn", btnIdx++, 3);
 			
 			var m1:Shape=new Shape();
 			addChild(m1);
 			panel1.mask=m1;
 			var g:Graphics=m1.graphics;
 			g.beginFill(0);
-			g.drawRect(-657, 0, 715, 60);
+			g.drawRect(-657, 0, 715, _hspacing);
 			g.endFill();
 			
 			var m2:Shape=new Shape();
@@ -154,7 +166,7 @@ package com.leyou.ui.tools {
 			panel2.mask=m2;
 			var g2:Graphics=m2.graphics;
 			g2.beginFill(0);
-			g2.drawRect(-657, 0, 715, 130);
+			g2.drawRect(-657, 0, 715, _hspacing*2);
 			g2.endFill();
 			
 			var m3:Shape=new Shape();
@@ -162,7 +174,7 @@ package com.leyou.ui.tools {
 			panel3.mask=m3;
 			var g3:Graphics=m3.graphics;
 			g3.beginFill(0);
-			g3.drawRect(-657, 0, 715, 200);
+			g3.drawRect(-657, 0, 715, _hspacing*3);
 			g3.endFill();
 		}
 		
@@ -225,19 +237,20 @@ package com.leyou.ui.tools {
 			btnWidget.visible=false;
 			btnWidget.pushContent(imgBtn);
 			btnWidget.x=-(BUTTON_WIDTH + _spacing) * index;
-			btnWidget.y=imgBtn.y;
 			imgBtn.x=0;
 			imgBtn.y=0;
-			
 			if (1 == pos) {
 				widgets1[btnWidget.name]=btnWidget;
 				panel1.addChild(btnWidget);
+				btnWidget.y=_hspacing*0;
 			} else if (2 == pos) {
 				widgets2[btnWidget.name]=btnWidget;
 				panel2.addChild(btnWidget);
+				btnWidget.y=_hspacing*1;
 			} else if (3 == pos) {
 				widgets3[btnWidget.name]=btnWidget;
 				panel3.addChild(btnWidget);
+				btnWidget.y=_hspacing*2;
 			}
 		}
 		
@@ -256,11 +269,11 @@ package com.leyou.ui.tools {
 			} else if (2 == pos) {
 				widgets2[btnWidget.name]=btnWidget;
 				panel2.addChild(btnWidget);
-				btnWidget.y=60;
+				btnWidget.y=_hspacing;
 			} else if (3 == pos) {
 				widgets3[btnWidget.name]=btnWidget;
 				panel3.addChild(btnWidget);
-				btnWidget.y=120;
+				btnWidget.y=_hspacing*2;
 			}
 		}
 		
@@ -309,7 +322,7 @@ package com.leyou.ui.tools {
 			var fuliW:RightTopWidget=getWidget("welfareBtn");
 			fuliW.setNum(c + welfareSelfCount);
 			if (1 == sp) {
-				fuliW.setText("签");
+				fuliW.setText(PropUtils.getStringById(1963));
 			} else {
 				fuliW.setText("");
 			}
@@ -324,7 +337,7 @@ package com.leyou.ui.tools {
 			var fuliW:RightTopWidget=getWidget("firstPayBtn");
 			
 			if (v) {
-				fuliW.setText("奖");
+				fuliW.setText(PropUtils.getStringById(1964));
 				fuliW.setEffect(true)
 			} else {
 				fuliW.setText("");
@@ -335,17 +348,23 @@ package com.leyou.ui.tools {
 		public function callback(type:String):void {
 			switch (type) {
 				case "scp":
-					UIOpenBufferManager.getInstance().open(WindowEnum.STORYCOPY);
+					UILayoutManager.getInstance().open_II(WindowEnum.DUNGEON_TEAM);
+					TweenLite.delayedCall(0.5, UIManager.getInstance().teamCopyWnd.setTabIndex, [0]);
 					UIManager.getInstance().creatWindow(WindowEnum.COPYTRACK);
 					break;
 				case "bcp":
-					UIOpenBufferManager.getInstance().open(WindowEnum.BOSS);
+					UILayoutManager.getInstance().open_II(WindowEnum.DUNGEON_TEAM);
+					TweenLite.delayedCall(0.5, UIManager.getInstance().teamCopyWnd.setTabIndex, [1]);
+//					UIOpenBufferManager.getInstance().open(WindowEnum.BOSS, 2);
 					break;
 				//				case "farm":
 				//					UILayoutManager.getInstance().open(WindowEnum.FARM);
 				//					break;
 				case "exp":
-					UIOpenBufferManager.getInstance().open(WindowEnum.EXPCOPY);
+
+					UILayoutManager.getInstance().open_II(WindowEnum.DUNGEON_TEAM);
+					TweenLite.delayedCall(0.5, UIManager.getInstance().teamCopyWnd.setTabIndex, [4]);
+					//					UIOpenBufferManager.getInstance().open(WindowEnum.EXPCOPY);
 					break;
 				case "sign":
 					UIOpenBufferManager.getInstance().open(WindowEnum.WELFARE);
@@ -384,9 +403,9 @@ package com.leyou.ui.tools {
 					expW.setEffect(playEffect);
 					expW.setNum(count);
 					if (count > 0) {
-						var ec:String="开启宝箱<font color='#ff0000'>({1}/10)</font><font color='#ff00'><u><a href='event:other_exp--exp'>立即参与</a></u></font>";
+						var ec:String=StringUtil.substitute(PropUtils.getStringById(1965), ["<font color='#ff0000'>({1}/10)</font><font color='#ff00'><u><a href='event:other_exp--exp'>"]);
 						ec=StringUtil.substitute(ec, 10 - count);
-						arr=["[练级]", ec, "", "", callback];
+						arr=[PropUtils.getStringById(1966), ec, "", "", callback];
 						UIManager.getInstance().taskTrack.updateOhterTrack(TaskEnum.taskLevel_levelingLine, arr);
 					} else {
 						UIManager.getInstance().taskTrack.delOtherTrack(TaskEnum.taskLevel_levelingLine)
@@ -397,46 +416,56 @@ package com.leyou.ui.tools {
 					jjcW.setEffect(playEffect);
 					jjcW.setNum(count);
 					if (1 == $sp) {
-						jjcW.setText("奖");
+						jjcW.setText(PropUtils.getStringById(1964));
 					} else {
 						jjcW.setText("");
 					}
 					break;
 				case "bcp":
-					var bcpW:RightTopWidget=getWidget("bossCopyBtn");
+					DataManager.getInstance().popupNumData.bossCyNum = count;
+					var bcpW:RightTopWidget=getWidget("teamCopyBtn");
 					bcpW.setEffect(playEffect);
-					bcpW.setNum(count);
-					if (!bcpW.visible) {
-						return;
-					}
+					bcpW.setNum(DataManager.getInstance().popupNumData.cyNum);
+//					var bcpW:RightTopWidget=getWidget("bossCopyBtn");
+//					bcpW.setEffect(playEffect);
+//					bcpW.setNum(count);
+//					if (!bcpW.visible) {
+//						return;
+//					}
 					var bc:String;
 					if (count > 0) {
-						bc="  BOSS挑战<font color='#ff00'><u><a href='event:other_bcp--bcp'>剩余{1}个</a></u></font>";
+						bc="  " + StringUtil.substitute(PropUtils.getStringById(1967), ["<font color='#ff00'><u><a href='event:other_bcp--bcp'>"]) + "</a></u></font>";
 						bc=StringUtil.substitute(bc, count);
 					} else {
-						bc="  BOSS挑战<font color='#ff00'><u><a href='event:other_bcp--bcp'>可以购买挑战次数</a></u></font>";
+						bc="  " + StringUtil.substitute(PropUtils.getStringById(1968), ["<font color='#ff00'><u><a href='event:other_bcp--bcp'>"]) + "</a></u></font>";
 					}
 					arr=["[BOSS]", bc, "", "", callback]
 					UIManager.getInstance().taskTrack.updateOhterTrack(TaskEnum.taskLevel_bossCopyLine, arr);
 					break;
 				case "scp":
-					var scpW:RightTopWidget=getWidget("storyCopyBtn");
+					DataManager.getInstance().popupNumData.storyCyNum = count;
+					var scpW:RightTopWidget=getWidget("teamCopyBtn");
 					scpW.setEffect(playEffect);
-					scpW.setNum(count);
-					if (values[0] > 0) {
-						scpW.setText("奖");
-					} else {
-						scpW.setText("");
-					}
-					if (!scpW.visible) {
-						return;
-					}
+					scpW.setNum(DataManager.getInstance().popupNumData.cyNum);
+//					var scpW:RightTopWidget=getWidget("storyCopyBtn");
+//					if(scpW){
+//						scpW.setEffect(playEffect);
+//						scpW.setNum(count);
+//						if (values[0] > 0) {
+//							scpW.setText(PropUtils.getStringById(1964));
+//						} else {
+//							scpW.setText("");
+//						}
+//						if (!scpW.visible) {
+//							return;
+//						}
+//					}
 					if (count > 0 || values[0] > 0) {
-						var sc1:String="待领取副本奖励<font color='#ff00'><u><a href='event:other_scp--scp'>剩余{1}个</a></u></font>";
+						var sc1:String=StringUtil.substitute(PropUtils.getStringById(1969), ["<font color='#ff00'><u><a href='event:other_scp--scp'>"]) + "</a></u></font>";
 						sc1=StringUtil.substitute(sc1, values[0]);
-						var sc2:String="待通关剧情副本<font color='#ff00'><u><a href='event:other_scp--scp'>剩余{1}个</a></u></font>";
+						var sc2:String=StringUtil.substitute(PropUtils.getStringById(1970), ["<font color='#ff00'><u><a href='event:other_scp--scp'>"]) + "</a></u></font>";
 						sc2=StringUtil.substitute(sc2, count);
-						arr=["[副本]", sc1, sc2, "", callback];
+						arr=[PropUtils.getStringById(1971), sc1, sc2, "", callback];
 						UIManager.getInstance().taskTrack.updateOhterTrack(TaskEnum.taskLevel_storeCopyLine, arr);
 					} else {
 						UIManager.getInstance().taskTrack.delOtherTrack(TaskEnum.taskLevel_storeCopyLine)
@@ -444,8 +473,10 @@ package com.leyou.ui.tools {
 					break;
 				case "farm":
 					var farmW:RightTopWidget=getWidget("farmBtn");
-					farmW.setEffect(playEffect);
-					farmW.setNum(count);
+					if(farmW){
+						farmW.setEffect(playEffect);
+						farmW.setNum(count);
+					}
 					break;
 				case "act":
 					var actW:RightTopWidget=getWidget("deliveryBtn");
@@ -461,8 +492,8 @@ package com.leyou.ui.tools {
 					welfareSelfCount=count;
 					sp=$sp;
 					if (1 == $sp) {
-						var wc1:String="今日未签到<font color='#ff00'><u><a href='event:other_sign--sign'>立即签到</a></u></font>"
-						arr=["[签到]", wc1, "", "", callback];
+						var wc1:String=StringUtil.substitute(PropUtils.getStringById(1972), ["<font color='#ff00'><u><a href='event:other_sign--sign'>"]) + "</a></u></font>"
+						arr=["[" + PropUtils.getStringById(1978) + "]", wc1, "", "", callback];
 						UIManager.getInstance().taskTrack.updateOhterTrack(TaskEnum.taskLevel_signInLine, arr);
 					} else {
 						UIManager.getInstance().taskTrack.delOtherTrack(TaskEnum.taskLevel_signInLine);
@@ -496,40 +527,60 @@ package com.leyou.ui.tools {
 					break;
 				case "col":
 					var cfw:RightTopWidget=getWidget("collectBtn");
-					cfw.setEffect(playEffect);
-					cfw.setNum(count);
-					DataManager.getInstance().collectionData.rewardCount = count;
-					var groupId:int = DataManager.getInstance().collectionData.cgroupId;
-					if(-1 == groupId && count <= 0){
+					if(cfw){
+						cfw.setEffect(playEffect);
+						cfw.setNum(count);
+					}
+					DataManager.getInstance().collectionData.rewardCount=count;
+					var groupId:int=DataManager.getInstance().collectionData.cgroupId;
+					if (-1 == groupId && count <= 0) {
 						UIManager.getInstance().taskTrack.delOtherTrack(TaskEnum.taskLevel_collectLine);
-					}else{
-						var remianTask:int = DataManager.getInstance().collectionData.remainTask(groupId);
+					} else {
+						var remianTask:int=DataManager.getInstance().collectionData.remainTask(groupId);
 						var cc1:String="";
-						if(-1 == groupId){
-							cc1="已全部收集完成";
-						}else{
-							var tData:TCollectionPreciousInfo = TableManager.getInstance().getPreciousByGroup(groupId);
-							cc1="<font color='#ff00'><u><a href='event:other_col--col'>{1}</a></u></font>地图中还有{2}个宝藏没有收集";
+						if (-1 == groupId) {
+							cc1=PropUtils.getStringById(1552);
+						} else {
+							var tData:TCollectionPreciousInfo=TableManager.getInstance().getPreciousByGroup(groupId);
+							cc1="<font color='#ff00'><u><a href='event:other_col--col'>{1}</a></u></font>"+PropUtils.getStringById(1553);
 							cc1=StringUtil.substitute(cc1, tData.mapName, remianTask);
 						}
-						var cc2:String="您有<font color='#ff00'><u><a href='event:other_col--col'>{1}</a></u></font>个收集宝藏未领取";
+						var cc2:String=StringUtil.substitute(PropUtils.getStringById(1554),["<font color='#ff00'><u><a href='event:other_col--col'>{1}</a></u></font>"]);
 						cc2=StringUtil.substitute(cc2, count);
-						if(count <= 0){
-							cc2 = "";
+						if (count <= 0) {
+							cc2="";
 						}
-						arr=["[收集]", cc1, cc2, "", callback];
+						arr=[PropUtils.getStringById(1555), cc1, cc2, "", callback];
 						UIManager.getInstance().taskTrack.updateOhterTrack(TaskEnum.taskLevel_collectLine, arr);
 					}
 					break;
 				case "ccz":
-					var ccfw:RightTopWidget = getWidget("abidePayBtn");
+					var ccfw:RightTopWidget=getWidget("abidePayBtn");
 					ccfw.setEffect(playEffect);
 					ccfw.setNum(count);
 					break;
 				case "cptm":
-					var cptm:RightTopWidget = getWidget("teamCopyBtn");
+					DataManager.getInstance().popupNumData.teamCyNum = count;
+					var cptm:RightTopWidget=getWidget("teamCopyBtn");
 					cptm.setEffect(playEffect);
-					cptm.setNum(count);
+					cptm.setNum(DataManager.getInstance().popupNumData.cyNum);
+//					var cptm:RightTopWidget=getWidget("teamCopyBtn");
+//					cptm.setEffect(playEffect);
+//					cptm.setNum(count);
+					break;
+				case "yd":
+					var tmw:RightTopWidget=getWidget("taskMarketBtn");
+					if(tmw){
+						tmw.setEffect(playEffect);
+						tmw.setNum(count);
+					}
+					break;
+				case "lday":
+					var lday:RightTopWidget=getWidget("sevenDayBtn");
+					if(lday){
+						lday.setEffect(playEffect);
+						lday.setNum(count);
+					}
 					break;
 			}
 		}
@@ -584,24 +635,26 @@ package com.leyou.ui.tools {
 					break;
 				case "farmBtn":
 					UIOpenBufferManager.getInstance().open(WindowEnum.FARM);
-//					UILayoutManager.getInstance().open(WindowEnum.FARM);
+					//					UILayoutManager.getInstance().open(WindowEnum.FARM);
 					break;
 				case "storyCopyBtn":
-					UIOpenBufferManager.getInstance().open(WindowEnum.STORYCOPY);
-//					UILayoutManager.getInstance().open(WindowEnum.STORYCOPY);
-//					UIManager.getInstance().creatWindow(WindowEnum.COPYTRACK);
+					//					UIOpenBufferManager.getInstance().open(WindowEnum.STORYCOPY);
+					//					UILayoutManager.getInstance().open(WindowEnum.STORYCOPY);
+					//					UIManager.getInstance().creatWindow(WindowEnum.COPYTRACK);
 					break;
 				case "bossCopyBtn":
 					UIOpenBufferManager.getInstance().open(WindowEnum.BOSS);
-//					UILayoutManager.getInstance().open(WindowEnum.BOSS);
+//					UIOpenBufferManager.getInstance().open(WindowEnum.FARM);
+					//					UILayoutManager.getInstance().open(WindowEnum.BOSS);
 					break;
-//				case "fieldBossBtn":
-//					UIOpenBufferManager.getInstance().open(WindowEnum.FIELDBOSS);
-//					UILayoutManager.getInstance().open(WindowEnum.FIELDBOSS);
-//					break;
+				case "fieldBossBtn":
+					UIOpenBufferManager.getInstance().open(WindowEnum.DRAGON_BALL);
+					//					UILayoutManager.getInstance().open(WindowEnum.FIELDBOSS);
+					//					UILayoutManager.getInstance().open(WindowEnum.DRAGON_BALL);
+					break;
 				case "expCopyBtn":
-					UIOpenBufferManager.getInstance().open(WindowEnum.EXPCOPY);
-//					UILayoutManager.getInstance().open(WindowEnum.EXPCOPY);
+					//					UIOpenBufferManager.getInstance().open(WindowEnum.EXPCOPY);
+					//					UILayoutManager.getInstance().open(WindowEnum.EXPCOPY);
 					break;
 				case "deliveryBtn":
 					UILayoutManager.getInstance().open_II(WindowEnum.PKCOPY);
@@ -614,36 +667,36 @@ package com.leyou.ui.tools {
 					break;
 				case "welfareBtn":
 					UIOpenBufferManager.getInstance().open(WindowEnum.WELFARE);
-//					UILayoutManager.getInstance().open(WindowEnum.WELFARE);
+					//					UILayoutManager.getInstance().open(WindowEnum.WELFARE);
 					break;
 				case "rankBtn":
 					UIOpenBufferManager.getInstance().open(WindowEnum.RANK);
-//					UILayoutManager.getInstance().open(WindowEnum.RANK);
+					//					UILayoutManager.getInstance().open(WindowEnum.RANK);
 					break;
 				case "shopBtn":
 					UILayoutManager.getInstance().open_II(WindowEnum.MYSTORE);
 					break;
 				case "activityBtn":
 					UIOpenBufferManager.getInstance().open(WindowEnum.ACTIVE);
-//					UILayoutManager.getInstance().open(WindowEnum.ACTIVE);
+					//					UILayoutManager.getInstance().open(WindowEnum.ACTIVE);
 					break;
 				case "keyBtn":
 					UILayoutManager.getInstance().open(WindowEnum.CDKEY);
 					break;
 				case "achievementBtn":
 					UIOpenBufferManager.getInstance().open(WindowEnum.ACHIEVEMENT);
-//					UILayoutManager.getInstance().open(WindowEnum.ACHIEVEMENT);
+					//					UILayoutManager.getInstance().open(WindowEnum.ACHIEVEMENT);
 					break;
-//				case "vipBtn":
-//					UILayoutManager.getInstance().open(WindowEnum.VIP);
-//					break;
+				//				case "vipBtn":
+				//					UILayoutManager.getInstance().open(WindowEnum.VIP);
+				//					break;
 				case "lotteryBtn":
 					UIOpenBufferManager.getInstance().open(WindowEnum.LUCKDRAW);
-//					UILayoutManager.getInstance().open(WindowEnum.LUCKDRAW);
+					//					UILayoutManager.getInstance().open(WindowEnum.LUCKDRAW);
 					break;
 				case "worshipBtn":
 					UIOpenBufferManager.getInstance().open(WindowEnum.WORSHIP);
-//					UILayoutManager.getInstance().open(WindowEnum.WORSHIP);
+					//					UILayoutManager.getInstance().open(WindowEnum.WORSHIP);
 					break;
 				case "firstPayBtn":
 					UILayoutManager.getInstance().open_II(WindowEnum.TOPUP);
@@ -652,24 +705,24 @@ package com.leyou.ui.tools {
 					UILayoutManager.getInstance().open(WindowEnum.FIRST_PAY);
 					break;
 				case "promotionBtn":
-//					UILayoutManager.getInstance().open(WindowEnum.PAY_PROMOTION);
+					//					UILayoutManager.getInstance().open(WindowEnum.PAY_PROMOTION);
 					UIOpenBufferManager.getInstance().open(WindowEnum.PAY_PROMOTION);
 					break;
 				case "tobeStrong":
 					UIOpenBufferManager.getInstance().open(WindowEnum.TOBE_STRONG);
-//					UILayoutManager.getInstance().open(WindowEnum.TOBE_STRONG);
+					//					UILayoutManager.getInstance().open(WindowEnum.TOBE_STRONG);
 					break;
 				case "sevenDBtn":
 					UIOpenBufferManager.getInstance().open(WindowEnum.SEVENDAY);
-//					UILayoutManager.getInstance().open(WindowEnum.SEVENDAY);
+					//					UILayoutManager.getInstance().open(WindowEnum.SEVENDAY);
 					break;
 				case "investBtn":
 					UIOpenBufferManager.getInstance().open(WindowEnum.INVEST);
-//					UILayoutManager.getInstance().open(WindowEnum.INVEST);
+					//					UILayoutManager.getInstance().open(WindowEnum.INVEST);
 					break;
 				case "areaCelebrate":
 					UIOpenBufferManager.getInstance().open(WindowEnum.AREA_CELEBRATE);
-//					UILayoutManager.getInstance().open(WindowEnum.AREA_CELEBRATE);
+					//					UILayoutManager.getInstance().open(WindowEnum.AREA_CELEBRATE);
 					break;
 				case "guildBtn":
 					if (!UIManager.getInstance().isCreate(WindowEnum.GUILD) || !UIManager.getInstance().guildWnd.visible) {
@@ -685,25 +738,25 @@ package com.leyou.ui.tools {
 					break;
 				case "firstReturnBtn":
 					UIOpenBufferManager.getInstance().open(WindowEnum.FIRST_RETURN);
-//					if((null != UIManager.getInstance().payFirst) && UIManager.getInstance().payFirst.visible){
-//						UIManager.getInstance().payFirst.hide();
-//					}else{
-//						Cmd_FCZ.cm_FCZ_I();
-//					}
+					//					if((null != UIManager.getInstance().payFirst) && UIManager.getInstance().payFirst.visible){
+					//						UIManager.getInstance().payFirst.hide();
+					//					}else{
+					//						Cmd_FCZ.cm_FCZ_I();
+					//					}
 					break;
 				case "payRankBtn":
 					UIOpenBufferManager.getInstance().open(WindowEnum.PAY_RANK);
-//					UILayoutManager.getInstance().open(WindowEnum.PAY_RANK);
+					//					UILayoutManager.getInstance().open(WindowEnum.PAY_RANK);
 					break;
 				case "onlineBtn":
 					UILayoutManager.getInstance().open(WindowEnum.ONLINDREWARD);
 					break;
 				case "guildBattleBtn":
 					UIOpenBufferManager.getInstance().open(WindowEnum.GUILD_BATTLE, 1);
-//					UILayoutManager.getInstance().open(WindowEnum.GUILD_BATTLE);
+					//					UILayoutManager.getInstance().open(WindowEnum.GUILD_BATTLE);
 					break;
 				case "tecentVipBtn":
-//					UIOpenBufferManager.getInstance().open(WindowEnum.QQ_VIP);
+					//					UIOpenBufferManager.getInstance().open(WindowEnum.QQ_VIP);
 					UILayoutManager.getInstance().open(WindowEnum.QQ_VIP);
 					break;
 				case "qqYellowBtn":
@@ -711,25 +764,46 @@ package com.leyou.ui.tools {
 					break;
 				case "collectBtn":
 					UIOpenBufferManager.getInstance().open(WindowEnum.COLLECTION);
-//					UILayoutManager.getInstance().open(WindowEnum.COLLECTION);
+					//					UILayoutManager.getInstance().open(WindowEnum.COLLECTION);
 					break;
 				case "costBtn":
 					UIOpenBufferManager.getInstance().open(WindowEnum.INTEGRAL);
-//					UILayoutManager.getInstance().open(WindowEnum.INTEGRAL);
+					//					UILayoutManager.getInstance().open(WindowEnum.INTEGRAL);
 					break;
 				case "abidePayBtn":
 					UIOpenBufferManager.getInstance().open(WindowEnum.ABIDE_PAY);
 					break;
 				case "groupBuyBtn":
-//					UILayoutManager.getInstance().open(WindowEnum.GROUP_BUY);
+					//					UILayoutManager.getInstance().open(WindowEnum.GROUP_BUY);
 					UIOpenBufferManager.getInstance().open(WindowEnum.GROUP_BUY);
 					break;
 				case "teamCopyBtn":
 					UILayoutManager.getInstance().open_II(WindowEnum.DUNGEON_TEAM);
 					break;
 				case "saleBtn":
-//					UILayoutManager.getInstance().open(WindowEnum.VENDUE);
+					//					UILayoutManager.getInstance().open(WindowEnum.VENDUE);
 					UIOpenBufferManager.getInstance().open(WindowEnum.VENDUE);
+					break;
+				//				case "legendaryBtn":
+				//					UILayoutManager.getInstance().open(WindowEnum.LEGENDAREY_WEAPON);
+				//					break;
+				case "superReturnBtn":
+					UILayoutManager.getInstance().open(WindowEnum.SUPER_FIRST_RETURN);
+					break;
+				case "blackStoreBtn":
+					//					UILayoutManager.getInstance().open(WindowEnum.BLACK_STROE);
+					UIOpenBufferManager.getInstance().open(WindowEnum.BLACK_STROE);
+					break;
+				case "petBtn":
+					//					UILayoutManager.getInstance().open(WindowEnum.PET);
+					UIOpenBufferManager.getInstance().open(WindowEnum.PET);
+					break;
+				case "taskMarketBtn":
+//					UILayoutManager.getInstance().open(WindowEnum.TASK_MARKET);
+					UIOpenBufferManager.getInstance().open(WindowEnum.TASK_MARKET);
+					break;
+				case "sevenDayBtn":
+					UILayoutManager.getInstance().open_II(WindowEnum.KEEP_7);
 					break;
 			}
 		}
@@ -742,12 +816,12 @@ package com.leyou.ui.tools {
 		 *
 		 */
 		public function active(n:String, num:int=-1, text:String=""):void {
-			var widget:RightTopWidget = getWidget(n);
-			if(null != widget){
-				if(num != -1){
+			var widget:RightTopWidget=getWidget(n);
+			if (null != widget) {
+				if (num != -1) {
 					widget.setNum(num);
 				}
-				if("" != text){
+				if ("" != text) {
 					widget.setText(text);
 				}
 				widget.setActive(true);
@@ -755,24 +829,24 @@ package com.leyou.ui.tools {
 			}
 		}
 		
-		public function setTime(n:String, time:int, ov:String=""):void{
-			var widget:RightTopWidget = getWidget(n);
-			if(null != widget){
-				widget.overV = ov;
+		public function setTime(n:String, time:int, ov:String=""):void {
+			var widget:RightTopWidget=getWidget(n);
+			if (null != widget) {
+				widget.overV=ov;
 				widget.setRemain(time);
 			}
 		}
 		
-		public function updateWidgetUrl(n:String, $url:String):void{
-			var widget:RightTopWidget = getWidget(n);
-			if(null != widget){
+		public function updateWidgetUrl(n:String, $url:String):void {
+			var widget:RightTopWidget=getWidget(n);
+			if (null != widget) {
 				widget.updateBmp($url);
 			}
 		}
 		
-		public function setEffect(n:String, b:Boolean):void{
-			var widget:RightTopWidget = getWidget(n);
-			if(null != widget){
+		public function setEffect(n:String, b:Boolean):void {
+			var widget:RightTopWidget=getWidget(n);
+			if (null != widget) {
 				widget.setEffect(b);
 			}
 		}
@@ -784,8 +858,8 @@ package com.leyou.ui.tools {
 		 *
 		 */
 		public function deactive(n:String):void {
-			var widget:RightTopWidget = getWidget(n);
-			if(null != widget){
+			var widget:RightTopWidget=getWidget(n);
+			if (null != widget) {
 				widget.setActive(false);
 				refresh();
 			}
@@ -846,55 +920,68 @@ package com.leyou.ui.tools {
 			active("investBtn");
 			active("guildBattleBtn");
 			active("groupBuyBtn");
-			active("costBtn");
+			active("sevenDayBtn");
+//			active("costBtn");
 			active("saleBtn");
+//			active("petBtn");
 			
 			// 腾讯平台
-			if(Core.isTencent){
+			if (Core.isTencent) {
 				active("tecentVipBtn");
-				if(0 == DataManager.getInstance().qqvipData.actSt){
+				if (0 == DataManager.getInstance().qqvipData.actSt) {
 					active("qqYellowBtn");
 				}
 			}
 			var level:int=Core.me.info.level;
 			// 收集
-			if(level >= ConfigEnum.setin1){
-				active("collectBtn");
+			if (level >= ConfigEnum.setin1) {
+//				active("collectBtn");
+				UIManager.getInstance().toolsWnd.unlockButton(MoldEnum.COLLECTION);
 				
-				var count:int = DataManager.getInstance().collectionData.rewardCount;
-				var groupId:int = DataManager.getInstance().collectionData.cgroupId;
-				if(-1 == groupId && count <= 0){
+				var count:int=DataManager.getInstance().collectionData.rewardCount;
+				var groupId:int=DataManager.getInstance().collectionData.cgroupId;
+				if (-1 == groupId && count <= 0) {
 					UIManager.getInstance().taskTrack.delOtherTrack(TaskEnum.taskLevel_collectLine);
-				}else{
-					var remianTask:int = DataManager.getInstance().collectionData.remainTask(groupId);
+				} else {
+					var remianTask:int=DataManager.getInstance().collectionData.remainTask(groupId);
 					var cc1:String="";
-					if(-1 == groupId){
-						cc1="已全部收集完成";
-					}else{
-						var tData:TCollectionPreciousInfo = TableManager.getInstance().getPreciousByGroup(groupId);
-						cc1="<font color='#ff00'><u><a href='event:other_col--col'>{1}</a></u></font>地图中还有{2}个宝藏没有收集";
+					if (-1 == groupId) {
+						cc1=PropUtils.getStringById(1552);
+					} else {
+						var tData:TCollectionPreciousInfo=TableManager.getInstance().getPreciousByGroup(groupId);
+						cc1="<font color='#ff00'><u><a href='event:other_col--col'>{1}</a></u></font>"+PropUtils.getStringById(1553);
 						cc1=StringUtil.substitute(cc1, tData.mapName, remianTask);
 					}
-					var cc2:String="您有<font color='#ff00'><u><a href='event:other_col--col'>{1}</a></u></font>个收集宝藏未领取";
+					var cc2:String=StringUtil.substitute(PropUtils.getStringById(1554),["<font color='#ff00'><u><a href='event:other_col--col'>{1}</a></u></font>"]);
 					cc2=StringUtil.substitute(cc2, count);
-					if(count <= 0){
-						cc2 = "";
+					if (count <= 0) {
+						cc2="";
 					}
-					var arr:Array=["[收集]", cc1, cc2, "", callback];
+					var arr:Array=[PropUtils.getStringById(1555), cc1, cc2, "", callback];
 					UIManager.getInstance().taskTrack.updateOhterTrack(TaskEnum.taskLevel_collectLine, arr);
 				}
+			}
+			// 佣兵
+			if(level >= ConfigEnum.servent1){
+				UIManager.getInstance().toolsWnd.unlockButton(MoldEnum.SERVENT);
 			}
 			// 排行榜
 			if (level >= ConfigEnum.RankOpenLevel) {
 				active("rankBtn");
 			}
-			// 我要变强
-			if (level >= ConfigEnum.tobeStr1) {
-				active("tobeStrong");
+			// 神器
+			if (level >= ConfigEnum.Artifact1) {
+				UIManager.getInstance().leftTopWnd.activeLegendaryBtn();
+				//				active("legendaryBtn");
 			}
+			// 我要变强
+//			if (level >= ConfigEnum.tobeStr1) {
+//				active("tobeStrong");
+//			}
 			// 农场
 			if (level >= ConfigEnum.FarmOpenLevel) {
-				active("farmBtn");
+//				active("farmBtn");
+				UIManager.getInstance().toolsWnd.unlockButton(MoldEnum.FARM);
 				//				UIManager.getInstance().openWindow(WindowEnum.FARM);
 				//				UIManager.getInstance().openWindow(WindowEnum.FARM_SHOP);
 				//				UIManager.getInstance().openWindow(WindowEnum.FARM_LOG);
@@ -905,18 +992,24 @@ package com.leyou.ui.tools {
 				//				UIManager.getInstance().openWindow(WindowEnum.STORYCOPY);
 				//				UIManager.getInstance().openWindow(WindowEnum.STORYCOPY_REWARD);
 			}
+			// 野外小Boss
+			if (level >= ConfigEnum.question1) {
+				active("bossCopyBtn");
+			}
 			// Boss副本
-			if (level >= ConfigEnum.BossCopyOpenLevel) {
-				active("bossCopyBtn");
-				//				UIManager.getInstance().openWindow(WindowEnum.BOSSCOPY);
-				//				UIManager.getInstance().openWindow(WindowEnum.BOSSCOPY_REWARD);
-			}
+			//			if (level >= ConfigEnum.BossCopyOpenLevel) {
+			//				active("bossCopyBtn");
+			//			}
+			//			
+			//			//野外BOSS
+			//			if (level >= ConfigEnum.FieldBossOpenLevel) {
+			//				active("bossCopyBtn");
+			//			}
 			
-			//野外BOSS
-			if (level >= ConfigEnum.FieldBossOpenLevel) {
-				active("bossCopyBtn");
+			// 龙珠
+//			if (level >= ConfigEnum.DragonBall10) {
 //				active("fieldBossBtn");
-			}
+//			}
 			
 			// 练级副本
 			if (level >= ConfigEnum.ExpCopyOpenLevel) {
@@ -930,9 +1023,9 @@ package com.leyou.ui.tools {
 				//				UIManager.getInstance().openWindow(WindowEnum.WELFARE);
 			}
 			// 活跃度
-			if (level >= ConfigEnum.ActiveOpenLevel) {
-				active("activityBtn");
-			}
+//			if (level >= ConfigEnum.ActiveOpenLevel) {
+//				active("activityBtn");
+//			}
 			
 			// 押镖
 			if (level >= ConfigEnum.question1) {
@@ -969,7 +1062,7 @@ package com.leyou.ui.tools {
 			
 			//行会
 			if (level >= ConfigEnum.UnionOpenLv) {
-				active("guildBtn");
+				//				active("guildBtn");
 			}
 			
 			// 商城
@@ -990,8 +1083,13 @@ package com.leyou.ui.tools {
 				UIManager.getInstance().toolsWnd.mountBtn.setActive(true, 1, true);
 			}
 			
-			if (level >= ConfigEnum.TeamDungeon1) {
+			if (level >= ConfigEnum.StoryCopyOpenLevel) {
 				active("teamCopyBtn");
+			}
+			
+			// 任务集市
+			if(level >= ConfigEnum.TaskMarket1){
+				active("taskMarketBtn");
 			}
 		}
 		

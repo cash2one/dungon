@@ -19,7 +19,8 @@ package com.leyou.net.cmd
 //			UIOpenBufferManager.getInstance().removeCmd(WindowEnum.BOSSCOPY, CmdEnum.SM_BCP_I);
 //			UIManager.getInstance().bossCpyWnd.loadCopy(obj);
 			DataManager.getInstance().bossCopyData.loadData_I(obj);
-			UIManager.getInstance().bossWnd.updateCopyBoss();
+			UIManager.getInstance().teamCopyWnd.bossCopy.updateView();
+//			UIManager.getInstance().bossWnd.updateCopyBoss();
 		}
 		
 		/**
@@ -38,7 +39,7 @@ package com.leyou.net.cmd
 		 */		
 		public static function sm_BCP_A(obj:Object):void{
 			DataManager.getInstance().bossCopyData.loadData_A(obj);
-			UIManager.getInstance().bossWnd.updateChallengeCount();
+			UIManager.getInstance().teamCopyWnd.bossCopy.updateCount();
 //			UIManager.getInstance().bossCpyWnd.updateChallengeCount(obj);
 		}
 		
@@ -48,8 +49,8 @@ package com.leyou.net.cmd
 		 * @param bossId BOSS编号
 		 * 
 		 */
-		public static function cm_BCP_A():void{
-			NetGate.getInstance().send(CmdEnum.CM_BCP_A);
+		public static function cm_BCP_A(currency:int):void{
+			NetGate.getInstance().send(CmdEnum.CM_BCP_A+currency);
 		}
 		
 		public static function cm_BCP_B():void{

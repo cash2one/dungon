@@ -9,6 +9,7 @@ package com.leyou.ui.tips {
 	import com.ace.ui.lable.Label;
 	import com.ace.ui.lable.children.TextArea;
 	import com.leyou.enum.PkCopyEnum;
+	import com.leyou.utils.PropUtils;
 
 	public class DungeonTZTips extends AutoSprite implements ITip {
 
@@ -93,7 +94,7 @@ package com.leyou.ui.tips {
 
 		private function lastTime(type:int):void {
 			if (type != PkCopyEnum.PKCOPY_QUEST && type != PkCopyEnum.PKCOPY_INVADE) {
-				this.timeLbl.text="全天";
+				this.timeLbl.text=PropUtils.getStringById(1920);
 				return;
 			}
 

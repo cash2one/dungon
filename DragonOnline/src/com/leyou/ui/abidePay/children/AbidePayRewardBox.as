@@ -77,6 +77,11 @@ package com.leyou.ui.abidePay.children
 			grid.stopMc();
 		}
 		
+		public function reset():void{
+			flagImg.visible = false;
+			receivebtn.visible = false;
+		}
+		
 		public function updateInfo(data:AbidePayData):void{
 			if(data.isReceive(_day, _type)){
 				flagImg.visible = true;

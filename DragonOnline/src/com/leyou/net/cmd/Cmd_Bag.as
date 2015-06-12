@@ -1,18 +1,16 @@
 package com.leyou.net.cmd {
 
-	import com.ace.config.Core;
 	import com.ace.enum.FunOpenEnum;
 	import com.ace.enum.ItemEnum;
 	import com.ace.enum.WindowEnum;
+	import com.ace.gameData.manager.DataManager;
 	import com.ace.gameData.manager.MyInfoManager;
 	import com.ace.manager.SoundManager;
 	import com.ace.manager.ToolTipManager;
-	import com.ace.manager.UILayoutManager;
 	import com.ace.manager.UIManager;
 	import com.leyou.data.bag.Baginfo;
 	import com.leyou.data.tips.TipsInfo;
 	import com.leyou.enum.CmdEnum;
-	import com.leyou.enum.ConfigEnum;
 	import com.leyou.net.NetGate;
 	import com.leyou.ui.convenientuse.ConvenientUseManager;
 
@@ -119,7 +117,12 @@ k	是否已加锁
 		public static function sm_bag_L(o:Object):void {
 			if (o.s != null) {
 
+				var oldArr:Array=MyInfoManager.getInstance().bagItems.filter(function(item:*,i:int,arr:Array):Boolean{
+					return true;
+				});
+				
 				MyInfoManager.getInstance().bagItems.length=0;
+
 
 				var arr:Array=o.s as Array;
 
@@ -147,6 +150,8 @@ k	是否已加锁
 				}
 
 				UIManager.getInstance().backpackWnd.refresh();
+				
+				UIManager.getInstance().backpackWnd.updateGridEffect(oldArr,MyInfoManager.getInstance().bagItems);
 
 				UIManager.getInstance().backpackWnd.setPlayGuideMountItem();
 				UIManager.getInstance().backpackWnd.setPlayGuideWingItem();
@@ -192,6 +197,10 @@ k	是否已加锁
 			
 			if (UIManager.getInstance().isCreate(WindowEnum.VENDUE)) {
 				UIManager.getInstance().vendueWnd.updataMoney();
+			}
+			
+			if(UIManager.getInstance().isCreateAndVisible(WindowEnum.LEGENDAREY_WEAPON)){
+				UIManager.getInstance().legendaryWnd.updateMaterialCount();
 			}
 
 			UIManager.getInstance().roleHeadWnd.updateCurrce();
@@ -278,6 +287,11 @@ pos	删除的位置
 			if (null != item) {
 				ConvenientUseManager.getInstance().checkUseQueue(item.tips.uid);
 			}
+			
+			// 神器物品刷新
+			if(UIManager.getInstance().isCreateAndVisible(WindowEnum.LEGENDAREY_WEAPON)){
+				UIManager.getInstance().legendaryWnd.updateMaterialCount();
+			}
 		}
 
 		/**
@@ -314,6 +328,10 @@ mk	mk=X,打开背包
 
 //			UIManager.getInstance().backpackWnd.updateItemData();
 
+			var oldArr:Array=MyInfoManager.getInstance().bagItems.filter(function(item:*,i:int,arr:Array):Boolean{
+				return true;
+			});
+			
 			var tinfo:Baginfo;
 			var barr:Array=MyInfoManager.getInstance().bagItems;
 			var oitem:Baginfo;
@@ -360,6 +378,9 @@ mk	mk=X,打开背包
 				SoundManager.getInstance().play(int(item.info.sound));
 
 			UIManager.getInstance().backpackWnd.refresh();
+			
+			UIManager.getInstance().backpackWnd.updateGridEffect(oldArr,MyInfoManager.getInstance().bagItems);
+			
 			UIManager.getInstance().backpackWnd.setPlayGuideMountItem();
 			UIManager.getInstance().backpackWnd.setPlayGuideEquipItem();
 			UIManager.getInstance().backpackWnd.setPlayGuideWingItem();
@@ -369,6 +390,12 @@ mk	mk=X,打开背包
 
 			if (UIManager.getInstance().isCreate(WindowEnum.GEM_LV))
 				UIManager.getInstance().gemLvWnd.updateList();
+			
+			
+			// 神器物品刷新
+			if(UIManager.getInstance().isCreateAndVisible(WindowEnum.LEGENDAREY_WEAPON)){
+				UIManager.getInstance().legendaryWnd.updateMaterialCount();
+			}
 		}
 
 		public static function sm_bag_Q(o:Object):void {
@@ -379,9 +406,10 @@ mk	mk=X,打开背包
 					UIManager.getInstance().backAddWnd.showPanel(o);
 					UIManager.getInstance().backpackWnd.openGrid=false;
 				} else {
-					UIManager.getInstance().backpackWnd.openGridTime=o.time;
-					UIManager.getInstance().backpackWnd.updateOpenGrid();
+//					UIManager.getInstance().backpackWnd.openGridTime=o.time;
+//					UIManager.getInstance().backpackWnd.updateOpenGrid();
 				}
+				
 			}
 
 		}
@@ -399,8 +427,9 @@ pos  -- 道具在背包中的位置
 				if (null == bagInfo) {
 					return;
 				}
-
+//				if(DataManager.getInstance().convenientData.isPrompt(bagInfo.info.name)){
 				ConvenientUseManager.getInstance().checkNewBagId(bagInfo.tips.uid);
+//				}
 
 //				if (1 == bagInfo.info.classid) {
 //					// 新获得装备
@@ -443,6 +472,11 @@ pos  -- 道具在背包中的位置
 //						}
 //					}
 //				}
+			}
+			
+			// 神器物品刷新
+			if(UIManager.getInstance().isCreateAndVisible(WindowEnum.LEGENDAREY_WEAPON)){
+				UIManager.getInstance().legendaryWnd.updateMaterialCount();
 			}
 		}
 

@@ -7,6 +7,8 @@ package com.leyou.ui.guildBattle
 	import com.ace.ui.tabbar.children.TabBar;
 	import com.leyou.net.cmd.Cmd_GuildBattle;
 	import com.leyou.net.cmd.Cmd_WARC;
+	import com.leyou.net.cmd.Cmd_ZC;
+	import com.leyou.ui.battlefield.IceBattlefieldRender;
 	import com.leyou.ui.cityBattle.CityBattleRender;
 	import com.leyou.ui.guildBattle.children.GuildBattleGuildRender;
 	
@@ -20,6 +22,8 @@ package com.leyou.ui.guildBattle
 		
 		private var cityBattle:CityBattleRender;
 		
+		private var iceBattle:IceBattlefieldRender;
+		
 		private var _currentIndex:int;
 		
 		public function GuildBattleWnd(){
@@ -30,12 +34,15 @@ package com.leyou.ui.guildBattle
 		private function init():void{
 			guildRender = new GuildBattleGuildRender();
 			cityBattle = new CityBattleRender();
+			iceBattle = new IceBattlefieldRender();
 			guildBttleType = getUIbyID("guildBttleType") as TabBar;
 			guildBttleType.addToTab(guildRender, 0);
 			guildBttleType.addToTab(cityBattle, 1);
+			guildBttleType.addToTab(iceBattle, 2);
 			guildBttleType.addEventListener(TabbarModel.changeTurnOnIndex, onTabClick);
 			guildRender.x = -23;
 			cityBattle.x = -23;
+			iceBattle.x = -23;
 		}
 		
 		public override function show(toTop:Boolean=true, $layer:int=1, toCenter:Boolean=true):void{
@@ -46,6 +53,9 @@ package com.leyou.ui.guildBattle
 					break;
 				case 1:
 					Cmd_WARC.cm_WARC_I();
+					break;
+				case 2:
+					Cmd_ZC.cm_ZC_I();
 					break;
 			}
 		}
@@ -71,11 +81,18 @@ package com.leyou.ui.guildBattle
 				case 1:
 					Cmd_WARC.cm_WARC_I();
 					break;
+				case 2:
+					Cmd_ZC.cm_ZC_I();
+					break;
 			}
 		}
 		
 		public function updateCityBattleInfo():void{
 			cityBattle.updateInfo();
+		}
+		
+		public function updateIceBattleInfo():void{
+			iceBattle.updateInfo();
 		}
 		
 		public override function get width():Number{

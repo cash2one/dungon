@@ -5,6 +5,7 @@ package com.leyou.ui.guild.child {
 	import com.ace.ui.img.child.Image;
 	import com.ace.ui.lable.Label;
 	import com.leyou.manager.TimerManager;
+	import com.leyou.utils.PropUtils;
 	import com.leyou.utils.TimeUtil;
 
 	public class GuildWarReady extends AutoSprite {
@@ -37,7 +38,7 @@ package com.leyou.ui.guild.child {
 		public function updateInfo(o:Object):void {
 
 			this.lastTime=o.stime;
-			this.lastTimeLbl.text="备战时间: " + TimeUtil.getIntToTime(this.lastTime) + "";
+			this.lastTimeLbl.text=PropUtils.getStringById(1750) + ": " + TimeUtil.getIntToTime(this.lastTime) + "";
 
 			if (this.lastTime > 0)
 				TimerManager.getInstance().add(exeTime);
@@ -58,12 +59,12 @@ package com.leyou.ui.guild.child {
 		private function exeTime(i:int):void {
 
 			if (this.lastTime - i > 0) {
-				this.lastTimeLbl.text="备战时间: " + TimeUtil.getIntToTime(this.lastTime - i) + "";
+				this.lastTimeLbl.text=PropUtils.getStringById(1750) + ": " + TimeUtil.getIntToTime(this.lastTime - i) + "";
 
 			} else {
 				this.lastTime=0;
 				TimerManager.getInstance().remove(exeTime);
-				this.lastTimeLbl.text="备战时间: 00:00:00";
+				this.lastTimeLbl.text=PropUtils.getStringById(1750) + ": 00:00:00";
 			}
 
 		}

@@ -19,6 +19,7 @@ package com.leyou.ui.sevenDay
 	import com.leyou.net.cmd.Cmd_Seven;
 	import com.leyou.ui.market.child.MarketGrid;
 	import com.leyou.ui.sevenDay.child.SevenDayRender;
+	import com.leyou.utils.PropUtils;
 	
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
@@ -163,7 +164,7 @@ package com.leyou.ui.sevenDay
 		public function showReward(day:int):void{
 			dayImg.updateBmp("ui/7d/7d_img_0"+day+".png");
 			var dayTask:SevenDayTaskData = DataManager.getInstance().sevenDayData.getDayTaskInfo(showDay);
-			remainLbl.text = StringUtil.substitute("剩余{num}个任务未完成", dayTask.unfinishCount);
+			remainLbl.text = StringUtil.substitute(PropUtils.getStringById(1875), dayTask.unfinishCount);
 			var rewardInfo:TSevenDayRewardInfo = TableManager.getInstance().getSevenDayRewardInfo(day);
 			for(var n:int = 0; n < 4; n++){
 				if(null != grids[n]){

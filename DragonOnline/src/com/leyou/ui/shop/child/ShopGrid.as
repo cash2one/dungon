@@ -3,21 +3,16 @@ package com.leyou.ui.shop.child {
 	import com.ace.enum.ItemEnum;
 	import com.ace.enum.PlayerEnum;
 	import com.ace.enum.TipEnum;
-	import com.ace.game.backpack.GridBase;
 	import com.ace.gameData.manager.MyInfoManager;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.manager.LibManager;
 	import com.ace.manager.ToolTipManager;
-	import com.ace.tools.ScaleBitmap;
 	import com.ace.ui.img.child.Image;
-	import com.ace.ui.lable.Label;
 	import com.leyou.data.role.EquipInfo;
 	import com.leyou.data.tips.TipsInfo;
-	import com.leyou.enum.TipsEnum;
 	import com.leyou.ui.backpack.child.GridModel;
 	
 	import flash.geom.Point;
-	import flash.geom.Rectangle;
 
 	public class ShopGrid extends GridModel {
 

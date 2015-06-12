@@ -17,13 +17,22 @@ package com.leyou.ui.skill {
 	import com.ace.manager.UILayoutManager;
 	import com.ace.manager.UIManager;
 	import com.ace.ui.auto.AutoWindow;
+	import com.ace.ui.tabbar.TabbarModel;
+	import com.ace.ui.tabbar.children.TabBar;
+	import com.ace.utils.StringUtil;
 	import com.leyou.data.playerSkill.SkillInfo;
 	import com.leyou.data.playerSkill.TipSkillInfo;
+	import com.leyou.enum.ConfigEnum;
 	import com.leyou.manager.PopupManager;
 	import com.leyou.net.cmd.Cmd_Link;
 	import com.leyou.net.cmd.Cmd_Skill;
+	import com.leyou.ui.skill.childs.PassiveSkill;
 	import com.leyou.ui.skill.childs.SkillBar;
+	import com.leyou.ui.tips.TipsAchievementTip;
+	import com.leyou.utils.PropUtils;
 	
+	import flash.display.Sprite;
+	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
@@ -38,6 +47,11 @@ package com.leyou.ui.skill {
 		public var confirmState:Boolean=false;
 		public var selectIndex:int=-1;
 
+		private var skllTabbar:TabBar;
+
+		private var skillContiner:Sprite;
+		private var passSkill:PassiveSkill;
+
 		public function SkillWnd() {
 			super(LibManager.getInstance().getXML("config/ui/SkillWnd.xml"));
 			this.init();
@@ -47,15 +61,42 @@ package com.leyou.ui.skill {
 
 		private function init():void {
 
-			this.addEventListener(MouseEvent.CLICK, onGridListClick);
-			this.addEventListener(MouseEvent.MOUSE_OVER, onGridListOver);
-			this.addEventListener(MouseEvent.MOUSE_MOVE, onGridListOver);
-			this.addEventListener(MouseEvent.MOUSE_OUT, onGridListOut);
+			this.skllTabbar=this.getUIbyID("skllTabbar") as TabBar;
+			this.skllTabbar.addEventListener(TabbarModel.changeTurnOnIndex, onChange);
 
-			this.scrollRect=new Rectangle(0, 0, 346, 522);
+			this.skillContiner=new Sprite();
+			this.skllTabbar.addToTab(this.skillContiner, 0);
+
+			this.skillContiner.x=-20;
+			this.skillContiner.y=3;
+
+			this.passSkill=new PassiveSkill();
+			this.skllTabbar.addToTab(this.passSkill, 1);
+
+//			this.skillContiner.addEventListener(MouseEvent.CLICK, onGridListClick);
+//			this.skillContiner.addEventListener(MouseEvent.MOUSE_OVER, onGridListOver);
+//			this.skillContiner.addEventListener(MouseEvent.MOUSE_MOVE, onGridListOver);
+//			this.skillContiner.addEventListener(MouseEvent.MOUSE_OUT, onGridListOut);
+
+			this.scrollRect=new Rectangle(0, 0, 574, 496);
+
+
+			this.skllTabbar.getTabButton(1).setToolTip(StringUtil.substitute(PropUtils.getStringById(2170), [ConfigEnum.skill4]));
 
 //			this.skillFun=new SkillFuWnd();
 //			LayerManager.getInstance().windowLayer.addChild(this.skillFun);
+		}
+
+		private function onChange(e:Event):void {
+
+			if (this.skllTabbar.turnOnIndex == 0) {
+
+			} else {
+				if (Core.me.info.level < ConfigEnum.skill4)
+					this.skllTabbar.turnToTab(0);
+			}
+
+
 		}
 
 		override public function show(toTop:Boolean=true, $layer:int=1, toCenter:Boolean=true):void {
@@ -69,14 +110,14 @@ package com.leyou.ui.skill {
 
 			super.show(toTop, $layer, toCenter);
 
-			if (!UIManager.getInstance().isCreate(WindowEnum.RUNE))
-				UIManager.getInstance().creatWindow(WindowEnum.RUNE);
-
-			UILayoutManager.getInstance().show(WindowEnum.SKILL, WindowEnum.RUNE, UILayoutManager.SPACE_X, UILayoutManager.SPACE_Y);
-//			UIManager.getInstance().skillFuWnd.show();
-			this.selectIndex=1;
-			this.renderArr[this.selectIndex].hight=true;
-			UIManager.getInstance().skillFuWnd.updateInfo(MyInfoManager.getInstance().skilldata.skillItems[this.selectIndex]);
+//			if (!UIManager.getInstance().isCreate(WindowEnum.RUNE))
+//				UIManager.getInstance().creatWindow(WindowEnum.RUNE);
+//
+//			UILayoutManager.getInstance().show(WindowEnum.SKILL, WindowEnum.RUNE, UILayoutManager.SPACE_X, UILayoutManager.SPACE_Y);
+////			UIManager.getInstance().skillFuWnd.show();
+//			this.selectIndex=1;
+//			this.renderArr[this.selectIndex].hight=true;
+//			UIManager.getInstance().skillFuWnd.updateInfo(MyInfoManager.getInstance().skilldata.skillItems[this.selectIndex]);
 		}
 
 		override public function sendOpenPanelProtocol(... parameters):void {
@@ -110,17 +151,16 @@ package com.leyou.ui.skill {
 					render=new SkillBar();
 					render.updateInfo(skill.skillItems[key]);
 
-					render.y=59 + i * 69;
-					render.x=19;
+					render.y=i * 67;
+//					render.x=19;
 
 					this.renderArr[int(key)]=render;
-					this.addToPane(render);
+					this.skillContiner.addChild(render);
 
 					if (skill.skillItems[key][0] == 0)
 						render.enable=true;
 					else
 						render.enable=false;
-
 					i++;
 				}
 
@@ -145,15 +185,21 @@ package com.leyou.ui.skill {
 //					else
 
 //					UILayoutManager.getInstance().show(WindowEnum.SKILL, WindowEnum.RUNE, UILayoutManager.SPACE_X, UILayoutManager.SPACE_Y);
-					
-					if(this.selectIndex!=-1)
-					UIManager.getInstance().skillFuWnd.updateInfo(MyInfoManager.getInstance().skilldata.skillItems[this.selectIndex]);
+
+					if (this.selectIndex != -1)
+						UIManager.getInstance().skillFuWnd.updateInfo(MyInfoManager.getInstance().skilldata.skillItems[this.selectIndex]);
 				}
 
 				UIManager.getInstance().toolsWnd.setAutoMagicList();
 			}
 
+			if (Core.me.info.level >= ConfigEnum.skill4)
+				this.skllTabbar.getTabButton(1).setToolTip("");
 
+		}
+
+		public function updateSkill(o:Object):void {
+			this.passSkill.updateInfo(o);
 		}
 
 		public function setautoMagic(skid:int, st:Boolean):void {
@@ -202,19 +248,30 @@ package com.leyou.ui.skill {
 
 		private function onGridListOver(evt:MouseEvent):void {
 
+			trace("111", evt.target, evt.currentTarget.name);
+
 			if (evt.target is SkillBar) {
 				SkillBar(evt.target).hight=true;
 
 				var skill:Array=TableManager.getInstance().getSkillArr(MyInfoManager.getInstance().skilldata.skillItems[this.renderArr.indexOf(evt.target)][1]);
 				skill.sortOn("id", Array.CASEINSENSITIVE | Array.NUMERIC);
 
-				var k:int=MyInfoManager.getInstance().skilldata.skillItems[this.renderArr.indexOf(evt.target)].indexOf(2, 3) - 2;
+				var skills:Array=MyInfoManager.getInstance().skilldata.skillItems[this.renderArr.indexOf(evt.target)];
+				var k:int=skills.indexOf(2, 3) - 2;
+
+				if (k < 0 && skills.length == 7 && (skills[6]).split("_")[1] == 2) {
+					k=(skills[6]).split("_")[0];
+				}
+
+				k=k < 0 ? 0 : k;
 
 				var tipInfo:TipSkillInfo=new TipSkillInfo();
-				tipInfo.skillInfo=skill[k < 0 ? 0 : k];
+				tipInfo.skillInfo=skill[k];
+
 				tipInfo.hasRune=false;
 //				tipInfo.level=MyInfoManager.getInstance().skilldata.skillItems[this.renderArr.indexOf(evt.target)][2];
 				tipInfo.level=int(tipInfo.skillInfo.autoLv);
+				tipInfo.skillLv=int(tipInfo.skillInfo.autoLv);
 
 //				tipInfo.runde=MyInfoManager.getInstance().skilldata.skillItems[this.renderArr.indexOf(evt.target)].indexOf(2, 3) - 2;
 
@@ -262,12 +319,39 @@ package com.leyou.ui.skill {
 			for (key in skl) {
 				if (int(skl[key][1]) == skid) {
 					k=skl[key].indexOf(2, 3) - 2;
+
+					if (k < 0 && skl[key].length == 7 && (skl[key][6]).split("_")[1] == 2) {
+						k=(skl[key][6]).split("_")[0];
+					}
+
 					break;
 				}
 			}
 
 			return sk[k < 0 ? 0 : k];
 		}
+		
+		/**
+		 * 
+		 * @param skid
+		 * @return 
+		 * 
+		 */		
+		public function getSkillArrByID(skid:int):Array {
+			var skl:Array=MyInfoManager.getInstance().skilldata.skillItems;
+			
+			var k:int;
+			var key:String;
+			for (key in skl) {
+				if (int(skl[key][1]) == skid) {
+					 return skl[key];
+				}
+			}
+			
+			return [];
+		}
+		
+		
 
 		public function showGetPanel(o:Object):void {
 			this.skillOb=new TipsSkillObWnd();
@@ -295,16 +379,16 @@ package com.leyou.ui.skill {
 
 		override public function hide():void {
 			super.hide();
-			
+
 			TweenManager.getInstance().lightingCompnent(UIManager.getInstance().toolsWnd.skillBtn);
 			GuideManager.getInstance().removeGuide(37);
-			
+
 			UIManager.getInstance().hideWindow(WindowEnum.RUNE);
 //			UIManager.getInstance().hideWindow(WindowEnum.MESSAGE);
-			
+
 			PopupManager.closeConfirm("changeRune");
 			UIManager.getInstance().hideWindow(WindowEnum.QUICK_BUY);
-			
+
 			if (this.selectIndex != -1)
 				this.renderArr[this.selectIndex].hight=false;
 
@@ -343,7 +427,7 @@ package com.leyou.ui.skill {
 		}
 
 		override public function get height():Number {
-			return 522;
+			return 496;
 		}
 
 	}

@@ -150,6 +150,7 @@ package com.leyou.ui.aution {
 			backpack.hidBind(true);
 			updataMoney();
 			GuideManager.getInstance().removeGuide(34);
+			autionBuyPanel.resetPage();
 		}
 		
 		/**

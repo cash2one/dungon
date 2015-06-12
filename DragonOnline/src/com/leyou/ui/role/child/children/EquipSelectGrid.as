@@ -227,11 +227,14 @@ package com.leyou.ui.role.child.children {
 //					}
 
 					Cmd_Gem.cmGemInlay(this.info.pos, UIManager.getInstance().selectWnd.GemSelectIndex, UIManager.getInstance().selectWnd.position);
-					
-					if(UIManager.getInstance().selectWnd.succEffect!=null)
+
+					if (UIManager.getInstance().selectWnd.succEffect != null)
 						UIManager.getInstance().selectWnd.succEffect();
-					
-				} else {
+
+				}else if(UIManager.getInstance().selectWnd.type == 3){
+					UIManager.getInstance().legendaryWnd.setMaterialEquip(UIManager.getInstance().selectWnd.position, info);
+					UIManager.getInstance().selectWnd.hide();
+				}else {
 					var type:int=(UIManager.getInstance().selectWnd.type == 0 ? 3 : 40);
 					Cmd_Bag.cm_bagMoveTo(this.info.pos, type, UIManager.getInstance().selectWnd.position);
 				}
@@ -260,7 +263,7 @@ package com.leyou.ui.role.child.children {
 //				return;
 //			}
 
-
+			UIManager.getInstance().selectWnd.hide();
 
 		}
 

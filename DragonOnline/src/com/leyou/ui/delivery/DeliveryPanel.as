@@ -20,8 +20,9 @@ package com.leyou.ui.delivery {
 	import com.greensock.TweenLite;
 	import com.leyou.enum.ConfigEnum;
 	import com.leyou.net.cmd.Cmd_Yct;
+	import com.leyou.utils.PropUtils;
 	import com.leyou.utils.StringUtil_II;
-	
+
 	import flash.events.MouseEvent;
 	import flash.utils.clearInterval;
 	import flash.utils.setInterval;
@@ -86,9 +87,9 @@ package com.leyou.ui.delivery {
 				case "flyBtn":
 					if (ConfigEnum.MarketOpenLevel <= Core.me.info.level) {
 						var tinfo:TItemInfo=TableManager.getInstance().getItemInfo(ConfigEnum.traveItem);
-						
-						if (MyInfoManager.getInstance().VipLastTransterCount==0 && MyInfoManager.getInstance().getBagItemNumByName(tinfo.name) <= 0) {
-							
+
+						if (MyInfoManager.getInstance().VipLastTransterCount == 0 && MyInfoManager.getInstance().getBagItemNumByName(tinfo.name) <= 0) {
+
 							if (!UIManager.getInstance().quickBuyWnd.isAutoBuy(ConfigEnum.traveItem, ConfigEnum.traveBindItem)) {
 								UILayoutManager.getInstance().show(WindowEnum.ROLE, WindowEnum.QUICK_BUY, UILayoutManager.SPACE_X, UILayoutManager.SPACE_Y + 40);
 								UIManager.getInstance().quickBuyWnd.pushItem(ConfigEnum.traveItem, ConfigEnum.traveBindItem);
@@ -98,15 +99,15 @@ package com.leyou.ui.delivery {
 							}
 						}
 					}
-					
+
 					EventManager.getInstance().dispatchEvent(EventEnum.SCENE_TRANS, true);
 					Cmd_Yct.cm_DeliveryTrackCart(2);
 					break;
 				case "enterBtn":
 
-					if (this.enterBtn.text.indexOf("进入") > -1) {
+					if (this.enterBtn.text.indexOf(PropUtils.getStringById(1677)) > -1) {
 						Cmd_Yct.cm_DeliveryEnterCart();
-					} else if (this.enterBtn.text.indexOf("离开") > -1) {
+					} else if (this.enterBtn.text.indexOf(PropUtils.getStringById(1678)) > -1) {
 						Cmd_Yct.cm_DeliveryQuitCart()
 					}
 
@@ -123,19 +124,19 @@ package com.leyou.ui.delivery {
 		 */
 		public function changeEnterCartState(v:Boolean):void {
 			if (v) {
-				this.enterBtn.text="离开镖车";
+				this.enterBtn.text=PropUtils.getStringById(1679);
 				this.flyBtn.setActive(false, .6, true);
 				this.trackBtn.setActive(false, .6, true);
-				
+
 				UIManager.getInstance().rightTopWnd.hideBar(1);
 			} else {
-				this.enterBtn.text="进入镖车";
+				this.enterBtn.text=PropUtils.getStringById(1680);
 
 				if (endSt == 0) {
 					this.flyBtn.setActive(true, 1, true);
 					this.trackBtn.setActive(true, 1, true);
 				}
-				
+
 				UIManager.getInstance().rightTopWnd.showBar(1);
 			}
 		}

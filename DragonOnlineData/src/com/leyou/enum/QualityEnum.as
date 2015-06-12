@@ -26,5 +26,10 @@ package com.leyou.enum
 		 * 传说 
 		 */		
 		public static const QUA_LEGEND:int = 4;
+		
+		/**
+		 * 神器
+		 */		
+		public static const QUA_ARTIFACT:int = 5;
 	}
 }

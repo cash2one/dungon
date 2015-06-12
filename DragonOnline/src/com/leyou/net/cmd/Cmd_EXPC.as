@@ -36,8 +36,8 @@ package com.leyou.net.cmd
 		 * 
 		 */		
 		public static function sm_Exp_I(obj:Object):void{
-			UIOpenBufferManager.getInstance().removeCmd(WindowEnum.EXPCOPY, CmdEnum.SM_EXPC_I);
-			UIManager.getInstance().expCopyWnd.updateCopy(obj);
+//			UIOpenBufferManager.getInstance().removeCmd(WindowEnum.EXPCOPY, CmdEnum.SM_EXPC_I);
+//			UIManager.getInstance().expCopyWnd.updateCopy(obj);
 		}
 		
 		/**

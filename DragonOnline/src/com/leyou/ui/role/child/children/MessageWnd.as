@@ -12,6 +12,7 @@ package com.leyou.ui.role.child.children {
 	import com.ace.utils.FileUtil;
 	import com.leyou.ui.team.TeamWnd;
 	import com.leyou.utils.FilterUtil;
+	import com.leyou.utils.PropUtils;
 	
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
@@ -52,14 +53,14 @@ package com.leyou.ui.role.child.children {
 				case "sureBtn":
 					if (this.f) { //需要判断是否有元素之心
 
-						if (MyInfoManager.getInstance().getBagItemNumByName("元素之心") > 0) { //背包中有元素之心
+						if (MyInfoManager.getInstance().getBagItemNumByName(PropUtils.getStringById(1865)) > 0) { //背包中有元素之心
 							UIManager.getInstance().roleWnd.elementWnd.setGuildElement();
 						} else { //背包中没有
 							UIManager.getInstance().quickBuyWnd.open();
 						}
 
 					} else { //不需要元素之心
-						if (this.titleNameLbl.text.indexOf("切换符文") > -1) {
+						if (this.titleNameLbl.text.indexOf(PropUtils.getStringById(1866)) > -1) {
 							UIManager.getInstance().skillWnd.setChangeRune();
 						} else
 							UIManager.getInstance().roleWnd.elementWnd.setGuildElement();

@@ -83,6 +83,7 @@ package com.leyou.net.cmd
 //		pos --格子位置 从1开始
 		public static function sm_LDW_B(obj:Object):void{
 			DataManager.getInstance().luckdrawData.loadData_B(obj);
+			UIManager.getInstance().luckDrawWnd.updateInfoEffect();
 			if(UIManager.getInstance().isCreate(WindowEnum.LUCKDRAW_STORE)){
 				UIManager.getInstance().luckPackWnd.updateInfo_B();
 			}

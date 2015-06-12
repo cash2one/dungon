@@ -71,6 +71,8 @@ package com.ace.enum {
 		public static const SCENE_TYPE_JDCJ:int=11; //决斗场景
 		public static const SCENE_TYPE_GUCJ:int=12; //帮战场景
 		public static const SCENE_TYPE_CYCJ:int=14; //主城争霸场景
+		public static const SCENE_TYPE_LZCJ:int=15; //龙珠场景
+		public static const SCENE_TYPE_SYCJ:int=16; //霜炎战场
 		public static const SCREEN_RECTANGLE:Point=new Point(100, 80); //屏幕中央不移动的区域
 
 

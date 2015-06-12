@@ -17,6 +17,7 @@ package com.leyou.ui.dungeonTeam.childs {
 	import com.leyou.manager.PopupManager;
 	import com.leyou.manager.TimerManager;
 	import com.leyou.net.cmd.Cmd_CpTm;
+	import com.leyou.utils.PropUtils;
 	
 	import flash.events.Event;
 	import flash.events.MouseEvent;
@@ -117,11 +118,11 @@ package com.leyou.ui.dungeonTeam.childs {
 		private function exeTime(i:int):void {
 
 			if (this.etime - i > 0) {
-				this.searchLbl.htmlText="<font color='#cccccc'>发送寻求队友(" + (this.etime - i) + ")</font>";
+				this.searchLbl.htmlText="<font color='#cccccc'>"+PropUtils.getStringById(1681)+"(" + (this.etime - i) + ")</font>";
 			} else {
 				TimerManager.getInstance().remove(exeTime);
 				this.searchLbl.styleSheet=FontEnum.DEFAULT_LINK_STYLE;
-				this.searchLbl.text="发送寻求队友";
+				this.searchLbl.text=PropUtils.getStringById(1681);
 				this.searchLbl.mouseEnabled=true;
 			}
 

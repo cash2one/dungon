@@ -44,7 +44,7 @@ package com.leyou.ui.vip
 			num.loadSource("ui/num/{num}_lz.png");
 			num.x = 245;
 			num.y = 54;
-			num.alingRound();
+			num.alignRound();
 			addChild(num);
 			tipsInfo = new TipVipEquipInfo();
 		}

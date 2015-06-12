@@ -22,6 +22,7 @@ package com.ace.gameData.table {
 		public var active:Boolean;
 		public var needLevel:int;
 		public var autoMonsterRange:uint;
+		public var isDouble:Boolean;
 
 		public function TSceneInfo(info:XML) {
 			this.id=info.@id;
@@ -40,6 +41,7 @@ package com.ace.gameData.table {
 			this.needLevel=info.@Map_Level;
 			this.autoMonsterRange=info.@odd;
 			(this.autoMonsterRange <= 0) && (this.autoMonsterRange=99999);
+			this.isDouble=("1" == info.@Double_info);
 		}
 	}
 }

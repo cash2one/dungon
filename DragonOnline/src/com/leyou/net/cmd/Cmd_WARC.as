@@ -39,6 +39,11 @@ package com.leyou.net.cmd
 			NetGate.getInstance().send(CmdEnum.CM_WARC_C+rate);
 		}
 		
+		// 发放双倍
+		public static function cm_WARC_S():void{
+			NetGate.getInstance().send(CmdEnum.CM_WARC_S);
+		}
+		
 		// 追踪信息
 		public static function sm_WARC_T(obj:Object):void{
 			DataManager.getInstance().cityBattleData.loadData_T(obj);
@@ -79,7 +84,7 @@ package com.leyou.net.cmd
 		
 		// 领取占领奖励
 		public static function sm_WARC_M(obj:Object):void{
-			var id:int = obj.id;
+			var id:int = obj.wjlid;
 			UIManager.getInstance().cityBattleReward.flyItem(id);
 		}
 	}

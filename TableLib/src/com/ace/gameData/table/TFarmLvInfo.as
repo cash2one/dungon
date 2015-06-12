@@ -4,7 +4,9 @@ package com.ace.gameData.table
 	{
 		public var level:int;
 		
-		public var cost:int;
+		public var costIB:int;
+		
+		public var costGold:int;
 		
 		public var profitRate:int;
 		
@@ -12,7 +14,8 @@ package com.ace.gameData.table
 			if(xml == null)
 				return;
 			this.level=xml.@farmLv;
-			this.cost=xml.@addIB;
+			this.costIB=xml.@addIB;
+			this.costGold=xml.@money;
 			this.profitRate=xml.@profitRate;
 		}
 	}

@@ -1,5 +1,6 @@
 package com.ace.game.scene.ui.child {
 	import com.ace.ICommon.ILivingUI;
+	import com.ace.config.Core;
 	import com.ace.game.scene.player.part.LivingBase;
 	import com.ace.gameData.manager.MapInfoManager;
 	import com.ace.gameData.manager.TableManager;
@@ -51,7 +52,8 @@ package com.ace.game.scene.ui.child {
 			var endIndex:int = nameStr.indexOf(")");
 			nameLbl.text = nameStr.substr(0, beginIndex);
 			var count:int = int(nameStr.substring(beginIndex+1, endIndex));
-			var content:String = TableManager.getInstance().getSystemNotice(9945).content;
+			var cid:int = (Core.isSF ? 30000 : 9945);
+			var content:String = TableManager.getInstance().getSystemNotice(cid).content;
 			content = StringUtil.substitute(content, count, ConfigEnum.BossBoxOpenCost);
 			desLbl.htmlText = content;
 			var sceneId:int = int(MapInfoManager.getInstance().sceneId);
@@ -59,9 +61,9 @@ package com.ace.game.scene.ui.child {
 			if(null == copyInfo){
 				throw new Error("副本宝箱表格填写错误");
 			}
-			grids[0].updataById(copyInfo.item5);
-			grids[1].updataById(copyInfo.item6);
-			grids[2].updataById(copyInfo.item7);
+			grids[0].updataInfo({itemId:copyInfo.item5Data[0], count:copyInfo.item5Data[1]});
+			grids[1].updataInfo({itemId:copyInfo.item6Data[0], count:copyInfo.item6Data[1]});
+			grids[2].updataInfo({itemId:copyInfo.item7Data[0], count:copyInfo.item7Data[1]});
 			
 		}
 

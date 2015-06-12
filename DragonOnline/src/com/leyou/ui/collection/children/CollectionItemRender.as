@@ -22,7 +22,7 @@ package com.leyou.ui.collection.children
 		
 		private var phyAttLbl:Label;
 		
-		private var magicAttLbl:Label;
+//		private var magicAttLbl:Label;
 		
 		private var lifeLbl:Label;
 		
@@ -34,7 +34,7 @@ package com.leyou.ui.collection.children
 		
 		private var phyDefLbl:Label;
 		
-		private var magicDefLbl:Label;
+//		private var magicDefLbl:Label;
 		
 		private var magicLbl:Label;
 		
@@ -77,12 +77,12 @@ package com.leyou.ui.collection.children
 			exitBtn = getUIbyID("exitBtn") as ImgButton;
 			phyAttLbl = getUIbyID("phyAttLbl") as Label;
 			phyDefLbl = getUIbyID("phyDefLbl") as Label;
-			magicAttLbl = getUIbyID("magicAttLbl") as Label;
+//			magicAttLbl = getUIbyID("magicAttLbl") as Label;
 			lifeLbl = getUIbyID("lifeLbl") as Label;
 			critLbl = getUIbyID("critLbl") as Label;
 			hitLbl = getUIbyID("hitLbl") as Label;
 			slayLbl = getUIbyID("slayLbl") as Label;
-			magicDefLbl = getUIbyID("magicDefLbl") as Label;
+//			magicDefLbl = getUIbyID("magicDefLbl") as Label;
 			magicLbl = getUIbyID("magicLbl") as Label;
 			tenacityLbl = getUIbyID("tenacityLbl") as Label;
 			dodgeLbl = getUIbyID("dodgeLbl") as Label;
@@ -252,13 +252,13 @@ package com.leyou.ui.collection.children
 				}
 			}
 			phyAttLbl.text = phyAtt+"";
-			magicAttLbl.text = magicAtt+"";
+//			magicAttLbl.text = magicAtt+"";
 			lifeLbl.text = life+"";
 			critLbl.text = crit+"";
 			hitLbl.text = hit+"";
 			slayLbl.text = slay+"";
 			phyDefLbl.text = phyDef+"";
-			magicDefLbl.text = magicDef+"";
+//			magicDefLbl.text = magicDef+"";
 			magicLbl.text = magic+"";
 			tenacityLbl.text = tenacity+"";
 			dodgeLbl.text = dodge+"";

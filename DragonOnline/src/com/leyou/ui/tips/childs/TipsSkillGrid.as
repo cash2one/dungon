@@ -29,7 +29,7 @@ package com.leyou.ui.tips.childs
 			}else{
 				iconBmp.updateBmp("ico/skills/" + info.icon + ".png");
 			}
-			dataId = int(info.skillId);
+			dataId = int(info.id);
 		}
 	}
 }

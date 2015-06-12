@@ -14,6 +14,7 @@ package com.leyou.ui.mail {
 	import com.leyou.net.cmd.Cmd_Mail;
 	import com.leyou.ui.mail.child.MailLableRender;
 	import com.leyou.ui.mail.child.MaillGrid;
+	import com.leyou.utils.PropUtils;
 	
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
@@ -132,7 +133,7 @@ package com.leyou.ui.mail {
 			switch (btnName) {
 				case "deleteBtn":
 					if(mailLink.mailInfo.hasStuff){
-						var warnStr:String = "邮件中有未提取物品，是否确认删除？";
+						var warnStr:String = PropUtils.getStringById(1783);
 						PopupManager.showConfirm(warnStr, deleteMailRequest, null, false, "wnd.mailRead.delete");
 //						var pWnd:WindInfo = WindInfo.getConfirmInfo(warnStr, deleteMailRequest);
 //						PopWindow.showWnd(UIEnum.WND_TYPE_CONFIRM, pWnd, "wnd.mailRead.delete");
@@ -201,6 +202,8 @@ package com.leyou.ui.mail {
 						qh = data[1];
 					}else if("honour" == key){
 						dataId = ItemEnum.HONOUR_VIR_ITEM_ID;
+					}else if("score" == key){
+						dataId = ItemEnum.CREDIT_VIR_ITEM_ID;
 					}
 				}
 				if(currentIndex < GRID_COUNT){

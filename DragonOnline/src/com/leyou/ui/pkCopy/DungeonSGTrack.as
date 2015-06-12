@@ -28,8 +28,9 @@ package com.leyou.ui.pkCopy {
 	import com.leyou.manager.TimerManager;
 	import com.leyou.net.cmd.Cmd_Ecp;
 	import com.leyou.ui.question.childs.QuestionQBtn;
+	import com.leyou.utils.PropUtils;
 	import com.leyou.utils.TimeUtil;
-
+	
 	import flash.events.MouseEvent;
 	import flash.events.TextEvent;
 	import flash.geom.Point;
@@ -124,7 +125,7 @@ package com.leyou.ui.pkCopy {
 							this.monsterArr[i].htmlText="<u><a href='event:" + ConfigEnum["Exp_Fb" + (13 + i)] + "'>" + info.name + "</a></u>";
 
 						if (o.npcl[i][1] == 1)
-							this.jfArr[i].text="三倍魂力";
+							this.jfArr[i].text=PropUtils.getStringById(1826);
 						else
 							this.jfArr[i].text="";
 					}

@@ -18,7 +18,7 @@ package com.leyou.utils
 	{
 		public static function openPayUrl():void{
 			if(!Core.PAY_OPEN){
-				PopupManager.showAlert("充值功能未开启,敬请期待!", null, false, "pay");
+				PopupManager.showAlert(PropUtils.getStringById(2023), null, false, "pay");
 				return;
 			}
 			if(Core.isTencent){
@@ -79,14 +79,24 @@ package com.leyou.utils
 		}
 		
 		public static function onBuyIB(url:String):void{
-			var pm:Object = {param : url, context : "buyIB"/*, sandbox : true*/};
-//			var ps:String = com.adobe.serialization.json.JSON.encode(pm);
-//			var text:TextField = new TextField();
-//			text.text = ps;
-//			text.x = 100;
-//			text.y = 100;
-//			UIManager.getInstance().chatWnd.stage.addChild(text);
+			var pm:Object = {param : url, context : "buyIB"};
+			if(Core.TX_SANDBOX){
+				pm["sandbox"] = true;
+			}
 			ExternalInterface.call("fusion2.dialog.buy", pm);
 		}
+		
+		//------------------------------------------------------------------
+		// 打开用户协议页面
+		public static function openUserProtocol():void{
+			var url:String = StringUtil.substitute("http://app.opensns.qq.com/app_useragreement?appid={appid}", Core.TX_APPID);
+			navigateToURL(new URLRequest(url), "_blank");
+		}
+		
+		// 实名认证
+		public static function openVerifyUser():void{
+			navigateToURL(new URLRequest("http://jkyx.qq.com/"), "_blank");
+		}
+		//------------------------------------------------------------------
 	}
 }

@@ -14,6 +14,7 @@ package com.leyou.ui.abidePay
 	import com.leyou.net.cmd.Cmd_CCZ;
 	import com.leyou.ui.abidePay.children.AbidePayRewardBox;
 	import com.leyou.ui.mail.child.MaillGrid;
+	import com.leyou.utils.PropUtils;
 	
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
@@ -77,7 +78,7 @@ package com.leyou.ui.abidePay
 			var data:AbidePayData = DataManager.getInstance().abidePayData;
 			_day = box.day;
 			_type = box.type;
-			tLbl.text = StringUtil.substitute("累计{1}天宝箱", _day);
+			tLbl.text = StringUtil.substitute(PropUtils.getStringById(1573), _day);
 			var content:String = TableManager.getInstance().getSystemNotice(10010).content;
 			contentLbl.text = StringUtil.substitute(content, _day, _type);
 			content = TableManager.getInstance().getSystemNotice(10011).content;
@@ -99,16 +100,16 @@ package com.leyou.ui.abidePay
 //			grid.updataById(tdata.getRewardByDay(_day));
 			
 			if(data.isReceive(_day, _type)){
-				receiveBtn.text = "已领取";
+				receiveBtn.text = PropUtils.getStringById(1574);
 				receiveBtn.setActive(false, 1, true);
 				return;
 			}
 			var rd:int = data.getAbideDay(_type);
 			if(rd >= _day){
-				receiveBtn.text = "领取奖励";
+				receiveBtn.text = PropUtils.getStringById(1575);
 				receiveBtn.setActive(true, 1, true);
 			}else{
-				receiveBtn.text = "未达成";
+				receiveBtn.text = PropUtils.getStringById(1576);
 				receiveBtn.setActive(false, 1, true);
 			}
 		}

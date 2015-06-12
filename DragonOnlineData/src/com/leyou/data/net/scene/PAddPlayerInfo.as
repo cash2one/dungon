@@ -25,7 +25,7 @@ package com.leyou.data.net.scene {
 
 //		1字节，0：玩家，1：NPC，2：怪物，3:宠物，4：掉落物			
 		private var SM_RACE_DIC:Object={0: PlayerEnum.RACE_HUMAN, 1: PlayerEnum.RACE_NPC, 2: PlayerEnum.RACE_MONSTER, //
-				3: "", 4: PlayerEnum.RACE_ITEM, 5: PlayerEnum.RACE_COLLECT, 6: PlayerEnum.RACE_NPC_MONSTER, 7: PlayerEnum.RACE_ESCORT, 8: PlayerEnum.RACE_NPC_HERO};
+				3: PlayerEnum.RACE_PET, 4: PlayerEnum.RACE_ITEM, 5: PlayerEnum.RACE_COLLECT, 6: PlayerEnum.RACE_NPC_MONSTER, 7: PlayerEnum.RACE_ESCORT, 8: PlayerEnum.RACE_NPC_HERO};
 
 		public function PAddPlayerInfo(br:ByteArray) {
 			br.position++;

@@ -4,7 +4,9 @@ package com.leyou.data.bossCopy
 	{
 		private var bossList:Vector.<BossCopyBossData> = new Vector.<BossCopyBossData>();
 		
-		public var cost:int;
+		public var costyb:int;
+		
+		public var costbyb:int;
 		
 		public var remainCount:int;
 		
@@ -37,7 +39,8 @@ package com.leyou.data.bossCopy
 		}
 		
 		public function loadData_A(obj:Object):void{
-			cost = obj.cyb;
+			costyb = obj.cyb;
+			costbyb = obj.cbyb;
 			remainCount = obj.cc;
 		}
 	}

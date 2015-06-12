@@ -8,13 +8,14 @@ package com.ace.game.manager {
 	import com.ace.config.Core;
 	import com.ace.enum.EventEnum;
 	import com.ace.game.manager.child.SceneKeyManagerModel;
+	import com.ace.game.proxy.ModuleProxy;
 	import com.ace.manager.EventManager;
 	import com.ace.manager.KeysManager;
 	import com.ace.manager.MouseManager;
 	import com.ace.manager.UIManager;
 	import com.ace.ui.setting.AssistWnd;
 	import com.ace.utils.DebugUtil;
-
+	
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	import flash.external.ExternalInterface;
@@ -42,7 +43,7 @@ package com.ace.game.manager {
 		override public function setup():void {
 			super.setup();
 			var arr:Array=[Keyboard.NUMBER_1, Keyboard.NUMBER_2, Keyboard.NUMBER_3, Keyboard.NUMBER_4, //
-				Keyboard.Q, Keyboard.W, Keyboard.E, Keyboard.R];
+				Keyboard.Q, Keyboard.W, Keyboard.E,Keyboard.NUMBER_8];
 
 
 			for (var i:int=0; i < arr.length; i++) {
@@ -55,9 +56,29 @@ package com.ace.game.manager {
 			MouseManager.getInstance().addFun(MouseEvent.RIGHT_MOUSE_DOWN, onRightClick);
 			MouseManager.getInstance().addFun(MouseEvent.RIGHT_MOUSE_UP, onRightClick);
 
+//			KeysManager.getInstance().addKeyFun(Keyboard.I, OnTest);
+
 			if (ExternalInterface.available) {
 				ExternalInterface.addCallback("sendToActionScript", quitGame);
 			}
+		}
+
+		private function OnTest(evt:KeyboardEvent):void {
+//			trace("当前锁定状态:", Core.me.info.isActLocked);
+		}
+
+		public function sceneInput(enable:Boolean):void {
+			if (enable) {
+				KeysManager.getInstance().restart();
+				SceneMouseManager.getInstance().restart();
+			} else {
+				KeysManager.getInstance().pause(this.inputEnableTip);
+				SceneMouseManager.getInstance().pause(this.inputEnableTip);
+			}
+		}
+
+		private function inputEnableTip():void {
+			ModuleProxy.broadcastMsg(4719);
 		}
 
 		private function onAutoMonster():void {
@@ -72,12 +93,12 @@ package com.ace.game.manager {
 
 		private function onRightClick(evt:MouseEvent):void {
 			if (evt.type == MouseEvent.RIGHT_MOUSE_DOWN) {
-				KeysManager.getInstance().disPatchEvent(Keyboard.R, KeyboardEvent.KEY_DOWN);
+				KeysManager.getInstance().disPatchEvent(Keyboard.NUMBER_8, KeyboardEvent.KEY_DOWN);
 			} else if (evt.type == MouseEvent.RIGHT_MOUSE_UP) {
-				KeysManager.getInstance().disPatchEvent(Keyboard.R, KeyboardEvent.KEY_UP);
+				KeysManager.getInstance().disPatchEvent(Keyboard.NUMBER_8, KeyboardEvent.KEY_UP);
 			}
 		}
-
+ 
 //			1		命中特效
 //			2		子弹+命中特效
 //			108		施法者自身特效+命中特效
@@ -99,9 +120,9 @@ package com.ace.game.manager {
 
 				this.isDownArr[evt.keyCode]=true;
 
-				if (Keyboard.NUMBER_1 <= evt.keyCode && evt.keyCode <= Keyboard.NUMBER_5) {
+				if ((Keyboard.NUMBER_1 <= evt.keyCode && evt.keyCode <= Keyboard.NUMBER_5) || evt.keyCode == Keyboard.NUMBER_8) {
 					UIManager.getInstance().toolsWnd.useGrid(num, true);
-				} else if (Keyboard.Q == evt.keyCode || Keyboard.W == evt.keyCode || Keyboard.E == evt.keyCode || Keyboard.R == evt.keyCode) {
+				} else if (Keyboard.Q == evt.keyCode || Keyboard.W == evt.keyCode || Keyboard.E == evt.keyCode) {
 					UIManager.getInstance().toolsWnd.useGrid(num, true);
 				}
 
@@ -109,19 +130,20 @@ package com.ace.game.manager {
 
 				if (!this.isDownArr[evt.keyCode])
 					return;
-				
+
 				this.isDownArr[evt.keyCode]=false;
 
 				var skillId:int=-1;
 
-				if (Keyboard.NUMBER_1 <= evt.keyCode && evt.keyCode <= Keyboard.NUMBER_5) {
+				if ((Keyboard.NUMBER_1 <= evt.keyCode && evt.keyCode <= Keyboard.NUMBER_5) || evt.keyCode == Keyboard.NUMBER_8) {
 					skillId=UIManager.getInstance().toolsWnd.useGrid(num);
-				} else if (Keyboard.Q == evt.keyCode || Keyboard.W == evt.keyCode || Keyboard.E == evt.keyCode || Keyboard.R == evt.keyCode) {
+				} else if (Keyboard.Q == evt.keyCode || Keyboard.W == evt.keyCode || Keyboard.E == evt.keyCode) {
 					skillId=UIManager.getInstance().toolsWnd.useGrid(num);
 				}
 
 				//技能：条件满足
 				if (skillId != -1 /*&& MagicUtil.conditionIsSatisfied(skillId)*/) {
+					SceneMouseManager.getInstance().clearKeepLDown();
 					Core.me.recordMagic(skillId);
 				}
 			}

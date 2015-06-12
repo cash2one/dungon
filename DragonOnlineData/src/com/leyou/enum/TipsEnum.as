@@ -34,24 +34,24 @@ package com.leyou.enum {
 //		施毒术
 
 		public static function get skill():Object{
-			if(_skill==null){
-				_skill=new Object();
-				setSkill("召唤神兽",["护身符","护身符(大)"],5);
-				setSkill("困魔咒",["护身符","护身符(大)"],1);
-				setSkill("神圣战甲术",["护身符","护身符(大)"],1);
-				setSkill("幽灵盾",["护身符","护身符(大)"],1);
-				setSkill("集体隐身术",["护身符","护身符(大)"],1);
-				setSkill("隐身术",["护身符","护身符(大)"],1);
-				setSkill("召唤骷髅",["护身符","护身符(大)"],1);
-				setSkill("灵魂火符",["护身符","护身符(大)"],1);
-				setSkill("施毒术",["灰色药粉(少量)","灰色药粉(中量)","灰色药粉(大量)","黄色药粉(少量)","黄色药粉(中量)","黄色药粉(大量)"],1);
-			}
-			return _skill;
+//			if(_skill==null){
+//				_skill=new Object();
+//				setSkill("召唤神兽",["护身符","护身符(大)"],5);
+//				setSkill("困魔咒",["护身符","护身符(大)"],1);
+//				setSkill("神圣战甲术",["护身符","护身符(大)"],1);
+//				setSkill("幽灵盾",["护身符","护身符(大)"],1);
+//				setSkill("集体隐身术",["护身符","护身符(大)"],1);
+//				setSkill("隐身术",["护身符","护身符(大)"],1);
+//				setSkill("召唤骷髅",["护身符","护身符(大)"],1);
+//				setSkill("灵魂火符",["护身符","护身符(大)"],1);
+//				setSkill("施毒术",["灰色药粉(少量)","灰色药粉(中量)","灰色药粉(大量)","黄色药粉(少量)","黄色药粉(中量)","黄色药粉(大量)"],1);
+//			}
+			return null;
 		}
 		private static function setSkill(name:String,useItem:Array,num:int):void{
-			_skill[name]=new Object;
-			_skill[name].item=useItem;
-			_skill[name].num=num;
+//			_skill[name]=new Object;
+//			_skill[name].item=useItem;
+//			_skill[name].num=num;
 		}
 	}
 }

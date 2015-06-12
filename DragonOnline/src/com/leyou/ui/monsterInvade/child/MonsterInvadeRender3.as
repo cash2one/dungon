@@ -7,6 +7,7 @@ package com.leyou.ui.monsterInvade.child {
 	import com.ace.ui.img.child.Image;
 	import com.greensock.TweenMax;
 	import com.leyou.ui.role.child.children.ImgRolling;
+	import com.leyou.utils.PropUtils;
 	
 	import flash.display.Bitmap;
 
@@ -38,7 +39,7 @@ package com.leyou.ui.monsterInvade.child {
 			this.rollPower.y=25;
 
 			this.rollPower.isPopNum=true;
-			this.rollPower.popText="经验 ";
+			this.rollPower.popText=PropUtils.getStringById(20);
 			this.rollPower.spacing=1;
 
 			this.rollPower.visible=false;

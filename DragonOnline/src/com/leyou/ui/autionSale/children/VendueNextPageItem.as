@@ -9,6 +9,7 @@ package com.leyou.ui.autionSale.children
 	import com.leyou.data.vendue.VendueNextData;
 	import com.leyou.enum.ConfigEnum;
 	import com.leyou.ui.market.child.MarketGrid;
+	import com.leyou.utils.PropUtils;
 	
 	public class VendueNextPageItem extends AutoSprite
 	{
@@ -44,7 +45,7 @@ package com.leyou.ui.autionSale.children
 			var pdate:Date = new Date(data.dtime*1000);
 			var edate:Date = new Date((data.dtime+ConfigEnum.vendue5)*1000);
 			var timeStr:String = "{1}{2}:{3}~{4}:{5}"
-			var dateStr:String = (cdate.date == pdate.date) ? "今日" : "明日";
+			var dateStr:String = (cdate.date == pdate.date) ? PropUtils.getStringById(1618) : PropUtils.getStringById(1618);
 			timeLbl.text = StringUtil.substitute(timeStr, dateStr, pdate.hours, pdate.minutes, edate.hours, edate.minutes);
 		}
 	}

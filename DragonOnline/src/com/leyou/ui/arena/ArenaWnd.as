@@ -36,8 +36,9 @@ package com.leyou.ui.arena {
 	import com.leyou.ui.question.childs.QuestionQBtn;
 	import com.leyou.util.DateUtil;
 	import com.leyou.utils.ArenaUtil;
+	import com.leyou.utils.PropUtils;
 	import com.leyou.utils.TimeUtil;
-	
+
 	import flash.events.MouseEvent;
 	import flash.events.TextEvent;
 
@@ -71,6 +72,7 @@ package com.leyou.ui.arena {
 		private var playerName:String;
 
 		private var addPKCountCost:int=0;
+		private var addPKCountCost1:int=0;
 		public var lastPkCount:int=0;
 
 		private var quitBtn:QuestionQBtn;
@@ -119,7 +121,7 @@ package com.leyou.ui.arena {
 			this.addFreeCountLbl.addEventListener(MouseEvent.MOUSE_OVER, onFreeClick);
 			this.addFreeCountLbl.addEventListener(MouseEvent.MOUSE_OUT, onFreeClick);
 
-			this.addFreeCountLbl.htmlText="<font color='#00ff00'><u><a href='event:free'>增加免战</a></u></font>";
+			this.addFreeCountLbl.htmlText="<font color='#00ff00'><u><a href='event:free'>" + PropUtils.getStringById(1585) + "</a></u></font>";
 			this.addFreeCountLbl.mouseEnabled=true;
 
 			this.addFreeCountLbl.styleSheet=FontEnum.DEFAULT_LINK_STYLE;
@@ -187,7 +189,7 @@ package com.leyou.ui.arena {
 
 		private function onQuitClick(e:MouseEvent):void {
 			if (SceneEnum.SCENE_TYPE_JSC == MapInfoManager.getInstance().type) {
-				PopupManager.showConfirm("确定离开竞技场?", function():void {
+				PopupManager.showConfirm(PropUtils.getStringById(1586) + "?", function():void {
 					Cmd_Arena.cm_ArenaQuit();
 				}, null, false, "quitarena");
 			}
@@ -200,7 +202,7 @@ package com.leyou.ui.arena {
 			} else if (e.type == MouseEvent.MOUSE_OUT) {
 
 			}
- 
+
 		}
 
 		public function get reAwardBtn():ImgButton {
@@ -240,7 +242,7 @@ package com.leyou.ui.arena {
 		private function onBtnOver(e:MouseEvent):void {
 
 			if (this.refreshTime > 0) {
-				this.refreshBtn.setToolTip(StringUtil.substitute(TableManager.getInstance().getSystemNotice(4716).content, [ConfigEnum.Miliyary4]));
+				this.refreshBtn.setToolTip(StringUtil.substitute(TableManager.getInstance().getSystemNotice(4716).content, [ConfigEnum.Miliyary4.split("|")[0]]));
 			} else {
 				this.refreshBtn.setToolTip(TableManager.getInstance().getSystemNotice(4712).content);
 			}
@@ -278,12 +280,17 @@ package com.leyou.ui.arena {
 				case "refreshBtn":
 					GuideManager.getInstance().removeGuide(66);
 					if (this.refreshTime > 0) {
-						ctx=StringUtil.substitute(TableManager.getInstance().getSystemNotice(4713).content, [ConfigEnum.Miliyary4]);
-						wnd=PopupManager.showConfirm(ctx, function():void {
-							Cmd_Arena.cm_ArenaRefresh();
-						}, null, false, "arenaRefresh");
+						ctx=StringUtil.substitute(TableManager.getInstance().getSystemNotice(4713).content, [ConfigEnum.Miliyary4.split("|")[0]]);
+//						wnd=PopupManager.showConfirm(ctx, function():void {
+//							Cmd_Arena.cm_ArenaRefresh();
+//						}, null, false, "arenaRefresh");
+
+						wnd=PopupManager.showRadioConfirm(ctx, ConfigEnum.Miliyary4.split("|")[0] + "", ConfigEnum.Miliyary4.split("|")[1] + "", function(i:int):void {
+							Cmd_Arena.cm_ArenaRefresh((i == 0 ? 1 : 0))
+						}, null, false, "arenaPkCount");
+
 					} else {
-						Cmd_Arena.cm_ArenaRefresh();
+						Cmd_Arena.cm_ArenaRefresh(1);
 					}
 					break;
 				case "topBtn":
@@ -293,8 +300,12 @@ package com.leyou.ui.arena {
 				case "addPkCountBtn":
 
 					ctx=StringUtil.substitute(TableManager.getInstance().getSystemNotice(4711).content, [this.addPKCountCost, 1]);
-					wnd=PopupManager.showConfirm(ctx, function():void {
-						Cmd_Arena.cm_ArenaBuyPkCount()
+//					wnd=PopupManager.showConfirm(ctx, function():void {
+//						Cmd_Arena.cm_ArenaBuyPkCount()
+//					}, null, false, "arenaPkCount");
+
+					wnd=PopupManager.showRadioConfirm(ctx, this.addPKCountCost + "", this.addPKCountCost1 + "", function(i:int):void {
+						Cmd_Arena.cm_ArenaBuyPkCount((i == 0 ? 1 : 0))
 					}, null, false, "arenaPkCount");
 
 					break;
@@ -358,13 +369,14 @@ package com.leyou.ui.arena {
 		public function updateInfo(o:Object):void {
 
 			UIManager.getInstance().showPanelCallback(WindowEnum.ARENA);
-			
+
 			this.proLbl.text="" + ArenaUtil.ArenaPro[int(o.jxlevel) - 1];
 			this.integralLbl.text="" + o.score;
 			this.topLbl.text="" + o.jrank;
 			this.lastPkCountLbl.text="" + o.sfight;
 			this.freeTimeLbl.text="" + DateUtil.formatTime(o.avoidt * 1000, 2);
 			this.addPKCountCost=o.buyf;
+			this.addPKCountCost1=o.buyf1;
 			this.lastPkCount=o.sfight;
 
 			if (!UIManager.getInstance().isCreate(WindowEnum.ARENAAWARD))
@@ -449,7 +461,7 @@ package com.leyou.ui.arena {
 
 				a=arr[i];
 
-				str+="你";
+				str+=PropUtils.getStringById(1587);
 
 				var d:Date=new Date();
 				d.month+=1;
@@ -461,14 +473,14 @@ package com.leyou.ui.arena {
 				ls=(d.time - d2.time);
 
 				if (ls / 1000 / 60 < 3)
-					str+="刚刚";
+					str+=PropUtils.getStringById(1589);
 				else
-					str+="在" + DateUtil.formatTime(ls, 3) + "前";
+					str+=StringUtil.substitute(PropUtils.getStringById(1590), [DateUtil.formatTime(ls, 3)]);
 
 				if (a[1] == 1)
-					str+="打败了";
+					str+=PropUtils.getStringById(1591);
 				else
-					str+="败给了";
+					str+=PropUtils.getStringById(1592);
 
 				str+="<font color='#ffd700'><u><a href='event:" + a[3] + "'>" + a[3] + "</a></u></font>\n";
 			}
@@ -484,7 +496,7 @@ package com.leyou.ui.arena {
 			} else {
 				this.refreshTime=0;
 				TimerManager.getInstance().remove(exePkTime);
-				this.refreshTimeLbl.text="0时0分0秒";
+				this.refreshTimeLbl.text=StringUtil.substitute(PropUtils.getStringById(1599), [0, 0, 0]);
 
 				if (this.visible)
 					GuideManager.getInstance().showGuide(66, this);
@@ -511,10 +523,10 @@ package com.leyou.ui.arena {
 
 			UIManager.getInstance().taskTrack.setGuideViewhide(TaskEnum.taskType_ArenaPkNum);
 		}
-		
-		override public function sendOpenPanelProtocol(...parameters):void{
+
+		override public function sendOpenPanelProtocol(... parameters):void {
 			this.dataModel=parameters;
-			
+
 			Cmd_Arena.cm_ArenaInit();
 			Cmd_Arena.cm_ArenaRecord(3);
 			Cmd_Arena.cm_ArenaList();

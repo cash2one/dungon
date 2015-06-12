@@ -73,6 +73,20 @@
     <classEntry path="com.leyou.data.sinfo.ServerData"/>
     <classEntry path="com.leyou.data.bossCopy.BossCopyData"/>
     <classEntry path="com.leyou.data.bossCopy.BossCopyBossData"/>
+    <classEntry path="com.leyou.data.dargonball.DragonBallData"/>
+    <classEntry path="com.leyou.data.iceBattle.IceBattleData"/>
+    <classEntry path="com.leyou.data.iceBattle.children.IceBattlePalyerData"/>
+    <classEntry path="com.leyou.data.iceBattle.children.BattleHistoryData"/>
+    <classEntry path="com.leyou.data.convenient.ConvenientData"/>
+    <classEntry path="com.leyou.data.pet.PetData"/>
+    <classEntry path="com.leyou.data.pet.PetEntryData"/>
+    <classEntry path="com.leyou.data.CommonData"/>
+    <classEntry path="com.leyou.data.blackStore.BlackStoreData"/>
+    <classEntry path="com.leyou.data.blackStore.BlackStoreItem"/>
+    <classEntry path="com.leyou.data.popupNumber.PopupNumberData"/>
+    <classEntry path="com.leyou.data.missinMarket.MissionMarketData"/>
+    <classEntry path="com.leyou.data.missinMarket.MissionMarketChapterData"/>
+    <classEntry path="com.leyou.data.missinMarket.MissionMarketTaskData"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

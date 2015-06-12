@@ -120,8 +120,8 @@ package com.leyou.ui.role {
 			this.wingWnd=new WingWnd();
 //			this.roleTabBar.addToTab(this.wingWnd, 3);
 
-			this.wingUnWnd=new WingUnWnd();
-			this.roleTabBar.addToTab(this.wingUnWnd, 6);
+//			this.wingUnWnd=new WingUnWnd();
+			this.roleTabBar.addToTab(this.wingWnd, 6);
 
 			this.titleWnd=new TitleWnd();
 			this.roleTabBar.addToTab(this.titleWnd, 4);
@@ -248,30 +248,7 @@ package com.leyou.ui.role {
 
 //			if (!this.visible) {
 
-			if (ConfigEnum.MountOpenLv <= Core.me.info.level)
-				this.roleTabBar.setTabVisible(1, true);
-			else
-				this.roleTabBar.setTabVisible(1, false);
 
-			if (ConfigEnum.ElementOpenLv <= Core.me.info.level)
-				this.roleTabBar.setTabVisible(3, true);
-			else
-				this.roleTabBar.setTabVisible(3, false);
-
-			if (Core.me.info.level >= ConfigEnum.WingOpenLv) {
-				this.roleTabBar.setTabVisible(6, true);
-			} else
-				this.roleTabBar.setTabVisible(6, false);
-
-			if (Core.me.info.level >= ConfigEnum.NckOpenLv)
-				this.roleTabBar.setTabVisible(4, true);
-			else
-				this.roleTabBar.setTabVisible(4, false);
-
-			if (Core.me.info.level >= ConfigEnum.Gem1)
-				this.roleTabBar.setTabVisible(2, true);
-			else
-				this.roleTabBar.setTabVisible(2, false);
 
 //			this.roleTabBar.setTabVisible(5, true);
 
@@ -357,7 +334,7 @@ package com.leyou.ui.role {
 
 				if (UIManager.getInstance().wingTradeWnd.visible)
 					UIManager.getInstance().wingTradeWnd.hide();
-				
+
 				this.wingAvatar.visible=false;
 				this.wingWnd.wingNameImg.visible=false;
 
@@ -382,7 +359,7 @@ package com.leyou.ui.role {
 
 				if (UIManager.getInstance().mountTradeWnd.visible)
 					UIManager.getInstance().mountTradeWnd.hide();
-				
+
 			}
 
 			if (this.roleTabBar.turnOnIndex == 3) {
@@ -433,7 +410,7 @@ package com.leyou.ui.role {
 
 				this.equipBackEffect.visible=false;
 				this.equipEffect.visible=false;
-
+				UIManager.getInstance().hideWindow(WindowEnum.MEDIC);
 			}
 
 			if (this.currentTabIndex != this.roleTabBar.turnOnIndex)
@@ -494,6 +471,32 @@ package com.leyou.ui.role {
 		override public function sendOpenPanelProtocol(... parameters):void {
 			this.dataModel=parameters;
 
+			if (ConfigEnum.MountOpenLv <= Core.me.info.level)
+				this.roleTabBar.setTabVisible(1, true);
+			else
+				this.roleTabBar.setTabVisible(1, false);
+
+			if (ConfigEnum.ElementOpenLv <= Core.me.info.level)
+				this.roleTabBar.setTabVisible(3, true);
+			else
+				this.roleTabBar.setTabVisible(3, false);
+
+			if (Core.me.info.level >= ConfigEnum.WingOpenLv) {
+				this.roleTabBar.setTabVisible(6, false);
+			} else
+				this.roleTabBar.setTabVisible(6, false);
+
+			if (Core.me.info.level >= ConfigEnum.NckOpenLv)
+				this.roleTabBar.setTabVisible(4, true);
+			else
+				this.roleTabBar.setTabVisible(4, false);
+
+			if (Core.me.info.level >= ConfigEnum.Gem1)
+				this.roleTabBar.setTabVisible(2, true);
+			else
+				this.roleTabBar.setTabVisible(2, false);
+
+			
 			Cmd_Gem.cmGemInit();
 			Cmd_Role.cm_role();
 			Cmd_Role.cm_equip();
@@ -641,7 +644,6 @@ package com.leyou.ui.role {
 
 //				if (this.roleTabBar.turnOnIndex == 5)
 				this.wingWnd.updateInfo(o);
-
 				this.roleTabBar.setTabVisible(6, true);
 
 			} else {
@@ -720,8 +722,12 @@ package com.leyou.ui.role {
 			return this.wingWnd.Lv;
 		}
 
+		public function wingOpenTradeLv():Boolean {
+			return this.wingWnd.Lv >= ConfigEnum.wing17;
+		}
+
 		public function wingIsTopLv():Boolean {
-			return this.wingWnd.Lv == 10;
+			return this.wingWnd.wLv >= 100;
 		}
 
 		public function elementschangeState(i:int):void {
@@ -822,6 +828,7 @@ package com.leyou.ui.role {
 			PopupManager.closeConfirm("openWingConfirm");
 			UIManager.getInstance().hideWindow(WindowEnum.QUICK_BUY);
 			UIManager.getInstance().hideWindow(WindowEnum.GEM_LV);
+			UIManager.getInstance().hideWindow(WindowEnum.MEDIC);
 			UILayoutManager.getInstance().composingWnd(WindowEnum.ROLE);
 
 			GuideManager.getInstance().removeGuide(2);
@@ -844,7 +851,8 @@ package com.leyou.ui.role {
 
 			UIManager.getInstance().taskTrack.setGuideView(TaskEnum.taskType_ElementFlagNum);
 
-			UIManager.getInstance().selectWnd.hide();
+
+			UIManager.getInstance().selectWnd.closePanel([0, 1, 2]);
 		}
 
 		public function resise():void {
@@ -922,6 +930,13 @@ package com.leyou.ui.role {
 
 				UIManager.getInstance().gemLvWnd.x=this.x + _w + UILayoutManager.SPACE_X;
 				UIManager.getInstance().gemLvWnd.y=this.y + UILayoutManager.SPACE_Y;
+			} else if (UIManager.getInstance().isCreate(WindowEnum.MEDIC) && UIManager.getInstance().medicWnd.visible) {
+
+				if (this.x + _w + 3 + UIManager.getInstance().medicWnd.width > UIEnum.WIDTH)
+					this.x=UIEnum.WIDTH - UIManager.getInstance().medicWnd.width - 3 - _w;
+
+				UIManager.getInstance().medicWnd.x=this.x + _w + UILayoutManager.SPACE_X;
+				UIManager.getInstance().medicWnd.y=this.y + UILayoutManager.SPACE_Y + 3;
 			}
 
 		}
@@ -937,8 +952,11 @@ package com.leyou.ui.role {
 				UIManager.getInstance().wingLvUpWnd.setToTop();
 			} else if (UIManager.getInstance().isCreate(WindowEnum.GEM_LV) && UIManager.getInstance().gemLvWnd.visible) {
 				UIManager.getInstance().gemLvWnd.setToTop();
+			} else if (UIManager.getInstance().isCreate(WindowEnum.MEDIC) && UIManager.getInstance().medicWnd.visible) {
+				UIManager.getInstance().medicWnd.setToTop();
 			}
 
+			UIManager.getInstance().selectWnd.setToTop();
 		}
 
 

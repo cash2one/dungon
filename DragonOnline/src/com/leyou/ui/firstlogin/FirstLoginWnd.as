@@ -12,6 +12,8 @@ package com.leyou.ui.firstlogin
 	
 	public class FirstLoginWnd extends AutoWindow
 	{
+		//private var logoImg:Image;
+		
 		public function FirstLoginWnd(){
 			super(LibManager.getInstance().getXML("config/ui/introduction/firstWnd.xml"));
 			init()

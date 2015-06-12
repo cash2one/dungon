@@ -36,6 +36,7 @@ package com.leyou.ui.guild {
 	import com.leyou.ui.guild.child.GuildSkill;
 	import com.leyou.ui.guild.child.GuildWar;
 	import com.leyou.ui.guild.child.GuildZC;
+	import com.leyou.utils.PropUtils;
 
 	import flash.display.DisplayObject;
 	import flash.events.Event;
@@ -110,6 +111,11 @@ package com.leyou.ui.guild {
 		public var guildLiveness:Boolean=false;
 
 		/**
+		 * 已捐赠金币
+		 */
+		public var guildDonateMoney:int=0;
+
+		/**
 		 *sr -- 收人 (0,1)
 tr -- 踢人 (0,1)
 sj -- 升级 (0,1)
@@ -152,14 +158,14 @@ gl -- 管理 (0,1)
 			this.guildShop=new GuildShop();
 			this.guildCreat=new GuildCreat();
 			this.guildList=new GuildList();
-			this.guildSkill=new GuildSkill();
+//			this.guildSkill=new GuildSkill();
 			this.guildCopy=new GuildDungeon();
 			this.guildPk=new GuildWar();
 			this.guildZc=new GuildZC();
 
 			this.guildTabbar.addToTab(this.guildMain, 0);
 			this.guildTabbar.addToTab(this.guildMember, 1);
-			this.guildTabbar.addToTab(this.guildSkill, 2);
+//			this.guildTabbar.addToTab(this.guildSkill, 2);
 			this.guildTabbar.addToTab(this.guildCopy, 3);
 			this.guildTabbar.addToTab(this.guildPk, 4);
 			this.guildTabbar.addToTab(this.guildShop, 5);
@@ -292,7 +298,7 @@ gl -- 管理 (0,1)
 
 			}
 
-			this.guildSkill.clearData();
+//			this.guildSkill.clearData();
 			this.guildMember.clearData();
 			this.guildList.clearData();
 		}
@@ -316,11 +322,11 @@ gl -- 管理 (0,1)
 
 			this.guildTabbar.setTabVisible(0, true);
 			this.guildTabbar.setTabVisible(1, true);
-			this.guildTabbar.setTabVisible(2, true);
+//			this.guildTabbar.setTabVisible(2, true);
 //			this.guildTabbar.setTabVisible(3, true);
 //			this.guildTabbar.setTabVisible(4, true);
 			this.guildTabbar.setTabVisible(5, true);
-			this.guildTabbar.setTabVisible(6, true);
+//			this.guildTabbar.setTabVisible(6, true);
 			this.guildTabbar.setTabVisible(7, true);
 			this.guildTabbar.setTabVisible(8, false);
 
@@ -363,15 +369,21 @@ gl -- 管理 (0,1)
 
 				this.autoAccCb.visible=true;
 			}
+			
+			if (o.hasOwnProperty("dmoney")) {
+				this.guildDonateMoney=o.dmoney;
+				
+				this.guildDonateMessage.updateLastMoney();
+			}
 
 			if (this.guildTabbar.turnOnIndex == 0 && o.mk == "I")
 				Cmd_Guild.cm_GuildNotice(o.unionid, 1);
 
 			this.guildMain.updateInfo(o);
 
-			this.memNumTxt.text="成员数：";
-			this.currOnLineTxt.text="当前在线：";
-			this.contributeTxt.text="行会贡献：";
+			this.memNumTxt.text=PropUtils.getStringById(1760);
+			this.currOnLineTxt.text=PropUtils.getStringById(1761);
+			this.contributeTxt.text=PropUtils.getStringById(1762);
 			this.bgIcon.visible=true;
 
 			MyInfoManager.getInstance().isGuild=true;
@@ -427,7 +439,7 @@ gl -- 管理 (0,1)
 			if (this.memberJob == GuildEnum.ADMINI_1) {
 //				this.autoAccCb.text="自动同意入会申请";
 			} else
-				this.autoAccCb.text="自动同意入会邀请";
+				this.autoAccCb.text=PropUtils.getStringById(1764);
 
 			this.autoAccCb.setActive((o[4] == 1 ? true : false));
 
@@ -570,7 +582,7 @@ gl -- 管理 (0,1)
 			this.guildAddWnd.hide();
 			this.guildMember.clearData();
 
-			this.guildSkill.clearData();
+//			this.guildSkill.clearData();
 
 			this.changeTabIndex=0;
 

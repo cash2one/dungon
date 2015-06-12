@@ -8,9 +8,11 @@ package com.leyou.ui.guild.child {
 	import com.ace.ui.input.children.TextInput;
 	import com.ace.ui.lable.children.TextArea;
 	import com.ace.ui.notice.NoticeManager;
+	import com.ace.utils.StringUtil;
 	import com.leyou.enum.ConfigEnum;
 	import com.leyou.manager.PopupManager;
 	import com.leyou.net.cmd.Cmd_Guild;
+	import com.leyou.utils.StringUtil_II;
 
 	import flash.events.MouseEvent;
 	import flash.events.TextEvent;
@@ -43,7 +45,7 @@ package com.leyou.ui.guild.child {
 			this.nameTxt.addEventListener(TextEvent.TEXT_INPUT, onInput);
 			this.createBtn.addEventListener(MouseEvent.CLICK, onClick);
 
-			this.requiteTxt.setHtmlText(TableManager.getInstance().getSystemNotice(3044).content);
+			this.requiteTxt.setHtmlText(StringUtil.substitute(TableManager.getInstance().getSystemNotice(3044).content, [ConfigEnum.union2, ConfigEnum.union24]));
 			this.descTxt.setHtmlText(TableManager.getInstance().getSystemNotice(3043).content);
 
 			this.x=-17;
@@ -87,7 +89,7 @@ package com.leyou.ui.guild.child {
 //					return;
 //				}
 
-				PopupManager.showRadioConfirm(TableManager.getInstance().getSystemNotice(3076).content, ConfigEnum.union24+"", ConfigEnum.union2+"", function(i:int):void {
+				PopupManager.showRadioConfirm(TableManager.getInstance().getSystemNotice(3076).content, ConfigEnum.union24 + "", ConfigEnum.union2 + "", function(i:int):void {
 
 					Cmd_Guild.cm_GuildCreate(nameTxt.text, (i == 0 ? 1 : 0));
 					Cmd_Guild.cm_GuildMemInfo(MyInfoManager.getInstance().name);

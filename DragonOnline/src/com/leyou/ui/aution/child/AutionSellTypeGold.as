@@ -22,7 +22,7 @@ package com.leyou.ui.aution.child {
 		private var equalLbl:Label;
 		private var ybImg:Image;
 		
-		private var rate:Number;
+		private var rate:Number=0;
 
 		private var grid:AutionSaleItemGrid;
 		
@@ -89,6 +89,9 @@ package com.leyou.ui.aution.child {
 				numTxt.text = ownCoin+"";
 			}
 			goldLbl.text = numTxt.text;
+			if(0 == rate){
+				
+			}
 			var v:Number = rate*coin;
 			if(v < 1){
 				v = Number(v.toFixed(4));
@@ -97,7 +100,11 @@ package com.leyou.ui.aution.child {
 			}else if(v >= 100){
 				v = uint(v);
 			}
-			ingotLbl.text = v+"";
+			if(0 == v){
+				ingotLbl.text = "?????";
+			}else{
+				ingotLbl.text = v+"";
+			}
 			equalLbl.x = goldLbl.x + goldLbl.width;
 			ybImg.x = equalLbl.x + equalLbl.width;
 			ingotLbl.x = ybImg.x + ybImg.width;

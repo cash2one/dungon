@@ -7,12 +7,9 @@ package com.leyou.ui.guild.child {
 	import com.ace.manager.LibManager;
 	import com.ace.manager.ToolTipManager;
 	import com.ace.ui.auto.AutoSprite;
-	import com.ace.ui.button.GroupButton;
 	import com.ace.ui.button.SwitchButton;
 	import com.ace.ui.img.child.Image;
 	import com.ace.ui.lable.Label;
-	import com.ace.utils.PnfUtil;
-	import com.leyou.enum.TipsEnum;
 	import com.leyou.utils.PropUtils;
 	
 	import flash.events.MouseEvent;

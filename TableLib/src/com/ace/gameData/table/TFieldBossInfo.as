@@ -36,21 +36,21 @@ package com.ace.gameData.table
 		
 		public var type:int;
 		
-		public var showItem1:int;
+		public var showItem1:Array;
 		
-		public var showItem2:int;
+		public var showItem2:Array;
 		
-		public var showItem3:int;
+		public var showItem3:Array;
 		
-		public var showItem4:int;
+		public var showItem4:Array;
 		
-		public var showItem5:int;
+		public var showItem5:Array;
 		
-		public var showItem6:int;
+		public var showItem6:Array;
 		
-		public var showItem7:int;
+		public var showItem7:Array;
 		
-		public var showItem8:int;
+		public var showItem8:Array;
 		
 		public var bgPic:String;
 		
@@ -77,14 +77,22 @@ package com.ace.gameData.table
 			item4Num = xml.@itemNum4;
 			
 			type = xml.@boss_obj;
-			showItem1 = xml.@ShowItem1;
-			showItem2 = xml.@ShowItem2;
-			showItem3 = xml.@ShowItem3;
-			showItem4 = xml.@ShowItem4;
-			showItem5 = xml.@ShowItem5;
-			showItem6 = xml.@ShowItem6;
-			showItem7 = xml.@ShowItem7;
-			showItem8 = xml.@ShowItem8;
+			var itemV:String = xml.@ShowItem1;
+			showItem1 = itemV.split("|");
+			itemV = xml.@ShowItem2;
+			showItem2 = itemV.split("|");
+			itemV = xml.@ShowItem3;
+			showItem3 = itemV.split("|");
+			itemV = xml.@ShowItem4;
+			showItem4 = itemV.split("|");
+			itemV = xml.@ShowItem5;
+			showItem5 = itemV.split("|");
+			itemV = xml.@ShowItem6;
+			showItem6 = itemV.split("|");
+			itemV = xml.@ShowItem7;
+			showItem7 = itemV.split("|");
+			itemV = xml.@ShowItem8;
+			showItem8 = itemV.split("|");
 			bgPic = xml.@BOSS_Card;
 		}
 		

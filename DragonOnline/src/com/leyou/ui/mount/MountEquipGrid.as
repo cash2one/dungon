@@ -1,17 +1,19 @@
 package com.leyou.ui.mount {
 
 	import com.ace.enum.ItemEnum;
+	import com.ace.enum.UIEnum;
 	import com.ace.game.backpack.GridBase;
 	import com.ace.gameData.manager.MyInfoManager;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.manager.LayerManager;
 	import com.ace.manager.LibManager;
+	import com.ace.manager.ToolTipManager;
 	import com.ace.manager.UIManager;
 	import com.ace.ui.notice.NoticeManager;
 	import com.leyou.net.cmd.Cmd_Bag;
 	import com.leyou.net.cmd.Cmd_Mount;
 	import com.leyou.ui.role.child.children.EquipGrid;
-
+	
 	import flash.geom.Point;
 
 	public class MountEquipGrid extends EquipGrid {
@@ -80,6 +82,10 @@ package com.leyou.ui.mount {
 			Cmd_Mount.cmMouEquip([13, 14, 15, 16].indexOf(this.dataId));
 
 		}
+		
+//		override public function mouseOverHandler($x:Number, $y:Number):void{
+//		 
+//		}
 
 		override public function mouseUpHandler($x:Number, $y:Number):void {
 
@@ -89,6 +95,19 @@ package com.leyou.ui.mount {
 			
 			var p:Point=LayerManager.getInstance().windowLayer.globalToLocal(this.parent.localToGlobal(new Point(this.x + 40, this.y)));
 
+			if (ToolTipManager.getInstance().isShow) {
+				var tipPs:Point=ToolTipManager.getInstance().tipPs;
+				
+				if (tipPs.x < UIManager.getInstance().selectWnd.width) {
+					p.x=tipPs.x + ToolTipManager.getInstance().getWidth();
+				} else if (UIEnum.WIDTH - tipPs.x < UIManager.getInstance().selectWnd.width) {
+					p.x=tipPs.x - UIManager.getInstance().selectWnd.width;
+				} else {
+					p.x=tipPs.x - UIManager.getInstance().selectWnd.width;
+				}
+				
+			}
+			
 			UIManager.getInstance().selectWnd.type=1;
 			UIManager.getInstance().selectWnd.showPanel(this.dataId, -1, p);
 

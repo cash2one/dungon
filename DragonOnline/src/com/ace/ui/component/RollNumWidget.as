@@ -6,6 +6,7 @@ package com.ace.ui.component
 	import com.ace.ui.lable.Label;
 	import com.ace.utils.StringUtil;
 	import com.greensock.TweenLite;
+	import com.leyou.utils.PropUtils;
 	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
@@ -105,7 +106,7 @@ package com.ace.ui.component
 		 * <T>以容器注册点为中心</T>
 		 * 
 		 */		
-		public function alingRound():void{
+		public function alignRound():void{
 			align = 3;
 		}
 		
@@ -416,7 +417,7 @@ package com.ace.ui.component
 				label.textColor = 0xff00;
 			}else{
 				var v:String = (num < 0) ? ""+num : "+"+num;
-				label.text = "战斗力" + v;
+				label.text = PropUtils.getStringById(1524) + v;
 				label.textColor = (num > 0) ? 0x00ff00 : 0xff0000;
 			}
 			label.y = 0;

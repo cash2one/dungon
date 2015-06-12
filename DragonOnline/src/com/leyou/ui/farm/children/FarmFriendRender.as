@@ -9,6 +9,7 @@ package com.leyou.ui.farm.children
 	import com.ace.ui.tabbar.TabbarModel;
 	import com.ace.ui.tabbar.children.TabBar;
 	import com.leyou.net.cmd.Cmd_Farm;
+	import com.leyou.utils.PropUtils;
 	
 	import flash.display.Sprite;
 	import flash.events.Event;
@@ -101,7 +102,7 @@ package com.leyou.ui.farm.children
 						Cmd_Farm.cm_FAM_A();
 					}else{
 						ownFarm = true;
-						UIManager.getInstance().farmWnd.setOwner("我");
+						UIManager.getInstance().farmWnd.setOwner(PropUtils.getStringById(1700));
 						Cmd_Farm.cm_FAM_I();
 					}
 					break;

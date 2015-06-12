@@ -69,10 +69,12 @@ index --第几个镖车(1,2,3)
 		 *--------------------------------------------------------------------------
 刷新镖车
 上行:yct|F
+ * -- 刷新镖车
+-- 上行:yct|Fbtype (0钻石 1绑定钻石)
 *
    */
-		public static function cm_DeliveryRefresh():void {
-			NetGate.getInstance().send(CmdEnum.CM_YCT_F);
+		public static function cm_DeliveryRefresh(type:int=0):void {
+			NetGate.getInstance().send(CmdEnum.CM_YCT_F+type);
 		}
 
 

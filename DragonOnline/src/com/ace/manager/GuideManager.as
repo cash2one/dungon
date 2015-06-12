@@ -170,6 +170,7 @@ package com.ace.manager {
 		 * 
 		 */		
 		public function showGuide(id:int, display:DisplayObjectContainer, check:Boolean=false):void{
+			return;
 			if (null == con) {
 				throw new Error("the guide layer is null.")
 			}
@@ -489,7 +490,7 @@ package com.ace.manager {
 			
 			// 押镖
 			if (level == ConfigEnum.delivery19) {
-				showGuide(8, UIManager.getInstance().rightTopWnd.getWidget("deliveryBtn"), true);
+//				showGuide(8, UIManager.getInstance().rightTopWnd.getWidget("deliveryBtn"), true);
 			}
 			
 			// 寄售
@@ -539,7 +540,7 @@ package com.ace.manager {
 			
 			//翅膀
 			if (level == ConfigEnum.WingOpenLv) {
-				showGuide(57, UIManager.getInstance().roleHeadWnd.wingBtn);
+				showGuide(57, UIManager.getInstance().leftTopWnd.wingBtn);
 			}
 			
 			//称号

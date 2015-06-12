@@ -625,7 +625,7 @@ package com.leyou.ui.gem {
 					this["g" + (i + 1) + "propArr"][1].text="";
 					this["g" + (i + 1) + "propArr"][2].text="";
 
-					str+="<font color='#cccccc'>尚未镶嵌宝石：镶嵌后将获得属性提升</font>\n";
+					str+="<font color='#cccccc'>" + PropUtils.getStringById(1720) + "</font>\n";
 
 					this.gemGridVec[i].reseGrid();
 					this.gemGridVec[i].canMove=false;
@@ -781,8 +781,8 @@ package com.leyou.ui.gem {
 			}
 
 
-			if (UIManager.getInstance().roleWnd.getTabIndex() != 2)
-				return;
+//			if (UIManager.getInstance().roleWnd.getTabIndex() != 2)
+//				return;
 
 			if (this.currentEquipIndex == -1) {
 				this.currentEquipIndex=0;

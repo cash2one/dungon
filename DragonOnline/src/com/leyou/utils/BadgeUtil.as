@@ -25,11 +25,11 @@ package com.leyou.utils {
 			for each (xml in bldNode.bloodNote) {
 
 				if (xml.@bloodId == item && xml.@attribute == pindex) {
-					if (value >= xml.@lowMin && value <=xml.@lowMax)
+					if (value >= xml.@lowMin && value <= xml.@lowMax)
 						return 0x69e053;
-					else if (value >= xml.@midMin && value <=xml.@midMax)
+					else if (value >= xml.@midMin && value <= xml.@midMax)
 						return 0x3fa6ed;
-					else if (value >= xml.@highMin && value <=xml.@highMax)
+					else if (value >= xml.@highMin && value <= xml.@highMax)
 						return 0xcc54ea;
 					else if (value == xml.@full)
 						return 0xf6d654;
@@ -39,14 +39,14 @@ package com.leyou.utils {
 			return 0xffffff;
 		}
 
-		
+
 		/**
-		 * 
+		 *
 		 * @param item
 		 * @param pindex
-		 * @return 
-		 * 
-		 */		
+		 * @return
+		 *
+		 */
 		public static function getColorRect(item:int, pindex:int):Array {
 
 			var bldNode:XML=LibManager.getInstance().getXML("config/table/bloodNote.xml");
@@ -66,17 +66,17 @@ package com.leyou.utils {
 			var str:String;
 
 			if (r == 100)
-				str="必成";
+				str=PropUtils.getStringById(1997);
 			else if (r >= 90 && r < 100)
-				str="极高";
+				str=PropUtils.getStringById(1998);
 			else if (r >= 70 && r < 90)
-				str="较高";
+				str=PropUtils.getStringById(1999);
 			else if (r >= 50 && r < 70)
-				str="高";
+				str=PropUtils.getStringById(2000);
 			else if (r >= 30 && r < 50)
-				str="较低";
+				str=PropUtils.getStringById(2001);
 			else if (r >= 0 && r < 30)
-				str="低";
+				str=PropUtils.getStringById(2002);
 
 			return str;
 		}

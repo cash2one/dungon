@@ -3,6 +3,7 @@ package com.leyou.ui.mount {
 	import com.ace.config.Core;
 	import com.ace.enum.TipEnum;
 	import com.ace.enum.WindowEnum;
+	import com.ace.game.scene.ui.effect.StarChangeEffect;
 	import com.ace.gameData.manager.MyInfoManager;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.table.TEquipInfo;
@@ -12,12 +13,10 @@ package com.leyou.ui.mount {
 	import com.ace.manager.GuideManager;
 	import com.ace.manager.LayerManager;
 	import com.ace.manager.LibManager;
-	import com.ace.manager.MouseManagerII;
 	import com.ace.manager.SoundManager;
 	import com.ace.manager.ToolTipManager;
 	import com.ace.manager.UILayoutManager;
 	import com.ace.manager.UIManager;
-	import com.ace.manager.child.MouseEventInfo;
 	import com.ace.tools.ScaleBitmap;
 	import com.ace.ui.auto.AutoSprite;
 	import com.ace.ui.button.children.ImgButton;
@@ -32,7 +31,8 @@ package com.leyou.ui.mount {
 	import com.leyou.enum.ConfigEnum;
 	import com.leyou.net.cmd.Cmd_Mount;
 	import com.leyou.ui.loading.LoadingRen;
-
+	import com.leyou.utils.PropUtils;
+	
 	import flash.display.DisplayObject;
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
@@ -138,12 +138,14 @@ package com.leyou.ui.mount {
 		 */
 		private var DownMountProgress:LoadingRen;
 
-		private var propArrKey:Array=[4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 21, 1, 2];
+		private var propArrKey:Array=[4, 5, 8, 9, 10, 11, 12, 13, 21, 1, 2];
 		private var propArrLbL:Array=[];
 
 		private var figthEquipInfo:TEquipInfo;
 
 		private var equipItemArr:Array=[];
+
+		private var starEffect:StarChangeEffect;
 
 		public function MountWnd(othePlayer:Boolean=false) {
 			super(LibManager.getInstance().getXML("config/ui/horseWnd.xml"));
@@ -225,8 +227,8 @@ package com.leyou.ui.mount {
 
 			this.viewAddList.push(this.phAttAddLbl);
 			this.viewAddList.push(this.phDefAddLbl);
-			this.viewAddList.push(this.magicAttAddLbl);
-			this.viewAddList.push(this.magicDefAddLbl);
+//			this.viewAddList.push(this.magicAttAddLbl);
+//			this.viewAddList.push(this.magicDefAddLbl);
 			this.viewAddList.push(this.hpAddLbl);
 			this.viewAddList.push(this.mpAddLbl);
 			this.viewAddList.push(this.critLvAddLbl);
@@ -234,7 +236,7 @@ package com.leyou.ui.mount {
 			this.viewAddList.push(this.dodgeLvAddLbl);
 			this.viewAddList.push(this.toughLvAddLbl);
 			this.viewAddList.push(this.guaidLvAddLbl);
-			this.viewAddList.push(this.moveSpeedAddLbl);
+//			this.viewAddList.push(this.moveSpeedAddLbl);
 			this.viewAddList.push(this.killLvAddLbl);
 
 			for (var i:int=0; i < 10; i++) {
@@ -320,7 +322,10 @@ package com.leyou.ui.mount {
 				}
 			}
 
-
+			this.starEffect=new StarChangeEffect(10, true);
+			this.addChild(this.starEffect);
+			this.starEffect.x=35;
+			this.starEffect.y=3;
 
 			this.swfTips=new Sprite();
 			this.swfTips.graphics.beginFill(0x000000);
@@ -335,12 +340,6 @@ package com.leyou.ui.mount {
 			this.swfTips.alpha=0;
 			this.swfTips.addEventListener(MouseEvent.MOUSE_MOVE, onMouseOver);
 			this.swfTips.addEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
-
-			var einfo:MouseEventInfo=new MouseEventInfo();
-			einfo.onMouseMove=onTipsMouseOver;
-			einfo.onMouseOut=onTipsMouseOut;
-
-			MouseManagerII.getInstance().addEvents(this.tipImg, einfo);
 
 			this.figthEquipInfo=new TEquipInfo();
 
@@ -357,7 +356,8 @@ package com.leyou.ui.mount {
 		}
 
 		private function onMouseOver(e:MouseEvent):void {
-			ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, TableManager.getInstance().getSystemNotice(1119 + this.jieNum).content, new Point(e.stageX, e.stageY));
+//			ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, TableManager.getInstance().getSystemNotice(1119 + this.jieNum).content, new Point(e.stageX, e.stageY));
+			ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, TableManager.getInstance().getSystemNotice(1119 + this.jieNum).content, new Point(100, 100));
 		}
 
 		private function onMouseOut(e:MouseEvent):void {
@@ -380,7 +380,7 @@ package com.leyou.ui.mount {
 
 					break;
 				case "evolutionBtn":
-					
+
 					UIManager.getInstance().hideWindow(WindowEnum.QUICK_BUY);
 //					UIManager.getInstance().mountLvUpwnd.open(); //进阶
 					UIManager.getInstance().mountTradeWnd.hide();
@@ -414,7 +414,7 @@ package com.leyou.ui.mount {
 					break;
 				case "getOnMountBtn":
 					Core.me.onMount(); //必须调用
-					if (this.getOnMountBtn.text.indexOf("下") > -1)
+					if (this.getOnMountBtn.text.indexOf(PropUtils.getStringById(1808)) > -1)
 						Cmd_Mount.cmMouUpOrDown();
 					else {
 
@@ -440,10 +440,10 @@ package com.leyou.ui.mount {
 //							SoundManager.getInstance().play(10);
 //						}, 1);
 
-						UIManager.getInstance().taskCollectProgress.startProgress(2000, function():void {
+//						UIManager.getInstance().taskCollectProgress.startProgress(2000, function():void {
 							Cmd_Mount.cmMouUpOrDown(jieNum + 1);
 							SoundManager.getInstance().play(10);
-						}, 1);
+//						}, 1);
 
 					}
 					break;
@@ -524,12 +524,12 @@ package com.leyou.ui.mount {
 
 //					this.DownMountProgress.resize();
 
-					UIManager.getInstance().taskCollectProgress.startProgress(2000, function():void {
+//					UIManager.getInstance().taskCollectProgress.startProgress(2000, function():void {
 //						trace(getTimer()-st,"---");
 						Cmd_Mount.cmMouUpOrDown((pid));
 						SoundManager.getInstance().play(10);
 						GuideManager.getInstance().removeGuide(3);
-					}, 1);
+//					}, 1);
 
 				}
 			}
@@ -604,7 +604,8 @@ package com.leyou.ui.mount {
 		 */
 		public function openTrade():void {
 
-			if (ConfigEnum.MountTradeOpenLv <= Core.me.info.level) {
+//			trace(ConfigEnum.MountTradeOpenLv,this.lv)
+			if (ConfigEnum.MountTradeOpenLv <= this.lv) {
 				this.domesticate.setActive(true, 1, true);
 				this.domesticate.setToolTip(TableManager.getInstance().getSystemNotice(1118).content);
 			} else {
@@ -622,10 +623,10 @@ package com.leyou.ui.mount {
 		public function changeMountBtnState(rd:int):void {
 
 			if (rd == 0) {
-				this.getOnMountBtn.text="骑     乘";
+				this.getOnMountBtn.text=PropUtils.getStringById(1810);
 				this.getOnMountBtn.setToolTip(TableManager.getInstance().getSystemNotice(1114).content);
 			} else {
-				this.getOnMountBtn.text="下     马";
+				this.getOnMountBtn.text=PropUtils.getStringById(1811);
 				this.getOnMountBtn.setToolTip(TableManager.getInstance().getSystemNotice(1115).content);
 			}
 
@@ -701,6 +702,9 @@ package com.leyou.ui.mount {
 				this.updatePropList(o);
 			}
 
+			if (o.hasOwnProperty("mlv"))
+				this.starEffect.setStarPos(o.mlv % 10 - 1);
+
 			if (o.hasOwnProperty("zdl")) {
 				if (this.rollPower.number != o.zdl) {
 					if (this.otherPlaye)
@@ -720,10 +724,12 @@ package com.leyou.ui.mount {
 				return;
 			}
 
-			if (this.lv == 10) {
+			if (this.mlv == 100) {
 				this.arrow1Img.visible=false;
 				this.evolutionBtn.setToolTip(TableManager.getInstance().getSystemNotice(1136).content);
 				this.evolutionBtn.setActive(false, .6, true);
+				
+				this.starEffect.setStarPos(9);
 			} else {
 				this.evolutionBtn.setToolTip(TableManager.getInstance().getSystemNotice(1117).content);
 				this.evolutionBtn.setActive(true, 1, true);
@@ -737,55 +743,58 @@ package com.leyou.ui.mount {
 
 		public function updatePropList(o:Object):void {
 
-			mount=TableManager.getInstance().getMountByLv(this.lv);
+			mount=TableManager.getInstance().getMountByLv(this.mlv);
 
-			this.lvLbl.text="" + this.mlv + "/" + mount.lvTop;
-			this.lvprogress.scaleX=int(this.mlv) / mount.lvTop;
+//			this.lvLbl.text="" + this.mlv + "/" + mount.lvTop;
+//			this.lvprogress.scaleX=int(this.mlv) / mount.lvTop;
 
 			var mountlv:TMountLv=TableManager.getInstance().getMountLvByLv(this.mlv);
 			var m1rate:Number=mount.proRate / 100;
 
 
 			if (o.dc.hasOwnProperty("4")) {
-				this.phAttLbl.text="" + (this.getPropTradeValue(this.getPropValue(mountlv.p_attack, m1rate), o.dc[4].r) + this.getMountPropValue(4));
+//				this.phAttLbl.text="" + (this.getPropTradeValue(this.getPropValue(mountlv.p_attack, m1rate), o.dc[4].r) + this.getMountPropValue(4));
+				this.phAttLbl.text="" + (mountlv.p_attack + this.getMountPropValue(4));
 			}
 
 			if (o.dc.hasOwnProperty("6")) {
-				this.magicAttLbl.text="" + (this.getPropTradeValue(this.getPropValue(mountlv.m_attack, m1rate), o.dc[6].r) + this.getMountPropValue(6));
+//				this.magicAttLbl.text="" + (this.getPropTradeValue(this.getPropValue(mountlv.m_attack, m1rate), o.dc[6].r) + this.getMountPropValue(6));
+//				this.magicAttLbl.text="" + (mountlv.m_attack + this.getMountPropValue(6));
 			}
 
 			if (o.dc.hasOwnProperty("5")) {
-				this.phDefLbl.text="" + (this.getPropTradeValue(this.getPropValue(mountlv.p_defense, m1rate), o.dc[5].r) + this.getMountPropValue(5));
+//				this.phDefLbl.text="" + (this.getPropTradeValue(this.getPropValue(mountlv.p_defense, m1rate), o.dc[5].r) + this.getMountPropValue(5));
+				this.phDefLbl.text="" + (mountlv.p_defense + this.getMountPropValue(5));
 			}
 
 			if (o.dc.hasOwnProperty("7")) {
-				this.magicDefLbl.text="" + (this.getPropTradeValue(this.getPropValue(mountlv.m_defense, m1rate), o.dc[7].r) + this.getMountPropValue(7));
+//				this.magicDefLbl.text="" + (mountlv.m_defense + this.getMountPropValue(7));
 			}
 
 			if (o.dc.hasOwnProperty("1")) {
-				this.hpLbl.text="" + (this.getPropTradeValue(this.getPropValue(mountlv.extraHp, m1rate), o.dc[1].r) + this.getMountPropValue(1));
+				this.hpLbl.text="" + (mountlv.extraHp + this.getMountPropValue(1));
 			}
 
 			if (o.dc.hasOwnProperty("2")) {
-				this.mpLbl.text=(this.getPropTradeValue(this.getPropValue(mountlv.extraMp, m1rate), o.dc[2].r) + this.getMountPropValue(2)) + "";
+				this.mpLbl.text=(mountlv.extraMp + this.getMountPropValue(2)) + "";
 			}
 
-			this.critLvLbl.text=(this.getPropValue(mountlv.crit, m1rate) + this.getMountPropValue(8)) + "";
-			this.toughLvLbl.text=(this.getPropValue(mountlv.critReduce, m1rate) + this.getMountPropValue(9)) + "";
-			this.hitLvLbl.text=(this.getPropValue(mountlv.hit, m1rate) + this.getMountPropValue(10)) + "";
-			this.dodgeLvLbl.text=(this.getPropValue(mountlv.dodge, m1rate) + this.getMountPropValue(11)) + "";
-			this.killLvLbl.text=(this.getPropValue(mountlv.critDam, m1rate) + this.getMountPropValue(12)) + "";
-			this.guaidLvLbl.text=(this.getPropValue(mountlv.critDamReduce, m1rate) + this.getMountPropValue(13)) + "";
-			this.moveSpeedLbl.text=this.getPropValue(mountlv.speed, m1rate) + "";
+			this.critLvLbl.text=(mountlv.crit + this.getMountPropValue(8)) + "";
+			this.toughLvLbl.text=(mountlv.critReduce + this.getMountPropValue(9)) + "";
+			this.hitLvLbl.text=(mountlv.hit + this.getMountPropValue(10)) + "";
+			this.dodgeLvLbl.text=(mountlv.dodge + this.getMountPropValue(11)) + "";
+			this.killLvLbl.text=(mountlv.critDam + this.getMountPropValue(12)) + "";
+			this.guaidLvLbl.text=(mountlv.critDamReduce + this.getMountPropValue(13)) + "";
+//			this.moveSpeedLbl.text=this.getPropValue(mountlv.speed, m1rate) + "";
 
-			if (Core.me.info.level <= 100 && this.mount.lv < 10) {
+			if (Core.me.info.level <= 100 && this.mlv < 100) {
 
-				var m2:TMount=TableManager.getInstance().getMountByLv(this.mount.lv + 1);
+				var m2:TMount=TableManager.getInstance().getMountByLv(this.mlv + 1);
 				var m2lv:TMountLv;
-				if (Core.me.info.level < m2.lvTop)
-					m2lv=TableManager.getInstance().getMountLvByLv(Core.me.info.level);
-				else
-					m2lv=TableManager.getInstance().getMountLvByLv(m2.lvTop);
+//				if (Core.me.info.level < m2.lv)
+//					m2lv=TableManager.getInstance().getMountLvByLv(Core.me.info.level);
+//				else
+				m2lv=TableManager.getInstance().getMountLvByLv(this.mlv + 1);
 
 				if (m2lv == null)
 					return;
@@ -794,30 +803,30 @@ package com.leyou.ui.mount {
 
 				//计算加成
 				if (o.dc.hasOwnProperty("4"))
-					this.phAttAddLbl.text="+" + this.getPropTradeValue(this.getPropValue(m2lv.p_attack, m2rate) - this.getPropValue(mountlv.p_attack, m1rate), o.dc[4].r) + "";
+					this.phAttAddLbl.text="+" + (m2lv.p_attack - mountlv.p_attack) + "";
 
 				if (o.dc.hasOwnProperty("5"))
-					this.phDefAddLbl.text="+" + this.getPropTradeValue(this.getPropValue(m2lv.p_defense, m2rate) - this.getPropValue(mountlv.p_defense, m1rate), o.dc[5].r) + "";
+					this.phDefAddLbl.text="+" + (m2lv.p_defense - mountlv.p_defense) + "";
 
-				if (o.dc.hasOwnProperty("6"))
-					this.magicAttAddLbl.text="+" + this.getPropTradeValue(this.getPropValue(m2lv.m_attack, m2rate) - this.getPropValue(mountlv.m_attack, m1rate), o.dc[6].r) + "";
+//				if (o.dc.hasOwnProperty("6"))
+//					this.magicAttAddLbl.text="+" + this.getPropTradeValue(this.getPropValue(m2lv.m_attack, m2rate) - this.getPropValue(mountlv.m_attack, m1rate), o.dc[6].r) + "";
 
-				if (o.dc.hasOwnProperty("7"))
-					this.magicDefAddLbl.text="+" + this.getPropTradeValue(this.getPropValue(m2lv.m_defense, m2rate) - this.getPropValue(mountlv.m_defense, m1rate), o.dc[7].r) + "";
+//				if (o.dc.hasOwnProperty("7"))
+//					this.magicDefAddLbl.text="+" + this.getPropTradeValue(this.getPropValue(m2lv.m_defense, m2rate) - this.getPropValue(mountlv.m_defense, m1rate), o.dc[7].r) + "";
 
 				if (o.dc.hasOwnProperty("1"))
-					this.hpAddLbl.text="+" + this.getPropTradeValue(this.getPropValue(m2lv.extraHp, m2rate) - this.getPropValue(mountlv.extraHp, m1rate), o.dc[1].r) + "";
+					this.hpAddLbl.text="+" + (m2lv.extraHp - mountlv.extraHp) + "";
 
 				if (o.dc.hasOwnProperty("2"))
-					this.mpAddLbl.text="+" + this.getPropTradeValue(this.getPropValue(m2lv.extraMp, m2rate) - this.getPropValue(mountlv.extraMp, m1rate), o.dc[2].r) + "";
+					this.mpAddLbl.text="+" + (m2lv.extraMp - mountlv.extraMp) + "";
 
-				this.critLvAddLbl.text="+" + (this.getPropValue(m2lv.crit, m2rate) - this.getPropValue(mountlv.crit, m1rate)) + "";
-				this.hitLvAddLbl.text="+" + (this.getPropValue(m2lv.hit, m2rate) - this.getPropValue(mountlv.hit, m1rate)) + "";
-				this.dodgeLvAddLbl.text="+" + (this.getPropValue(m2lv.dodge, m2rate) - this.getPropValue(mountlv.dodge, m1rate)) + "";
-				this.toughLvAddLbl.text="+" + (this.getPropValue(m2lv.critReduce, m2rate) - this.getPropValue(mountlv.critReduce, m1rate)) + "";
-				this.guaidLvAddLbl.text="+" + (this.getPropValue(m2lv.critDamReduce, m2rate) - this.getPropValue(mountlv.critDamReduce, m1rate)) + "";
-				this.moveSpeedAddLbl.text="+" + (this.getPropValue(m2lv.speed, m2rate) - this.getPropValue(mountlv.speed, m1rate)) + "";
-				this.killLvAddLbl.text="+" + (this.getPropValue(m2lv.critDam, m2rate) - this.getPropValue(mountlv.critDam, m1rate)) + "";
+				this.critLvAddLbl.text="+" + (m2lv.crit - mountlv.crit) + "";
+				this.hitLvAddLbl.text="+" + (m2lv.hit - mountlv.hit) + "";
+				this.dodgeLvAddLbl.text="+" + (m2lv.dodge - mountlv.dodge) + "";
+				this.toughLvAddLbl.text="+" + (m2lv.critReduce - mountlv.critReduce) + "";
+				this.guaidLvAddLbl.text="+" + (m2lv.critDamReduce - mountlv.critDamReduce) + "";
+//				this.moveSpeedAddLbl.text="+" + (m2lv.speed - this.getPropValue(mountlv.speed, m1rate)) + "";
+				this.killLvAddLbl.text="+" + (m2lv.critDam - mountlv.critDam) + "";
 
 			} else {
 

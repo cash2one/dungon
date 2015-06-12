@@ -69,6 +69,7 @@ package com.leyou.ui.convenientuse.children
 			if(dataId <= 0){
 				return;
 			}
+			bitem.bagInfo.tips.isdiff = false;
 			super.mouseOverHandler($x, $y);
 			if(null != item){
 				var info:TEquipInfo = TableManager.getInstance().getEquipInfo(bitem.bagInfo.tips.itemid);

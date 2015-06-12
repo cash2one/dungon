@@ -8,7 +8,8 @@ package com.leyou.ui.guild.child {
 	import com.ace.ui.lable.Label;
 	import com.ace.ui.lable.children.TextArea;
 	import com.leyou.net.cmd.Cmd_Guild;
-
+	import com.leyou.utils.PropUtils;
+	
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
@@ -85,14 +86,14 @@ package com.leyou.ui.guild.child {
 					Cmd_Guild.cm_GuildEditNotice(UIManager.getInstance().guildWnd.guildId, 2, this.contentLbl.text);
 				}
 
-				this.editBtn.text="编辑宣言";
+				this.editBtn.text=PropUtils.getStringById(1752);
 //				this.contentLbl.mouseChildren=this.contentLbl.mouseEnabled=false;
 //				this.contentLbl.tf.type=TextFieldType.DYNAMIC;
 				this.contentLbl.editable=false;
 
 			} else {
 
-				this.editBtn.text="确定";
+				this.editBtn.text=PropUtils.getStringById(1742);
 //				this.contentLbl.mouseChildren=this.contentLbl.mouseEnabled=true;
 //				this.contentLbl.tf.type=TextFieldType.INPUT;
 				this.contentLbl.editable=true;
@@ -113,7 +114,7 @@ package com.leyou.ui.guild.child {
 
 			this.lastTimeLbl.text="" + o.time;
 
-			this.editBtn.text="编辑宣言";
+			this.editBtn.text=PropUtils.getStringById(1752);
 			this.editState=false;
 		}
 

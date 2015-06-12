@@ -29,13 +29,17 @@ package com.leyou.ui.guildBattle
 		
 		private var guildRankLbl:Label;
 		
-		private var gmRankLbl:Label;
+//		private var gmRankLbl:Label;
 		
 		private var memRLbl:Label;
 		
 		private var guildRLbl:Label;
 		
-		private var gmRLbl:Label;
+//		private var gmRLbl:Label;
+		
+		private var memRTLbl:Label;
+		
+		private var guildRTLbl:Label;
 		
 		private var receiveBtn:NormalButton;
 //		
@@ -71,9 +75,9 @@ package com.leyou.ui.guildBattle
 //		
 //		private var gmGrid4Img:Image;
 		
-		private var gridImgs3:Vector.<Image>;
-		
-		private var grids3:Vector.<MaillGrid>;
+//		private var gridImgs3:Vector.<Image>;
+//		
+//		private var grids3:Vector.<MaillGrid>;
 		
 		public function GuildBattleMessageWnd(){
 			super(LibManager.getInstance().getXML("config/ui/guildBattle/warGuildMegWnd.xml"));
@@ -88,10 +92,12 @@ package com.leyou.ui.guildBattle
 			energyLbl = getUIbyID("energyLbl") as Label;
 			memRankLbl = getUIbyID("memRankLbl") as Label;
 			guildRankLbl = getUIbyID("guildRankLbl") as Label;
-			gmRankLbl = getUIbyID("gmRankLbl") as Label;
+//			gmRankLbl = getUIbyID("gmRankLbl") as Label;
 			memRLbl = getUIbyID("memRLbl") as Label;
 			guildRLbl = getUIbyID("guildRLbl") as Label;
-			gmRLbl = getUIbyID("gmRLbl") as Label;
+//			gmRLbl = getUIbyID("gmRLbl") as Label;
+			memRTLbl = getUIbyID("memRTLbl") as Label;
+			guildRTLbl = getUIbyID("memRTLbl") as Label;
 			receiveBtn = getUIbyID("receiveBtn") as NormalButton;
 //			memGrid1Img = getUIbyID("memGrid1Img") as Image;
 //			memGrid2Img = getUIbyID("memGrid2Img") as Image;
@@ -133,20 +139,20 @@ package com.leyou.ui.guildBattle
 //			gmGrid2Img = getUIbyID("gmGrid2Img") as Image;
 //			gmGrid3Img = getUIbyID("gmGrid3Img") as Image;
 //			gmGrid4Img = getUIbyID("gmGrid4Img") as Image;
-			gridImgs3 = new Vector.<Image>();
-			gridImgs3.push(getUIbyID("gmGrid1Img"));
-			gridImgs3.push(getUIbyID("gmGrid2Img"));
-			gridImgs3.push(getUIbyID("gmGrid3Img"));
-			gridImgs3.push(getUIbyID("gmGrid4Img"));
-			length = gridImgs3.length;
-			grids3 = new Vector.<MaillGrid>(length);
-			for(var n:int = 0; n < length; n++){
-				var g3:MaillGrid = new MaillGrid();
-				grids3[n] = g3;
-				g3.x = gridImgs3[n].x;
-				g3.y = gridImgs3[n].y;
-				pane.addChild(g3);
-			}
+//			gridImgs3 = new Vector.<Image>();
+//			gridImgs3.push(getUIbyID("gmGrid1Img"));
+//			gridImgs3.push(getUIbyID("gmGrid2Img"));
+//			gridImgs3.push(getUIbyID("gmGrid3Img"));
+//			gridImgs3.push(getUIbyID("gmGrid4Img"));
+//			length = gridImgs3.length;
+//			grids3 = new Vector.<MaillGrid>(length);
+//			for(var n:int = 0; n < length; n++){
+//				var g3:MaillGrid = new MaillGrid();
+//				grids3[n] = g3;
+//				g3.x = gridImgs3[n].x;
+//				g3.y = gridImgs3[n].y;
+//				pane.addChild(g3);
+//			}
 //			updateInfo();
 			receiveBtn.addEventListener(MouseEvent.CLICK, onBtnClick);
 		}
@@ -180,10 +186,10 @@ package com.leyou.ui.guildBattle
 					cgrids = grids2;
 					cImgs = gridImgs2;
 					break;
-				case 3:
-					cgrids = grids3;
-					cImgs = gridImgs3;
-					break;
+//				case 3:
+//					cgrids = grids3;
+//					cImgs = gridImgs3;
+//					break;
 			}
 			var index:int = 0;
 			var grid:MaillGrid;
@@ -259,10 +265,10 @@ package com.leyou.ui.guildBattle
 					cgrids = grids2;
 					cImgs = gridImgs2;
 					break;
-				case 3:
-					cgrids = grids3;
-					cImgs = gridImgs3;
-					break;
+//				case 3:
+//					cgrids = grids3;
+//					cImgs = gridImgs3;
+//					break;
 			}
 			for each(var g:MaillGrid in cgrids){
 				g.visible = false;
@@ -279,12 +285,13 @@ package com.leyou.ui.guildBattle
 			energyLbl.text = data.energy+"";
 			memRankLbl.text = data.memRank+"";
 			guildRankLbl.text = data.guildRank+"";
-			gmRankLbl.text = data.guildMemRank+"";
+//			gmRankLbl.text = data.guildMemRank+"";
 			
 			// 个人
 			var prInfo:TGuildBattleInfo = TableManager.getInstance().getGuildBattleInfo(1+"|"+data.memRank);
 			hideGrids(1);
 			memRLbl.visible = (null == prInfo);
+			memRTLbl.visible = memRLbl.visible;
 			if(null != prInfo){
 				fillGirds(prInfo, 1);
 			}
@@ -294,6 +301,7 @@ package com.leyou.ui.guildBattle
 			hideGrids(2);
 			var addHonour:int = data.honour*rate/100;
 			guildRLbl.visible = (0 >= addHonour);
+			guildRTLbl.visible = guildRLbl.visible;
 			if(0 < addHonour){
 				grids2[0].updateInfo(ItemEnum.HONOUR_VIR_ITEM_ID, addHonour);
 				grids2[0].visible = true;
@@ -301,12 +309,12 @@ package com.leyou.ui.guildBattle
 			}
 			
 			// 行会内排名
-			var gmrInfo:TGuildBattleInfo = TableManager.getInstance().getGuildBattleInfo(2+"|"+data.guildMemRank);
-			hideGrids(3);
-			gmRLbl.visible = (null == gmrInfo);
-			if(null != gmrInfo){
-				fillGirds(gmrInfo, 3);
-			}
+//			var gmrInfo:TGuildBattleInfo = TableManager.getInstance().getGuildBattleInfo(2+"|"+data.guildMemRank);
+//			hideGrids(3);
+//			gmRLbl.visible = (null == gmrInfo);
+//			if(null != gmrInfo){
+//				fillGirds(gmrInfo, 3);
+//			}
 		}
 	}
 }

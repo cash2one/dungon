@@ -5,6 +5,7 @@ package com.leyou.net.cmd
 	import com.ace.manager.UIOpenBufferManager;
 	import com.leyou.enum.CmdEnum;
 	import com.leyou.net.NetGate;
+	import com.leyou.utils.PropUtils;
 	import com.leyou.utils.StringUtil_II;
 
 	public class Cmd_Aution
@@ -193,7 +194,7 @@ package com.leyou.net.cmd
 		 * 
 		 */		
 		public static function cm_Aution_L(name:String):void{
-			name.replace("钱", "币");
+			name.replace(PropUtils.getStringById(1550), PropUtils.getStringById(1551));
 			NetGate.getInstance().send(CmdEnum.CM_CGT_L + "," + name);
 		}
 		

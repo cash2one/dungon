@@ -5,17 +5,21 @@ package com.ace.ui.setting.child {
 	import com.ace.enum.TipEnum;
 	import com.ace.game.backpack.GridBase;
 	import com.ace.gameData.manager.TableManager;
+	import com.ace.gameData.table.TSkillInfo;
 	import com.ace.manager.LibManager;
 	import com.ace.manager.ToolTipManager;
 	import com.ace.manager.UIManager;
 	import com.ace.tools.ScaleBitmap;
 	import com.leyou.data.playerSkill.TipSkillInfo;
-
+	
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 
 	public class AssistSkillGrid extends GridBase {
+		
 		public var switchListener:Function;
+		
+		public var gid:int;
 
 		public function AssistSkillGrid() {
 			init();
@@ -34,7 +38,8 @@ package com.ace.ui.setting.child {
 			isLock=false;
 			mouseEnabled=true;
 			mouseChildren=true;
-			bgBmp.updateBmp("ui/common/common_icon_bg.png");
+			bgBmp.visible = false;
+//			bgBmp.updateBmp("ui/common/common_icon_bg.png");
 
 			var select:ScaleBitmap=new ScaleBitmap(LibManager.getInstance().getImg("ui/backpack/select.png"));
 			select.scale9Grid=new Rectangle(2, 2, 20, 20);
@@ -46,15 +51,16 @@ package com.ace.ui.setting.child {
 		}
 
 		public override function updataInfo(info:Object):void {
-			if (info == null)
-				return;
-			super.updataInfo(info);
+			var skillId:int = info as int;
+			if(skillId == 0) return;
+			var skillInfo:TSkillInfo = TableManager.getInstance().getSkillById(skillId);
+			super.updataInfo(skillInfo);
 			if (this.gridType == ItemEnum.TYPE_GRID_RUNE) {
-				this.iconBmp.updateBmp("ico/skills/" + info.runeIcon + ".png", null, false, 36, 36);
+				this.iconBmp.updateBmp("ico/skills/" + skillInfo.runeIcon + ".png", null, false, 36, 36);
 			} else {
-				this.iconBmp.updateBmp("ico/skills/" + info.icon + ".png", null, false, 36, 36);
+				this.iconBmp.updateBmp("ico/skills/" + skillInfo.icon + ".png", null, false, 36, 36);
 			}
-			this.dataId=int(info.id);
+			this.dataId=skillId;
 		}
 
 		/**
@@ -70,11 +76,13 @@ package com.ace.ui.setting.child {
 				return;
 			}
 			var tipInfo:TipSkillInfo=new TipSkillInfo();
-			var skillId:uint=uint(TableManager.getInstance().getSkillById(dataId).skillId);
-			tipInfo.skillInfo=UIManager.getInstance().skillWnd.getOpenSkill(skillId)
-			tipInfo.runde=TableManager.getInstance().getSkillArr(skillId).indexOf(tipInfo.skillInfo);
-			tipInfo.hasRune=(0 < tipInfo.runde);
-			tipInfo.level=Core.me.info.level;
+//			var skillId:uint=uint(TableManager.getInstance().getSkillById(dataId).skillId);
+//			tipInfo.skillInfo=UIManager.getInstance().skillWnd.getOpenSkill(skillId)
+			tipInfo.skillInfo=TableManager.getInstance().getSkillById(dataId);
+//			tipInfo.runde=TableManager.getInstance().getSkillArr(skillId).indexOf(tipInfo.skillInfo);
+//			tipInfo.hasRune=(0 < tipInfo.runde);
+//			tipInfo.skillLv = 0;
+//			tipInfo.level=Core.me.info.level;
 			if (tipInfo.hasRune) {
 				ToolTipManager.getInstance().showII([TipEnum.TYPE_SKILL, TipEnum.TYPE_RUNE], [tipInfo, tipInfo], PlayerEnum.DIR_S, new Point(0, 0), new Point(this.stage.mouseX + 15, this.stage.mouseY + 15));
 			} else {

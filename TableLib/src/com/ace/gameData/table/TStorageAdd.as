@@ -18,6 +18,11 @@ package com.ace.gameData.table
 		*	开启所需元宝
 		*/
 		public var addMoney:int;
+		
+		/**
+		 * 开启所需绑定元宝
+		 */		
+		public var addBMoney:int;
 
 		/**
 		*	获得HP上限
@@ -38,6 +43,7 @@ package com.ace.gameData.table
 			this.storId=data.@storId;
 			this.addTime=data.@addTime;
 			this.addMoney=data.@addMoney;
+			this.addBMoney=data.@addBMoney;
 			this.addHP=data.@addHP;
 			this.addExp=data.@addExp;
 

@@ -10,6 +10,7 @@ package com.leyou.ui.task.child {
 	import com.leyou.data.bag.Baginfo;
 	import com.leyou.data.tips.TipsInfo;
 	import com.leyou.utils.FilterUtil;
+	import com.leyou.utils.PropUtils;
 	
 	import flash.geom.Point;
 
@@ -145,9 +146,9 @@ package com.leyou.ui.task.child {
 			if (_num >= 10000) {
 
 				if (_num / 10000 >= 100) {
-					this.numLbl.text=Math.floor(_num / 10000) + "万";
+					this.numLbl.text=Math.floor(_num / 10000) + PropUtils.getStringById(1532);
 				} else {
-					this.numLbl.text=(int(_num / 10000) + int(parseFloat(((_num / 10000) - int(_num / 10000)).toPrecision(1)) * 10) / 10) + "万";
+					this.numLbl.text=(int(_num / 10000) + int(parseFloat(((_num / 10000) - int(_num / 10000)).toPrecision(1)) * 10) / 10) + PropUtils.getStringById(1532);
 				}
 
 			} else {
@@ -194,18 +195,23 @@ package com.leyou.ui.task.child {
 				return;
 
 			if (this.dataId == 65535) {
-				ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, "金币" + (this.tipsInfo.moneyNum == 0 ? "" : ":" + this.tipsInfo.moneyNum), this.parent.localToGlobal(new Point(this.x + this.width, this.y + this.height)));
+				ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, PropUtils.getStringById(32) + (this.tipsInfo.moneyNum == 0 ? "" : ":" + this.tipsInfo.moneyNum), this.parent.localToGlobal(new Point(this.x + this.width, this.y + this.height)));
 			} else if (this.dataId == 65534) {
-				ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, "经验" + (this.tipsInfo.moneyNum == 0 ? "" : ":" + this.tipsInfo.moneyNum), this.parent.localToGlobal(new Point(this.x + this.width, this.y + this.height)));
+				ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, PropUtils.getStringById(20) + (this.tipsInfo.moneyNum == 0 ? "" : ":" + this.tipsInfo.moneyNum), this.parent.localToGlobal(new Point(this.x + this.width, this.y + this.height)));
 			} else if (this.dataId == 65533) {
-				ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, "魂力" + (this.tipsInfo.moneyNum == 0 ? "" : ":" + this.tipsInfo.moneyNum), this.parent.localToGlobal(new Point(this.x + this.width, this.y + this.height)));
+				ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, PropUtils.getStringById(29) + (this.tipsInfo.moneyNum == 0 ? "" : ":" + this.tipsInfo.moneyNum), this.parent.localToGlobal(new Point(this.x + this.width, this.y + this.height)));
 			} else if (this.dataId == 65531) {
-				ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, "行会贡献" + (this.tipsInfo.moneyNum == 0 ? "" : ":" + this.tipsInfo.moneyNum), this.parent.localToGlobal(new Point(this.x + this.width, this.y + this.height)));
+				ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, PropUtils.getStringById(31) + (this.tipsInfo.moneyNum == 0 ? "" : ":" + this.tipsInfo.moneyNum), this.parent.localToGlobal(new Point(this.x + this.width, this.y + this.height)));
 			} else if (this.dataId == 65532) {
-				ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, "绑定钻石" + (this.tipsInfo.moneyNum == 0 ? "" : ":" + this.tipsInfo.moneyNum), this.parent.localToGlobal(new Point(this.x + this.width, this.y + this.height)));
+				ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, PropUtils.getStringById(33) + (this.tipsInfo.moneyNum == 0 ? "" : ":" + this.tipsInfo.moneyNum), this.parent.localToGlobal(new Point(this.x + this.width, this.y + this.height)));
 			} else {
 				
-				var info:Object=(TableManager.getInstance().getItemInfo(this.dataId) || TableManager.getInstance().getEquipInfo(this.dataId));
+				var info:Object;
+				if(TableManager.getInstance().getItemInfo(this.dataId)==null)
+					info=TableManager.getInstance().getEquipInfo(this.dataId);
+				else
+					info=TableManager.getInstance().getItemInfo(this.dataId);
+				
 				var type:int=TipEnum.TYPE_EMPTY_ITEM;
 				if(info.classid==10){
 					type=TipEnum.TYPE_GEM_OTHER;

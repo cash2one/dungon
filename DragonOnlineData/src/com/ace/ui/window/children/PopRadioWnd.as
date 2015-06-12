@@ -59,6 +59,11 @@ package com.ace.ui.window.children
 			}
 		}
 		
+		public override function show(toTop:Boolean=true, $layer:int=1, toCenter:Boolean=true):void{
+			super.show(toTop, $layer, toCenter);
+			bybRadio.turnOn(false);
+		}
+		
 		public override function update(info:WindInfo):void{
 			contentLbl.htmlText = info.content;
 			ybRadio.text = info.radioTex1;

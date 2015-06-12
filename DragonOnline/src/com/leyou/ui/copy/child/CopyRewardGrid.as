@@ -12,6 +12,7 @@ package com.leyou.ui.copy.child
 	import com.ace.tools.ScaleBitmap;
 	import com.ace.ui.lable.Label;
 	import com.leyou.data.tips.TipsInfo;
+	import com.leyou.utils.PropUtils;
 	
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
@@ -116,9 +117,9 @@ package com.leyou.ui.copy.child
 			if(info.count > 1 && info.count < 10000){
 				numLbl.text = info.count+"";
 			}else if(info.count >= 10000 && info.count < 1000000){
-				numLbl.text = (info.count/10000).toFixed(1) + "万";
+				numLbl.text = (info.count/10000).toFixed(1) + PropUtils.getStringById(1532);
 			}else if(info.count >= 1000000){
-				numLbl.text = int(info.count/10000) + "万";
+				numLbl.text = int(info.count/10000) + PropUtils.getStringById(1532);
 			}else if(info.count <= 0){
 				numLbl.text = "";
 			}

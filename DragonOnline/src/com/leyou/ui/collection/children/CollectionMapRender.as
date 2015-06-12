@@ -43,7 +43,7 @@ package com.leyou.ui.collection.children
 			mouseChildren = true;
 			zdl = new RollNumWidget();
 			zdl.loadSource("ui/num/{num}_lzs.png");
-			zdl.alingRound();
+			zdl.alignRound();
 			addChild(zdl);
 			zdl.x = 385;
 			zdl.y = 388;

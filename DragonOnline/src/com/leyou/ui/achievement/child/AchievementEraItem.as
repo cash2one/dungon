@@ -11,6 +11,7 @@ package com.leyou.ui.achievement.child
 	import com.ace.ui.lable.Label;
 	import com.leyou.data.achievement.AchievementEraData;
 	import com.leyou.data.achievement.AchievementRoleProgressData;
+	import com.leyou.utils.PropUtils;
 	
 	public class AchievementEraItem extends AutoSprite
 	{
@@ -125,13 +126,13 @@ package com.leyou.ui.achievement.child
 			filters = [FilterEnum.enable];
 			var tinfo:TAchievementInfo = TableManager.getInstance().getAchievementInfo(mData.id);
 			if((9 == tinfo.type) || (10 == tinfo.type)){
-				progressLbl.text = "您的达成进度：" + mData.value + "/" + 14;
+				progressLbl.text = PropUtils.getStringById(1581) + mData.value + "/" + 14;
 				progressImg.scaleX = mData.value/14;
 			}else if(7 == tinfo.type){
-				progressLbl.text = "您的达成进度：" + mData.value + "/" + 5;
+				progressLbl.text = PropUtils.getStringById(1581) + mData.value + "/" + tinfo.threshold;
 				progressImg.scaleX = mData.value/5;
 			}else{
-				progressLbl.text = "您的达成进度：" + mData.value + "/" + tinfo.threshold;
+				progressLbl.text = PropUtils.getStringById(1581) + mData.value + "/" + tinfo.threshold;
 				progressImg.scaleX = mData.value/tinfo.threshold;
 			}
 		}

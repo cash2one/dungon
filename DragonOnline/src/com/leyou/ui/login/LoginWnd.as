@@ -216,22 +216,32 @@ package com.leyou.ui.login {
 //			
 //			this.userNameTinput.text="http://192.168.10.16/dragon/game/?qid=1102&server_id=dev1&time=1417147509&sign=6ee50c094380a9da79056a709ceb4986&isAdult=1&lgn|Puserid=1102,svrid=dev1,fcm=1,timestamp=1417147509,sign=84e759dae28496886e1ba797056d8792";
 		
-			this.userNameTinput.text="http://192.168.10.16/dragon/game/?qid=1539&server_id=dev1&time=1418786810&sign=0c95ab39f298789cffe184adc53d8b2f&isAdult=1&lgn|Puserid=1539,svrid=dev1,fcm=1,timestamp=1418786810,sign=09d1b51d3bc3e91f502dfbd235185c59";
+//			this.userNameTinput.text="http://192.168.10.16/dragon/game/?qid=1539&server_id=dev1&time=1418786810&sign=0c95ab39f298789cffe184adc53d8b2f&isAdult=1&lgn|Puserid=1539,svrid=dev1,fcm=1,timestamp=1418786810,sign=09d1b51d3bc3e91f502dfbd235185c59";
 //			this.userNameTinput.text="http://192.168.10.16/dragon/game/?qid=1549&server_id=dev1&time=1418788737&sign=b25c981bfe87ce2ec3616b05e64ee162&isAdult=1&lgn|Puserid=1549,svrid=dev1,fcm=1,timestamp=1418788737,sign=30084936c91ee5640f4fa1f7585cb27d";
 //			this.userNameTinput.text="http://192.168.10.16/dragon/game/?qid=1619&server_id=dev1&time=1418898705&sign=71ddaa1f42218413c3face9f751262da&isAdult=1&lgn|Puserid=1619,svrid=dev1,fcm=1,timestamp=1418898705,sign=c1b80d028ae3a3c3240b2a42e9cda937";
-			this.userNameTinput.text="http://192.168.10.16/dragon/game/?qid=1624&server_id=dev1&time=1418954015&sign=cbee93a0e61d0d6d168ed0a072e55f38&isAdult=1&lgn|Puserid=1624,svrid=dev1,fcm=1,timestamp=1418954015,sign=65f23616fbed52b481fcc1e26640f585";
-//			this.userNameTinput.text="http://192.168.10.16/dragon/game/?qid=1642&server_id=dev1&time=1419063268&sign=aa8017b85bb6505f410fbe903a1f67eb&isAdult=1&lgn|Puserid=1642,svrid=dev1,fcm=1,timestamp=1419063268,sign=9954ce95ca04e8037465dd74912e4489";
-//			this.userNameTinput.text="http://192.168.10.16/dragon/game/?qid=681&server_id=dev1&time=1419212488&sign=0f1e0a9ca77b37f566a11c2875096a7b&isAdult=1&lgn|Puserid=681,svrid=dev1,fcm=1,timestamp=1419212488,sign=ff075627923238fc3ace428d2ca2166b";
+//			this.userNameTinput.text="http://192.168.10.16/dragon/game/?qid=1624&server_id=dev1&time=1418954015&sign=cbee93a0e61d0d6d168ed0a072e55f38&isAdult=1&lgn|Puserid=1624,svrid=dev1,fcm=1,timestamp=1418954015,sign=65f23616fbed52b481fcc1e26640f585";
+			this.userNameTinput.text="http://192.168.10.16/dragon/game/?qid=1642&server_id=dev1&time=1419063268&sign=aa8017b85bb6505f410fbe903a1f67eb&isAdult=1&lgn|Puserid=1642,svrid=dev1,fcm=1,timestamp=1419063268,sign=9954ce95ca04e8037465dd74912e4489";
+			this.userNameTinput.text="http://192.168.10.16/dragon/game/?qid=681&server_id=dev1&time=1419212488&sign=0f1e0a9ca77b37f566a11c2875096a7b&isAdult=1&lgn|Puserid=681,svrid=dev1,fcm=1,timestamp=1419212488,sign=ff075627923238fc3ace428d2ca2166b";
 //			this.userNameTinput.text="http://192.168.10.16/dragon/game/?qid=1686&server_id=dev1&time=1419485228&sign=89c407b49cf41d6f7d7e3bce84143cf8&isAdult=1&lgn|Puserid=1686,svrid=dev1,fcm=1,timestamp=1419485228,sign=5b8f5f890949c9e4a2fa521fc7ac5373";
 //			this.userNameTinput.text="http://192.168.10.16/dragon/game/?qid=dev1658&server_id=dev1&time=1421829809&sign=a31db4300a4deb0e18ec20af53f8ea4f&isAdult=1&key=dev";
+//			this.userNameTinput.text="http://192.168.10.16/dragon/game/?qid=devasda12312&server_id=dev1&time=1432093959&sign=e0c1f6662e6675e654f91965b9e2f09a&isAdult=1&key=dev";
 			
 //			this.userNameTinput.text="http://192.168.10.16/dragon/game/?qid=dev1&server_id=dev1&time=1421921870&sign=ebe377a101c8c3db6f952ee757c64d4a&isAdult=1&key=dev";
 //			this.userNameTinput.text="lgn|Puserid=dev1741,svrid=dev1,fcm=1,timestamp=1422525279,sign=62624af1b8b3e11691d6d0e0a6bf9e25";
 //			this.userNameTinput.text="lgn|Puserid=dev4,svrid=dev1,fcm=1,timestamp=1423110393,sign=6d683b45e6f6f20e46b15af2d345e575";
 //			this.userNameTinput.text="lgn|Puserid=dev1,svrid=dev1,fcm=1,timestamp=1423899976,sign=02b5b561968659fb0a06b579c542d9b0";
 //			this.userNameTinput.text="lgn|Puserid=dev,svrid=dev1,fcm=1,timestamp=1424922535,sign=50e02f559e89fbd199153d3db2be0d7c";
-//			this.userNameTinput.text="lgn|Puserid=dev52,svrid=dev1,fcm=1,timestamp=1425110846,sign=571637d74a4babd04f4a0cf25a211642";
-//			this.userNameTinput.text="lgn|Puserid=dev,svrid=dev1,fcm=1,timestamp=1425173971,sign=2d6c7ecaac6b6625a4292576fbeaa64c";
+			this.userNameTinput.text="lgn|Puserid=dev52,svrid=dev1,fcm=1,timestamp=1425110846,sign=571637d74a4babd04f4a0cf25a211642";
+			this.userNameTinput.text="lgn|Puserid=dev,svrid=dev1,fcm=1,timestamp=1425173971,sign=2d6c7ecaac6b6625a4292576fbeaa64c";
+//			this.userNameTinput.text="lgn|Puserid=dev1,svrid=dev1,fcm=1,timestamp=1426833186,sign=813e707f3c614a17a561c1057c557d28";
+//			this.userNameTinput.text="lgn|Puserid=dev,svrid=dev1,fcm=1,timestamp=1427253052,sign=9247b08c6252f0127eb39a789f9b4bab";
+//			this.userNameTinput.text="lgn|Puserid=devs1,svrid=dev1,fcm=1,timestamp=1430391276,sign=f9c90333852b94bce4e9124a766747eb";
+//			this.userNameTinput.text="lgn|Puserid==dev1,svrid=dev1,fcm=1,timestamp=1432110082,sign=cb0a7c0853229dcfccb72d15189678f9";
+			this.userNameTinput.text="lgn|Puserid=devxh002,svrid=dev1,fcm=1,timestamp=1434106640,sign=ae0d1982c583391117f302b6dfc16e6f";
+			this.userNameTinput.text="lgn|Puserid=devxh003,svrid=dev1,fcm=1,timestamp=1434107054,sign=690bc6dc6d6e60d3e6386e0339d7fac5";
+			
+//			this.userNameTinput.text="http://192.168.10.16/dragon/game/?ip=192.168.10.88?port=9932?lgn|Puserid=dev1212,svrid=dev1,fcm=1,timestamp=1431419816,sign=50c13694517e451a564b2486d533f394";
+//			this.userNameTinput.text="lgn|Puserid=dev2,svrid=dev1,fcm=1,timestamp=1433939439,sign=07aa684b730b5e8a821126cddfb43aae";
 			
 			if (Core.webId && Core.webId != "") {
 				this.userNameTinput.text=Core.webId;

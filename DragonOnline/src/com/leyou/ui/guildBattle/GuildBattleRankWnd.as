@@ -20,7 +20,7 @@ package com.leyou.ui.guildBattle
 		
 		private var memberRankRender:GuildBattleMemRankRender;
 		
-		private var guildMemberRankRender:GuildBattleGuildMemRankRender;
+//		private var guildMemberRankRender:GuildBattleGuildMemRankRender; // 去掉第一行会排名奖励
 		
 		private var _currentIdx:int;
 		
@@ -37,19 +37,20 @@ package com.leyou.ui.guildBattle
 			
 			guildRankRender = new GuildBattleGuildRankRender();
 			memberRankRender = new GuildBattleMemRankRender();
-			guildMemberRankRender = new GuildBattleGuildMemRankRender();
-			guildBattleReward.addToTab(guildRankRender, 0);
-			guildBattleReward.addToTab(memberRankRender, 1);
-			guildBattleReward.addToTab(guildMemberRankRender, 2);
+//			guildMemberRankRender = new GuildBattleGuildMemRankRender();
+			guildBattleReward.addToTab(guildRankRender, 1);
+			guildBattleReward.addToTab(memberRankRender, 0);
+//			guildBattleReward.addToTab(guildMemberRankRender, 2);
 			guildBattleReward.addEventListener(TabbarModel.changeTurnOnIndex, onTabClick);
 			
 			guildRankRender.x = -12;
 			guildRankRender.y = 2;
 			memberRankRender.x = -12;
 			memberRankRender.y = 2;
-			guildMemberRankRender.x = -12;
-			guildMemberRankRender.y = 2;
+//			guildMemberRankRender.x = -12;
+//			guildMemberRankRender.y = 2;
 			guildBattleReward.y += 5;
+//			guildBattleReward.setTabVisible(2, false);
 		}
 		
 		public override function get width():Number{
@@ -74,7 +75,7 @@ package com.leyou.ui.guildBattle
 			}else if(2 == data.type){
 				guildRankRender.updateDetailInfo(data);
 			}else if(3 == data.type){
-				guildMemberRankRender.updateDetailInfo(data);
+//				guildMemberRankRender.updateDetailInfo(data);
 			}
 		}
 	}

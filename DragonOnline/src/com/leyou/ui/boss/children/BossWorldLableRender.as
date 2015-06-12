@@ -15,6 +15,7 @@ package com.leyou.ui.boss.children
 	import com.greensock.TweenLite;
 	import com.leyou.data.fieldboss.FieldBossInfo;
 	import com.leyou.net.cmd.Cmd_Go;
+	import com.leyou.utils.PropUtils;
 	
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
@@ -131,7 +132,7 @@ package com.leyou.ui.boss.children
 			}else if(1 == bData.status){
 				// 已刷新
 				refreshTLbl.textColor = 0xff00;
-				refreshTLbl.text = "已刷新";
+				refreshTLbl.text = PropUtils.getStringById(1650);
 			}
 			bgImg.updateBmp("ui/boss/"+bossInfo.bgPic);
 		}

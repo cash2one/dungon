@@ -12,6 +12,7 @@ package com.leyou.ui.welfare.child.component
 	import com.leyou.data.calendar.DayInfo;
 	import com.leyou.data.calendar.MonthInfo;
 	import com.leyou.enum.CalendarEnum;
+	import com.leyou.enum.ConfigEnum;
 	import com.leyou.manager.PopupManager;
 	import com.leyou.net.cmd.Cmd_Welfare;
 	import com.leyou.utils.PayUtil;
@@ -93,8 +94,8 @@ package com.leyou.ui.welfare.child.component
 				if(signC < signVC){
 					if(CalendarEnum.SIGN_STATUS_REFIT == dayInfo.signStatus){
 						var cc:String = TableManager.getInstance().getSystemNotice(5301).content;
-						cc = StringUtil.substitute(cc, getCost());
-						PopupManager.showConfirm(cc, sign, null, false, "calender.sign");
+//						cc = StringUtil.substitute(cc, getCost());
+						PopupManager.showRadioConfirm(cc, ConfigEnum.welfare11.split("|")[0], ConfigEnum.welfare11.split("|")[1], sign, null, false, "calender.sign");
 					}else if(day == currentDay){
 						sign();
 					}
@@ -111,8 +112,8 @@ package com.leyou.ui.welfare.child.component
 			PayUtil.openPayUrl();
 		}
 		
-		private function getCost():int{
-			return UIManager.getInstance().welfareWnd.getCost();
+//		private function getCost():int{
+//			return UIManager.getInstance().welfareWnd.getCost();
 //			var dd:int = currentDay - day;
 //			switch(dd){
 //				case 1:
@@ -131,10 +132,11 @@ package com.leyou.ui.welfare.child.component
 //					return ConfigEnum.welfare17;
 //			}
 //			return 0;
-		}
+//		}
 		
-		protected function sign():void{
-			Cmd_Welfare.cm_SIGN_S(day);
+		protected function sign(type:int=0):void{
+			var rtype:int = ((0 == type) ? 1 : 0);
+			Cmd_Welfare.cm_SIGN_S(day,rtype);
 		}
 		
 		public function updataInfo(monthInfo:MonthInfo, dayIndex:int):void{

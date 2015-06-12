@@ -3,7 +3,7 @@ package com.leyou.ui.copy
 	import com.ace.manager.GuideManager;
 	import com.ace.manager.LibManager;
 	import com.ace.manager.UIManager;
-	import com.ace.ui.auto.AutoWindow;
+	import com.ace.ui.auto.AutoSprite;
 	import com.ace.ui.button.children.ImgButton;
 	import com.leyou.enum.TaskEnum;
 	import com.leyou.net.cmd.Cmd_SCP;
@@ -16,7 +16,7 @@ package com.leyou.ui.copy
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 
-	public class StoryCopyView extends AutoWindow
+	public class StoryCopyView extends AutoSprite
 	{
 		protected static const GRID_COUNT:int = 4;
 		
@@ -54,8 +54,8 @@ package com.leyou.ui.copy
 			allPastBtn.addEventListener(MouseEvent.CLICK, onButtonClick);
 			copyPannel = new Sprite();
 			copyPannel.mouseEnabled = false;
-			copyPannel.x = 75;
-			copyPannel.y = 93;
+			copyPannel.x = 74;
+			copyPannel.y = 10;
 			copyPannel.scrollRect = new Rectangle(0, 0, 600, 280);
 			addChild(copyPannel);
 			items = new Vector.<CopyItem>();
@@ -63,23 +63,25 @@ package com.leyou.ui.copy
 			grids = new Vector.<CopyRewardGrid>();
 			for(var n:int = 0; n < GRID_COUNT; n++){
 				var grid:CopyRewardGrid = new CopyRewardGrid();
-				grid.x = 190 + n*45;
-				grid.y = 425;
+				grid.x = 182 + n*45;
+				grid.y = 337;
 				addChild(grid);
 				grids.push(grid);
 			}
-			hideBg();
+			
+			x = -29;
+			y = 3;
 		}
 		
-		public override function show(toTop:Boolean=true, $layer:int=1, toCenter:Boolean=true):void{
-			super.show(toTop, $layer, toCenter);
-			Cmd_SCP.cm_SCP_I();
-			GuideManager.getInstance().showGuide(30, this);
-			GuideManager.getInstance().removeGuide(28);
-			GuideManager.getInstance().removeGuide(29);
-			
-			UIManager.getInstance().taskTrack.setGuideViewhide(TaskEnum.taskType_CopySuccess);
-		}
+//		public override function show(toTop:Boolean=true, $layer:int=1, toCenter:Boolean=true):void{
+//			super.show(toTop, $layer, toCenter);
+//			Cmd_SCP.cm_SCP_I();
+//			GuideManager.getInstance().showGuide(30, this);
+//			GuideManager.getInstance().removeGuide(28);
+//			GuideManager.getInstance().removeGuide(29);
+//			
+//			UIManager.getInstance().taskTrack.setGuideViewhide(TaskEnum.taskType_CopySuccess);
+//		}
 		
 		public override function hide():void{
 			super.hide();

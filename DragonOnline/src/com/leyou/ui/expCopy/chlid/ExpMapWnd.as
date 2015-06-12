@@ -12,6 +12,7 @@ package com.leyou.ui.expCopy.chlid
 	import com.ace.ui.img.child.Image;
 	import com.ace.ui.lable.Label;
 	import com.leyou.net.cmd.Cmd_EXPC;
+	import com.leyou.utils.PropUtils;
 	
 	import flash.events.MouseEvent;
 	
@@ -23,15 +24,15 @@ package com.leyou.ui.expCopy.chlid
 		
 		private var previewImg:Image;  
 		
-		private var desLbl:Label;
+//		private var desLbl:Label;
 		
-		private var rateLbl:Label;
+//		private var rateLbl:Label;
 		
-		private var priceLbl:Label;
+//		private var priceLbl:Label;
 		
-		private var costLbl:Label;
+//		private var costLbl:Label;
 		
-		private var moneyImg:Image;
+//		private var moneyImg:Image;
 		
 		private var buttons:Vector.<ExpCopyButton>;
 		
@@ -42,11 +43,11 @@ package com.leyou.ui.expCopy.chlid
 		
 		private function init():void{
 			previewImg = getUIbyID("previewImg") as Image;
-			moneyImg = getUIbyID("moneyImg") as Image;
-			costLbl = getUIbyID("costLbl") as Label;
-			rateLbl = getUIbyID("rateLbl") as Label;
-			desLbl = getUIbyID("desLbl") as Label;
-			priceLbl = getUIbyID("priceLbl") as Label;
+//			moneyImg = getUIbyID("moneyImg") as Image;
+//			costLbl = getUIbyID("costLbl") as Label;
+//			rateLbl = getUIbyID("rateLbl") as Label;
+//			desLbl = getUIbyID("desLbl") as Label;
+//			priceLbl = getUIbyID("priceLbl") as Label;
 			buttons = new Vector.<ExpCopyButton>(POINTS_MAX_NUM);
 			hideBg();
 			clsBtn.x -= 6;
@@ -56,12 +57,12 @@ package com.leyou.ui.expCopy.chlid
 		public function loadMap($copyId:int):void{
 			copyId = $copyId;
 			var copyInfo:TExpCopyInfo = TableManager.getInstance().getExpCopyInfo(copyId);
-			desLbl.visible = (copyInfo.moneyCost > 0);
-			rateLbl.visible = (copyInfo.moneyCost > 0);
-			costLbl.visible = (copyInfo.moneyCost > 0);
-			moneyImg.visible = (copyInfo.moneyCost > 0);
-			priceLbl.visible = (copyInfo.moneyCost > 0);
-			priceLbl.text = int(Math.pow(Core.me.info.level/45, 2) * copyInfo.moneyCost) + "/分钟";
+//			desLbl.visible = (copyInfo.moneyCost > 0);
+//			rateLbl.visible = (copyInfo.moneyCost > 0);
+//			costLbl.visible = (copyInfo.moneyCost > 0);
+//			priceLbl.visible = (copyInfo.moneyCost > 0);
+//			priceLbl.text = int(Math.pow(Core.me.info.level/45, 2) * copyInfo.moneyCost) + "/"+PropUtils.getStringById(1698);
+//			moneyImg.visible = (copyInfo.moneyCost > 0);
 			
 			var sceneInfo:TSceneInfo = TableManager.getInstance().getSceneInfo(copyInfo.sceneId+"");
 			var sUlr:String = PlayerEnum.URL_SCENE + sceneInfo.mapRes + "/map.jpg";

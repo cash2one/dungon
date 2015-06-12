@@ -26,6 +26,7 @@ package com.leyou.ui.vip
 	import com.leyou.net.cmd.Cmd_Vip;
 	import com.leyou.ui.vip.child.VipSkillGrid;
 	import com.leyou.util.ZDLUtil;
+	import com.leyou.utils.PropUtils;
 	
 	import flash.display.Sprite;
 	import flash.events.Event;
@@ -56,9 +57,9 @@ package com.leyou.ui.vip
 		
 		private var phAttAddLbl:Label;
 		
-		private var magicAttAddLbl:Label;
-		
-		private var magicDefAddLbl:Label;
+//		private var magicAttAddLbl:Label;
+//		
+//		private var magicDefAddLbl:Label;
 		
 		private var phDefAddLbl:Label;
 		
@@ -76,11 +77,11 @@ package com.leyou.ui.vip
 		
 		private var guaidLvAddLbl:Label;
 		
-		private var magicAttLbl:Label;
+//		private var magicAttLbl:Label;
 		
 		private var phDefLbl:Label;
 		
-		private var magicDefLbl:Label;
+//		private var magicDefLbl:Label;
 		
 		private var hpLbl:Label;
 		
@@ -122,7 +123,7 @@ package com.leyou.ui.vip
 			num = new RollNumWidget();
 			num.loadSource("ui/num/{num}_zdl.png");
 			addChild(num);
-			num.alingRound();
+			num.alignRound();
 			num.x = 140;
 			num.y = 410;
 			movie = new SwfLoader();
@@ -142,8 +143,8 @@ package com.leyou.ui.vip
 			leftBtn = getUIbyID("leftBtn") as ImgButton;
 			phAttLbl = getUIbyID("phAttLbl") as Label;
 			phAttAddLbl = getUIbyID("phAttAddLbl") as Label;
-			magicAttAddLbl = getUIbyID("magicAttAddLbl") as Label;
-			magicDefAddLbl = getUIbyID("magicDefAddLbl") as Label;
+//			magicAttAddLbl = getUIbyID("magicAttAddLbl") as Label;
+//			magicDefAddLbl = getUIbyID("magicDefAddLbl") as Label;
 			phDefAddLbl = getUIbyID("phDefAddLbl") as Label;
 			hpAddLbl = getUIbyID("hpAddLbl") as Label;
 			critLvAddLbl = getUIbyID("critLvAddLbl") as Label;
@@ -152,9 +153,9 @@ package com.leyou.ui.vip
 			dodgeLvAddLbl = getUIbyID("dodgeLvAddLbl") as Label;
 			killLvAddLbl = getUIbyID("killLvAddLbl") as Label;
 			guaidLvAddLbl = getUIbyID("guaidLvAddLbl") as Label;
-			magicAttLbl = getUIbyID("magicAttLbl") as Label;
+//			magicAttLbl = getUIbyID("magicAttLbl") as Label;
 			phDefLbl = getUIbyID("phDefLbl") as Label;
-			magicDefLbl = getUIbyID("magicDefLbl") as Label;
+//			magicDefLbl = getUIbyID("magicDefLbl") as Label;
 			hpLbl = getUIbyID("hpLbl") as Label;
 			critLvLbl = getUIbyID("critLvLbl") as Label;
 			toughLvLbl = getUIbyID("toughLvLbl") as Label;
@@ -239,8 +240,8 @@ package com.leyou.ui.vip
 			var rate:Number = (nvipDetail.rate-vipDetail.rate)*0.01;
 			phAttAddLbl.text = "+"+int(vipAttribute.phyAtt*rate);
 			hpAddLbl.text = "+"+int(vipAttribute.hp*rate);
-			magicAttAddLbl.text = "+"+int(vipAttribute.maigcAtt*rate);
-			magicDefAddLbl.text = "+"+int(vipAttribute.magicDef*rate);
+//			magicAttAddLbl.text = "+"+int(vipAttribute.maigcAtt*rate);
+//			magicDefAddLbl.text = "+"+int(vipAttribute.magicDef*rate);
 			phDefAddLbl.text = "+"+int(vipAttribute.phyDef*rate);
 			critLvAddLbl.text = "+"+int(vipAttribute.crit*rate);
 			toughLvAddLb.text = "+"+int(vipAttribute.tenacity*rate);
@@ -397,9 +398,9 @@ package com.leyou.ui.vip
 				guard += rideBless.guard;
 			}
 			phAttLbl.text = phyAtt+"";
-			magicAttLbl.text = magicAtt+"";
+//			magicAttLbl.text = magicAtt+"";
 			phDefLbl.text = phDef+"";
-			magicDefLbl.text = magicDef+"";
+//			magicDefLbl.text = magicDef+"";
 			hpLbl.text = hp+"";
 			critLvLbl.text = crit+"";
 			toughLvLbl.text = tough+"";
@@ -407,7 +408,7 @@ package com.leyou.ui.vip
 			dodgeLvLbl.text = dodge+"";
 			killLvLbl.text = slay+"";
 			guardLvLbl.text = guard+"";
-			var zdl:int = ZDLUtil.computation(hp, 0, phyAtt, phDef, magicAtt, magicDef, crit, tough, hit, dodge, slay, guard);
+			var zdl:int = ZDLUtil.computation(hp, 0, phyAtt, phDef, magicAtt, magicDef, crit, tough, hit, dodge, slay, guard, 0, 0);
 			num.setNum(zdl);
 			setBless(false);
 			setBtnText();
@@ -433,7 +434,7 @@ package com.leyou.ui.vip
 		}
 		
 		public function setBtnText():void{
-			var btnText:String = (currentLv==Core.me.info.vipEquipId) ? "隐藏" : "显示";
+			var btnText:String = (currentLv==Core.me.info.vipEquipId) ? PropUtils.getStringById(1975) : PropUtils.getStringById(1976);
 			showBtn.text = btnText;
 		}
 		
@@ -454,8 +455,8 @@ package com.leyou.ui.vip
 		private function setBless(value:Boolean):void{
 			phAttAddLbl.visible = value;
 			hpAddLbl.visible = value;
-			magicAttAddLbl.visible = value;
-			magicDefAddLbl.visible = value;
+//			magicAttAddLbl.visible = value;
+//			magicDefAddLbl.visible = value;
 			phDefAddLbl.visible = value;
 			critLvAddLbl.visible = value;
 			toughLvAddLb.visible = value;

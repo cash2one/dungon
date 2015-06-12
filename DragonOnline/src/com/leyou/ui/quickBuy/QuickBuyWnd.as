@@ -5,6 +5,7 @@ package com.leyou.ui.quickBuy
 	import com.ace.gameData.manager.MyInfoManager;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.table.TItemInfo;
+	import com.ace.gameData.table.TMarketInfo;
 	import com.ace.manager.LibManager;
 	import com.ace.manager.UILayoutManager;
 	import com.ace.manager.UIManager;
@@ -145,14 +146,14 @@ package com.leyou.ui.quickBuy
 			}
 		}
 		
-		protected function getMaxCount(itemId:int, price:int):int{
+		protected function getMaxCount(itemId:int, price:int, quckInfo:QuickBuyInfo):int{
 			var yb:int = UIManager.getInstance().backpackWnd.yb;
 			var byb:int = UIManager.getInstance().backpackWnd.byb;
 			var freeBagNum:int = MyInfoManager.getInstance().getBagEmptyNum();
 			
 			var itTable:TItemInfo = TableManager.getInstance().getItemInfo(itemId);
 			var maxCount:int = itTable.maxgroup * freeBagNum;
-			var tmpCount:int = (0 == itTable.bind) ? yb/price : byb/price;
+			var tmpCount:int = quckInfo.isBind ? byb/price : yb/price;
 			if(maxCount > tmpCount){
 				maxCount = tmpCount;
 			}
@@ -293,6 +294,9 @@ package com.leyou.ui.quickBuy
 				showItem(itemInfoB);
 				return;
 			}
+			if((itemInfo && !itemInfo.select) && (itemInfoB && !itemInfoB.select)){
+				showItem(itemInfo);
+			}
 		}
 		
 		private function showItem(info:QuickBuyInfo):void{
@@ -346,7 +350,7 @@ package com.leyou.ui.quickBuy
 			var color:int = ItemUtil.getColorByQuality(currentItem.quality);
 			nameLbl.htmlText = "<Font face='SimSun' size = '16' color='#"+ color.toString(16).replace("0x") + "'>" + currentItem.name+ "</Font>";
 			numStep.minimum = 1;
-			numStep.maximum = getMaxCount(info.itemId, info.price);
+			numStep.maximum = getMaxCount(info.itemId, info.price, info);
 			numStep.value = 1;
 			numSlider.progress = 0;
 			maxCount = numStep.maximum;
@@ -453,11 +457,12 @@ package com.leyou.ui.quickBuy
 				}
 				var price:uint = list[n][1];
 				var item:TItemInfo = TableManager.getInstance().getItemInfo(itemId);
+				var mitem:TMarketInfo = TableManager.getInstance().getMarketItem(itemId);
 				var info:QuickBuyInfo = new QuickBuyInfo();
 				info.name = item.name;
 				info.itemId = itemId;
 				info.price = price;
-				info.isBind = false;
+				info.isBind = mitem.isBind();
 				info.quality = int(item.quality);
 				items.push(info);
 				if(info.isBind){

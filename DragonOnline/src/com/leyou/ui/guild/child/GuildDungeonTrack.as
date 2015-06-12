@@ -20,7 +20,8 @@ package com.leyou.ui.guild.child {
 	import com.leyou.net.cmd.Cmd_Ucp;
 	import com.leyou.ui.question.childs.QuestionBtn;
 	import com.leyou.ui.question.childs.QuestionQBtn;
-
+	import com.leyou.utils.PropUtils;
+	
 	import flash.events.MouseEvent;
 
 	public class GuildDungeonTrack extends AutoSprite {
@@ -91,7 +92,7 @@ package com.leyou.ui.guild.child {
 						color="#ff0000";
 
 					render=new Label();
-					render.htmlText="击杀：" + TableManager.getInstance().getLivingInfo(obj.mid).name + "<font color='" + color + "'>(" + obj.cc + "/" + obj.mc + ")</font>";
+					render.htmlText=PropUtils.getStringById(1674)+"：" + TableManager.getInstance().getLivingInfo(obj.mid).name + "<font color='" + color + "'>(" + obj.cc + "/" + obj.mc + ")</font>";
 
 //					render.x=10;
 					render.y=i * render.height;

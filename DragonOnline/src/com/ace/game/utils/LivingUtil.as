@@ -55,7 +55,8 @@ package com.ace.game.utils {
 				} else {
 					// tid 是2014时是boss副本的宝箱
 					rareBoxidTag=living.info.idTag;
-					var content:String=TableManager.getInstance().getSystemNotice(4405).content;
+					var cid:int = (Core.isSF ? 30001 : 4405);
+					var content:String=TableManager.getInstance().getSystemNotice(cid).content;
 					content=StringUtil.substitute(content, ConfigEnum.BossBoxOpenCost);
 					PopupManager.showConfirm(content, onClickRareBox, null, false, "rareBox.click");
 				}

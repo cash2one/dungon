@@ -6,6 +6,7 @@ package com.leyou.ui.backpack {
 	import com.ace.enum.SceneEnum;
 	import com.ace.enum.UIEnum;
 	import com.ace.enum.WindowEnum;
+	import com.ace.game.manager.SceneKeyManager;
 	import com.ace.game.scene.player.big.BigAvatar;
 	import com.ace.gameData.manager.MapInfoManager;
 	import com.ace.gameData.manager.MyInfoManager;
@@ -16,6 +17,7 @@ package com.leyou.ui.backpack {
 	import com.ace.manager.UILayoutManager;
 	import com.ace.manager.UIManager;
 	import com.ace.ui.map.MapWnd;
+	import com.greensock.TweenMax;
 	import com.leyou.enum.ConfigEnum;
 	import com.leyou.manager.PopupManager;
 	import com.leyou.net.cmd.Cmd_Bag;
@@ -41,7 +43,7 @@ package com.leyou.ui.backpack {
 
 			EventManager.getInstance().addEvent(EventEnum.SCENE_LOADED, onComplete);
 		}
- 
+
 		private function onComplete():void {
 
 			if (SceneEnum.SCENE_TYPE_JSC == MapInfoManager.getInstance().type) {
@@ -55,6 +57,11 @@ package com.leyou.ui.backpack {
 					UIManager.getInstance().creatWindow(WindowEnum.ARENA);
 
 				UIManager.getInstance().arenaWnd.setQuitBtnVisible(true);
+//				Core.me.info.isActLocked=true;
+				Cmd_Mount.cmMouUpOrDown();
+				SceneKeyManager.getInstance().sceneInput(false);
+				if (Core.me != null)
+					Core.me.onAutoMonster();
 				MapWnd.getInstance().hideSwitch();
 			} else if (SceneEnum.SCENE_TYPE_RQCJ == MapInfoManager.getInstance().type) {
 				UIManager.getInstance().smallMapWnd.switchToType(2);
@@ -155,6 +162,7 @@ package com.leyou.ui.backpack {
 
 		}
 
+
 		public function setPlayGuideWingItem():void {
 			var num:int=MyInfoManager.getInstance().getBagItemNumById(ConfigEnum.WingItem) + MyInfoManager.getInstance().getBagItemNumById(ConfigEnum.WingbindItem);
 
@@ -184,7 +192,7 @@ package com.leyou.ui.backpack {
 			}
 		}
 
-		public function resise():void {
+		public function resize():void {
 
 			this.x=(UIEnum.WIDTH - this.width) / 2;
 			this.y=(UIEnum.HEIGHT - this.height) / 2;

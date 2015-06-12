@@ -47,7 +47,17 @@
     <classEntry path="com.ace.gameData.table.TQQVipLvRewardInfo"/>
     <classEntry path="com.ace.gameData.table.TCollectionPreciousInfo"/>
     <classEntry path="com.ace.gameData.table.TAbidePayInfo"/>
-    <classEntry path="com.ace.gameData.table.TWing_Trade"/>
+    <classEntry path="com.ace.gameData.table.TSuit"/>
+    <classEntry path="com.ace.gameData.table.TIcebattleReward"/>
+    <classEntry path="com.ace.gameData.table.TLegendaryWeaponInfo"/>
+    <classEntry path="com.ace.gameData.table.TAttributeInfo"/>
+    <classEntry path="com.ace.gameData.table.TMarketInfo"/>
+    <classEntry path="com.ace.gameData.table.TPetInfo"/>
+    <classEntry path="com.ace.gameData.table.TPetStarInfo"/>
+    <classEntry path="com.ace.gameData.table.TPetAttackInfo"/>
+    <classEntry path="com.ace.gameData.table.TPetSkillInfo"/>
+    <classEntry path="com.ace.gameData.table.TPetFriendlyInfo"/>
+
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

@@ -1,10 +1,12 @@
 package com.leyou.ui.welfare.child.page
 {
+	import com.ace.config.Core;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.table.TLevelGiftInfo;
 	import com.ace.manager.LibManager;
 	import com.ace.ui.auto.AutoSprite;
 	import com.leyou.ui.welfare.child.component.WelfareLvRender;
+
 	/**
 	 * 福利等级奖励分页
 	 * @author wfh
@@ -42,7 +44,11 @@ package com.leyou.ui.welfare.child.page
 				render = new WelfareLvRender();
 				addChild(render);
 				render.x = 5;
-				render.y = 5 + (level/10-1)*62;
+				if(Core.isSF){
+					render.y = 5 + (level/10-2)*62;
+				}else{
+					render.y = 5 + (level/10-1)*62;
+				}
 				renders[level] = render;
 			}
 			return render;

@@ -40,5 +40,11 @@ package com.leyou.enum
 		public static const ELEMENT:int = 17;
 		
 		public static const GUlID:int = 10;
+		
+		public static const SERVENT:int = 50;
+		
+		public static const FARM:int = 51;
+		
+		public static const COLLECTION:int = 52;
 	}
 }

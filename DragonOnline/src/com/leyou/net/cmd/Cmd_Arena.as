@@ -104,8 +104,8 @@ package com.leyou.net.cmd {
 
 *
 */
-		public static function cm_ArenaBuyPkCount():void {
-			NetGate.getInstance().send(CmdEnum.CM_JJC_Z);
+		public static function cm_ArenaBuyPkCount(type:int):void {
+			NetGate.getInstance().send(CmdEnum.CM_JJC_Z+type);
 		}
 
 		/**
@@ -115,8 +115,8 @@ package com.leyou.net.cmd {
 下行:jjc|{"mk":"I".....
 *
 */
-		public static function cm_ArenaBuyFreeCount(num:int):void {
-			NetGate.getInstance().send(CmdEnum.CM_JJC_A + num);
+		public static function cm_ArenaBuyFreeCount(num:int,type:int):void {
+			NetGate.getInstance().send(CmdEnum.CM_JJC_A + num+","+type);
 		}
 
 
@@ -128,8 +128,8 @@ package com.leyou.net.cmd {
 
 *
 */
-		public static function cm_ArenaRefresh():void {
-			NetGate.getInstance().send(CmdEnum.CM_JJC_F);
+		public static function cm_ArenaRefresh(type:int):void {
+			NetGate.getInstance().send(CmdEnum.CM_JJC_F+type);
 		}
 
 		/**

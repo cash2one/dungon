@@ -423,8 +423,8 @@ package com.leyou.net.cmd {
 					if (UIManager.getInstance().vipWnd) {
 						UIManager.getInstance().vipWnd.updateVipLv();
 					}
-					if (UIManager.getInstance().storyCopyWnd) {
-						UIManager.getInstance().storyCopyWnd.updateVipLv();
+					if (UIManager.getInstance().teamCopyWnd) {
+						UIManager.getInstance().teamCopyWnd.storyCopy.updateVipLv();
 					}
 				} else {
 					IS_FIRST_LOGIN=true; // 读取缓存配置

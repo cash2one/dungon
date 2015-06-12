@@ -19,20 +19,20 @@ package com.leyou.ui.aution.child {
 
 		public var nameLbl:Label;
 		private var goldLbl:Label;
-		private var ybLbl:Label;
+//		private var ybLbl:Label;
 //		private var typeCb:ComboBox;
 		private var goldTxt:TextInput;
 		private var confirmBtn:NormalButton;
-		private var moneyImg:Image;
+//		private var moneyImg:Image;
 		private var selectMoneyImg:Image;
-		private var jbBtn:RadioButton;
-		private var ybBtn:RadioButton;
-		private var ybImg:Image;
+//		private var jbBtn:RadioButton;
+//		private var ybBtn:RadioButton;
+//		private var ybImg:Image;
 
 		private var grid:AutionSaleItemGrid;
 		public var switchGrid:Boolean;
 		
-		private var currencyType:int;
+		private const currencyType:int = 2;
 		
 		public function AutionSellTypeItem() {
 			super(LibManager.getInstance().getXML("config/ui/aution/autionSellTypeItem.xml"));
@@ -46,23 +46,23 @@ package com.leyou.ui.aution.child {
 		private function init():void {
 			this.mouseChildren = true;
 			this.nameLbl = this.getUIbyID("nameLbl") as Label;
-			this.goldLbl = this.getUIbyID("goldLbl") as Label;
+			this.goldLbl = this.getUIbyID("goldLbl0") as Label;
 //			this.typeCb = this.getUIbyID("typeCb") as ComboBox;
 			this.goldTxt = this.getUIbyID("goldTxt") as TextInput;
 			this.confirmBtn = this.getUIbyID("confirmBtn") as NormalButton;
-			this.moneyImg = this.getUIbyID("moneyImg") as Image;
+//			this.moneyImg = this.getUIbyID("moneyImg") as Image;
 			this.selectMoneyImg = this.getUIbyID("selectMoneyImg") as Image;
-			this.jbBtn = this.getUIbyID("jbBtn") as RadioButton;
-			this.ybBtn = this.getUIbyID("ybBtn") as RadioButton;
-			this.ybLbl = this.getUIbyID("ybLbl") as Label;
+//			this.jbBtn = this.getUIbyID("jbBtn") as RadioButton;
+//			this.ybBtn = this.getUIbyID("ybBtn") as RadioButton;
+//			this.ybLbl = this.getUIbyID("ybLbl") as Label;
 //			this.ybBtn.visible = false;
 //			this.ybImg = this.getUIbyID("ybImg") as Image;
 //			this.ybImg.visible = false;
-			this.jbBtn.turnOn();
+//			this.jbBtn.turnOn();
 			this.nameLbl.text = "";
-			this.goldLbl.text = "0";
+//			this.goldLbl.text = "0";
 			this.goldTxt.text = "0";
-			this.ybLbl.text = "0";
+//			this.ybLbl.text = "0";
 			this.goldTxt.restrict = "[0-9]";
 			this.goldTxt.input.maxChars = 9;
 			this.goldTxt.addEventListener(MouseEvent.CLICK, onTextSelect);
@@ -77,8 +77,8 @@ package com.leyou.ui.aution.child {
 			this.grid.setType(ItemEnum.TYPE_GRID_AUTIONSALE);
 			this.grid.dragInListener = onGridDragIn;
 			this.confirmBtn.addEventListener(MouseEvent.CLICK, onClick);
-			this.ybBtn.addEventListener(MouseEvent.CLICK, onTypeCbClick);
-			this.jbBtn.addEventListener(MouseEvent.CLICK, onTypeCbClick);
+//			this.ybBtn.addEventListener(MouseEvent.CLICK, onTypeCbClick);
+//			this.jbBtn.addEventListener(MouseEvent.CLICK, onTypeCbClick);
 //			this.typeCb.setDataByArr([{str: "金币", val: 0}, {str: "元宝", val: 2}]);
 //			this.typeCb.addEventListener(DropMenuEvent.Item_Selected, onTypeCbClick);
 		}
@@ -99,15 +99,15 @@ package com.leyou.ui.aution.child {
 		 * @param event 事件
 		 * 
 		 */		
-		protected function onTypeCbClick(event:Event):void{
-			if("jbBtn" == event.target.name){
-				currencyType = 0;
-			}else if("ybBtn" == event.target.name){
-				currencyType = 2;
-			}
-			var sourcePath:String = ItemUtil.getExchangeIcon(currencyType)
-			selectMoneyImg.updateBmp(sourcePath);
-		}
+//		protected function onTypeCbClick(event:Event):void{
+//			if("jbBtn" == event.target.name){
+//				currencyType = 0;
+//			}else if("ybBtn" == event.target.name){
+//				currencyType = 2;
+//			}
+//			var sourcePath:String = ItemUtil.getExchangeIcon(currencyType)
+//			selectMoneyImg.updateBmp(sourcePath);
+//		}
 		
 		/**
 		 * <T>物品拖入格子触发</T>
@@ -161,9 +161,9 @@ package com.leyou.ui.aution.child {
 		 */
 		public function loadLastPrice(o:Object):void{
 			var price:uint = o.pr;
-			var currentLbl:Label = (0 == o.tp) ? goldLbl : ybLbl;
-			currentLbl.text = (0 == price) ? "???????" : (price+"");
-			currentLbl.text = price+"";
+//			var currentLbl:Label = (0 == o.tp) ? goldLbl : ybLbl;
+			goldLbl.text = (0 == price) ? "???????" : (price+"");
+			goldLbl.text = price+"";
 //			var iconPath:String = ItemUtil.getExchangeIcon(o.tp);
 //			moneyImg.updateBmp(iconPath);
 		}

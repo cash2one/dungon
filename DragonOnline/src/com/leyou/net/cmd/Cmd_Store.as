@@ -216,8 +216,8 @@ package com.leyou.net.cmd {
 					UIManager.getInstance().backAddWnd.showPanel(o);
 					UIManager.getInstance().storageWnd.openGrid=false;
 				} else {
-					UIManager.getInstance().storageWnd.openGridTime=o.time;
-					UIManager.getInstance().storageWnd.updateOpenGrid();
+//					UIManager.getInstance().storageWnd.openGridTime=o.time;
+//					UIManager.getInstance().storageWnd.updateOpenGrid();
 				}
 			}
 		}

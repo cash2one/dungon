@@ -15,9 +15,11 @@ package com.leyou.ui.dungeonTeam.childs {
 	import com.ace.ui.img.child.Image;
 	import com.ace.ui.lable.Label;
 	import com.ace.ui.scrollPane.children.ScrollPane;
+	import com.ace.utils.StringUtil;
 	import com.leyou.net.cmd.Cmd_Ucp;
+	import com.leyou.utils.PropUtils;
 	import com.leyou.utils.TimeUtil;
-	
+
 	import flash.events.MouseEvent;
 	import flash.geom.Rectangle;
 
@@ -130,7 +132,7 @@ package com.leyou.ui.dungeonTeam.childs {
 			var data:Object=render.data;
 
 			if (data.hasOwnProperty("funame") && data.funame != null && data.funame != "") {
-				this.getLbl.htmlText="已被<font color='#00ff00'>" + data.funame + "</font>获得";
+				this.getLbl.htmlText=StringUtil.substitute(PropUtils.getStringById(1692), ["<font color='#00ff00'>" + data.funame + "</font>"]);
 				this.ytgImg.visible=true;
 			} else {
 				this.getLbl.text="";
@@ -154,7 +156,7 @@ package com.leyou.ui.dungeonTeam.childs {
 				str+=TimeUtil.getWeekStringByInt(arr[i]);
 
 				if (info.Key_Hour == null) {
-					str+=" 全天";
+					str+=PropUtils.getStringById(1693);
 				} else
 					str+=" " + info.Key_Hour.replace("|", "-").replace(/(\d\d)\,(\d\d)\,(\d\d)\-(\d\d)\,(\d\d)\,(\d\d)/g, "$1:$2\-$4:$5") + "\n";
 
@@ -217,9 +219,9 @@ package com.leyou.ui.dungeonTeam.childs {
 					}
 				}
 			}
-			
+
 			var grender:DungeonTGuildBtn;
-			for each(grender in this.itemRenderArr){
+			for each (grender in this.itemRenderArr) {
 				this.addChild(grender);
 			}
 
@@ -231,7 +233,7 @@ package com.leyou.ui.dungeonTeam.childs {
 			this.updateFirstGrid(info);
 
 			this.succImg.visible=false;
-			
+
 			//st:副本状态 (0未解锁 1已解锁 2未通关 3已通关,4 未开启)
 			if (data.st == 0 || data.st == 3 || data.st == 4) {
 				this.enterBtn.setActive(false, .6, true);
@@ -255,7 +257,7 @@ package com.leyou.ui.dungeonTeam.childs {
 
 			this.addChild(this.succImg)
 			this.addChild(this.lockImg)
-			
+
 		}
 
 		private function updateDropGrid(info:TDungeon_Base):void {

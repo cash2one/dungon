@@ -20,7 +20,7 @@ package com.leyou.ui.role.child.children {
 	import com.leyou.data.role.RoleInfo;
 	import com.leyou.enum.QualityEnum;
 	import com.leyou.utils.FilterUtil;
-	
+
 	import flash.display.DisplayObject;
 	import flash.geom.Point;
 
@@ -116,25 +116,30 @@ package com.leyou.ui.role.child.children {
 					id=info.tip_own;
 
 					if (i == 3 || i == 4) {
-						dataArr=[info.attack, info.magic, info.phyDef, info.magicDef, info.life, info.tenacity, info.dodge, info.guard];
+//						dataArr=[info.attack, info.magic, info.phyDef, info.magicDef, info.life, info.tenacity, info.dodge, info.guard];
+						dataArr=[info.attack, info.phyDef, info.life, info.tenacity, info.dodge, info.guard];
 					} else
-						dataArr=[info.attack, info.magic, info.phyDef, info.magicDef, info.life, info.crit, info.hit, info.slay];
+//						dataArr=[info.attack, info.magic, info.phyDef, info.magicDef, info.life, info.crit, info.hit, info.slay];
+						dataArr=[info.attack, info.phyDef, info.life, info.crit, info.hit, info.slay];
 
 				} else {
 
 					id=info.tip_unown;
 
 					if (i == 3) {
-						dataArr=[this.buffStateArr[i] + this.buffStateArr[4], info.attack, info.magic, info.phyDef, info.magicDef, info.life, info.tenacity, info.dodge, info.guard];
+//						dataArr=[this.buffStateArr[i] + this.buffStateArr[4], info.attack, info.magic, info.phyDef, info.magicDef, info.life, info.tenacity, info.dodge, info.guard];
+						dataArr=[this.buffStateArr[i] + this.buffStateArr[4], info.attack, info.phyDef, info.life, info.tenacity, info.dodge, info.guard];
 					} else if (i == 4) {
-						dataArr=[this.buffStateArr[i], info.attack, info.magic, info.phyDef, info.magicDef, info.life, info.tenacity, info.dodge, info.guard];
+//						dataArr=[this.buffStateArr[i], info.attack, info.magic, info.phyDef, info.magicDef, info.life, info.tenacity, info.dodge, info.guard];
+						dataArr=[this.buffStateArr[i], info.attack, info.phyDef, info.life, info.tenacity, info.dodge, info.guard];
 					} else {
 
 						var ucount:int=0;
 						for (var _i:int=i; _i < 3; _i++)
 							ucount+=this.buffStateArr[_i]
 
-						dataArr=[ucount, info.attack, info.magic, info.phyDef, info.magicDef, info.life, info.crit, info.hit, info.slay];
+//						dataArr=[ucount, info.attack, info.magic, info.phyDef, info.magicDef, info.life, info.crit, info.hit, info.slay];
+						dataArr=[ucount, info.attack, info.phyDef, info.life, info.crit, info.hit, info.slay];
 					}
 				}
 
@@ -202,6 +207,10 @@ package com.leyou.ui.role.child.children {
 						this.buffStateArr[4]++;
 					}
 
+					if (info.info.quality == QualityEnum.QUA_ARTIFACT) {
+						this.buffStateArr[5]++;
+					}
+
 				} else
 					isfull=false;
 
@@ -242,10 +251,18 @@ package com.leyou.ui.role.child.children {
 				k=this.buffStateArr.indexOf(14, 3);
 
 				if (k == -1) {
-					j=int(this.buffStateArr[3]) + int(this.buffStateArr[4]);
+					j=int(this.buffStateArr[4]) + int(this.buffStateArr[5]);
+					if (j == 14) {
+						k=4;
+					} else {
+						j=int(this.buffStateArr[3]) + int(this.buffStateArr[4]);
+						if (j < 14) {
+							j+=int(this.buffStateArr[5]);
+						}
 
-					if (j == 14)
-						k=3;
+						if (j == 14)
+							k=3;
+					}
 				}
 
 				currentQIndex=k;
@@ -255,7 +272,8 @@ package com.leyou.ui.role.child.children {
 					this.buffArr[_i].filters=[];
 
 			}
-			
+
+			ToolTipManager.getInstance().hide();
 			UIManager.getInstance().selectWnd.updateList();
 		}
 

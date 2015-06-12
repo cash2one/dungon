@@ -1,12 +1,17 @@
 package com.leyou.net.cmd {
+	import com.ace.config.Core;
 	import com.ace.gameData.manager.MyInfoManager;
-	import com.leyou.enum.CmdEnum;
 	import com.ace.manager.UIManager;
+	import com.leyou.enum.CmdEnum;
 	import com.leyou.net.NetGate;
 
 	import flash.utils.ByteArray;
 
 	public class Cmd_Login {
+
+		public static function sm_alogin(obj:Object):void {
+			Core.IS_RE_LOGIN=true;
+		}
 
 		// 登陆连接串
 		public static function cm_lgn(str:String):void {

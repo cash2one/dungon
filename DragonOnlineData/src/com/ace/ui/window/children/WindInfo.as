@@ -1,12 +1,14 @@
 package com.ace.ui.window.children {
+	import com.leyou.utils.PropUtils;
+	
 	import flash.geom.Point;
 	
 	public class WindInfo {
 		
 		public var title:String;
 		public var content:String;
-		public var okBtnName:String="确认";
-		public var cancelBtnName:String="取消";
+		public var okBtnName:String=PropUtils.getStringById(2072);
+		public var cancelBtnName:String=PropUtils.getStringById(1960);
 		
 		public var isModal:Boolean;
 		public var showClose:Boolean;
@@ -25,7 +27,7 @@ package com.ace.ui.window.children {
 		
 		static public function getAlertInfo($content:String, okFun:Function=null):WindInfo {
 			var info:WindInfo=new WindInfo();
-			info.title="警告框";
+			info.title=PropUtils.getStringById(1549);
 			info.content=$content;
 			info.okFun=okFun;
 			return info;
@@ -33,7 +35,7 @@ package com.ace.ui.window.children {
 		
 		static public function getConfirmInfo($content:String, okFun:Function=null, cancelFun:Function=null):WindInfo {
 			var info:WindInfo=new WindInfo();
-			info.title="确认框";
+			info.title=PropUtils.getStringById(2073);
 			info.content=$content;
 			info.okFun=okFun;
 			info.cancelFun=cancelFun;
@@ -42,7 +44,7 @@ package com.ace.ui.window.children {
 		
 		static public function getInputInfo($content:String, okFun:Function=null, cancelFun:Function=null):WindInfo {
 			var info:WindInfo=new WindInfo();
-			info.title="输入框";
+			info.title=PropUtils.getStringById(2074);
 			info.content=$content;
 			info.okFun=okFun;
 			info.cancelFun=cancelFun;
@@ -51,7 +53,7 @@ package com.ace.ui.window.children {
 		
 		static public function getRadioInfo($content:String, okFun:Function=null, cancelFun:Function=null):WindInfo{
 			var info:WindInfo=new WindInfo();
-			info.title="确认框";
+			info.title=PropUtils.getStringById(2073);
 			info.content=$content;
 			info.okFun=okFun;
 			info.cancelFun=cancelFun;

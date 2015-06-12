@@ -9,7 +9,8 @@ package com.leyou.ui.backpack.child {
 	import com.leyou.data.bag.Baginfo;
 	import com.leyou.net.cmd.Cmd_Bag;
 	import com.leyou.utils.ItemUtil;
-
+	import com.leyou.utils.PropUtils;
+	
 	import flash.events.MouseEvent;
 
 	public class BagDropPanel extends AutoWindow {
@@ -63,9 +64,9 @@ package com.leyou.ui.backpack.child {
 			this.itemName.x=this.width - this.itemName.width >> 1;
 
 			if (info.info.bind == 1) {
-				this.stateLbl.text="摧毁";
+				this.stateLbl.text=PropUtils.getStringById(1631);
 			} else {
-				this.stateLbl.text="丢弃";
+				this.stateLbl.text=PropUtils.getStringById(1630);
 			}
 		}
 

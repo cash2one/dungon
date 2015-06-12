@@ -15,6 +15,7 @@ package com.leyou.ui.mysteryStore {
 	import com.ace.manager.UIManager;
 	import com.ace.manager.child.MouseEventInfo;
 	import com.ace.ui.auto.AutoWindow;
+	import com.ace.ui.button.children.CheckBox;
 	import com.ace.ui.dropMenu.children.ComboBox;
 	import com.ace.ui.dropMenu.event.DropMenuEvent;
 	import com.ace.ui.img.child.Image;
@@ -24,14 +25,17 @@ package com.leyou.ui.mysteryStore {
 	import com.ace.ui.tabbar.children.TabBar;
 	import com.leyou.data.tips.TipsInfo;
 	import com.leyou.ui.mysteryStore.child.MyStoreRender;
-	
+	import com.leyou.utils.PropUtils;
+
 	import flash.display.DisplayObject;
 	import flash.events.Event;
+	import flash.events.MouseEvent;
 	import flash.geom.Point;
 
 	public class MyStoreWnd extends AutoWindow {
 
 		private var lvCb:ComboBox;
+		private var useCb:CheckBox;
 		private var itemList:ScrollPane;
 		private var itemCountLbl:Label;
 		private var icoImg:Image;
@@ -60,7 +64,8 @@ package com.leyou.ui.mysteryStore {
 
 		private function init():void {
 
-			this.lvCb=this.getUIbyID("lvCb") as ComboBox;
+//			this.lvCb=this.getUIbyID("lvCb") as ComboBox;
+			this.useCb=this.getUIbyID("useCb") as CheckBox;
 			this.itemCountLbl=this.getUIbyID("itemCountLbl") as Label;
 			this.itemList=this.getUIbyID("itemList") as ScrollPane;
 			this.icoImg=this.getUIbyID("icoImg") as Image;
@@ -72,26 +77,27 @@ package com.leyou.ui.mysteryStore {
 			this.addChild(this.icoImg);
 			this.addChild(this.ryImg);
 
-			var infoXml:XML=LibManager.getInstance().getXML("config/table/shop.xml");
-			var xmllist:XMLList=infoXml.shop;
+//			var infoXml:XML=LibManager.getInstance().getXML("config/table/shop.xml");
+//			var xmllist:XMLList=infoXml.shop;
 
-			var xml:XML;
-			var larr:Array=[{label: "全部", uid: 0}];
-			var lvarr:Array=[];
-			for each (xml in xmllist) {
-				if (xml.@shopId != this.shopID || int(xml.@tagId) != this.tagID) {
-					continue;
-				}
-
-				if (lvarr.indexOf(int(xml.@itemLv)) == -1) {
-					larr.push({label: int(xml.@itemLv) + "级", uid: int(xml.@itemLv)});
-					lvarr.push(int(xml.@itemLv));
-				}
-			}
+//			var xml:XML;
+//			var larr:Array=[{label: PropUtils.getStringById(2148), uid: 0}];
+//			var lvarr:Array=[];
+//			for each (xml in xmllist) {
+//				if (xml.@shopId != this.shopID || int(xml.@tagId) != this.tagID) {
+//					continue;
+//				}
+//
+//				if (lvarr.indexOf(int(xml.@itemLv)) == -1) {
+//					larr.push({label: int(xml.@itemLv) + PropUtils.getStringById(1812), uid: int(xml.@itemLv)});
+//					lvarr.push(int(xml.@itemLv));
+//				}
+//			}
 
 //			this.lvCb.list.addRends([{label: "全部", uid: 0}, {label: "1级", uid: 1}, {label: "20级", uid: 20}, {label: "40级", uid: 40}, {label: "60级", uid: 60}, {label: "70级", uid: 70}, {label: "80级", uid: 80}, {label: "90级", uid: 90}]);
-			this.lvCb.list.addRends(larr);
-			this.lvCb.addEventListener(DropMenuEvent.Item_Selected, onItemClick);
+//			this.lvCb.list.addRends(larr);
+//			this.lvCb.addEventListener(DropMenuEvent.Item_Selected, onItemClick);
+			this.useCb.addEventListener(MouseEvent.CLICK, onItemSelected);
 
 			var einfo:MouseEventInfo=new MouseEventInfo();
 			einfo.onMouseMove=onTipsMouseOver;
@@ -125,29 +131,32 @@ package com.leyou.ui.mysteryStore {
 
 			this.tagID=this.mystorTabar.turnOnIndex + 1;
 
-			var infoXml:XML=LibManager.getInstance().getXML("config/table/shop.xml");
-			var xmllist:XMLList=infoXml.shop;
+//			var infoXml:XML=LibManager.getInstance().getXML("config/table/shop.xml");
+//			var xmllist:XMLList=infoXml.shop;
+//
+//			var xml:XML;
+//			var larr:Array=[{label: PropUtils.getStringById(2148), uid: 0}];
+//			var lvarr:Array=[];
+//			lvarr.length=0;
+//
+//			for each (xml in xmllist) {
+//
+//				if (xml.@shopId != this.shopID || int(xml.@tagId) != this.tagID) {
+//					continue;
+//				}
+//
+//				if ((((Core.me.info.profession != xml.@Class && xml.@Class != 0) || Core.me.info.level < int(xml.@itemLv)) && useCb.isOn))
+//					continue;
+//
+//				if (lvarr.indexOf(int(xml.@itemLv)) == -1) {
+//					larr.push({label: int(xml.@itemLv) + PropUtils.getStringById(1812), uid: int(xml.@itemLv)});
+//					lvarr.push(int(xml.@itemLv));
+//				}
+//
+//			}
 
-			var xml:XML;
-			var larr:Array=[{label: "全部", uid: 0}];
-			var lvarr:Array=[];
-			lvarr.length=0;
-
-			for each (xml in xmllist) {
-
-				if (xml.@shopId != this.shopID || int(xml.@tagId) != this.tagID) {
-					continue;
-				}
-
-				if (lvarr.indexOf(int(xml.@itemLv)) == -1) {
-					larr.push({label: int(xml.@itemLv) + "级", uid: int(xml.@itemLv)});
-					lvarr.push(int(xml.@itemLv));
-				}
-
-			}
-
-			this.lvCb.list.removeRenders();
-			this.lvCb.list.addRends(larr);
+//			this.lvCb.list.removeRenders();
+//			this.lvCb.list.addRends(larr);
 //			this.lvCb.list.selectByUid("0");
 
 			this.updateInfo();
@@ -168,6 +177,11 @@ package com.leyou.ui.mysteryStore {
 		private function onItemClick(e:Event):void {
 
 			this.selectLv=this.lvCb.list.value.uid;
+			this.updateInfo();
+		}
+
+		private function onItemSelected(e:Event):void {
+
 			this.updateInfo();
 		}
 
@@ -204,7 +218,8 @@ package com.leyou.ui.mysteryStore {
 
 				i++;
 
-				if (xml.@shopId != this.shopID || (int(xml.@itemLv) != this.selectLv && this.selectLv != 0) || (Core.me.info.profession != xml.@Class && xml.@Class != 0) || int(xml.@tagId) != this.tagID)
+//				if (xml.@shopId != this.shopID || (int(xml.@itemLv) != this.selectLv && this.selectLv != 0) || (Core.me.info.profession != xml.@Class && xml.@Class != 0) || int(xml.@tagId) != this.tagID)
+				if (xml.@shopId != this.shopID || int(xml.@tagId) != this.tagID)
 					continue;
 
 				infoItem=TableManager.getInstance().getEquipInfo(xml.@itemId);
@@ -213,6 +228,10 @@ package com.leyou.ui.mysteryStore {
 					throw Error("没有物品id:" + xml.@itemId)
 					return;
 				}
+
+
+				if ((((Core.me.info.profession != xml.@Class && xml.@Class != 0) || Core.me.info.level < int(infoItem.level)) && useCb.isOn))
+					continue;
 
 				render=new MyStoreRender();
 				render.x=(this.renderArr.length % 3) * (render.width + 7) + 5;
@@ -242,9 +261,9 @@ package com.leyou.ui.mysteryStore {
 			this.dataModel=parameters;
 			UIManager.getInstance().showPanelCallback(WindowEnum.MYSTORE);
 		}
-		
-		public function setTabIndex(i:int):void{
-			 this.mystorTabar.turnToTab(i);
+
+		public function setTabIndex(i:int):void {
+			this.mystorTabar.turnToTab(i);
 		}
 
 		public function resise():void {

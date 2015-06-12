@@ -12,7 +12,9 @@ package com.leyou.ui.guild.child {
 	import com.ace.ui.img.child.Image;
 	import com.ace.ui.lable.Label;
 	import com.ace.ui.scrollPane.children.ScrollPane;
+	import com.ace.utils.StringUtil;
 	import com.leyou.net.cmd.Cmd_Ucp;
+	import com.leyou.utils.PropUtils;
 	import com.leyou.utils.TimeUtil;
 
 	import flash.events.MouseEvent;
@@ -119,7 +121,7 @@ package com.leyou.ui.guild.child {
 			var data:Object=render.data;
 
 			if (data.hasOwnProperty("funame") && data.funame != null && data.funame != "") {
-				this.getLbl.htmlText="已被<font color='#00ff00'>" + data.funame + "</font>获得";
+				this.getLbl.htmlText=StringUtil.substitute(PropUtils.getStringById(1692), ["<font color='#00ff00'>" + data.funame + "</font>"]);
 				this.ytgImg.visible=true;
 			} else {
 				this.getLbl.text="";
@@ -143,7 +145,7 @@ package com.leyou.ui.guild.child {
 				str+=TimeUtil.getWeekStringByInt(arr[i]);
 
 				if (info.Key_Hour == null) {
-					str+=" 全天";
+					str+=PropUtils.getStringById(1693);
 				} else
 					str+=" " + info.Key_Hour.replace("|", "-").replace(/(\d\d)\,(\d\d)\,(\d\d)\-(\d\d)\,(\d\d)\,(\d\d)/g, "$1:$2\-$4:$5") + "\n";
 

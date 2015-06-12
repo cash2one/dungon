@@ -4,7 +4,9 @@ package com.leyou.ui.monsterInvade.child {
 	import com.ace.manager.LibManager;
 	import com.ace.manager.ToolTipManager;
 	import com.ace.ui.auto.AutoSprite;
+	import com.ace.utils.StringUtil;
 	import com.leyou.enum.ConfigEnum;
+	import com.leyou.utils.PropUtils;
 	
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
@@ -29,8 +31,8 @@ package com.leyou.ui.monsterInvade.child {
 				this.addChild(monlist);
 
 //				if (i < 3) {
-					monlist.addEventListener(MouseEvent.MOUSE_OVER, onTipMouseOver);
-					monlist.addEventListener(MouseEvent.MOUSE_OUT, onTipMouseOut);
+				monlist.addEventListener(MouseEvent.MOUSE_OVER, onTipMouseOver);
+				monlist.addEventListener(MouseEvent.MOUSE_OUT, onTipMouseOut);
 //				} else {
 //					monlist.setIconState(false);
 //				}
@@ -44,10 +46,10 @@ package com.leyou.ui.monsterInvade.child {
 		}
 
 		private function onTipMouseOver(e:MouseEvent):void {
-			var str:Array=["一", "二", "三","四","五","六","七","八","九","十"];
-			var val:Array=[ConfigEnum.DemonInvasion9,ConfigEnum.DemonInvasion10,ConfigEnum.DemonInvasion11,ConfigEnum.DemonInvasion15,ConfigEnum.DemonInvasion16,ConfigEnum.DemonInvasion17,ConfigEnum.DemonInvasion18,ConfigEnum.DemonInvasion19,ConfigEnum.DemonInvasion20,ConfigEnum.DemonInvasion21];
-			
-			ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, "造成伤害<font size='18' color='#ffff00'>第" + str[this.topVec.indexOf(e.target as MonsterInvadeList)] + "名</font>可获取&#13;&#13;金币:"+val[this.topVec.indexOf(e.target as MonsterInvadeList)] , new Point(e.stageX, e.stageY));
+			var str:Array=[PropUtils.getStringById(1659), PropUtils.getStringById(1660), PropUtils.getStringById(1661), PropUtils.getStringById(1662), PropUtils.getStringById(1663),PropUtils.getStringById(1664), PropUtils.getStringById(1796), PropUtils.getStringById(1797), PropUtils.getStringById(1798), PropUtils.getStringById(1799)];
+			var val:Array=[ConfigEnum.DemonInvasion9, ConfigEnum.DemonInvasion10, ConfigEnum.DemonInvasion11, ConfigEnum.DemonInvasion15, ConfigEnum.DemonInvasion16, ConfigEnum.DemonInvasion17, ConfigEnum.DemonInvasion18, ConfigEnum.DemonInvasion19, ConfigEnum.DemonInvasion20, ConfigEnum.DemonInvasion21];
+
+			ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, StringUtil.substitute(PropUtils.getStringById(1800),[str[this.topVec.indexOf(e.target as MonsterInvadeList)]]) + val[this.topVec.indexOf(e.target as MonsterInvadeList)], new Point(e.stageX, e.stageY));
 		}
 
 		private function onTipMouseOut(e:MouseEvent):void {

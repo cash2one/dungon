@@ -94,6 +94,15 @@ package com.leyou.ui.skill {
 			render.x=11;
 			render.y=57 + i * render.height;
 
+			i++;
+
+			render=new SkillFuBar();
+			this.addToPane(render);
+			this.renderArr.push(render);
+
+			render.x=11;
+			render.y=57 + i * render.height;
+
 //			var item:TItemInfo=TableManager.getInstance().getItemInfo(ConfigEnum.skillItem);
 
 //			this.itemNameLbl.styleSheet=FontEnum.DEFAULT_LINK_STYLE;
@@ -165,10 +174,12 @@ package com.leyou.ui.skill {
 			var skb:Array=MyInfoManager.getInstance().skilldata.skillItems;
 //			this.titleLbl.text=""+skill[0].name;
 
-			for (var i:int=0; i < skill.length; i++) {
+//			for (var i:int=0; i < skill.length; i++) {
+			for (var i:int=0; i < 4; i++) {
+
 				if (i == 0) {
 
-					if (MyInfoManager.getInstance().skilldata.skillItems[this.index].indexOf(2, 3) == -1) {
+					if (MyInfoManager.getInstance().skilldata.skillItems[this.index].indexOf(2, 3) == -1 && (arr.length != 7 || arr[6].split("_")[1] != 2)) {
 						this.renderArr[i].state=true;
 						this.renderArr[i].hight=true;
 					} else {
@@ -181,11 +192,28 @@ package com.leyou.ui.skill {
 					this.renderArr[i].active=arr[i + 2];
 				}
 			}
+
+			if (arr.length == 7) {
+				this.renderArr[i].visible=true;
+
+				var str:String=arr[i + 2];
+
+				this.renderArr[i].updateInfo(skill[str.split("_")[0]]);
+				this.renderArr[i].active=str.split("_")[1];
+
+			} else
+				this.renderArr[i].visible=false;
 		}
 
 		public function setChangeRune():void {
 			if (this.selectIndex != -1) {
-				Cmd_Skill.cm_sklChange(index, this.selectIndex);
+
+				var pos:int=this.selectIndex;
+				if (this.selectIndex == 4) {
+					pos=MyInfoManager.getInstance().skilldata.skillItems[this.index][6].split("_")[0];
+				}
+
+				Cmd_Skill.cm_sklChange(index, pos);
 			}
 		}
 
@@ -204,7 +232,13 @@ package com.leyou.ui.skill {
 						return;
 					}
 
-					var acid:int=MyInfoManager.getInstance().skilldata.skillItems[this.index].indexOf(2, 3) - 2;
+					var skills:Array=MyInfoManager.getInstance().skilldata.skillItems[this.index];
+
+					var acid:int=skills.indexOf(2, 3) - 2;
+					if (acid < 0 && skills.length == 7 && (skills[6]).split("_")[1]==2) {
+						acid=(skills[6]).split("_")[0];
+					}
+
 					acid=acid < 0 ? 0 : acid;
 
 					if (this.renderArr.indexOf(e.target) != acid) {

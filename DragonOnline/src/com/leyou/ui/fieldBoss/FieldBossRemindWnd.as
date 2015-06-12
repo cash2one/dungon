@@ -18,6 +18,7 @@ package com.leyou.ui.fieldBoss
 	import com.leyou.enum.TaskEnum;
 	import com.leyou.net.cmd.Cmd_Go;
 	import com.leyou.net.cmd.Cmd_YBS;
+	import com.leyou.utils.PropUtils;
 	
 	import flash.display.Graphics;
 	import flash.display.Shape;
@@ -81,9 +82,9 @@ package com.leyou.ui.fieldBoss
 					if(remindCbx.isOn){
 						DataManager.getInstance().fieldBossData.setRemind(bossId);
 						var monsterInfo:TLivingInfo = TableManager.getInstance().getLivingInfo(bossInfo.monsterId);
-						var content:String="        {1}<font color='#ff00'><u><a href='event:other_ycp--{2}'>前往击杀</a></u></font>";
+						var content:String="        {1}<font color='#ff00'><u><a href='event:other_ycp--{2}'>"+PropUtils.getStringById(1570)+"</a></u></font>";
 						content=StringUtil.substitute(content, monsterInfo.name, bossId);
-						var arr:Array = ["[野外BOSS]", content, "", "", Cmd_YBS.callBack];
+						var arr:Array = [PropUtils.getStringById(1571), content, "", "", Cmd_YBS.callBack];
 						UIManager.getInstance().taskTrack.updateOhterTrack(TaskEnum.taskLevel_fieldbossCopyLine, arr);
 					}else{
 						DataManager.getInstance().fieldBossData.setRemind(0);

@@ -55,11 +55,11 @@ package com.leyou.utils {
 		public static function getStringByState(s:int):String {
 
 			if (s == 0)
-				return "未完成";
+				return PropUtils.getStringById(2054);
 			else if (s == 1)
-				return "已完成";
+				return PropUtils.getStringById(1584);
 			else if (s == -1)
-				return "可领取";
+				return PropUtils.getStringById(1567);
 
 			return "";
 		}
@@ -79,17 +79,21 @@ package com.leyou.utils {
 
 			switch (type) {
 				case 1:
-					return "主线"
+					return PropUtils.getStringById(2056);
 				case 2:
-					return "日常"
+					return PropUtils.getStringById(2057);
 				case 3:
-					return "活动"
+					return PropUtils.getStringById(2058);
 				case 4:
-					return "引导"
+					return PropUtils.getStringById(2059);
 				case 5:
-					return "节日"
+					return PropUtils.getStringById(2060);
 				case 6:
-					return "帮派"
+					return PropUtils.getStringById(2061);
+				case 7:
+					return PropUtils.getStringById(2168);
+				case 8:
+					return PropUtils.getStringById(2169);
 
 			}
 

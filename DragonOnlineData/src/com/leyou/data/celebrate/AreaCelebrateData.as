@@ -2,6 +2,7 @@ package com.leyou.data.celebrate
 {
 	import com.ace.utils.StringUtil;
 	import com.leyou.enum.ConfigEnum;
+	import com.leyou.utils.PropUtils;
 	
 	import flash.utils.getTimer;
 	
@@ -25,7 +26,7 @@ package com.leyou.data.celebrate
 		}
 		
 		public function getActiveTime():String{
-			var tpl:String = "活动时间:{1}年{2}月{3}日-{4}年{5}月{6}日";
+			var tpl:String = PropUtils.getStringById(2075);
 			var openDate:Date = new Date(_openTime*1000);
 			var endDate:Date = new Date((_openTime+ConfigEnum.welfare19*24*60*60)*1000);
 			return StringUtil.substitute(tpl, openDate.fullYear, (openDate.month+1), openDate.date, endDate.fullYear, (endDate.month+1), endDate.date-1);

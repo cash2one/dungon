@@ -25,6 +25,7 @@ package com.leyou.ui.task {
 	import com.ace.ui.lable.Label;
 	import com.ace.ui.notice.NoticeManager;
 	import com.ace.ui.scrollPane.children.ScrollPane;
+	import com.ace.utils.StringUtil;
 	import com.greensock.TweenLite;
 	import com.leyou.enum.ConfigEnum;
 	import com.leyou.enum.TaskEnum;
@@ -37,6 +38,7 @@ package com.leyou.ui.task {
 	import com.leyou.ui.task.child.MissionTrackRender;
 	import com.leyou.ui.task.child.TaskTrackBtn;
 	import com.leyou.util.DateUtil;
+	import com.leyou.utils.PropUtils;
 	import com.leyou.utils.TaskUtil;
 
 	import flash.display.DisplayObject;
@@ -140,6 +142,8 @@ package com.leyou.ui.task {
 
 			this.linkArr[TaskEnum.taskLevel_mainLine]=[];
 			this.linkArr[TaskEnum.taskLevel_switchLine]=[];
+			this.linkArr[TaskEnum.taskLevel_mercenaryExpLine]=[];
+			this.linkArr[TaskEnum.taskLevel_mercenaryCloseLine]=[];
 
 			this.taskList[TaskEnum.taskLevel_questLine]=updateQuestion;
 			this.taskList[TaskEnum.taskLevel_deliveryLine]=updateDelivery;
@@ -161,7 +165,7 @@ package com.leyou.ui.task {
 				return;
 
 			var globalPoint:Point=new Point(e.stageX, e.stageY);
-			var screenPoint:Point=UIManager.getInstance().gameScene.globalToLocal(globalPoint);
+			var screenPoint:Point=UIManager.getInstance().gameScene.foreground.globalToLocal(globalPoint);
 			var targetPoint:Point=SceneUtil.screenToTile(screenPoint.x, screenPoint.y);
 
 			if (e.currentTarget is TaskTrack) {
@@ -178,9 +182,7 @@ package com.leyou.ui.task {
 					}
 
 				} else {
-
 					Core.me.gotoMap(targetPoint, "", false);
-
 				}
 
 			}
@@ -322,7 +324,7 @@ package com.leyou.ui.task {
 
 					this.renderStateBtn.updateIcon(2);
 					this.linkArr[int(minfo.type)].push("npc_id--" + minfo["dnpc"]);
-					tartxt="向<font color='#00ff00'><u><a href='event:" + this.linkArr[int(minfo.type)][0] + "'>" + minfo["dnpcname"] + "</a></u></font>回复";
+					tartxt=StringUtil.substitute(PropUtils.getStringById(1894), ["<font color='#00ff00'><u><a href='event:" + this.linkArr[int(minfo.type)][0] + "'>" + minfo["dnpcname"] + "</a></u></font>"]);
 
 				} else if (o.st == -1) {
 
@@ -347,8 +349,9 @@ package com.leyou.ui.task {
 					}
 				}
 
+				item.taskNameTxt(minfo.name);
+
 				if (int(minfo.type) == TaskEnum.taskLevel_mainLine) {
-					item.taskNameTxt(minfo.name);
 
 					taskID=o.tid;
 					this.mainTaskType=int(minfo.dtype);
@@ -404,7 +407,7 @@ package com.leyou.ui.task {
 								UIManager.getInstance().roleWnd.setTabIndex(1);
 							});
 
-							
+
 
 							if (this.taskOneInfo == null)
 								dc=2;
@@ -420,8 +423,8 @@ package com.leyou.ui.task {
 
 							}
 
-							if (!UIManager.getInstance().isCreate(WindowEnum.STORYCOPY) || !UIManager.getInstance().storyCopyWnd.visible)
-								UILayoutManager.getInstance().show(WindowEnum.STORYCOPY);
+							if (!UIManager.getInstance().teamCopyWnd || !UIManager.getInstance().teamCopyWnd.visible)
+								UILayoutManager.getInstance().open_II(WindowEnum.DUNGEON_TEAM);
 						} else if (this.mainTaskType == TaskEnum.taskType_TodayTaskSuccessNum) {
 
 							if (lv < ConfigEnum.taskDailyOpenLv) {
@@ -437,19 +440,19 @@ package com.leyou.ui.task {
 							}
 
 							if (!UIManager.getInstance().isCreate(WindowEnum.ROLE) || !UIManager.getInstance().roleWnd.visible)
-							UILayoutManager.getInstance().show_II(WindowEnum.ROLE);
-							 
+								UILayoutManager.getInstance().show_II(WindowEnum.ROLE);
+
 							if (this.taskOneInfo == null)
 								dc=2;
-							
+
 							TweenLite.delayedCall(dc, UIManager.getInstance().roleWnd.setTabIndex, [3]);
 						} else if (this.mainTaskType == TaskEnum.taskType_ArenaPkNum) {
 							if (lv < ConfigEnum.ArenaOpenLv) {
 								NoticeManager.getInstance().broadcastById(9963, [ConfigEnum.ArenaOpenLv]);
 							}
 
-							if (!UIManager.getInstance().isCreate(WindowEnum.ARENA) || !UIManager.getInstance().arenaWnd.visible) 
-							UILayoutManager.getInstance().show_II(WindowEnum.ARENA);
+							if (!UIManager.getInstance().isCreate(WindowEnum.ARENA) || !UIManager.getInstance().arenaWnd.visible)
+								UILayoutManager.getInstance().show_II(WindowEnum.ARENA);
 						}
 					}
 
@@ -482,7 +485,7 @@ package com.leyou.ui.task {
 
 				} else if (int(minfo.type) == TaskEnum.taskLevel_switchLine) {
 					item.cloop=int(o.cloop);
-					item.taskNameTxt("每日环任务 <font color='#ff0000'>(" + o.cloop + "/20)</font>");
+					item.taskNameTxt(PropUtils.getStringById(1895) + " <font color='#ff0000'>(" + o.cloop + "/20)</font>");
 
 					if (o.st == 1)
 						SceneProxy.onTaskComplete();
@@ -494,6 +497,8 @@ package com.leyou.ui.task {
 
 					item.setYbOnKeyVisible(Core.me.info.vipLv >= DataManager.getInstance().vipData.taskPrivilegeVipLv());
 					UIManager.getInstance().taskWnd.setVipLvState(Core.me.info.vipLv)
+				} else if (int(minfo.type) == TaskEnum.taskLevel_mercenaryCloseLine || int(minfo.type) == TaskEnum.taskLevel_mercenaryExpLine) {
+
 				}
 
 				item.taskTargetTxt(tartxt);
@@ -525,7 +530,7 @@ package com.leyou.ui.task {
 				this.taskCount+=item.height - 10;
 
 				item.cloop=20;
-				item.taskNameTxt("每日环任务 <font color='#00ff00'>(20/20)</font>");
+				item.taskNameTxt(PropUtils.getStringById(1895) + " <font color='#00ff00'>(20/20)</font>");
 				item.taskTargetTxt("");
 				item.taskTypeTxt("[" + TaskUtil.getStringByType(2) + "]");
 
@@ -707,16 +712,16 @@ package com.leyou.ui.task {
 				} else
 					item=this.renderVec[TaskEnum.taskLevel_deliveryLine];
 
-				item.taskTypeTxt("[护镖]");
+				item.taskTypeTxt(PropUtils.getStringById(1896));
 				if (o.ynum == o.zynum) {
-					item.taskNameTxt("每日押镖 <font color='#00ff00'>(" + o.ynum + "/" + o.zynum + ")</font>");
+					item.taskNameTxt(PropUtils.getStringById(1897) + " <font color='#00ff00'>(" + o.ynum + "/" + o.zynum + ")</font>");
 				} else
-					item.taskNameTxt("每日押镖 <font color='#ff0000'>(" + o.ynum + "/" + o.zynum + ")</font>");
+					item.taskNameTxt(PropUtils.getStringById(1897) + " <font color='#ff0000'>(" + o.ynum + "/" + o.zynum + ")</font>");
 
 				switch (o.yst) {
 					case 0:
-						item.taskStateTxt("<font color='#ee2211'>未领取</font>");
-						item.taskTargetTxt("到<font color='#00ff00'><u><a href='event:npc_id--" + ConfigEnum.delivery21 + "'>" + TableManager.getInstance().getLivingInfo(ConfigEnum.delivery21).name + "</a></u></font>处领取");
+						item.taskStateTxt("<font color='#ee2211'>" + PropUtils.getStringById(1898) + "</font>");
+						item.taskTargetTxt(StringUtil.substitute(PropUtils.getStringById(1899), ["<font color='#00ff00'><u><a href='event:npc_id--" + ConfigEnum.delivery21 + "'>" + TableManager.getInstance().getLivingInfo(ConfigEnum.delivery21).name + "</a></u></font>"]));
 						item.taskLastHpTxt("");
 						item.setTrBtnVisible(true);
 
@@ -726,7 +731,7 @@ package com.leyou.ui.task {
 
 						break;
 					case 1:
-						item.taskStateTxt("<font color='#ee2211'>护送中</font>");
+						item.taskStateTxt("<font color='#ee2211'>" + PropUtils.getStringById(1900) + "</font>");
 
 						item.taskTargetTxt("");
 						item.taskLastHpTxt("");
@@ -744,7 +749,7 @@ package com.leyou.ui.task {
 						UIManager.getInstance().deliveryPanel.updateInfo(o);
 						break;
 					case 2:
-						item.taskStateTxt("<font color='#00ff9c'>已完成</font>");
+						item.taskStateTxt("<font color='#00ff9c'>" + PropUtils.getStringById(1584) + "</font>");
 						item.taskTargetTxt("");
 						item.taskLastHpTxt("");
 						item.setTrBtnVisible(false);
@@ -806,17 +811,17 @@ package com.leyou.ui.task {
 					this.taskCount+=item.height;
 				}
 
-				item.taskTypeTxt("[竞技]");
+				item.taskTypeTxt(PropUtils.getStringById(1902));
 
 				if (o.sfight == o.zfight) {
-					item.taskNameTxt("可以购买挑战次数<font color='#00ff00'><u><a href='event:arena'>立即参与</a></u></font>");
+					item.taskNameTxt(StringUtil.substitute(PropUtils.getStringById(1903), ["<font color='#00ff00'><u><a href='event:arena'>"]) + "</a></u></font>");
 				} else
-					item.taskNameTxt("今日挑战次数 <font color='#ff0000'>(" + o.sfight + "/" + o.zfight + ")</font><font color='#00ff00'><u><a href='event:arena'>立即参与</a></u></font>");
+					item.taskNameTxt(StringUtil.substitute(PropUtils.getStringById(1904), [" <font color='#ff0000'>(" + o.sfight + "/" + o.zfight + ")</font><font color='#00ff00'><u><a href='event:arena'>"]) + "</a></u></font>");
 
 				item.taskStateTxt("");
 
 				if (o.jlst == 0)
-					item.taskTargetTxt("待领取军衔奖励 <font color='#00ff00'><u><a href='event:accpetArena--aa'>点击领取</a></u></font>");
+					item.taskTargetTxt(StringUtil.substitute(PropUtils.getStringById(1905), [" <font color='#00ff00'><u><a href='event:accpetArena--aa'>"]) + "</a></u></font>");
 				else {
 					item.taskTargetTxt("");
 					this.taskCount-=20;
@@ -870,15 +875,15 @@ package com.leyou.ui.task {
 					} else
 						item=this.renderVec[TaskEnum.taskLevel_dragonLine];
 
-					item.taskTypeTxt("[龙穴]");
+					item.taskTypeTxt(PropUtils.getStringById(1906));
 					var str:String="";
 
 					if (o.vars == 0) {
-						str="可以购买挑战次数";
-						str+="<font color='#00ff00'><u><a href='event:dungeon'>立即参与</a></u></font>";
+						str=PropUtils.getStringById(1907);
+						str+="<font color='#00ff00'><u><a href='event:dungeon'>" + PropUtils.getStringById(1908) + "</a></u></font>";
 					} else {
-						str="今日参与次数 <font color='#ff0000'>(" + (o.cm - o.vars) + "/" + (o.cm) + ")</font>";
-						str+="<font color='#00ff00'><u><a href='event:dungeon'>立即参与</a></u></font>";
+						str=PropUtils.getStringById(1909) + " <font color='#ff0000'>(" + (o.cm - o.vars) + "/" + (o.cm) + ")</font>";
+						str+="<font color='#00ff00'><u><a href='event:dungeon'>" + PropUtils.getStringById(1908) + "</a></u></font>";
 					}
 
 					item.taskNameTxt(str);
@@ -923,13 +928,13 @@ package com.leyou.ui.task {
 				} else
 					item=this.renderVec[TaskEnum.taskLevel_questLine];
 
-				item.taskTypeTxt("[答题]");
+				item.taskTypeTxt(PropUtils.getStringById(1910));
 				item.taskStateTxt("");
 				item.taskTargetTxt("");
 
 				if (questtime > 0) {
 
-					item.taskNameTxt("答题活动即将开启 <font color='#00ff00'><u><a href='event:enterquest--'>立即参与</a></u></font> ");
+					item.taskNameTxt(StringUtil.substitute(PropUtils.getStringById(1911), [" <font color='#00ff00'><u><a href='event:enterquest--'>"]) + "</a></u></font> ");
 					TimerManager.getInstance().remove(questExeTime);
 					TimerManager.getInstance().add(questExeTime);
 
@@ -943,7 +948,7 @@ package com.leyou.ui.task {
 
 				} else if (questtime == 0) {
 
-					item.taskNameTxt("答题活动已开启  <font color='#00ff00'><u><a href='event:enterquest--'>立即参与</a></u></font> ");
+					item.taskNameTxt(StringUtil.substitute(PropUtils.getStringById(1912), [" <font color='#00ff00'><u><a href='event:enterquest--'>"]) + "</a></u></font> ");
 
 //					if (!this.questionrenderStateBtn.visible) {
 //
@@ -1004,7 +1009,7 @@ package com.leyou.ui.task {
 			if (questtime - i > 0) {
 				tstr=DateUtil.formatTime((questtime - i) * 1000, 3);
 
-				this.renderVec[TaskEnum.taskLevel_questLine].taskNameTxt("答题活动即将开启 <font color='#00ff00'>" + tstr + "</font> <font color='#00ff00'><u><a href='event:enterquest--'>立即参与</a></u></font>");
+				this.renderVec[TaskEnum.taskLevel_questLine].taskNameTxt(StringUtil.substitute(PropUtils.getStringById(1913), [" <font color='#00ff00'>" + tstr + "</font> <font color='#00ff00'><u><a href='event:enterquest--'>"]) + "</a></u></font>");
 
 				if (!UIManager.getInstance().isCreate(WindowEnum.QUESTION))
 					UIManager.getInstance().creatWindow(WindowEnum.QUESTION);
@@ -1227,11 +1232,11 @@ package com.leyou.ui.task {
 						return;
 					}
 
-					if (UIManager.getInstance().isCreate(WindowEnum.STORYCOPY) && UIManager.getInstance().storyCopyWnd.visible) {
-						return;
-					}
+//					if (UIManager.getInstance().isCreate(WindowEnum.DUNGEON_TEAM) && UIManager.getInstance().storyCopyWnd.visible) {
+//						return;
+//					}
 
-					UILayoutManager.getInstance().show(WindowEnum.STORYCOPY);
+					UILayoutManager.getInstance().open_II(WindowEnum.DUNGEON_TEAM);
 				} else if (this.mainTaskType == TaskEnum.taskType_TodayTaskSuccessNum) {
 
 					if (lv < ConfigEnum.taskDailyOpenLv) {

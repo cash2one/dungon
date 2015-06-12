@@ -20,23 +20,23 @@ package com.ace.gameData.table
 		
 		public var show2PicUrl:String;
 		
-		public var item1:int;
+		public var item1:String;
 		
 		public var num1:int;
 		
-		public var item2:int;
+		public var item2:String;
 		
 		public var num2:int;
 		
-		public var item3:int;
+		public var item3:String;
 		
 		public var num3:int;
 		
-		public var item4:int;
+		public var item4:String;
 		
 		public var num4:int;
 		
-		public var item5:int;
+		public var item5:String;
 		
 		public var num5:int;
 		

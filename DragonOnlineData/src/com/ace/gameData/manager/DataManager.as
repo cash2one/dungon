@@ -7,22 +7,30 @@
 package com.ace.gameData.manager {
 	import com.ace.gameData.tools.ToolsInfo;
 	import com.ace.manager.SOLManager;
+	import com.leyou.data.CommonData;
 	import com.leyou.data.abidePay.AbidePayData;
 	import com.leyou.data.achievement.AchievementData;
+	import com.leyou.data.blackStore.BlackStoreData;
 	import com.leyou.data.bossCopy.BossCopyData;
 	import com.leyou.data.celebrate.AreaCelebrateData;
 	import com.leyou.data.cityBattle.CityBattleData;
 	import com.leyou.data.collectioin.CollectionData;
+	import com.leyou.data.convenient.ConvenientData;
+	import com.leyou.data.dargonball.DragonBallData;
 	import com.leyou.data.fieldboss.FieldBossData;
 	import com.leyou.data.friend.FriendData;
 	import com.leyou.data.groupBuy.GroupBuyData;
 	import com.leyou.data.guildBattle.GuildBattleData;
+	import com.leyou.data.iceBattle.IceBattleData;
 	import com.leyou.data.integral.IntegralData;
 	import com.leyou.data.invest.InvestData;
 	import com.leyou.data.luckDraw.LuckDrawData;
+	import com.leyou.data.missinMarket.MissionMarketData;
 	import com.leyou.data.online.OnlineRewardData;
 	import com.leyou.data.paypromotion.PayPromotionData;
 	import com.leyou.data.payrank.PayRankData;
+	import com.leyou.data.pet.PetData;
+	import com.leyou.data.popupNumber.PopupNumberData;
 	import com.leyou.data.qqvip.QQVipData;
 	import com.leyou.data.sevenDay.SevenDayData;
 	import com.leyou.data.sinfo.ServerData;
@@ -47,6 +55,8 @@ package com.ace.gameData.manager {
 		}
 		
 		private var _cookieData:Object;
+		
+		public var commonData:CommonData;
 		
 		public var toolsInfo:ToolsInfo; //工具栏数据
 		
@@ -92,7 +102,21 @@ package com.ace.gameData.manager {
 		
 		public var vendueData:VendueData; // 拍卖
 		
-		public var cityBattleData:CityBattleData; //主城争霸
+		public var cityBattleData:CityBattleData; // 主城争霸
+		
+		public var dragonBallData:DragonBallData; // 龙珠
+		
+		public var iceBattleData:IceBattleData; // 霜炎战场
+		
+		public var convenientData:ConvenientData; // 快捷换装提示信息
+		
+		public var petData:PetData; // 宠物信息
+		
+		public var blackStoreData:BlackStoreData; // 黑市
+		
+		public var popupNumData:PopupNumberData; // 角标数字
+		
+		public var missionMarketData:MissionMarketData; // 任务集市
 		
 		public function DataManager() {
 		}
@@ -149,6 +173,7 @@ package com.ace.gameData.manager {
 		}
 
 		private function init():void {
+			this.commonData=new CommonData();
 			this.toolsInfo=new ToolsInfo();
 			this.achievementData=new AchievementData();
 			this.vipData=new VipData();
@@ -172,6 +197,13 @@ package com.ace.gameData.manager {
 			this.groupBuyData=new GroupBuyData();
 			this.vendueData=new VendueData();
 			this.cityBattleData=new CityBattleData();
+			this.dragonBallData=new DragonBallData();
+			this.iceBattleData=new IceBattleData();
+			this.convenientData=new ConvenientData();
+			this.petData=new PetData();
+			this.blackStoreData=new BlackStoreData();
+			this.popupNumData=new PopupNumberData();
+			this.missionMarketData=new MissionMarketData();
 		}
 	}
 }

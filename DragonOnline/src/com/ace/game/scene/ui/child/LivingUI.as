@@ -108,7 +108,9 @@ package com.ace.game.scene.ui.child {
 			// 行会争霸
 			var type:int=MapInfoManager.getInstance().type;
 			var guildBattle:Boolean = ((type == SceneEnum.SCENE_TYPE_GUCJ) || (type == SceneEnum.SCENE_TYPE_CYCJ)) && (Core.me.info.guildName != info.tileNames[0]);
-			if(guildWar || guildBattle){
+			// 霜炎战场
+			var isEnemy:Boolean = (Core.me.info.camp != info.camp);
+			if(guildWar || guildBattle || isEnemy){
 				nameLbl.htmlText=StringUtil_II.getColorStr(str, getColor(PkMode.PK_COLOR_ORANGE));
 			}else{
 				nameLbl.htmlText=StringUtil_II.getColorStr(str, getColor(info.color));

@@ -6,10 +6,10 @@ package com.leyou.ui.copy.child
 	import com.ace.manager.GuideManager;
 	import com.ace.manager.LibManager;
 	import com.ace.manager.ToolTipManager;
-	import com.ace.ui.component.ProgressBarII;
 	import com.ace.ui.auto.AutoSprite;
 	import com.ace.ui.button.children.ImgButton;
 	import com.ace.ui.button.children.NormalButton;
+	import com.ace.ui.component.ProgressBarII;
 	import com.ace.ui.img.child.Image;
 	import com.ace.ui.lable.Label;
 	import com.ace.utils.StringUtil;
@@ -20,6 +20,7 @@ package com.leyou.ui.copy.child
 	import com.leyou.net.cmd.Cmd_SCP;
 	import com.leyou.util.DateUtil;
 	import com.leyou.utils.CopyUtil;
+	import com.leyou.utils.PropUtils;
 	
 	import flash.display.Sprite;
 	import flash.events.Event;
@@ -188,7 +189,7 @@ package com.leyou.ui.copy.child
 		protected function onEnterFrame(event:Event):void{
 			var rt:int = progressBar.getRemainTime();
 			if(rt >= 0){
-				timeLbl.text = "剩余:"+DateUtil.formatTime(rt, 1);
+				timeLbl.text = PropUtils.getStringById(1672)+DateUtil.formatTime(rt, 1);
 			}else{
 				removeEventListener(Event.ENTER_FRAME, onEnterFrame);
 			}
@@ -207,9 +208,9 @@ package com.leyou.ui.copy.child
 			switch($status){
 				case CopyEnum.COPYSTATUS_LOCK:
 					var f:ColorMatrixFilter = new ColorMatrixFilter([0, 0, 0, 0, 0, 
-						0, 0, 0, 0, 0, 
-						0, 0, 0, 0, 0, 
-						0, 0, 0, 1, 0]);
+																	0, 0, 0, 0, 0, 
+																	0, 0, 0, 0, 0, 
+																	0, 0, 0, 1, 0]);
 					rankImg.visible = true;
 					rankImg.updateBmp("ui/dungeon/icon_wen.png");
 					iconImg.filters = [f];

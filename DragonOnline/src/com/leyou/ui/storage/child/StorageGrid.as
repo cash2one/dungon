@@ -241,12 +241,12 @@ package com.leyou.ui.storage.child {
 			if (this.isEmpty) {
 				var badd:TStorageAdd=TableManager.getInstance().getStorAddInfo(this.initId + 1);
 
-				if (UIManager.getInstance().storageWnd.itemCount == this.initId) {
-					openPoint=new Point($x, $y);
-					this.openExeTime(this.opengridIndex);
-					TimerManager.getInstance().add(openExeTime, "openStorekey");
-				} else
-					ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, StringUtil.substitute(TableManager.getInstance().getSystemNotice(9906).content, [this.initId + 1, badd.addHP, badd.addExp, badd.addMoney]), new Point($x, $y));
+//				if (UIManager.getInstance().storageWnd.itemCount == this.initId) {
+//					openPoint=new Point($x, $y);
+//					this.openExeTime(this.opengridIndex);
+//					TimerManager.getInstance().add(openExeTime, "openStorekey");
+//				} else
+					ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, StringUtil.substitute(TableManager.getInstance().getSystemNotice(9906).content, [this.initId + 1, badd.addHP, badd.addExp, badd.addBMoney]), new Point($x, $y));
 
 			} else {
 

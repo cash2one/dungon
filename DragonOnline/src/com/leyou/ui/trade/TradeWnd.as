@@ -11,6 +11,7 @@ package com.leyou.ui.trade {
 	import com.ace.ui.lable.Label;
 	import com.ace.ui.scrollPane.children.ScrollPane;
 	import com.leyou.ui.trade.child.TradeRender;
+	import com.leyou.utils.PropUtils;
 	
 	import flash.events.Event;
 	import flash.events.FocusEvent;
@@ -216,7 +217,7 @@ package com.leyou.ui.trade {
 			this.gameGoldILbl.mouseChildren=true;
 			this.selfItemArr.length=0;
 
-			this.shelvesBtn.text="物品上架";
+			this.shelvesBtn.text=PropUtils.getStringById(1973);
 			isshelves=false;
 		}
 
@@ -228,11 +229,11 @@ package com.leyou.ui.trade {
 		private function onBtnClick(evt:MouseEvent):void {
 			if (evt.currentTarget.name == "shelvesBtn") { //上架按钮
 
-				if (NormalButton(evt.currentTarget).text.indexOf("取消上架") > -1) {
-					NormalButton(evt.currentTarget).text="物品上架";
+				if (NormalButton(evt.currentTarget).text.indexOf(PropUtils.getStringById(1974)) > -1) {
+					NormalButton(evt.currentTarget).text=PropUtils.getStringById(1973);
 					isshelves=false;
 				} else {
-					NormalButton(evt.currentTarget).text="取消上架";
+					NormalButton(evt.currentTarget).text=PropUtils.getStringById(1974);
 					isshelves=true;
 
 //					UIManager.getInstance().backPackWnd.show();

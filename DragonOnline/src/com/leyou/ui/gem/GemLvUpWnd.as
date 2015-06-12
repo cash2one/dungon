@@ -35,6 +35,7 @@ package com.leyou.ui.gem {
 	import com.leyou.utils.EffectUtil;
 	import com.leyou.utils.FilterUtil;
 	import com.leyou.utils.ItemUtil;
+	import com.leyou.utils.PropUtils;
 	
 	import flash.display.DisplayObject;
 	import flash.events.Event;
@@ -174,9 +175,9 @@ package com.leyou.ui.gem {
 				this.renderArr.push(render);
 			}
 
-			this.accordMenu.addItem("攻击宝石", "", data1);
-			this.accordMenu.addItem("防御宝石", "", data2);
-			this.accordMenu.addItem("生命宝石", "", data3);
+			this.accordMenu.addItem(PropUtils.getStringById(1716), "", data1);
+			this.accordMenu.addItem(PropUtils.getStringById(1717), "", data2);
+			this.accordMenu.addItem(PropUtils.getStringById(1718), "", data3);
 
 			this.accordMenu.addEventListener(MouseEvent.CLICK, onTreeClick);
 
@@ -210,8 +211,8 @@ package com.leyou.ui.gem {
 			this.itemImg.updateBmp("ico/items/" + tinfo.icon + ".png");
 			this.itemImg.setWH(20, 20);
 
-			this.itemCb.text="    ×1 100% 成功";
-			this.ybCb.text="    ×1 100% 成功";
+			this.itemCb.text="    ×1 100% "+PropUtils.getStringById(1719);
+			this.ybCb.text="    ×1 100% "+PropUtils.getStringById(1719);
 
 			var einfo1:MouseEventInfo;
 
@@ -336,8 +337,8 @@ package com.leyou.ui.gem {
 
 			this.moneyLbl.text=(this.moneyNum * this.currentCount) + "";
 
-			this.itemCb.text="    ×" + (this.rate * this.currentCount) + " 100% 成功";
-			this.ybCb.text="    ×" + (ConfigEnum.Gem7 * this.rate * this.currentCount) + " 100% 成功";
+			this.itemCb.text="    ×" + (this.rate * this.currentCount) + " 100% "+PropUtils.getStringById(1719);
+			this.ybCb.text="    ×" + (ConfigEnum.Gem7 * this.rate * this.currentCount) + " 100% "+PropUtils.getStringById(1719);
 
 		}
 
@@ -397,8 +398,8 @@ package com.leyou.ui.gem {
 			this.moneyLbl.text=(this.moneyNum * this.currentCount) + "";
 			this.numInput.text="" + this.currentCount;
 
-			this.itemCb.text="    ×" + (this.rate * this.currentCount) + " 100% 成功";
-			this.ybCb.text="    ×" + (ConfigEnum.Gem7 * this.rate * this.currentCount) + " 100% 成功";
+			this.itemCb.text="    ×" + (this.rate * this.currentCount) + " 100% "+PropUtils.getStringById(1719);
+			this.ybCb.text="    ×" + (ConfigEnum.Gem7 * this.rate * this.currentCount) + " 100% "+PropUtils.getStringById(1719);
 		}
 
 		private function updateSelectInfo():void {
@@ -453,8 +454,8 @@ package com.leyou.ui.gem {
 
 			this.rate=ConfigEnum.Gem4.split("|")[tinfo.level - 2];
 
-			this.itemCb.text="    ×" + (this.rate * this.currentCount) + " 100% 成功";
-			this.ybCb.text="    ×" + (ConfigEnum.Gem7 * this.rate * this.currentCount) + " 100% 成功";
+			this.itemCb.text="    ×" + (this.rate * this.currentCount) + " 100% "+PropUtils.getStringById(1719);
+			this.ybCb.text="    ×" + (ConfigEnum.Gem7 * this.rate * this.currentCount) + " 100% "+PropUtils.getStringById(1719);
 
 			if (this.currentMaxCount < 1)
 				return;

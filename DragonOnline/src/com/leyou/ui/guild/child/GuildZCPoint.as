@@ -9,6 +9,7 @@ package com.leyou.ui.guild.child {
 	import com.ace.ui.img.child.Image;
 	import com.ace.ui.lable.Label;
 	import com.ace.utils.StringUtil;
+	import com.leyou.utils.PropUtils;
 	
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
@@ -50,7 +51,7 @@ package com.leyou.ui.guild.child {
 			this.currentRate=rate;
 			this.currentValue=value;
 
-			this.txtLbl.text=rate + "倍收益";
+			this.txtLbl.text=rate + PropUtils.getStringById(1751);
 		}
 
 

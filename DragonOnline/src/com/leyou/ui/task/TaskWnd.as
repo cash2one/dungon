@@ -90,7 +90,7 @@ package com.leyou.ui.task {
 			}
 			
 			//广告
-			UIManager.getInstance().adWnd.showPanel();
+//			UIManager.getInstance().adWnd.showPanel();
 		}
 
 		/**

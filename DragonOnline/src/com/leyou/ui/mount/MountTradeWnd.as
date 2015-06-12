@@ -23,7 +23,7 @@ package com.leyou.ui.mount {
 	import com.leyou.manager.PopupManager;
 	import com.leyou.net.cmd.Cmd_Mount;
 	import com.leyou.utils.PropUtils;
-	
+
 	import flash.display.DisplayObject;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
@@ -101,7 +101,7 @@ package com.leyou.ui.mount {
 
 		private var checkBoxIndex:int=-1;
 
-		private var propArrKey:Array=[4, 5, 6, 7, 1, 2];
+		private var propArrKey:Array=[4, 5, 1, 2];
 
 		private var numArr:Array=[];
 
@@ -172,44 +172,44 @@ package com.leyou.ui.mount {
 			this.fightImg=this.getUIbyID("fightImg") as Image;
 
 			this.oldArr[PropUtils.getIndexByStr("物理攻击")]=this.phAttLbl;
-			this.oldArr[PropUtils.getIndexByStr("法术攻击")]=this.magicAttLbl;
+//			this.oldArr[PropUtils.getIndexByStr("法术攻击")]=this.magicAttLbl;
 			this.oldArr[PropUtils.getIndexByStr("物理防御")]=this.phDefLbl;
-			this.oldArr[PropUtils.getIndexByStr("法术防御")]=this.magicDefLbl;
+//			this.oldArr[PropUtils.getIndexByStr("法术防御")]=this.magicDefLbl;
 			this.oldArr[PropUtils.getIndexByStr("生命上限")]=this.hpLbl;
 //			this.oldArr[PropUtils.getIndexByStr("法力上限")]=this.mpLbl;
 
 			this.oldRateArr[PropUtils.getIndexByStr("物理攻击")]=this.phAttAddLbl;
-			this.oldRateArr[PropUtils.getIndexByStr("法术攻击")]=this.magicAttAddLbl;
+//			this.oldRateArr[PropUtils.getIndexByStr("法术攻击")]=this.magicAttAddLbl;
 			this.oldRateArr[PropUtils.getIndexByStr("物理防御")]=this.phDefAddLbl;
-			this.oldRateArr[PropUtils.getIndexByStr("法术防御")]=this.magicDefAddLbl;
+//			this.oldRateArr[PropUtils.getIndexByStr("法术防御")]=this.magicDefAddLbl;
 			this.oldRateArr[PropUtils.getIndexByStr("生命上限")]=this.hpAddLbl;
 //			this.oldRateArr[PropUtils.getIndexByStr("法力上限")]=this.mpAddLbl;
 
 			this.newArr[PropUtils.getIndexByStr("物理攻击")]=this.n_phAttLbl;
-			this.newArr[PropUtils.getIndexByStr("法术攻击")]=this.n_magicAttLbl;
+//			this.newArr[PropUtils.getIndexByStr("法术攻击")]=this.n_magicAttLbl;
 			this.newArr[PropUtils.getIndexByStr("物理防御")]=this.n_phDefLbl;
-			this.newArr[PropUtils.getIndexByStr("法术防御")]=this.n_magicDefLbl;
+//			this.newArr[PropUtils.getIndexByStr("法术防御")]=this.n_magicDefLbl;
 			this.newArr[PropUtils.getIndexByStr("生命上限")]=this.n_hpLbl;
 //			this.newArr[PropUtils.getIndexByStr("法力上限")]=this.n_mpLbl;
 
 			this.newRateArr[PropUtils.getIndexByStr("物理攻击")]=this.n_phAttRateLbl;
-			this.newRateArr[PropUtils.getIndexByStr("法术攻击")]=this.n_magicAttRateLbl;
+//			this.newRateArr[PropUtils.getIndexByStr("法术攻击")]=this.n_magicAttRateLbl;
 			this.newRateArr[PropUtils.getIndexByStr("物理防御")]=this.n_phDefRateLbl;
-			this.newRateArr[PropUtils.getIndexByStr("法术防御")]=this.n_magicDegRateLbl;
+//			this.newRateArr[PropUtils.getIndexByStr("法术防御")]=this.n_magicDegRateLbl;
 			this.newRateArr[PropUtils.getIndexByStr("生命上限")]=this.n_hpRateLbl;
 //			this.newRateArr[PropUtils.getIndexByStr("法力上限")]=this.n_mpRateLbl;
 
 			this.newDiffArr[PropUtils.getIndexByStr("物理攻击")]=this.n_phAttAddLbl;
-			this.newDiffArr[PropUtils.getIndexByStr("法术攻击")]=this.n_magicAttAddLbl;
+//			this.newDiffArr[PropUtils.getIndexByStr("法术攻击")]=this.n_magicAttAddLbl;
 			this.newDiffArr[PropUtils.getIndexByStr("物理防御")]=this.n_phDefAddLbl;
-			this.newDiffArr[PropUtils.getIndexByStr("法术防御")]=this.n_magicDegAddLbl;
+//			this.newDiffArr[PropUtils.getIndexByStr("法术防御")]=this.n_magicDegAddLbl;
 			this.newDiffArr[PropUtils.getIndexByStr("生命上限")]=this.n_hpAddLbl;
 //			this.newDiffArr[PropUtils.getIndexByStr("法力上限")]=this.n_mpAddLbl;
 
 			this.newImgArr[PropUtils.getIndexByStr("物理攻击")]=this.phAttImg;
-			this.newImgArr[PropUtils.getIndexByStr("法术攻击")]=this.magicAttImg;
+//			this.newImgArr[PropUtils.getIndexByStr("法术攻击")]=this.magicAttImg;
 			this.newImgArr[PropUtils.getIndexByStr("物理防御")]=this.phDefImg;
-			this.newImgArr[PropUtils.getIndexByStr("法术防御")]=this.magicDefImg;
+//			this.newImgArr[PropUtils.getIndexByStr("法术防御")]=this.magicDefImg;
 			this.newImgArr[PropUtils.getIndexByStr("生命上限")]=this.hpImg;
 //			this.newImgArr[PropUtils.getIndexByStr("法力上限")]=this.mpImg;
 
@@ -360,12 +360,13 @@ package com.leyou.ui.mount {
 			var i:String;
 			for (i in this.dc) {
 
-				if (int(i) == 2)
+				if (int(i) == 2 || int(i) == 6 || int(i) == 7)
 					continue;
 
 				//第一次
 				if (count == 6) {
 
+					
 					this.setPropsItemData(int(i) - 1, o.dc[i]["r"], o.dc[i]["v"]);
 					this.newImgArr[int(i) - 1].visible=false;
 					this.newArr[int(i) - 1].textColor=0xffffff;
@@ -423,38 +424,53 @@ package com.leyou.ui.mount {
 			this.powerNum=num;
 
 			var len:int=num.toString().length;
-			var _x:Number=306 - len * 16 >> 1;
+			var _x:Number=(306 - len * 16) >> 1;
 
 			if (num < 0) {
-				_x-=21 >> 1;
-
-				img=new Image();
-				img.fillEmptyBmd();
-				img.updateBmp("ui/num/cut_red.png");
-
-				img.y=fightLbl.y + 8;
-				img.x=_x;
-
-				this.addChild(img);
-				this.numArr.push(img);
-
-//				_x+=21>>1;
+				_x-=7;
 			}
 
 			for (var i:int=0; i < len; i++) {
 
 				img=new Image();
 				img.fillEmptyBmd();
-				if (num < 0) {
-					img.updateBmp("ui/num/" + num.toString().charAt(i) + "_red.png");
-				} else
-					img.updateBmp("ui/num/" + num.toString().charAt(i) + "_green.png");
 
-				img.y=fightLbl.y + 3;
+//				if (num < 0) {
+//					img.updateBmp("ui/num/" + num.toString().charAt(i) + "_red.png");
+//				} else
+
+				img.updateBmp("ui/num/" + num.toString().charAt(i) + "_zdl.png");
+
+				img.y=fightLbl.y + 8;
 				img.x=_x + i * 16;
 
 				this.addChild(img);
 				this.numArr.push(img);
+			}
+
+			img=new Image();
+			img.fillEmptyBmd();
+			this.addChild(img);
+			this.numArr.push(img);
+
+			img.y=fightLbl.y + 11;
+			img.x=_x + i * 16 + 10;
+
+			img.visible=(num != 0);
+
+			if (num < 0) {
+//				_x-=2;
+				img.updateBmp("ui/equip/equip_arrow3.png");
+//				img.x=_x;
+//				_x-=3;
+
+				img.y=fightLbl.y + 14;
+
+			} else {
+//				_x-=12;
+				img.updateBmp("ui/equip/equip_arrow4.png");
+//				img.x=_x;
+//				_x+=12;
 			}
 
 		}

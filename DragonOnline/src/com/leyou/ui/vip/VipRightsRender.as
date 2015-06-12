@@ -2,7 +2,9 @@ package com.leyou.ui.vip
 {
 	import com.ace.config.Core;
 	import com.ace.enum.FilterEnum;
+	import com.ace.enum.PlayerEnum;
 	import com.ace.enum.TipEnum;
+	import com.ace.enum.UIEnum;
 	import com.ace.gameData.manager.DataManager;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.table.TVIPDetailInfo;
@@ -117,6 +119,29 @@ package com.leyou.ui.vip
 			}
 		}
 		
+		private function getProItem(value:String):int{
+			var arr:Array = value.split("|");
+			if(arr.length > 1){
+				var idx:int = getIndexByPro(Core.me.info.profession);
+				return arr[idx];
+			}
+			return arr[0];
+		}
+		
+		private function getIndexByPro(pro:int):int{
+			switch(pro){
+				case PlayerEnum.PRO_SOLDIER:
+					return 0;
+				case PlayerEnum.PRO_MASTER:
+					return 1;
+				case PlayerEnum.PRO_WARLOCK:
+					return 2;
+				case PlayerEnum.PRO_RANGER:
+					return 3;
+			}
+			return 0;
+		}
+		
 		public function updateVipLv(lv:int):void{
 			if(lv <= 0 || lv > 10) return;
 			for each(var g:MarketGrid in grids){
@@ -127,30 +152,36 @@ package com.leyou.ui.vip
 //			trace("------------------------------trace vip gride count label width begin")
 			var vipDetail:TVIPDetailInfo = TableManager.getInstance().getVipDetailInfo(lv);
 			var index:int = 0;
+			var tid:int;
 			var grid:MarketGrid;
-			if(vipDetail.item1 > 0){
+			if((null != vipDetail.item1) && ("" != vipDetail.item1)){
+				tid = getProItem(vipDetail.item1);
 				grid = getGrid(index);
-				grid.updataInfo({itemId:vipDetail.item1, count:vipDetail.num1});
+				grid.updataInfo({itemId:tid, count:vipDetail.num1});
 				index++;
 			}
-			if(vipDetail.item2 > 0){
+			if((null != vipDetail.item2) && ("" != vipDetail.item2)){
+				tid = getProItem(vipDetail.item2);
 				grid = getGrid(index);
-				grid.updataInfo({itemId:vipDetail.item2, count:vipDetail.num2});
+				grid.updataInfo({itemId:tid, count:vipDetail.num2});
 				index++;
 			}
-			if(vipDetail.item3 > 0){
+			if((null != vipDetail.item3) && ("" != vipDetail.item3)){
+				tid = getProItem(vipDetail.item3);
 				grid = getGrid(index);
-				grid.updataInfo({itemId:vipDetail.item3, count:vipDetail.num3});
+				grid.updataInfo({itemId:tid, count:vipDetail.num3});
 				index++;
 			}
-			if(vipDetail.item4 > 0){
+			if((null != vipDetail.item4) && ("" != vipDetail.item3)){
+				tid = getProItem(vipDetail.item4);
 				grid = getGrid(index);
-				grid.updataInfo({itemId:vipDetail.item4, count:vipDetail.num4});
+				grid.updataInfo({itemId:tid, count:vipDetail.num4});
 				index++;
 			}
-			if(vipDetail.item5 > 0){
+			if((null != vipDetail.item5) && ("" != vipDetail.item5)){
+				tid = getProItem(vipDetail.item5);
 				grid = getGrid(index);
-				grid.updataInfo({itemId:vipDetail.item5, count:vipDetail.num5});
+				grid.updataInfo({itemId:tid, count:vipDetail.num5});
 				index++;
 			}
 //			trace("------------------------------trace vip gride count label width end")

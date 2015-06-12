@@ -5,6 +5,7 @@ package com.leyou.ui.mount {
 	import com.ace.enum.PlayerEnum;
 	import com.ace.enum.TipEnum;
 	import com.ace.enum.WindowEnum;
+	import com.ace.game.scene.ui.effect.StarChangeEffect;
 	import com.ace.gameData.manager.MyInfoManager;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.table.TItemInfo;
@@ -37,7 +38,8 @@ package com.leyou.ui.mount {
 	import com.leyou.ui.quickBuy.QuickBuyWnd;
 	import com.leyou.ui.role.child.children.ImgRolling;
 	import com.leyou.utils.EffectUtil;
-	
+	import com.leyou.utils.PropUtils;
+
 	import flash.display.Bitmap;
 	import flash.display.DisplayObject;
 	import flash.display.Sprite;
@@ -75,6 +77,7 @@ package com.leyou.ui.mount {
 
 		private var goldImg:Image;
 		private var imgArr:Vector.<Image>;
+		private var starEffect:StarChangeEffect;
 
 		private var checkBoxFlag:Vector.<Boolean>;
 		private var info:TMount;
@@ -170,6 +173,11 @@ package com.leyou.ui.mount {
 
 			this.upBtn.setToolTip(TableManager.getInstance().getSystemNotice(1130).content);
 			this.autoUpBtn.setToolTip(TableManager.getInstance().getSystemNotice(1129).content);
+
+			this.starEffect=new StarChangeEffect(10, true);
+			this.addChild(this.starEffect);
+			this.starEffect.x=52;
+			this.starEffect.y=340;
 
 			this.tipsinfo=new TipsInfo();
 			this.tipsinfo.itemid=ConfigEnum.MountItem;
@@ -302,7 +310,7 @@ package com.leyou.ui.mount {
 			this.updateProgress();
 
 			GuideManager.getInstance().showGuide(5, this);
-			
+
 			UIManager.getInstance().taskTrack.setGuideViewhide(TaskEnum.taskType_MountLv);
 		}
 
@@ -316,14 +324,14 @@ package com.leyou.ui.mount {
 				wnd=null;
 			}
 
-			autoUpBtn.text="自动进化";
+			autoUpBtn.text=PropUtils.getStringById(1804);
 			autoTimeId=0;
 
 			this.upBtn.mouseChildren=this.upBtn.mouseEnabled=this.autoUpBtn.mouseChildren=this.autoUpBtn.mouseEnabled=true;
 			UILayoutManager.getInstance().composingWnd(WindowEnum.ROLE);
 			GuideManager.getInstance().removeGuide(5);
 			GuideManager.getInstance().removeGuide(89);
-			
+
 			UIManager.getInstance().taskTrack.setGuideView(TaskEnum.taskType_MountLv);
 		}
 
@@ -382,6 +390,7 @@ package com.leyou.ui.mount {
 					else
 						this.checkBoxFlag[0]=false;
 
+					this.moneyLbl.text=this.data.em;
 					this.needNumLbl.text=" x " + this.info.Multiple1;
 					this.upBtn.setToolTip(TableManager.getInstance().getSystemNotice(1130).content);
 					this.radLbl.text=ConfigEnum.Mount17 + "-999";
@@ -392,8 +401,9 @@ package com.leyou.ui.mount {
 					else
 						this.checkBoxFlag[1]=false;
 
+					this.moneyLbl.text=(int(this.data.em) * 5) + "";
 					this.needNumLbl.text=" x " + this.info.Multiple2;
-					this.upBtn.setToolTip(com.ace.utils.StringUtil.substitute(TableManager.getInstance().getSystemNotice(1131).content, [ConfigEnum.Mount18, this.info.Multiple2, "坐骑进化药剂", this.info.money]));
+					this.upBtn.setToolTip(com.ace.utils.StringUtil.substitute(TableManager.getInstance().getSystemNotice(1131).content, [ConfigEnum.Mount18, this.info.Multiple2, PropUtils.getStringById(1805), this.info.money]));
 					this.radLbl.text=ConfigEnum.Mount18 + "-999";
 					break;
 				case "up2CheckBox":
@@ -402,8 +412,9 @@ package com.leyou.ui.mount {
 					else
 						this.checkBoxFlag[2]=false;
 
+					this.moneyLbl.text=(int(this.data.em) * 10) + "";
 					this.needNumLbl.text=" x " + this.info.Multiple5;
-					this.upBtn.setToolTip(com.ace.utils.StringUtil.substitute(TableManager.getInstance().getSystemNotice(1132).content, [ConfigEnum.Mount19, this.info.Multiple5, "坐骑进化药剂", this.info.money]));
+					this.upBtn.setToolTip(com.ace.utils.StringUtil.substitute(TableManager.getInstance().getSystemNotice(1132).content, [ConfigEnum.Mount19, this.info.Multiple5, PropUtils.getStringById(1805), this.info.money]));
 					this.radLbl.text=ConfigEnum.Mount19 + "-999";
 					break;
 			}
@@ -430,13 +441,13 @@ package com.leyou.ui.mount {
 
 				if (rate > 0) {
 
-					if (this.autoUpBtn.text.indexOf("自动进化") > -1) {
+					if (this.autoUpBtn.text.indexOf(PropUtils.getStringById(1804)) > -1) {
 
-						wnd=PopupManager.showConfirm("自动进化将自动扣除您的金钱与进阶道具，直至进阶完毕，是否确认开启自动进化？", startEve, null, false, "moutLv");
+						wnd=PopupManager.showConfirm(PropUtils.getStringById(1806), startEve, null, false, "moutLv");
 
 					} else {
 
-						autoUpBtn.text="自动进化";
+						autoUpBtn.text=PropUtils.getStringById(1804);
 						clearInterval(autoTimeId);
 						autoTimeId=0;
 
@@ -466,8 +477,8 @@ package com.leyou.ui.mount {
 
 		private function startEve():void {
 			upBtn.mouseChildren=upBtn.mouseEnabled=false; //autoUpBtn.mouseChildren=autoUpBtn.mouseEnabled=false;
-			autoUpBtn.text="停止进化";
-			autoTimeId=setInterval(updateAutoLv, 2000);
+			autoUpBtn.text=PropUtils.getStringById(1807);
+			autoTimeId=setInterval(updateAutoLv, 1500);
 			updateAutoLv();
 		}
 
@@ -563,7 +574,7 @@ package com.leyou.ui.mount {
 		private function closeTime():void {
 			if (autoTimeId != 0) {
 				NoticeManager.getInstance().broadcast(TableManager.getInstance().getSystemNotice(1112));
-				autoUpBtn.text="自动进化";
+				autoUpBtn.text=PropUtils.getStringById(1804);
 				clearInterval(autoTimeId);
 				autoTimeId=0;
 			}
@@ -587,6 +598,9 @@ package com.leyou.ui.mount {
 			if (o.hasOwnProperty("em"))
 				this.moneyLbl.text=o.em;
 
+			if (o.hasOwnProperty("mlv"))
+				this.starEffect.setStarPos(o.mlv % 10 - 1);
+
 			if (o.hasOwnProperty("ad")) {
 				this.ad=o.ad;
 
@@ -599,21 +613,21 @@ package com.leyou.ui.mount {
 					r=10;
 
 				var p:Point=this.localToGlobal(new Point(130, 350));
-				TweenLite.delayedCall(2, EffectUtil.flyWordEffect, ["+" + (o.ad * r) + " 坐骑进化值", p]);
+				TweenLite.delayedCall(2, EffectUtil.flyWordEffect, ["+" + (o.ad * r) + " " + PropUtils.getStringById(1808), p]);
 			}
 
-			if (o.hasOwnProperty("el") && this.autoLv != o.el) {
-				this.autoLv=o.el;
+			if (o.hasOwnProperty("mlv") && this.autoLv != o.mlv) {
+				this.autoLv=o.mlv;
 				this.endRoll();
 
 				if (this.autoLv != 0) {
 					this.closeTime();
 
 //					if (successEffect.isLoaded) {
-						successEffect.visible=true;
-						successEffect.playAct(PlayerEnum.ACT_STAND, -1, false, function():void {
-							successEffect.visible=false;
-						});
+					successEffect.visible=true;
+					successEffect.playAct(PlayerEnum.ACT_STAND, -1, false, function():void {
+						successEffect.visible=false;
+					});
 //					}
 
 					SoundManager.getInstance().play(22);
@@ -639,15 +653,18 @@ package com.leyou.ui.mount {
 			if (this.data.hasOwnProperty("el")) {
 
 				lv=this.data.el;
+				if (int(this.data.mlv) % 10 == 9)
+					lv=lv + 1;
+
 				if (this.data.el == 10)
-					lv=9;
+					lv=10;
 
-				this.lvImg.updateBmp("ui/horse/horse_lv" + (lv + 1) + ".png");
-				this.lvNameImg.updateBmp("ui/horse/horse_lv" + (lv + 1) + "_name.png");
+				this.lvImg.updateBmp("ui/horse/horse_lv" + (lv) + ".png");
+				this.lvNameImg.updateBmp("ui/horse/horse_lv" + (lv) + "_name.png");
 
-				var pid:int=20500 + (lv + 1);
+				var pid:int=20500 + lv;
 
-				if ((lv + 1) == 10) {
+				if (lv == 10) {
 					this.effectBg.update(pid);
 				} else
 					this.effectBg.update(pid);

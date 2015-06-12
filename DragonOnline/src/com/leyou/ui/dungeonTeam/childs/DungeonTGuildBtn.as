@@ -5,6 +5,7 @@ package com.leyou.ui.dungeonTeam.childs {
 	import com.ace.ui.auto.AutoSprite;
 	import com.ace.ui.img.child.Image;
 	import com.ace.ui.lable.Label;
+	import com.leyou.utils.PropUtils;
 
 	public class DungeonTGuildBtn extends AutoSprite {
 
@@ -40,10 +41,10 @@ package com.leyou.ui.dungeonTeam.childs {
 				else
 					this.stateLbl.defaultTextFormat=FontEnum.getTextFormat("Green12");
 				
-				this.stateLbl.text=["未解锁", "已解锁", "未通关", "已通关", "未开启"][o.st] + "";
+				this.stateLbl.text=[PropUtils.getStringById(1687), PropUtils.getStringById(1688), PropUtils.getStringById(1689), PropUtils.getStringById(1690), PropUtils.getStringById(1691)][o.st] + "";
 			} else {
 				this.stateLbl.defaultTextFormat=FontEnum.getTextFormat("Red12");
-				this.stateLbl.text="未解锁";
+				this.stateLbl.text=PropUtils.getStringById(1687);
 			}
 
 		}

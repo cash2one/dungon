@@ -65,7 +65,7 @@ package com.leyou.ui.arrow {
 		}
 
 		public function updateState():void {
-			this.updateInfo();
+//			this.updateInfo();
 		}
 
 		private function updateInfo():void {

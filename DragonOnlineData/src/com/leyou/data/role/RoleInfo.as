@@ -70,5 +70,15 @@ package com.leyou.data.role {
 		 * vip lv 
 		 */		
 		public var vipLv:int=0;
+		
+		/**
+		 * 绝对攻击
+		 */		
+		public var absAttLbl:int=0;
+		
+		/**
+		 * 绝对防御
+		 */		
+		public var absDefLbl:int=0;
 	}
 }

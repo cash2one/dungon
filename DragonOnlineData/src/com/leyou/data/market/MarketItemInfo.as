@@ -56,6 +56,8 @@ package com.leyou.data.market
 		 */		
 		public var pageType:int;
 		
+		public var buyType:int;
+		
 		/**
 		 * <T>构造</T>
 		 * 

@@ -26,7 +26,7 @@ package com.leyou.ui.payrank {
 	import com.leyou.ui.payrank.children.PayRankReward;
 	import com.leyou.utils.PayUtil;
 	import com.leyou.utils.PropUtils;
-
+	
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
@@ -234,6 +234,7 @@ package com.leyou.ui.payrank {
 				reward.updateTInfo(rInfo);
 			}
 		}
+		
 
 		public function updateInfo():void {
 			tick=getTimer();
@@ -262,7 +263,11 @@ package com.leyou.ui.payrank {
 					break;
 				case 3:
 					id=4304;
-					value=ConfigEnum.dayAward5;
+					if(DataManager.getInstance().serverData.isOpening()){
+						value=ConfigEnum.dayAward5;
+					}else{
+						value=ConfigEnum.dayAward7;
+					}
 					url="ui/yrcb/icon_dqzdl.png";
 					break;
 			}
@@ -281,12 +286,14 @@ package com.leyou.ui.payrank {
 		public override function show(toTop:Boolean=true, $layer:int=1, toCenter:Boolean=true):void {
 			super.show(toTop, $layer, toCenter);
 			payRank.reset();
+			payRankBtn.turnOn(false);
 //			Cmd_PayRank.cm_PayRank_I(ctype, 1, PayRankData.RANK_MAX_NUM);
 			updateTime();
 		}
 
 		public override function hide():void {
 			super.hide();
+			ctype = 1;
 			if (TimeManager.getInstance().hasITick(updateTime)) {
 				TimeManager.getInstance().removeITick(updateTime);
 			}

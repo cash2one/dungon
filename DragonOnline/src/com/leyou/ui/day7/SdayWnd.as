@@ -4,6 +4,7 @@ package com.leyou.ui.day7 {
 	import com.ace.enum.WindowEnum;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.table.TKeep_7;
+	import com.ace.manager.GuideManager;
 	import com.ace.manager.LibManager;
 	import com.ace.manager.UIManager;
 	import com.ace.ui.FlyManager;
@@ -48,6 +49,9 @@ package com.leyou.ui.day7 {
 			this.init();
 			this.hideBg();
 			this.mouseChildren=true;
+
+			this.clsBtn.y=60;
+			this.clsBtn.x-=40;
 		}
 
 		private function init():void {
@@ -311,19 +315,22 @@ package com.leyou.ui.day7 {
 			}
 
 			this.sdayPicArr[idx].setMask(false)
-			this.sdayPicArr[idx].rotationY=0;
-			this.sdayPicArr[idx].rotationX=0;
-			this.sdayPicArr[idx].z=1;
+//			this.sdayPicArr[idx].rotationY=0;
+//			this.sdayPicArr[idx].rotationX=0;
+//			this.sdayPicArr[idx].z=1;
 //			this.sdayPicArr[idx].scaleX=1.1;
 			this.sdayPicArr[idx].scaleY=1;
 //			this.sdayPicArr[idx].scaleZ=1;
 			this.addChild(this.sdayPicArr[idx]);
-			TweenMax.to(this.sdayPicArr[idx], 0.3, {x: 228 + 25 + idx * 52, y: 203});
+			TweenMax.to(this.sdayPicArr[idx], 0.3, {x: 228 + 25 + idx * 52, y: 203, z: 1, rotationY: 0, rotationX: 0});
 
-			if (this.dataobj.dlist[idx] == 1 || idx > this.currentDay - 1)
+			if (this.dataobj.dlist[idx] == 1 || idx > this.currentDay - 1) {
+				GuideManager.getInstance().removeGuide(112);
 				this.accpetBtn.setActive(false, 0.6, true)
-			else
+			} else {
 				this.accpetBtn.setActive(true, 1, true)
+				GuideManager.getInstance().showGuide(112, this.accpetBtn);
+			}
 
 			this.selectDay=idx + 1;
 		}
@@ -349,7 +356,7 @@ package com.leyou.ui.day7 {
 
 		override public function hide():void {
 			super.hide();
-
+			GuideManager.getInstance().removeGuide(112);
 			this.selectDay=0;
 		}
 

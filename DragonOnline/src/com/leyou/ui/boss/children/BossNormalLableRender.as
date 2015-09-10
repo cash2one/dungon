@@ -13,8 +13,9 @@ package com.leyou.ui.boss.children {
 	import com.ace.utils.StringUtil;
 	import com.leyou.data.fieldboss.FieldBossInfo;
 	import com.leyou.net.cmd.Cmd_Go;
+	import com.leyou.util.DateUtil;
 	import com.leyou.utils.PropUtils;
-
+	
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	import flash.text.StyleSheet;
@@ -121,11 +122,15 @@ package com.leyou.ui.boss.children {
 			var sceneInfo:TSceneInfo=TableManager.getInstance().getSceneInfo(bossInfo.sceneId + "");
 			nameLbl.text=monsterInfo.name.replace("[BOSS]", "") + "[lv" + monsterInfo.level + "]";
 			lvLbl.text=bossInfo.openLv + "";
-			refreshTLbl.text=bossInfo.refreshTimes[0] / 60 + PropUtils.getStringById(1649);
+//			refreshTLbl.text=bossInfo.refreshTimes[0] / 60 + PropUtils.getStringById(1649);
 			statusLbl.text=(1 == data.status) ? PropUtils.getStringById(1650) : PropUtils.getStringById(1651);
 			statusLbl.textColor=(1 == data.status) ? 0xff00 : 0xff0000;
 			mapLbl.text=sceneInfo.name;
-
+			if(0 != data.refreshTick){
+				refreshTLbl.text = DateUtil.formatDate(new Date(data.refreshTick*1000),"HH24:MI");
+			}else{
+				refreshTLbl.text = "--:--"
+			}
 		}
 	}
 }

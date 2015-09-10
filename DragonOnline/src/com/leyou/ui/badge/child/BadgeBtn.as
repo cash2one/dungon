@@ -15,7 +15,7 @@ package com.leyou.ui.badge.child {
 	import com.leyou.utils.ColorUtil;
 	import com.leyou.utils.FilterUtil;
 	import com.leyou.utils.PropUtils;
-	
+
 	import flash.events.MouseEvent;
 
 	public class BadgeBtn extends AutoSprite {
@@ -64,20 +64,20 @@ package com.leyou.ui.badge.child {
 
 			this.upgradeBtn.addEventListener(MouseEvent.CLICK, onClick);
 
-			if (id == 10) {
-				this.itemIcon.updateBmp("ui/badge/badge_icon_10.png");
+			if (id >= 10) {
+				this.itemIcon.updateBmp("ui/badge/badge_icon_" + id + ".png");
 			} else
 				this.itemIcon.updateBmp("ui/badge/badge_icon_0" + id + ".png");
 		}
 
 		private function onClick(e:MouseEvent):void {
 			this.setMouseDownState();
-			
+
 			UIManager.getInstance().badgeRebudWnd.show();
 			this.setRebudData();
 		}
-		
-		public function setMouseDownState():void{
+
+		public function setMouseDownState():void {
 			this.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
 			this.imgbg.turnOn();
 		}
@@ -98,9 +98,9 @@ package com.leyou.ui.badge.child {
 				this["value" + o[str][1] + "Lbl"].text="+" + o[str][0];
 			}
 
-			if(!UIManager.getInstance().isCreate(WindowEnum.BADGEREBUD))
+			if (!UIManager.getInstance().isCreate(WindowEnum.BADGEREBUD))
 				UIManager.getInstance().creatWindow(WindowEnum.BADGEREBUD);
-			
+
 			if (UIManager.getInstance().badgeRebudWnd.visible && UIManager.getInstance().badgeRebudWnd.index == id)
 				this.setRebudData();
 		}
@@ -153,9 +153,9 @@ package com.leyou.ui.badge.child {
 		}
 
 
-		override public function get width():Number{
+		override public function get width():Number {
 			return 250;
 		}
-		
+
 	}
 }

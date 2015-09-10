@@ -70,6 +70,8 @@ package com.ace.game.proxy {
 			if(UIManager.getInstance().isCreate(WindowEnum.DUNGEON_TEAM)){
 				UIManager.getInstance().teamCopyWnd.updatePage();
 			}
+			
+			UIManager.getInstance().toolsWnd.openFuncToLevel();
 
 			UIManager.getInstance().roleWnd.openWingBuy();
 			UIManager.getInstance().adWnd.updateState();
@@ -248,7 +250,7 @@ package com.ace.game.proxy {
 			//在安全区不允许相互攻击
 			if (Core.me.pInfo.isInSafety || //
 				AreaUtil.checkSafe(SceneUtil.screenXToTileX(living.x), SceneUtil.screenYToTileY(living.y))) {
-				NoticeManager.getInstance().broadcastById(9977);
+				NoticeManager.getInstance().broadcastById(9976);
 				return false;
 			}
 

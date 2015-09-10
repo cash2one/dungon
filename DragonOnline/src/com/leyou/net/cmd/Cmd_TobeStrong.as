@@ -15,9 +15,9 @@ package com.leyou.net.cmd
 			if(UIManager.getInstance().isCreate(WindowEnum.TOBE_STRONG)){
 				UIManager.getInstance().tobeStrong.updateInfo();
 			}
-			if(UIManager.getInstance().isCreate(WindowEnum.DIE)){
-				UIManager.getInstance().dieWnd.updateInfo();
-			}
+//			if(UIManager.getInstance().isCreate(WindowEnum.DIE)){
+//				UIManager.getInstance().dieWnd.updateInfo();
+//			}
 		}
 		
 		public static function cm_RISE_I():void{

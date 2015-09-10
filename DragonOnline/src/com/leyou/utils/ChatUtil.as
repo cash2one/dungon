@@ -18,7 +18,7 @@ package com.leyou.utils {
 	import com.leyou.data.tips.TipsInfo;
 	import com.leyou.enum.ChatEnum;
 	import com.leyou.net.cmd.Cmd_Bag;
-
+	
 	import flash.display.DisplayObject;
 
 	public class ChatUtil {
@@ -366,9 +366,9 @@ package com.leyou.utils {
 					}
 				}
 			}
+			var contentInfo:ChatContentInfo=new ChatContentInfo();
 			content=StringUtil_II.translate(content, values);
 			content=getChannelColor(content, ChatEnum.CHANNEL_SYSTEM);
-			var contentInfo:ChatContentInfo=new ChatContentInfo();
 			contentInfo.channelName=StringUtil_II.getColorStr(StringUtil_II.getAreaF(contentInfo.type), ChatEnum.COLOR_USER);
 			contentInfo.content=contentInfo.channelName + content;
 			if (4119 == msgId) {
@@ -414,6 +414,8 @@ package com.leyou.utils {
 					return PropUtils.getStringById(2015);
 				case "warc":
 					return PropUtils.getStringById(2016);
+				case "fanl":
+					return PropUtils.getStringById(2194);
 			}
 			return null;
 		}

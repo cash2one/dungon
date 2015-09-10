@@ -121,6 +121,7 @@ package com.leyou.ui.rank.child
 		protected function setSelectLabel(label:RankRender):void{
 			if(null != label){
 				UIManager.getInstance().rankWnd.showAvatar(label.avaStr, label.gender, label.vocation);
+				Cmd_Rank.cm_RAK_A(0, label.getName());
 			}
 			if((null == label) || (selectLabel == label)){
 				return;
@@ -133,7 +134,6 @@ package com.leyou.ui.rank.child
 			selectLabel.onMouseOver(null);
 			selectLabel.locked = true;
 			UIManager.getInstance().rankWnd.playerName = selectLabel.getName();
-			Cmd_Rank.cm_RAK_A(0, selectLabel.getName());
 		}
 		
 		protected function onSortType(event:Event):void{

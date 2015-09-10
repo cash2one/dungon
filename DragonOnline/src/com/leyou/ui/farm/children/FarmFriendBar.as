@@ -59,7 +59,7 @@ package com.leyou.ui.farm.children
 		 * 
 		 */		
 		public function get friendName():String{
-			return areaLbl.text.replace(PropUtils.getStringById(1699),"")+"."+nameLbl.text;
+			return areaLbl.text.replace(PropUtils.getStringById(1699),"")+nameLbl.text;
 		}
 		
 		/**
@@ -69,9 +69,9 @@ package com.leyou.ui.farm.children
 		 * 
 		 */		
 		public function set friendName(n:String):void{
-			var index:int = n.indexOf(".");
+			var index:int = n.indexOf("]");
 			if(-1 != index){
-				areaLbl.text = n.substr(0, index) + PropUtils.getStringById(1699);
+				areaLbl.text = n.substr(0, index+1) + PropUtils.getStringById(1699);
 				nameLbl.text = n.substr(index+1);
 			}
 		}

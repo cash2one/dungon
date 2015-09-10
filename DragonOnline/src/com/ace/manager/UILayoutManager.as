@@ -92,6 +92,7 @@ package com.ace.manager {
 			StartObjs[WindowEnum.GUILD]=toolsWnd.getUIbyID("guildBtn");
 			StartObjs[WindowEnum.EQUIP]=toolsWnd.getUIbyID("duanZBtn");
 			StartObjs[WindowEnum.SKILL]=toolsWnd.getUIbyID("skillBtn");
+			StartObjs[WindowEnum.GEM_LV]=toolsWnd.getUIbyID("alchmyBtn");
 			StartObjs[WindowEnum.BADAGE]=toolsWnd.getUIbyID("wenZBtn");
 			StartObjs[WindowEnum.FRIEND]=toolsWnd.getUIbyID("friendBtn");
 			StartObjs[WindowEnum.MAILL]=UIManager.getInstance().smallMapWnd.getUIbyID("mailBtn");
@@ -136,6 +137,8 @@ package com.ace.manager {
 			StartObjs[WindowEnum.PET]=rightTopWnd.getWidget("petBtn");
 			StartObjs[WindowEnum.TASK_MARKET]=rightTopWnd.getWidget("taskMarketBtn");
 			StartObjs[WindowEnum.KEEP_7]=rightTopWnd.getWidget("sevenDayBtn");
+			StartObjs[WindowEnum.TTT]=rightTopWnd.getWidget("towerBtn");
+			StartObjs[WindowEnum.LABA]=rightTopWnd.getWidget("gambleBtn");
 
 			//------------------------------------------------------------
 			// 关联界面注册,格式:
@@ -144,22 +147,24 @@ package com.ace.manager {
 			LinkWnds={};
 			LinkWnds[WindowEnum.AUTION]=[WindowEnum.AUTION, WindowEnum.BACKPACK];
 			LinkWnds[WindowEnum.MAILL]=[WindowEnum.MAILL, WindowEnum.BACKPACK];
-			LinkWnds[WindowEnum.ROLE]=[WindowEnum.ROLE, WindowEnum.BACKPACK];
-			LinkWnds[WindowEnum.BACKPACK]=[WindowEnum.MAILL, WindowEnum.AUTION, WindowEnum.ROLE, WindowEnum.BACKPACK];
+			LinkWnds[WindowEnum.ROLE]=[WindowEnum.ROLE, WindowEnum.BACKPACK,WindowEnum.GEM_LV];
+			LinkWnds[WindowEnum.BACKPACK]=[WindowEnum.MAILL, WindowEnum.AUTION, WindowEnum.ROLE, WindowEnum.BACKPACK,WindowEnum.GEM_LV];
 			LinkWnds[WindowEnum.STOREGE]=[WindowEnum.STOREGE, WindowEnum.BACKPACK];
 			LinkWnds[WindowEnum.SHOP]=[WindowEnum.SHOP, WindowEnum.BACKPACK];
-
+			LinkWnds[WindowEnum.LABA_DESC]=[WindowEnum.LABA,WindowEnum.LABA_DESC];
+			
 			//------------------------------------------------------------
 			// 子界面注册,格式:
 			//				  界面枚举:[子界面枚举数组]
 			//------------------------------------------------------------
 			ChildrenWnds={};
-			ChildrenWnds[WindowEnum.ROLE]=[WindowEnum.MOUTLVUP, WindowEnum.MOUTTRADEUP,WindowEnum.MEDIC,WindowEnum.WING_FLY, WindowEnum.WINGLVUP, WindowEnum.GEM_LV, WindowEnum.QUICK_BUY];
+			ChildrenWnds[WindowEnum.ROLE]=[WindowEnum.MOUTLVUP, WindowEnum.MOUTTRADEUP,WindowEnum.MEDIC,WindowEnum.WING_FLY, WindowEnum.WINGLVUP,WindowEnum.QUICK_BUY];
 			ChildrenWnds[WindowEnum.SKILL]=[WindowEnum.RUNE, WindowEnum.QUICK_BUY];
 			ChildrenWnds[WindowEnum.EQUIP]=[WindowEnum.QUICK_BUY];
 			ChildrenWnds[WindowEnum.MAILL]=[WindowEnum.MAILL_READ];
 			ChildrenWnds[WindowEnum.LUCKDRAW]=[WindowEnum.LUCKDRAW_STORE];
-
+			
+			
 			Offsets={};
 		}
 

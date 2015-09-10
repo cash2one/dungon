@@ -3,6 +3,7 @@ package com.ace.loader.pre {
 	import com.ace.delayCall.DelayCallManager;
 	import com.ace.enum.FileEnum;
 	import com.ace.enum.FilterEnum;
+	import com.ace.enum.PlatformEnum;
 	import com.ace.enum.UIEnum;
 	import com.ace.manager.LibManager;
 	import com.ace.manager.LoopManager;
@@ -78,7 +79,12 @@ package com.ace.loader.pre {
 			text.autoSize=TextFieldAutoSize.LEFT;
 			text.textColor=0xffffff;
 			text.filters=[FilterEnum.hei_miaobian];
-			text.text="抵制不良游戏，拒绝盗版游戏。注意自我保护，谨防受骗上当。适度游戏益脑，沉迷游戏伤身。合理安排时间，享受健康生活。";
+			if (UIEnum.MULTI_LAN == PlatformEnum.LAN_CN) {
+				text.text="抵制不良游戏，拒绝盗版游戏。注意自我保护，谨防受骗上当。适度游戏益脑，沉迷游戏伤身。合理安排时间，享受健康生活。";
+			} else if (UIEnum.MULTI_LAN == PlatformEnum.LAN_TW) {
+				text.text="遊戲純屬娛樂，切勿過度沉迷，建議您，每小時都要起來動一動，讓身體休息一下喔。";
+			}
+
 			if (this.gameRoot.stage.loaderInfo.parameters.hasOwnProperty("version")) {
 				this.text.appendText(this.gameRoot.stage.loaderInfo.parameters.version);
 			} else {
@@ -122,7 +128,7 @@ package com.ace.loader.pre {
 
 		override public function onLoaded():void {
 			setProgress(1);
-			progressText.text="准备资源中....";
+			progressText.text="Loading....";
 			super.onLoaded();
 //			DelayCallManager.getInstance().add(this, this.onLoaded2, "onLoaded2", 1);
 			setTimeout(this.setUp, 10);

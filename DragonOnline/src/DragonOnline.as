@@ -3,13 +3,18 @@ package {
 	import com.ace.config.Core;
 	import com.ace.enum.UIEnum;
 	import com.ace.game.manager.LogManager;
+	import com.ace.loader.child.SwfLoader;
 	import com.ace.manager.LayerManager;
+	import com.ace.manager.LibManager;
 	import com.ace.ui.FlyManager;
 	import com.ace.ui.UiTester;
+	import com.ace.ui.button.children.ImgButton;
 	import com.ace.ui.img.child.Image;
 	import com.ace.ui.notice.NoticeManager;
 	import com.leyou.net.ServerFunDic;
 	import com.leyou.utils.MessageUtil;
+	
+	import flash.display.Bitmap;
 
 	[SWF(width='1024', height='768', backgroundColor='#000000')]
 	public class DragonOnline extends GameModel {
@@ -25,12 +30,17 @@ package {
 
 		override protected function start():void {
 
-//			var effectSucc:SwfLoader=new SwfLoader(99939,null, true);
+//			var effectSucc:SwfLoader=new SwfLoader(27069,null, true);
 //			this.addChild(effectSucc);
 //			return ;
-			
-			
-			
+ 	
+//			this.addChild(new Image("ui/other/close_btn_minus.png"))
+//			this.addChild(new Image("ui/alchemy/btn_2.png"))
+//			this.addChild(new Bitmap(LibManager.getInstance().getImg("ui/alchemy/btn_2.png")))
+//			this.addChild(new Bitmap(LibManager.getInstance().getImg("ui/other/close_btn_minus.png")))
+//			this.addChild(new ImgButton(LibManager.getInstance().getImg("ui/alchemy/btn_2.png")))
+				
+				
 			if (Core.bugTest) {
 				LayerManager.getInstance().windowLayer.addChild(new UiTester());
 				return;

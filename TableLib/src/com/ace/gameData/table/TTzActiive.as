@@ -62,6 +62,11 @@ package com.ace.gameData.table
 		public var bImage:String;
 		
 		/**
+		 *	bImage
+		 */
+		public var mmImage:String;
+		
+		/**
 		 *	time
 		 */
 		public var time:String;
@@ -141,6 +146,7 @@ package com.ace.gameData.table
 			this.nameImage=data.@nameImage;
 			this.sImage=data.@sImage;
 			this.bImage=data.@bImage;
+			this.mmImage=data.@mmImage;
 			this.time=data.@time;
 			this.pretime=data.@pretime;
 			this.realtime=data.@realtime;

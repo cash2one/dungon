@@ -105,7 +105,7 @@ package com.leyou.ui.role.child {
 		private var rollingFalg:Array;
 		private var stopImgNum:Array;
 
-		private var guildElement:int;
+		public var guildElement:int=-1;
 		private var clickIdx:int;
 		private var timer:Timer;
 		public var info:ElementInfo;
@@ -509,7 +509,6 @@ package com.leyou.ui.role.child {
 				for (i=0; i < this.info.elements.length; i++) {
 					this.info.elements[i].flag=false;
 				}
-
 				this.info.elements[this.guildElement].flag=true;
 			}
 
@@ -556,6 +555,7 @@ package com.leyou.ui.role.child {
 					this.info.elements[i].flag=false;
 				}
 
+				GuideManager.getInstance().removeGuide(11);
 				this.info.elements[this.guildElement].flag=true;
 			}
 		}

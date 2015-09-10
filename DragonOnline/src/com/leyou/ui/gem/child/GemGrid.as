@@ -1,6 +1,7 @@
 package com.leyou.ui.gem.child {
 
 
+	import com.ace.enum.FontEnum;
 	import com.ace.enum.ItemEnum;
 	import com.ace.enum.TipEnum;
 	import com.ace.game.backpack.GridBase;
@@ -8,8 +9,10 @@ package com.leyou.ui.gem.child {
 	import com.ace.manager.LibManager;
 	import com.ace.manager.ToolTipManager;
 	import com.ace.manager.UIManager;
+	import com.ace.ui.lable.Label;
 	import com.leyou.data.tips.TipsInfo;
 	import com.leyou.net.cmd.Cmd_Gem;
+	import com.leyou.utils.FilterUtil;
 	
 	import flash.geom.Point;
 
@@ -22,7 +25,9 @@ package com.leyou.ui.gem.child {
 		public var gemGridList:Vector.<GemGrid>;
 
 		public var effectGlow:Function;
-		
+
+		protected var numLbl:Label;
+
 		public function GemGrid() {
 			super();
 		}
@@ -44,6 +49,14 @@ package com.leyou.ui.gem.child {
 
 			this.tips=new TipsInfo();
 
+			this.numLbl=new Label();
+			this.numLbl.x=22;
+			this.numLbl.y=24;
+			this.addChild(this.numLbl);
+
+			this.numLbl.defaultTextFormat=FontEnum.getTextFormat("White10right");
+			this.numLbl.filters=[FilterUtil.showBorder(0x000000)];
+
 			this.doubleClickEnabled=true;
 //						this.opaqueBackground=0xff0000;
 		}
@@ -52,7 +65,7 @@ package com.leyou.ui.gem.child {
 			this.reset();
 			this.unlocking();
 
-			this.bgBmp.alpha=0;
+//			this.bgBmp.alpha=0;
 
 			if (info == null)
 				return;
@@ -70,7 +83,7 @@ package com.leyou.ui.gem.child {
 
 			this.stopMc();
 			if (info.effect != null && info.effect != "0" && this.selectIndex == -1) {
-				if (this.bgBmp.width == 60 && this.bgBmp.height == 60 && info.effect1 != "") {
+				if (this.iconBmp.width == 60 && this.iconBmp.height == 60 && info.effect1 != "") {
 					this.playeMc(int(info.effect1), new Point(0, 0));
 				} else
 					this.playeMc(int(info.effect), new Point(0, 0));
@@ -89,16 +102,37 @@ package com.leyou.ui.gem.child {
 		}
 
 		public function setSize(w:Number, h:Number):void {
-			this.bgBmp.setWH(w, h);
+//			this.bgBmp.setWH(w, h);
 			this.selectBmp.setWH(w + 5, h + 5);
 
-			this.selectBmp.x=this.bgBmp.width - this.selectBmp.width >> 1;
-			this.selectBmp.y=this.bgBmp.height - this.selectBmp.height >> 1;
+			this.selectBmp.x=60 - this.selectBmp.width >> 1;
+			this.selectBmp.y=60 - this.selectBmp.height >> 1;
 			this.iconBmp.setWH(w, h);
 			//			if (info.info.effect1 != null && info.info.effect1 != "0" && this.dataId == -1)
 			//				this.playeMc(int(info.info.effect1));
+
+
+
 		}
 
+		public function setBgBmp(s:int):void {
+			if (s == 2) {
+				this.bgBmp.bitmapData=LibManager.getInstance().getImg("ui/other/icon_prop_bigframe.png");
+				this.bgBmp.x=-11;
+				this.bgBmp.y=-11;
+			} else if (s == 1) {
+				this.bgBmp.updateBmp("ui/equip/icon_prop_smframe.png");
+				this.bgBmp.x=-7;
+				this.bgBmp.y=-7;
+			}
+
+			this.bgBmp.alpha=1;
+		}
+
+		public function setNum(num:String):void {
+			this.numLbl.text="" + num;
+			this.numLbl.x=40 - this.numLbl.textWidth - 5;
+		}
 
 		public function getItemID():int {
 			return this.tips.itemid;
@@ -110,8 +144,15 @@ package com.leyou.ui.gem.child {
 			if (this.isEmpty)
 				return;
 
+			
 			tips.isdiff=false;
-			ToolTipManager.getInstance().show(TipEnum.TYPE_GEM_OTHER, tips, new Point(this.stage.mouseX + this.width, this.stage.mouseY + this.height));
+			
+			var type:int=TipEnum.TYPE_GEM_OTHER;
+			if(this.tips.itemid>10000){
+				type=TipEnum.TYPE_EQUIP_ITEM;
+			}
+			
+			ToolTipManager.getInstance().show(type, tips, new Point(this.stage.mouseX + this.width, this.stage.mouseY + this.height));
 		}
 
 		override public function mouseOutHandler():void {
@@ -142,10 +183,10 @@ package com.leyou.ui.gem.child {
 //					}
 
 					Cmd_Gem.cmGemInlay(fromItem.data.pos, this.selectIndex, this.dataId);
-					
-					if(this.effectGlow!=null)
+
+					if (this.effectGlow != null)
 						this.effectGlow();
-					
+
 					ToolTipManager.getInstance().hide();
 				}
 
@@ -159,7 +200,7 @@ package com.leyou.ui.gem.child {
 
 			if (!this.doubleClickEnabled)
 				return;
-			
+
 			if (this.selectIndex != -1 && this.dataId != -1) {
 				Cmd_Gem.cmGemQuit(this.selectIndex, this.dataId);
 			}

@@ -189,10 +189,10 @@ package com.leyou.util {
 					if (hour > 0 || ("" != content)) {
 						content+=hour + PropUtils.getStringById(2062);
 					}
-					if (minute > 0 || ("" != content)) {
+					if ((day <= 0) && (minute > 0 || ("" != content))) {
 						content+=minute + PropUtils.getStringById(2147);
 					}
-					if (second > 0 || ("" != content)) {
+					if ((day <= 0) && (second > 0 || ("" != content))) {
 						content+=second + PropUtils.getStringById(2146);
 					}
 					break;
@@ -240,5 +240,18 @@ package com.leyou.util {
 			format=format.replace("MS", StringUtil.fillTheStr(date.milliseconds, 2, "0"));
 			return format;
 		}
+		
+		public static function convertDateStr(dateStr:String):String{  
+			var strArr:Array = dateStr.split(" ");  
+			var fStr:String = "{0} {1} {2}";
+			return format(fStr, (strArr[0] as String).split("-").join("/"), strArr[1], "GMT");  
+		}  
+		
+		public static function format(str:String, ...args):String{  
+			for(var i:int = 0; i<args.length; i++){  
+				str = str.replace(new RegExp("\\{" + i + "\\}", "gm"), args[i]);  
+			}  
+			return str;  
+		}  
 	}
 }

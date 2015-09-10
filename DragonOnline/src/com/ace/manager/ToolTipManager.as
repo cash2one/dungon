@@ -5,6 +5,7 @@ package com.ace.manager {
 	import com.ace.ui.toolTip.children.ToolTip;
 	import com.leyou.ui.tips.BuyBuffWnd;
 	import com.leyou.ui.tips.DungeonTZTips;
+	import com.leyou.ui.tips.GuildSciTips;
 	import com.leyou.ui.tips.TipsAchievementTip;
 	import com.leyou.ui.tips.TipsActiveRewardTip;
 	import com.leyou.ui.tips.TipsCollectionTip;
@@ -19,11 +20,14 @@ package com.ace.manager {
 	import com.leyou.ui.tips.TipsGemWnd;
 	import com.leyou.ui.tips.TipsMissionWnd;
 	import com.leyou.ui.tips.TipsRuneTip;
+	import com.leyou.ui.tips.TipsPetTip;
 	import com.leyou.ui.tips.TipsSkillTip;
+	import com.leyou.ui.tips.TipsTzWnd;
 	import com.leyou.ui.tips.TipsVipBlessTip;
 	import com.leyou.ui.tips.TipsVipEquipTip;
 	import com.leyou.ui.tips.TipsVipSkillTip;
 	import com.leyou.ui.tips.TipsguildSWnd;
+	import com.leyou.ui.tips.TitleTips;
 
 	public class ToolTipManager extends MToolTipManager {
 
@@ -68,6 +72,10 @@ package com.ace.manager {
 			this.classDic[TipEnum.TYPE_COLLECTION]=TipsCollectionTip;
 			this.classDic[TipEnum.TYPE_GEM]=TipsGemEquipWnd;
 			this.classDic[TipEnum.TYPE_GEM_OTHER]=TipsGemWnd;
+			this.classDic[TipEnum.TYPE_TZ]=TipsTzWnd;
+			this.classDic[TipEnum.TYPE_GUILD_BLESS]=GuildSciTips;
+			this.classDic[TipEnum.TYPE_TITLE]=TitleTips;
+			this.classDic[TipEnum.TYPE_PET]=TipsPetTip;
 		}
 
 	}

@@ -7,6 +7,7 @@ package com.leyou.ui.rank.child {
 	import com.ace.ui.img.child.Image;
 	import com.ace.ui.lable.Label;
 	import com.ace.ui.menu.data.MenuInfo;
+	import com.ace.utils.StringUtil;
 	import com.greensock.TweenLite;
 	import com.leyou.enum.ChatEnum;
 	import com.leyou.net.cmd.Cmd_Duel;
@@ -14,7 +15,7 @@ package com.leyou.ui.rank.child {
 	import com.leyou.net.cmd.Cmd_Guild;
 	import com.leyou.net.cmd.Cmd_Tm;
 	import com.leyou.utils.PropUtils;
-
+	
 	import flash.events.MouseEvent;
 
 	public class RankRender extends AutoSprite implements IMenu {
@@ -148,28 +149,38 @@ package com.leyou.ui.rank.child {
 						return PropUtils.getStringById(1527);
 				}
 			} else if (2 == type || 3 == type) {
-				switch (var1) {
-					case 1:
-						return PropUtils.getStringById(1862);
-					case 2:
-						return PropUtils.getStringById(1863);
-					case 3:
-						return PropUtils.getStringById(1839);
-					case 4:
-						return PropUtils.getStringById(1840);
-					case 5:
-						return PropUtils.getStringById(1841);
-					case 6:
-						return PropUtils.getStringById(1842);
-					case 7:
-						return PropUtils.getStringById(1843);
-					case 8:
-						return PropUtils.getStringById(1844);
-					case 9:
-						return PropUtils.getStringById(1845);
-					case 10:
-						return PropUtils.getStringById(1846);
+				var level:int = Math.floor(var1/10)+1;
+				var starLv:int = var1%10;
+				var lvStr:String = StringUtil.substitute(PropUtils.getStringById(2187), PropUtils.getCNum(level));
+				var starStr:String = (starLv > 0) ? starStr = StringUtil.substitute(PropUtils.getStringById(2188), PropUtils.getCNum(starLv)) : "";
+				// 100级特殊处理
+				if(100 <= var1){
+					lvStr = StringUtil.substitute(PropUtils.getStringById(2187), PropUtils.getCNum(10));
+					starStr = StringUtil.substitute(PropUtils.getStringById(2188), PropUtils.getCNum(10));
 				}
+				return lvStr+starStr;
+//				switch (var1) {
+//					case 1:
+//						return PropUtils.getStringById(1862);
+//					case 2:
+//						return PropUtils.getStringById(1863);
+//					case 3:
+//						return PropUtils.getStringById(1839);
+//					case 4:
+//						return PropUtils.getStringById(1840);
+//					case 5:
+//						return PropUtils.getStringById(1841);
+//					case 6:
+//						return PropUtils.getStringById(1842);
+//					case 7:
+//						return PropUtils.getStringById(1843);
+//					case 8:
+//						return PropUtils.getStringById(1844);
+//					case 9:
+//						return PropUtils.getStringById(1845);
+//					case 10:
+//						return PropUtils.getStringById(1846);
+//				}
 			} else if (5 == type) {
 				switch (var1) {
 					case 1:

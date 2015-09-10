@@ -85,6 +85,10 @@ package com.leyou.net.cmd {
 			NetGate.getInstance().send(CmdEnum.CM_TAG + "|" + areaId);
 		}
 
+		public static function cm_ulogi():void {
+			NetGate.getInstance().send(CmdEnum.CM_ULOGI_I + UIEnum.PLAT_FORM_ID);
+		}
+
 		internal static var PRE_PS:Point;
 
 		//通知进入地图
@@ -105,6 +109,7 @@ package com.leyou.net.cmd {
 //			KeysManager.getInstance().addKeyFun(Keyboard.I,cm_r);
 //			cm_r();
 			Core.isTencent && cm_tx();
+			cm_ulogi();
 		}
 
 		internal static var isFirst:Boolean=true; //
@@ -207,8 +212,7 @@ package com.leyou.net.cmd {
 			while (br.bytesAvailable) {
 				br.position++;
 				var id:uint=br.readUnsignedShort();
-				if (id == Core.me.id)
-					return;
+
 
 				br.position++;
 				var len:uint=br.readUnsignedShort() >> 2;
@@ -225,9 +229,9 @@ package com.leyou.net.cmd {
 				}
 				//			trace("接受像素点：" + sDs);
 				var player:LivingModel=UIManager.getInstance().gameScene.getPlayer(id);
-				if (!player) {
-					trace("没有找到该玩家");
-					return;
+				if (!player || id == Core.me.id) {
+//					trace("没有找到该玩家");
+					continue;
 				}
 
 				CONFIG::debug {
@@ -435,6 +439,7 @@ package com.leyou.net.cmd {
 					SettingManager.getInstance().assitInfo.loadCookie();
 					UIManager.getInstance().soundConfig.loadSetting();
 					UIManager.getInstance().viewConfig.loadSetting();
+					UIManager.getInstance().petIconbar.checkActive();
 					// 挂机可用药品
 					AssistWnd.getInstance().refreshHpItem();
 					// 刷新可用地图
@@ -452,6 +457,34 @@ package com.leyou.net.cmd {
 			sm_equipEffect(living.info.id);
 			sm_lockChange(living);
 			sm_hideGuidLiving(living);
+
+			sm_onAddPet(living);
+
+			if (living.info.race == PlayerEnum.RACE_PET) {
+				living.addEffect(TableManager.getInstance().getPetStarLvInfo(living.info.tId, living.info.color).pnfId2);
+			}
+		}
+
+		static public function sm_onAddPet(living:LivingModel):void {
+			if (living.id == Core.me.info.id)
+				return;
+			if (String(living.info.tileNames[1]).indexOf(Core.me.info.name) != -1) {
+				trace("自己的佣兵");
+				Core.pet=living;
+				Core.me.info.petId=living.id;
+				EventManager.getInstance().dispatchEvent(EventEnum.PET_ADD);
+			}
+		}
+
+		static public function sm_onDelPet(id:int):void {
+			if (id == Core.me.info.id)
+				return;
+			if (Core.me.info.petId == id) {
+				trace("删除佣兵");
+				EventManager.getInstance().dispatchEvent(EventEnum.PET_DEL);
+				Core.pet=null;
+				Core.me.info.petId=-1;
+			}
 		}
 
 		static public function sm_hideGuidLiving(living:LivingModel):void {
@@ -464,7 +497,7 @@ package com.leyou.net.cmd {
 			if (!Core.me.pInfo.isLockAttackTarget)
 				return;
 //			trace("是否是锁定玩家：", living.info.name, Core.me.pInfo.lockAttackName);
-			if (living.info.name == Core.me.pInfo.lockAttackName) {
+			if (living.info.name == Core.me.pInfo.lockAttackName && !living.info.isHiding) {
 				Core.me.pInfo.changeLockTarget(living.id);
 				EventManager.getInstance().dispatchEvent(EventEnum.LOCK_TARGET_IN);
 			}
@@ -554,6 +587,7 @@ package com.leyou.net.cmd {
 			obj=obj.split("|")[1];
 			var arr:Array=obj.split(",");
 			for (var i:int=0; i < arr.length; i++) {
+				sm_onDelPet(arr[i]);
 				UIManager.getInstance().gameScene.delLivingBase(arr[i]);
 			}
 		}
@@ -642,6 +676,10 @@ package com.leyou.net.cmd {
 					living.info.equipLv=obj["svar"][0];
 					living.info.equipColor=obj["svar"][1];
 					sm_equipEffect(living.info.id);
+					break;
+				case 6:
+					living.info.name=obj["svar"][0];
+					living.ui.showName(living.info);
 					break;
 			}
 		}

@@ -12,6 +12,7 @@ package com.leyou.ui.tips {
 	import com.leyou.enum.ConfigEnum;
 	import com.leyou.enum.TaskEnum;
 	import com.leyou.ui.task.child.MissionGrid;
+	import com.leyou.utils.TaskUtil;
 
 	public class TipsDMissonWnd extends AutoSprite implements ITip {
 
@@ -78,18 +79,18 @@ package com.leyou.ui.tips {
 						if (bname.indexOf("npc") > -1 || bname.indexOf("box") > -1) {
 
 							//							this.linkArr[int(minfo.type)].push(bname + "--" + minfo[bname]);
-							tartxt=tartxt.replace("##", "<font color='#00ff00'><u><a href='event:" + bname + "--" + minfo[bname] + "'>" + minfo[tarval[i]] + "</a></u></font>");
+							tartxt=tartxt.replace("##", "<font color='#00ff00'><u><a href='event:" + bname + "--" + minfo[bname] + "'>" + TaskUtil.getTaskTargetName(tarval[i], minfo[tarval[i]]) + "</a></u></font>");
 						} else {
 							//							this.linkArr[int(minfo.type)].push(bname + "--" + minfo.target_point);
 
 							if (int(minfo.dtype) == TaskEnum.taskType_killBossDrop)
-								tartxt=tartxt.replace("##", "<font color='#00ff00'><u><a href='event:" + String(tarval[0]).split("_")[0] + "_id" + "--" + minfo.target_point + "'>" + minfo[tarval[i]] + "</a></u></font>");
+								tartxt=tartxt.replace("##", "<font color='#00ff00'><u><a href='event:" + String(tarval[0]).split("_")[0] + "_id" + "--" + minfo.target_point + "'>" + TaskUtil.getTaskTargetName(tarval[i], minfo[tarval[i]]) + "</a></u></font>");
 							else if (int(minfo.dtype) == TaskEnum.taskType_collect)
-								tartxt=tartxt.replace("##", "<font color='#00ff00'><u><a href='event:" + String(tarval[0]).split("_")[0] + "_id" + "--" + minfo.box_id + "'>" + minfo[tarval[i]] + "</a></u></font>");
+								tartxt=tartxt.replace("##", "<font color='#00ff00'><u><a href='event:" + String(tarval[0]).split("_")[0] + "_id" + "--" + minfo.box_id + "'>" + TaskUtil.getTaskTargetName(tarval[i], minfo[tarval[i]]) + "</a></u></font>");
 							else if (int(minfo.dtype) == TaskEnum.taskType_Exchange)
-								tartxt=tartxt.replace("##", "<font color='#00ff00'><u><a href='event:" + bname + "--" + minfo.dnpc + "'>" + minfo[tarval[i]] + "</a></u></font>");
+								tartxt=tartxt.replace("##", "<font color='#00ff00'><u><a href='event:" + bname + "--" + minfo.dnpc + "'>" + TaskUtil.getTaskTargetName(tarval[i], minfo[tarval[i]]) + "</a></u></font>");
 							else
-								tartxt=tartxt.replace("##", "<font color='#00ff00'><u><a href='event:" + bname + "--" + minfo.target_point + "'>" + minfo[tarval[i]] + "</a></u></font>");
+								tartxt=tartxt.replace("##", "<font color='#00ff00'><u><a href='event:" + bname + "--" + minfo.target_point + "'>" + TaskUtil.getTaskTargetName(tarval[i], minfo[tarval[i]]) + "</a></u></font>");
 						}
 					}
 

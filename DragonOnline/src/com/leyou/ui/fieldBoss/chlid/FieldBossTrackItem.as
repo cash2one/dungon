@@ -3,6 +3,7 @@ package com.leyou.ui.fieldBoss.chlid {
 	import com.ace.gameData.manager.DataManager;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.table.TFieldBossInfo;
+	import com.ace.gameData.table.TItemInfo;
 	import com.ace.manager.LibManager;
 	import com.ace.manager.ToolTipManager;
 	import com.ace.ui.auto.AutoSprite;
@@ -11,7 +12,7 @@ package com.leyou.ui.fieldBoss.chlid {
 	import com.ace.utils.StringUtil;
 	import com.leyou.data.fieldboss.FBRankInfo;
 	import com.leyou.utils.PropUtils;
-
+	
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
@@ -45,7 +46,8 @@ package com.leyou.ui.fieldBoss.chlid {
 			var content:String=TableManager.getInstance().getSystemNotice(5006).content;
 			var bossId:int=DataManager.getInstance().fieldBossData.damBossId;
 			var bossInfo:TFieldBossInfo=TableManager.getInstance().getFieldBossInfo(bossId);
-			content=StringUtil.substitute(content, rank, bossInfo.getRewardCountByRank(rank));
+			var itemInfo:TItemInfo=TableManager.getInstance().getItemInfo(bossInfo.getRewardByRank(rank));
+			content=StringUtil.substitute(content, rank, itemInfo.name, bossInfo.getRewardCountByRank(rank));
 			ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, content, new Point(stage.mouseX, stage.mouseY));
 		}
 

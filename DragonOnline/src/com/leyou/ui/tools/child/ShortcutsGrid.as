@@ -24,8 +24,9 @@ package com.leyou.ui.tools.child {
 	import com.leyou.data.playerSkill.TipSkillInfo;
 	import com.leyou.data.tips.TipsInfo;
 	import com.leyou.net.cmd.Cmd_Link;
-
+	
 	import flash.geom.Point;
+	import flash.geom.Rectangle;
 
 	public class ShortcutsGrid extends GridBase {
 
@@ -94,6 +95,8 @@ package com.leyou.ui.tools.child {
 
 			this.autoEffect=new SwfLoader();
 			this.autoEffect.update(99969);
+			
+			this.autoEffect.mouseChildren=this.autoEffect.mouseEnabled=false;
 //			this.autoEffect.x=-3;
 //			this.autoEffect.y=-2;
 
@@ -103,6 +106,10 @@ package com.leyou.ui.tools.child {
 			this.cdLbl.y=37 - this.cdLbl.height >> 1;
 			this.addChild(this.cdLbl);
 
+//			this.opaqueBackground=0xff0000;
+			
+			this.scrollRect=new Rectangle(0,0,43,43);
+			
 			DebugUtil.cacheLabel(this);
 		}
 

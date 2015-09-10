@@ -57,7 +57,7 @@ package com.leyou.ui.copy.child
 		protected var pastImg:Image;
 		
 		// 开始副本
-		protected var beginBtn:NormalButton;
+		protected var _beginBtn:NormalButton;
 		
 		// 领取奖励
 		protected var receiveBtn:ImgButton;
@@ -76,6 +76,10 @@ package com.leyou.ui.copy.child
 			init();
 		}
 		
+		public function get beginBtn():NormalButton{
+			return _beginBtn;
+		}
+
 		public function get status():int{
 			return info.status;
 		}
@@ -93,7 +97,7 @@ package com.leyou.ui.copy.child
 			flagBtn = getUIbyID("flagBtn") as NormalButton;
 			catalysisBtn = getUIbyID("catalysisBtn") as ImgButton;
 			progressImg = getUIbyID("progressImg") as Image;
-			beginBtn = getUIbyID("beginBtn") as NormalButton;
+			_beginBtn = getUIbyID("beginBtn") as NormalButton;
 			pastImg = getUIbyID("pastImg") as Image;
 			receiveBtn = getUIbyID("receiveBtn") as ImgButton;
 			timeLbl = getUIbyID("timeLbl") as Label;

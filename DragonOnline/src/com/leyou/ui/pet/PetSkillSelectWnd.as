@@ -1,5 +1,6 @@
 package com.leyou.ui.pet
 {
+	import com.ace.gameData.manager.DataManager;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.table.TPetSkillInfo;
 	import com.ace.gameData.table.TSkillInfo;
@@ -8,6 +9,8 @@ package com.leyou.ui.pet
 	import com.ace.ui.button.children.ImgButton;
 	import com.ace.ui.lable.Label;
 	import com.ace.ui.setting.child.AssistSkillGrid;
+	import com.leyou.data.pet.PetEntryData;
+	import com.leyou.utils.PropUtils;
 	
 	import flash.events.MouseEvent;
 	
@@ -33,6 +36,8 @@ package com.leyou.ui.pet
 		
 		private var selectCall:Function;
 		
+		private var titleIILbl:Label;
+		
 		public function PetSkillSelectWnd(){
 			super(LibManager.getInstance().getXML("config/ui/pet/serSelectWnd.xml"));
 			init();
@@ -42,6 +47,8 @@ package com.leyou.ui.pet
 			leftBtn = getUIbyID("leftBtn") as ImgButton;
 			pageLbl = getUIbyID("pageLbl") as Label;
 			rightBtn = getUIbyID("rightBtn") as ImgButton;
+			titleIILbl = getUIbyID("titleLbl") as Label;
+			titleIILbl.text = PropUtils.getStringById(2201);
 			
 			leftBtn.addEventListener(MouseEvent.CLICK, onMouseClick);
 			rightBtn.addEventListener(MouseEvent.CLICK, onMouseClick);
@@ -53,6 +60,7 @@ package com.leyou.ui.pet
 				pane.addChild(grid);
 				grid.x = 27.35 + 48 * int(n%5);
 				grid.y = 48.35 + 48 * int(n/5);
+				grid.isPetSkill = true;
 				grid.addEventListener(MouseEvent.CLICK, onSkillClick);
 			}
 			clsBtn.x -= 6;
@@ -96,7 +104,7 @@ package com.leyou.ui.pet
 					var psinfo:TPetSkillInfo = skills[n];
 					var skillInfo:TSkillInfo = TableManager.getInstance().getSkillById(psinfo.skillId1);
 					grid.gid = psinfo.id;
-					grid.updataInfo(skillInfo);
+					grid.updataInfo(skillInfo.id);
 					grid.visible = true;
 				}catch(e:RangeError){
 					grid.visible = false;
@@ -109,12 +117,13 @@ package com.leyou.ui.pet
 			_pos = pos;
 			_petID = pid;
 			selectCall = $callBack;
+			var data:PetEntryData = DataManager.getInstance().petData.getPetById(pid);
 			var petType:int = TableManager.getInstance().getPetInfo(pid).race;
 			skills.length = 0;
 			var petSkillDic:Object = TableManager.getInstance().getPetSkillDic();
 			for(var key:String in petSkillDic){
 				var petSkill:TPetSkillInfo = petSkillDic[key];
-				if((petSkill.race == petType) || (0 == petSkill.race)){
+				if(((petSkill.race == petType) || (0 == petSkill.race)) && !data.containsSID(petSkill.id)){
 					skills.push(petSkill);
 				}
 			}

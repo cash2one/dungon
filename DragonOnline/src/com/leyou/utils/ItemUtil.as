@@ -36,6 +36,7 @@ package com.leyou.utils {
 2 元宝
 3 真气
 4 荣耀
+6 巨龙点数
 *
 * @param i
 	   * @return
@@ -53,6 +54,8 @@ package com.leyou.utils {
 				return "ui/guild/guild_money.png";
 			} else if (i == 4) {
 				return "ui/backpack/honor.png";
+			} else if (i == 6) {
+				return "ui/common/jlbz.png";
 			}
 
 

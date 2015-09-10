@@ -27,6 +27,7 @@ package com.leyou.ui.task {
 	import com.leyou.ui.task.child.MissionGrid;
 	import com.leyou.ui.task.child.TaskTrackBtn;
 	import com.leyou.utils.FilterUtil;
+	import com.leyou.utils.TaskUtil;
 
 	import flash.events.MouseEvent;
 	import flash.events.TextEvent;
@@ -198,8 +199,8 @@ package com.leyou.ui.task {
 					this.accTaskBtn.setNum("(" + (timer) + ")");
 					TimerManager.getInstance().add(exeTime);
 					this.timer--;
-					
-					GuideManager.getInstance().showGuide(20, this);
+
+					GuideManager.getInstance().showGuide(20, this.accTaskBtn);
 				}
 
 			} else {
@@ -277,15 +278,15 @@ package com.leyou.ui.task {
 						bname=String(tarval[i]).split("_")[0] + "_id";
 
 						if (int(minfo.dtype) == TaskEnum.taskType_killBossDrop || int(minfo.dtype) == TaskEnum.taskType_collect)
-							tartxt=tartxt.replace("##", "<font color='#00ff00'><u><a href='event:" + String(tarval[0]).split("_")[0] + "_id" + "--" + minfo.target_point + "'>" + minfo[tarval[i]] + "</a></u></font>");
+							tartxt=tartxt.replace("##", "<font color='#00ff00'><u><a href='event:" + String(tarval[0]).split("_")[0] + "_id" + "--" + minfo.target_point + "'>" + TaskUtil.getTaskTargetName(tarval[i], minfo[tarval[i]]) + "</a></u></font>");
 						else if (int(minfo.dtype) == TaskEnum.taskType_Exchange)
-							tartxt=tartxt.replace("##", "<font color='#00ff00'><u><a href='event:" + bname + "--" + minfo.item_id + "'>" + minfo[tarval[i]] + "</a></u></font>");
+							tartxt=tartxt.replace("##", "<font color='#00ff00'><u><a href='event:" + bname + "--" + minfo.item_id + "'>" + TaskUtil.getTaskTargetName(tarval[i], minfo[tarval[i]]) + "</a></u></font>");
 						else if (int(minfo.dtype) == TaskEnum.taskType_CopySuccess) {
 							tartxt=tartxt.replace("##", "<font color='#00ff00'><u><a href='event:#'>" + TableManager.getInstance().getCopyInfo(minfo[tarval[i]]).name + "</a></u></font>");
 						} else if (int(minfo.dtype) == TaskEnum.taskType_ElementFlagNum) {
 							tartxt=tartxt.replace("##", "<font color='#00ff00'><u><a href='event:#'>" + minfo[tarval[i]] + "</a></u></font>");
 						} else
-							tartxt=tartxt.replace("##", "<font color='#00ff00'><u><a href='event:" + bname + "--" + minfo[bname] + "'>" + minfo[tarval[i]] + "</a></u></font>");
+							tartxt=tartxt.replace("##", "<font color='#00ff00'><u><a href='event:" + bname + "--" + minfo[bname] + "'>" +TaskUtil.getTaskTargetName(tarval[i],minfo[tarval[i]])+ "</a></u></font>");
 					}
 				}
 
@@ -305,7 +306,7 @@ package com.leyou.ui.task {
 			this.titleLbl.text="" + minfo.name;
 			this.titleLbl.x=this.width - this.titleLbl.textWidth >> 1;
 			this.taskTargetLbl.htmlText="" + tartxt;
-			this.taskReplyLbl.htmlText="<font color='#00ff00'><a href='event:npc_id--" + minfo.dnpc + "'>" + minfo.dnpcname + "</a></font>";
+			this.taskReplyLbl.htmlText="<font color='#00ff00'><a href='event:npc_id--" + minfo.dnpc + "'>" + TaskUtil.getTaskTargetName("npc_id", minfo.dnpc) + "</a></font>";
 
 			this.targetMapLbl.text="" + minfo.tag;
 //			if (int(minfo.dtype) != TaskEnum.taskType_upgrade) {

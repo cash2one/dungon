@@ -33,11 +33,14 @@ package com.leyou.data.net.scene {
 
 
 			br.position++;
-			info.tId=br.readShort();
+//			info.tId=br.readShort();
+			info.tId=br.readInt();
 			br.position++;
 			info.num=br.readShort();
 			br.position++;
 			var isFirst:Boolean=br.readBoolean();
+			br.position++;
+			info.throwOwnerId=br.readUnsignedShort();
 
 			if (!isFirst) {
 				info.ps.x=SceneUtil.screenXToTileX(toPs.x);

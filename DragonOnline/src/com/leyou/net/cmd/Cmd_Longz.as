@@ -7,6 +7,7 @@ package com.leyou.net.cmd {
 	import com.leyou.net.NetGate;
 
 	public class Cmd_Longz {
+		
 		public static function cm_Longz_I():void {
 			NetGate.getInstance().send(CmdEnum.CM_LONGZ_I);
 		}
@@ -28,7 +29,7 @@ package com.leyou.net.cmd {
 		public static function cm_Longz_W(index:int):void {
 			NetGate.getInstance().send(CmdEnum.CM_LONGZ_W + index);
 		}
-
+		
 		public static function cm_Longz_C():void {
 			NetGate.getInstance().send(CmdEnum.CM_LONGZ_C);
 		}
@@ -48,18 +49,18 @@ package com.leyou.net.cmd {
 
 		public static function sm_Longz_T(obj:Object):void {
 			if (!UIManager.getInstance().isCreate(WindowEnum.COPYTRACK)) {
-				UIManager.getInstance().creatWindow(WindowEnum.COPYTRACK)
+				UIManager.getInstance().creatWindow(WindowEnum.COPYTRACK);
 			}
 			UIManager.getInstance().copyTrack.updateInfo(obj, 1);
 		}
 
 		/**
 		 *龙珠魔核信息
-上行:longz|D
-下行:longz|{"mk":"D","dlist":[[itemid,num],[itemid,num]...], }
-	   dlist  -- 已使用的魔核信息列表
-				 itemid -- 魔核道具id
-			  num    -- 已使用数量
+		上行:longz|D
+		下行:longz|{"mk":"D","dlist":[[itemid,num],[itemid,num]...], }
+		    dlist  -- 已使用的魔核信息列表
+			itemid -- 魔核道具id
+			num    -- 已使用数量
 		 *
 		 */
 		public static function cm_Longz_D():void {
@@ -70,6 +71,35 @@ package com.leyou.net.cmd {
 			UIManager.getInstance().creatWindow(WindowEnum.MEDIC);
 			UIManager.getInstance().medicWnd.updateInfo(o);
 		}
-
+		
+		public static function cm_Longz_A(lid:int=1):void{
+			NetGate.getInstance().send(CmdEnum.CM_LONGZ_A+lid);
+		}
+		
+		public static function sm_Longz_A(obj:Object):void{
+			DataManager.getInstance().dragonBallData.loadData_A(obj);
+			if(1 == DataManager.getInstance().dragonBallData.rid){
+				UIManager.getInstance().dragonBallWnd.updateCollectionReward();
+			}else{
+				UIManager.getInstance().dragonBallWnd.updateRewardItem();
+			}
+		}
+		
+		public static function cm_Longz_H():void{
+			 NetGate.getInstance().send(CmdEnum.CM_LONGZ_H);
+		}
+		
+		public static function sm_Longz_H(obj:Object):void{
+			DataManager.getInstance().dragonBallData.loadData_H(obj);
+			UIManager.getInstance().dragonBallWnd.updateProperty();
+		}
+		
+		public static function cm_Longz_P(pid:int, num:int, isRefresh:int=0):void{
+			NetGate.getInstance().send(CmdEnum.CM_LONGZ_P+pid+","+num+","+isRefresh);
+		}
+		
+		public static function cm_Longz_Z():void{
+			NetGate.getInstance().send(CmdEnum.CM_LONGZ_Z);
+		}
 	}
 }

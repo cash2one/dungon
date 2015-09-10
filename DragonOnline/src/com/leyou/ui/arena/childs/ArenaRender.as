@@ -1,5 +1,6 @@
 package com.leyou.ui.arena.childs {
 
+	import com.ace.enum.FontEnum;
 	import com.ace.enum.PlayerEnum;
 	import com.ace.enum.TipEnum;
 	import com.ace.game.scene.player.Living;
@@ -21,12 +22,13 @@ package com.leyou.ui.arena.childs {
 	import com.ace.utils.StringUtil;
 	import com.leyou.net.cmd.Cmd_Arena;
 	import com.leyou.utils.PropUtils;
-	
+
 	import flash.display.DisplayObject;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
+	import flash.text.Font;
 
 	public class ArenaRender extends AutoSprite {
 
@@ -49,6 +51,7 @@ package com.leyou.ui.arena.childs {
 		public var arenaspr:Sprite;
 
 		public var pkLbl:Label;
+		public var titleNameLbl:Label;
 
 		private var mName:String;
 		private var mintegral:int=0;
@@ -112,6 +115,12 @@ package com.leyou.ui.arena.childs {
 			einfo.onMouseOut=onTipsMouseOut;
 
 			MouseManagerII.getInstance().addEvents(this.iconImg, einfo);
+
+			this.titleNameLbl=new Label("888");
+
+
+			this.titleNameLbl.defaultTextFormat=FontEnum.getTextFormat("Yellow14Center");
+
 		}
 
 		private function onTipsMouseOver(e:DisplayObject):void {
@@ -129,9 +138,13 @@ package com.leyou.ui.arena.childs {
 		private function onStage(e:Event):void {
 			UIManager.getInstance().arenaWnd.addChildAt(this.living, 3);
 			UIManager.getInstance().arenaWnd.addChildAt(this.livimgUI, 3);
+			UIManager.getInstance().arenaWnd.addChild(this.titleNameLbl);
 
 			this.livimgUI.x=this.x;
 			this.livimgUI.y=this.y - 50;
+
+			this.titleNameLbl.x=this.livimgUI.x + 15;
+			this.titleNameLbl.y=this.livimgUI.y + 15;
 		}
 
 		private function onMouseOver(e:MouseEvent):void {
@@ -174,10 +187,11 @@ package com.leyou.ui.arena.childs {
 
 		private function onClick(e:MouseEvent):void {
 
-			if (UIManager.getInstance().arenaWnd.lastPkCount > 0)
-				this.setPkState(false);
+//			if (UIManager.getInstance().arenaWnd.lastPkCount > 0) 
+//				this.setPkState(false);
+			
+				Cmd_Arena.cm_ArenaPkPlayer(this.index);
 
-			Cmd_Arena.cm_ArenaPkPlayer(this.index);
 		}
 
 		public function setPkState(v:Boolean):void {
@@ -289,6 +303,13 @@ package com.leyou.ui.arena.childs {
 			this.living.info.level=u[1];
 			this.living.info.profession=u[2];
 			this.living.info.sex=u[3];
+
+			if (u[9] == 0)
+				this.titleNameLbl.htmlText="" + PropUtils.getStringById(101402);
+			else
+				this.titleNameLbl.htmlText=PropUtils.getStringById(101403) + ":" + u[9];
+
+			this.titleNameLbl.x=this.livimgUI.x + 15 + (134 - this.titleNameLbl.width) / 2;
 
 			this.livimgUI.showName(this.living.info);
 //			this.livimgUI.x=this.x+(this.living.width-this.livimgUI.width)>>1;

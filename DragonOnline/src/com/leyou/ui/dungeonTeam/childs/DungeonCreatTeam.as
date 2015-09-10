@@ -11,10 +11,11 @@ package com.leyou.ui.dungeonTeam.childs {
 	import com.ace.ui.dropMenu.event.DropMenuEvent;
 	import com.ace.ui.input.children.TextInput;
 	import com.ace.ui.notice.NoticeManager;
+	import com.ace.utils.StringUtil;
 	import com.leyou.net.cmd.Cmd_CpTm;
-
+	import com.leyou.utils.PropUtils;
+	
 	import flash.events.Event;
-	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 
 	public class DungeonCreatTeam extends AutoWindow {
@@ -25,6 +26,7 @@ package com.leyou.ui.dungeonTeam.childs {
 		private var powerLbl:TextInput;
 
 		private var autoStartCb:CheckBox;
+		private var autoStartCbb:ComboBox;
 
 		private var passwardCb:CheckBox;
 		private var passwardLbl:TextInput;
@@ -52,6 +54,7 @@ package com.leyou.ui.dungeonTeam.childs {
 			this.powerLbl=this.getUIbyID("powerLbl") as TextInput;
 
 			this.autoStartCb=this.getUIbyID("autoStartCb") as CheckBox;
+			this.autoStartCbb=this.getUIbyID("autoStartCbb") as ComboBox;
 
 			this.passwardCb=this.getUIbyID("passwardCb") as CheckBox;
 			this.passwardLbl=this.getUIbyID("passwardLbl") as TextInput;
@@ -62,6 +65,14 @@ package com.leyou.ui.dungeonTeam.childs {
 			this.confirmBtn=this.getUIbyID("confirmBtn") as NormalButton;
 
 			this.copyListCb.addEventListener(DropMenuEvent.Item_Selected, onItemClick);
+
+			var data:Array=[];
+			data.push({label: StringUtil.substitute(PropUtils.getStringById(101413), [2]), uid: 2});
+			data.push({label: StringUtil.substitute(PropUtils.getStringById(101413), [3]), uid: 3});
+			data.push({label: StringUtil.substitute(PropUtils.getStringById(101413), [4]), uid: 4});
+
+			this.autoStartCbb.list.removeRenders();
+			this.autoStartCbb.list.addRends(data);
 
 //			this.powerLbl.mouseChildren=false;
 //			this.powerLbl.mouseEnabled=false;
@@ -112,6 +123,7 @@ package com.leyou.ui.dungeonTeam.childs {
 					this.powerLbl.mouseEnabled=this.powerCb.isOn;
 					break;
 				case "autoStartCb":
+					this.autoStartCbb.mouseChildren=this.autoStartCbb.mouseEnabled=this.autoStartCb.isOn;
 					break;
 				case "passwardCb":
 					this.passwardLbl.mouseChildren=this.passwardCb.isOn;
@@ -125,7 +137,7 @@ package com.leyou.ui.dungeonTeam.childs {
 						return;
 					}
 
-					Cmd_CpTm.cmTeamCopyCreate(this.copyListCb.list.value.uid, (this.powerCb.isOn ? int(this.powerLbl.text) : 1000), (this.autoStartCb.isOn ? 1 : 0), (this.passwardCb.isOn ? this.passwardLbl.text : ""));
+					Cmd_CpTm.cmTeamCopyCreate(this.copyListCb.list.value.uid, (this.powerCb.isOn ? int(this.powerLbl.text) : 1000), (this.autoStartCb.isOn ? this.autoStartCbb.list.value.uid : 0), (this.passwardCb.isOn ? this.passwardLbl.text : ""));
 					break;
 			}
 		}
@@ -140,6 +152,8 @@ package com.leyou.ui.dungeonTeam.childs {
 
 			this.powerCb.turnOn();
 			this.autoStartCb.turnOn();
+			this.autoStartCbb.mouseChildren=this.autoStartCbb.mouseEnabled=true;
+			
 			this.passwardCb.turnOff();
 
 //			this.copyListCb.list.removeRenders();

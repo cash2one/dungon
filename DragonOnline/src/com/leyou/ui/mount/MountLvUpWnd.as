@@ -16,6 +16,7 @@ package com.leyou.ui.mount {
 	import com.ace.manager.MouseManagerII;
 	import com.ace.manager.SoundManager;
 	import com.ace.manager.ToolTipManager;
+	import com.ace.manager.TweenManager;
 	import com.ace.manager.UILayoutManager;
 	import com.ace.manager.UIManager;
 	import com.ace.manager.child.MouseEventInfo;
@@ -28,6 +29,7 @@ package com.leyou.ui.mount {
 	import com.ace.ui.notice.NoticeManager;
 	import com.ace.ui.window.children.SimpleWindow;
 	import com.ace.utils.StringUtil;
+	import com.greensock.TimelineMax;
 	import com.greensock.TweenLite;
 	import com.greensock.TweenMax;
 	import com.leyou.data.tips.TipsInfo;
@@ -56,7 +58,7 @@ package com.leyou.ui.mount {
 		private var up1CheckBox:RadioButton;
 		private var up2CheckBox:RadioButton;
 
-		private var autoUpBtn:ImgLabelButton;
+		public var autoUpBtn:ImgLabelButton;
 		private var upBtn:ImgLabelButton;
 
 		private var num0Sp:ImgRolling;
@@ -94,6 +96,7 @@ package com.leyou.ui.mount {
 		private var lv:int=0;
 
 		private var autoLv:int=0;
+		private var mlv:int=0;
 
 		private var autoTimeId:int=0;
 
@@ -309,7 +312,7 @@ package com.leyou.ui.mount {
 
 			this.updateProgress();
 
-			GuideManager.getInstance().showGuide(5, this);
+			GuideManager.getInstance().showGuide(5, this.autoUpBtn);
 
 			UIManager.getInstance().taskTrack.setGuideViewhide(TaskEnum.taskType_MountLv);
 		}
@@ -598,8 +601,8 @@ package com.leyou.ui.mount {
 			if (o.hasOwnProperty("em"))
 				this.moneyLbl.text=o.em;
 
-			if (o.hasOwnProperty("mlv"))
-				this.starEffect.setStarPos(o.mlv % 10 - 1);
+//			if (o.hasOwnProperty("mlv"))
+//				this.starEffect.setStarPos(o.mlv % 10 - 1);
 
 			if (o.hasOwnProperty("ad")) {
 				this.ad=o.ad;
@@ -619,21 +622,21 @@ package com.leyou.ui.mount {
 			if (o.hasOwnProperty("mlv") && this.autoLv != o.mlv) {
 				this.autoLv=o.mlv;
 				this.endRoll();
-
+				
 				if (this.autoLv != 0) {
 					this.closeTime();
-
-//					if (successEffect.isLoaded) {
-					successEffect.visible=true;
-					successEffect.playAct(PlayerEnum.ACT_STAND, -1, false, function():void {
-						successEffect.visible=false;
-					});
-//					}
-
-					SoundManager.getInstance().play(22);
+					
+					//					if (successEffect.isLoaded) {
+//					successEffect.visible=true;
+//					successEffect.playAct(PlayerEnum.ACT_STAND, -1, false, function():void {
+//						successEffect.visible=false;
+//					});
+//					//					}
+//					
+//					SoundManager.getInstance().play(22);
 				}
 			}
-
+			
 		}
 
 		private function updateProgress():void {
@@ -641,13 +644,56 @@ package com.leyou.ui.mount {
 			if (data.hasOwnProperty("ev")) {
 				this.lvProgress.text=data.ev + "/" + this.info.exp;
 //				this.proceTextArea.scaleX=(int(data.ev) / this.info.exp) > 1 ? 1 : (int(data.ev) / this.info.exp);
-				if (data.ev == 0) {
-					this.proceTextArea.visible=false;
+
+				if (this.mlv != 0) {
+					if (data.mlv == this.mlv) {
+						TweenMax.to(this.proceTextArea, 0.5, {width: Number((int(data.ev) / this.info.exp) > 1 ? 1 : (int(data.ev) / this.info.exp)) * 214, onComplete: updateCompleteProgress});
+					} else {
+
+						var tline:TimelineMax=new TimelineMax();
+						tline.active=true;
+						for (var i:int=this.mlv; i < this.data.mlv; i++) {
+							tline.append(TweenMax.to(this.proceTextArea, 0.5, {width: 214, onComplete: CompleteProgress, onCompleteParams: [i]}));
+						}
+
+						tline.append(TweenMax.to(this.proceTextArea, 0.5, {width: Number((int(data.ev) / this.info.exp) > 1 ? 1 : (int(data.ev) / this.info.exp)) * 214, onComplete: updateCompleteProgress}));
+					}
 				} else {
-					this.proceTextArea.visible=true;
-					this.proceTextArea.setSize(Number((int(data.ev) / this.info.exp) > 1 ? 1 : (int(data.ev) / this.info.exp)) * 214, 12);
+					this.updateCompleteProgress()
 				}
+
+				this.mlv=data.mlv;
 			}
+
+		}
+
+		private function CompleteProgress(i:int):void {
+
+			this.starEffect.setStarPos(i % 10 - 1);
+
+			this.proceTextArea.visible=true;
+			this.proceTextArea.setSize(0, 12);
+			
+			
+			successEffect.visible=true;
+			successEffect.playAct(PlayerEnum.ACT_STAND, -1, false, function():void {
+				successEffect.visible=false;
+			});
+			//					}
+			
+			SoundManager.getInstance().play(22);
+			
+		}
+
+		private function updateCompleteProgress():void {
+			if (data.ev == 0) {
+				this.proceTextArea.visible=false;
+			} else {
+				this.proceTextArea.visible=true;
+				this.proceTextArea.setSize(Number((int(data.ev) / this.info.exp) > 1 ? 1 : (int(data.ev) / this.info.exp)) * 214, 12);
+			}
+
+			this.starEffect.setStarPos(data.mlv % 10 - 1);
 
 			//换lv图
 			if (this.data.hasOwnProperty("el")) {
@@ -670,8 +716,8 @@ package com.leyou.ui.mount {
 					this.effectBg.update(pid);
 
 			}
-
 			this.upBtn.mouseChildren=this.upBtn.mouseEnabled=this.autoUpBtn.mouseChildren=this.autoUpBtn.mouseEnabled=true;
+
 		}
 
 		public function updateSuccess(o:Object):void {

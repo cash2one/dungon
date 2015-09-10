@@ -5,6 +5,7 @@ package com.leyou.ui.cityBattle
 	import com.ace.ui.button.children.NormalButton;
 	import com.ace.ui.input.children.TextInput;
 	import com.leyou.net.cmd.Cmd_WARC;
+	import com.leyou.utils.StringUtil_II;
 	
 	import flash.events.Event;
 	import flash.events.MouseEvent;
@@ -51,7 +52,7 @@ package com.leyou.ui.cityBattle
 		protected function onBtnCLick(event:MouseEvent):void{
 			switch(event.target.name){
 				case "confirmBtn":
-					var text:String = announceText.text;
+					var text:String = StringUtil_II.getGuildFilterWord(announceText.text);
 					Cmd_WARC.cm_WARC_N(text);
 					hide();
 					break;

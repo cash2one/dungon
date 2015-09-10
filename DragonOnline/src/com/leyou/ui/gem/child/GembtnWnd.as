@@ -2,6 +2,8 @@ package com.leyou.ui.gem.child {
 
 
 	import com.ace.gameData.manager.MyInfoManager;
+	import com.ace.gameData.manager.TableManager;
+	import com.ace.gameData.table.TAlchemy;
 	import com.ace.gameData.table.TEquipInfo;
 	import com.ace.manager.LibManager;
 	import com.ace.ui.auto.AutoSprite;
@@ -10,6 +12,8 @@ package com.leyou.ui.gem.child {
 	import com.ace.ui.lable.Label;
 	import com.leyou.utils.ItemUtil;
 	import com.leyou.utils.PlayerUtil;
+
+	import flash.sampler.getInvocationCount;
 
 	public class GembtnWnd extends AutoSprite {
 
@@ -35,15 +39,47 @@ package com.leyou.ui.gem.child {
 			this.x=5;
 		}
 
-		public function updateInfo(info:TEquipInfo):void {
+		public function updateInfo(tinfo:TAlchemy):void {
 
-			this.nameLbl.text="" + info.name + "(" + Math.floor(MyInfoManager.getInstance().getBagItemNumById(info.id - 1) / 3) + ")";
-			this.nameLbl.textColor=ItemUtil.getColorByQuality(int(info.quality));
+			var num:int=int.MAX_VALUE;
+			var d:int=0;
+			var rate:int=0;
+			for (var i:int=0; i < 5; i++) {
+				if (tinfo["Datum" + (i + 1)] > 0) {
+					d=MyInfoManager.getInstance().getBagItemNumById(tinfo["Datum" + (i + 1)]);
+					if (d < tinfo["Datum_Num" + (i + 1)]) {
+						num=0;
+						rate=0;
+						break;
+					} else {
+						if (d < num) {
+							num=d;
+							rate=tinfo["Datum_Num" + (i + 1)];
+						}
+					}
+				}
+			}
 
-			this.itemImg.updateBmp("ico/items/" + info.icon + ".png");
-			this.itemImg.setWH(20, 20);
+			this.nameLbl.text="" + tinfo.AlThird_Nam + "(" + int(Math.floor(num / rate)) + ")";
+//			this.nameLbl.text="" + info.name + "(" + Math.floor(MyInfoManager.getInstance().getBagItemNumById(info.id - 1) / 3) + ")";
+//			this.nameLbl.textColor=ItemUtil.getColorByQuality(int(info.quality));
 
-			this.id=info.id;
+			var info:Object;
+			for (i=0; i < 3; i++) {
+				if (tinfo["Product" + (i + 1)] > 0) {
+					if (tinfo["Product" + (i + 1)] > 10000)
+						info=TableManager.getInstance().getItemInfo(tinfo["Product" + (i + 1)]);
+					else
+						info=TableManager.getInstance().getEquipInfo(tinfo["Product" + (i + 1)]);
+
+					this.itemImg.updateBmp("ico/items/" + info.icon + ".png");
+					break;
+				}
+			}
+
+			this.itemImg.setWH(15, 15);
+
+			this.id=tinfo.Al_ID;
 		}
 
 		public function getID():int {
@@ -59,7 +95,7 @@ package com.leyou.ui.gem.child {
 		}
 
 		override public function get height():Number {
-			return 34;
+			return 25;
 		}
 
 	}

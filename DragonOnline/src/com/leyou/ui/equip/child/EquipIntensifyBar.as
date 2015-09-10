@@ -15,14 +15,20 @@ package com.leyou.ui.equip.child {
 	import com.ace.manager.child.MouseEventInfo;
 	import com.ace.ui.auto.AutoSprite;
 	import com.ace.ui.button.children.CheckBox;
+	import com.ace.ui.button.children.ImgButton;
+	import com.ace.ui.dropMenu.children.ComboBox;
+	import com.ace.ui.dropMenu.event.DropMenuEvent;
 	import com.ace.ui.img.child.Image;
+	import com.ace.ui.input.children.TextInput;
 	import com.ace.ui.lable.Label;
 	import com.leyou.data.tips.TipsInfo;
 	import com.leyou.ui.quickBuy.QuickBuyWnd;
 	import com.leyou.utils.BadgeUtil;
+	import com.leyou.utils.FilterUtil;
 	import com.leyou.utils.PropUtils;
 
 	import flash.display.DisplayObject;
+	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.events.TextEvent;
 	import flash.geom.Point;
@@ -46,7 +52,8 @@ package com.leyou.ui.equip.child {
 		private var goldImg:Image;
 
 		private var needItemLbl:Label;
-		private var moreRodioBtn:CheckBox;
+		private var autoEqBtn:CheckBox;
+		private var lvCb:ComboBox;
 
 		private var viewTxtArr:Array=[];
 		private var view1Arr:Array=[];
@@ -54,6 +61,12 @@ package com.leyou.ui.equip.child {
 		private var view3Arr:Array=[];
 
 		private var items:Array=[];
+		private var datalist:Array=[];
+
+		private var tipInfo:TipsInfo;
+
+		private var targetlv:int;
+		private var loadtargetLv:int;
 
 		public function EquipIntensifyBar() {
 			super(LibManager.getInstance().getXML("config/ui/equip/equipIntensifyBar.xml"));
@@ -79,11 +92,15 @@ package com.leyou.ui.equip.child {
 			this.needGoldLbl=this.getUIbyID("needGoldLbl") as Label;
 
 			this.needItemLbl=this.getUIbyID("needItemLbl") as Label;
-			this.moreRodioBtn=this.getUIbyID("moreRodioBtn") as CheckBox;
+			this.autoEqBtn=this.getUIbyID("autoEqBtn") as CheckBox;
+
+			this.lvCb=this.getUIbyID("lvCb") as ComboBox;
 
 			this.goldImg=this.getUIbyID("goldImg") as Image;
 
-			this.moreRodioBtn.addEventListener(MouseEvent.CLICK, onClick);
+//			this.autoEqBtn.addEventListener(MouseEvent.CLICK, onClick);
+
+			this.lvCb.addEventListener(DropMenuEvent.Item_Selected, onChangeOffice);
 
 			this.needItemLbl.styleSheet=FontEnum.DEFAULT_LINK_STYLE;
 			this.needItemLbl.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
@@ -108,6 +125,11 @@ package com.leyou.ui.equip.child {
 			einfo.onMouseOut=onTipsMouseOut;
 
 			MouseManagerII.getInstance().addEvents(this.goldImg, einfo);
+
+
+			for (var i:int=1; i < 17; i++) {
+				this.datalist.push({label: i + PropUtils.getStringById(2176), uid: i});
+			}
 
 
 		}
@@ -147,13 +169,14 @@ package com.leyou.ui.equip.child {
 
 		}
 
-		private function onClick(e:MouseEvent):void {
-
-
-
+		private function onChangeOffice(e:Event):void {
+			this.loadtargetLv=this.lvCb.list.value.uid;
+			this.updatechangeLv(this.lvCb.list.value.uid);
 		}
 
 		public function updateData(info:TipsInfo):void {
+
+			this.tipInfo=info;
 
 			var einfo:TEquipInfo=TableManager.getInstance().getEquipInfo(info.itemid);
 
@@ -207,7 +230,7 @@ package com.leyou.ui.equip.child {
 
 			var tmp1Xml:XML=xml.strengthen[int(this.lv1Lbl.text)];
 //			this.succLbl.text="" + BadgeUtil.getTypeByRate(tmp1Xml.@sucessRate);
-			this.succLbl.text="" + tmp1Xml.@sucessRate+"%";
+			this.succLbl.text="" + tmp1Xml.@sucessRate + "%";
 
 			this.needGoldLbl.text="" + int(tmp1Xml.@money);
 
@@ -215,6 +238,64 @@ package com.leyou.ui.equip.child {
 			this.needItemLbl.htmlText="<font color='#cc54ea'><a href='event:" + tmp1Xml.@item2 + "--" + iteminfo.id + "'><u><b>" + iteminfo.name + "</b></u></a></font> x " + tmp1Xml.@itemNum;
 
 			this.items=[tmp1Xml.@item2, iteminfo.id];
+
+			if (this.loadtargetLv == 0 || this.loadtargetLv == info.qh || !this.autoEqBtn.isOn) {
+				this.lvCb.list.addRends(this.datalist.slice(info.qh, einfo.maxlevel));
+				this.lvCb.list.selectByUid((info.qh + 1 > einfo.maxlevel ? einfo.maxlevel : info.qh + 1) + "");
+			}
+		}
+
+		public function updatechangeLv(qh:int):void {
+
+			var info:TipsInfo=this.tipInfo;
+
+			if (info.qh >= qh)
+				return;
+
+			var einfo:TEquipInfo=TableManager.getInstance().getEquipInfo(info.itemid);
+
+			this.lv2Lbl.text="" + qh;
+
+			var xml:XML=LibManager.getInstance().getXML("config/table/strengthen.xml");
+
+			var tmpXml:XML;
+			if (info.qh >= qh)
+				tmpXml=xml.strengthen[info.qh];
+			else
+				tmpXml=xml.strengthen[qh];
+
+			var rate:int=tmpXml.@addRate;
+
+			var pArr:Array=[];
+			var key:String;
+
+			var i:int=0;
+			for (key in info.p) {
+				if (info.p[key] != 0 && key.indexOf("qh") == -1 && int(key) <= 7) {
+
+					this.viewTxtArr[i].text="" + PropUtils.propArr[int(key) - 1];
+					this.view2Arr[i].text="" + (int(info.p[key]) + Math.ceil(rate / 100 * int(info.p[key])));
+
+					this.view3Arr[i].visible=true;
+					i++;
+				}
+			}
+
+			while (i <= 1) {
+				this.view3Arr[i].visible=false;
+				this.view2Arr[i].text="";
+				this.viewTxtArr[i].text="";
+				i++;
+			}
+
+			var tmp1Xml:XML=xml.strengthen[qh - 1];
+			this.succLbl.text="" + tmp1Xml.@sucessRate + "%";
+
+			this.needGoldLbl.text="" + int(tmp1Xml.@money);
+
+			var iteminfo:TItemInfo=TableManager.getInstance().getItemInfo(tmp1Xml.@item);
+			this.needItemLbl.htmlText="<font color='#cc54ea'><a href='event:" + tmp1Xml.@item2 + "--" + iteminfo.id + "'><u><b>" + iteminfo.name + "</b></u></a></font> x " + tmp1Xml.@itemNum;
+
 		}
 
 		public function buyItems():Boolean {
@@ -230,6 +311,8 @@ package com.leyou.ui.equip.child {
 
 				UILayoutManager.getInstance().show(WindowEnum.EQUIP, WindowEnum.QUICK_BUY, UILayoutManager.SPACE_X, UILayoutManager.SPACE_Y + 40);
 				UIManager.getInstance().quickBuyWnd.pushItem(this.items[1], this.items[0], needNum);
+
+				this.setAutoEnbale(true);
 				return true;
 
 			} else {
@@ -255,7 +338,7 @@ package com.leyou.ui.equip.child {
 		}
 
 		public function get autoSuccess():Boolean {
-			return this.moreRodioBtn.isOn;
+			return this.autoEqBtn.isOn;
 		}
 
 		public function get needGoldNum():int {
@@ -264,6 +347,35 @@ package com.leyou.ui.equip.child {
 
 		public function get currentLv():int {
 			return int(this.lv1Lbl.text);
+		}
+
+		public function setAutoEnbale(v:Boolean):void {
+			this.lvCb.mouseEnabled=v;
+			this.lvCb.mouseChildren=v;
+			this.autoEqBtn.mouseEnabled=v;
+			this.autoEqBtn.mouseChildren=v;
+
+			if (!v) {
+				this.lvCb.filters=[FilterUtil.enablefilter];
+				this.autoEqBtn.filters=[FilterUtil.enablefilter];
+			} else {
+				this.lvCb.filters=[];
+				this.autoEqBtn.filters=[];
+			}
+		}
+
+		public function get targetLv():int {
+			this.targetlv=this.loadtargetLv;
+			return this.targetlv;
+		}
+
+		public function set targetLv(i:int):void {
+			this.targetlv=i;
+		}
+		
+		public function clearData():void{
+			
+			this.loadtargetLv=0;
 		}
 
 	}

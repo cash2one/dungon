@@ -153,6 +153,8 @@ package com.leyou.ui.delivery {
 			super.show(toTop, $layer, toCenter);
 			this.resise();
 			Cmd_Yct.cm_DeliveryInit();
+			
+			GuideManager.getInstance().removeGuide(8);
 		}
 
 		override public function get width():Number {

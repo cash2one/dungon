@@ -93,11 +93,11 @@ package com.leyou.ui.invest
 		}
 		
 		public override function get width():Number{
-			return 698;
+			return 758;
 		}
 		
 		public override function get height():Number{
-			return 403;
+			return 516;
 		}
 		
 		public function resize():void{

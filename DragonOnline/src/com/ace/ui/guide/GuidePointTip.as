@@ -9,7 +9,9 @@ package com.ace.ui.guide
 	import com.ace.ui.img.child.Image;
 	import com.ace.ui.lable.Label;
 	
+	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
+	import flash.display.Graphics;
 	import flash.geom.Point;
 	import flash.utils.getTimer;
 	
@@ -25,7 +27,7 @@ package com.ace.ui.guide
 		
 		private var remain:int;
 		
-		private var dis:DisplayObjectContainer;
+		private var dis:DisplayObject;
 		
 		private var listenter:Function;
 		
@@ -58,6 +60,13 @@ package com.ace.ui.guide
 			addChild(pointSwf);
 			setType($type);
 			desLbl.wordWrap = true;
+			
+//			var g:Graphics = graphics;
+//			g.beginFill(0xff);
+//			g.drawRect(0, 0, width, height);
+//			g.beginFill(0xffff);
+//			g.drawCircle(0,0,5);
+//			g.endFill();
 		}
 		
 		private function setType($type:int):void{
@@ -140,7 +149,7 @@ package com.ace.ui.guide
 				return true;
 			}
 			if((null != dis) && (null != _linkInfo) && (null != parent)){
-				var p:DisplayObjectContainer = dis;
+				var p:DisplayObject = dis;
 				while(p != root){
 					if((null == p) || !p.visible){
 						return false;
@@ -180,7 +189,7 @@ package com.ace.ui.guide
 			}
 		}
 		
-		public function updateInfo(info:TGuideInfo, $dis:DisplayObjectContainer):void{
+		public function updateInfo(info:TGuideInfo, $dis:DisplayObject):void{
 			if(null == $dis){
 				throw new Error("要指引的显示对象为NULL,指引ID为:"+info.id);
 			}

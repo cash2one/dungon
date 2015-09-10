@@ -144,6 +144,7 @@ package com.leyou.ui.promotion.children {
 
 		public function flyItem():void {
 			var ids:Array=[];
+			
 			var point:Array=[];
 			for each (var g:MarketGrid in grids) {
 				if (null != g) {

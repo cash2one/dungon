@@ -213,6 +213,8 @@ package com.ace.enum {
 		
 		// 竞技场积分
 		public static const CREDIT_VIR_ITEM_ID:int = 65525;
-
+		
+		// 龙魂
+		public static const LONGHUN_VIR_ITEM_ID:int = 65054;
 	}
 }

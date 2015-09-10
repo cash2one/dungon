@@ -5,6 +5,7 @@ package com.ace.gameData.manager {
 	import com.ace.gameData.table.TActiveInfo;
 	import com.ace.gameData.table.TActiveRewardInfo;
 	import com.ace.gameData.table.TAd;
+	import com.ace.gameData.table.TAlchemy;
 	import com.ace.gameData.table.TAreaCelebrateInfo;
 	import com.ace.gameData.table.TAttributeInfo;
 	import com.ace.gameData.table.TBackpackAdd;
@@ -13,6 +14,8 @@ package com.ace.gameData.manager {
 	import com.ace.gameData.table.TCityBattleRewardInfo;
 	import com.ace.gameData.table.TCollectionPreciousInfo;
 	import com.ace.gameData.table.TCopyInfo;
+	import com.ace.gameData.table.TDragonBallPropertyInfo;
+	import com.ace.gameData.table.TDragonBallRewardInfo;
 	import com.ace.gameData.table.TDungeon_Base;
 	import com.ace.gameData.table.TEquipBlessInfo;
 	import com.ace.gameData.table.TEquipInfo;
@@ -31,6 +34,7 @@ package com.ace.gameData.manager {
 	import com.ace.gameData.table.TItemInfo;
 	import com.ace.gameData.table.TKeep_7;
 	import com.ace.gameData.table.TLZItemInfo;
+	import com.ace.gameData.table.TLaba;
 	import com.ace.gameData.table.TLegendaryWeaponInfo;
 	import com.ace.gameData.table.TLevelGiftInfo;
 	import com.ace.gameData.table.TMarketInfo;
@@ -66,6 +70,7 @@ package com.ace.gameData.manager {
 	import com.ace.gameData.table.TTobeStrongInfo;
 	import com.ace.gameData.table.TTobeStrongLevelInfo;
 	import com.ace.gameData.table.TTzActiive;
+	import com.ace.gameData.table.TUnion_Bless;
 	import com.ace.gameData.table.TUnion_attribute;
 	import com.ace.gameData.table.TVIPAttribute;
 	import com.ace.gameData.table.TVIPDetailInfo;
@@ -139,6 +144,7 @@ package com.ace.gameData.manager {
 		private var collectionDic:Object;
 		private var collectionGroupDic:Object;
 		private var abidePayDic:Object;
+		private var combineDic:Object;
 		private var _rankRewardHeDic:Object;
 		private var groupBuyDic:Object;
 		private var vendueDic:Object;
@@ -159,6 +165,11 @@ package com.ace.gameData.manager {
 		private var missionMarketDic:Object;
 		private var missionRewardDic:Object;
 		private var keep7Dic:Object;
+		private var guildBlessDic:Object;
+		private var dragonBallRewardDic:Object;
+		private var dragonBallPropertyDic:Object;
+		private var alchemyDic:Object;
+		private var labaDic:Object;
 
 		public function TableManager() {
 			super();
@@ -241,6 +252,7 @@ package com.ace.gameData.manager {
 			this.collectionDic={};
 			this.collectionGroupDic={};
 			this.abidePayDic={};
+			this.combineDic={};
 			this._rankRewardHeDic={};
 			this.groupBuyDic={};
 			this.vendueDic={};
@@ -261,6 +273,11 @@ package com.ace.gameData.manager {
 			this.missionMarketDic={};
 			this.missionRewardDic={};
 			this.keep7Dic={};
+			this.guildBlessDic={};
+			this.dragonBallRewardDic={};
+			this.dragonBallPropertyDic={};
+			this.alchemyDic={};
+			this.labaDic={};
 			
 			var info:XML;
 			var render:XML;
@@ -612,6 +629,12 @@ package com.ace.gameData.manager {
 			for each (render in info.children()) {
 				this.abidePayDic[render.@id]=new TAbidePayInfo(render);
 			}
+			
+			// 和服连冲
+			info=LibManager.getInstance().getXML("config/table/hflc.xml");
+			for each (render in info.children()) {
+				this.combineDic[render.@id]=new TAbidePayInfo(render);
+			}
 
 			// 主城争霸--奖励
 			info=LibManager.getInstance().getXML("config/table/City_Fight.xml");
@@ -663,9 +686,10 @@ package com.ace.gameData.manager {
 			}
 			
 			// 宠物表
+			var pindex:int;
 			info=LibManager.getInstance().getXML("config/table/servent.xml");
 			for each (render in info.children()) {
-				this.petDic[render.@id]=new TPetInfo(render);
+				this.petDic[pindex++]=new TPetInfo(render);
 			}
 			
 			// 宠物友好度
@@ -721,12 +745,43 @@ package com.ace.gameData.manager {
 			for each (render in info.children()) {
 				this.keep7Dic[render.@Keep_day]=new TKeep_7(render);
 			}
+			
+			// 技能等级消耗
+			info=LibManager.getInstance().getXML("config/table/Union_Bless.xml");
+			for each (render in info.children()) {
+				this.guildBlessDic[render.@ID]=new TUnion_Bless(render);
+			}
+			
+			// 龙珠奖励
+			info=LibManager.getInstance().getXML("config/table/Lh_Exchange.xml");
+			for each(render in info.children()){
+				this.dragonBallRewardDic[render.@Lh_ID]=new TDragonBallRewardInfo(render);
+			}
+			
+			// 龙珠属性
+			info=LibManager.getInstance().getXML("config/table/Lh_Add.xml");
+			for each(render in info.children()){
+				this.dragonBallPropertyDic[render.@Lh_AttID]=new TDragonBallPropertyInfo(render);
+			}
+			
+			//炼金
+			info=LibManager.getInstance().getXML("config/table/Alchemy.xml");
+			for each(render in info.children()){
+				this.alchemyDic[render.@Al_ID]=new TAlchemy(render);
+			}
+			
+			//拉霸
+			info=LibManager.getInstance().getXML("config/table/laba.xml");
+			for each(render in info.children()){
+				this.labaDic[render.@id]=new TLaba(render); 
+			}
 		}
 
 		//=====================================获取===================================================================
 		override public function getLanguage(id:int):String {
 			if(!this.attributeDic.hasOwnProperty(id))
 				return　"";
+			
 			return this.getAttributeInfo(id).attibuteDes;
 		}
 		
@@ -750,6 +805,22 @@ package com.ace.gameData.manager {
 			return this.skillLvDic[lv];
 		}
 		
+		public function getDragonBallRewardDic():Object{
+			return this.dragonBallRewardDic;
+		}
+		
+		public function getDragonBallReward(id:int):TDragonBallRewardInfo{
+			return this.dragonBallRewardDic[id];
+		}
+		
+		public function getDragonBallPropertyDic():Object{
+			return this.dragonBallPropertyDic;
+		}
+		
+		public function getDragonBallProperty(id:int):TDragonBallPropertyInfo{
+			return this.dragonBallPropertyDic[id];
+		}
+		
 		public function getPetDic():Object{
 			return this.petDic;
 		}
@@ -759,7 +830,13 @@ package com.ace.gameData.manager {
 		}
 		
 		public function getPetInfo(id:int):TPetInfo{
-			return this.petDic[id];
+			for(var key:String in petDic){
+				var petInfo:TPetInfo = petDic[key];
+				if(petInfo.id == id){
+					return petInfo;
+				}
+			}
+			return null;
 		}
 		
 		public function getPetFriendlyInfo(lv:int):TPetFriendlyInfo{
@@ -806,6 +883,10 @@ package com.ace.gameData.manager {
 
 		public function getAbidePayInfo(id:int):TAbidePayInfo {
 			return this.abidePayDic[id];
+		}
+		
+		public function getCombinePayInfo(id:int):TAbidePayInfo{
+			return this.combineDic[id];
 		}
 
 		public function getPreciousById(id:int):TCollectionPreciousInfo {
@@ -934,6 +1015,21 @@ package com.ace.gameData.manager {
 				}
 			}
 			return arr;
+		}
+		
+		public function getPayPromotionByType(type:int):Array{
+			var arr:Array = [];
+			for(var key:String in payPromotionDic){
+				var info:TPayPromotion = payPromotionDic[key];
+				if(info.type == type){
+					arr.push(info);
+				}
+			}
+			return arr;
+		}
+		
+		public function getPromotionDic():Object{
+			return this.payPromotionDic;
 		}
 
 		public function getPayPromotion(id:int):TPayPromotion {
@@ -1541,6 +1637,21 @@ package com.ace.gameData.manager {
 
 			return false;
 		}
+		
+		public function getTttCopyAll():Array{
+			
+			var arr:Array=[];
+			var tdb:TDungeon_Base;
+			
+			for each(tdb in this.guildCopyDic){
+				if(tdb.Dungeon_Type==12)
+				arr.push(tdb);
+			}
+			
+			return arr;
+		}
+		
+		
 
 		public function getTzActiveAll():Object {
 			return this.pkCopyDic;
@@ -1570,6 +1681,85 @@ package com.ace.gameData.manager {
 
 		public function getKeep7ByDay(d:int):TKeep_7{
 			return this.keep7Dic[d];
+		}
+		
+		public function getGuildblessByID(d:int):TUnion_Bless{
+			return this.guildBlessDic[d];
+		}
+		
+		public function getGuildblessByType(d:int):TUnion_Bless{
+			var ub:TUnion_Bless;
+			for each(ub in this.guildBlessDic){
+				if(ub.build_Obj==d && ub.build_Lv==1)
+					return ub;
+			}
+			
+			return null;
+		}
+	 
+		
+		public function getGuildblessByAll():Object{
+			return this.guildBlessDic;
+		}
+		
+		public function getGemByID(id:int):TAlchemy{
+			return this.alchemyDic[id];
+		}
+	 
+		public function getGemListByType(id:int,type:int=1):Array{
+			
+			var arr:Array=[];
+			var al:TAlchemy;
+			for each(al in this.alchemyDic){
+				if(type==1 && al.Al_Type==id)
+					arr.push(al);
+				else if(type==2 && al.Al_second==id)
+					arr.push(al);
+				else if(type==3 && al.Al_Third==id)
+					arr.push(al);
+			}
+			
+			return (arr.length==0?null:arr);
+		}
+	 
+		/**
+		 * 
+		 * @param parentID
+		 * @param type
+		 * @return 
+		 * 
+		 */		
+		public function getGemListNameByType(parent2ID:int=1,parentID:int=1,type:int=1):Array{
+			
+			var typeArr:Array=[];
+			var arr:Array=[];
+			var al:TAlchemy;
+			for each(al in this.alchemyDic){
+				if(type==1 && typeArr.indexOf(al.Al_Type)==-1){
+					arr.push(al);
+					typeArr.push(al.Al_Type);
+				}else if(type==2 && parentID==al.Al_Type && typeArr.indexOf(al.Al_second)==-1){
+					arr.push(al);
+					typeArr.push(al.Al_second);
+				}else if(type==3 && parent2ID==al.Al_Type && parentID==al.Al_second  && typeArr.indexOf(al.Al_Third)==-1){
+					arr.push(al);
+					typeArr.push(al.Al_Third);
+				}
+			}
+			
+			return (arr.length==0?null:arr);
+		}
+ 
+		public function getGemListByAll():Object{
+			return this.alchemyDic;
+		}
+		
+		public function getLabaAll():Object{
+			return this.labaDic;
+		}
+		
+		public function getLabaById(id:int):TLaba{
+			return this.labaDic[id];
 		}
 
 	}

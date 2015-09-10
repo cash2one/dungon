@@ -61,7 +61,7 @@ package com.leyou.ui.guild.child {
 
 			this.editBtn.addEventListener(MouseEvent.CLICK, onClick);
 
-			data=[{label: PropUtils.getStringById(1737), uid: 1}, {label: PropUtils.getStringById(1738), uid: 2}, {label: PropUtils.getStringById(1739), uid: 3}, {label: PropUtils.getStringById(1740), uid: 4}];
+			data=[{label: PropUtils.getStringById(36), uid: 1}, {label: PropUtils.getStringById(37), uid: 2}, {label: PropUtils.getStringById(38), uid: 3}, {label: PropUtils.getStringById(39), uid: 4}];
 			this.officeCb.addEventListener(DropMenuEvent.Item_Selected, onChangeOffice);
 
 			this.descTxt.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
@@ -89,8 +89,6 @@ package com.leyou.ui.guild.child {
 				else
 					Cmd_Guild.cm_GuildDesc(this.nameLbl.text, PropUtils.getStringById(1594));
 
-				Cmd_Guild.cm_GuildOffice(this.nameLbl.text, int(this.officeCb.list.value.uid));
-
 				this.editBtn.text=PropUtils.getStringById(1741);
 				this.descTxt.mouseChildren=this.descTxt.mouseEnabled=false;
 				this.descTxt.tf.type=TextFieldType.DYNAMIC;
@@ -109,9 +107,13 @@ package com.leyou.ui.guild.child {
 		}
 
 		private function onChangeOffice(e:Event):void {
-			this.editBtn.text=PropUtils.getStringById(1742);
-			this.descTxt.mouseChildren=this.descTxt.mouseEnabled=true;
-			this.editState=true;
+			
+			if(this.nameLbl.text!="" && this.visible)
+			Cmd_Guild.cm_GuildOffice(this.nameLbl.text, int(this.officeCb.list.value.uid));
+			
+//			this.editBtn.text=PropUtils.getStringById(1742);
+//			this.descTxt.mouseChildren=this.descTxt.mouseEnabled=true;
+//			this.editState=true;
 		}
 
 		/**
@@ -161,6 +163,10 @@ package com.leyou.ui.guild.child {
 		override public function hide():void {
 			super.hide();
 
+			this.editBtn.text=PropUtils.getStringById(1741);
+			this.descTxt.mouseChildren=this.descTxt.mouseEnabled=false;
+			this.descTxt.tf.type=TextFieldType.DYNAMIC;
+			this.descTxt.editable=false;
 		}
 
 	}

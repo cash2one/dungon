@@ -161,6 +161,10 @@ package com.leyou.ui.backpack.child {
 			this.addChild(this.bindingBmp);
 			this.addChild(this.disableBmp);
 			this.addChild(this.numLbl);
+
+			if (info.aid == 31961  || info.aid == 31964)
+				Cmd_Bag.cm_bagUse(info.pos);
+
 		}
 
 		override protected function reset():void {
@@ -178,6 +182,8 @@ package com.leyou.ui.backpack.child {
 			this.cdMc.clearCD();
 			this.cdMc.play(0, 0)
 
+			this.iconBmp.setWH(40, 40);
+			this.bgBmp.visible=true;
 		}
 
 		public function setSize(w:Number, h:Number):void {
@@ -213,6 +219,19 @@ package com.leyou.ui.backpack.child {
 			this.addChild(this.bindingBmp);
 			this.addChild(this.disableBmp);
 			this.addChild(this.numLbl);
+		}
+
+		public function setLockState():void {
+			this.reset();
+			this.canMove=false;
+			this.iconBmp.updateBmp("ui/backpack/lock.png");
+
+			this.bgBmp.setWH(40, 40);
+			this.bgBmp.visible=false;
+			this.selectBmp.visible=false;
+			this.iconBmp.setWH(43, 43);
+			this.iconBmp.x=0;
+			this.iconBmp.y=0;
 		}
 
 		//经过事件
@@ -573,7 +592,7 @@ package com.leyou.ui.backpack.child {
 		 */
 		public function startCD(s:int=0):void {
 			var info:Baginfo=this.data;
-			if (info == null || info.info == null || info.info.classid != ItemEnum.ITEM_TYPE_YAOSHUI || s == 0)
+			if (info == null || info.info == null || (info.info.classid != ItemEnum.ITEM_TYPE_DAOJU && info.info.classid != ItemEnum.ITEM_TYPE_DAOJU) || s == 0)
 				return;
 
 			this.cdMc.visible=true;
@@ -842,24 +861,25 @@ package com.leyou.ui.backpack.child {
 						}
 
 					} else if (this.data.info.subclassid == 26) {
-						if (!UIManager.getInstance().roleWnd.openWing()) {
-							NoticeManager.getInstance().broadcast(TableManager.getInstance().getSystemNotice(9938));
-							return;
-						}
-
-						if (UIManager.getInstance().roleWnd.wingLv() < ConfigEnum.wing17) {
-							NoticeManager.getInstance().broadcast(TableManager.getInstance().getSystemNotice(1220));
-							return;
-						}
-
-						if (!UIManager.getInstance().roleWnd.visible)
-							UILayoutManager.getInstance().show_II(WindowEnum.ROLE);
-
-						TweenMax.delayedCall(.6, function():void {
-							UIManager.getInstance().roleWnd.setTabIndex(6);
-							UILayoutManager.getInstance().show_II(WindowEnum.ROLE, WindowEnum.WING_FLY, -20);
-
-						});
+//						if (!UIManager.getInstance().roleWnd.openWing()) {
+//							NoticeManager.getInstance().broadcast(TableManager.getInstance().getSystemNotice(9938));
+//							return;
+//						}
+//
+//						if (UIManager.getInstance().roleWnd.wingLv() < ConfigEnum.wing17) {
+//							NoticeManager.getInstance().broadcast(TableManager.getInstance().getSystemNotice(1220));
+//							return;
+//						}
+//
+//						if (!UIManager.getInstance().roleWnd.visible)
+//							UILayoutManager.getInstance().show_II(WindowEnum.ROLE);
+//
+//						TweenMax.delayedCall(.6, function():void {
+//							UIManager.getInstance().roleWnd.setTabIndex(6);
+//							UILayoutManager.getInstance().show_II(WindowEnum.ROLE, WindowEnum.WING_FLY, -20);
+//
+//						});
+						UIOpenBufferManager.getInstance().open(WindowEnum.GUILD_BATTLE, 1);
 					} else if (this.data.info.subclassid == 14) {
 						UILayoutManager.getInstance().show_II(WindowEnum.SKILL);
 					} else if (this.data.info.id == 30401) {
@@ -877,7 +897,7 @@ package com.leyou.ui.backpack.child {
 							NoticeManager.getInstance().broadcast(TableManager.getInstance().getSystemNotice(9938));
 							return;
 						}
-						
+
 						UILayoutManager.getInstance().show_II(WindowEnum.EQUIP);
 						TweenMax.delayedCall(.3, UIManager.getInstance().equipWnd.changeTable, [5]);
 					} else if (int(this.data.info.subclassid) == 27) {
@@ -885,18 +905,18 @@ package com.leyou.ui.backpack.child {
 							NoticeManager.getInstance().broadcast(TableManager.getInstance().getSystemNotice(9938));
 							return;
 						}
-						
+
 						if (!UIManager.getInstance().roleWnd.visible)
 							UILayoutManager.getInstance().show_II(WindowEnum.ROLE);
-						
+
 						TweenMax.delayedCall(.6, function():void {
 							UIManager.getInstance().roleWnd.setTabIndex(6);
-							
+
 							if (UIManager.getInstance().roleWnd.wingOpenTradeLv())
 								UILayoutManager.getInstance().show_II(WindowEnum.ROLE, WindowEnum.WING_FLY, -20);
-							
+
 						});
-						
+
 					} else if (this.data.info.id == 30403) {
 						UIOpenBufferManager.getInstance().open(WindowEnum.LUCKDRAW);
 					} else if (this.data.info.pay > 0) {
@@ -934,23 +954,23 @@ package com.leyou.ui.backpack.child {
 						UILayoutManager.getInstance().show(WindowEnum.LEGENDAREY_WEAPON);
 					} else if (this.data.info.subclassid == 36) {
 
-						if (ConfigEnum.Gem1 > Core.me.info.level) {
+						if (ConfigEnum.Alchemy1 > Core.me.info.level) {
 							NoticeManager.getInstance().broadcast(TableManager.getInstance().getSystemNotice(9938));
 							return;
 						}
 
 
-						if (!UIManager.getInstance().roleWnd.visible)
-							UILayoutManager.getInstance().show_II(WindowEnum.ROLE);
-						else
-							UIManager.getInstance().roleWnd.setGemSlot(dataId);
+//						if (!UIManager.getInstance().roleWnd.visible)
+//							UILayoutManager.getInstance().show_II(WindowEnum.ROLE);
+//						else
+//							UIManager.getInstance().roleWnd.setGemSlot(dataId);
+//
+//						TweenMax.delayedCall(.6, function():void {
+//
+//							UIManager.getInstance().roleWnd.setTabIndex(2);
 
-						TweenMax.delayedCall(.6, function():void {
-
-							UIManager.getInstance().roleWnd.setTabIndex(2);
-
-							UILayoutManager.getInstance().show_II(WindowEnum.ROLE, WindowEnum.GEM_LV, -20);
-						});
+							UILayoutManager.getInstance().show_II(WindowEnum.GEM_LV);
+//						});
 					} else {
 						Cmd_Bag.cm_bagUse(this.dataId);
 					}
@@ -1126,43 +1146,44 @@ package com.leyou.ui.backpack.child {
 						}
 
 					} else if (this.data.info.subclassid == 26) {
-						if (!UIManager.getInstance().roleWnd.openWing()) {
-							NoticeManager.getInstance().broadcast(TableManager.getInstance().getSystemNotice(9938));
-							return;
-						}
+//						if (!UIManager.getInstance().roleWnd.openWing()) {
+//							NoticeManager.getInstance().broadcast(TableManager.getInstance().getSystemNotice(9938));
+//							return;
+//						}
+//
+//						if (UIManager.getInstance().roleWnd.wingLv() < ConfigEnum.wing17) {
+//							NoticeManager.getInstance().broadcast(TableManager.getInstance().getSystemNotice(1220));
+//							return;
+//						}
+//
+//						if (!UIManager.getInstance().roleWnd.visible)
+//							UILayoutManager.getInstance().show_II(WindowEnum.ROLE);
+//
+//						TweenMax.delayedCall(.6, function():void {
+//							UIManager.getInstance().roleWnd.setTabIndex(6);
+//
+//							UILayoutManager.getInstance().show_II(WindowEnum.ROLE, WindowEnum.WING_FLY, -20);
+//
+//						});
+						UIOpenBufferManager.getInstance().open(WindowEnum.GUILD_BATTLE, 1);
 
-						if (UIManager.getInstance().roleWnd.wingLv() < ConfigEnum.wing17) {
-							NoticeManager.getInstance().broadcast(TableManager.getInstance().getSystemNotice(1220));
-							return;
-						}
-
-						if (!UIManager.getInstance().roleWnd.visible)
-							UILayoutManager.getInstance().show_II(WindowEnum.ROLE);
-
-						TweenMax.delayedCall(.6, function():void {
-							UIManager.getInstance().roleWnd.setTabIndex(6);
-
-							UILayoutManager.getInstance().show_II(WindowEnum.ROLE, WindowEnum.WING_FLY, -20);
-
-						});
-						
 					} else if (int(this.data.info.subclassid) == 27) {
 						if (!UIManager.getInstance().roleWnd.openWing()) {
 							NoticeManager.getInstance().broadcast(TableManager.getInstance().getSystemNotice(9938));
 							return;
 						}
-						
+
 						if (!UIManager.getInstance().roleWnd.visible)
 							UILayoutManager.getInstance().show_II(WindowEnum.ROLE);
-						
+
 						TweenMax.delayedCall(.6, function():void {
 							UIManager.getInstance().roleWnd.setTabIndex(6);
-							
+
 							if (UIManager.getInstance().roleWnd.wingOpenTradeLv())
 								UILayoutManager.getInstance().show_II(WindowEnum.ROLE, WindowEnum.WING_FLY, -20);
-							
+
 						});
-						
+
 					} else if (this.data.info.subclassid == 14) {
 						UILayoutManager.getInstance().show_II(WindowEnum.SKILL);
 					} else if (this.data.info.subclassid == 25) {
@@ -1217,23 +1238,23 @@ package com.leyou.ui.backpack.child {
 					} else if ((31839 == this.data.info.id) || (31840 == this.data.info.id) || (31841 == this.data.info.id) || (31842 == this.data.info.id)) {
 						UILayoutManager.getInstance().show(WindowEnum.LEGENDAREY_WEAPON);
 					} else if (this.data.info.subclassid == 36) {
-						
-						if (ConfigEnum.Gem1 > Core.me.info.level) {
+
+						if (ConfigEnum.Alchemy1 > Core.me.info.level) {
 							NoticeManager.getInstance().broadcast(TableManager.getInstance().getSystemNotice(9938));
 							return;
 						}
-						
-						if (!UIManager.getInstance().roleWnd.visible)
-							UILayoutManager.getInstance().show_II(WindowEnum.ROLE);
-						else
-							UIManager.getInstance().roleWnd.setGemSlot(dataId);
-						
-						TweenMax.delayedCall(.6, function():void {
-							
-							UIManager.getInstance().roleWnd.setTabIndex(2);
-							
+
+//						if (!UIManager.getInstance().roleWnd.visible)
+//							UILayoutManager.getInstance().show_II(WindowEnum.ROLE);
+//						else
+//							UIManager.getInstance().roleWnd.setGemSlot(dataId);
+//
+//						TweenMax.delayedCall(.6, function():void {
+//
+//							UIManager.getInstance().roleWnd.setTabIndex(2);
+
 							UILayoutManager.getInstance().show_II(WindowEnum.ROLE, WindowEnum.GEM_LV, -20);
-						});
+//						});
 					} else {
 						Cmd_Bag.cm_bagUse(this.dataId);
 					}

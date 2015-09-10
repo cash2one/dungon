@@ -166,7 +166,7 @@ package com.leyou.ui.welfare.child.page {
 			}
 			welfareLogin.turnToTab(_currentIndex);
 			if (!signedImg.visible) {
-				GuideManager.getInstance().showGuide(48, this);
+				GuideManager.getInstance().showGuide(48, signBtn);
 			}
 			//			checkGuide();
 		}
@@ -272,5 +272,6 @@ package com.leyou.ui.welfare.child.page {
 			}
 			return false;
 		}
+		
 	}
 }

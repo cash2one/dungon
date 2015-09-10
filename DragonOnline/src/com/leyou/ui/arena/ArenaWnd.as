@@ -23,6 +23,7 @@ package com.leyou.ui.arena {
 	import com.ace.ui.menu.data.MenuInfo;
 	import com.ace.ui.window.children.SimpleWindow;
 	import com.ace.utils.StringUtil;
+	import com.greensock.TweenLite;
 	import com.leyou.enum.ChatEnum;
 	import com.leyou.enum.ConfigEnum;
 	import com.leyou.enum.TaskEnum;
@@ -384,13 +385,15 @@ package com.leyou.ui.arena {
 
 			UIManager.getInstance().arenaAwardWnd.updateInfo(int(o.jxlevel) - 1, o.jlst);
 
-			if (this.freeTime == 0)
-				this.freeTime=o.avoidt;
+//			if (this.freeTime == 0)
+			this.freeTime=o.avoidt;
 
 			this.addFreeCountLbl.visible=(this.freeTime <= 0)
 			this.freeTimeTxt.visible=!this.addFreeCountLbl.visible;
 
-			TimerManager.getInstance().add(exeFreeTime);
+			TimerManager.getInstance().remove(exeFreeTime);
+			if (this.freeTime > 0)
+				TimerManager.getInstance().add(exeFreeTime);
 		}
 
 		private function exeFreeTime(i:int):void {
@@ -440,8 +443,10 @@ package com.leyou.ui.arena {
 				TimerManager.getInstance().add(exePkTime);
 			} else {
 				this.refreshLbl.visible=false;
-				if (this.visible)
-					GuideManager.getInstance().showGuide(66, this);
+				TweenLite.delayedCall(0.6, function():void {
+					if (visible)
+						GuideManager.getInstance().showGuide(66, refreshBtn);
+				});
 				this.refreshBtn.updataBmd("ui/delivery/btn_shuaxin2.png");
 			}
 
@@ -496,10 +501,11 @@ package com.leyou.ui.arena {
 			} else {
 				this.refreshTime=0;
 				TimerManager.getInstance().remove(exePkTime);
-				this.refreshTimeLbl.text=StringUtil.substitute(PropUtils.getStringById(1599), [0, 0, 0]);
+//				this.refreshTimeLbl.text=StringUtil.substitute(PropUtils.getStringById(1599), [0, 0, 0]);
+				this.refreshTimeLbl.text="";
 
 				if (this.visible)
-					GuideManager.getInstance().showGuide(66, this);
+					GuideManager.getInstance().showGuide(66, this.refreshBtn);
 
 				this.refreshLbl.visible=false;
 				this.refreshBtn.updataBmd("ui/delivery/btn_shuaxin2.png");

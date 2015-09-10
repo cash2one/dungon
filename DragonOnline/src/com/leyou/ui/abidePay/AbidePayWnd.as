@@ -151,7 +151,7 @@ package com.leyou.ui.abidePay {
 				var box:AbidePayRewardBox=new AbidePayRewardBox();
 				pane.addChild(box);
 				var tData:TAbidePayInfo=TableManager.getInstance().getAbidePayInfo((m % 3) + 1);
-				box.updateContent(tData, arr[int(m / 3)]);
+				box.updateContent(tData, arr[int(m / 3)], 1);
 				box.x=203 + int(m / 3) * 162;
 				box.y=270 + int(m % 3) * 90;
 				boxes.push(box);
@@ -307,7 +307,7 @@ package com.leyou.ui.abidePay {
 				box.updateInfo(data);
 			}
 
-			var rate:Number=data.cpayValue / tData3.ib;
+			var rate:Number=data.cpayValue / tData1.ib;
 			if (rate > 1) {
 				rate=1;
 			}

@@ -120,7 +120,7 @@ package com.leyou.ui.boss.children
 				numLbl.text = (count/10000).toFixed(1) + PropUtils.getStringById(1532);
 			}else if(count >= 1000000){
 				numLbl.text = int(count/10000) + PropUtils.getStringById(1532);
-			}else if(count <= 0){
+			}else if(count <= 1){
 				numLbl.text = "";
 			}
 			var iconUrl:String = GameFileEnum.URL_ITEM_ICO + sourceName;

@@ -23,6 +23,7 @@ package com.ace.gameData.table {
 		public var needLevel:int;
 		public var autoMonsterRange:uint;
 		public var isDouble:Boolean;
+		public var isNeedMount:Boolean;
 
 		public function TSceneInfo(info:XML) {
 			this.id=info.@id;
@@ -42,6 +43,7 @@ package com.ace.gameData.table {
 			this.autoMonsterRange=info.@odd;
 			(this.autoMonsterRange <= 0) && (this.autoMonsterRange=99999);
 			this.isDouble=("1" == info.@Double_info);
+			this.isNeedMount=("1" == info.@Mount_Blade);
 		}
 	}
 }

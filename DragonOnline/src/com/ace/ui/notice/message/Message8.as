@@ -166,7 +166,7 @@ package com.ace.ui.notice.message
 						}
 						s+="."
 					}else{
-						s+=","+PropUtils.getStringById(1527);
+						s+=","+PropUtils.getStringById(1517);
 					}
 				}else if(1 == data[5]){
 					s = TableManager.getInstance().getSystemNotice(3904).content;

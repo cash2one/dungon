@@ -52,6 +52,9 @@ package com.leyou.ui.dragonBall.children
 			for(var n:int = 0; n < l; n++){
 				var copyId:int = data.getCopyID(n);
 				var copyInfo:TCopyInfo = TableManager.getInstance().getCopyInfo(copyId);
+//				if(null == copyInfo){
+//					continue;
+//				}
 				var item:DragonBallCopyItem = items[n];
 				if(null == item){
 					item = new DragonBallCopyItem();

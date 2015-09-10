@@ -1,16 +1,21 @@
 package com.leyou.ui.pet.children
 {
 	import com.ace.enum.FilterEnum;
+	import com.ace.enum.TipEnum;
 	import com.ace.gameData.manager.DataManager;
 	import com.ace.gameData.manager.MyInfoManager;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.table.TPetAttackInfo;
 	import com.ace.gameData.table.TPetStarInfo;
+	import com.ace.manager.EventManager;
 	import com.ace.manager.LibManager;
+	import com.ace.manager.ToolTipManager;
+	import com.ace.manager.UIManager;
 	import com.ace.ui.auto.AutoSprite;
 	import com.ace.ui.button.children.NormalButton;
 	import com.ace.ui.img.child.Image;
 	import com.ace.ui.lable.Label;
+	import com.ace.utils.StringUtil;
 	import com.leyou.data.pet.PetEntryData;
 	import com.leyou.enum.ConfigEnum;
 	import com.leyou.net.cmd.Cmd_Pet;
@@ -19,6 +24,7 @@ package com.leyou.ui.pet.children
 	import com.leyou.utils.PropUtils;
 	
 	import flash.events.MouseEvent;
+	import flash.geom.Point;
 	
 	public class PetStarUpgradePage extends AutoSprite
 	{
@@ -56,6 +62,18 @@ package com.leyou.ui.pet.children
 		
 		private var petTId:int;
 		
+		private var ccritLbl:Label;
+		
+		private var ncritLbl:Label;
+		
+		private var chitLbl:Label;
+		
+		private var nhitLbl:Label;
+		
+		private var ccattLbl:Label;
+		
+		private var ncattLbl:Label;
+		
 		public function PetStarUpgradePage(){
 			super(LibManager.getInstance().getXML("config/ui/pet/serventSX.xml"));
 			init();
@@ -76,6 +94,12 @@ package com.leyou.ui.pet.children
 			lvUpBtn = getUIbyID("lvUpBtn") as NormalButton;
 			costLbl = getUIbyID("costLbl") as Label;
 			costMoneyLbl = getUIbyID("costMoneyLbl") as Label;
+			ccritLbl = getUIbyID("ccritLbl") as Label;
+			ncritLbl = getUIbyID("ncritLbl") as Label;
+			chitLbl = getUIbyID("chitLbl") as Label;
+			nhitLbl = getUIbyID("nhitLbl") as Label;
+			ccattLbl = getUIbyID("ccattLbl") as Label;
+			ncattLbl = getUIbyID("ncattLbl") as Label;
 			var maxStar:int = ConfigEnum.servent9;
 			cstars = new Vector.<Image>(maxStar);
 			nstars = new Vector.<Image>(maxStar);
@@ -88,11 +112,61 @@ package com.leyou.ui.pet.children
 			
 			grid = new MarketGrid();
 			grid.isShowPrice = false;
-			grid.x = 125 + 11;
-			grid.y = 221 + 11;
+			grid.x = 129 + 11;
+			grid.y = 244 + 11;
 			addChild(grid);
 			addChild(costLbl);
 			lvUpBtn.addEventListener(MouseEvent.CLICK, onMouseClick);
+			
+			var tlabel:Label = getUIbyID("star6800Lbl") as Label;
+			tlabel.mouseEnabled = true;
+			tlabel.addEventListener(MouseEvent.MOUSE_OVER, onTipsOver);
+			
+			tlabel = getUIbyID("att6803Lbl") as Label;
+			tlabel.mouseEnabled = true;
+			tlabel.addEventListener(MouseEvent.MOUSE_OVER, onTipsOver);
+			
+			tlabel = getUIbyID("hp6804Lbl") as Label;
+			tlabel.mouseEnabled = true;
+			tlabel.addEventListener(MouseEvent.MOUSE_OVER, onTipsOver);
+			
+			tlabel = getUIbyID("speed6806Lbl") as Label;
+			tlabel.mouseEnabled = true;
+			tlabel.addEventListener(MouseEvent.MOUSE_OVER, onTipsOver);
+			
+			tlabel = getUIbyID("smart6805Lbl") as Label;
+			tlabel.mouseEnabled = true;
+			tlabel.addEventListener(MouseEvent.MOUSE_OVER, onTipsOver);
+			
+			tlabel = getUIbyID("call6807Lbl") as Label;
+			tlabel.mouseEnabled = true;
+			tlabel.addEventListener(MouseEvent.MOUSE_OVER, onTipsOver);
+			
+			tlabel = getUIbyID("crit6808Lbl") as Label;
+			tlabel.mouseEnabled = true;
+			tlabel.addEventListener(MouseEvent.MOUSE_OVER, onTipsOver);
+			
+			tlabel = getUIbyID("hit6809Lbl") as Label;
+			tlabel.mouseEnabled = true;
+			tlabel.addEventListener(MouseEvent.MOUSE_OVER, onTipsOver);
+			
+			tlabel = getUIbyID("cat6810Lbl") as Label;
+			tlabel.mouseEnabled = true;
+			tlabel.addEventListener(MouseEvent.MOUSE_OVER, onTipsOver);
+			
+			EventManager.getInstance().addEvent("petStarLvUp", onStarLevelUp);
+		}
+		
+		private function onStarLevelUp(pid:int):void{
+			UIManager.getInstance().petWnd.playLvUpEffect(1);
+		}
+		
+		protected function onTipsOver(event:MouseEvent):void{
+			var codeStr:String = event.target.name;
+			codeStr = codeStr.match(/\d+/)[0];
+			var str:String = TableManager.getInstance().getSystemNotice(int(codeStr)).content;
+			str = StringUtil.substitute(str, ConfigEnum.servent2);
+			ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, str, new Point(stage.mouseX, stage.mouseY));
 		}
 		
 		protected function onMouseClick(event:MouseEvent):void{
@@ -137,24 +211,33 @@ package com.leyou.ui.pet.children
 			var cpetStarInfo:TPetStarInfo = TableManager.getInstance().getPetStarLvInfo(petTId, starLv);
 			var npetStarInfo:TPetStarInfo = TableManager.getInstance().getPetStarLvInfo(petTId, starLv+1);
 			
-			var petLvInfo:TPetAttackInfo = TableManager.getInstance().getPetLvInfo(starLv, level);
+			var cpetLvInfo:TPetAttackInfo = TableManager.getInstance().getPetLvInfo(starLv, level);
+			var npetLvInfo:TPetAttackInfo = TableManager.getInstance().getPetLvInfo(starLv+1, level);
 			
-			costMoneyLbl.text = npetStarInfo.money+"";
-			cHpLbl.text = int(cpetStarInfo.hp*Math.pow(1.15, level/13) + petLvInfo.fixedAtt)+"";
-			cAttLbl.text = int(cpetStarInfo.fixedAtt*Math.pow(1.05, level/3) + petLvInfo.fixedAtt)+"";
+			costMoneyLbl.text = cpetStarInfo.money+"";
+			cHpLbl.text = int(cpetStarInfo.hp + cpetLvInfo.hp)+"";
+			cAttLbl.text = int(cpetStarInfo.fixedAtt + cpetLvInfo.fixedAtt)+"";
 			cSpeedLbl.text = cpetStarInfo.attSpeed/1000+PropUtils.getStringById(2157);
 			cSmartLbl.text = PetAttributeUtil.getSmartLv(cpetStarInfo.skillRate);
-			cReviveLbl.text = (cpetStarInfo.revive+petLvInfo.revive)+PropUtils.getStringById(2146);
+			cReviveLbl.text = (cpetStarInfo.revive+cpetLvInfo.revive)+PropUtils.getStringById(2146);
+			ccritLbl.text = int(cpetStarInfo.critRate/100) + "%";
+			chitLbl.text = int(cpetStarInfo.hitRate/100) + "%";
+			ccattLbl.text = int(cpetStarInfo.slayRate/100) + "%";
+				
+			if(null != npetStarInfo){
+				nHpLbl.text = int(npetStarInfo.hp + npetLvInfo.hp)+"";
+				nAttLbl.text = int(npetStarInfo.fixedAtt + npetLvInfo.fixedAtt)+"";
+				nSpeedLbl.text = npetStarInfo.attSpeed/1000+PropUtils.getStringById(2157);
+				nSmartLbl.text = PetAttributeUtil.getSmartLv(npetStarInfo.skillRate);
+				nReviveLbl.text = (npetStarInfo.revive+npetLvInfo.revive)+PropUtils.getStringById(2146);
+				ncritLbl.text = int(npetStarInfo.critRate/100) + "%";
+				nhitLbl.text = int(npetStarInfo.hitRate/100) + "%";
+				ncattLbl.text = int(npetStarInfo.slayRate/100) + "%";
+			}
 			
-			nHpLbl.text = int(npetStarInfo.hp*Math.pow(1.15, level/13) + petLvInfo.fixedAtt)+"";
-			nAttLbl.text = int(npetStarInfo.fixedAtt*Math.pow(1.05, level/3) + petLvInfo.fixedAtt)+"";
-			nSpeedLbl.text = npetStarInfo.attSpeed/1000+PropUtils.getStringById(2157);
-			nSmartLbl.text = PetAttributeUtil.getSmartLv(npetStarInfo.skillRate);
-			nReviveLbl.text = (npetStarInfo.revive+petLvInfo.revive)+PropUtils.getStringById(2146);
-			
-			var rnum:int = MyInfoManager.getInstance().getBagItemNumById(npetStarInfo.item);
-			grid.updataById(npetStarInfo.item);
-			costLbl.text = rnum+"/"+npetStarInfo.itemNum;
+			var rnum:int = MyInfoManager.getInstance().getBagItemNumById(cpetStarInfo.item);
+			grid.updataById(cpetStarInfo.item);
+			costLbl.text = rnum+"/"+cpetStarInfo.itemNum;
 		}
 	}
 }

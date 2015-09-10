@@ -52,8 +52,17 @@ package com.leyou.ui.bossCopy
 			hide();
 		}
 		
+		private function clear():void{
+			for each(var gird:MarketGrid in grids){
+				if(null != gird){
+					gird.clear();
+				}
+			}
+		}
+		
 		public function updateInfo(obj:Object):void{
 			show();
+			clear();
 			var copyInfo:TCopyInfo = TableManager.getInstance().getCopyInfo(obj.cid);
 			var index:int = 0;
 			if(copyInfo.firstEXP > 0){

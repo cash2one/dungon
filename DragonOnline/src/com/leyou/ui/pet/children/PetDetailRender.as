@@ -1,13 +1,16 @@
 package com.leyou.ui.pet.children
 {
+	import com.ace.enum.TipEnum;
 	import com.ace.gameData.manager.DataManager;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.table.TPetAttackInfo;
 	import com.ace.gameData.table.TPetInfo;
 	import com.ace.gameData.table.TPetStarInfo;
 	import com.ace.manager.LibManager;
+	import com.ace.manager.ToolTipManager;
 	import com.ace.ui.auto.AutoSprite;
 	import com.ace.ui.component.RollNumWidget;
+	import com.ace.ui.img.child.Image;
 	import com.ace.ui.lable.Label;
 	import com.ace.ui.lable.children.TextArea;
 	import com.leyou.data.pet.PetEntryData;
@@ -18,6 +21,7 @@ package com.leyou.ui.pet.children
 	import com.leyou.utils.StringUtil_II;
 	
 	import flash.events.MouseEvent;
+	import flash.geom.Point;
 	import flash.text.StyleSheet;
 	
 	public class PetDetailRender extends AutoSprite
@@ -68,6 +72,14 @@ package com.leyou.ui.pet.children
 		
 		private var cpetId:int;
 		
+		private var bgImg:Image;
+		
+		private var critLbl:Label;
+		
+		private var hitLbl:Label;
+		
+		private var cattLbl:Label;
+		
 		public function PetDetailRender(){
 			super(LibManager.getInstance().getXML("config/ui/pet/serventCard2.xml"))
 			init();
@@ -75,6 +87,7 @@ package com.leyou.ui.pet.children
 		
 		private function init():void{
 			mouseChildren = true;
+			bgImg = getUIbyID("bgImg") as Image;
 			returnLbl = getUIbyID("returnLbl") as Label;
 			qmdLbl = getUIbyID("qmdLbl") as Label;
 			nameLbl = getUIbyID("nameLbl") as Label;
@@ -95,6 +108,9 @@ package com.leyou.ui.pet.children
 			addDodgeLbl = getUIbyID("addDodgeLbl") as Label;
 			addGuardLbl = getUIbyID("addGuardLbl") as Label;
 			desLbl = getUIbyID("desLbl") as TextArea;
+			critLbl = getUIbyID("critLbl") as Label;
+			hitLbl = getUIbyID("hitLbl") as Label;
+			cattLbl = getUIbyID("cattLbl") as Label;
 			
 			var style:StyleSheet = new StyleSheet()
 			var aHover:Object = new Object();
@@ -109,9 +125,91 @@ package com.leyou.ui.pet.children
 			numV = new RollNumWidget();
 			numV.loadSource("ui/num/{num}_zdl.png");
 			numV.alignLeft();
-			numV.x = 133;
-			numV.y = 227;
+			numV.x = 128;
+			numV.y = 235;
 			addChild(numV);
+			
+			var tlabel:Label = getUIbyID("attLbl4") as Label;
+			tlabel.mouseEnabled = true;
+			tlabel.addEventListener(MouseEvent.MOUSE_OVER, onTipsOver);
+			
+			tlabel = getUIbyID("defLbl5") as Label;
+			tlabel.mouseEnabled = true;
+			tlabel.addEventListener(MouseEvent.MOUSE_OVER, onTipsOver);
+			
+			tlabel = getUIbyID("lifeLbl1") as Label;
+			tlabel.mouseEnabled = true;
+			tlabel.addEventListener(MouseEvent.MOUSE_OVER, onTipsOver);
+			
+			tlabel = getUIbyID("critLbl8") as Label;
+			tlabel.mouseEnabled = true;
+			tlabel.addEventListener(MouseEvent.MOUSE_OVER, onTipsOver);
+			
+			tlabel = getUIbyID("hitLbl10") as Label;
+			tlabel.mouseEnabled = true;
+			tlabel.addEventListener(MouseEvent.MOUSE_OVER, onTipsOver);
+			
+			tlabel = getUIbyID("slayLbl12") as Label;
+			tlabel.mouseEnabled = true;
+			tlabel.addEventListener(MouseEvent.MOUSE_OVER, onTipsOver);
+			
+			tlabel = getUIbyID("tenacityLbl9") as Label;
+			tlabel.mouseEnabled = true;
+			tlabel.addEventListener(MouseEvent.MOUSE_OVER, onTipsOver);
+			
+			tlabel = getUIbyID("dodgeLbl11") as Label;
+			tlabel.mouseEnabled = true;
+			tlabel.addEventListener(MouseEvent.MOUSE_OVER, onTipsOver);
+			
+			tlabel = getUIbyID("guardLbl13") as Label;
+			tlabel.mouseEnabled = true;
+			tlabel.addEventListener(MouseEvent.MOUSE_OVER, onTipsOver);
+			
+			tlabel = getUIbyID("att6803Lbl") as Label;
+			tlabel.mouseEnabled = true;
+			tlabel.addEventListener(MouseEvent.MOUSE_OVER, onPetTipsOver);
+			
+			tlabel = getUIbyID("hp6804Lbl") as Label;
+			tlabel.mouseEnabled = true;
+			tlabel.addEventListener(MouseEvent.MOUSE_OVER, onPetTipsOver);
+			
+			tlabel = getUIbyID("smart6805Lbl") as Label;
+			tlabel.mouseEnabled = true;
+			tlabel.addEventListener(MouseEvent.MOUSE_OVER, onPetTipsOver);
+			
+			tlabel = getUIbyID("attSpeed6806Lbl") as Label;
+			tlabel.mouseEnabled = true;
+			tlabel.addEventListener(MouseEvent.MOUSE_OVER, onPetTipsOver);
+			
+			tlabel = getUIbyID("revive6807Lbl") as Label;
+			tlabel.mouseEnabled = true;
+			tlabel.addEventListener(MouseEvent.MOUSE_OVER, onPetTipsOver);
+			
+			tlabel = getUIbyID("crit6808Lbl") as Label;
+			tlabel.mouseEnabled = true;
+			tlabel.addEventListener(MouseEvent.MOUSE_OVER, onPetTipsOver);
+			
+			tlabel = getUIbyID("hit6809Lbl") as Label;
+			tlabel.mouseEnabled = true;
+			tlabel.addEventListener(MouseEvent.MOUSE_OVER, onPetTipsOver);
+			
+			tlabel = getUIbyID("catt6810Lbl") as Label;
+			tlabel.mouseEnabled = true;
+			tlabel.addEventListener(MouseEvent.MOUSE_OVER, onPetTipsOver);
+		}
+		
+		protected function onPetTipsOver(event:MouseEvent):void{
+			var codeStr:String = event.target.name;
+			codeStr = codeStr.match(/\d+/)[0];
+			var str:String = TableManager.getInstance().getSystemNotice(int(codeStr)).content;
+			ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, str, new Point(stage.mouseX, stage.mouseY));
+		}
+		
+		protected function onTipsOver(event:MouseEvent):void{
+			var codeStr:String = event.target.name;
+			codeStr = codeStr.match(/\d+/)[0];
+			var str:String = TableManager.getInstance().getSystemNotice(9500 + int(codeStr)).content;
+			ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, str, new Point(stage.mouseX, stage.mouseY));
 		}
 		
 		protected function onMouseClick(event:MouseEvent):void{
@@ -121,9 +219,9 @@ package com.leyou.ui.pet.children
 		}
 		
 		public function updateInfo(petTId:int):void{
-			if(cpetId == petTId){
-				return;
-			}
+//			if(cpetId == petTId){
+//				return;
+//			}
 			cpetId = petTId;
 			
 			// 表格数据
@@ -149,11 +247,14 @@ package com.leyou.ui.pet.children
 			nameLbl.text = petInfo.name;
 			raceLbl.text = PetAttributeUtil.getRaceName(petInfo.race);
 			
-			attLbl.text = int(petStarLvInfo.fixedAtt*Math.pow(1.05, level/3) + petLvInfo.fixedAtt)+"";
-			hpLbl.text = int(petStarLvInfo.hp*Math.pow(1.15, level/13) + petLvInfo.fixedAtt)+"";
+			attLbl.text = int(petStarLvInfo.fixedAtt + petLvInfo.fixedAtt)+"";
+			hpLbl.text = int(petStarLvInfo.hp + petLvInfo.hp)+"";
 			smartLbl.text = PetAttributeUtil.getSmartLv(petStarLvInfo.skillRate);
 			reviveLbl.text = (petStarLvInfo.revive+petLvInfo.revive)+PropUtils.getStringById(2146);
-			attSpeedLbl.text = petStarLvInfo.attSpeed/1000+PropUtils.getStringById(2157)
+			attSpeedLbl.text = petStarLvInfo.attSpeed/1000+PropUtils.getStringById(2157);
+			critLbl.text = int(petStarLvInfo.critRate/100)+"%";
+			hitLbl.text = int(petStarLvInfo.hitRate/100)+"%";
+			cattLbl.text = int(petStarLvInfo.slayRate/100)+"%";
 			
 			// 主人加成
 			var rate:Number = Math.pow((10000 + ConfigEnum.servent20)/10000, (qmdLv-1));
@@ -169,7 +270,8 @@ package com.leyou.ui.pet.children
 			var zdlNum:int = int(ZDLUtil.computation(petInfo.hp, 0, petInfo.phyAtt, petInfo.phyDef, petInfo.magicAtt, petInfo.magicDef, petInfo.crit, petInfo.tenacity, petInfo.hit, petInfo.dodge, petInfo.slay, petInfo.guard, petInfo.fixedAtt, petInfo.fixedDef)*Math.pow((10000 + ConfigEnum.servent20)/10000, (qmdLv-1)));
 			numV.setNum(zdlNum);
 			
-			desLbl.setText(PropUtils.getStringById(2151));
+			desLbl.setText(petInfo.des);
+			bgImg.updateBmp("ui/servent/" + petInfo.backBg);
 		}
 		
 		public function regristerSwitch(method:Function):void{

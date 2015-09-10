@@ -136,6 +136,7 @@ package com.leyou.data.fieldboss
 				}
 				bInfo.bossId = bList[n][0];
 				bInfo.status = bList[n][1];
+				bInfo.refreshTick = bList[n][2];
 			}
 			lowBossList.sort(compare);
 		}

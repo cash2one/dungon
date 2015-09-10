@@ -1,14 +1,21 @@
 package com.leyou.ui.pet.children {
+	import com.ace.config.Core;
+	import com.ace.enum.TipEnum;
 	import com.ace.gameData.manager.DataManager;
 	import com.ace.gameData.manager.MyInfoManager;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.table.TMissionDate;
 	import com.ace.gameData.table.TPetFriendlyInfo;
 	import com.ace.gameData.table.TPetInfo;
+	import com.ace.gameData.table.TPointInfo;
+	import com.ace.manager.EventManager;
 	import com.ace.manager.LibManager;
+	import com.ace.manager.ToolTipManager;
+	import com.ace.manager.UIManager;
 	import com.ace.tools.ScaleBitmap;
 	import com.ace.ui.auto.AutoSprite;
 	import com.ace.ui.button.children.NormalButton;
+	import com.ace.ui.img.child.Image;
 	import com.ace.ui.input.children.TextInput;
 	import com.ace.ui.lable.Label;
 	import com.ace.utils.StringUtil;
@@ -20,8 +27,9 @@ package com.leyou.ui.pet.children {
 	import com.leyou.util.ZDLUtil;
 	import com.leyou.utils.PropUtils;
 	import com.leyou.utils.StringUtil_II;
-
+	
 	import flash.events.MouseEvent;
+	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.text.StyleSheet;
 
@@ -61,6 +69,8 @@ package com.leyou.ui.pet.children {
 		private var petTId:int;
 
 		private var grid:MarketGrid;
+		
+		private var finishedImg:Image;
 
 		public function PetBosomPage() {
 			super(LibManager.getInstance().getXML("config/ui/pet/serventQM.xml"));
@@ -85,6 +95,7 @@ package com.leyou.ui.pet.children {
 			numInput=getUIbyID("numInput") as TextInput;
 			maxNumBtn=getUIbyID("maxNumBtn") as NormalButton;
 			useBtn=getUIbyID("useBtn") as NormalButton;
+			finishedImg=getUIbyID("finishedImg") as Image;
 
 			grid=new MarketGrid();
 			grid.x=24;
@@ -103,15 +114,39 @@ package com.leyou.ui.pet.children {
 			receiveBtn.addEventListener(MouseEvent.CLICK, onMouseClick);
 			maxNumBtn.addEventListener(MouseEvent.CLICK, onMouseClick);
 			useBtn.addEventListener(MouseEvent.CLICK, onMouseClick);
+			
+			var tlabel:Label = getUIbyID("qm6802Lbl") as Label;
+			tlabel.mouseEnabled = true;
+			tlabel.addEventListener(MouseEvent.MOUSE_OVER, onTipsOver);
+			EventManager.getInstance().addEvent("petQmLvUp", onQmLvUp);
 		}
-
+		
+		private function onQmLvUp(id:int):void{
+			UIManager.getInstance().petWnd.playLvUpEffect(3);
+		}
+		
+		protected function onTipsOver(event:MouseEvent):void{
+			var codeStr:String = event.target.name;
+			codeStr = codeStr.match(/\d+/)[0];
+			var str:String = TableManager.getInstance().getSystemNotice(int(codeStr)).content;
+			ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, str, new Point(stage.mouseX, stage.mouseY));
+		}
+		
 		protected function onMouseClick(event:MouseEvent):void {
+			var petData:PetData = DataManager.getInstance().petData;
 			switch (event.target.name) {
 				case "taskLbl":
-					Cmd_Pet.cm_PET_A(2, petTId);
+					var petTaskInfo:TMissionDate = TableManager.getInstance().getMissionDataByID(petData.qmdTaskId);
+					var pt:TPointInfo = TableManager.getInstance().getPointInfo(petTaskInfo.target_point);
+					Core.me.gotoMap(new Point(pt.tx, pt.ty), pt.sceneId, true);
+//					Cmd_Pet.cm_PET_A(2, petTId);
 					break;
 				case "receiveBtn":
-					Cmd_Pet.cm_PET_A(2, petTId);
+					if((petData.qmdPetId == petTId) && (1 == petData.qmdTaskStatus)){
+						Cmd_Pet.cm_PET_D(2);
+					}else{
+						Cmd_Pet.cm_PET_A(2, petTId);
+					}
 					break;
 				case "maxNumBtn":
 					var num1:int=MyInfoManager.getInstance().getBagItemNumById(ConfigEnum.servent18.split(",")[0]);
@@ -136,10 +171,11 @@ package com.leyou.ui.pet.children {
 				qmdLv=petEntry.qmdLv;
 			}
 
-			var petQmInfo:TPetFriendlyInfo=TableManager.getInstance().getPetFriendlyInfo(qmdLv + 1);
+			var petQmInfo:TPetFriendlyInfo=TableManager.getInstance().getPetFriendlyInfo(qmdLv);
 			progressLbl.text=qmd + "/" + petQmInfo.friendlyNum;
 			progressCImg.scrollRect=new Rectangle(0, 0, 326 * qmd / petQmInfo.friendlyNum, 18);
 			qmdLbl.text=qmdLv + "";
+			cQmdLbl.text = qmdLv + "";
 			nQmdLbl.text=(qmdLv + 1) + "";
 			var crate:Number=Math.pow((10000 + ConfigEnum.servent20) / 10000, qmdLv) - 1;
 			var nrate:Number=Math.pow((10000 + ConfigEnum.servent20) / 10000, qmdLv + 1) - 1;
@@ -149,9 +185,9 @@ package com.leyou.ui.pet.children {
 			nAddAttLbl.text="" + int(ZDLUtil.computation(petInfo.hp, 0, petInfo.phyAtt, petInfo.phyDef, petInfo.magicAtt, petInfo.magicDef, petInfo.crit, petInfo.tenacity, petInfo.hit, petInfo.dodge, petInfo.slay, petInfo.guard, petInfo.fixedAtt, petInfo.fixedDef) * Math.pow((10000 + ConfigEnum.servent20) / 10000, qmdLv));
 
 			var petData:PetData=DataManager.getInstance().petData;
-			var taskId:int=petData.lvTaskId;
+			var taskId:int=petData.qmdTaskId;
 			if (taskId <= 0) {
-
+				finishedImg.visible = false;
 				return;
 			}
 
@@ -159,8 +195,9 @@ package com.leyou.ui.pet.children {
 			var text:String=petTaskInfo.monster_name + "(" + petData.qmdPogress + "/" + petTaskInfo.monster_num + ")";
 			text=StringUtil_II.addEventString(text, text, true);
 			taskLbl.htmlText=StringUtil_II.getColorStr(text, "#ff00");
-			rewardLbl.text=PropUtils.getStringById(2149) + ConfigEnum.servent10;
-			costLbl.text=ConfigEnum.servent11 + "";
+			rewardLbl.text=PropUtils.getStringById(2149) + ConfigEnum.servent16;
+			costLbl.text=ConfigEnum.servent17 + "";
+			finishedImg.visible = petEntry.qmMissionComplete;
 
 			if ((0 == petData.qmdPetId) || (petData.qmdPetId != petTId)) {
 				receiveBtn.setActive(true, 1, true);

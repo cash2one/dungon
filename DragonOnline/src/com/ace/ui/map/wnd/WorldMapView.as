@@ -19,7 +19,8 @@ package com.ace.ui.map.wnd {
 	import com.ace.utils.ImageUtil;
 	import com.ace.utils.StringUtil;
 	import com.leyou.net.cmd.Cmd_Go;
-
+	import com.leyou.utils.PropUtils;
+	
 	import flash.display.MovieClip;
 	import flash.display.SimpleButton;
 	import flash.events.MouseEvent;
@@ -62,7 +63,11 @@ package com.ace.ui.map.wnd {
 
 		protected function onBtnOver(event:MouseEvent):void {
 			var content:String=TableManager.getInstance().getSystemNotice(9937).content;
-			content=StringUtil.substitute(content, MyInfoManager.getInstance().VipLastTransterCount);
+			var timec:String = MyInfoManager.getInstance().VipLastTransterCount+"";
+			if(-1 == MyInfoManager.getInstance().VipLastTransterCount){
+				timec = PropUtils.getStringById(1890);
+			}
+			content=StringUtil.substitute(content, timec);
 			ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, content, new Point(stage.mouseX, stage.mouseY));
 		}
 

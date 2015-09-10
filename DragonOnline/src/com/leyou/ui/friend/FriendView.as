@@ -81,7 +81,7 @@ package com.leyou.ui.friend {
 			acc.x = 25;
 			acc.y = 52;
 			addChild(acc);
-			acc.addItem(PropUtils.getStringById(1713), "(0/50)", null, menu1Vec);
+			acc.addItem(PropUtils.getStringById(1713), "(0/100)", null, menu1Vec);
 			acc.addItem(PropUtils.getStringById(1714), "(0/20)", null, menu2Vec);
 			acc.addItem(PropUtils.getStringById(1715), "(0/20)", null, menu3Vec);
 		}

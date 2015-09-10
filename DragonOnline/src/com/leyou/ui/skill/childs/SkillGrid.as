@@ -172,7 +172,7 @@ package com.leyou.ui.skill.childs {
 			super.mouseMoveHandler($x, $y);
 			this.selectBmp.visible=true;
 
-			if (this.gridType == ItemEnum.TYPE_GRID_SKILL || this.dataId == -1)
+			if (this.gridType == ItemEnum.TYPE_GRID_SKILL || this.dataId == -1 || this.skillIndex == 0)
 				return;
 
 			var skill:Array=TableManager.getInstance().getSkillArr(MyInfoManager.getInstance().skilldata.skillItems[this.skillIndex][1]);
@@ -204,9 +204,9 @@ package com.leyou.ui.skill.childs {
 			tipInfo.runde=skill.indexOf(tipInfo.skillInfo);
 
 			if (tipInfo.runde <= 0)
-				ToolTipManager.getInstance().show(TipEnum.TYPE_SKILL, tipInfo, new Point($x + 15, $y+ 15));
+				ToolTipManager.getInstance().show(TipEnum.TYPE_SKILL, tipInfo, new Point($x + 15, $y + 15));
 			else
-				ToolTipManager.getInstance().showII([TipEnum.TYPE_SKILL, TipEnum.TYPE_RUNE], [tipInfo, tipInfo], PlayerEnum.DIR_S, new Point(0, 0), new Point($x+ 15, $y+ 15));
+				ToolTipManager.getInstance().showII([TipEnum.TYPE_SKILL, TipEnum.TYPE_RUNE], [tipInfo, tipInfo], PlayerEnum.DIR_S, new Point(0, 0), new Point($x + 15, $y + 15));
 
 
 		}

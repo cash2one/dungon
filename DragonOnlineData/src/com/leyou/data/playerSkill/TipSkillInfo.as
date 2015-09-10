@@ -18,5 +18,8 @@ package com.leyou.data.playerSkill
 		
 		// 技能信息
 		public var skillInfo:TSkillInfo;
+		
+		// 宠物技能
+		public var isPetSkill:Boolean = false;
 	}
 }

@@ -16,7 +16,7 @@ package com.leyou.ui.task {
 	import com.leyou.ui.task.child.MissionDailyRender;
 	import com.leyou.ui.task.child.MissionMainRender;
 	import com.leyou.utils.StringUtil_II;
-	
+
 	import flash.events.Event;
 
 	public class TaskWnd extends AutoWindow {
@@ -63,13 +63,14 @@ package com.leyou.ui.task {
 					this.dailyRender.visible=true;
 					GuideManager.getInstance().removeGuide(17);
 					GuideManager.getInstance().removeGuide(18);
+					GuideManager.getInstance().removeGuide(121);
 					break;
 			}
 
 		}
-		
-		public function setVipLvState(lv:int=0):void{
-			this.dailyRender.setonKeySuccState(lv);	
+
+		public function setVipLvState(lv:int=0):void {
+			this.dailyRender.setonKeySuccState(lv);
 			UIManager.getInstance().taskTrack.setDailyTaskVip(lv)
 		}
 
@@ -88,7 +89,7 @@ package com.leyou.ui.task {
 				this.taskTabBar.setTabVisible(1, true);
 				this.dailyRender.updateInfo(tr[1]);
 			}
-			
+
 			//广告
 //			UIManager.getInstance().adWnd.showPanel();
 		}
@@ -104,17 +105,21 @@ package com.leyou.ui.task {
 
 		override public function show(toTop:Boolean=true, $layer:int=1, toCenter:Boolean=true):void {
 			super.show(toTop, $layer, toCenter);
-			
+
 			this.taskTabBar.setTabVisible(1, (Core.me.info.level >= ConfigEnum.taskDailyOpenLv))
 
 			GuideManager.getInstance().removeGuide(17);
 			UIManager.getInstance().taskTrack.setGuideViewhide(TaskEnum.taskType_TodayTaskSuccessNum);
-			
+
+			if (Core.me.info.level == ConfigEnum.taskDailyOpenLv) {
+				GuideManager.getInstance().showGuide(121, this.taskTabBar.getTabButton(1));
+			}
+
 		}
-		
-		override public function sendOpenPanelProtocol(...parameters):void{
+
+		override public function sendOpenPanelProtocol(... parameters):void {
 			this.dataModel=parameters;
-			
+
 			UIManager.getInstance().showPanelCallback(WindowEnum.TASK);
 		}
 
@@ -129,11 +134,11 @@ package com.leyou.ui.task {
 
 			PopupManager.closeConfirm("onKeySuccToday");
 			PopupManager.closeConfirm("loopSuccToday");
-			
+
 			this.taskTabBar.turnToTab(0);
-			
+
 			TweenManager.getInstance().lightingCompnent(UIManager.getInstance().toolsWnd.missionBtn);
-			
+
 			UIManager.getInstance().taskTrack.setGuideView(TaskEnum.taskType_TodayTaskSuccessNum);
 		}
 

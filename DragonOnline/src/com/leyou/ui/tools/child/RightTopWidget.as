@@ -1,14 +1,16 @@
 package com.leyou.ui.tools.child {
 	import com.ace.enum.FilterEnum;
 	import com.ace.loader.child.SwfLoader;
+	import com.ace.manager.GuideManager;
 	import com.ace.manager.TimeManager;
 	import com.ace.ui.button.children.ImgButton;
 	import com.ace.ui.img.child.Image;
 	import com.ace.utils.StringUtil;
 	import com.leyou.utils.PropUtils;
-
+	
 	import flash.display.DisplayObject;
 	import flash.display.Sprite;
+	import flash.events.MouseEvent;
 	import flash.text.TextField;
 	import flash.text.TextFormat;
 	import flash.text.TextFormatAlign;
@@ -86,8 +88,16 @@ package com.leyou.ui.tools.child {
 			effectLoader.x=18;
 			effectLoader.y=20;
 			overV="";
+			
+			addEventListener(MouseEvent.CLICK, onMouseClick);
 		}
-
+		
+		protected function onMouseClick(event:MouseEvent):void{
+			if("onlineBtn" == name){
+				GuideManager.getInstance().removeGuide(23);
+			}
+		}
+		
 		public function pushContent($display:DisplayObject):void {
 			display=$display;
 			name=display.name;
@@ -151,6 +161,9 @@ package com.leyou.ui.tools.child {
 				TimeManager.getInstance().removeITick(updateTime);
 			}
 			timeLbl.text=overV;
+			if("onlineBtn" == name){
+				GuideManager.getInstance().showGuide(23, this, true);
+			}
 		}
 
 		private function updateTime():void {

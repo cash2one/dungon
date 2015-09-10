@@ -17,27 +17,27 @@ package com.leyou.net.cmd {
 	/**
 	 *下行指令：
   物品信息：  bag#{"mk":"S","t":1,"o":num,s:[{"id":id,"num":num,"pos":pos,"k":k}...],"k":k};
-																												  加入新的物品：bag#{"mk":"L","t":1,s:[{"id":id,"num":num,"pos":pos,"k":k}...]}
+																													加入新的物品：bag#{"mk":"L","t":1,s:[{"id":id,"num":num,"pos":pos,"k":k}...]}
   设置背包格子数量：bag#{"mk":"L","t":1,"o":num}
-																												  金钱信息： bag#{"mk":"G","t":1,"g":"num","s":num,"l":num,"b":num,"bs":num};
+																													金钱信息： bag#{"mk":"G","t":1,"g":"num","s":num,"l":num,"b":num,"bs":num};
   销毁物品： bag#{"mk":"D","t":1,"pos":pos};
-																												  打开背包： bag#{"mk":"X","t":1};
+																													打开背包： bag#{"mk":"X","t":1};
   清空背包： bag#{"mk":"R","t":1};
-																												  卖出物品： bag#{"mk":"O","t":1,"pos":pos};
+																													卖出物品： bag#{"mk":"O","t":1,"pos":pos};
 
 上行：
    挪动物品：bag|1|Mpos1,pos2
-																																										   移动到另一容器：bag|1|Vpos1,container2,pos2
+																																											  移动到另一容器：bag|1|Vpos1,container2,pos2
    拆分物品：bag|1|Spos,num
-																																										   销毁物品：bag|1|Dpos
+																																											  销毁物品：bag|1|Dpos
    重排背包：bag|1|R
-																																										   使用物品(普通物品)：bag|1|Upos
+																																											  使用物品(普通物品)：bag|1|Upos
    扩展容器：bag|1|E
-																																										   请求数据：bag|2|F
+																																											  请求数据：bag|2|F
    卖出物品：bag|1|Lpos
-																																							*
+																																							   *
    *
-																																						 mk: 操作标示 t： 背包类型 1：背包 2：仓库 3：人物装备 6:任务 15：卡片 30：药园
+																																							mk: 操作标示 t： 背包类型 1：背包 2：仓库 3：人物装备 6:任务 15：卡片 30：药园
 	 *
 	 */
 	public class Cmd_Bag {
@@ -117,10 +117,10 @@ k	是否已加锁
 		public static function sm_bag_L(o:Object):void {
 			if (o.s != null) {
 
-				var oldArr:Array=MyInfoManager.getInstance().bagItems.filter(function(item:*,i:int,arr:Array):Boolean{
+				var oldArr:Array=MyInfoManager.getInstance().bagItems.filter(function(item:*, i:int, arr:Array):Boolean {
 					return true;
 				});
-				
+
 				MyInfoManager.getInstance().bagItems.length=0;
 
 
@@ -150,8 +150,8 @@ k	是否已加锁
 				}
 
 				UIManager.getInstance().backpackWnd.refresh();
-				
-				UIManager.getInstance().backpackWnd.updateGridEffect(oldArr,MyInfoManager.getInstance().bagItems);
+
+				UIManager.getInstance().backpackWnd.updateGridEffect(oldArr, MyInfoManager.getInstance().bagItems);
 
 				UIManager.getInstance().backpackWnd.setPlayGuideMountItem();
 				UIManager.getInstance().backpackWnd.setPlayGuideWingItem();
@@ -179,6 +179,8 @@ k	是否已加锁
 			UIManager.getInstance().backpackWnd.byb=o.byb;
 			UIManager.getInstance().backpackWnd.zq=o.zq;
 			UIManager.getInstance().backpackWnd.honour=o.honour;
+			UIManager.getInstance().backpackWnd.jl=o.bjf;
+			UIManager.getInstance().backpackWnd.lh=o.lh;
 
 			UIManager.getInstance().backpackWnd.updataMoney();
 
@@ -194,13 +196,21 @@ k	是否已加锁
 			if (UIManager.getInstance().isCreate(WindowEnum.MYSTORE)) {
 				UIManager.getInstance().myStore.updateItemNum();
 			}
-			
+
+			if (UIManager.getInstance().isCreate(WindowEnum.LUCKDRAW)) {
+				UIManager.getInstance().luckDrawWnd.updateItemNum();
+			}
+
 			if (UIManager.getInstance().isCreate(WindowEnum.VENDUE)) {
 				UIManager.getInstance().vendueWnd.updataMoney();
 			}
-			
-			if(UIManager.getInstance().isCreateAndVisible(WindowEnum.LEGENDAREY_WEAPON)){
+
+			if (UIManager.getInstance().isCreateAndVisible(WindowEnum.LEGENDAREY_WEAPON)) {
 				UIManager.getInstance().legendaryWnd.updateMaterialCount();
+			}
+			
+			if(UIManager.getInstance().isCreate(WindowEnum.DRAGON_BALL)){
+				UIManager.getInstance().dragonBallWnd.updateLh();
 			}
 
 			UIManager.getInstance().roleHeadWnd.updateCurrce();
@@ -287,9 +297,9 @@ pos	删除的位置
 			if (null != item) {
 				ConvenientUseManager.getInstance().checkUseQueue(item.tips.uid);
 			}
-			
+
 			// 神器物品刷新
-			if(UIManager.getInstance().isCreateAndVisible(WindowEnum.LEGENDAREY_WEAPON)){
+			if (UIManager.getInstance().isCreateAndVisible(WindowEnum.LEGENDAREY_WEAPON)) {
 				UIManager.getInstance().legendaryWnd.updateMaterialCount();
 			}
 		}
@@ -328,10 +338,10 @@ mk	mk=X,打开背包
 
 //			UIManager.getInstance().backpackWnd.updateItemData();
 
-			var oldArr:Array=MyInfoManager.getInstance().bagItems.filter(function(item:*,i:int,arr:Array):Boolean{
+			var oldArr:Array=MyInfoManager.getInstance().bagItems.filter(function(item:*, i:int, arr:Array):Boolean {
 				return true;
 			});
-			
+
 			var tinfo:Baginfo;
 			var barr:Array=MyInfoManager.getInstance().bagItems;
 			var oitem:Baginfo;
@@ -378,9 +388,9 @@ mk	mk=X,打开背包
 				SoundManager.getInstance().play(int(item.info.sound));
 
 			UIManager.getInstance().backpackWnd.refresh();
-			
-			UIManager.getInstance().backpackWnd.updateGridEffect(oldArr,MyInfoManager.getInstance().bagItems);
-			
+
+			UIManager.getInstance().backpackWnd.updateGridEffect(oldArr, MyInfoManager.getInstance().bagItems);
+
 			UIManager.getInstance().backpackWnd.setPlayGuideMountItem();
 			UIManager.getInstance().backpackWnd.setPlayGuideEquipItem();
 			UIManager.getInstance().backpackWnd.setPlayGuideWingItem();
@@ -390,10 +400,10 @@ mk	mk=X,打开背包
 
 			if (UIManager.getInstance().isCreate(WindowEnum.GEM_LV))
 				UIManager.getInstance().gemLvWnd.updateList();
-			
-			
+
+
 			// 神器物品刷新
-			if(UIManager.getInstance().isCreateAndVisible(WindowEnum.LEGENDAREY_WEAPON)){
+			if (UIManager.getInstance().isCreateAndVisible(WindowEnum.LEGENDAREY_WEAPON)) {
 				UIManager.getInstance().legendaryWnd.updateMaterialCount();
 			}
 		}
@@ -409,7 +419,7 @@ mk	mk=X,打开背包
 //					UIManager.getInstance().backpackWnd.openGridTime=o.time;
 //					UIManager.getInstance().backpackWnd.updateOpenGrid();
 				}
-				
+
 			}
 
 		}
@@ -473,9 +483,9 @@ pos  -- 道具在背包中的位置
 //					}
 //				}
 			}
-			
+
 			// 神器物品刷新
-			if(UIManager.getInstance().isCreateAndVisible(WindowEnum.LEGENDAREY_WEAPON)){
+			if (UIManager.getInstance().isCreateAndVisible(WindowEnum.LEGENDAREY_WEAPON)) {
 				UIManager.getInstance().legendaryWnd.updateMaterialCount();
 			}
 		}
@@ -662,8 +672,8 @@ S	英文逗号分割 位置，拆分出的数量
 -- pos道具位置
 -- 使用参数 (如定位道具 为玩家的名字)
 * @param pos
-	   * @param name
-			*
+   * @param name
+		   *
 		 */
 		public static function cm_bagUseOf(pos:int, name:String):void {
 			NetGate.getInstance().send("bag|1|T" + pos + "," + name);

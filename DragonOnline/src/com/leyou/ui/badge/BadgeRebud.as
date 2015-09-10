@@ -165,8 +165,8 @@ package com.leyou.ui.badge {
 				}
 			}
 
-			if (index == 10) {
-				this.iconImg.updateBmp("ui/badge/badge_icon_10.png");
+			if (index >= 10) {
+				this.iconImg.updateBmp("ui/badge/badge_icon_"+index+".png");
 			} else
 				this.iconImg.updateBmp("ui/badge/badge_icon_0" + index + ".png");
 		}
@@ -215,8 +215,8 @@ package com.leyou.ui.badge {
 				this["lock" + k + "Cb"].setActive(true);
 			}
 
-			if (index == 10) {
-				this.iconImg.updateBmp("ui/badge/badge_icon_10.png");
+			if (index >= 10) {
+				this.iconImg.updateBmp("ui/badge/badge_icon_"+index+".png");
 			} else
 				this.iconImg.updateBmp("ui/badge/badge_icon_0" + index + ".png");
 		}

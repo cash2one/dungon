@@ -22,6 +22,11 @@ package com.ace.enum {
 		static public const ON_HURT_WARNING:String="onHurtWarning";//参数【living:LivingModel】
 		static public const CANCEL_HURT_WARNING:String="cancelHurtWarning";
 		static public const SELECT_HURT_WARNING:String="selectHurtWarning";//参数【角色名称：living.info.name】
+		
+		//佣兵
+		static public const PET_ADD:String="addPet";
+		static public const PET_DEL:String="delPet";
+		static public const PET_UPDATE_HP:String="updateHp";
 
 		//设置
 		static public const SETTING_HIDE_ALL:String="hideAll";

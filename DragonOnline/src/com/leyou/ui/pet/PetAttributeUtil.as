@@ -1,5 +1,6 @@
 package com.leyou.ui.pet
 {
+	import com.leyou.enum.ConfigEnum;
 	import com.leyou.utils.PropUtils;
 
 	public class PetAttributeUtil
@@ -62,16 +63,21 @@ package com.leyou.ui.pet
 		}
 		
 		public static function getSmartLv(rate:int):String{
+			var span1:Array = ConfigEnum.servent25.split("|");
+			var span2:Array = ConfigEnum.servent26.split("|");
+			var span3:Array = ConfigEnum.servent27.split("|");
+			var span4:Array = ConfigEnum.servent28.split("|");
+			var span5:Array = ConfigEnum.servent29.split("|");
 			var smartName:String = null;
-			if(rate >= 500 && rate < 700){
+			if(rate >= int(span1[0]) && rate < int(span1[1])){
 				smartName = PropUtils.getStringById(2163);
-			}else if(rate >= 700 && rate < 900){
+			}else if(rate >= int(span2[0]) && rate < int(span2[1])){
 				smartName = PropUtils.getStringById(2164);
-			}else if(rate >= 900 && rate < 1100){
+			}else if(rate >= int(span3[0]) && rate < int(span3[1])){
 				smartName = PropUtils.getStringById(2165);
-			}else if(rate >= 1100 && rate < 1300){
+			}else if(rate >= int(span4[0]) && rate < int(span4[1])){
 				smartName = PropUtils.getStringById(2166);
-			}else if(rate >= 1300 && rate < 1500){
+			}else if(rate >= int(span5[0]) && rate < int(span5[1])){
 				smartName = PropUtils.getStringById(2167);
 			}else{
 				smartName = PropUtils.getStringById(2168);

@@ -368,6 +368,9 @@ package com.ace.gameData.table
 		/**
 		 */
 		public var Boss_Drop:String;
+		
+		
+		public var D_Floor:int;
 
 		
 		public function TDungeon_Base(data:XML=null)
@@ -430,6 +433,7 @@ package com.ace.gameData.table
 			this.DBC_ITEM8=data.@DBC_ITEM8;
 			this.Base_Drop=data.@Base_Drop;
 			this.Boss_Drop=data.@Boss_Drop;
+			this.D_Floor=data.@D_Floor;
 
 			
 		}

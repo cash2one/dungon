@@ -155,6 +155,8 @@ package com.leyou.ui.role.child.children {
 		public function updateInfo(o:RoleInfo):void {
 
 			this.nameLbl.text=o.n + "";
+
+			this.raceImg.visible=(o.vipLv > 0);
 			this.raceImg.updateBmp("ui/name/vip" + o.vipLv + ".jpg");
 
 			this.raceImg.x=(273 - 34 - this.nameLbl.textWidth) / 2;

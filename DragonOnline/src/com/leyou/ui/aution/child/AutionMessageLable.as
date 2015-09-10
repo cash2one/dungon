@@ -2,6 +2,8 @@ package com.leyou.ui.aution.child {
 	import com.ace.ICommon.IMenu;
 	import com.ace.config.Core;
 	import com.ace.enum.ItemEnum;
+	import com.ace.gameData.manager.TableManager;
+	import com.ace.gameData.table.TItemInfo;
 	import com.ace.manager.LibManager;
 	import com.ace.manager.MenuManager;
 	import com.ace.manager.UIManager;
@@ -17,19 +19,18 @@ package com.leyou.ui.aution.child {
 	import com.leyou.utils.ItemUtil;
 	import com.leyou.utils.PropUtils;
 	import com.leyou.utils.StringUtil_II;
-
+	
 	import flash.events.TextEvent;
-	import flash.geom.Point;
 
 	public class AutionMessageLable extends AutoSprite implements IMenu {
 
-		private static const sellTpl:String=PropUtils.getStringById(1613) + "<Font face='SimSun' size='12' color='#ffd700'>{5}{6}</Font>";
+		private static var sellTpl:String;
 
-		private static const buyTpl:String=PropUtils.getStringById(1614) + "<Font face='SimSun' size='12' color='#ffd700'>{5}{6}</Font>";
+		private static var buyTpl:String;
 
-		private static const cancelTpl:String=PropUtils.getStringById(1615);
+		private static var cancelTpl:String;
 
-		private static const confirmTpl:String=PropUtils.getStringById(2145);
+		private static var confirmTpl:String;
 
 		private var msgLbl:TextArea;
 		private var grid:AutionSaleItemGrid;
@@ -65,6 +66,11 @@ package com.leyou.ui.aution.child {
 			menuArr.push(new MenuInfo(ChatEnum.CLICK_MENU[ChatEnum.ADD_FRIEND], ChatEnum.ADD_FRIEND));
 			menuArr.push(new MenuInfo(ChatEnum.CLICK_MENU[ChatEnum.ADD_TEAM], ChatEnum.ADD_TEAM));
 			menuArr.push(new MenuInfo(ChatEnum.CLICK_MENU[ChatEnum.ADD_GUILD], ChatEnum.ADD_GUILD));
+			
+			sellTpl = PropUtils.getStringById(1613) + "<Font face='SimSun' size='12' color='#ffd700'>{5}{6}</Font>";
+			buyTpl = PropUtils.getStringById(1614) + "<Font face='SimSun' size='12' color='#ffd700'>{5}{6}</Font>";
+			cancelTpl = PropUtils.getStringById(1615);
+			confirmTpl = PropUtils.getStringById(2145);
 		}
 
 		/**
@@ -107,6 +113,16 @@ package com.leyou.ui.aution.child {
 		public function updateInfo(data:AutionItemData):void {
 			dataLink=data;
 			grid.updataInfo(data);
+			if(3 == data.item_type){
+				data.itemName = PropUtils.getStringById(32);
+			}else{
+				var item:TItemInfo = TableManager.getInstance().getItemInfo(data.itemId);
+				if(null != item){
+					data.itemName = item.name;
+				}else{
+					data.itemName = TableManager.getInstance().getEquipInfo(data.itemId).name;
+				}
+			}
 			var content:String;
 			switch (dataLink.operate) {
 				case 2:

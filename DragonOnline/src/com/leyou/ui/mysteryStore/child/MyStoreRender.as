@@ -98,6 +98,8 @@ package com.leyou.ui.mysteryStore.child {
 				ToolTipManager.getInstance().show(TipEnum.TYPE_EMPTY_ITEM, this.tips, new Point(this.stage.mouseX, this.stage.mouseY));
 			} else if (this.tipsInfo.moneyType == 5) {
 				ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, TableManager.getInstance().getSystemNotice(10001).content, new Point(this.stage.mouseX, this.stage.mouseY));
+			} else if (this.tipsInfo.moneyType == 6) {
+				ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, TableManager.getInstance().getSystemNotice(9609).content, new Point(this.stage.mouseX, this.stage.mouseY));
 			}
 
 		}
@@ -124,11 +126,10 @@ package com.leyou.ui.mysteryStore.child {
 
 			var infoItem:Object;
 
-			if (o.tagId == "3") {
-				infoItem=TableManager.getInstance().getItemInfo(o.itemId);
-			} else {
+			infoItem=TableManager.getInstance().getItemInfo(o.itemId);
+			if (infoItem == null)
 				infoItem=TableManager.getInstance().getEquipInfo(o.itemId);
-			}
+//			}
 
 			this.grid.updataInfo(infoItem);
 
@@ -143,7 +144,7 @@ package com.leyou.ui.mysteryStore.child {
 				this.lvLbl.textColor=0xffffff;
 			}
 
-			if (o.moneyId == 4) {
+			if (o.moneyId == 4 || o.moneyId == 6) {
 
 				this.numLbl.text=o.moneyNum + "";
 
@@ -154,14 +155,18 @@ package com.leyou.ui.mysteryStore.child {
 				}
 
 				this.tipsInfo.itemid=infoItem.id;
-				this.tipsInfo.moneyType=5;
+
+				if (o.moneyId == 4)
+					this.tipsInfo.moneyType=5;
+				else if (o.moneyId == 6)
+					this.tipsInfo.moneyType=6;
+
 				this.tipsInfo.moneyNum=int(o.moneyNum);
 //				this.tipsInfo.moneyItemid=10001;
 
-
 				this.icoImg.fillEmptyBmd();
 //				this.icoImg.bitmapData=LibManager.getInstance().getImg("ico/items/" + infoItem.icon + ".png");
-				this.icoImg.updateBmp(ItemUtil.getExchangeIcon(4));
+				this.icoImg.updateBmp(ItemUtil.getExchangeIcon(o.moneyId));
 
 			} else {
 
@@ -179,8 +184,8 @@ package com.leyou.ui.mysteryStore.child {
 				this.tipsInfo.moneyNum=this.info.itemNum;
 				this.tipsInfo.moneyItemid=int(o.consumeItem);
 
-			
-				
+
+
 				infoItem=TableManager.getInstance().getItemInfo(o.consumeItem);
 				this.icoImg.fillEmptyBmd();
 //			this.icoImg.bitmapData=LibManager.getInstance().getImg("ico/items/" + infoItem.icon + ".png");

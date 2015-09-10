@@ -32,7 +32,7 @@ package com.leyou.ui.mount {
 	import com.leyou.net.cmd.Cmd_Mount;
 	import com.leyou.ui.loading.LoadingRen;
 	import com.leyou.utils.PropUtils;
-	
+
 	import flash.display.DisplayObject;
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
@@ -397,6 +397,9 @@ package com.leyou.ui.mount {
 
 					if (this.jieNum >= this.pageCount - 1) {
 						this.rightImgBtn.visible=false;
+						this.starEffect.setStarPos(this.mlv % 10 - 1);
+					} else {
+						this.starEffect.setStarPos(9);
 					}
 
 					this.leftImgBtn.visible=true;
@@ -407,6 +410,12 @@ package com.leyou.ui.mount {
 					this.jieNum--;
 					if (this.jieNum <= 0) {
 						this.leftImgBtn.visible=false;
+						if (this.jieNum == this.pageCount - 1)
+							this.starEffect.setStarPos(this.mlv % 10 - 1);
+						else
+							this.starEffect.setStarPos(9);
+					} else {
+						this.starEffect.setStarPos(9);
 					}
 
 					this.rightImgBtn.visible=true;
@@ -441,8 +450,8 @@ package com.leyou.ui.mount {
 //						}, 1);
 
 //						UIManager.getInstance().taskCollectProgress.startProgress(2000, function():void {
-							Cmd_Mount.cmMouUpOrDown(jieNum + 1);
-							SoundManager.getInstance().play(10);
+						Cmd_Mount.cmMouUpOrDown(jieNum + 1);
+						SoundManager.getInstance().play(10);
 //						}, 1);
 
 					}
@@ -526,9 +535,9 @@ package com.leyou.ui.mount {
 
 //					UIManager.getInstance().taskCollectProgress.startProgress(2000, function():void {
 //						trace(getTimer()-st,"---");
-						Cmd_Mount.cmMouUpOrDown((pid));
-						SoundManager.getInstance().play(10);
-						GuideManager.getInstance().removeGuide(3);
+					Cmd_Mount.cmMouUpOrDown((pid));
+					SoundManager.getInstance().play(10);
+					GuideManager.getInstance().removeGuide(3);
 //					}, 1);
 
 				}
@@ -702,8 +711,12 @@ package com.leyou.ui.mount {
 				this.updatePropList(o);
 			}
 
-			if (o.hasOwnProperty("mlv"))
-				this.starEffect.setStarPos(o.mlv % 10 - 1);
+			if (o.hasOwnProperty("mlv")) {
+				if (this.mlv == 100)
+					this.starEffect.setStarPos(9);
+				else
+					this.starEffect.setStarPos(o.mlv % 10 - 1);
+			}
 
 			if (o.hasOwnProperty("zdl")) {
 				if (this.rollPower.number != o.zdl) {
@@ -728,7 +741,7 @@ package com.leyou.ui.mount {
 				this.arrow1Img.visible=false;
 				this.evolutionBtn.setToolTip(TableManager.getInstance().getSystemNotice(1136).content);
 				this.evolutionBtn.setActive(false, .6, true);
-				
+
 				this.starEffect.setStarPos(9);
 			} else {
 				this.evolutionBtn.setToolTip(TableManager.getInstance().getSystemNotice(1117).content);
@@ -893,6 +906,9 @@ package com.leyou.ui.mount {
 			return Math.ceil(s + s * (r / 10000));
 		}
 
+		public function getMouseLvBtn():NormalButton {
+			return this.evolutionBtn;
+		}
 
 	}
 }

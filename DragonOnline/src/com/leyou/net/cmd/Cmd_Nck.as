@@ -119,6 +119,13 @@ npc|{"id":id,"time":time}
 			UIManager.getInstance().roleWnd.titlePanel.updateUninstall(o);
 		}
 
+		public static function sm_Nck_D(o:Object):void {
+			if (!o.hasOwnProperty("curNckid"))
+				return;
+
+			UIManager.getInstance().roleWnd.titlePanel.updatedelete(o);
+		}
+
 		/**
 		 *卸下称号		// 只能卸下 人物历程类，身份象征类称号
 	上行：nck|U,id

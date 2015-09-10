@@ -199,7 +199,7 @@ package com.leyou.ui.convenientuse
 			for each (var str:String in convenientItems) {
 				var index:int = id.indexOf(str);
 				if (0 == index) {
-					if(-1 == itemQueue.indexOf(info.tips.uid)){
+					if((-1 == itemQueue.indexOf(info.tips.uid)) && (Core.me.info.level >= info.info.level)){
 						itemQueue.push(info.tips.uid);
 					}
 					break;

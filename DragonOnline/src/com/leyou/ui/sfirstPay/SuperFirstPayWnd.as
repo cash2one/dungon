@@ -1,5 +1,6 @@
 package com.leyou.ui.sfirstPay
 {
+	import com.ace.gameData.manager.DataManager;
 	import com.ace.manager.LibManager;
 	import com.ace.manager.TimeManager;
 	import com.ace.ui.auto.AutoWindow;
@@ -57,7 +58,12 @@ package com.leyou.ui.sfirstPay
 		}
 		
 		private function initPayInfo():void{
-			var config:String = ConfigEnum.ReturnCash1;
+			var config:String;
+			if(DataManager.getInstance().serverData.isOpening()){
+				config = ConfigEnum.ReturnCash1;
+			}else{
+				config = ConfigEnum.ReturnCash4;
+			}
 			var payList:Array = config.split("|");
 			var payStr:String = "";
 			var retutrnStr:String = "";
@@ -70,6 +76,8 @@ package com.leyou.ui.sfirstPay
 				}
 				retutrnStr += StringUtil.substitute(PropUtils.getStringById(1816)+"\n", data[2]);
 			}
+			var reg:RegExp = /-\d+/g;
+			payStr = payStr.replace(reg, "");
 			payLbl.text = payStr;
 			returnLbl.text = retutrnStr;
 		}

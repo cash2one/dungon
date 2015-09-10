@@ -43,6 +43,8 @@ package com.leyou.ui.mysteryStore {
 		private var mystorTabar:TabBar;
 		private var ryCountLbl:Label;
 		private var ryImg:Image;
+		private var jlCountLbl:Label;
+		private var jlImg:Image;
 
 		private var renderArr:Vector.<MyStoreRender>;
 
@@ -74,8 +76,12 @@ package com.leyou.ui.mysteryStore {
 			this.ryCountLbl=this.getUIbyID("ryCountLbl") as Label;
 			this.ryImg=this.getUIbyID("ryImg") as Image;
 
+			this.jlCountLbl=this.getUIbyID("jlCountLbl") as Label;
+			this.jlImg=this.getUIbyID("jlImg") as Image;
+
 			this.addChild(this.icoImg);
 			this.addChild(this.ryImg);
+			this.addChild(this.jlImg);
 
 //			var infoXml:XML=LibManager.getInstance().getXML("config/table/shop.xml");
 //			var xmllist:XMLList=infoXml.shop;
@@ -110,6 +116,13 @@ package com.leyou.ui.mysteryStore {
 			einfo.onMouseOut=onTipsMouseOut;
 
 			MouseManagerII.getInstance().addEvents(this.ryImg, einfo);
+
+
+			einfo=new MouseEventInfo();
+			einfo.onMouseMove=onTipsMouseOver;
+			einfo.onMouseOut=onTipsMouseOut;
+
+			MouseManagerII.getInstance().addEvents(this.jlImg, einfo);
 
 			this.tips=new TipsInfo();
 			this.tips.itemid=30401;
@@ -168,6 +181,8 @@ package com.leyou.ui.mysteryStore {
 				ToolTipManager.getInstance().show(TipEnum.TYPE_EMPTY_ITEM, this.tips, new Point(this.stage.mouseX, this.stage.mouseY));
 			} else if (e == this.ryImg)
 				ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, TableManager.getInstance().getSystemNotice(10001).content, new Point(this.stage.mouseX, this.stage.mouseY));
+			else if (e == this.jlImg)
+				ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, TableManager.getInstance().getSystemNotice(9609).content, new Point(this.stage.mouseX, this.stage.mouseY));
 		}
 
 		private function onTipsMouseOut(e:DisplayObject):void {
@@ -188,7 +203,8 @@ package com.leyou.ui.mysteryStore {
 		public function updateItemNum():void {
 			this.itemCountLbl.text="" + MyInfoManager.getInstance().getBagItemNumById(30401);
 			this.ryCountLbl.text="" + UIManager.getInstance().backpackWnd.honour;
-
+			this.jlCountLbl.text="" + UIManager.getInstance().backpackWnd.jl;
+			
 			if (this.visible)
 				this.updateInfo();
 		}
@@ -210,6 +226,7 @@ package com.leyou.ui.mysteryStore {
 
 			this.itemCountLbl.text="" + MyInfoManager.getInstance().getBagItemNumById(30401);
 			this.ryCountLbl.text="" + UIManager.getInstance().backpackWnd.honour;
+			this.jlCountLbl.text="" + UIManager.getInstance().backpackWnd.jl;
 
 			var i:int=-1;
 			var xml:XML;
@@ -223,7 +240,9 @@ package com.leyou.ui.mysteryStore {
 					continue;
 
 				infoItem=TableManager.getInstance().getEquipInfo(xml.@itemId);
-
+				if (infoItem == null) 
+					infoItem=TableManager.getInstance().getItemInfo(xml.@itemId);
+				
 				if (infoItem == null) {
 					throw Error("没有物品id:" + xml.@itemId)
 					return;
@@ -242,8 +261,10 @@ package com.leyou.ui.mysteryStore {
 					render.updataInfo(new TShop(xml), int(this.ryCountLbl.text));
 				} else if (xml.@tagId == "1") {
 					render.updataInfo(new TShop(xml), int(this.itemCountLbl.text));
+				} else if (xml.@tagId == "3") {
+					render.updataInfo(new TShop(xml), int(this.jlCountLbl.text));
 				}
-
+				
 				this.itemList.addToPane(render);
 				this.renderArr.push(render);
 			}

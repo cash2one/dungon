@@ -79,8 +79,8 @@ package com.leyou.ui.creatUser {
 		private var tipImg:Image;
 		private var logoImg:Image;
 
-		private var panel:Sprite;
-		private var texts:Vector.<TextField>;
+//		private var panel:Sprite;
+//		private var texts:Vector.<TextField>;
 
 		private var topIndex:int;
 
@@ -170,13 +170,13 @@ package com.leyou.ui.creatUser {
 			addEventListener(MouseEvent.CLICK, onMouseClick);
 
 			var byteArr:ByteArray=LibManager.getInstance().getBinary("config/ui/creatUser/playName_femalename.txt");
-			var str:String=byteArr.readMultiByte(byteArr.length, "gb2132");
+			var str:String=byteArr.readMultiByte(byteArr.length, "UTF-8");
 			femaleNameQueue=str.split("\r\n");
 			byteArr=LibManager.getInstance().getBinary("config/ui/creatUser/playName_malename.txt");
-			str=byteArr.readMultiByte(byteArr.length, "gb2132");
+			str=byteArr.readMultiByte(byteArr.length, "UTF-8");
 			maleNameQueue=str.split("\r\n");
 			byteArr=LibManager.getInstance().getBinary("config/ui/creatUser/playName_surname.txt");
-			str=byteArr.readMultiByte(byteArr.length, "gb2132");
+			str=byteArr.readMultiByte(byteArr.length, "UTF-8");
 			surNameArr=str.split("\r\n");
 			femaleNameQueue.pop();
 			maleNameQueue.pop();
@@ -198,36 +198,36 @@ package com.leyou.ui.creatUser {
 			}
 			tick=getTimer();
 
-			panel=new Sprite();
-			addChild(panel);
-			panel.y=505;
-
-			texts=new Vector.<TextField>(ROLL_NAME_NUM);
-			for (var n:int=0; n < ROLL_NAME_NUM; n++) {
-				var tf:TextField=new TextField();
-				tf.wordWrap=false;
-				tf.autoSize=TextFormatAlign.LEFT;
-				tf.textColor=0xffffff;
-				tf.y=15 * n;
-				panel.addChild(tf);
-				texts[n]=tf;
-				tf.htmlText="<FONT size='12' color='#9f8657'>" + randomName() + "</FONT> " + PropUtils.getStringById(1675);
-			}
-			rollName();
+//			panel=new Sprite();
+//			addChild(panel);
+//			panel.y=505;
+//
+//			texts=new Vector.<TextField>(ROLL_NAME_NUM);
+//			for (var n:int=0; n < ROLL_NAME_NUM; n++) {
+//				var tf:TextField=new TextField();
+//				tf.wordWrap=false;
+//				tf.autoSize=TextFormatAlign.LEFT;
+//				tf.textColor=0xffffff;
+//				tf.y=15 * n;
+//				panel.addChild(tf);
+//				texts[n]=tf;
+//				tf.htmlText="<FONT size='12' color='#9f8657'>" + randomName() + "</FONT> " + PropUtils.getStringById(1675);
+//			}
+//			rollName();
 		}
 
-		private function rollName():void {
-			for (var n:int=0; n < ROLL_NAME_NUM; n++) {
-				var tf:TextField=texts[n];
-				var obj:Object;
-				if (0 == n) {
-					obj={y: (n - 1) * 15, alpha: 0, ease: Linear.easeNone, onComplete: onMoveOver, onCompleteParams: [tf]};
-				} else {
-					obj={y: (n - 1) * 15, ease: Linear.easeNone, onComplete: onMoveOver, onCompleteParams: [tf]};
-				}
-				TweenMax.to(tf, 1.5, obj);
-			}
-		}
+//		private function rollName():void {
+//			for (var n:int=0; n < ROLL_NAME_NUM; n++) {
+//				var tf:TextField=texts[n];
+//				var obj:Object;
+//				if (0 == n) {
+//					obj={y: (n - 1) * 15, alpha: 0, ease: Linear.easeNone, onComplete: onMoveOver, onCompleteParams: [tf]};
+//				} else {
+//					obj={y: (n - 1) * 15, ease: Linear.easeNone, onComplete: onMoveOver, onCompleteParams: [tf]};
+//				}
+//				TweenMax.to(tf, 1.5, obj);
+//			}
+//		}
 
 		public function onMoveOver(tf:TextField):void {
 			if (tf.y <= -15) {
@@ -443,10 +443,10 @@ package com.leyou.ui.creatUser {
 			surNameArr=null;
 			maleNameQueue=null;
 			femaleNameQueue=null;
-			for (var n:int=0; n < ROLL_NAME_NUM; n++) {
-				TweenMax.killTweensOf(texts[n]);
-			}
-			texts=null;
+//			for (var n:int=0; n < ROLL_NAME_NUM; n++) {
+//				TweenMax.killTweensOf(texts[n]);
+//			}
+//			texts=null;
 			//			ResizeManager.getInstance(). (this);
 		}
 	}

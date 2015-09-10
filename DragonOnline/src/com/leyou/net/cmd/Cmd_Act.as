@@ -36,6 +36,7 @@ actid -- 活动id(1答题 2运镖 3龙穴 4入侵)
 
 
 		public static function sm_Act_I(o:Object):void {
+			//Cmd_Stime.cmRequestTime();
 			UIManager.getInstance().pkCopyWnd.updateInfo(o);
 		}
 
@@ -48,7 +49,7 @@ actid -- 活动id(1答题 2运镖 3龙穴 4入侵)
 			if (!UIManager.getInstance().isCreate(WindowEnum.PKCOPYPANEL))
 				UIManager.getInstance().creatWindow(WindowEnum.PKCOPYPANEL);
 
-			cmActInit();
+			Cmd_Stime.cmRequestTime();
 			UIManager.getInstance().pkCopyPanel.updateInfo(o);
 		}
 

@@ -1,6 +1,6 @@
 package com.leyou.ui.dungeonTeam.childs {
-	import com.leyou.ui.task.child.MissionGrid;
 	
+	import com.leyou.ui.task.child.MissionGrid;
 	import flash.display.BitmapData;
 
 	public class TeamCopyGrid extends MissionGrid {

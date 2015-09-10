@@ -38,11 +38,11 @@ package com.leyou.ui.chat.child {
 				faceMC.y = Math.floor(i / 10) * (20+5)+5;
 				faceMC.addEventListener(MouseEvent.CLICK, onImgClick);
 			}
-//			var bg:ScaleBitmap = new ScaleBitmap(LibManager.getInstance().getImg(FontEnum.getTextScaleInfo("PanelBgOut").imgUrl));
-//			bg.scale9Grid = FontEnum.getTextScaleInfo("PanelBgOut").rect;
-//			bg.setSize(255, 105);
-//			bg.alpha = .8;
-//			addChildAt(bg, 0);
+			var bg:ScaleBitmap = new ScaleBitmap(LibManager.getInstance().getImg(FontEnum.getTextScaleInfo("PanelBgOut").imgUrl));
+			bg.scale9Grid = FontEnum.getTextScaleInfo("PanelBgOut").rect;
+			bg.setSize(255, 135);
+			bg.alpha = .8;
+			addChildAt(bg, 0);
 		}
 		
 		/**
@@ -57,7 +57,7 @@ package com.leyou.ui.chat.child {
 		public function resize():void{
 			var chatWnd:ChatWnd = UIManager.getInstance().chatWnd;
 			x = chatWnd.width;
-			y = chatWnd.y + 327 - 105;
+			y = chatWnd.y + 327 - 150;
 		}
 		
 		/**
@@ -67,7 +67,7 @@ package com.leyou.ui.chat.child {
 		 * 
 		 */		
 		private function onImgClick(evt:MouseEvent):void {
-			visible = false;
+//			visible = false;
 			var str:String = evt.currentTarget.name;
 			UIManager.getInstance().chatWnd.addFace("\\" + str);
 		}

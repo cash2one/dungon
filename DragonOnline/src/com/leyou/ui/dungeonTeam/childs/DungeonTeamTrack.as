@@ -68,7 +68,7 @@ package com.leyou.ui.dungeonTeam.childs {
 			for (var i:int=0; i < m.length; i++) {
 				lb=new Label();
 
-				lb.text=PropUtils.getStringById(1674)+":" + TableManager.getInstance().getLivingInfo(m[i].mid).name
+				lb.text=PropUtils.getStringById(1674)+TableManager.getInstance().getLivingInfo(m[i].mid).name
 
 				this.addChild(lb);
 

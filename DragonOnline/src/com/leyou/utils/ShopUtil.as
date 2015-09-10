@@ -50,6 +50,9 @@ package com.leyou.utils {
 						break;
 					case 6:
 						return DataManager.getInstance().integralData.integral;
+					case 7:
+						return UIManager.getInstance().backpackWnd.jl;
+						break;
 				}
 			}
 

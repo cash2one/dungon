@@ -1,6 +1,8 @@
 package com.leyou.net.cmd {
 	
+	import com.leyou.enum.CmdEnum;
 	import com.leyou.manager.TimerManager;
+	import com.leyou.net.NetGate;
 
 	public class Cmd_Stime {
 
@@ -18,5 +20,9 @@ stime
 		}
 
 
+		public static function cmRequestTime():void{
+			NetGate.getInstance().send("stime|I");
+		}
+		
 	}
 }

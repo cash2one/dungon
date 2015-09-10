@@ -7,27 +7,22 @@ package com.leyou.ui.backpack {
 	import com.ace.enum.UIEnum;
 	import com.ace.enum.WindowEnum;
 	import com.ace.game.manager.SceneKeyManager;
-	import com.ace.game.scene.player.big.BigAvatar;
 	import com.ace.gameData.manager.MapInfoManager;
 	import com.ace.gameData.manager.MyInfoManager;
+	import com.ace.gameData.manager.TableManager;
 	import com.ace.manager.EventManager;
 	import com.ace.manager.GuideManager;
-	import com.ace.manager.LibManager;
 	import com.ace.manager.TweenManager;
 	import com.ace.manager.UILayoutManager;
 	import com.ace.manager.UIManager;
 	import com.ace.ui.map.MapWnd;
-	import com.greensock.TweenMax;
 	import com.leyou.enum.ConfigEnum;
 	import com.leyou.manager.PopupManager;
 	import com.leyou.net.cmd.Cmd_Bag;
+	import com.leyou.net.cmd.Cmd_CD;
 	import com.leyou.net.cmd.Cmd_Mount;
 	import com.leyou.net.cmd.Cmd_Wig;
 	import com.leyou.ui.backpack.child.BackpackGrid;
-	
-	import flash.display.Bitmap;
-	import flash.events.Event;
-	import flash.geom.Matrix;
 
 	public class BackpackWnd extends BackpackWndView {
 
@@ -71,6 +66,18 @@ package com.leyou.ui.backpack {
 				UIManager.getInstance().smallMapWnd.switchToType(2);
 				UIManager.getInstance().rightTopWnd.hideBar(1);
 				MapWnd.getInstance().hideSwitch();
+			} else if (SceneEnum.SCENE_TYPE_TTT == MapInfoManager.getInstance().type) {
+				UIManager.getInstance().smallMapWnd.switchToType(2);
+				UIManager.getInstance().rightTopWnd.hideBar(1);
+				MapWnd.getInstance().hideSwitch();
+				
+				UIManager.getInstance().taskTrack.hide();
+				UIManager.getInstance().hideWindow(WindowEnum.PKCOPY);
+				UIManager.getInstance().hideWindow(WindowEnum.PKCOPYPANEL);
+				
+				Cmd_Mount.cmMouUpOrDown();
+				if (Core.me != null)
+					Core.me.onAutoMonster();
 			}
 
 		}
@@ -89,7 +96,7 @@ package com.leyou.ui.backpack {
 				this.firstOpen=false;
 			}
 
-
+			this.updateItemCount();
 
 		}
 
@@ -102,7 +109,7 @@ package com.leyou.ui.backpack {
 			this.dataModel=parameters;
 			Cmd_Bag.cm_bagData();
 			Cmd_Bag.cm_bagOpenGrid();
-
+			 
 		}
 
 		override public function hide():void {
@@ -136,11 +143,11 @@ package com.leyou.ui.backpack {
 		public function setPlayGuideMountItem(type:int=0):void {
 			var num:int=MyInfoManager.getInstance().getBagItemNumById(ConfigEnum.MountItem) + MyInfoManager.getInstance().getBagItemNumById(ConfigEnum.MountbindItem);
 
-			if (num >= 10) {
+			if (num >= TableManager.getInstance().getGuideInfo(86).act_con) {
 
 				switch (type) {
 					case 0:
-						GuideManager.getInstance().showGuide(86, UIManager.getInstance().toolsWnd);
+						GuideManager.getInstance().showGuide(86, UIManager.getInstance().toolsWnd.playerBtn);
 						break;
 					case 1:
 						GuideManager.getInstance().removeGuide(86);
@@ -148,16 +155,14 @@ package com.leyou.ui.backpack {
 						break;
 					case 2:
 						GuideManager.getInstance().removeGuide(87);
-						GuideManager.getInstance().showGuide(88, UIManager.getInstance().roleWnd);
+						GuideManager.getInstance().showGuide(88, UIManager.getInstance().roleWnd.getMouseLvBtn());
 						break;
 					case 3:
 						GuideManager.getInstance().removeGuide(88);
-						GuideManager.getInstance().showGuide(89, UIManager.getInstance().mountLvUpwnd);
+						GuideManager.getInstance().showGuide(89, UIManager.getInstance().mountLvUpwnd.autoUpBtn);
 						break;
 				}
-
-
-
+ 
 			}
 
 		}
@@ -166,19 +171,21 @@ package com.leyou.ui.backpack {
 		public function setPlayGuideWingItem():void {
 			var num:int=MyInfoManager.getInstance().getBagItemNumById(ConfigEnum.WingItem) + MyInfoManager.getInstance().getBagItemNumById(ConfigEnum.WingbindItem);
 
-			if (num >= 10) {
+			if (num >= TableManager.getInstance().getGuideInfo(90).act_con) {
 				if (UIManager.getInstance().roleWnd.openWing())
-					GuideManager.getInstance().showGuide(90, UIManager.getInstance().toolsWnd);
+					GuideManager.getInstance().showGuide(90, UIManager.getInstance().toolsWnd.playerBtn);
 			}
 		}
 
 		public function setPlayGuideEquipItem():void {
 			var num:int=MyInfoManager.getInstance().getBagItemNumById(ConfigEnum.StrengStone1) + MyInfoManager.getInstance().getBagItemNumById(ConfigEnum.StrengStone2);
 
-			if (num >= 20) {
+			if (num >= TableManager.getInstance().getGuideInfo(94).act_con) {
 				if (Core.me != null && Core.me.info.level >= ConfigEnum.EquipIntensifyOpenLv)
-					GuideManager.getInstance().showGuide(94, UIManager.getInstance().toolsWnd);
+					GuideManager.getInstance().showGuide(94, UIManager.getInstance().toolsWnd.duanZBtn);
 			}
+
+
 		}
 
 		public function setPlayGuideLuckItem():void {
@@ -187,8 +194,8 @@ package com.leyou.ui.backpack {
 			if (!UIManager.getInstance().isCreate(WindowEnum.LUCKDRAW))
 				UIManager.getInstance().creatWindow(WindowEnum.LUCKDRAW);
 
-			if (num >= 2) {
-				GuideManager.getInstance().showGuides([97, 98], [UIManager.getInstance().rightTopWnd.getWidget("lotteryBtn"), UIManager.getInstance().luckDrawWnd]);
+			if (num >= TableManager.getInstance().getGuideInfo(97).act_con) {
+				GuideManager.getInstance().showGuides([97, 98], [UIManager.getInstance().rightTopWnd.getWidget("lotteryBtn"), UIManager.getInstance().luckDrawWnd.getUIbyID("pLotteryBtn")]);
 			}
 		}
 

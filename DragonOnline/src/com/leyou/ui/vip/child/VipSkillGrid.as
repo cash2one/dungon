@@ -38,7 +38,6 @@ package com.leyou.ui.vip.child
 			mouseChildren = true;
 			bgBmp.updateBmp("ui/common/common_icon_bg.png");
 			tipInfo = new TipVipSkillInfo();
-			cdMc
 			cdMc.x=2;
 			cdMc.y=2;
 			cdMc.updateUI(36, 36);

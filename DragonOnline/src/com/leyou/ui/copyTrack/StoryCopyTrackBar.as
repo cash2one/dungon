@@ -173,7 +173,7 @@ package com.leyou.ui.copyTrack {
 					var countLbl:Label=countLbls[n];
 					if (null != monster) {
 						var monsterInfo:TLivingInfo=TableManager.getInstance().getLivingInfo(monster.mid);
-						monsterLbl.text=PropUtils.getStringById(1674)+" : " + monsterInfo.name;
+						monsterLbl.text=PropUtils.getStringById(1674)+ monsterInfo.name;
 						countLbl.textColor=(monster.cc == monster.mc) ? 0xff00 : 0xff0000
 						countLbl.text="(" + monster.cc + "/" + monster.mc + ")";
 						countLbl.x=monsterLbl.x + monsterLbl.width + 5;

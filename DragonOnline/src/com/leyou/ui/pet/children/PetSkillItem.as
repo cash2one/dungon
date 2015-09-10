@@ -15,7 +15,6 @@ package com.leyou.ui.pet.children
 	import com.ace.ui.img.child.Image;
 	import com.ace.ui.lable.Label;
 	import com.ace.ui.setting.child.AssistSkillGrid;
-	import com.ace.ui.window.children.PopWindow;
 	import com.ace.utils.StringUtil;
 	import com.leyou.data.playerSkill.TipSkillInfo;
 	import com.leyou.enum.ConfigEnum;
@@ -107,6 +106,7 @@ package com.leyou.ui.pet.children
 		
 		protected function onMouseOver(event:MouseEvent):void{
 			tipInfo.skillInfo=TableManager.getInstance().getSkillById(grid.dataId);
+			tipInfo.isPetSkill = true;
 			ToolTipManager.getInstance().show(TipEnum.TYPE_SKILL, tipInfo, new Point(this.stage.mouseX + 15, this.stage.mouseY + 15));
 		}
 		
@@ -119,7 +119,10 @@ package com.leyou.ui.pet.children
 					UIManager.getInstance().petSkillSelectWnd.updateInfo(_petId, index+1, callBack);
 					break;
 				case 2:
-					PopupManager.showConfirm("", onConfirm, null, false, "petskill.remove");
+					var skillInfo:TSkillInfo=TableManager.getInstance().getSkillById(grid.dataId);
+					var content:String = TableManager.getInstance().getSystemNotice(10074).content;
+					content = StringUtil.substitute(content, skillInfo.name);
+					PopupManager.showConfirm(content, onConfirm, null, false, "petskill.remove");
 					break;
 			}
 		}
@@ -144,7 +147,10 @@ package com.leyou.ui.pet.children
 						UILayoutManager.getInstance().show(WindowEnum.PET_SKILL_SELECT);
 						UIManager.getInstance().petSkillSelectWnd.updateInfo(_petId, index+1, callBack);
 					}else if(2 == status){
-						Cmd_Pet.cm_PET_F(_petId, index+1);
+						var skillInfo:TSkillInfo=TableManager.getInstance().getSkillById(grid.dataId);
+						var content:String = TableManager.getInstance().getSystemNotice(10074).content;
+						content = StringUtil.substitute(content, skillInfo.name);
+						PopupManager.showConfirm(content, onConfirm, null, false, "petskill.remove");
 					}
 					break;
 			}
@@ -234,12 +240,25 @@ package com.leyou.ui.pet.children
 		
 		public function updateInfo(skill:Array):void{
 			if(null == skill) return;
+			if(skill.length <= 0) return;
 			setStatus(2);
 			gpid = skill[0];
 			var lv:int = skill[1];
 			var petSkill:TPetSkillInfo = TableManager.getInstance().getPetSkill(gpid);
-			var skillId:int = petSkill["skillId"+lv];
+			if(null != petSkill){
+				var skillId:int = petSkill["skillId"+lv];
+			}
 			updateSkill(skillId);
+			if(lv >= ConfigEnum.servent8){
+				clsBtn.visible = true;
+				proLbl.visible = false;
+				lvUpBtn.visible = false;
+				iconImg.visible = false;
+				costLbl.visible = false;
+				upCostLbl.visible = false;
+				learnLbl.visible = false;
+				return;
+			}
 			proLbl.text = TableManager.getInstance().getItemInfo(petSkill.item).name+"x"+ petSkill["itemNum"+(lv+1)];
 			costLbl.text = petSkill["money"+(lv+1)];
 		}

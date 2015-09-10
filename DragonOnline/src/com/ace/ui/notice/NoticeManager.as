@@ -181,6 +181,40 @@ package com.ace.ui.notice {
 			}
 		}
 		
+		public function ass_II(type:int, content:String, values:Array=null):void{
+			switch (type) {
+				case NoticeEnum.TYPE_MESSAGER1:
+					this.message1.broadcast(content, values);
+					break;
+				case NoticeEnum.TYPE_MESSAGER2:
+					this.message2.broadcast(content, values);
+					break;
+				case NoticeEnum.TYPE_MESSAGER3:
+					// 聊天栏显示
+					break;
+				case NoticeEnum.TYPE_MESSAGER4:
+//					this.message4.broadcast(info, values);
+					break;
+				case NoticeEnum.TYPE_MESSAGER5:
+					this.message5.broadcast(content, values);
+					break;
+				case NoticeEnum.TYPE_MESSAGER6:
+//					this.message6.broadcast(info, values);
+					break;
+				case NoticeEnum.TYPE_MESSAGER7:
+					this.message7.show(content, values);
+					break;
+				case NoticeEnum.TYPE_MESSAGER8:
+//					this.message8.broadcast(info, values);
+					break;
+				case NoticeEnum.TYPE_MESSAGER11:
+//					this.message11.broadcast(info, values);
+					break;
+				default:
+					break;
+			}
+		}
+		
 		public function setMsgVisible(type:int, v:Boolean):void{
 			switch (type) {
 				case NoticeEnum.TYPE_MESSAGER1:

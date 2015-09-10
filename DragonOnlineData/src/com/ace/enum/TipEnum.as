@@ -32,5 +32,9 @@ package com.ace.enum {
 		static public const TYPE_COLLECTION:int=22;//收集
 		static public const TYPE_GEM:int=23;//宝石
 		static public const TYPE_GEM_OTHER:int=24;//宝石
+		static public const TYPE_TZ:int=25;//活动
+		static public const TYPE_GUILD_BLESS:int=27;//科技
+		static public const TYPE_TITLE:int=28;//科技
+		static public const TYPE_PET:int=29;//宠物
 	}
 }

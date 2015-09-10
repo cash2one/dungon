@@ -11,9 +11,11 @@ package com.leyou.ui.boss.children
 	import com.ace.ui.button.children.ImgButton;
 	import com.ace.ui.img.child.Image;
 	import com.ace.ui.lable.Label;
+	import com.ace.ui.notice.NoticeManager;
 	import com.ace.utils.StringUtil;
 	import com.greensock.TweenLite;
 	import com.leyou.data.fieldboss.FieldBossInfo;
+	import com.leyou.enum.ConfigEnum;
 	import com.leyou.net.cmd.Cmd_Go;
 	import com.leyou.utils.PropUtils;
 	
@@ -93,8 +95,6 @@ package com.leyou.ui.boss.children
 			if(!_select){
 				TweenLite.to(selectImg, 0.5, {alpha:1});
 			}
-			
-			
 		}
 		
 		protected function onMouseClick(event:MouseEvent):void{
@@ -102,6 +102,10 @@ package com.leyou.ui.boss.children
 			var point:TPointInfo;
 			switch(event.target.name){
 				case "flyBtn":
+					if(ConfigEnum.FieldBossForbiddenLeve <= (Core.me.info.level - bossInfo.openLv)){
+						NoticeManager.getInstance().broadcastById(4905, [ConfigEnum.FieldBossForbiddenLeve]);
+						return;
+					}
 					point = TableManager.getInstance().getPointInfo(bossInfo.pointId);
 					Cmd_Go.cmGoPoint(int(bossInfo.sceneId), point.tx, point.ty);
 					break;

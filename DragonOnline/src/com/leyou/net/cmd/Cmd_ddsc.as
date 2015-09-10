@@ -48,7 +48,7 @@ package com.leyou.net.cmd {
 				if (UIManager.getInstance().firstPay.flyItem()) {
 //					UIManager.getInstance().rightTopWnd.deactive("areaFirstPayBtn");
 					UIManager.getInstance().leftTopWnd.setFirstGift(false);
-					return;
+//					return;
 				}
 			}
 
@@ -81,14 +81,20 @@ package com.leyou.net.cmd {
 //				UIManager.getInstance().rightTopWnd.deactive("areaFirstPayBtn");
 				UIManager.getInstance().leftTopWnd.setFirstGift(false);
 
+				
 				if (!o.hasOwnProperty("jlist"))
 					return;
-
+				
 				if (!UIManager.getInstance().isCreate(WindowEnum.TOPUP))
 					UIManager.getInstance().creatWindow(WindowEnum.TOPUP);
-
+				
 				UIManager.getInstance().topUpWnd.updateInfo(o);
+				
 			}
+			
+			
+			
+			
 		}
 
 		public static function cm_DdscInit():void {

@@ -22,6 +22,11 @@ package com.ace.enum {
 
 		static public const ID_DEV:String="dev";
 		static public const ID_TEST:String="ceshi";
+		
+		//
+		static public const LAN_CN:String="cn";
+		static public const LAN_TW:String="tw";
+		static public const LAN_EN:String="en";
 
 		static public const PLAT_ARR:Array=[ID_1360, ID_360, ID_119WAN, ID_14339, ID_E7E7PK, //
 			ID_KUGOU, ID_YINGSU, ID_TENCENT, ID_AOYI, ID_517KD, ID_76JU, ID_SF, ID_SF2, //

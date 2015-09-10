@@ -107,7 +107,7 @@ package com.leyou.ui.welfare.child.component
 			}
 			// 指引
 			if(!receiveImg.visible && threshold){
-				GuideManager.getInstance().showGuide(49, UIManager.getInstance().welfareWnd);
+				GuideManager.getInstance().showGuide(49, receiveBtn);
 			}
 			btnImg.updateBmp(url);
 			var offSet:int;

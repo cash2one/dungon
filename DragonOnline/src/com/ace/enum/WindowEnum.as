@@ -476,5 +476,34 @@ package com.ace.enum {
 		 * 7日登陆 
 		 */		
 		public static const KEEP_7:int = 129;
+		
+		// 和服连冲
+		public static const COMBINE_RECHARGE:int = 130;
+		
+		// 道具抽奖
+		public static const PRO_LUCKDRAW:int = 131;
+		
+		/**
+		 *通天塔 
+		 */		
+		public static const TTT:int = 132;
+		/**
+		 * 通天塔  追踪
+		 */		
+		public static const TTT_TRACK:int = 133;
+
+        // 宠物选择
+		public static const PET_SELECT:int = 134;
+		
+		/**
+		 * 拉巴
+		 */		
+		public static const LABA:int = 135;
+		
+		/**
+		 *拉霸奖励 说明
+		 */		
+		public static const LABA_DESC:int = 136;
+		
 	}
 }

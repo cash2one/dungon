@@ -1,4 +1,6 @@
 package com.leyou.utils {
+	import com.ace.config.Core;
+	import com.ace.enum.UIEnum;
 	import com.ace.enum.WindowEnum;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.table.TLivingInfo;
@@ -73,8 +75,8 @@ package com.leyou.utils {
 5.节日
 6.帮派
 * @param type
-   *
-		   */
+*
+*/
 		public static function getStringByType(type:int):String {
 
 			switch (type) {
@@ -122,7 +124,11 @@ package com.leyou.utils {
 							UILayoutManager.getInstance().show_II(WindowEnum.BACKPACK);
 
 							TweenLite.delayedCall(.3, function():void {
-								UILayoutManager.getInstance().show(WindowEnum.STOREGE);
+
+								if (!UIManager.getInstance().isCreate(WindowEnum.STOREGE))
+									UIManager.getInstance().creatWindow(WindowEnum.STOREGE);
+
+								UIManager.getInstance().storageWnd.show(true, UIEnum.WND_LAYER_NORMAL, true);
 								UILayoutManager.getInstance().composingWnd(WindowEnum.STOREGE);
 							});
 							break;
@@ -133,6 +139,9 @@ package com.leyou.utils {
 							UIManager.getInstance().deliveryWnd.show();
 							break;
 						case TaskEnum.NPC_FUNC_GUILD:
+							if (UIManager.getInstance().isCreate(WindowEnum.GUILD) && UIManager.getInstance().guildWnd.visible)
+								return;
+
 							UILayoutManager.getInstance().show_II(WindowEnum.GUILD);
 							break;
 						case TaskEnum.NPC_FUNC_EQUIT:
@@ -146,7 +155,12 @@ package com.leyou.utils {
 			}
 		}
 
-
+		/**
+		 *
+		 * @param obj
+		 * @return
+		 *
+		 */
 		public static function ChangeObjectToArray(obj:Object):Array {
 			var a:Array=[];
 			var str:String;
@@ -157,6 +171,34 @@ package com.leyou.utils {
 			return a;
 		}
 
+		/**
+		 * 
+		 * @param name
+		 * @param id
+		 * @return 
+		 * 
+		 */		
+		public static function getTaskTargetName(name:String, id:int):String {
+
+			var str:String;
+
+			switch (name) {
+				case "npc_id":
+					str=TableManager.getInstance().getLivingInfo(id).name;
+					break;
+				case "monster_id":
+					str=TableManager.getInstance().getLivingInfo(id).name;
+					break;
+				case "item_id":
+					str=TableManager.getInstance().getItemInfo(id).name;
+					break;
+				case "box_id":
+					str=TableManager.getInstance().getLivingInfo(id).name;
+					break;
+			}
+
+			return str;
+		}
 
 	}
 }

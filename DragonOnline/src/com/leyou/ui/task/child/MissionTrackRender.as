@@ -18,6 +18,7 @@ package com.leyou.ui.task.child {
 	import com.ace.manager.ToolTipManager;
 	import com.ace.manager.UILayoutManager;
 	import com.ace.manager.UIManager;
+	import com.ace.manager.UIOpenBufferManager;
 	import com.ace.ui.auto.AutoSprite;
 	import com.ace.ui.button.children.ImgButton;
 	import com.ace.ui.lable.Label;
@@ -33,7 +34,7 @@ package com.leyou.ui.task.child {
 	import com.leyou.net.cmd.Cmd_Tsk;
 	import com.leyou.utils.FilterUtil;
 	import com.leyou.utils.PropUtils;
-	
+
 	import flash.events.MouseEvent;
 	import flash.events.TextEvent;
 	import flash.geom.Point;
@@ -226,7 +227,7 @@ package com.leyou.ui.task.child {
 
 			var i1:int=int(ConfigEnum.taskDailyCost1.split("|")[0]);
 			var i2:int=int(ConfigEnum.taskDailyCost1.split("|")[1]);
-			PopupManager.showRadioConfirm(str, ((ConfigEnum.taskDailySum - this.cloop + 1) * i1)+"", ((ConfigEnum.taskDailySum - this.cloop + 1) * i2)+"", function(i:int):void {
+			PopupManager.showRadioConfirm(str, ((ConfigEnum.taskDailySum - this.cloop + 1) * i1) + "", ((ConfigEnum.taskDailySum - this.cloop + 1) * i2) + "", function(i:int):void {
 				Cmd_Tsk.cmTaskDailySuccess(2, (i == 0 ? 1 : 0));
 			}, null, false, "onKeySuccToday");
 
@@ -240,7 +241,7 @@ package com.leyou.ui.task.child {
 				str=StringUtil.substitute(TableManager.getInstance().getSystemNotice(2306).content, [ConfigEnum.taskDailyCost1.split("|")[0]])
 			}
 
-			PopupManager.showRadioConfirm(str, ConfigEnum.taskDailyCost1.split("|")[0]+"", ConfigEnum.taskDailyCost1.split("|")[1]+"", function(i:int):void {
+			PopupManager.showRadioConfirm(str, ConfigEnum.taskDailyCost1.split("|")[0] + "", ConfigEnum.taskDailyCost1.split("|")[1] + "", function(i:int):void {
 				Cmd_Tsk.cmTaskDailySuccess(1, (i == 0 ? 1 : 0));
 			}, null, false, "loopSuccToday");
 		}
@@ -316,7 +317,10 @@ package com.leyou.ui.task.child {
 				GuideManager.getInstance().removeGuide(104);
 			}
 
-			if (this.taskType == TaskEnum.taskLevel_switchLine && this.taskDtype == TaskEnum.taskType_Exchange) {
+
+			if (str[0].indexOf("mercenary") > -1 && (int(this.taskType) == TaskEnum.taskLevel_mercenaryCloseLine || int(this.taskType) == TaskEnum.taskLevel_mercenaryExpLine)) {
+				UIOpenBufferManager.getInstance().open(WindowEnum.PET);
+			} else if (this.taskType == TaskEnum.taskLevel_switchLine && this.taskDtype == TaskEnum.taskType_Exchange) {
 				UILayoutManager.getInstance().show(WindowEnum.SHOP);
 				UIManager.getInstance().buyWnd.updateTask(int(str[1]), int(taskTargetLbl.text.split("/")[1].replace(")", "")));
 
@@ -338,6 +342,7 @@ package com.leyou.ui.task.child {
 
 			} else if (str[0].indexOf("npc") > -1) {
 				Cmd_Go.cmGo(str[1]);
+				GuideManager.getInstance().removeGuide(8);
 			} else if (str[0].indexOf("dungeon") > -1) {
 				UILayoutManager.getInstance().open(WindowEnum.PKCOPY);
 			} else if (str[0].indexOf("enterquest") > -1) {
@@ -401,7 +406,7 @@ package com.leyou.ui.task.child {
 
 				UILayoutManager.getInstance().open_II(WindowEnum.ROLE);
 
-				TweenLite.delayedCall(0.3, function():void {
+				TweenLite.delayedCall(0.6, function():void {
 					UILayoutManager.getInstance().show_II(WindowEnum.ROLE, WindowEnum.MOUTLVUP, UILayoutManager.SPACE_X, UILayoutManager.SPACE_Y);
 					UIManager.getInstance().roleWnd.setTabIndex(1);
 				});

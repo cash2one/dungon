@@ -87,6 +87,8 @@
     <classEntry path="com.leyou.data.missinMarket.MissionMarketData"/>
     <classEntry path="com.leyou.data.missinMarket.MissionMarketChapterData"/>
     <classEntry path="com.leyou.data.missinMarket.MissionMarketTaskData"/>
+    <classEntry path="com.leyou.data.combineData.CombineData"/>
+    <classEntry path="com.leyou.data.paypromotion.PayPromotionDataII"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

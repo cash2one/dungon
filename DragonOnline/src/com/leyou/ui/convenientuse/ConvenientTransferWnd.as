@@ -181,7 +181,7 @@ package com.leyou.ui.convenientuse {
 		public override function set visible(value:Boolean):void{
 			super.visible = value;
 			if(value){
-				GuideManager.getInstance().showGuide(40, this);
+				GuideManager.getInstance().showGuide(40, useBtn);
 			}else{
 				GuideManager.getInstance().removeGuide(40);
 			}

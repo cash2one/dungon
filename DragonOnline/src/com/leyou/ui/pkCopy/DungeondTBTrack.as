@@ -18,6 +18,7 @@ package com.leyou.ui.pkCopy {
 	import com.leyou.manager.PopupManager;
 	import com.leyou.manager.TimerManager;
 	import com.leyou.net.cmd.Cmd_Wbox;
+	import com.leyou.ui.pkCopy.child.DungeonTzGrid;
 	import com.leyou.utils.TimeUtil;
 
 	public class DungeondTBTrack extends AutoSprite {
@@ -34,6 +35,7 @@ package com.leyou.ui.pkCopy {
 
 		private var keyLblArr:Array=[];
 		private var valueLblArr:Array=[];
+		private var gridArr:Array=[];
 
 		private var time:int=0;
 
@@ -57,7 +59,7 @@ package com.leyou.ui.pkCopy {
 			this.descLbl=this.getUIbyID("descLbl") as Label;
 
 			this.ruleLbl.setToolTip(TableManager.getInstance().getSystemNotice(5506).content);
-			this.descLbl.htmlText="" + StringUtil.substitute(TableManager.getInstance().getSystemNotice(5507).content,[ConfigEnum.dungeonTB15]);
+			this.descLbl.htmlText="" + StringUtil.substitute(TableManager.getInstance().getSystemNotice(5507).content, [ConfigEnum.dungeonTB15]);
 
 			EventManager.getInstance().addEvent(EventEnum.COPY_QUIT, onClick);
 		}
@@ -89,35 +91,49 @@ package com.leyou.ui.pkCopy {
 //			this.equipLbl.text="" + o.qhs;
 			this.equipLbl.text="" + o.exp;
 //			this.eleLbl.text="" + o.ele;
-			this.wingLbl.text="" + o.wing;
-			this.lvupLbl.text="" + o.jsdw;
+//			this.wingLbl.text="" + o.wing;
+//			this.lvupLbl.text="" + o.jsdw;
+//			this.wingLbl.text=""
+//			this.lvupLbl.text=""
 
-//			for (var i:int=0; i < this.keyLblArr.length; i++) {
-//				if (this.keyLblArr[i] != null) {
-//					this.removeChild(this.keyLblArr[i]);
-//					this.removeChild(this.valueLblArr[i]);
-//				}
-//			}
+			var render:DungeonTzGrid;
+			for each (render in this.gridArr) {
+				this.removeChild(render);
+			}
 
-//			var str:String;
-//			var lb:Label;
-//			var i:int;
-//			for each (str in o) {
-//				lb=new Label();
-//				this.addChild(lb);
-//				
-//				lb.text=TableManager.getInstance().
-//				
-//				i++;
-//			}
+			this.gridArr.length=0;
+
+			var item:Object;
+			var str:Array;
+			var i:int=0;
+			for each (str in o.items) {
+				render=new DungeonTzGrid();
+
+				this.addChild(render);
+				this.gridArr.push(render);
+
+				if (String(str[0]).length == 4)
+					item=TableManager.getInstance().getEquipInfo(str[0]);
+				else
+					item=TableManager.getInstance().getItemInfo(str[0]);
+
+				render.updataInfo(item);
+				render.setNum(str[1]);
+
+				render.x=10 + (i % 6) * 42;
+				render.y=88 + Math.floor(i / 6) * 42;
+
+				i++;
+			}
 
 
 			this.timeLbl.text="" + TimeUtil.getIntToTime(o.stime);
 
-			if (this.time == 0)
-				this.time=o.stime;
+			this.time=o.stime;
 
-			TimerManager.getInstance().add(exeTime);
+			TimerManager.getInstance().remove(exeTime);
+			if (this.time > 0)
+				TimerManager.getInstance().add(exeTime);
 		}
 
 		private function exeTime(i:int):void {

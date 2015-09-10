@@ -44,8 +44,8 @@ package com.leyou.ui.autionSale.children
 			var info:TVendueInfo = TableManager.getInstance().getVendueInfo(data.id);
 			grid.updateInfo(info.itemId, info.itemCount);
 			var date:Date = new Date(data.tick*1000);
-			dateLbl.text = StringUtil.substitute("{1}.{2}.{3}", date.fullYear, date.month+1, date.date);
-			timeLbl.text = StringUtil.substitute("{1}:{2}", date.hours, date.minutes);
+			dateLbl.text = StringUtil.substitute("{1}-{2}-{3}", date.fullYear, date.month+1, date.date);
+			timeLbl.text = StringUtil.substitute("{1}:{2}", StringUtil.fillTheStr(date.hours, 2, "0", true), StringUtil.fillTheStr(date.minutes, 2, "0", true));
 			priceLbl.text = data.price+"";
 			nameLbl.text = data.name;
 		}

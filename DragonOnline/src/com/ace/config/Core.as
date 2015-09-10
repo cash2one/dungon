@@ -2,6 +2,7 @@ package com.ace.config {
 	import com.ace.enum.PlatformEnum;
 	import com.ace.enum.UIEnum;
 	import com.ace.game.scene.player.MyPlayer;
+	import com.ace.game.scene.player.part.LivingModel;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.table.TServerListInfo;
 	import com.ace.manager.LibManager;
@@ -12,16 +13,18 @@ package com.ace.config {
 	public class Core {
 		public static var stg:DragonOnline;
 		public static var serverIp:String="192.168.10.88";
+//				public static var serverIp:String="202.55.225.225";
 		public static var loginPort:int=9932;
- 
-//		public static var serverName:String="S3";
+
+		//		public static var serverName:String="S3";
 		public static var serverName:String="dev1";
- 
+
 		public static var gameName:String="sog";
 		public static var userId:String;
 		static public var webId:String; //登陆字符串
 
 		public static var me:MyPlayer;
+		public static var pet:LivingModel;
 		public static const bugTest:Boolean=false;
 		//		public static const bugTest:Boolean=true;
 		public static const clientTest:Boolean=false;
@@ -49,6 +52,10 @@ package com.ace.config {
 		public static var TX_SANDBOX:Boolean;
 		public static var TX_VIPTIP:Boolean;
 
+		public static var KEYWORD_OPEN:Boolean=true;
+
+		private static var sf_arr:Array=["jl588", "987q", "10yi", "yiyimm", "cb007", "66lou"];
+
 		public static function setup(obj:Object):void {
 			if (obj.hasOwnProperty("version")) {
 				(!UIEnum.IS_USE_CDN) && (UIEnum.DATAROOT=obj.dataRoot);
@@ -59,6 +66,8 @@ package com.ace.config {
 				Core.serverIp=obj.ip
 				Core.loginPort=obj.port;
 				Core.AUTO_CREAT_TIME=obj.autoCreatTime;
+				if (obj.hasOwnProperty("isOpenKW"))
+					Core.KEYWORD_OPEN=(obj.isOpenKW == 1) ? true : false;
 				Core.SPEECK_LEVEL=obj.speechlv;
 				(Core.SPEECK_LEVEL == 0) && (Core.SPEECK_LEVEL=35);
 				Core.webId=obj.strlgn;
@@ -76,10 +85,14 @@ package com.ace.config {
 				Core.TX_ZONEID=obj.zoneid;
 				Core.TX_SANDBOX=(obj.sandbox == 1) ? true : false;
 				Core.TX_VIPTIP=(obj.vipTip == 1) ? true : false;
+				if (sf_arr.indexOf(UIEnum.PLAT_FORM_ID) != -1) {
+					UIEnum.PLAT_FORM_ID=PlatformEnum.ID_SF;
+				}
 			} else {
 				UIEnum.PLAT_FORM_ID=PlatformEnum.ID_AOYI;
 				//调试要登陆的服务器和ip
 				//				(!UIEnum.IS_USE_CDN) && UIEnum.DATAROOT="http://sogres.oss-cn-hangzhou.aliyuncs.com/webData/dragonResII/";
+				//				(!UIEnum.IS_USE_CDN) && (UIEnum.DATAROOT="http://192.168.10.106/webData/dragonResEn/");
 				(!UIEnum.IS_USE_CDN) && (UIEnum.DATAROOT="http://192.168.10.16/webData/dragonRes/");
 					//				(!UIEnum.IS_USE_CDN) && (UIEnum.DATAROOT="http://sogres2.leyou365.com/webData/dragonResEn/");
 					//				(!UIEnum.IS_USE_CDN) && (UIEnum.DATAROOT="http://1251243446.cdn.myqcloud.com/1251243446/sogres/webData/dragonResEn/");
@@ -106,18 +119,9 @@ package com.ace.config {
 				Core.serverIp=obj.ip;
 				Core.loginPort=obj.port;
 			} else {
- 
- 
-//				Core.serverIp="120.26.0.110";
-//				Core.loginPort=9932;
- 
-//				Core.serverIp="120.26.0.95";
-//				Core.loginPort=9932;
- 
-				//				Core.serverIp="119.29.106.221";
-				//				Core.loginPort=9932;
- 
- 
+				//								Core.serverIp="120.26.1.109";
+				//								Core.loginPort=9932;
+
 			}
 
 			if (obj.hasOwnProperty("payUrl")) {
@@ -166,12 +170,12 @@ package com.ace.config {
 		static public function get isSF():Boolean {
 			return (UIEnum.PLAT_FORM_ID == PlatformEnum.ID_SF) || (UIEnum.PLAT_FORM_ID == PlatformEnum.ID_SF2);
 		}
-		
-		static public function get isSF1():Boolean{
+
+		static public function get isSF1():Boolean {
 			return (UIEnum.PLAT_FORM_ID == PlatformEnum.ID_SF);
 		}
-		
-		static public function get isSF2():Boolean{
+
+		static public function get isSF2():Boolean {
 			return (UIEnum.PLAT_FORM_ID == PlatformEnum.ID_SF2);
 		}
 

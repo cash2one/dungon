@@ -1,5 +1,6 @@
 package com.leyou.ui.gem {
 
+	import com.ace.config.Core;
 	import com.ace.enum.TipEnum;
 	import com.ace.enum.WindowEnum;
 	import com.ace.game.manager.DragManager;
@@ -21,6 +22,7 @@ package com.leyou.ui.gem {
 	import com.greensock.TweenLite;
 	import com.leyou.data.bag.Baginfo;
 	import com.leyou.data.tips.TipsInfo;
+	import com.leyou.enum.ConfigEnum;
 	import com.leyou.net.cmd.Cmd_Gem;
 	import com.leyou.ui.gem.child.GemGrid;
 	import com.leyou.utils.PropUtils;
@@ -720,7 +722,8 @@ package com.leyou.ui.gem {
 		}
 
 		private function onClick(e:MouseEvent):void {
-			UILayoutManager.getInstance().open(WindowEnum.ROLE, WindowEnum.GEM_LV, UILayoutManager.SPACE_X, UILayoutManager.SPACE_Y);
+			if (Core.me.info.level >= ConfigEnum.Alchemy1)
+				UILayoutManager.getInstance().open(WindowEnum.ROLE, WindowEnum.GEM_LV, UILayoutManager.SPACE_X, UILayoutManager.SPACE_Y);
 		}
 
 		public function updateInfo(o:Object):void {
@@ -792,6 +795,10 @@ package com.leyou.ui.gem {
 			} else
 				this.updateCurrentList();
 
+		}
+
+		override public function get height():Number {
+			return 526;
 		}
 
 

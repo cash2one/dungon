@@ -1,11 +1,13 @@
 package com.leyou.ui.pet.children
 {
+	import com.ace.enum.TipEnum;
 	import com.ace.gameData.manager.DataManager;
 	import com.ace.gameData.manager.MyInfoManager;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.table.TPetInfo;
 	import com.ace.gameData.table.TPetStarInfo;
 	import com.ace.manager.LibManager;
+	import com.ace.manager.ToolTipManager;
 	import com.ace.ui.auto.AutoSprite;
 	import com.ace.ui.button.children.NormalButton;
 	import com.ace.ui.component.RollNumWidget;
@@ -17,6 +19,7 @@ package com.leyou.ui.pet.children
 	import com.leyou.util.ZDLUtil;
 	
 	import flash.events.MouseEvent;
+	import flash.geom.Point;
 	
 	public class PetCallInPage extends AutoSprite
 	{
@@ -80,6 +83,49 @@ package com.leyou.ui.pet.children
 			numV.x = 154+15;
 			numV.y = 154;
 			addChild(numV);
+			
+			var tlabel:Label = getUIbyID("attLbl4") as Label;
+			tlabel.mouseEnabled = true;
+			tlabel.addEventListener(MouseEvent.MOUSE_OVER, onTipsOver);
+			
+			tlabel = getUIbyID("defLbl5") as Label;
+			tlabel.mouseEnabled = true;
+			tlabel.addEventListener(MouseEvent.MOUSE_OVER, onTipsOver);
+			
+			tlabel = getUIbyID("lifeLbl1") as Label;
+			tlabel.mouseEnabled = true;
+			tlabel.addEventListener(MouseEvent.MOUSE_OVER, onTipsOver);
+			
+			tlabel = getUIbyID("critLbl8") as Label;
+			tlabel.mouseEnabled = true;
+			tlabel.addEventListener(MouseEvent.MOUSE_OVER, onTipsOver);
+			
+			tlabel = getUIbyID("hitLbl10") as Label;
+			tlabel.mouseEnabled = true;
+			tlabel.addEventListener(MouseEvent.MOUSE_OVER, onTipsOver);
+			
+			tlabel = getUIbyID("slayLbl12") as Label;
+			tlabel.mouseEnabled = true;
+			tlabel.addEventListener(MouseEvent.MOUSE_OVER, onTipsOver);
+			
+			tlabel = getUIbyID("tenacityLbl9") as Label;
+			tlabel.mouseEnabled = true;
+			tlabel.addEventListener(MouseEvent.MOUSE_OVER, onTipsOver);
+			
+			tlabel = getUIbyID("dodgeLbl11") as Label;
+			tlabel.mouseEnabled = true;
+			tlabel.addEventListener(MouseEvent.MOUSE_OVER, onTipsOver);
+			
+			tlabel = getUIbyID("guardLbl13") as Label;
+			tlabel.mouseEnabled = true;
+			tlabel.addEventListener(MouseEvent.MOUSE_OVER, onTipsOver);
+		}
+		
+		protected function onTipsOver(event:MouseEvent):void{
+			var codeStr:String = event.target.name;
+			codeStr = codeStr.match(/\d+/)[0];
+			var str:String = TableManager.getInstance().getSystemNotice(9500 + int(codeStr)).content;
+			ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, str, new Point(stage.mouseX, stage.mouseY));
 		}
 		
 		protected function onBtnClick(event:MouseEvent):void{
@@ -117,8 +163,8 @@ package com.leyou.ui.pet.children
 			
 			var petStarInfo:TPetStarInfo = TableManager.getInstance().getPetStarLvInfo(petTId, starLv);
 			var rnum:int = MyInfoManager.getInstance().getBagItemNumById(petStarInfo.item);
-			grid.updataById(petStarInfo.item);
-			costLbl.text = rnum+"/"+petStarInfo.itemNum;
+			grid.updateInfoII(petInfo.activeItem, /*petInfo.itemCount*/0);
+			costLbl.text = rnum+"/"+petInfo.itemCount;
 		}
 	}
 }

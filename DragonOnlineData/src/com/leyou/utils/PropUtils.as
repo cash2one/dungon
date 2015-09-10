@@ -408,6 +408,55 @@ package com.leyou.utils {
 		public static function getFightingHpAndMp(e:TEquipInfo):Number {
 			return Number(e.minhp) * TableManager.getInstance().getZdlElement(1).rate + Number(e.minmana) * TableManager.getInstance().getZdlElement(2).rate;
 		}
-
+		
+		public static function getCNum(num:int):String{
+			switch(num){
+				case 1:
+					return getStringById(2177);
+				case 2:
+					return getStringById(2178);
+				case 3:
+					return getStringById(2179);
+				case 4:
+					return getStringById(2180);
+				case 5:
+					return getStringById(2181);
+				case 6:
+					return getStringById(2182);
+				case 7:
+					return getStringById(2183);
+				case 8:
+					return getStringById(2184);
+				case 9:
+					return getStringById(2185);
+				case 10:
+					return getStringById(2186);
+			}
+			return null;
+		}
+		
+		public static function getPropertyString(id:int):String{ 
+			switch(id){
+				case 4:
+					return getStringById(101297);
+				case 5:
+					return getStringById(101298);
+				case 1:
+					return getStringById(101299);
+				case 8:
+					return getStringById(101300);
+				case 9:
+					return getStringById(101303);
+				case 10:
+					return getStringById(101301);
+				case 11:
+					return getStringById(101304);
+				case 12:
+					return getStringById(101302);
+				case 13:
+					return getStringById(101305);
+			}
+			return null;
+		}
 	}
 }

@@ -7,18 +7,15 @@ package com.leyou.ui.skill {
 	import com.ace.manager.LibManager;
 	import com.ace.manager.UIManager;
 	import com.ace.ui.auto.AutoSprite;
-	import com.ace.ui.auto.AutoWindow;
 	import com.ace.ui.button.children.ImgButton;
-	import com.ace.ui.button.children.NormalButton;
 	import com.ace.ui.img.child.Image;
 	import com.ace.ui.lable.Label;
 	import com.greensock.TweenLite;
-	import com.greensock.easing.Circ;
 	import com.greensock.easing.Elastic;
-	import com.leyou.net.cmd.Cmd_Assist;
 	import com.leyou.net.cmd.Cmd_Link;
 	import com.leyou.ui.skill.childs.SkillGrid;
 	import com.leyou.ui.tools.child.ShortcutsGrid;
+	import com.leyou.utils.PropUtils;
 	
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
@@ -147,8 +144,8 @@ package com.leyou.ui.skill {
 				skiArr=TableManager.getInstance().getSkillArr(o.skill);
 				skiArr.sortOn("id", Array.CASEINSENSITIVE | Array.NUMERIC);
 
-				this.titleNameLbl.text="恭喜你开启了新技能";
-				this.descLbl.text="点击此处将其放入快捷栏";
+				this.titleNameLbl.text=PropUtils.getStringById(1881)+"";
+				this.descLbl.text=PropUtils.getStringById(1882)+"";
 				this.runeLbl.text="";
 
 				this.grid.gridType=ItemEnum.TYPE_GRID_SKILL;
@@ -162,8 +159,8 @@ package com.leyou.ui.skill {
 				skiArr=TableManager.getInstance().getSkillArr(o.rune[0]);
 				skiArr.sortOn("id", Array.CASEINSENSITIVE | Array.NUMERIC);
 
-				this.titleNameLbl.text="恭喜你开启了新符文";
-				this.descLbl.text="点击此处将关闭窗口";
+				this.titleNameLbl.text=PropUtils.getStringById(1883)+"";
+				this.descLbl.text=PropUtils.getStringById(1884)+"";
 				this.runeLbl.text="" + skiArr[o.rune[1]].runeName;
 				this.rune=true;
 

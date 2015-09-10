@@ -25,6 +25,7 @@ package com.leyou.ui.luckDraw {
 	import com.ace.ui.menu.data.MenuInfo;
 	import com.ace.ui.scrollPane.children.ScrollPane;
 	import com.ace.utils.StringUtil;
+	import com.greensock.TweenLite;
 	import com.greensock.TweenMax;
 	import com.greensock.easing.Expo;
 	import com.leyou.data.luckDraw.LuckDrawData;
@@ -42,7 +43,9 @@ package com.leyou.ui.luckDraw {
 	import com.leyou.util.DateUtil;
 	import com.leyou.utils.ItemUtil;
 	import com.leyou.utils.PropUtils;
+	import com.leyou.utils.StringUtil_II;
 	
+	import flash.display.DisplayObject;
 	import flash.events.MouseEvent;
 	import flash.events.TextEvent;
 	import flash.geom.Point;
@@ -133,6 +136,15 @@ package com.leyou.ui.luckDraw {
 		private var btnEffect:SwfLoader;
 		
 		private var pRemainCLbl:Label;
+		
+		private var desLbl:Label;
+		
+		private var gotoLbl:Label;
+		
+		private var valueLbl:Label;
+		
+		private var moneyImg:Image;
+		private var jlInfo:MouseEventInfo;
 
 		public function LuckDrawWnd() {
 			super(LibManager.getInstance().getXML("config/ui/luckDraw/luckDrawWnd.xml"));
@@ -172,6 +184,13 @@ package com.leyou.ui.luckDraw {
 			logPanel=getUIbyID("logPanel") as ScrollPane;
 			selfPanel=getUIbyID("selfLogPanel") as ScrollPane;
 			propImg=getUIbyID("propImg") as Image;
+			desLbl=getUIbyID("desLbl") as Label;
+			gotoLbl=getUIbyID("gotoLbl") as Label;
+			valueLbl=getUIbyID("valueLbl") as Label;
+			moneyImg=getUIbyID("moneyImg") as Image;
+			desLbl.htmlText = TableManager.getInstance().getSystemNotice(6110).content;
+			gotoLbl.mouseEnabled = true;
+			gotoLbl.addEventListener(MouseEvent.CLICK, onBtnClick);
 			pLotteryBtn.addEventListener(MouseEvent.CLICK, onBtnClick);
 			ybLotteryBtn.addEventListener(MouseEvent.CLICK, onBtnClick);
 			ybLottery10Btn.addEventListener(MouseEvent.CLICK, onBtnClick);
@@ -215,7 +234,11 @@ package com.leyou.ui.luckDraw {
 			MouseManagerII.getInstance().addEvents(ybImg, evtInfo);
 			MouseManagerII.getInstance().addEvents(yb2Img, evtInfo);
 			MouseManagerII.getInstance().addEvents(propImg, evtInfo);
-
+			jlInfo=new MouseEventInfo();
+			jlInfo.onMouseMove=onTipsMouseOver;
+			jlInfo.onMouseOut=onTipsMouseOut;
+			
+			MouseManagerII.getInstance().addEvents(moneyImg, jlInfo);
 			tipInfo=new TipsInfo();
 			tipInfo.isShowPrice=false;
 			//			proNameLbl.mouseEnabled = true;
@@ -239,8 +262,26 @@ package com.leyou.ui.luckDraw {
 			if (Core.isSF) {
 				ybImg.updateBmp("ui/backpack/yuanbaoIco_bound.png");
 			}
+			
+			var style:StyleSheet=new StyleSheet();
+			style.setStyle("body", {leading: 0.5});
+			style.setStyle("a:hover", {color: "#ff0000"});
+			gotoLbl.styleSheet=style;
+			gotoLbl.htmlText=StringUtil_II.addEventString(gotoLbl.text, gotoLbl.text, true);
 		}
-
+		
+		private function onTipsMouseOver(e:DisplayObject):void {
+			ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, TableManager.getInstance().getSystemNotice(9609).content, new Point(this.stage.mouseX, this.stage.mouseY));
+		}
+		
+		private function onTipsMouseOut(e:DisplayObject):void {
+			ToolTipManager.getInstance().hide();
+		}
+		
+		public function updateItemNum():void {
+			valueLbl.text = "" + UIManager.getInstance().backpackWnd.jl;
+		}
+		
 		public override function get height():Number {
 			return 562;
 		}
@@ -332,6 +373,7 @@ package com.leyou.ui.luckDraw {
 			if (!TimeManager.getInstance().hasITick(updateTime)) {
 				TimeManager.getInstance().addITick(1000, updateTime);
 			}
+			updateItemNum();
 		}
 
 		private function updateTime():void {
@@ -376,6 +418,13 @@ package com.leyou.ui.luckDraw {
 						Cmd_LDW.cm_LDW_D(1);
 						GuideManager.getInstance().removeGuide(98);
 					}
+					break;
+				case "gotoLbl":
+					UILayoutManager.getInstance().show_II(WindowEnum.MYSTORE);
+					
+					TweenLite.delayedCall(0.3, function():void {
+						UIManager.getInstance().myStore.setTabIndex(2);
+					});
 					break;
 				case "ybLotteryBtn":
 					if (!isLoop) {
@@ -595,6 +644,7 @@ package com.leyou.ui.luckDraw {
 				var rInfo:LuckDrawRewardInfo=data.getReward(n);
 				grids[index].updataInfo({count: rInfo.count, itemId: rInfo.itemid});
 			}
+			updateTime();
 		}
 
 		public function updateInfoEffect():void {

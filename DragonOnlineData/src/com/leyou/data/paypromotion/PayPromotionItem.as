@@ -14,6 +14,8 @@ package com.leyou.data.paypromotion
 		
 		public var dc:int;
 		
+		public var hasBegin:Boolean = false;
+		
 		public function updateInfo(data:Array):void{
 			id = data[0];
 			status = data[1];

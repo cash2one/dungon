@@ -10,8 +10,10 @@ package com.leyou.ui.abidePay
 	import com.ace.ui.lable.Label;
 	import com.ace.utils.StringUtil;
 	import com.leyou.data.abidePay.AbidePayData;
+	import com.leyou.data.combineData.CombineData;
 	import com.leyou.enum.ConfigEnum;
 	import com.leyou.net.cmd.Cmd_CCZ;
+	import com.leyou.net.cmd.Cmd_HCCZ;
 	import com.leyou.ui.abidePay.children.AbidePayRewardBox;
 	import com.leyou.ui.mail.child.MaillGrid;
 	import com.leyou.utils.PropUtils;
@@ -41,6 +43,8 @@ package com.leyou.ui.abidePay
 		
 		private var grids:Vector.<MaillGrid>;
 		
+		private var _belongType:int;
+		
 		public function AbidePayBoxWnd(){
 			super(LibManager.getInstance().getXML("config/ui/abidePay/lxczMegWnd.xml"));
 			init();
@@ -59,11 +63,11 @@ package com.leyou.ui.abidePay
 //			iconImg.x = 112;
 //			iconImg.y = 93;
 			grids = new Vector.<MaillGrid>();
-			for(var n:int = 0; n < 4; n++){
+			for(var n:int = 0; n < 5; n++){
 				var grid:MaillGrid = new MaillGrid();
 				addChild(grid);
-				grid.x = 42 + n*62;
-				grid.y = 107;
+				grid.x = 23 + n*54;
+				grid.y = 106;
 				grids.push(grid);
 			}
 //			grid = new MarketGrid();
@@ -74,20 +78,78 @@ package com.leyou.ui.abidePay
 			clsBtn.y -= 14;
 		}
 		
+		public function updateCombineInfo(box:AbidePayRewardBox):void{
+			var data:CombineData = DataManager.getInstance().combineData;
+			_day = box.day;
+			_type = box.type;
+			_belongType = box.belongType;
+			tLbl.text = StringUtil.substitute(PropUtils.getStringById(1573), _day);
+			var content:String = TableManager.getInstance().getSystemNotice(10010).content;
+			contentLbl.text = StringUtil.substitute(content, _day, _type);
+			var id:int = (1 == _belongType) ? 10011 : 10050;
+			content = TableManager.getInstance().getSystemNotice(id).content;
+			introLbl.text = content;
+			dayLbl.text = data.getAbideDay(_type)+"/"+_day;
+			
+			var rewardArr:Array = getCombineRewardArr(_type, _day);
+			var l:int = rewardArr.length;
+			for(var n:int = 0; n < 5; n++){
+				if(n < l){
+					var d:Array = rewardArr[n].split(",");
+					grids[n].updateInfo(d[0], d[1]);
+				}else{
+					grids[n].clear();
+				}
+			}
+			
+			if(data.isReceive(_day, _type)){
+				receiveBtn.text = PropUtils.getStringById(1574);
+				receiveBtn.setActive(false, 1, true);
+				return;
+			}
+			var rd:int = data.getAbideDay(_type);
+			if(rd >= _day){
+				receiveBtn.text = PropUtils.getStringById(1575);
+				receiveBtn.setActive(true, 1, true);
+			}else{
+				receiveBtn.text = PropUtils.getStringById(1576);
+				receiveBtn.setActive(false, 1, true);
+			}
+		}
+		
+		private function getCombineRewardArr(_type:int, _day:int):Array{
+			var tdata1:TAbidePayInfo = TableManager.getInstance().getCombinePayInfo(1);
+			var tdata2:TAbidePayInfo = TableManager.getInstance().getCombinePayInfo(2);
+			var tdata3:TAbidePayInfo = TableManager.getInstance().getCombinePayInfo(3);
+			var dayArr:Array = ConfigEnum.hflc2.split(",");
+			var index:int = dayArr.indexOf(_day+"")*3;
+			if(tdata1.ib == _type){
+				index += 0;
+			}else if(tdata2.ib == _type){
+				index += 1;
+			}else if(tdata3.ib == _type){
+				index += 2;
+			}
+			index += 3;
+			return ConfigEnum["hflc"+index].split("|");
+		}
+		
 		public function updateInfo(box:AbidePayRewardBox):void{
 			var data:AbidePayData = DataManager.getInstance().abidePayData;
 			_day = box.day;
 			_type = box.type;
+			_belongType = box.belongType;
 			tLbl.text = StringUtil.substitute(PropUtils.getStringById(1573), _day);
 			var content:String = TableManager.getInstance().getSystemNotice(10010).content;
 			contentLbl.text = StringUtil.substitute(content, _day, _type);
-			content = TableManager.getInstance().getSystemNotice(10011).content;
+			var id:int = (1 == _belongType) ? 10011 : 10050;
+			content = TableManager.getInstance().getSystemNotice(id).content;
 			introLbl.text = content;
 			dayLbl.text = data.getAbideDay(_type)+"/"+_day;
 			
 			var rewardArr:Array = getRewardArr(_type, _day);
 			var l:int = rewardArr.length;
-			for(var n:int = 0; n < 4; n++){
+			for(var n:int = 0; n < 5; n++){
 				if(n < l){
 					var d:Array = rewardArr[n].split(",");
 					grids[n].updateInfo(d[0], d[1]);
@@ -152,7 +214,11 @@ package com.leyou.ui.abidePay
 		}
 		
 		protected function onBtnClick(event:MouseEvent):void{
-			Cmd_CCZ.cm_CCZ_C(_type, _day);
+			if(1 == _belongType){
+				Cmd_CCZ.cm_CCZ_C(_type, _day);
+			}else{
+				Cmd_HCCZ.cm_HCCZ_C(_type, _day);
+			}
 		}
 	}
 }

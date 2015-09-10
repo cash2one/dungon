@@ -86,7 +86,7 @@ package com.ace.ui.smallMap {
 		}
 		
 		private function showGuide():void{
-			GuideManager.getInstance().showGuide(99, hideBtn);
+//			GuideManager.getInstance().showGuide(99, hideBtn);
 		}
 		
 		protected function onMouseOut(event:MouseEvent):void {

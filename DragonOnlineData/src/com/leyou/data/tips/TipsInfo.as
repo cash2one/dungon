@@ -186,6 +186,7 @@ zdl      --战斗力
 3 真气
 4 碎片
 5 荣誉
+6 巨龙点数
 		 */		
 		public var moneyType:int=0;
 		public var moneyNum:int=0;

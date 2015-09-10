@@ -53,7 +53,7 @@ package com.leyou.ui.badge {
 			this.items=new Vector.<BadgeBtn>();
 
 			var bbg:BadgeBtn;
-			for (var i:int=0; i < 10; i++) {
+			for (var i:int=0; i < 11; i++) {
 				bbg=new BadgeBtn(i + 1);
 
 				this.gridList.addToPane(bbg);
@@ -80,7 +80,7 @@ package com.leyou.ui.badge {
 				this.useCount=o.wn;
 
 			var bbg:BadgeBtn;
-			for (var i:int=0; i < 10; i++) {
+			for (var i:int=0; i < 11; i++) {
 				bbg=this.items[i];
 
 				if (o.hasOwnProperty("lk") && o.lk[i + 1])
@@ -106,7 +106,7 @@ package com.leyou.ui.badge {
 
 			} else {
 				//default
-				if (this.currentOpenPoint == 1100)
+				if (this.currentOpenPoint == 1200)
 					this.items[0].setMouseDownState();
 				else
 					this.items[int(this.currentOpenPoint / 100) - 1].setMouseDownState();
@@ -148,8 +148,9 @@ package com.leyou.ui.badge {
 		override public function show(toTop:Boolean=true, $layer:int=1, toCenter:Boolean=true):void {
 			super.show(toTop, $layer, toCenter);
 
-
-			GuideManager.getInstance().showGuide(14, this);
+			if (this.currentOpenPoint == 100)
+				GuideManager.getInstance().showGuide(14, this);
+			
 			GuideManager.getInstance().removeGuide(12);
 			GuideManager.getInstance().removeGuide(13);
 

@@ -16,7 +16,7 @@ package com.leyou.ui.market.child {
 	import com.leyou.utils.FilterUtil;
 	import com.leyou.utils.ItemUtil;
 	import com.leyou.utils.PropUtils;
-
+	
 	import flash.geom.Point;
 	import flash.text.TextFieldAutoSize;
 	import flash.text.TextFormat;
@@ -28,13 +28,17 @@ package com.leyou.ui.market.child {
 		private var tips:TipsInfo;
 		private var numLbl:Label;
 //		private var effect:SwfLoader;
-		private var count:int;
+		private var _count:int;
 		public var moneyType:int;
 		public var moneyNum:int;
-		public var isShowPrice:Boolean=true;
+		public var isShowPrice:Boolean;
 		protected var limitTimeLbl:Label;
 
 		public function MarketGrid() {
+		}
+
+		public function get count():int{
+			return _count;
 		}
 
 		override protected function init(hasCd:Boolean=false):void {
@@ -81,6 +85,7 @@ package com.leyou.ui.market.child {
 			numLbl.y=45;
 			numLbl.width=64;
 			numLbl.height=20;
+			isShowPrice = false;
 		}
 
 //		public function addEffect():void{
@@ -97,6 +102,10 @@ package com.leyou.ui.market.child {
 //				removeChild(effect);
 //			}
 //		}
+		
+		public function updateBG(url:String):void{
+			bgBmp.updateBmp(url);
+		}
 
 		/**
 		 * <T>鼠标移入显示TIP</T>
@@ -175,6 +184,10 @@ package com.leyou.ui.market.child {
 			iconBmp.updateBmp(iconUrl);
 			addChild(numLbl);
 		}
+		
+		public function updateInfoII(rid:int, ic:int):void{
+			updataInfo({itemId:rid, count:ic});
+		}
 
 		public override function updataInfo(info:Object):void {
 //			addEffect();
@@ -201,11 +214,15 @@ package com.leyou.ui.market.child {
 				return;
 			}
 			numLbl.visible=true;
-			count=info.count;
+			_count=info.count;
 			if (info.count > 1 && info.count < 10000) {
 				numLbl.text=info.count + "";
 			} else if (info.count >= 10000 && info.count < 1000000) {
-				numLbl.text=(info.count / 10000).toFixed(1) + PropUtils.getStringById(1532);
+				var vc:Number = Number((info.count / 10000).toFixed(1));
+//				if(vc == int(info.count / 10000)){
+//					vc = int(info.count / 10000);
+//				}
+				numLbl.text=vc + PropUtils.getStringById(1532);
 			} else if (info.count >= 1000000) {
 				numLbl.text=int(info.count / 10000) + PropUtils.getStringById(1532);
 			} else if (info.count <= 1) {

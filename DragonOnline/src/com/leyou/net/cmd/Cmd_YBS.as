@@ -48,7 +48,7 @@ package com.leyou.net.cmd
 		}
 		
 		public static function sm_YBS_X(obj:Object):void{
-			if(UIManager.getInstance().isCreate(WindowEnum.FIELD_BOSS_REWARD)){
+			if(UIManager.getInstance().isCreate(WindowEnum.FIELD_BOSS_TRACK)){
 				if(DataManager.getInstance().fieldBossData.damBossId == obj.ybid){
 					UIManager.getInstance().fieldBossTrack.hide();
 				}

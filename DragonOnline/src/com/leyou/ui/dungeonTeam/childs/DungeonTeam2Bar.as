@@ -11,7 +11,7 @@ package com.leyou.ui.dungeonTeam.childs {
 	import com.ace.ui.img.child.Image;
 	import com.ace.ui.lable.Label;
 	import com.leyou.utils.FilterUtil;
-	
+
 	import flash.events.MouseEvent;
 
 	public class DungeonTeam2Bar extends AutoSprite {
@@ -59,7 +59,7 @@ package com.leyou.ui.dungeonTeam.childs {
 
 			this.baseGrid.x=111;
 			this.baseGrid.y=25;
-			
+
 			this.baseGrid.higtEffect=this.dispEvent;
 
 			this.dbGridVec=new Vector.<TeamCopyGrid>();
@@ -72,7 +72,7 @@ package com.leyou.ui.dungeonTeam.childs {
 				this.dbGridVec.push(tgrid);
 
 				tgrid.higtEffect=this.dispEvent;
-				
+
 				tgrid.x=197 + i * 45;
 				tgrid.y=25;
 			}
@@ -111,30 +111,30 @@ package com.leyou.ui.dungeonTeam.childs {
 
 			this.id=o[0];
 			this.nameLbl.text="" + tcopyinfo.Dungeon_Name;
-			
-			if(Core.me.info.level>=tcopyinfo.Key_Level)
+
+			if (Core.me.info.level >= tcopyinfo.Key_Level)
 				this.lvLbl.defaultTextFormat=FontEnum.getTextFormat("DefaultFont");
 			else
 				this.lvLbl.defaultTextFormat=FontEnum.getTextFormat("Red12");
-			
+
 			this.lvLbl.text="" + tcopyinfo.Key_Level;
-			
-			if(int(o[1])>0)
+
+			if (int(o[1]) > 0)
 				this.countLbl.defaultTextFormat=FontEnum.getTextFormat("DefaultFont");
 			else
 				this.countLbl.defaultTextFormat=FontEnum.getTextFormat("Red12");
-			
+
 			this.countLbl.text="" + int(o[1]);
 
 			if (tcopyinfo.Base_Drop == "") {
 				this.baseGrid.visible=false;
 			} else {
 				this.baseGrid.visible=true;
-				
-				if(String(tcopyinfo.Base_Drop.split("|")[0].split(",")[0]).length==4)
-				this.baseGrid.updataInfo(TableManager.getInstance().getEquipInfo(int(tcopyinfo.Base_Drop.split("|")[0].split(",")[0])));
+
+				if (String(tcopyinfo.Base_Drop.split("|")[0].split(",")[0]).length == 4)
+					this.baseGrid.updataInfo(TableManager.getInstance().getEquipInfo(int(tcopyinfo.Base_Drop.split("|")[0].split(",")[0])));
 				else
-				this.baseGrid.updataInfo(TableManager.getInstance().getItemInfo(int(tcopyinfo.Base_Drop.split("|")[0].split(",")[0])));
+					this.baseGrid.updataInfo(TableManager.getInstance().getItemInfo(int(tcopyinfo.Base_Drop.split("|")[0].split(",")[0])));
 			}
 
 			var ctx:Array=[];
@@ -145,11 +145,11 @@ package com.leyou.ui.dungeonTeam.childs {
 				ctx=tcopyinfo["DBC_ITEM" + (i + 1)].split(",");
 
 				render=this.dbGridVec[i] as TeamCopyGrid;
-				if(String(ctx[0]).length==4)
-				render.updataInfo(TableManager.getInstance().getEquipInfo(int(ctx[0])));
+				if (String(ctx[0]).length == 4)
+					render.updataInfo(TableManager.getInstance().getEquipInfo(int(ctx[0])));
 				else
-				render.updataInfo(TableManager.getInstance().getItemInfo(int(ctx[0])));
-					
+					render.updataInfo(TableManager.getInstance().getItemInfo(int(ctx[0])));
+
 				render.canMove=false;
 
 				if (ctx.length == 2)
@@ -161,8 +161,8 @@ package com.leyou.ui.dungeonTeam.childs {
 			}
 
 		}
-		
-		public function dispEvent():void{
+
+		public function dispEvent():void {
 			this.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
 		}
 

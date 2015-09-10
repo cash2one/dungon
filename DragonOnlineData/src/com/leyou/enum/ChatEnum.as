@@ -62,9 +62,9 @@ package com.leyou.enum {
 		//喇叭的显示时间
 		public static const TIME_HORN:int=5000;
 		// 喇叭的顶替时间
-		public static const TIME_REPLACE_HORN:int=3200;
+//		public static const TIME_REPLACE_HORN:int=3200;
 		// 喇叭的消失时间
-		public static const TIME_DISAPPEAR_HORN:int=5200;
+//		public static var TIME_DISAPPEAR_HORN:int=5200;
 		// 单个普通频道消息保存最大数量
 		public static const COMMONMSG_MAX_COUNT:int=50;
 		// 系统消息保存最大数量
@@ -81,9 +81,17 @@ package com.leyou.enum {
 		public static const WORLD_CHANNEL_LIMIT:int=20;
 
 		// 表情数量
-		public static const FACE_IMG_COUNT:int=26;
+		public static const FACE_IMG_COUNT:int=47;
 		// 表情关键字
-		public static const TEXT_IMG_KEYS:Array=["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59", "60", "61", "62", "63", "64", "65"];
+		public static const TEXT_IMG_KEYS:Array=["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", 
+			"11", "12", "13", "14", "15", "16", "17", "18", "19", "20",  
+			"21", "22", "23", "24", "25", "26", "27", "28", "29", "30",
+			"31", "32", "33", "34", "35", "36", "37", "38", "39", "40",
+			"41", "42", "43", "44", "45", "46", "47",
+			// vip图标
+			"50", "51", "52", "53", "54", "55", "56", "57", "58", "59",
+			// 聊天频道图标
+			"60", "61", "62", "63", "64", "65"];
 
 		// user   1    -- 玩家的名字  可点击出弹出菜单
 		// item   2    -- 物品装备    弹出tips

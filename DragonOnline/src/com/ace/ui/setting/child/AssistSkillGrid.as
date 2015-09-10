@@ -1,5 +1,4 @@
 package com.ace.ui.setting.child {
-	import com.ace.config.Core;
 	import com.ace.enum.ItemEnum;
 	import com.ace.enum.PlayerEnum;
 	import com.ace.enum.TipEnum;
@@ -8,7 +7,6 @@ package com.ace.ui.setting.child {
 	import com.ace.gameData.table.TSkillInfo;
 	import com.ace.manager.LibManager;
 	import com.ace.manager.ToolTipManager;
-	import com.ace.manager.UIManager;
 	import com.ace.tools.ScaleBitmap;
 	import com.leyou.data.playerSkill.TipSkillInfo;
 	
@@ -20,6 +18,8 @@ package com.ace.ui.setting.child {
 		public var switchListener:Function;
 		
 		public var gid:int;
+		
+		public var isPetSkill:Boolean = false;
 
 		public function AssistSkillGrid() {
 			init();
@@ -52,7 +52,11 @@ package com.ace.ui.setting.child {
 
 		public override function updataInfo(info:Object):void {
 			var skillId:int = info as int;
-			if(skillId == 0) return;
+			if(skillId == 0){
+				dataId = -1;
+				iconBmp.fillEmptyBmd();
+				return;
+			}
 			var skillInfo:TSkillInfo = TableManager.getInstance().getSkillById(skillId);
 			super.updataInfo(skillInfo);
 			if (this.gridType == ItemEnum.TYPE_GRID_RUNE) {
@@ -83,6 +87,7 @@ package com.ace.ui.setting.child {
 //			tipInfo.hasRune=(0 < tipInfo.runde);
 //			tipInfo.skillLv = 0;
 //			tipInfo.level=Core.me.info.level;
+			tipInfo.isPetSkill = isPetSkill;
 			if (tipInfo.hasRune) {
 				ToolTipManager.getInstance().showII([TipEnum.TYPE_SKILL, TipEnum.TYPE_RUNE], [tipInfo, tipInfo], PlayerEnum.DIR_S, new Point(0, 0), new Point(this.stage.mouseX + 15, this.stage.mouseY + 15));
 			} else {

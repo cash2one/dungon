@@ -9,14 +9,16 @@ package com.leyou.ui.dungeonTeam.childs {
 	import com.ace.manager.LibManager;
 	import com.ace.manager.UIManager;
 	import com.ace.ui.auto.AutoSprite;
-	import com.ace.ui.button.ButtonModel;
 	import com.ace.ui.button.children.CheckBox;
 	import com.ace.ui.button.children.NormalButton;
-	import com.ace.ui.button.event.ButtonEvent;
+	import com.ace.ui.dropMenu.children.ComboBox;
+	import com.ace.ui.dropMenu.event.DropMenuEvent;
 	import com.ace.ui.lable.Label;
+	import com.ace.utils.StringUtil;
 	import com.leyou.manager.PopupManager;
 	import com.leyou.manager.TimerManager;
 	import com.leyou.net.cmd.Cmd_CpTm;
+	import com.leyou.utils.FilterUtil;
 	import com.leyou.utils.PropUtils;
 	
 	import flash.events.Event;
@@ -27,6 +29,7 @@ package com.leyou.ui.dungeonTeam.childs {
 		private var enterBtn:NormalButton;
 		private var quitBtn:NormalButton;
 		private var autoStartCb:CheckBox;
+		private var autoStartCbb:ComboBox;
 		private var searchLbl:Label;
 		private var cpNameLbl:Label;
 
@@ -50,18 +53,29 @@ package com.leyou.ui.dungeonTeam.childs {
 			this.enterBtn=this.getUIbyID("enterBtn") as NormalButton;
 			this.quitBtn=this.getUIbyID("quitBtn") as NormalButton;
 			this.autoStartCb=this.getUIbyID("autoStartCb") as CheckBox;
+			this.autoStartCbb=this.getUIbyID("autoStartCbb") as ComboBox;
 			this.searchLbl=this.getUIbyID("searchLbl") as Label;
 			this.cpNameLbl=this.getUIbyID("cpNameLbl") as Label;
 
+			var data:Array=[];
+			data.push({label: StringUtil.substitute(PropUtils.getStringById(101413), [2]), uid: 2});
+			data.push({label: StringUtil.substitute(PropUtils.getStringById(101413), [3]), uid: 3});
+			data.push({label: StringUtil.substitute(PropUtils.getStringById(101413), [4]), uid: 4});
+
+			this.autoStartCbb.list.removeRenders();
+			this.autoStartCbb.list.addRends(data);
+			this.autoStartCbb.addEventListener(DropMenuEvent.Item_Selected, onItemClick);
+			
 			this.enterBtn.addEventListener(MouseEvent.CLICK, onClick);
 			this.quitBtn.addEventListener(MouseEvent.CLICK, onClick);
 			this.autoStartCb.addEventListener(MouseEvent.CLICK, onClick);
+			this.autoStartCbb.addEventListener(MouseEvent.CLICK, onClick);
 //			this.autoStartCb.addEventListener(ButtonEvent.Switch_Change, onCkClick);
 			this.searchLbl.addEventListener(MouseEvent.CLICK, onClick);
 			this.searchLbl.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
 			this.searchLbl.addEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
 			this.searchLbl.mouseEnabled=true;
-			
+
 			this.itemsList=new Vector.<DungeonTeam1PlayerBar>();
 
 			var playBar:DungeonTeam1PlayerBar;
@@ -76,6 +90,11 @@ package com.leyou.ui.dungeonTeam.childs {
 
 				playBar.visible=false;
 			}
+		}
+		
+		private function onItemClick(e:Event):void {
+			if (this.autoStartCb.isOn)
+				Cmd_CpTm.cmTeamCopyTeamAutoAdd(this.autoStartCbb.value.uid);
 		}
 
 		private function onMouseOver(e:MouseEvent):void {
@@ -103,7 +122,12 @@ package com.leyou.ui.dungeonTeam.childs {
 					}, null, false, "teamCopyQuit");
 					break;
 				case "autoStartCb":
-					Cmd_CpTm.cmTeamCopyTeamAutoAdd((this.auto == 0 ? 1 : 0));
+					if (this.autoStartCb.isOn) {
+						Cmd_CpTm.cmTeamCopyTeamAutoAdd(this.autoStartCbb.value.uid);
+						this.autoStartCbb.mouseChildren=this.autoStartCbb.mouseEnabled=true;
+						this.autoStartCbb.filters=[];
+					} else
+						Cmd_CpTm.cmTeamCopyTeamAutoAdd(0);
 					break;
 				case "searchLbl":
 					Cmd_CpTm.cmTeamCopyTeamFind();
@@ -118,7 +142,7 @@ package com.leyou.ui.dungeonTeam.childs {
 		private function exeTime(i:int):void {
 
 			if (this.etime - i > 0) {
-				this.searchLbl.htmlText="<font color='#cccccc'>"+PropUtils.getStringById(1681)+"(" + (this.etime - i) + ")</font>";
+				this.searchLbl.htmlText="<font color='#cccccc'>" + PropUtils.getStringById(1681) + "(" + (this.etime - i) + ")</font>";
 			} else {
 				TimerManager.getInstance().remove(exeTime);
 				this.searchLbl.styleSheet=FontEnum.DEFAULT_LINK_STYLE;
@@ -132,14 +156,28 @@ package com.leyou.ui.dungeonTeam.childs {
 		public function updateInfo(o:Object, lv:Boolean, count:Boolean):void {
 
 			if (o.hasOwnProperty("auto")) {
-				if (o.auto == 1)
+				if (o.auto > 0) {
 					this.autoStartCb.turnOn();
-				else
+					
+					if(this.auto!=o.auto)
+					this.autoStartCbb.list.selectByUid(o.auto);
+					
+					this.autoStartCbb.filters=[];
+					this.autoStartCbb.mouseChildren=this.autoStartCbb.mouseEnabled=true;
+
+				} else {
 					this.autoStartCb.turnOff();
+
+					this.autoStartCbb.filters=[FilterUtil.enablefilter];
+					this.autoStartCbb.mouseChildren=this.autoStartCbb.mouseEnabled=false;
+				}
 
 				this.auto=o.auto;
 			} else {
 				this.autoStartCb.turnOff();
+				
+				this.autoStartCbb.filters=[FilterUtil.enablefilter];
+				this.autoStartCbb.mouseChildren=this.autoStartCbb.mouseEnabled=false;
 			}
 
 			var team:Array;
@@ -158,7 +196,7 @@ package com.leyou.ui.dungeonTeam.childs {
 				this.cpNameLbl.text="" + cinfo.Dungeon_Name;
 
 			} else {
-				
+
 				this.autoStartCb.visible=false;
 				this.quitBtn.visible=false;
 				this.searchLbl.visible=false;

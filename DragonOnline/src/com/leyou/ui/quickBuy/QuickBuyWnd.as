@@ -296,6 +296,13 @@ package com.leyou.ui.quickBuy
 			}
 			if((itemInfo && !itemInfo.select) && (itemInfoB && !itemInfoB.select)){
 				showItem(itemInfo);
+				ybRBtn.turnOn();
+				return;
+			}
+			if((null == itemInfo) && (null != itemInfoB)){
+				showItem(itemInfoB);
+				bybRBtn.turnOn();
+				return;
 			}
 		}
 		
@@ -476,16 +483,20 @@ package com.leyou.ui.quickBuy
 				ybRBtn.turnOn();
 				itemInfo.relativeItem = itemInfoB;
 				currentItem = itemInfo;
+				showItem(currentItem);
+				ybRBtn.turnOn();
 			}
 			if(null != itemInfoB){
 				itemInfoB.relativeItem = itemInfo;
 				if(null == currentItem){
 					currentItem = itemInfoB;
+					showItem(currentItem);
+					bybRBtn.turnOn();
 				}
 			}
-			if(null != currentItem){
-				showItem(currentItem);
-			}
+//			if(null != currentItem){
+//				showItem(currentItem);
+//			}
 		}
 	}
 }

@@ -6,7 +6,8 @@ package com.ace.ui.accordion {
 	import com.ace.ui.lable.Label;
 	import com.ace.ui.menu.data.MenuInfo;
 	import com.ace.ui.scrollPane.children.ScrollPane;
-	
+
+	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
@@ -48,15 +49,20 @@ package com.ace.ui.accordion {
 		 */
 		private var _states:Boolean=false;
 
+		public var isSecond:Boolean=false;
+
 		public var menuVec:Vector.<MenuInfo>;
 		public var selectIndex:int=-1;
 
-		public function AccordionItem(index:int=0, _w:Number=200, _h:Number=0, _titleHeight:Number=0) {
+
+
+		public function AccordionItem(index:int=0, _w:Number=200, _h:Number=0, _titleHeight:Number=0, issencord:Boolean=false) {
 			super();
 			this.index=index;
 			this._w=_w;
 			this._h=_h;
 			this._titleH=_titleHeight;
+			this.isSecond=issencord;
 			this.init();
 
 			this.mouseChildren=true;
@@ -65,9 +71,23 @@ package com.ace.ui.accordion {
 
 		private function init():void {
 
-			var rect:Rectangle=new Rectangle(12, 26, 233, 22);
-			_lb=new LabelButton(LibManager.getInstance().getImg("ui/other/button_type1.png"), rect, _w, _titleH, "accordion_ttt", true);
+			var rect:Rectangle;
+			var res:String;
+			var gname:String;
+			if (this.isSecond) {
+				res="ui/alchemy/btn_2.png";
+				rect=new Rectangle(0, 0, 190, 75);
+				gname="accordion_tttt";
+			} else {
+				res="ui/other/button_type1.png";
+				rect=new Rectangle(12, 26, 233, 22);
+				gname="accordion_ttt";
+			}
+
+
+			_lb=new LabelButton(LibManager.getInstance().getImg(res), rect, _w, _titleH, gname, true);
 			this.addChild(_lb);
+			_lb.CrossVisible=isSecond;
 
 			_continer=new Sprite();
 			this.addChild(_continer);
@@ -90,10 +110,10 @@ package com.ace.ui.accordion {
 		}
 
 		/**
-		 * 从第一个添加 
+		 * 从第一个添加
 		 * @param continer
-		 * 
-		 */		
+		 *
+		 */
 		public function addItemUnshift(continer:DisplayObjectContainer):void {
 			_scrollPanel.addToPane(continer);
 			_itemsVec.unshift(continer);
@@ -101,21 +121,21 @@ package com.ace.ui.accordion {
 		}
 
 		/**
-		 * 更新到位置 
+		 * 更新到位置
 		 * @param index
 		 * @param continer
-		 * 
-		 */		
-		public function addItemAt(index:int,continer:DisplayObjectContainer):void {
+		 *
+		 */
+		public function addItemAt(index:int, continer:DisplayObjectContainer):void {
 			_scrollPanel.addToPane(continer);
-			_itemsVec.splice(index,0,continer);
+			_itemsVec.splice(index, 0, continer);
 			this.updatePs();
 		}
-		
+
 		/**
-		 *更新位置 
-		 * 
-		 */		
+		 *更新位置
+		 *
+		 */
 		public function updatePs():void {
 			var con:DisplayObjectContainer;
 			for (var i:int=0; i < this._itemsVec.length; i++) {
@@ -133,8 +153,10 @@ package com.ace.ui.accordion {
 				this.removeChildAt(0);
 
 			var rect:Rectangle=new Rectangle(12, 26, 233, 22);
-			_lb=new LabelButton(LibManager.getInstance().getImg("ui/other/button_type1.png"), rect, _w, _titleH, "accordion_ttt", true);
+			var res:String=(this.isSecond ? "ui/alchemy/btn_2.png" : "ui/other/button_type1.png");
+			_lb=new LabelButton(LibManager.getInstance().getImg(res), rect, _w, _titleH, "accordion_ttt", true);
 			this.addChild(_lb);
+			_lb.CrossVisible=this.isSecond;
 
 			_continer=new Sprite();
 			this.addChild(_continer);
@@ -174,8 +196,9 @@ package com.ace.ui.accordion {
 			this.removeChild(this._lb);
 
 			var rect:Rectangle=new Rectangle(12, 26, 233, 22);
-			_lb=new LabelButton(LibManager.getInstance().getImg("ui/other/button_type1.png"), rect, _w, _titleH, "accordion_ttt", true);
+			_lb=new LabelButton(LibManager.getInstance().getImg((this.isSecond ? "ui/alchemy/btn_2_up.png" : "ui/other/button_type1.png")), rect, _w, _titleH, "accordion_ttt", true);
 			this.addChild(_lb);
+			_lb.CrossVisible=this.isSecond;
 
 			_continer.y=_lb.height + 2;
 		}
@@ -185,7 +208,7 @@ package com.ace.ui.accordion {
 			for each (con in this._itemsVec) {
 				_scrollPanel.addToPane(con);
 			}
-			
+
 			this._scrollPanel.scrollTo(0);
 			DelayCallManager.getInstance().add(this, this._scrollPanel.updateUI, "updateUI", 4);
 		}
@@ -278,12 +301,23 @@ package com.ace.ui.accordion {
 		public function set states(v:Boolean):void {
 			this._states=v;
 			this._continer.visible=v;
+			
+			if (v){
+				this._lb.turnOn(false);
+			}else{
+				this._lb.turnOff(false);
+			}
+
+		}
+
+		public function getItemList(i:int):DisplayObjectContainer {
+			return this._itemsVec[i];
 		}
 
 		public function get states():Boolean {
 			return this._states;
 		}
-
+		
 		/**
 		 * 获取高
 		 * @return

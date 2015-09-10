@@ -1,7 +1,10 @@
 package com.leyou.ui.pet {
 	import com.ace.gameData.manager.DataManager;
 	import com.ace.gameData.manager.TableManager;
+	import com.ace.gameData.table.TPetAttackInfo;
+	import com.ace.gameData.table.TPetFriendlyInfo;
 	import com.ace.gameData.table.TPetInfo;
+	import com.ace.gameData.table.TPetStarInfo;
 	import com.ace.manager.LibManager;
 	import com.ace.ui.auto.AutoWindow;
 	import com.ace.ui.button.children.RadioButton;
@@ -141,6 +144,20 @@ package com.leyou.ui.pet {
 			}
 		}
 		
+		public function playLvUpEffect(type:int):void{
+			switch(type){
+				case 1:
+					petImg.palyStarLvUpEffect();
+					break;
+				case 2:
+					petImg.palyLvUpEffect();
+					break;
+				case 3:
+					petImg.palyQmLvUpEffect();
+					break;
+			}
+		}
+		
 		private function initAllPet():void{
 			clearPetListPanel();
 			var index:int = 0;
@@ -148,7 +165,7 @@ package com.leyou.ui.pet {
 			var petDic:Object = TableManager.getInstance().getPetDic();
 			for(var key:String in petDic){
 				var petInfo:TPetInfo = petDic[key];
-				if(null != petInfo){
+				if(null != petInfo && petInfo.visible){
 					try{
 						var petRender:PetListRender = petList[index];
 					}catch (error:RangeError){
@@ -167,6 +184,8 @@ package com.leyou.ui.pet {
 					}
 				}
 			}
+			petListPanel.scrollTo(0);
+			petListPanel.updateUI();
 		}
 		
 		protected function onItemClick(event:MouseEvent):void{
@@ -204,23 +223,46 @@ package com.leyou.ui.pet {
 				petRender.y = 80*n;
 				petListPanel.addToPane(petRender);
 			}
+			petListPanel.scrollTo(0);
+			petListPanel.updateUI();
 		}
 		
 		private function showPetInfo(petTId:int):void{
 			if(DataManager.getInstance().petData.containsPet(petTId)){
 				var petEntryData:PetEntryData = DataManager.getInstance().petData.getPetById(petTId);
-				if(petEntryData.isInit){
-					showPetCard(petTId);
-					showPetPage(petTId);
-				}else{
-					Cmd_Pet.cm_PET_I(petTId);
-				}
-				petBar.turnToTab(1);
+//				if(petEntryData.isInit){
+//					showPetCard(petTId);
+//					showPetPage(petTId);
+//				}else{
+				Cmd_Pet.cm_PET_I(petTId);
+				Cmd_Pet.cm_PET_T();
+//				}
 				petBar.setTabVisible(0, false);
 				petBar.setTabVisible(1, true);
 				petBar.setTabVisible(2, true);
 				petBar.setTabVisible(3, true);
 				petBar.setTabVisible(4, true);
+				
+				var petEntry:PetEntryData = DataManager.getInstance().petData.getPetById(petTId);
+				
+				var npetStarInfo:TPetStarInfo = TableManager.getInstance().getPetStarLvInfo(petTId, petEntry.starLv + 1);
+				petBar.setTabActive(1, (null != npetStarInfo));
+				
+				var nPetLvInfo:TPetAttackInfo = TableManager.getInstance().getPetLvInfo(petEntry.starLv, petEntry.level+ 1);
+				petBar.setTabActive(2, (null != nPetLvInfo));
+				
+				var petQmInfo:TPetFriendlyInfo = TableManager.getInstance().getPetFriendlyInfo(petEntry.qmdLv + 1);
+				petBar.setTabActive(3, (null != petQmInfo));
+				
+				if(null != npetStarInfo){
+					petBar.turnToTab(1);
+				}else if(null != nPetLvInfo){
+					petBar.turnToTab(2);
+				}else if(null != petQmInfo){
+					petBar.turnToTab(3);
+				}else{
+					petBar.turnToTab(4);
+				}
 			}else{
 				petBar.turnToTab(0);
 				petBar.setTabVisible(0, true);
@@ -311,8 +353,21 @@ package com.leyou.ui.pet {
 		}
 		
 		public function updatePetInfo():void{
+			if(null == selectPet) return;
 			showPetCard(selectPet.petTId);
 			showPetPage(selectPet.petTId);
+		}
+		
+		public function flyQmGift():void{
+			petImg.flyQmGift();
+		}
+		
+		public override function get width():Number{ 
+			return 898;
+		}
+		
+		public override function get height():Number{ 
+			return 539;
 		}
 	}
 }

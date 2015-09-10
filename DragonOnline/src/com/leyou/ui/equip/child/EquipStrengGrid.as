@@ -14,7 +14,7 @@ package com.leyou.ui.equip.child {
 	import com.leyou.data.tips.TipsInfo;
 	import com.leyou.ui.backpack.child.GridModel;
 	import com.leyou.utils.FilterUtil;
-
+	
 	import flash.display.Shape;
 	import flash.geom.Point;
 
@@ -563,6 +563,11 @@ package com.leyou.ui.equip.child {
 
 			if (EquipStrengGrid.selectStateII == this)
 				this.setSelectState(true);
+		}
+		
+		public function setEnable(v:Boolean):void{
+			this.mouseChildren=v;
+			this.mouseEnabled=v;
 		}
 
 	}

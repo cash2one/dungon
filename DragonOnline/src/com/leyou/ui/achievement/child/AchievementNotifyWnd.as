@@ -10,6 +10,7 @@ package com.leyou.ui.achievement.child
 	import com.ace.ui.img.child.Image;
 	import com.ace.ui.lable.Label;
 	import com.greensock.TweenLite;
+	import com.greensock.TweenMax;
 	import com.leyou.data.achievement.AchievementEraData;
 	import com.leyou.enum.ConfigEnum;
 	import com.leyou.utils.PlayerUtil;
@@ -94,7 +95,7 @@ package com.leyou.ui.achievement.child
 				rightImg.x = currentX + currentWidth;
 			}
 			alpha = 1;
-			DelayCallManager.getInstance().add(this, tweenHide, "achievement.notify", stage.frameRate*5);
+			TweenMax.delayedCall(2, tweenHide);
 		}
 		
 		public function tweenHide():void{
@@ -102,8 +103,8 @@ package com.leyou.ui.achievement.child
 		}
 		
 		protected function onEnterFrame(event:Event):void{
-			currentX -= 8;
-			currentWidth += 16;
+			currentX -= 16;
+			currentWidth += 32;
 			if(currentX <= 0){
 				removeEventListener(Event.ENTER_FRAME, onEnterFrame);
 				return;

@@ -6,7 +6,6 @@ package com.leyou.ui.copy
 	import com.ace.ui.auto.AutoSprite;
 	import com.ace.ui.button.children.ImgButton;
 	import com.leyou.enum.TaskEnum;
-	import com.leyou.net.cmd.Cmd_SCP;
 	import com.leyou.ui.copy.child.CopyItem;
 	import com.leyou.ui.copy.child.CopyRewardGrid;
 	
@@ -83,10 +82,18 @@ package com.leyou.ui.copy
 //			UIManager.getInstance().taskTrack.setGuideViewhide(TaskEnum.taskType_CopySuccess);
 //		}
 		
-		public override function hide():void{
-			super.hide();
+		public function showGuide():void{
+			GuideManager.getInstance().showGuide(30, items[0].beginBtn);
+			GuideManager.getInstance().removeGuide(28);
+			GuideManager.getInstance().removeGuide(29);
+		}
+		
+//		public override function hide():void{
+//			super.hide();
+//		}
+		
+		public function removeGuide():void{
 			GuideManager.getInstance().removeGuide(30);
-			
 			UIManager.getInstance().taskTrack.setGuideView(TaskEnum.taskType_CopySuccess);
 		}
 		

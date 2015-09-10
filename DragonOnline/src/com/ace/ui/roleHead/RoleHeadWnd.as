@@ -10,11 +10,9 @@ package com.ace.ui.roleHead {
 	import com.ace.game.core.SceneCore;
 	import com.ace.game.proxy.SceneProxy;
 	import com.ace.gameData.buff.child.BuffInfo;
-	import com.ace.gameData.manager.DataManager;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.player.LivingInfo;
 	import com.ace.gameData.table.TBuffInfo;
-	import com.ace.loader.child.SwfLoader;
 	import com.ace.manager.EventManager;
 	import com.ace.manager.GuideManager;
 	import com.ace.manager.LibManager;
@@ -40,14 +38,13 @@ package com.ace.ui.roleHead {
 	import com.leyou.utils.PlayerUtil;
 	import com.leyou.utils.PropUtils;
 	import com.leyou.utils.StringUtil_II;
-
+	
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 	import flash.events.TextEvent;
 	import flash.geom.Point;
 	import flash.system.System;
 	import flash.text.StyleSheet;
-	import flash.utils.getTimer;
 
 	public class RoleHeadWnd extends AutoSprite implements IMenu {
 		//		private static const HP_WIDTH_MAX:int = 190;
@@ -107,9 +104,11 @@ package com.ace.ui.roleHead {
 //		private var evtInfo:MouseEventInfo;
 		private var modeBtn:ImgButton;
 		private var pfVipImg:Image;
+		private var ifunImg:Image;
 		private var pfImgContainer:Sprite;
 		private var style:StyleSheet;
 		private var copyArr:Vector.<MenuInfo>;
+		private var icons:Vector.<Image>;
 
 //		private var giftBtn:ImgButton;
 //		private var giftSwf:SwfLoader;
@@ -189,20 +188,31 @@ package com.ace.ui.roleHead {
 //			evtInfo.onMouseOut = onMouseOut;
 			vipImg=getUIbyID("vipImg") as Image;
 			teamImg=getUIbyID("teamImg") as Image;
+			ifunImg=getUIbyID("ifunImg") as Image;
 //			guildImg=getUIbyID("guildImg") as Image;
 			doubleImg=getUIbyID("doubleImg") as Image;
 			bloodImg=getUIbyID("bloodImg") as Image;
 			freshImg=getUIbyID("freshImg") as Image;
 			safeImg=getUIbyID("safeImg") as Image;
 			worldExpImg=getUIbyID("worldExpImg") as Image;
+			icons = new Vector.<Image>();
 			packContainer(vipImg);
-			packContainer(teamImg);
+			icons.push(vipImg);
+			packContainer(ifunImg);
+			icons.push(ifunImg);
 //			packContainer(guildImg);
-			packContainer(doubleImg);
-			packContainer(bloodImg);
-			packContainer(freshImg);
-			packContainer(safeImg);
 			packContainer(worldExpImg);
+			icons.push(worldExpImg);
+			packContainer(doubleImg);
+			icons.push(doubleImg);
+			packContainer(teamImg);
+			icons.push(teamImg);
+			packContainer(bloodImg);
+			icons.push(bloodImg);
+			packContainer(freshImg);
+			icons.push(freshImg);
+			packContainer(safeImg);
+			icons.push(safeImg);
 //			MouseManagerII.getInstance().addEvents(vipImg, evtInfo);
 //			MouseManagerII.getInstance().addEvents(teamImg, evtInfo);
 //			MouseManagerII.getInstance().addEvents(guildImg, evtInfo);
@@ -212,6 +222,7 @@ package com.ace.ui.roleHead {
 //			MouseManagerII.getInstance().addEvents(safeImg, evtInfo);
 			activeIcon("vipImg", false);
 			activeIcon("teamImg", false);
+			activeIcon("ifunImg", false);
 			activeIcon("guildImg", false);
 			activeIcon("doubleImg", false);
 			activeIcon("bloodImg", false);
@@ -219,6 +230,7 @@ package com.ace.ui.roleHead {
 			activeIcon("safeImg", false);
 			activeIcon("worldExpImg", false);
 			pfVipImg.visible=false;
+			resetPosition();
 
 			if (!Core.PAY_OPEN) {
 				payBtn.setActive(false, 1, true);
@@ -324,6 +336,19 @@ package com.ace.ui.roleHead {
 			img.parent.addChild(container);
 			container.addChild(img);
 		}
+		
+		public function resetPosition():void{
+			var index:int;
+			var l:int = icons.length;
+			for(var n:int = 0; n < l; n++){
+				var spt:Image = icons[n];
+				if(null != spt && spt.visible){ 
+					spt.x = 91 + 31*index;
+					spt.y = 118;
+					index++;
+				}
+			}
+		}
 
 		private function onMouseOut(event:MouseEvent):void {
 //			trace("--------------------on mouse out target name = "+ event.target.name);
@@ -384,6 +409,9 @@ package com.ace.ui.roleHead {
 						wexpAdd=values[0];
 					}
 					break;
+				case "ifunImg":
+					ifunImg.filters=value ? null : [FilterEnum.enable];
+					break;
 			}
 		}
 
@@ -433,10 +461,18 @@ package com.ace.ui.roleHead {
 			} else {
 				activeIcon("safeImg", false);
 			}
+			// 平台VIPbuff
+			bInfo=null;
+			bInfo=Core.me.info.buffsInfo.getBuff(ConfigEnum.buff1);
+			if (null != bInfo) {
+				activeIcon("ifunImg", true);
+			} else {
+				activeIcon("ifunImg", false);
+			}
 		}
 
 		private function onPkAttack():void {
-			GuideManager.getInstance().showGuide(7, UIManager.getInstance().roleHeadWnd);
+			GuideManager.getInstance().showGuide(7, modeBtn);
 		}
 
 //		// 更新翅膀信息
@@ -564,6 +600,10 @@ package com.ace.ui.roleHead {
 					} else {
 						content=StringUtil.substitute(content, wexpAdd);
 					}
+					break;
+				case "ifunImg":
+					id=(null != ifunImg.filters && 0 != ifunImg.filters.length) ? 10038 : 10039;
+					content=TableManager.getInstance().getSystemNotice(id).content;
 					break;
 				default:
 					break;

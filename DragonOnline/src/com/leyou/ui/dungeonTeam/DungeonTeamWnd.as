@@ -1,10 +1,12 @@
 package com.leyou.ui.dungeonTeam {
 
 	import com.ace.config.Core;
+	import com.ace.enum.SceneEnum;
 	import com.ace.enum.UIEnum;
 	import com.ace.enum.WindowEnum;
 	import com.ace.gameData.manager.MapInfoManager;
 	import com.ace.gameData.manager.TableManager;
+	import com.ace.manager.GuideManager;
 	import com.ace.manager.LayerManager;
 	import com.ace.manager.LibManager;
 	import com.ace.manager.UILayoutManager;
@@ -12,6 +14,7 @@ package com.leyou.ui.dungeonTeam {
 	import com.ace.ui.auto.AutoWindow;
 	import com.ace.ui.tabbar.TabbarModel;
 	import com.ace.ui.tabbar.children.TabBar;
+	import com.greensock.TweenLite;
 	import com.leyou.enum.ConfigEnum;
 	import com.leyou.manager.PopupManager;
 	import com.leyou.net.cmd.Cmd_BCP;
@@ -24,7 +27,7 @@ package com.leyou.ui.dungeonTeam {
 	import com.leyou.ui.dungeonTeam.childs.DungeonTeamBtn;
 	import com.leyou.ui.dungeonTeam.childs.DungeonTeamCopy;
 	import com.leyou.ui.expCopy.ExpCopyWnd;
-
+	
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 
@@ -95,13 +98,13 @@ package com.leyou.ui.dungeonTeam {
 			dungeonTeamTabbar.addToTab(bossCopy, 1);
 			expCopy=new ExpCopyWnd();
 			dungeonTeamTabbar.addToTab(expCopy, 4);
-			
+
 			dungeonTeamTabbar.setTabVisible(1, false);
 			dungeonTeamTabbar.setTabVisible(4, false);
 			if (Core.me.info.level >= ConfigEnum.BossCopyOpenLevel) {
 				dungeonTeamTabbar.setTabVisible(1, true);
 			}
-			if(Core.me.info.level >= ConfigEnum.ExpCopyOpenLevel){
+			if (Core.me.info.level >= ConfigEnum.ExpCopyOpenLevel) {
 				dungeonTeamTabbar.setTabVisible(4, true);
 			}
 			//------------------------------------------------------------
@@ -110,13 +113,20 @@ package com.leyou.ui.dungeonTeam {
 		private function onClick(e:MouseEvent):void {
 			if (!TableManager.getInstance().getGuildCopyExistBySceneIDAndType(int(MapInfoManager.getInstance().sceneId), 7))
 				UILayoutManager.getInstance().open_II(WindowEnum.DUNGEON_TEAM);
+
+			TweenLite.delayedCall(0.6, function():void {
+				setTabIndex(2);
+			});
+
+
 		}
 
 		private function onChange(e:Event):void {
 
-			if (this.dungeonTeamTabbar.turnOnIndex == 1) {
+			if (this.dungeonTeamTabbar.turnOnIndex != 2) {
 				PopupManager.closeConfirm("teamCopyPassword");
-			}
+			} else
+				GuideManager.getInstance().removeGuide(117);
 
 			//------------------------------------------------------------
 			// WFH添加
@@ -126,37 +136,53 @@ package com.leyou.ui.dungeonTeam {
 					break;
 				case 1:
 					Cmd_BCP.cm_BCP_I();
+					GuideManager.getInstance().removeGuide(116);
+					break;
+				case 4:
+					GuideManager.getInstance().removeGuide(118);
 					break;
 			}
- 
+
 			//------------------------------------------------------------
 		}
-		
+
 		//------------------------------------------------------------
 		// WFH添加
-		public function updatePage():void{
+		public function updatePage():void {
 			dungeonTeamTabbar.setTabVisible(1, false);
 			dungeonTeamTabbar.setTabVisible(4, false);
 			if (Core.me.info.level >= ConfigEnum.BossCopyOpenLevel) {
 				dungeonTeamTabbar.setTabVisible(1, true);
 			}
-			if(Core.me.info.level >= ConfigEnum.ExpCopyOpenLevel){
+			if (Core.me.info.level >= ConfigEnum.ExpCopyOpenLevel) {
 				dungeonTeamTabbar.setTabVisible(4, true);
 			}
 		}
+
 		//------------------------------------------------------------
 
 		override public function show(toTop:Boolean=true, $layer:int=1, toCenter:Boolean=true):void {
 			super.show(toTop, $layer, toCenter);
 			Cmd_SCP.cm_SCP_I();
+			//------------------------------------------------------------
+			// WFH添加
+			storyCopy.showGuide();
+			bossCopy.removeGuide();
+			expCopy.removeGuide();
+			GuideManager.getInstance().showGuide(116, dungeonTeamTabbar.getTabButton(1));
+			GuideManager.getInstance().showGuide(118, dungeonTeamTabbar.getTabButton(4));
+			//------------------------------------------------------------
 
 			if (Core.me.info.level >= ConfigEnum.TeamDungeon1) {
 				this.dungeonTeamTabbar.setTabVisible(2, true)
+				GuideManager.getInstance().showGuide(117, this.dungeonTeamTabbar.getTabButton(2));
 			} else {
 				this.dungeonTeamTabbar.setTabVisible(2, false)
 			}
 
 			this.dungeonTeamTabbar.setTabVisible(3, false);
+
+			GuideManager.getInstance().removeGuide(111);
 		}
 
 		override public function sendOpenPanelProtocol(... parameters):void {
@@ -203,7 +229,9 @@ package com.leyou.ui.dungeonTeam {
 
 				if (!this.leftBtn.visible) {
 					this.resize();
-					this.leftBtn.visible=true;
+
+					if (MapInfoManager.getInstance().type == SceneEnum.SCENE_TYPE_PTCJ)
+						this.leftBtn.visible=true;
 				}
 
 			} else {
@@ -244,6 +272,11 @@ package com.leyou.ui.dungeonTeam {
 
 			UIManager.getInstance().hideWindow(WindowEnum.DUNGEON_TEAM_CREATE);
 
+			expCopy.removeGuide();
+			bossCopy.removeGuide();
+			storyCopy.removeGuide();
+
+			GuideManager.getInstance().removeGuide(117);
 		}
 
 		public function resize():void {

@@ -30,7 +30,7 @@ package com.leyou.ui.skill {
 	import com.leyou.ui.skill.childs.SkillBar;
 	import com.leyou.ui.tips.TipsAchievementTip;
 	import com.leyou.utils.PropUtils;
-	
+
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
@@ -102,13 +102,13 @@ package com.leyou.ui.skill {
 		override public function show(toTop:Boolean=true, $layer:int=1, toCenter:Boolean=true):void {
 //			NetGate.getInstance().send("help");
 
-			if (6 == Core.me.info.level)
-				GuideManager.getInstance().showGuide(37, this);
-
 			GuideManager.getInstance().removeGuide(63);
 			GuideManager.getInstance().removeGuide(35);
 
 			super.show(toTop, $layer, toCenter);
+			
+			if (15 == MyInfoManager.getInstance().skilldata.skillItems[1][2])
+				GuideManager.getInstance().showGuide(37, this.renderArr[1].fuwenImg2);
 
 //			if (!UIManager.getInstance().isCreate(WindowEnum.RUNE))
 //				UIManager.getInstance().creatWindow(WindowEnum.RUNE);
@@ -195,7 +195,9 @@ package com.leyou.ui.skill {
 
 			if (Core.me.info.level >= ConfigEnum.skill4)
 				this.skllTabbar.getTabButton(1).setToolTip("");
-
+			
+			if (this.visible && 15 == MyInfoManager.getInstance().skilldata.skillItems[1][2])
+				GuideManager.getInstance().showGuide(37, this.renderArr[1].fuwenImg2);
 		}
 
 		public function updateSkill(o:Object):void {
@@ -330,28 +332,28 @@ package com.leyou.ui.skill {
 
 			return sk[k < 0 ? 0 : k];
 		}
-		
+
 		/**
-		 * 
+		 *
 		 * @param skid
-		 * @return 
-		 * 
-		 */		
+		 * @return
+		 *
+		 */
 		public function getSkillArrByID(skid:int):Array {
 			var skl:Array=MyInfoManager.getInstance().skilldata.skillItems;
-			
+
 			var k:int;
 			var key:String;
 			for (key in skl) {
 				if (int(skl[key][1]) == skid) {
-					 return skl[key];
+					return skl[key];
 				}
 			}
-			
+
 			return [];
 		}
-		
-		
+
+
 
 		public function showGetPanel(o:Object):void {
 			this.skillOb=new TipsSkillObWnd();

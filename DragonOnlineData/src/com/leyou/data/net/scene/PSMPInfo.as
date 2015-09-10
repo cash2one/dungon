@@ -66,9 +66,10 @@ package com.leyou.data.net.scene {
 			tmpArr=tmpStr.split(",");
 
 			fInfo.clear();
-			if (tmpArr[0] != 0) {
-				fInfo.suit=tmpArr[0];
-			} else {
+//			if (tmpArr[0] != 0) {
+//				fInfo.suit=tmpArr[0];
+//			} else {
+				fInfo.vmAvatar=tmpArr[0];
 				fInfo.mount=tmpArr[4];
 				if (fInfo.mount == 0) {
 					info.isOnMount=false;
@@ -82,7 +83,7 @@ package com.leyou.data.net.scene {
 					fInfo.mountWing=PnfUtil.realWingId(tmpArr[3], true, info.sex, info.profession);
 					fInfo.autoNormalInfo(true, info.profession, info.sex);
 				}
-			}
+//			}
 			info.equipLv=tmpArr[5];
 			info.equipColor=tmpArr[6];
 
@@ -142,14 +143,14 @@ package com.leyou.data.net.scene {
 			tmpStr=tmpStr.substr(1);
 			tmpArr=tmpStr.split(",");
 			info.vipEquipId=tmpArr[0];
-			
+
 			//X
 			tmpStr=arr[14];
 			tmpStr=tmpStr.substr(1);
 			tmpArr=tmpStr.split(",");
 			info.pfVipType=tmpArr[0];
 			info.pfVipLv=tmpArr[1];
-			
+
 			//Z
 			tmpStr=arr[15];
 			tmpStr=tmpStr.substr(1);

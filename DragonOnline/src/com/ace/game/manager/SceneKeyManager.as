@@ -43,7 +43,7 @@ package com.ace.game.manager {
 		override public function setup():void {
 			super.setup();
 			var arr:Array=[Keyboard.NUMBER_1, Keyboard.NUMBER_2, Keyboard.NUMBER_3, Keyboard.NUMBER_4, //
-				Keyboard.Q, Keyboard.W, Keyboard.E,Keyboard.NUMBER_8];
+						Keyboard.NUMBER_5, Keyboard.NUMBER_6, Keyboard.NUMBER_7,Keyboard.NUMBER_8];
 
 
 			for (var i:int=0; i < arr.length; i++) {
@@ -120,11 +120,12 @@ package com.ace.game.manager {
 
 				this.isDownArr[evt.keyCode]=true;
 
-				if ((Keyboard.NUMBER_1 <= evt.keyCode && evt.keyCode <= Keyboard.NUMBER_5) || evt.keyCode == Keyboard.NUMBER_8) {
-					UIManager.getInstance().toolsWnd.useGrid(num, true);
-				} else if (Keyboard.Q == evt.keyCode || Keyboard.W == evt.keyCode || Keyboard.E == evt.keyCode) {
+				if ((Keyboard.NUMBER_1 <= evt.keyCode && evt.keyCode <= Keyboard.NUMBER_7) || evt.keyCode == Keyboard.NUMBER_8) {
 					UIManager.getInstance().toolsWnd.useGrid(num, true);
 				}
+//				} else if (Keyboard.Q == evt.keyCode || Keyboard.W == evt.keyCode || Keyboard.E == evt.keyCode) {
+//					UIManager.getInstance().toolsWnd.useGrid(num, true);
+//				}
 
 			} else {
 
@@ -135,11 +136,13 @@ package com.ace.game.manager {
 
 				var skillId:int=-1;
 
-				if ((Keyboard.NUMBER_1 <= evt.keyCode && evt.keyCode <= Keyboard.NUMBER_5) || evt.keyCode == Keyboard.NUMBER_8) {
-					skillId=UIManager.getInstance().toolsWnd.useGrid(num);
-				} else if (Keyboard.Q == evt.keyCode || Keyboard.W == evt.keyCode || Keyboard.E == evt.keyCode) {
+				if ((Keyboard.NUMBER_1 <= evt.keyCode && evt.keyCode <= Keyboard.NUMBER_7) || evt.keyCode == Keyboard.NUMBER_8) {
 					skillId=UIManager.getInstance().toolsWnd.useGrid(num);
 				}
+				
+//				} else if (Keyboard.Q == evt.keyCode || Keyboard.W == evt.keyCode || Keyboard.E == evt.keyCode) {
+//					skillId=UIManager.getInstance().toolsWnd.useGrid(num);
+//				}
 
 				//技能：条件满足
 				if (skillId != -1 /*&& MagicUtil.conditionIsSatisfied(skillId)*/) {

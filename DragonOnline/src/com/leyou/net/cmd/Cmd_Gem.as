@@ -8,7 +8,7 @@ package com.leyou.net.cmd {
 
 
 		public static function sm_Gem_I(o:Object):void {
-			trace(o)
+//			trace(o)
 
 			if (o.hasOwnProperty("name")) {
 				UIManager.getInstance().otherPlayerWnd.updateGemInfo(o);

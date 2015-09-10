@@ -1,6 +1,7 @@
 package com.leyou.ui.missionMarket
 {
 	import com.ace.gameData.manager.DataManager;
+	import com.ace.manager.GuideManager;
 	import com.ace.manager.LibManager;
 	import com.ace.manager.TimeManager;
 	import com.ace.ui.auto.AutoWindow;
@@ -51,6 +52,7 @@ package com.leyou.ui.missionMarket
 			if(marketSingleRender.visible){
 				Cmd_TaskMarket.cm_TaskMarket_L(marketRender.currentType);
 			}
+			GuideManager.getInstance().removeGuide(108);
 		}
 		
 		public override function hide():void{
@@ -85,6 +87,7 @@ package com.leyou.ui.missionMarket
 			var data:MissionMarketData = DataManager.getInstance().missionMarketData;
 			marketRender.updateInfo(data);
 			marketSingleRender.updateInfo(marketRender.currentType);
+			refreshTime();
 		}
 	}
 }

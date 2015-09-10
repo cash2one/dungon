@@ -220,6 +220,7 @@ package com.ace.game.scene.ui.child {
 						titles=new Vector.<TitleRender>();
 					}
 					var tr:TitleRender=new TitleRender();
+					tr.disableMouse();
 					tr.updateInfo(tInfo);
 					titles.push(tr);
 					addChild(tr);

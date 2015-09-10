@@ -19,6 +19,7 @@ package com.ace.game.scene.player {
 	import com.ace.gameData.manager.SettingManager;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.manager.EventManager;
+	import com.ace.manager.KeysManager;
 	import com.ace.manager.UIManager;
 	import com.ace.tools.FPS;
 	import com.ace.ui.setting.AssistWnd;
@@ -27,7 +28,9 @@ package com.ace.game.scene.player {
 	import com.leyou.net.cmd.Cmd_Attack;
 	import com.leyou.net.cmd.Cmd_Scene;
 
+	import flash.events.KeyboardEvent;
 	import flash.geom.Point;
+	import flash.ui.Keyboard;
 	import flash.utils.getTimer;
 
 	public class MyPlayer extends MyPlayerModel {
@@ -107,6 +110,18 @@ package com.ace.game.scene.player {
 		}
 
 		override public function autoMagic():Boolean {
+			if (this.info.isOnMount && !MapInfoManager.getInstance().isNeedMount) {
+				this.info.clearPath();
+				this.info.clearUseMageicState();
+				this.info.clearTargetTile();
+				KeysManager.getInstance().disPatchEvent(Keyboard.X, KeyboardEvent.KEY_UP);
+				return true;
+			}
+
+			if (!this.info.isOnMount && MapInfoManager.getInstance().isNeedMount) {
+				KeysManager.getInstance().disPatchEvent(Keyboard.X, KeyboardEvent.KEY_UP);
+			}
+
 			UIManager.getInstance().toolsWnd.updateCurrentCD(this.info.recordMagicId);
 //			trace("释放技能：id" + this.info.recordMagicId + "	坐标：" + SceneMouseManager.getInstance().mouseTile());
 			var receivePlayer:LivingModel=SceneCore.sceneModel.getPlayer(this.info.recordAttackTargetId);
@@ -118,6 +133,7 @@ package com.ace.game.scene.player {
 			} else {
 				pt=SceneUtil.tileToScreen(this.info.recordTargetTile.x, this.info.recordTargetTile.y);
 			}
+
 			Cmd_Attack.cm_3010(this.info.recordMagicId, this.info.recordAttackTargetId, pt.x, pt.y, this.x, this.y);
 			super.autoMagic();
 			return true;
@@ -197,7 +213,7 @@ package com.ace.game.scene.player {
 					}
 
 					item=UIManager.getInstance().gameScene.findItem(new Point(i, j));
-					if (!item || (!this.pInfo.isManualPickUp && LivingItemInfo(item.bInfo).throwOwnerId == this.info.id))
+					if (!item || !item.bInfo.isDead || (!this.pInfo.isManualPickUp && LivingItemInfo(item.bInfo).throwOwnerId == this.info.id))
 						continue;
 					if (item.bInfo.tId == 65535 || this.pInfo.isManualPickUp || //
 						LivingItemInfo(item.bInfo).quality >= SettingManager.getInstance().assitInfo.autoPickQuality) {
@@ -220,6 +236,7 @@ package com.ace.game.scene.player {
 					}
 				}
 			}
+//			this.pInfo.isManualPickUp=false;
 		}
 
 		//========================状态改变时，需要改变外部模块的===================================

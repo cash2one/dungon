@@ -1,20 +1,24 @@
 package com.leyou.ui.rank {
 	import com.ace.enum.PlayerEnum;
 	import com.ace.game.scene.player.big.BigAvatar;
+	import com.ace.game.scene.ui.child.TitleRender;
+	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.player.child.FeatureInfo;
+	import com.ace.gameData.table.TTitle;
 	import com.ace.loader.child.SwfLoader;
 	import com.ace.manager.LibManager;
 	import com.ace.ui.auto.AutoWindow;
 	import com.ace.ui.button.children.ImgButton;
 	import com.ace.ui.button.children.TabButton;
+	import com.ace.ui.img.child.Image;
 	import com.ace.ui.lable.Label;
 	import com.ace.utils.PnfUtil;
 	import com.leyou.net.cmd.Cmd_Rank;
+	import com.leyou.ui.rank.child.RankConsumeRender;
+	import com.leyou.ui.rank.child.RankHeroRender;
 	import com.leyou.ui.rank.child.RankListRender;
 	import com.leyou.ui.rank.child.RankLockRender;
-	import com.leyou.utils.StringUtil_II;
 	
-	import flash.events.Event;
 	import flash.events.MouseEvent;
 
 	public class RankWnd extends AutoWindow {
@@ -32,8 +36,12 @@ package com.leyou.ui.rank {
 		private var lvBtn:TabButton;
 
 		private var cfBtn:TabButton;
+		
+		private var heroBtn:TabButton;
+		
+		private var spendBtn:TabButton;
 
-		private var timeLbl:Label;
+//		private var timeLbl:Label;
 
 		private var applaudBtn:ImgButton;
 
@@ -53,11 +61,15 @@ package com.leyou.ui.rank {
 
 		private var jxRankPage:RankListRender;
 
-		private var currentPage:RankListRender;
+		private var currentPage:Object;
 
 		private var lvRankPage:RankListRender;
 
 		private var cfRankPage:RankListRender;
+		
+		private var heroRankePage:RankHeroRender;
+		
+		private var consumeRankPage:RankConsumeRender;
 
 		private var lockPage:RankLockRender;
 
@@ -72,6 +84,10 @@ package com.leyou.ui.rank {
 		private var countLbl:Label;
 		
 		private var effectMovie:SwfLoader;
+		
+		private var movieBgImg:Image;
+		
+		private var titleRender:TitleRender;
 
 		public function RankWnd() {
 			super(LibManager.getInstance().getXML("config/ui/rankWnd.xml"));
@@ -80,6 +96,10 @@ package com.leyou.ui.rank {
 
 //		(1总战斗力 2坐骑 3翅膀 4装备 5军衔 6等级 7财富)
 		private function init():void {
+			titleRender = new TitleRender();
+			titleRender.x = 594;
+			titleRender.y = 70;
+			pane.addChild(titleRender);
 			lockPage=new RankLockRender();
 			lockPage.x=150;
 			lockPage.y=47;
@@ -90,13 +110,16 @@ package com.leyou.ui.rank {
 			jxBtn=getUIbyID("jxBtn") as TabButton;
 			lvBtn=getUIbyID("lvBtn") as TabButton;
 			cfBtn=getUIbyID("cfBtn") as TabButton;
+			heroBtn=getUIbyID("heroBtn") as TabButton;
+			spendBtn=getUIbyID("spendBtn") as TabButton;
 			applaudBtn=getUIbyID("applaudBtn") as ImgButton;
 			disdainBtn=getUIbyID("disdainBtn") as ImgButton;
 			applaudLbl=getUIbyID("applaudLbl") as Label;
 			disdainLbl=getUIbyID("disdainLbl") as Label;
+			movieBgImg=getUIbyID("movieBgImg") as Image;
 
 			countLbl=getUIbyID("countLbl") as Label;
-			timeLbl=getUIbyID("timeLbl") as Label;
+//			timeLbl=getUIbyID("timeLbl") as Label;
 			rideMovie = new BigAvatar();
 			pane.addChild(rideMovie);
 			playerMovie=new BigAvatar();
@@ -129,6 +152,13 @@ package com.leyou.ui.rank {
 			cfRankPage=new RankListRender(7);
 			cfRankPage.visible=false;
 			pane.addChild(cfRankPage);
+			heroRankePage = new RankHeroRender();
+			heroRankePage.visible=false;
+			pane.addChild(heroRankePage);
+			consumeRankPage=new RankConsumeRender();
+			consumeRankPage.visible=false;
+			pane.addChild(consumeRankPage);
+			
 //			zdlRankPage.initByType();
 //			zbRankPage.initByType();
 //			zqRankPage.initByType();
@@ -144,10 +174,12 @@ package com.leyou.ui.rank {
 			zqBtn.addEventListener(MouseEvent.CLICK, onBtnClick);
 			cbBtn.addEventListener(MouseEvent.CLICK, onBtnClick);
 			jxBtn.addEventListener(MouseEvent.CLICK, onBtnClick);
+			heroBtn.addEventListener(MouseEvent.CLICK, onBtnClick);
 			applaudBtn.addEventListener(MouseEvent.CLICK, onBtnClick);
 			disdainBtn.addEventListener(MouseEvent.CLICK, onBtnClick);
-			lvBtn.turnOn();
-			selectPage(lvRankPage);
+			spendBtn.addEventListener(MouseEvent.CLICK, onBtnClick);
+			heroBtn.turnOn();
+			switchToHeroRank();
 		}
 
 		public function selectPageByType(type:int):void {
@@ -181,6 +213,12 @@ package com.leyou.ui.rank {
 					sPage=cfRankPage;
 					cfBtn.turnOn();
 					break;
+				case 8:
+					switchToSpendRank();
+					return;
+				case 100:
+					switchToHeroRank();
+					return;
 			}
 			selectPage(sPage);
 		}
@@ -195,6 +233,7 @@ package com.leyou.ui.rank {
 
 		public function palyerInfo(obj:Object):void {
 			var myCount:int = obj.mysc;
+			countLbl.visible = true;
 			countLbl.text=obj.mysc;
 			var pn:String=obj.name;
 			applaudLbl.text=obj.like;
@@ -203,7 +242,25 @@ package com.leyou.ui.rank {
 			disdainBtn.setActive(myCount > 0, 1, true);
 		}
 
-		public function showAvatar(avaStr:String, sex:int, pro:int):void {
+		public function showAvatar(avaStr:String, sex:int, pro:int, titleId:int=0):void {
+			if(null == avaStr){
+				titleRender.visible = false;
+				rideMovie.visible = false;
+				playerMovie.visible = false;
+				countLbl.visible = false;
+				applaudLbl.text = "0";
+				disdainLbl.text = "0";
+				applaudBtn.setActive(false, 1, true);
+				disdainBtn.setActive(false, 1, true);
+				return;
+			}
+			if(titleId > 0){
+				titleRender.visible = true;
+				var titleInfo:TTitle = TableManager.getInstance().getTitleByID(titleId);
+				titleRender.updateInfo(titleInfo);
+			}else{
+				titleRender.visible = false;
+			}
 			if (null == fInfo) {
 				fInfo=new FeatureInfo();
 			}
@@ -222,7 +279,7 @@ package com.leyou.ui.rank {
 //				big.playAct(PlayerEnum.ACT_STAND, 3);
 //				return;
 //			}
-			if(avaArr[0] != ""){
+			if(avaArr.length <= 1){
 				playerMovie.visible = false;
 				fInfo.suit = avaArr[0];
 				rideMovie.show(fInfo);
@@ -247,23 +304,26 @@ package com.leyou.ui.rank {
 
 		public override function show(toTop:Boolean=true, $layer:int=1, toCenter:Boolean=true):void {
 			super.show(toTop, $layer, toCenter);
-			addEventListener(Event.ENTER_FRAME, updateTime);
-		}
-
-		public override function hide():void {
-			super.hide();
-			if (hasEventListener(Event.ENTER_FRAME)) {
-				removeEventListener(Event.ENTER_FRAME, updateTime);
+			if(currentPage is RankConsumeRender){
+				currentPage.requestInfo();
 			}
+//			addEventListener(Event.ENTER_FRAME, updateTime);
 		}
 
-		protected function updateTime(event:Event):void {
-			var date:Date=new Date();
-			var rh:int=23 - date.hours;
-			var rm:int=60 - date.minutes;
-			var rs:int=60 - date.seconds;
-			timeLbl.text=StringUtil_II.lpad(rh + "", 2, "0") + ":" + StringUtil_II.lpad(rm + "", 2, "0") + ":" + StringUtil_II.lpad(rs + "", 2, "0");
-		}
+//		public override function hide():void {
+//			super.hide();
+//			if (hasEventListener(Event.ENTER_FRAME)) {
+//				removeEventListener(Event.ENTER_FRAME, updateTime);
+//			}
+//		}
+
+//		protected function updateTime(event:Event):void {
+//			var date:Date=new Date();
+//			var rh:int=23 - date.hours;
+//			var rm:int=60 - date.minutes;
+//			var rs:int=60 - date.seconds;
+//			timeLbl.text=StringUtil_II.lpad(rh + "", 2, "0") + ":" + StringUtil_II.lpad(rm + "", 2, "0") + ":" + StringUtil_II.lpad(rs + "", 2, "0");
+//		}
 
 		protected function onBtnClick(event:MouseEvent):void {
 			var sPage:RankListRender;
@@ -289,6 +349,12 @@ package com.leyou.ui.rank {
 				case "cfBtn":
 					sPage=cfRankPage;
 					break;
+				case "heroBtn":
+					switchToHeroRank();
+					return;
+				case "spendBtn":
+					switchToSpendRank();
+					return;
 				case "applaudBtn":
 					if ((null != playerName) && ("" != playerName)) {
 						Cmd_Rank.cm_RAK_A(1, playerName);
@@ -302,14 +368,81 @@ package com.leyou.ui.rank {
 			}
 			selectPage(sPage);
 		}
+		
+		private function switchToSpendRank():void{
+			spendBtn.turnOn();
+			titleRender.visible = true;
+			playerMovie.visible = true;
+			rideMovie.visible = true;
+			movieBgImg.visible = true;
+			if (currentPage != consumeRankPage) {
+				
+				playerMovie.visible=false;
+				if (contains(lockPage)) {
+					removeChild(lockPage);
+				}
+				
+				if (null == currentPage) {
+					currentPage=consumeRankPage;
+				} else if (currentPage.visible) {
+					currentPage.visible=false;
+					if(currentPage.hasOwnProperty("removeSwitchTimer")){
+						currentPage.removeSwitchTimer();
+					}
+					currentPage=consumeRankPage;
+				}
+				currentPage.visible=true;
+				currentPage.x=150;
+				currentPage.y=50;
+				currentPage.requestInfo();
+			}
+		}
+		
+		private function switchToHeroRank():void{
+			titleRender.visible = false;
+			playerMovie.visible = false;
+			rideMovie.visible = false;
+			movieBgImg.visible = false;
+			if (currentPage != heroRankePage) {
+				
+				playerMovie.visible=false;
+				if (contains(lockPage)) {
+					removeChild(lockPage);
+				}
+				
+				if (null == currentPage) {
+					currentPage=heroRankePage;
+				} else if (currentPage.visible) {
+					currentPage.visible=false;
+					if(currentPage.hasOwnProperty("removeSwitchTimer")){
+						currentPage.removeSwitchTimer();
+					}
+					currentPage=heroRankePage;
+				}
+				currentPage.visible=true;
+				currentPage.x=150;
+				currentPage.y=50;
+				currentPage.requestInfo();
+			}
+		}
 
 		protected function selectPage(page:RankListRender):void {
+			titleRender.visible = false;
+			playerMovie.visible = true;
+			rideMovie.visible = true;
+			movieBgImg.visible = true;
+			if(currentPage == heroRankePage){
+				currentPage.visible=false;
+				currentPage = null;
+			}
 			if (currentPage != page) {
 				if (null == currentPage) {
 					currentPage=page;
 				} else if (currentPage.visible) {
 					currentPage.visible=false;
-					currentPage.removeSwitchTimer();
+					if(currentPage.hasOwnProperty("removeSwitchTimer")){
+						currentPage.removeSwitchTimer();
+					}
 					currentPage=page;
 				}
 				currentPage.addSwitchTimer();
@@ -318,6 +451,14 @@ package com.leyou.ui.rank {
 				currentPage.y=47;
 				currentPage.requestInfo(1);
 			}
+		}
+		
+		public function updateConsumeInfo(obj:Object):void{
+			consumeRankPage.updateInfo(obj);
+		}
+		
+		public function updateHeroInfo(obj:Object):void{
+			heroRankePage.updateInfo(obj);
 		}
 
 		public function updateInfo(obj:Object):void {

@@ -10,6 +10,8 @@ package com.leyou.data.fieldboss
 		
 		public var type:int;
 		
+		public var refreshTick:uint;
+		
 		public function unserialize(nd:Array):void{
 			bossId = nd[0];
 			status = nd[1];

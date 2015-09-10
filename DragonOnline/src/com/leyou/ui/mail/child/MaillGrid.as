@@ -134,6 +134,10 @@ package com.leyou.ui.mail.child {
 //				ToolTipManager.getInstance().show(TipEnum.TYPE_EMPTY_ITEM, tips, new Point(stage.mouseX + 15, stage.mouseY + 15));
 			}
 		}
+		
+		public override function updataInfo(info:Object):void {
+			updateInfo(info.itemId, info.count);
+		}
 
 		public function updateInfo(itemId:int, $count:int=0):void {
 			count=$count;

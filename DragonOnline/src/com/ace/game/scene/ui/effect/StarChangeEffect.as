@@ -12,7 +12,7 @@ package com.ace.game.scene.ui.effect {
 
 		private var count:int=0;
 		private var ischange:Boolean=false;
-		private var changeIndex:int=-1;
+		private var changeIndex:int=-2;
 
 		private var tweenMax:TweenMax;
 
@@ -42,6 +42,7 @@ package com.ace.game.scene.ui.effect {
 			if (i == this.changeIndex)
 				return;
 
+
 			if (tweenMax != null) {
 				tweenMax.pause();
 				tweenMax.kill();
@@ -63,6 +64,9 @@ package com.ace.game.scene.ui.effect {
 				}
 
 			}
+
+			if (i == 9)
+				this.changeIndex=-2;
 
 		}
 

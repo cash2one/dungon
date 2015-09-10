@@ -22,13 +22,12 @@ package com.leyou.ui.market {
 	import com.leyou.ui.arrow.AdWnd;
 	import com.leyou.ui.market.child.MarketItemRender;
 	import com.leyou.ui.market.child.MarketNumlistItem;
-	import com.leyou.ui.market.child.MarketWingRender;
+	import com.leyou.ui.market.child.MarketPromotionRender;
 	import com.leyou.ui.market.child.TencentMarketItem;
 	import com.leyou.util.DateUtil;
 	import com.leyou.utils.PayUtil;
 	import com.leyou.utils.StringUtil_II;
 	
-	import flash.display.DisplayObject;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
@@ -72,6 +71,8 @@ package com.leyou.ui.market {
 		
 		private var tencentPanel:ScrollPane;
 		private var tencentMarketItems:Vector.<TencentMarketItem>;
+		
+		public var promotionRender:MarketPromotionRender;
 		
 		public function MarketWnd() {
 			super(LibManager.getInstance().getXML("config/ui/marketWnd.xml"));
@@ -125,10 +126,10 @@ package com.leyou.ui.market {
 			
 			adWnd = new AdWnd();
 			adWnd.hideClsBtn();
-			pane.addChild(adWnd);
 			adWnd.showPanel();
 			adWnd.x = 58;
 			adWnd.y = 75;
+			pane.addChild(adWnd);
 			pane.swapChildren(adWnd, marketDTab);
 			
 			tencentImg.visible = Core.isTencent;
@@ -139,6 +140,11 @@ package com.leyou.ui.market {
 				tabBar.turnToTab(0);
 			}
 			tabBar.setTabVisible(4, false);
+			
+			promotionRender = new MarketPromotionRender();
+			promotionRender.x = 63;
+			promotionRender.y = 88;
+			addChild(promotionRender);
 		}
 		
 		public function updateADState():void{
@@ -210,18 +216,20 @@ package com.leyou.ui.market {
 //			tabBar.turnToTab(_currentIdx);
 			
 //			if((null == wingRender) || ((null != wingRender) && !wingRender.visible)){
-//				if(Core.isTencent){
-//					tabBar.turnToTab(0);
-//				}else{
-//					tabBar.turnToTab(1);
-//				}
+				if(Core.isTencent){
+					tabBar.turnToTab(0);
+				}else{
+					tabBar.turnToTab(1);
+				}
 //			}
 			updataMoney();
 			GuideManager.getInstance().removeGuide(16);
+			promotionRender.addTimer();
 		}
 		
 		public override function hide():void{
 			super.hide();
+			promotionRender.removeTimer();
 			if(MarketItemRender.buyWnd){
 				MarketItemRender.buyWnd.hide();
 			}
@@ -393,6 +401,16 @@ package com.leyou.ui.market {
 			}
 			initPage(index-1);
 			updataMoney();
+			var status:int = o.lbuy[0];
+			var time:int = o.lbuy[1];
+			if((0 == status) && (0 == time)){
+				adWnd.visible = true;
+				promotionRender.visible = false;
+			}else{
+				adWnd.visible = false;
+				promotionRender.visible = true;
+				promotionRender.updateInfo(o);
+			}
 		}			
 		
 		public function setWingInfo(obj:Object):void{

@@ -24,6 +24,10 @@ package com.ace.ui.window.children
 		
 		private var cancelFun:Function;
 		
+		private var ybLbl:Label;
+		
+		private var bybLbl:Label;
+		
 		public function PopRadioWnd(info:WindInfo){
 			super(info, LibManager.getInstance().getXML("config/ui/farm/messageCoSeWnd.xml"));
 		}
@@ -34,6 +38,8 @@ package com.ace.ui.window.children
 			bybRadio = getUIbyID("bybRBtn") as RadioButton;
 			cancelBtn = getUIbyID("cancelBtn") as NormalButton;
 			confirmBtn = getUIbyID("confirmBtn") as NormalButton;
+			ybLbl = getUIbyID("ybLbl") as Label;
+			bybLbl = getUIbyID("bybLbl") as Label;
 			cancelBtn.addEventListener(MouseEvent.CLICK, onBtnClick);
 			confirmBtn.addEventListener(MouseEvent.CLICK, onBtnClick);
 			bybRadio.turnOn();
@@ -66,8 +72,8 @@ package com.ace.ui.window.children
 		
 		public override function update(info:WindInfo):void{
 			contentLbl.htmlText = info.content;
-			ybRadio.text = info.radioTex1;
-			bybRadio.text = info.radioTex2;
+			ybLbl.text = info.radioTex1;
+			bybLbl.text = info.radioTex2;
 			confirmFun = info.okFun;
 			cancelFun = info.cancelFun;
 		}

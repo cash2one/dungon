@@ -73,12 +73,12 @@ package com.leyou.ui.pkCopy.child {
 
 		private function onClick(e:MouseEvent):void {
 
-			if (this.serverId == 0) {
-				UILayoutManager.getInstance().open_II(WindowEnum.DUNGEON_TEAM);
-//				UIManager.getInstance().openWindow(WindowEnum.EXPCOPY);
-				this.hide();
-				return;
-			}
+//			if (this.serverId == 0) {
+//				UILayoutManager.getInstance().open_II(WindowEnum.DUNGEON_TEAM);
+////				UIManager.getInstance().openWindow(WindowEnum.EXPCOPY);
+//				this.hide();
+//				return;
+//			}
 
 			Cmd_Act.cmActNowAccept(this.actid);
 			this.hide();
@@ -117,20 +117,20 @@ package com.leyou.ui.pkCopy.child {
 			this.requirTxt.setText("" + tinfo.des3);
 			this.rewardTxt.setText("" + tinfo.des4);
 
-			if (tinfo.serverId == 1) {
-				this.show();
+			//if (tinfo.serverId == 1) {
+			//	this.show();
 //				UIManager.getInstance().rightTopWnd.active("questBtn")
-			} else if (tinfo.serverId == 0) {
-				if (1 == o.state) {
-					var wc:String=StringUtil.substitute(PropUtils.getStringById(1823),["<font color='#ff00'><u><a href='event:other_doubleExp--doubleExp'>"])+"</a></u></font>"
-					var arr:Array=[PropUtils.getStringById(1824), wc, "", "", callback];
-					UIManager.getInstance().taskTrack.updateOhterTrack(TaskEnum.taskLevel_doubleLine, arr);
-
-					this.show();
-				} else {
-					UIManager.getInstance().taskTrack.delOtherTrack(TaskEnum.taskLevel_doubleLine);
-				}
-			} else
+//			} else if (tinfo.serverId == 0) {
+//				if (1 == o.state) {
+//					var wc:String=StringUtil.substitute(PropUtils.getStringById(1823),["<font color='#ff00'><u><a href='event:other_doubleExp--doubleExp'>"])+"</a></u></font>"
+//					var arr:Array=[PropUtils.getStringById(1824), wc, "", "", callback];
+//					UIManager.getInstance().taskTrack.updateOhterTrack(TaskEnum.taskLevel_doubleLine, arr);
+//
+//					this.show();
+//				} else {
+//					UIManager.getInstance().taskTrack.delOtherTrack(TaskEnum.taskLevel_doubleLine);
+//				}
+			//} else
 				this.show();
 
 			this.reSize();

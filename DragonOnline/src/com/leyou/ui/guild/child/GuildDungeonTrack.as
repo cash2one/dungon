@@ -92,7 +92,7 @@ package com.leyou.ui.guild.child {
 						color="#ff0000";
 
 					render=new Label();
-					render.htmlText=PropUtils.getStringById(1674)+"：" + TableManager.getInstance().getLivingInfo(obj.mid).name + "<font color='" + color + "'>(" + obj.cc + "/" + obj.mc + ")</font>";
+					render.htmlText=PropUtils.getStringById(1674)+TableManager.getInstance().getLivingInfo(obj.mid).name + "<font color='" + color + "'>(" + obj.cc + "/" + obj.mc + ")</font>";
 
 //					render.x=10;
 					render.y=i * render.height;

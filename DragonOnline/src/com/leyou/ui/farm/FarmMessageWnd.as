@@ -5,6 +5,7 @@ package com.leyou.ui.farm
 	import com.ace.ui.auto.AutoWindow;
 	import com.ace.ui.button.children.NormalButton;
 	import com.ace.ui.button.children.RadioButton;
+	import com.ace.ui.lable.Label;
 	import com.leyou.net.cmd.Cmd_Farm;
 	
 	import flash.events.MouseEvent;
@@ -23,6 +24,10 @@ package com.leyou.ui.farm
 		
 		private var landID:int;
 		
+		private var ybLbl:Label;
+		
+		private var bybLbl:Label;
+		
 		public function FarmMessageWnd(){
 			super(LibManager.getInstance().getXML("config/ui/farm/messageCoSeWnd.xml"));
 			init();
@@ -33,6 +38,8 @@ package com.leyou.ui.farm
 			cancelBtn = getUIbyID("cancelBtn") as NormalButton;
 			bybRBtn = getUIbyID("bybRBtn") as RadioButton;
 			ybRBtn = getUIbyID("ybRBtn") as RadioButton;
+			ybLbl = getUIbyID("ybLbl") as Label;
+			bybLbl = getUIbyID("bybLbl") as Label;
 			confirmBtn.addEventListener(MouseEvent.CLICK, onBtnClick);
 			cancelBtn.addEventListener(MouseEvent.CLICK, onBtnClick);
 			bybRBtn.addEventListener(MouseEvent.CLICK, onBtnClick);
@@ -63,8 +70,8 @@ package com.leyou.ui.farm
 		
 		public function loadInfo(landId:int, info:TFarmLandInfo):void{
 			landID = landId
-			ybRBtn.text = "    "+info.cost;
-			bybRBtn.text = "    "+ info.bcost;
+			ybLbl.text = info.cost+"";
+			bybLbl.text = info.bcost+"";
 			type = 0;
 			bybRBtn.turnOn();
 		}

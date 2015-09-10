@@ -147,13 +147,11 @@ package com.leyou.ui.storage {
 				g=gridVec[i];
 
 				if (this.storageTabBar.turnOnIndex > 0 && (arr.length <= i || arr[0].info == null))
-					g.visible=false;
-				else
-					g.visible=true;
+					StorageGrid(g).setLockState();
 
 				if (i < ItemEnum.STORAGE_GRIDE_OPEN) {
-					if (arr.length <= i)
-						g.updataInfo(null);
+					if (arr.length <= i && this.storageTabBar.turnOnIndex > 0)
+						StorageGrid(g).setLockState();
 					else
 						g.updataInfo(arr[i]);
 

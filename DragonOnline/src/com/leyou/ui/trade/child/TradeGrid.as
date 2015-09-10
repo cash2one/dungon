@@ -1,12 +1,8 @@
 package com.leyou.ui.trade.child {
 	import com.ace.enum.ItemEnum;
 	import com.ace.game.backpack.GridBase;
-	import com.ace.game.manager.DragManager;
-	import com.ace.gameData.manager.MyInfoManager;
 	import com.ace.manager.LibManager;
 	import com.ace.ui.lable.Label;
-	import com.ace.manager.UIManager;
-	import com.leyou.ui.backpack.child.BackpackGrid;
 
 	public class TradeGrid extends GridBase {
 

@@ -25,6 +25,7 @@ package com.leyou.ui.achievement
 	import com.leyou.net.cmd.Cmd_Achievement;
 	import com.leyou.ui.achievement.child.AchievementEraItem;
 	import com.leyou.ui.achievement.child.AchievementRoleItem;
+	import com.leyou.utils.PropUtils;
 	
 	import flash.events.Event;
 	import flash.events.MouseEvent;
@@ -195,14 +196,14 @@ package com.leyou.ui.achievement
 				var arr:Array = [];
 				var sc:int = data.serverCount;
 				for(var n:int = 0; n < sc; n++){
-					var serInfo:TServerListInfo = TableManager.getInstance().getServerInfo(UIEnum.PLAT_FORM_ID);
-					if(null != serInfo){
+//					var serInfo:TServerListInfo = TableManager.getInstance().getServerInfo(UIEnum.PLAT_FORM_ID);
+//					if(null != serInfo){
 						var serId:String = data.getServerId(n).match(/\d+/)[0];
 						var serName:String;
 						switch(UIEnum.PLAT_FORM_ID){
-							case PlatformEnum.ID_KUGOU:
-								serName = StringUtil.substitute(serInfo.name, serId, serId);
-								break;
+//							case PlatformEnum.ID_KUGOU:
+//								serName = StringUtil.substitute(serInfo.name, serId, serId);
+//								break;
 //							case PlatformEnum.ID_1360:
 //								serName = StringUtil.substitute(serInfo.name, serId);
 //								break;
@@ -219,14 +220,14 @@ package com.leyou.ui.achievement
 //								serName = StringUtil.substitute(serInfo.name, serId);
 //								break;
 							default:
-								serName = StringUtil.substitute(serInfo.name, serId);
+								serName = StringUtil.substitute(PropUtils.getStringById(2197), serId);
 								break;
 						}
 						var obj:Object = {label:serName, uid:data.getServerId(n)}
 						arr.push(obj);
-					}else{
-						throw new Error("找不到服务器名称.");
-					}
+//					}else{
+//						throw new Error("找不到服务器名称.");
+//					}
 				}
 				serverCbx.list.addRends(arr);
 				serverCbx.list.selectByUid(Core.serverName);

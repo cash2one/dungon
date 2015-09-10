@@ -27,6 +27,7 @@ package com.leyou.ui.chat.child {
 	import com.ace.ui.tabbar.children.TabBar;
 	import com.ace.utils.StringUtil;
 	import com.adobe.serialization.json.JSON;
+	import com.greensock.TweenLite;
 	import com.greensock.TweenMax;
 	import com.leyou.data.chat_II.ChatChannelInfo;
 	import com.leyou.data.chat_II.ChatContentInfo;
@@ -45,7 +46,7 @@ package com.leyou.ui.chat.child {
 	import com.leyou.utils.ItemUtil;
 	import com.leyou.utils.PropUtils;
 	import com.leyou.utils.StringUtil_II;
-
+	
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.events.TextEvent;
@@ -370,6 +371,7 @@ package com.leyou.ui.chat.child {
 //				NoticeManager.getInstance().broadcastById(noticeId, arr);
 //				return;
 //			}
+			UIManager.getInstance().faceWnd.hide();
 			// 若均为不可见字符返回
 			var content:String=input.input.text;
 			content=StringUtil_II.trim(content);
@@ -408,10 +410,10 @@ package com.leyou.ui.chat.child {
 					o={i: "", c: StringUtil.substitute(PropUtils.getStringById(1656), [remain])};
 					chatContent=ChatUtil.decode(o);
 					pushContent(chatContent);
+					reset();
 					return;
 				}
 			}
-
 
 			// 个人聊天记录添加
 			while (myRecord.length >= ChatEnum.MYRECORD_REMAIN) {
@@ -421,6 +423,7 @@ package com.leyou.ui.chat.child {
 
 			// 处理频道聊天
 			if (processChannel(channel, content)) {
+				trace("-------------------send sucess")
 				tickRecords[channel]=currTick;
 			}
 		}
@@ -691,10 +694,11 @@ package com.leyou.ui.chat.child {
 				case "fcz":
 					UIOpenBufferManager.getInstance().open(WindowEnum.FIRST_RETURN);
 					break;
-				case "cptm":
+				case "cptm":// 组队副本
 					if (SceneEnum.SCENE_TYPE_PTCJ == MapInfoManager.getInstance().type) {
 						Cmd_CpTm.cmTeamCopyAdd(values[0]);
 						UILayoutManager.getInstance().open_II(WindowEnum.DUNGEON_TEAM);
+						TweenLite.delayedCall(0.5, UIManager.getInstance().teamCopyWnd.setTabIndex, [2]);
 					}
 					break;
 				case "pm":
@@ -704,6 +708,9 @@ package com.leyou.ui.chat.child {
 					if (SceneEnum.SCENE_TYPE_PTCJ == MapInfoManager.getInstance().type) {
 						UIOpenBufferManager.getInstance().open(WindowEnum.GUILD_BATTLE, 1);
 					}
+					break;
+				case "fanl":
+					UIOpenBufferManager.getInstance().open(WindowEnum.PAY_PROMOTION);
 					break;
 			}
 		}

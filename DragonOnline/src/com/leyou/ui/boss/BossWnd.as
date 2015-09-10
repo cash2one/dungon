@@ -95,9 +95,6 @@ package com.leyou.ui.boss {
 		public override function show(toTop:Boolean=true, $layer:int=1, toCenter:Boolean=true):void {
 			super.show(toTop, $layer, toCenter);
 			switch (_currentIndex) {
-				case 0:
-					Cmd_Act.cmActInit();
-					break;
 				case 1:
 					Cmd_YBS.cm_YBS_L();
 					break;
@@ -106,6 +103,7 @@ package com.leyou.ui.boss {
 					break;
 			}
 			
+			Cmd_Act.cmActInit();
 			UIManager.getInstance().pkCopyWnd.show();
 		}
 

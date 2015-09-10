@@ -54,8 +54,8 @@ package com.leyou.ui.chat.child {
 			if(-1 != playerNames.indexOf(name)){
 				return;
 			}
-			while(playerNames.length > ChatEnum.PALYER_NAME_REMAIN){
-				var rid:String = (cycUid-ChatEnum.PALYER_NAME_REMAIN+1)+"";
+			while(playerNames.length >= ChatEnum.PALYER_NAME_REMAIN){
+				var rid:String = (cycUid-ChatEnum.PALYER_NAME_REMAIN)+"";
 				playerNames.shift();
 				nameBox.list.removeRender(rid);
 			}

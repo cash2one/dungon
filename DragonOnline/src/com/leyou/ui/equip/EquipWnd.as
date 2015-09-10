@@ -105,6 +105,9 @@ package com.leyou.ui.equip {
 					this.equipReclassRender.clearAllData();
 					this.equipBreakRender.clearAllData();
 					this.LvupRender.clearAllData();
+					
+					GuideManager.getInstance().removeGuide(115);	
+					
 					break;
 				case 3:
 					this.equipIntensifyRender.clearAllData();
@@ -121,6 +124,9 @@ package com.leyou.ui.equip {
 					this.equipReclassRender.clearAllData();
 					this.LvupRender.clearAllData();
 					this.equipBreakRender.setChange();
+					
+					GuideManager.getInstance().removeGuide(114);
+					
 					break;
 				case 5:
 					this.equipIntensifyRender.clearAllData();
@@ -129,6 +135,9 @@ package com.leyou.ui.equip {
 					this.equipReclassRender.clearAllData();
 					this.equipBreakRender.clearAllData();
 					this.LvupRender.clearAllData();
+					
+					GuideManager.getInstance().removeGuide(113);
+			 
 					break;
 			}
 
@@ -213,6 +222,7 @@ package com.leyou.ui.equip {
 				this.bagTabBar.setTabVisible(2, false);
 			} else {
 				this.bagTabBar.setTabVisible(2, true);
+				GuideManager.getInstance().showGuide(115, this.bagTabBar.getTabButton(2));
 			}
 
 			if (ConfigEnum.EquipReclassOpenLv > Core.me.info.level) {
@@ -225,12 +235,15 @@ package com.leyou.ui.equip {
 				this.bagTabBar.setTabVisible(4, false);
 			} else {
 				this.bagTabBar.setTabVisible(4, true);
+				GuideManager.getInstance().showGuide(114, this.bagTabBar.getTabButton(4));
 			}
+			
 
 			if (ConfigEnum.equip24 > Core.me.info.level) {
 				this.bagTabBar.setTabVisible(5, false);
 			} else {
 				this.bagTabBar.setTabVisible(5, true);
+				GuideManager.getInstance().showGuide(113, this.bagTabBar.getTabButton(5));
 			}
 
 			if (EquipStrengGrid.selectState != null) {
@@ -250,7 +263,13 @@ package com.leyou.ui.equip {
 			GuideManager.getInstance().removeGuide(62);
 			GuideManager.getInstance().removeGuide(94);
 
+			GuideManager.getInstance().removeGuide(105);
+			GuideManager.getInstance().removeGuide(106);
+
 			UIManager.getInstance().taskTrack.setGuideViewhide(TaskEnum.taskType_EquitTopLv);
+			
+			
+			
 		}
 
 		public function updateBagRender():void {
@@ -314,6 +333,9 @@ package com.leyou.ui.equip {
 			this.bagTabBar.turnToTab(0);
 			UIManager.getInstance().taskTrack.setGuideView(TaskEnum.taskType_EquitTopLv);
 
+			GuideManager.getInstance().removeGuide(113);
+			GuideManager.getInstance().removeGuide(114);
+			GuideManager.getInstance().removeGuide(115);			
 		}
 
 		override public function sendOpenPanelProtocol(... parameters):void {

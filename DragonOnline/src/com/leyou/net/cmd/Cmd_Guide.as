@@ -50,7 +50,7 @@ package com.leyou.net.cmd
 //					UIManager.getInstance().creatWindow(WindowEnum.WELFARE).changeTable(0);
 					break;
 				case 81:
-					GuideManager.getInstance().showGuide(81, UIManager.getInstance().roleHeadWnd);
+					GuideManager.getInstance().showGuide(81, UIManager.getInstance().roleHeadWnd.getUIbyID("vipBtn"));
 					break;
 				
 			}

@@ -1,5 +1,6 @@
 package com.leyou.ui.guild {
 
+	import com.ace.config.Core;
 	import com.ace.enum.TipEnum;
 	import com.ace.enum.UIEnum;
 	import com.ace.enum.WindowEnum;
@@ -19,11 +20,13 @@ package com.leyou.ui.guild {
 	import com.ace.ui.tabbar.TabbarModel;
 	import com.ace.ui.tabbar.children.TabBar;
 	import com.greensock.TweenLite;
+	import com.leyou.enum.ConfigEnum;
 	import com.leyou.enum.GuildEnum;
 	import com.leyou.manager.PopupManager;
 	import com.leyou.net.cmd.Cmd_Guild;
 	import com.leyou.net.cmd.Cmd_Ucp;
 	import com.leyou.net.cmd.Cmd_Unw;
+	import com.leyou.net.cmd.Cmd_unb;
 	import com.leyou.ui.guild.child.GuildAddWnd;
 	import com.leyou.ui.guild.child.GuildCreat;
 	import com.leyou.ui.guild.child.GuildDungeon;
@@ -32,6 +35,7 @@ package com.leyou.ui.guild {
 	import com.leyou.ui.guild.child.GuildMemMessager;
 	import com.leyou.ui.guild.child.GuildMember;
 	import com.leyou.ui.guild.child.GuildPowManager;
+	import com.leyou.ui.guild.child.GuildSci;
 	import com.leyou.ui.guild.child.GuildShop;
 	import com.leyou.ui.guild.child.GuildSkill;
 	import com.leyou.ui.guild.child.GuildWar;
@@ -64,6 +68,7 @@ package com.leyou.ui.guild {
 		private var guildCreat:GuildCreat;
 		private var guildList:GuildList;
 		private var guildSkill:GuildSkill;
+		private var guildSci:GuildSci;
 		private var guildCopy:GuildDungeon;
 		private var guildPk:GuildWar;
 		private var guildZc:GuildZC;
@@ -124,9 +129,17 @@ gl -- 管理 (0,1)
 */
 		public var memberPrice:Object={};
 
+		public var guildSciData:Array=[];
+
+
+
 		private var ischeckUset:int=0;
 
+
+
 		private var changeTabIndex:int=0;
+
+
 
 		public function GuildWnd() {
 			super(LibManager.getInstance().getXML("config/ui/guildWnd.xml"));
@@ -158,18 +171,18 @@ gl -- 管理 (0,1)
 			this.guildShop=new GuildShop();
 			this.guildCreat=new GuildCreat();
 			this.guildList=new GuildList();
-//			this.guildSkill=new GuildSkill();
+			this.guildSci=new GuildSci();
 			this.guildCopy=new GuildDungeon();
 			this.guildPk=new GuildWar();
 			this.guildZc=new GuildZC();
 
 			this.guildTabbar.addToTab(this.guildMain, 0);
 			this.guildTabbar.addToTab(this.guildMember, 1);
-//			this.guildTabbar.addToTab(this.guildSkill, 2);
-			this.guildTabbar.addToTab(this.guildCopy, 3);
-			this.guildTabbar.addToTab(this.guildPk, 4);
+			this.guildTabbar.addToTab(this.guildSci, 2);
+//			this.guildTabbar.addToTab(this.guildCopy, 3);
+//			this.guildTabbar.addToTab(this.guildPk, 4);
 			this.guildTabbar.addToTab(this.guildShop, 5);
-			this.guildTabbar.addToTab(this.guildZc, 6);
+//			this.guildTabbar.addToTab(this.guildZc, 6);
 			this.guildTabbar.addToTab(this.guildList, 7);
 			this.guildTabbar.addToTab(this.guildCreat, 8);
 
@@ -259,7 +272,9 @@ gl -- 管理 (0,1)
 					UIManager.getInstance().buyWnd.hide();
 					break;
 				case 2:
-					Cmd_Guild.cm_GuildSkill();
+					Cmd_unb.cmGuildBlessInit();
+//					this.updateGuildSci(null);
+//					Cmd_Guild.cm_GuildSkill();
 					this.guildDonateMessage.hide();
 					this.guildAddWnd.hide();
 					UIManager.getInstance().buyWnd.hide();
@@ -322,11 +337,11 @@ gl -- 管理 (0,1)
 
 			this.guildTabbar.setTabVisible(0, true);
 			this.guildTabbar.setTabVisible(1, true);
-//			this.guildTabbar.setTabVisible(2, true);
-//			this.guildTabbar.setTabVisible(3, true);
-//			this.guildTabbar.setTabVisible(4, true);
+
+			this.guildTabbar.setTabVisible(3, false);
+			this.guildTabbar.setTabVisible(4, false);
 			this.guildTabbar.setTabVisible(5, true);
-//			this.guildTabbar.setTabVisible(6, true);
+			this.guildTabbar.setTabVisible(6, false);
 			this.guildTabbar.setTabVisible(7, true);
 			this.guildTabbar.setTabVisible(8, false);
 
@@ -369,10 +384,10 @@ gl -- 管理 (0,1)
 
 				this.autoAccCb.visible=true;
 			}
-			
+
 			if (o.hasOwnProperty("dmoney")) {
 				this.guildDonateMoney=o.dmoney;
-				
+
 				this.guildDonateMessage.updateLastMoney();
 			}
 
@@ -386,6 +401,9 @@ gl -- 管理 (0,1)
 			this.contributeTxt.text=PropUtils.getStringById(1762);
 			this.bgIcon.visible=true;
 
+			if (this.guildLv >= ConfigEnum.Union_Bless1)
+				this.guildTabbar.setTabVisible(2, true);
+			
 			MyInfoManager.getInstance().isGuild=true;
 
 			if (!this.visible)
@@ -479,6 +497,19 @@ gl -- 管理 (0,1)
 			this.guildList.descTxt(txt.substr(0, 250));
 		}
 
+		/**
+		 *
+		 * @param o
+		 *
+		 */
+		public function updateGuildSci(o:Object):void {
+
+//			var od:Object={num: 1, blist: [[1, 1, 1, 86400],, [6, 2, 1, 86400],[], [11, 3, 1, 86400]]}
+
+			this.guildSciData=o.blist;
+			this.guildSci.updateInfo(o);
+		}
+
 		override public function show(toTop:Boolean=true, $layer:int=1, toCenter:Boolean=true):void {
 			super.show(toTop, $layer, toCenter);
 
@@ -489,6 +520,10 @@ gl -- 管理 (0,1)
 			GuideManager.getInstance().removeGuide(102);
 			GuideManager.getInstance().removeGuide(103);
 
+			this.guildTabbar.setTabVisible(3, false);
+			this.guildTabbar.setTabVisible(4, false);
+			this.guildTabbar.setTabVisible(6, false);
+			
 		}
 
 //		override public function set visible(value:Boolean):void {
@@ -534,6 +569,10 @@ gl -- 管理 (0,1)
 				this.guildTabbar.turnToTab(7);
 			}
 
+			this.guildTabbar.setTabVisible(3, false);
+			this.guildTabbar.setTabVisible(4, false);
+			this.guildTabbar.setTabVisible(6, false);
+			
 			this.autoAccCb.visible=false;
 
 			this.currentonlineLbl.text="";
@@ -587,6 +626,12 @@ gl -- 管理 (0,1)
 			this.changeTabIndex=0;
 
 			PopupManager.closeConfirm("guildwarpk");
+			
+			PopupManager.closeConfirm("guildSciDel");
+			PopupManager.closeConfirm("guildSciGet");
+			PopupManager.closeConfirm("guildSciUpgrade");
+			PopupManager.closeConfirm("guildSciBuild");
+			
 			TweenManager.getInstance().lightingCompnent(UIManager.getInstance().toolsWnd.guildBtn);
 		}
 

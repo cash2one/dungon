@@ -71,6 +71,10 @@ package com.leyou.net.cmd {
 			var count:int=values.length;
 			for (var n:int=0; n < count; n++) {
 				var value:Object=values[n];
+				if(null == value){
+					copy[n] = "null string given by server";
+					//throw new Error("无效对象,要替换的属性数组为:"+values.join(","));
+				}
 				var index:int=value.toString().indexOf("#");
 				if (-1 != index) {
 					var itemId:uint=uint(value.substr(index + 1));

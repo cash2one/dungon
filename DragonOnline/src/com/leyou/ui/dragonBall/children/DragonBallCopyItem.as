@@ -79,10 +79,17 @@ package com.leyou.ui.dragonBall.children
 			grids[index++].updateInfo(copyInfo.item2Data[0], copyInfo.item2Data[1]);
 			grids[index++].updateInfo(copyInfo.item3Data[0], copyInfo.item3Data[1]);
 			
-			grids[index++].updateInfo(copyInfo.ticket1, copyInfo.ticketC1);
-			grids[index++].updateInfo(copyInfo.ticket2, copyInfo.ticketC2);
-			grids[index++].updateInfo(copyInfo.ticket3, copyInfo.ticketC3);
-			grids[index++].updateInfo(copyInfo.ticket4, copyInfo.ticketC4);
+			grids[index].updateInfo(copyInfo.ticket1, copyInfo.ticketC1);
+			grids[index].visible = (copyInfo.ticket1 > 0);
+			index++;
+			grids[index].updateInfo(copyInfo.ticket2, copyInfo.ticketC2);
+			grids[index].visible = (copyInfo.ticket2 > 0);
+			index++;
+			grids[index].updateInfo(copyInfo.ticket3, copyInfo.ticketC3);
+			grids[index].visible = (copyInfo.ticket3 > 0);
+			index++;
+			grids[index].updateInfo(copyInfo.ticket4, copyInfo.ticketC4);
+			grids[index].visible = (copyInfo.ticket4 > 0);
 		}
 	}
 }

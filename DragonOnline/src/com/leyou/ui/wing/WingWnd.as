@@ -19,7 +19,7 @@ package com.leyou.ui.wing {
 	import com.leyou.enum.ConfigEnum;
 	import com.leyou.net.cmd.Cmd_Wig;
 	import com.leyou.utils.PropUtils;
-	
+
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 
@@ -88,7 +88,7 @@ package com.leyou.ui.wing {
 
 		private var otherPlay:Boolean=false;
 		//3
-		private var propArrKey:Array=[4, 5, 8, 9, 10, 11, 12, 13, 1, 2,24];
+		private var propArrKey:Array=[4, 5, 8, 9, 10, 11, 12, 13, 1, 2, 24];
 
 		public function WingWnd(otherPlayer:Boolean=false) {
 			super(LibManager.getInstance().getXML("config/ui/wing/wingWnd.xml"));
@@ -318,23 +318,24 @@ package com.leyou.ui.wing {
 //						this.gridVec[int(key) - 1].canMove=false;
 //				}
 			}
+			
+			if (info.hasOwnProperty("wlv"))
+				this.starEffect.setStarPos(info.wlv % 10 - 1);
 
 			if (this.otherPlay) {
 				this.leftImgBtn.visible=false;
 				return;
 			}
 
-			if (info.hasOwnProperty("wlv"))
-				this.starEffect.setStarPos(info.wlv % 10 - 1);
 
 			this.wlv=info.wlv;
-			
+
 			if (info.wlv >= 100) {
 				this.wingUpBtn.setActive(false, .6, true);
 				this.wingUpBtn.setToolTip(TableManager.getInstance().getSystemNotice(1213).content);
 				this.arrowImg.visible=false;
 				UIManager.getInstance().wingLvUpWnd.hide();
-				
+
 				this.starEffect.setStarPos(9);
 			} else {
 				this.wingUpBtn.setActive(true, 1, true);
@@ -343,7 +344,7 @@ package com.leyou.ui.wing {
 				UIManager.getInstance().wingLvUpWnd.update(xml, info);
 			}
 
-			
+
 			if (this.lv >= ConfigEnum.wing17) {
 
 				this.wingTradeBtn.setActive(true, 1, true);
@@ -357,7 +358,7 @@ package com.leyou.ui.wing {
 			} else {
 
 				this.wingTradeBtn.setActive(false, .6, true);
-				this.wingTradeBtn.setToolTip(StringUtil.substitute(TableManager.getInstance().getSystemNotice(1217).content,[ConfigEnum.wing17]));
+				this.wingTradeBtn.setToolTip(StringUtil.substitute(TableManager.getInstance().getSystemNotice(1217).content, [ConfigEnum.wing17]));
 				this.arrow1Img.visible=false;
 			}
 		}
@@ -405,7 +406,7 @@ package com.leyou.ui.wing {
 		public function get Lv():int {
 			return this.lv;
 		}
-		
+
 		public function get wLv():int {
 			return this.wlv;
 		}
@@ -495,8 +496,15 @@ package com.leyou.ui.wing {
 
 				if (swfIndex > this.pageCount) {
 					swfIndex=this.pageCount;
-				} else
-					this.rightImgBtn.visible=true;
+				} else {
+
+					if (swfIndex == this.pageCount)
+						this.starEffect.setStarPos(this.wlv % 10 - 1);
+					else {
+						this.rightImgBtn.visible=true;
+						this.starEffect.setStarPos(9);
+					}
+				}
 
 				this.leftImgBtn.visible=true;
 
@@ -506,8 +514,12 @@ package com.leyou.ui.wing {
 
 				if (swfIndex < 1) {
 					swfIndex=1;
-				} else
+					if (swfIndex == this.pageCount)
+						this.starEffect.setStarPos(this.wlv % 10 - 1);
+				} else {
 					this.leftImgBtn.visible=true;
+					this.starEffect.setStarPos(9);
+				}
 
 				this.rightImgBtn.visible=true;
 

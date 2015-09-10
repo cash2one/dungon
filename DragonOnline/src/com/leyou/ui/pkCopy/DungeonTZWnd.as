@@ -1,8 +1,6 @@
 package com.leyou.ui.pkCopy {
 
 	import com.ace.config.Core;
-	import com.ace.enum.EventEnum;
-	import com.ace.enum.FontEnum;
 	import com.ace.enum.SceneEnum;
 	import com.ace.enum.UIEnum;
 	import com.ace.enum.WindowEnum;
@@ -11,27 +9,22 @@ package com.leyou.ui.pkCopy {
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.table.TItemInfo;
 	import com.ace.gameData.table.TTzActiive;
-	import com.ace.manager.EventManager;
-	import com.ace.manager.GuideManager;
 	import com.ace.manager.LayerManager;
 	import com.ace.manager.LibManager;
 	import com.ace.manager.UILayoutManager;
 	import com.ace.manager.UIManager;
 	import com.ace.ui.auto.AutoSprite;
-	import com.ace.ui.auto.AutoWindow;
 	import com.ace.ui.button.children.ImgButton;
 	import com.ace.ui.button.children.NormalButton;
 	import com.ace.ui.img.child.Image;
 	import com.ace.ui.lable.Label;
 	import com.ace.ui.notice.NoticeManager;
 	import com.ace.ui.scrollPane.children.ScrollPane;
-	import com.ace.utils.ArrayUtil;
-	import com.ace.utils.ObjectUtil;
-	import com.greensock.TweenLite;
 	import com.leyou.enum.ConfigEnum;
 	import com.leyou.manager.TimerManager;
 	import com.leyou.net.cmd.Cmd_Act;
 	import com.leyou.net.cmd.Cmd_Go;
+	import com.leyou.net.cmd.Cmd_Stime;
 	import com.leyou.ui.pkCopy.child.DungeonTZRender;
 	import com.leyou.ui.pkCopy.child.DungeonTzGrid;
 	import com.leyou.utils.TaskUtil;
@@ -51,7 +44,7 @@ package com.leyou.ui.pkCopy {
 		private var accpetBtn:NormalButton;
 		private var flyBtn:ImgButton;
 
-		private var startBtn:ImgButton;
+		private var startBtnArr:Array=[];
 
 		private var itemsList:Vector.<DungeonTZRender>;
 		private var gridList:Vector.<DungeonTzGrid>;
@@ -67,9 +60,16 @@ package com.leyou.ui.pkCopy {
 		private var startId:int=-1;
 		private var clientId:int=-1;
 
+		private var startIdArr:Array=[];
+		private var clientIdArr:Array=[];
+
+		private var tzId:int=-1;
+
 		private var scenesType:int;
 
 		private var o:Object;
+
+		private var tzBar:TzBar;
 
 		public function DungeonTZWnd() {
 //			super(LibManager.getInstance().getXML("config/ui/pkCopy/dungeonTZWnd.xml"));
@@ -106,11 +106,17 @@ package com.leyou.ui.pkCopy {
 
 			date=new Date();
 
-			this.startBtn=new ImgButton("ui/tz/tz_btn_sglx.png");
-			LayerManager.getInstance().windowLayer.addChild(this.startBtn);
+			var startBtn:ImgButton;
 
-			this.startBtn.visible=false;
-			this.startBtn.addEventListener(MouseEvent.CLICK, onStartClick);
+			for (var i:int=0; i < 10; i++) {
+				startBtn=new ImgButton("ui/tz/tz_btn_sglx.png");
+				LayerManager.getInstance().windowLayer.addChild(startBtn);
+
+				this.startBtnArr.push(startBtn);
+
+				startBtn.visible=false;
+				startBtn.addEventListener(MouseEvent.CLICK, onStartClick);
+			}
 
 			this.timerLbl=new Label();
 			LayerManager.getInstance().windowLayer.addChild(this.timerLbl);
@@ -121,7 +127,14 @@ package com.leyou.ui.pkCopy {
 
 			this.timerLbl.visible=true;
 
+			Cmd_Stime.cmRequestTime();
 			TimerManager.getInstance().add(exePkCopyTime);
+
+			this.tzBar=new TzBar();
+			LayerManager.getInstance().windowLayer.addChild(this.tzBar);
+
+			this.tzBar.x=(UIEnum.WIDTH - 150) - 80;
+			this.tzBar.y=80;
 
 			this.x=-13;
 			this.y=3;
@@ -133,7 +146,7 @@ package com.leyou.ui.pkCopy {
 				if (!UIManager.getInstance().isCreate(WindowEnum.PKCOPYPANEL))
 					UIManager.getInstance().creatWindow(WindowEnum.PKCOPYPANEL);
 
-				UIManager.getInstance().pkCopyPanel.updateInfo({actid: startId});
+				UIManager.getInstance().pkCopyPanel.updateInfo({actid: startIdArr[this.startBtnArr.indexOf(e.target)]});
 			} else {
 				NoticeManager.getInstance().broadcastById(4408);
 			}
@@ -166,7 +179,7 @@ package com.leyou.ui.pkCopy {
 				Cmd_Act.cmActNowAccept(selectId);
 		}
 
-		private function exePkCopyTime(i:int):void {
+		private function exePkCopyTime(_i:int):void {
 
 			this.timerLbl.htmlText="<font color='#ffffff' size='14'>" + TimeUtil.getTimeToString(date) + "</font>";
 			this.timerLbl.textColor=0xffffff;
@@ -177,9 +190,20 @@ package com.leyou.ui.pkCopy {
 			this.updateList();
 
 //			trace(MapInfoManager.getInstance().type, this.clientId)
-			if (MapInfoManager.getInstance() != null && MapInfoManager.getInstance().type != SceneEnum.SCENE_TYPE_PTCJ && MapInfoManager.getInstance().type == this.clientId) {
-				this.startBtn.visible=false;
+
+			for (var i:int=0; i < this.clientIdArr.length; i++) {
+				if (MapInfoManager.getInstance() != null && MapInfoManager.getInstance().type != SceneEnum.SCENE_TYPE_PTCJ && MapInfoManager.getInstance().type == this.clientIdArr[i]) {
+					this.startBtnArr[i].visible=false;
+				}
+
+				if (int(MapInfoManager.getInstance().sceneId) == 110 && this.clientIdArr[i] == 13) {
+					this.startBtnArr[i].visible=false;
+				}
 			}
+
+
+			this.resise();
+
 		}
 
 		private function onClick(e:MouseEvent):void {
@@ -240,6 +264,9 @@ package com.leyou.ui.pkCopy {
 		}
 
 		public function updateInfo(data:Object):void {
+			if (Core.me == null || Core.me.info == null)
+				return;
+
 			this.o=data;
 
 			var render:DungeonTZRender;
@@ -318,14 +345,25 @@ package com.leyou.ui.pkCopy {
 
 			var render:DungeonTZRender;
 			var i:int=0;
+			var okopen:Boolean=false;
 			var tinfo:TTzActiive;
 			var arr:Array=[];
 			var arr1:Array=[];
 			var arr2:Array=[];
 
-			this.startBtn.visible=false;
+			this.tzId=-1;
 
-			for each (render in this.itemsList) {
+//			this.startBtn.visible=false;
+
+			this.setStartBtnVisible(10);
+			this.startIdArr=[];
+			this.clientIdArr=[];
+
+			var sid:int=0;
+
+			for (i=0; i < this.itemsList.length; i++) {
+				render=this.itemsList[i] as DungeonTZRender;
+
 				date.time=(TimerManager.CurrentServerTime + TimerManager.currentTime) * 1000;
 				tinfo=TableManager.getInstance().getTzActiveByID(render.id);
 
@@ -338,31 +376,42 @@ package com.leyou.ui.pkCopy {
 
 				if (date >= date1 && date < date2) {
 
+					if (render.id != 1)
+						okopen=true;
+
+					if (Core.me == null || tinfo.lv > Core.me.info.level) {
+						continue;
+					}
+
 					if (this.getStateByID(render.id) == 1) {
 
 						if (this.selectId == -1)
 							render.exeClick();
 
-						if (Core.me == null || tinfo.lv > Core.me.info.level) {
-							continue;
-						}
-
 						render.updateState(1);
 
 						if (tinfo.btn != "") {
 
-							if (this.startId != render.id)
-								this.startBtn.updataBmd("ui/tz/" + tinfo.btn);
+							if (this.startIdArr[sid] != render.id)
+								this.startBtnArr[sid].updataBmd("ui/tz/" + tinfo.btn);
 
-							this.startBtn.visible=true;
+							this.startBtnArr[sid].visible=true;
 
-							this.startId=render.id;
-							this.clientId=tinfo.clientId;
+							this.startIdArr[sid]=render.id;
+							this.clientIdArr[sid]=tinfo.clientId;
+
+							sid++;
 						}
 
-					} else
+					} else {
 						render.updateState(2);
 
+//						if (this.getStateByID(render.id) == 2) {
+//
+//							if (render.id != 1)
+//								okopen=true;
+//						}
+					}
 
 					switch (MapInfoManager.getInstance().type) {
 						case SceneEnum.SCENE_TYPE_SGLX:
@@ -383,10 +432,37 @@ package com.leyou.ui.pkCopy {
 							break;
 					}
 
-				} else if (date < date1)
+				} else if (date < date1) {
 					render.updateState(0);
-				else if (date > date2)
+
+					if (this.tzId == -1)
+						this.tzId=i;
+				} else if (date > date2)
 					render.updateState(2);
+
+			}
+
+
+			if (okopen || date > date2 || this.tzId == -1) {
+				this.tzBar.hide();
+			} else {
+
+//				trace(this.tzId, this.itemsList[this.tzId].id, TableManager.getInstance().getTzActiveByID(this.itemsList[this.tzId].id).lv)
+				var infot:TTzActiive=TableManager.getInstance().getTzActiveByID(this.itemsList[this.tzId].id);
+				if (Core.me == null || infot.lv > Core.me.info.level) {
+					this.tzBar.hide();
+					return;
+				}
+
+				this.tzBar.updateInfo(this.itemsList[this.tzId].id, this.itemsList[this.tzId - 1].id, this.itemsList[1].id);
+			}
+
+		}
+
+		private function setStartBtnVisible(num:int):void {
+
+			for (var i:int=0; i < num; i++) {
+				this.startBtnArr[i].visible=false;
 			}
 
 		}
@@ -428,11 +504,25 @@ package com.leyou.ui.pkCopy {
 //			this.x=(UIEnum.WIDTH - this.width) / 2;
 //			this.y=(UIEnum.HEIGHT - this.height) / 2;
 
-			this.startBtn.x=(UIEnum.WIDTH - this.startBtn.width) / 2;
-			this.startBtn.y=UIEnum.HEIGHT - this.startBtn.height - 200;
+			for (var j:int=0; j < 10; j++) {
+				if (!this.startBtnArr[j].visible) {
+					break;
+				}
+			}
+
+
+			for (var i:int=0; i < 10; i++) {
+				if (this.startBtnArr[i].visible) {
+					this.startBtnArr[i].x=(UIEnum.WIDTH - j * this.startBtnArr[i].width) / 2 + i * this.startBtnArr[i].width;
+					this.startBtnArr[i].y=UIEnum.HEIGHT - this.startBtnArr[i].height - 200;
+				}
+			}
 
 			this.timerLbl.x=(UIEnum.WIDTH - this.timerLbl.width) - 120;
 			this.timerLbl.y=6;
+
+			this.tzBar.x=(UIEnum.WIDTH - 202) - 30;
+			this.tzBar.y=100;
 		}
 
 		public function setHidBtn(v:Boolean):void {

@@ -27,8 +27,10 @@ package com.leyou.ui.tools {
 	import com.ace.ui.notice.NoticeManager;
 	import com.ace.ui.setting.AssistWnd;
 	import com.ace.utils.StringUtil;
+	import com.greensock.TweenLite;
 	import com.greensock.TweenMax;
 	import com.leyou.data.bag.Baginfo;
+	import com.leyou.enum.ConfigEnum;
 	import com.leyou.enum.MoldEnum;
 	import com.leyou.net.cmd.Cmd_Assist;
 	import com.leyou.net.cmd.Cmd_Bag;
@@ -72,6 +74,7 @@ package com.leyou.ui.tools {
 		private var mercenaryBtn:ImgButton;
 		private var framBtn:ImgButton;
 		private var collectBtn:ImgButton;
+		private var alchmyBtn:ImgButton;
 
 		private var expImg:Image;
 		private var hunImg:Image;
@@ -120,6 +123,7 @@ package com.leyou.ui.tools {
 			this.mercenaryBtn=this.getUIbyID("mercenaryBtn") as ImgButton;
 			this.framBtn=this.getUIbyID("framBtn") as ImgButton;
 			this.collectBtn=this.getUIbyID("collectBtn") as ImgButton;
+			this.alchmyBtn=this.getUIbyID("alchmyBtn") as ImgButton;
 
 			this.friendBtn=this.getUIbyID("friendBtn") as ImgButton;
 			this.teamBtn=this.getUIbyID("teamBtn") as ImgButton;
@@ -146,14 +150,22 @@ package com.leyou.ui.tools {
 			this.hunBg=this.getUIbyID("hunBg") as Image;
 
 			var arr:Array=[this.teamBtn, this.guildBtn, this.friendBtn, this.daZBtn, this.mountBtn, this.guaJBtn, this.playerBtn, this.backpackBtn, this.skillBtn, this.missionBtn, // 
-				this.duanZBtn, this.wenZBtn, this.shiCBtn, this.shopBtn, this.mercenaryBtn, this.framBtn, this.collectBtn,];
+				this.duanZBtn, this.wenZBtn, this.shiCBtn, this.shopBtn, this.mercenaryBtn, this.framBtn, this.collectBtn, this.alchmyBtn];
 
+			var tipid:int=0;
 			for (var i:int=0; i < arr.length; i++) {
 				if (arr[i] != null) {
 					ImgButton(arr[i]).addEventListener(MouseEvent.CLICK, onBtnClick);
-					ImgButton(arr[i]).setToolTip(TableManager.getInstance().getSystemNotice(10017 + i).content);
+					if (i + 1 == arr.length)
+						tipid=10048;
+					else
+						tipid=10017 + i;
+
+					ImgButton(arr[i]).setToolTip(TableManager.getInstance().getSystemNotice(tipid).content);
 				}
 			}
+
+//			this.mercenaryBtn.visible=false;
 
 //			this.jingliBtn.addEventListener(MouseEvent.CLICK, onJinliClick);
 //			this.jingliBtn.addEventListener(MouseEvent.MOUSE_OVER, onjinMouseOver);
@@ -161,9 +173,17 @@ package com.leyou.ui.tools {
 //
 //			this.jingliBtn.mouseChildren=this.jingliBtn.mouseEnabled=true;
 
+			this.hpAndmp=new ToolsHpAndMpProgress();
+			this.addChild(this.hpAndmp);
+			this.addShoruCutKey();
+			this.addChild(this.quickImg);
+
+			this.hpAndmp.x=349;
+
+
 			this.addChild(this.expBg);
 			this.addChild(this.hunBg);
-			
+
 			var einfo:MouseEventInfo=new MouseEventInfo();
 			einfo.onMouseMove=onExpMouseOver;
 			einfo.onMouseOut=onExpMouseOut;
@@ -179,17 +199,12 @@ package com.leyou.ui.tools {
 			this.expBg.alpha=0;
 			this.hunBg.alpha=0;
 
-			this.hpAndmp=new ToolsHpAndMpProgress();
-			this.addChild(this.hpAndmp);
-			this.addShoruCutKey();
-			this.addChild(this.quickImg);
 
-			this.hpAndmp.x=349;
 
 			this.x=(UIEnum.WIDTH - this.width) >> 1;
 
 			this.mountBtn.setActive(false, .6, true);
-
+			
 		}
 
 		private function onClick(e:MouseEvent):void {
@@ -213,6 +228,8 @@ package com.leyou.ui.tools {
 				return;
 
 			this.hpAndmp.updateProgress();
+			
+			this.openFuncToLevel();
 		}
 
 		public function stopAddMp():void {
@@ -815,6 +832,11 @@ package com.leyou.ui.tools {
 			if (Core.me == null || Core.me.info == null)
 				return;
 
+			if (Core.me.info.level >= ConfigEnum.Alchemy1)
+				this.alchmyBtn.setActive(true, 1, true);
+			else
+				this.alchmyBtn.setActive(false, 0.6, true);
+
 //			this.wenZBtn.setActive((ConfigEnum.BadgeOpenLv <= Core.me.info.level));
 		}
 
@@ -902,6 +924,10 @@ package com.leyou.ui.tools {
 					var mod:int=AssistWnd.getInstance().visible ? 2 : 1;
 					UILayoutManager.getInstance().singleMove(AssistWnd.getInstance(), "assistWnd", mod, evt.target.localToGlobal(new Point(0, 0)));
 //					AssistWnd.getInstance().open();
+					break;
+				case "alchmyBtn":
+					if (Core.me.info.level >= ConfigEnum.Alchemy1)
+						UILayoutManager.getInstance().open(WindowEnum.GEM_LV);
 					break;
 			}
 

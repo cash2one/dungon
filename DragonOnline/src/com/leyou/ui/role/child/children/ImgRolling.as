@@ -4,13 +4,12 @@ package com.leyou.ui.role.child.children {
 	import com.ace.ui.img.child.Image;
 	import com.greensock.TweenLite;
 	import com.greensock.easing.Back;
-
+	
 	import flash.display.Bitmap;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.events.TimerEvent;
-	import flash.geom.Rectangle;
 	import flash.utils.Timer;
 
 	public class ImgRolling extends Sprite {

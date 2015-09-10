@@ -29,6 +29,7 @@ package com.ace.ui.toolTip {
 		protected var tipsDic:Object; //实例字典
 		protected var classDic:Object; //类字典
 		private var stg:Stage;
+		private var _dir:int;
 		
 		// TIP矩形(碰撞检测用)
 		private var tipRect:Rectangle;
@@ -103,7 +104,7 @@ package com.ace.ui.toolTip {
 				MouseManager.getInstance().addFun(MouseEvent.MOUSE_OUT, onMouseOut);
 			this.clearTipCon();
 			this.dis=$dis;
-			
+			_dir = dir;
 			var tmpTip:ITip;
 			for (var i:int=0; i < types.length; i++) {
 				this.initTips(types[i]);
@@ -113,18 +114,22 @@ package com.ace.ui.toolTip {
 				this.tipCon.addChild(tmpTip as DisplayObject);
 				if (i == 1) {
 					switch (dir) {
+						// 上
 						case 0:
 							tmpTip.x=tipPt.x;
 							tmpTip.y=-tmpTip.height + tipPt.y;
 							break;
+						// 右
 						case 2:
 							tmpTip.x=this.tipsDic[types[i - 1]].width + tipPt.x;
 							tmpTip.y=tipPt.y;
 							break;
+						// 下
 						case 4:
 							tmpTip.x=tipPt.x;
 							tmpTip.y=this.tipsDic[types[i - 1]].height + tipPt.y;
 							break;
+						// 左
 						case 6:
 							tmpTip.x=-this.tipsDic[types[i - 1]].width + tipPt.x;
 							tmpTip.y=tipPt.y;
@@ -220,10 +225,14 @@ package com.ace.ui.toolTip {
 			// TIP的宽高 -- 新计算方式
 			tipRect.height = 0;
 			tipRect.width = tipCon.width;
-			var cnum:int = tipCon.numChildren;
-			while(0 != cnum){
-				cnum--;
-				tipRect.height += tipCon.getChildAt(cnum).height;
+			if((0 == _dir) || (4 == _dir) || (1 == _dir)){
+				var cnum:int = tipCon.numChildren;
+				while((0 != cnum)){
+					cnum--;
+					tipRect.height += tipCon.getChildAt(cnum).height;
+				}
+			}else{
+				tipRect.height = tipCon.height;
 			}
 			//------------------------------------------------------------------
 			
@@ -345,7 +354,7 @@ package com.ace.ui.toolTip {
 		}
 		
 		public function get isShow():Boolean {
-//			trace("是否显示Tip：",this.tipCon.visible);
+			trace("是否显示Tip：",this.tipCon.visible);
 			return this.tipCon.visible;
 		}
 		

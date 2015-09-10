@@ -201,8 +201,7 @@ package com.leyou.ui.wing {
 			if (evt.target.name == "autoUpBtn") {
 
 				if (this.autoUpBtn.text.indexOf(PropUtils.getStringById(1986)) > -1) {
-					win=PopupManager.showConfirm(PropUtils.getStringById(1987), startEvo, function():void{
-					trace("ffeeeeeeeeeeee");
+					win=PopupManager.showConfirm(PropUtils.getStringById(1987), startEvo, function():void {
 					}, false, "wingLv");
 				} else {
 
@@ -310,8 +309,9 @@ package com.leyou.ui.wing {
 				this.wishLbl.text=o.exp; // + "/" + xml.@Wish_Exp;
 				var diff:int=int(o.exp - this.currentExp);
 
-				if (o.hasOwnProperty("wlv") && int(o.wlv) != this.autoLv && this.autoLv != 0 && this.autoTimeID != 0) {
-					this.autoUpBtn.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+				if (o.hasOwnProperty("wlv") && int(o.wlv) != this.autoLv && this.autoLv != 0) {
+					if (this.autoTimeID != 0)
+						this.autoUpBtn.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
 					diff=int(xml.@Wish_Exp) - int(this.currentExp);
 
 					this.successEffect.visible=true;

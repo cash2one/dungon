@@ -99,6 +99,7 @@ package com.leyou.ui.market.child {
 			grid.x=10;
 			grid.y=10; 
 			addChild(grid);
+			grid.isShowPrice = true;
 		}
 		
 		protected function onMouseOver(event:MouseEvent):void
@@ -152,6 +153,7 @@ package com.leyou.ui.market.child {
 			}
 			dataLink = data;
 			dataLink.render = this;
+			dataLink.buyType = 2;
 			updataRender();
 		}
 		

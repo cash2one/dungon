@@ -2,6 +2,7 @@ package com.leyou.ui.expCopy
 {
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.table.TNoticeInfo;
+	import com.ace.manager.GuideManager;
 	import com.ace.manager.LibManager;
 	import com.ace.ui.auto.AutoSprite;
 	import com.ace.ui.lable.Label;
@@ -160,6 +161,10 @@ package com.leyou.ui.expCopy
 //			doubleImg.updateBmp("ui/num/"+obj.two.bl+"_lzs.png");
 //			priceLbl.text = obj.two.money;
 //			openLbl.text = obj.box.cc + "/" + obj.box.cm;
+		}
+		
+		public function removeGuide():void{
+			GuideManager.getInstance().removeGuide(83);
 		}
 	}
 }

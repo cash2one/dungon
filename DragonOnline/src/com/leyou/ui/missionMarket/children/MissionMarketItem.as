@@ -8,6 +8,7 @@ package com.leyou.ui.missionMarket.children
 	import com.ace.ui.auto.AutoSprite;
 	import com.ace.ui.button.children.NormalButton;
 	import com.ace.ui.img.child.Image;
+	import com.greensock.TweenMax;
 	import com.leyou.data.missinMarket.MissionMarketChapterData;
 	import com.leyou.net.cmd.Cmd_TaskMarket;
 	import com.leyou.ui.mail.child.MaillGrid;
@@ -28,6 +29,8 @@ package com.leyou.ui.missionMarket.children
 		private var switchFun:Function;
 		
 		public var type:int;
+		
+		public var receiveAble:Boolean;
 		
 		private var grids:Vector.<MaillGrid>;
 		
@@ -77,9 +80,16 @@ package com.leyou.ui.missionMarket.children
 			bgImg.updateBmp("ui/missionbar/mk_bg_"+type+".jpg");
 			var finished:Boolean = (data.finishedNum == data.totalNum);
 			completeImg.visible = finished && (1 == data.status);
+			if(data.jlc > 0){
+				TweenMax.to(this, 2, {glowFilter: {color: 0xFFD700, alpha: 1, blurX: 18, blurY: 18, strength: 4}, yoyo: true, repeat: -1});
+			}else{
+				TweenMax.killTweensOf(this);
+				this.filters = null;
+			}
 			if(finished){
 				receiveBtn.text = (0 == data.status) ? "领取奖励" : "已领取";
 				receiveBtn.setActive((0 == data.status), 1, true);
+				
 			}else{
 				receiveBtn.text = "未完成";
 				receiveBtn.setActive(false, 1, true);

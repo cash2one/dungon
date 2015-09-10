@@ -20,6 +20,7 @@ package com.ace.game.scene.ui {
 	import com.ace.ui.button.children.ImgButton;
 	import com.ace.ui.button.children.NormalButton;
 	import com.ace.ui.button.children.RadioButton;
+	import com.ace.ui.img.child.Image;
 	import com.ace.ui.input.children.TextInput;
 	import com.ace.ui.lable.Label;
 	import com.ace.ui.menu.data.MenuInfo;
@@ -38,7 +39,7 @@ package com.ace.game.scene.ui {
 	import com.leyou.utils.ItemUtil;
 	import com.leyou.utils.PropUtils;
 	import com.leyou.utils.StringUtil_II;
-
+	
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.events.TextEvent;
@@ -97,6 +98,7 @@ package com.ace.game.scene.ui {
 
 		private var killName:String;
 		private var menuArr:Vector.<MenuInfo>;
+		private var totalPriceImg:Image;
 
 		public function ReviveWnd() {
 			super(LibManager.getInstance().getXML("config/ui/scene/reviveWnd.xml"));
@@ -121,6 +123,7 @@ package com.ace.game.scene.ui {
 			bybChek=getUIbyID("bybChek") as RadioButton;
 			sumPrice=getUIbyID("sumPrice") as Label;
 			buyBtn=getUIbyID("buyBtn") as NormalButton;
+			totalPriceImg=getUIbyID("totalPriceImg") as Image;
 
 			var format:TextFormat=numInput.input.defaultTextFormat;
 			format.align=TextFormatAlign.CENTER;
@@ -147,6 +150,9 @@ package com.ace.game.scene.ui {
 			grid.x=68;
 			grid.y=54;
 			addChild(grid);
+			
+			ybChek.addEventListener(MouseEvent.CLICK, onCLick);
+			bybChek.addEventListener(MouseEvent.CLICK, onCLick);
 		}
 
 		protected function onTextClick(event:TextEvent):void {
@@ -433,6 +439,14 @@ package com.ace.game.scene.ui {
 					var id:int=ybChek.isOn ? 1 : 2;
 					var type:int=ybChek.isOn ? 1 : 4;
 					Cmd_Market.cm_Mak_B(type, id, int(numInput.text));
+					break;
+				case "ybChek":
+					sumPrice.text=(price * int(numInput.text)) + "";
+					totalPriceImg.updateBmp("ui/backpack/yuanbaoIco.png");
+					break;
+				case "bybChek":
+					sumPrice.text=(price * int(numInput.text)) + "";
+					totalPriceImg.updateBmp("ui/backpack/yuanbaoIco_bound.png");
 					break;
 			}
 		}

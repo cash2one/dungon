@@ -1,7 +1,9 @@
 package com.ace.game.scene.ui
 {
+	import com.ace.enum.SceneEnum;
 	import com.ace.enum.UIEnum;
 	import com.ace.game.proxy.CmdProxy;
+	import com.ace.gameData.manager.MapInfoManager;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.table.TEquipInfo;
 	import com.ace.gameData.table.TItemInfo;
@@ -15,6 +17,7 @@ package com.ace.game.scene.ui
 	import com.ace.utils.StringUtil;
 	import com.leyou.enum.ChatEnum;
 	import com.leyou.net.cmd.Cmd_EXPC;
+	import com.leyou.net.cmd.Cmd_Ttt;
 	import com.leyou.util.DateUtil;
 	import com.leyou.utils.ItemUtil;
 	import com.leyou.utils.PropUtils;
@@ -72,11 +75,23 @@ package com.ace.game.scene.ui
 		
 		protected function onBtnClick(event:MouseEvent):void{
 			CmdProxy.cm_revive(0);
-			Cmd_EXPC.cm_Exp_L();
 			if(TimeManager.getInstance().hasITick(onTick)){
 				TimeManager.getInstance().removeITick(onTick);
 			}
 			hide();
+			
+			var type:int=MapInfoManager.getInstance().type;
+			
+			
+			switch (type) {
+				case SceneEnum.SCENE_TYPE_LJCJ:
+					Cmd_EXPC.cm_Exp_L();
+					break;
+				case SceneEnum.SCENE_TYPE_TTT:
+					Cmd_Ttt.cmCopyExit();
+					break;
+			}
+			
 		}
 		
 		/**

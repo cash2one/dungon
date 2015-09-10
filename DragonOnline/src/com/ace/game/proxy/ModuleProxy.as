@@ -75,7 +75,7 @@ package com.ace.game.proxy {
 
 			if (!exist) {
 				if (!SettingManager.getInstance().assitInfo.isAutoBuyHP)
-					GuideManager.getInstance().showGuide(45, UIManager.getInstance().toolsWnd);
+					GuideManager.getInstance().showGuide(45, UIManager.getInstance().toolsWnd.getUIbyID("guaJBtn"));
 			}
 
 			return false;
@@ -121,13 +121,19 @@ package com.ace.game.proxy {
 			var xmllist:XMLList=infoXml.shop;
 			var xml:XML;
 			var index:int=0;
+			var exist:Boolean=false;
 
 			for each (xml in xmllist) {
-				if (xml.@itemId == id) {
+				if (xml.@itemId == id && xml.@shopId == 1) {
+					exist=true;
 					break;
 				}
+				
 				index++;
 			}
+
+			if (!exist)
+				return false;
 
 			var table:TItemInfo=TableManager.getInstance().getItemInfo(id);
 			if (table == null)

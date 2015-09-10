@@ -135,7 +135,7 @@ package com.leyou.ui.tips {
 			desLbl.htmlText=StringUtil.substitute(skill.des, num1, num2);
 			var openLv:int=skillInfo.autoLv;
 			var hasNext:Boolean=((id % 4 + 1) < 4);
-			if ((openLv <= Core.me.info.level) && hasNext) {
+			if (((openLv <= Core.me.info.level) && hasNext) && !tipInfo.isPetSkill) {
 				num1=(skillInfo.addition1 + skillInfo.addition2 * (tipInfo.skillLv + 1)) / 100;
 				num2=skillInfo.addition4 + skillInfo.addition3 * (tipInfo.skillLv + 1);
 				ndesLbl.htmlText=StringUtil.substitute(skill.des, num1, num2);
@@ -172,10 +172,10 @@ package com.leyou.ui.tips {
 				conEnergyLbl.text=TableManager.getInstance().getSkillLvInfo(tipInfo.skillLv).energy + "";
 				conGoldLbl.text=TableManager.getInstance().getSkillLvInfo(tipInfo.skillLv).money + "";
 			} else {
-				openLevelLbl.visible=hasNext;
+				openLevelLbl.visible=(hasNext && !tipInfo.isPetSkill);
 				openLevelLbl.text=openLv + PropUtils.getStringById(1583);
-				skillLvLbl.visible=!hasNext;
-				skillLvLbl.text=tipInfo.skillLv + "";
+				skillLvLbl.visible=!(hasNext && !tipInfo.isPetSkill);
+				skillLvLbl.text=tipInfo.skillLv + PropUtils.getStringById(1812);
 				nSkillLvLbl.visible=false;
 				ndesLbl.visible=false;
 				lineImg.visible=false;

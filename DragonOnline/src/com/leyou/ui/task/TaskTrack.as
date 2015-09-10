@@ -242,14 +242,16 @@ package com.leyou.ui.task {
 
 				if (this.renderVec[int(minfo.type)] == null) {
 					item=new MissionTrackRender();
-				} else
+				} else{
 					item=this.renderVec[minfo.type];
-
+					item.visible=true;
+				}
+				
 				item.y=this.taskCount;
 				this.taskCount+=item.height;
 
-				if (o.tid == 23)
-					GuideManager.getInstance().showGuide(67, item.flyBtn);
+//				if (o.tid == 23)
+//					GuideManager.getInstance().showGuide(67, item.flyBtn);
 
 				if (o.tid == 1) {
 					UIManager.getInstance().showWindow(WindowEnum.FIRST_LOGIN);
@@ -290,22 +292,22 @@ package com.leyou.ui.task {
 
 								if (bname.indexOf("npc") > -1) { // || bname.indexOf("box") > -1) {
 									this.linkArr[int(minfo.type)].push(bname + "--" + minfo[bname]);
-									tartxt=tartxt.replace("##", "<font color='#00ff00'><u><a href='event:" + bname + "--" + minfo[bname] + "'>" + minfo[tarval[i]] + "</a></u></font>");
+									tartxt=tartxt.replace("##", "<font color='#00ff00'><u><a href='event:" + bname + "--" + minfo[bname] + "'>" + TaskUtil.getTaskTargetName(tarval[i], minfo[tarval[i]]) + "</a></u></font>");
 								} else {
 									this.linkArr[int(minfo.type)].push(bname + "--" + minfo.target_point);
 
 									if (int(minfo.dtype) == TaskEnum.taskType_killBossDrop)
-										tartxt=tartxt.replace("##", "<font color='#00ff00'><u><a href='event:" + String(tarval[0]).split("_")[0] + "_id" + "--" + minfo.target_point + "'>" + minfo[tarval[i]] + "</a></u></font>");
+										tartxt=tartxt.replace("##", "<font color='#00ff00'><u><a href='event:" + String(tarval[0]).split("_")[0] + "_id" + "--" + minfo.target_point + "'>" + TaskUtil.getTaskTargetName(tarval[i], minfo[tarval[i]]) + "</a></u></font>");
 									else if (int(minfo.dtype) == TaskEnum.taskType_collect)
-										tartxt=tartxt.replace("##", "<font color='#00ff00'><u><a href='event:" + String(tarval[0]).split("_")[0] + "_id" + "--" + minfo.target_point + "'>" + minfo[tarval[i]] + "</a></u></font>");
+										tartxt=tartxt.replace("##", "<font color='#00ff00'><u><a href='event:" + String(tarval[0]).split("_")[0] + "_id" + "--" + minfo.target_point + "'>" + TaskUtil.getTaskTargetName(tarval[i], minfo[tarval[i]]) + "</a></u></font>");
 									else if (int(minfo.dtype) == TaskEnum.taskType_Exchange)
-										tartxt=tartxt.replace("##", "<font color='#00ff00'><u><a href='event:" + bname + "--" + minfo.item_id + "'>" + minfo[tarval[i]] + "</a></u></font>");
+										tartxt=tartxt.replace("##", "<font color='#00ff00'><u><a href='event:" + bname + "--" + minfo.item_id + "'>" + TaskUtil.getTaskTargetName(tarval[i], minfo[tarval[i]]) + "</a></u></font>");
 									else if (int(minfo.dtype) == TaskEnum.taskType_CopySuccess) {
 										tartxt=tartxt.replace("##", "<font color='#00ff00'><u><a href='event:copysuccess'>" + TableManager.getInstance().getCopyInfo(minfo[tarval[i]]).name + "</a></u></font>");
 									} else if (int(minfo.dtype) == TaskEnum.taskType_ElementFlagNum) {
 										tartxt=tartxt.replace("##", "<font color='#00ff00'><u><a href='event:elements'>" + minfo[tarval[i]] + "</a></u></font>");
 									} else
-										tartxt=tartxt.replace("##", "<font color='#00ff00'><u><a href='event:" + bname + "--" + minfo.target_point + "'>" + minfo[tarval[i]] + "</a></u></font>");
+										tartxt=tartxt.replace("##", "<font color='#00ff00'><u><a href='event:" + bname + "--" + minfo.target_point + "'>" + TaskUtil.getTaskTargetName(tarval[i], minfo[tarval[i]]) + "</a></u></font>");
 								}
 							}
 
@@ -322,9 +324,15 @@ package com.leyou.ui.task {
 
 				} else if (o.st == 1) {
 
-					this.renderStateBtn.updateIcon(2);
-					this.linkArr[int(minfo.type)].push("npc_id--" + minfo["dnpc"]);
-					tartxt=StringUtil.substitute(PropUtils.getStringById(1894), ["<font color='#00ff00'><u><a href='event:" + this.linkArr[int(minfo.type)][0] + "'>" + minfo["dnpcname"] + "</a></u></font>"]);
+					if (int(minfo.type) == TaskEnum.taskLevel_mainLine) {
+						this.renderStateBtn.updateIcon(2);
+						item.targetVisible.visible=true;
+						this.linkArr[int(minfo.type)].push("npc_id--" + minfo["dnpc"]);
+						tartxt=StringUtil.substitute(PropUtils.getStringById(1894), ["<font color='#00ff00'><u><a href='event:" + this.linkArr[int(minfo.type)][0] + "'>" + TaskUtil.getTaskTargetName("npc_id", minfo.dnpc) + "</a></u></font>"]);
+					} else if (int(minfo.type) == TaskEnum.taskLevel_mercenaryCloseLine || int(minfo.type) == TaskEnum.taskLevel_mercenaryExpLine) {
+//						tartxt=StringUtil.substitute(PropUtils.getStringById(1894), ["<font color='#00ff00'><u><a href='event:" + this.linkArr[int(minfo.type)][0] + "'>" + TaskUtil.getTaskTargetName("npc_id", minfo.dnpc) + "</a></u></font>"]);
+
+					}
 
 				} else if (o.st == -1) {
 
@@ -366,7 +374,7 @@ package com.leyou.ui.task {
 						GuideManager.getInstance().showGuide(104, this); //.getWidget("expCopyBtn"));
 
 					if (o.tid == 110) {
-						GuideManager.getInstance().showGuide(83, UIManager.getInstance().rightTopWnd.getWidget("expCopyBtn"));
+						GuideManager.getInstance().showGuide(83, UIManager.getInstance().rightTopWnd.getWidget("teamCopyBtn"));
 					} else
 						GuideManager.getInstance().removeGuide(83);
 
@@ -499,13 +507,23 @@ package com.leyou.ui.task {
 					UIManager.getInstance().taskWnd.setVipLvState(Core.me.info.vipLv)
 				} else if (int(minfo.type) == TaskEnum.taskLevel_mercenaryCloseLine || int(minfo.type) == TaskEnum.taskLevel_mercenaryExpLine) {
 
+					if (o.st == 1) {
+						SceneProxy.onTaskComplete();
+
+						item.taskNameTxt(minfo.name + " <font color='#00ff00'><u><a href='event:mercenary--'>领取奖励</a></u></font>");
+						item.setTrBtnVisible(false);
+						item.targetVisible.visible=false;
+						taskCount-=20;
+					} else{
+						item.setTrBtnVisible(true);
+						item.targetVisible.visible=true;
+					}
 				}
 
 				item.taskTargetTxt(tartxt);
 				item.taskStateTxt("<font color='#" + stateTxt + "'>" + TaskUtil.getStringByState(int(o.st)) + "</font>");
 				item.taskTypeTxt("[" + TaskUtil.getStringByType(int(minfo.type)) + "]");
 
-				this.dailyrenderStateBtn.visible=false;
 				this.renderVec[int(minfo.type)]=item;
 
 				if (int(minfo.type) == TaskEnum.taskLevel_mainLine) {
@@ -539,6 +557,7 @@ package com.leyou.ui.task {
 				item.setTrBtnVisible(false);
 				item.setYbOnKeyVisible(false);
 
+				
 				UIManager.getInstance().taskWnd.setVipLvState();
 
 				if (o.award == 0) {
@@ -658,6 +677,12 @@ package com.leyou.ui.task {
 			var tr:Array=o.tr;
 			tr.sortOn("type", Array.CASEINSENSITIVE | Array.NUMERIC);
 
+			if(this.renderVec[TaskEnum.taskLevel_mercenaryCloseLine]!=null)
+				this.renderVec[TaskEnum.taskLevel_mercenaryCloseLine].visible=false;
+			
+			if(this.renderVec[TaskEnum.taskLevel_mercenaryExpLine]!=null)
+				this.renderVec[TaskEnum.taskLevel_mercenaryExpLine].visible=false;
+			
 			var tritem:Object;
 			for each (tritem in tr) {
 				if (tritem != null) {
@@ -668,6 +693,9 @@ package com.leyou.ui.task {
 					}
 				}
 			}
+			
+			
+			
 
 			this.firstAutoAstar=false;
 
@@ -772,6 +800,8 @@ package com.leyou.ui.task {
 						this.taskCount+=item.height;
 					else
 						this.taskCount+=item.height - 20;
+
+					GuideManager.getInstance().showGuide(8, item, true);
 				}
 
 				if (this.deliveryrenderStateBtn.visible) {
@@ -1027,6 +1057,16 @@ package com.leyou.ui.task {
 		}
 
 		/**
+		 *
+		 * @param type
+		 * @return
+		 *
+		 */
+		public function getTaskItemRender(type:int):MissionTrackRender {
+			return this.renderVec[type];
+		}
+
+		/**
 		 * 状态按钮
 		 * @param e
 		 *
@@ -1130,6 +1170,11 @@ package com.leyou.ui.task {
 					});
 				}
 
+			} else if (_type == TaskEnum.taskLevel_mercenaryCloseLine || _type == TaskEnum.taskLevel_mercenaryExpLine) {
+
+				info=TableManager.getInstance().getPointInfo(int(this.linkArr[_type][0].split("--")[1]));
+				Cmd_Go.cmGoPoint(int(info.sceneId), info.tx, info.ty);
+
 			} else {
 
 				if (int(this.taskOneInfo.st) == 0) {
@@ -1220,7 +1265,7 @@ package com.leyou.ui.task {
 
 					UILayoutManager.getInstance().show_II(WindowEnum.ROLE);
 
-					TweenLite.delayedCall(0.3, function():void {
+					TweenLite.delayedCall(0.6, function():void {
 						UILayoutManager.getInstance().show(WindowEnum.ROLE, WindowEnum.MOUTLVUP, UILayoutManager.SPACE_X, UILayoutManager.SPACE_Y);
 						UIManager.getInstance().roleWnd.setTabIndex(1);
 					});

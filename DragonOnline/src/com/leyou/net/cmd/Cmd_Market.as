@@ -126,5 +126,9 @@ package com.leyou.net.cmd
 		public static function sm_Mak_F(o:Object):void{
 			UIManager.getInstance().quickBuyWnd.loadItem(o);
 		}
+		
+		public static function cm_Mak_G(bid:int, num:int):void{
+			NetGate.getInstance().send(CmdEnum.CM_MAK_G+bid+","+num);
+		}
 	}
 }

@@ -95,7 +95,7 @@ package com.ace.ui.notice.message {
 			if (this.lbl.x <= -this.lbl.width) {
 				this.times++;
 				this.lbl.x=this.bg.width;
-				if (this.times >= 3 && this.noticeArr.length <= 0) {
+				if ((this.times >= NoticeEnum.MESSAGE7_TIMES) && (this.noticeArr.length <= 0)) {
 					this.clearMe();
 					return;
 				} else if (this.noticeArr.length > 0) {

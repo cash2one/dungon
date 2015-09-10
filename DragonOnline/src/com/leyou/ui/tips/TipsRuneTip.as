@@ -8,7 +8,6 @@ package com.leyou.ui.tips {
 	import com.ace.ui.auto.AutoSprite;
 	import com.ace.ui.img.child.Image;
 	import com.ace.ui.lable.Label;
-	import com.ace.utils.StringUtil;
 	import com.leyou.data.playerSkill.TipSkillInfo;
 	import com.leyou.ui.tips.childs.TipsSkillGrid;
 	import com.leyou.utils.PropUtils;
@@ -68,7 +67,7 @@ package com.leyou.ui.tips {
 			var skill:TSkillInfo=tipInfo.skillInfo;
 			nameLbl.text=skill.runeName;
 			desLbl.htmlText=skill.runeDes;
-			levelLbl.text=StringUtil.substitute(PropUtils.getStringById(2170),[skill.autoLv]);
+			levelLbl.text=skill.autoLv + PropUtils.getStringById(1583);
 
 			if (tipInfo.skillLv < int(skill.autoLv))
 				levelLbl.textColor=0xff0000;

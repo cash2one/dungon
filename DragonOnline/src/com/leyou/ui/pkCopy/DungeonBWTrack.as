@@ -111,20 +111,20 @@ package com.leyou.ui.pkCopy {
 //
 //			this.timeLbl.y=this.timLbl.y=lb.y + lb.height + 5;
 
-			if (o.hasOwnProperty("1712"))
-				this.countLbl.text=int(o["1712"]) + "";
-			else
-				this.countLbl.text="0";
+//			if (o.hasOwnProperty("1712"))
+//				this.countLbl.text=int(o["1712"]) + "";
+//			else
+//				this.countLbl.text="0";
 
 			if (o.hasOwnProperty("1710"))
 				this.ybLbl.text=int(o["1710"]) + "";
 			else
 				this.ybLbl.text="0";
 
-			if (o.hasOwnProperty("1711"))
-				this.chLbl.text=int(o["1711"]) + "";
-			else
-				this.chLbl.text="0";
+//			if (o.hasOwnProperty("1711"))
+//				this.chLbl.text=int(o["1711"]) + "";
+//			else
+//				this.chLbl.text="0";
 
 //			trace(this.time,"99999999");
 //			this.timeLbl.text="" + TimeUtil.getIntToTime(o.stime);

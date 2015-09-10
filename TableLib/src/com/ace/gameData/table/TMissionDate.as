@@ -57,7 +57,7 @@ package com.ace.gameData.table
 		 *	
 		 *	dnpc
 		 */
-		public var dnpc:String;
+		public var dnpc:int;
 		
 		/**
 		 *	交任务NPC名称

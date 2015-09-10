@@ -2,10 +2,12 @@ package com.leyou.ui.title {
 
 	import com.ace.ICommon.IMenu;
 	import com.ace.config.Core;
+	import com.ace.enum.TipEnum;
 	import com.ace.gameData.manager.MyInfoManager;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.table.TTitle;
 	import com.ace.manager.LibManager;
+	import com.ace.manager.ToolTipManager;
 	import com.ace.manager.UIManager;
 	import com.ace.ui.accordion.Accordion;
 	import com.ace.ui.auto.AutoSprite;
@@ -15,6 +17,7 @@ package com.leyou.ui.title {
 	import com.ace.ui.img.child.Image;
 	import com.ace.ui.lable.Label;
 	import com.ace.ui.lable.children.TextArea;
+	import com.leyou.data.tips.TipsInfo;
 	import com.leyou.manager.TimerManager;
 	import com.leyou.net.cmd.Cmd_Nck;
 	import com.leyou.ui.title.child.TitleBar;
@@ -22,6 +25,7 @@ package com.leyou.ui.title {
 	import com.leyou.utils.TimeUtil;
 
 	import flash.events.MouseEvent;
+	import flash.geom.Point;
 
 	public class TitleWnd extends AutoSprite implements IMenu {
 
@@ -62,6 +66,10 @@ package com.leyou.ui.title {
 		private var currentTime:int=0;
 
 		private var pos:int=-1;
+
+		private var isOver:Boolean=false;
+		private var tipsInfo:TipsInfo;
+
 
 		public function TitleWnd() {
 			super(LibManager.getInstance().getXML("config/ui/title/titleWnd.xml"));
@@ -142,6 +150,10 @@ package com.leyou.ui.title {
 					render=new TitleBar();
 					render.updateInfo(item);
 
+					render.addEventListener(MouseEvent.MOUSE_OVER, onTipsOver)
+					render.addEventListener(MouseEvent.MOUSE_OUT, onTipsOut)
+					render.addEventListener(MouseEvent.CLICK, onClick);
+					
 					this.titleBarList[item.titleId]=render;
 
 					switch (item.type) {
@@ -168,8 +180,9 @@ package com.leyou.ui.title {
 			this.titleTree.addItem(PropUtils.getStringById(1954), "", data1);
 			this.titleTree.addItem(PropUtils.getStringById(1955), "", data2);
 			this.titleTree.addItem(PropUtils.getStringById(1956), "", data3);
-
-			this.titleTree.addEventListener(MouseEvent.CLICK, onClick);
+			this.titleTree.saveData();
+			
+//			this.titleTree.addEventListener(MouseEvent.CLICK, onClick);
 			this.startBtn.addEventListener(MouseEvent.CLICK, onstartClick);
 
 			this.startBtn.setActive(false, .6, true);
@@ -179,6 +192,8 @@ package com.leyou.ui.title {
 			this.startBtn.visible=false;
 
 			this.setProgressVisiable(false);
+
+			this.tipsInfo=new TipsInfo();
 		}
 
 		private function onstartClick(e:MouseEvent):void {
@@ -207,6 +222,32 @@ package com.leyou.ui.title {
 
 		}
 
+		private function onTipsOver(e:MouseEvent):void {
+			if (e.target is TitleBar) {
+				this.isOver=true;
+				var bar:TitleBar=e.target as TitleBar;
+ 
+				var tinfo:TTitle=TableManager.getInstance().getTitleByID(this.titleBarList.indexOf(bar));
+				if (tinfo == null)
+					return;
+
+				if (tinfo.time > 0 && bar.mouseChildren) {
+					Cmd_Nck.cm_NckLastTime(tinfo.titleId);
+				}
+
+				this.tipsInfo.itemid=this.titleBarList.indexOf(bar);
+				this.tipsInfo.t=0;
+				this.tipsInfo.isUse=bar.mouseChildren
+				ToolTipManager.getInstance().show(TipEnum.TYPE_TITLE, this.tipsInfo, new Point(e.stageX, e.stageY));
+			}
+		}
+
+		private function onTipsOut(e:MouseEvent):void {
+			this.isOver=false;
+			ToolTipManager.getInstance().hide();
+
+		}
+
 		public function updateSelectData(render:TitleBar):void {
 			var tinfo:TTitle=TableManager.getInstance().getTitleByID(this.titleBarList.indexOf(render));
 			if (tinfo == null)
@@ -217,7 +258,7 @@ package com.leyou.ui.title {
 			pos=0;
 			for (var i:int=0; i < 4; i++) {
 				if (i < 3 && tinfo["attribute" + (i + 1)] > 0) {
-					this.properNameArr[i].text="      "+PropUtils.propArr[int(tinfo["attribute" + (i + 1)]) - 1] + ":";
+					this.properNameArr[i].text="      " + PropUtils.propArr[int(tinfo["attribute" + (i + 1)]) - 1] + ":";
 
 //					if (int(tinfo["attribute" + (i + 1)]) - 1 < 7){
 //						this.properkeyArr[i].text="" + tinfo["value" + (i + 1)];
@@ -489,11 +530,20 @@ package com.leyou.ui.title {
 
 		public function updateLastTime(o:Object):void {
 
-			this.currentTime=o.time;
-			this.properNameArr[this.pos].text=PropUtils.getStringById(1941)+":";
-			this.properkeyArr[this.pos].text="" + TimeUtil.getIntToDateTime(currentTime);
+			var bar:TitleBar=this.titleBarList[o.id] as TitleBar;
 
-			TimerManager.getInstance().add(exeTimer, "nickTime");
+			if (bar.isclick) {
+				this.currentTime=o.time;
+				this.properNameArr[this.pos].text=PropUtils.getStringById(1941) + ":";
+				this.properkeyArr[this.pos].text="" + TimeUtil.getIntToDateTime(currentTime);
+
+				TimerManager.getInstance().add(exeTimer, "nickTime");
+			}
+
+			if (bar.mouseChildren && this.isOver) {
+				this.tipsInfo.t=o.time;
+				ToolTipManager.getInstance().show(TipEnum.TYPE_TITLE, this.tipsInfo, new Point(this.stage.mouseX, this.stage.mouseY));
+			}
 
 //			var render:TitleBar;
 //			
@@ -539,6 +589,29 @@ package com.leyou.ui.title {
 			this.startBtn.setToolTip(TableManager.getInstance().getSystemNotice(1401).content);
 
 			render.setState(false);
+		}
+
+		public function updatedelete(o:Object):void {
+			var render:TitleBar=this.titleBarList[o.curNckid];
+
+			if (render.getType() != 2)
+				this.updateActiveByType(render.getType());
+
+			this.startBtn.text=PropUtils.getStringById(1958);
+			this.startBtn.setToolTip(TableManager.getInstance().getSystemNotice(1401).content);
+
+			render.enableTime=false;
+
+			currentTime=0;
+			TimerManager.getInstance().removeBykey("nickTime");
+
+			if (pos > -1) {
+				properNameArr[pos].text="";
+				properNameArr[pos].setToolTip("");
+				properkeyArr[pos].text="";
+			}
+
+			startBtn.setActive(false, .6, true);
 		}
 
 		private function updateClickByType(type:int):void {

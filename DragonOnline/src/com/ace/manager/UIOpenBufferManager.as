@@ -11,13 +11,13 @@ package com.ace.manager
 	import com.leyou.net.cmd.Cmd_CCZ;
 	import com.leyou.net.cmd.Cmd_CLI;
 	import com.leyou.net.cmd.Cmd_Collection;
-	import com.leyou.net.cmd.Cmd_EXPC;
 	import com.leyou.net.cmd.Cmd_FCZ;
 	import com.leyou.net.cmd.Cmd_Fanl;
 	import com.leyou.net.cmd.Cmd_Farm;
 	import com.leyou.net.cmd.Cmd_Friend;
 	import com.leyou.net.cmd.Cmd_GBUY;
 	import com.leyou.net.cmd.Cmd_GuildBattle;
+	import com.leyou.net.cmd.Cmd_HCCZ;
 	import com.leyou.net.cmd.Cmd_Invest;
 	import com.leyou.net.cmd.Cmd_KF;
 	import com.leyou.net.cmd.Cmd_LDW;
@@ -28,7 +28,6 @@ package com.ace.manager
 	import com.leyou.net.cmd.Cmd_PayRank;
 	import com.leyou.net.cmd.Cmd_Pet;
 	import com.leyou.net.cmd.Cmd_Rank;
-	import com.leyou.net.cmd.Cmd_SCP;
 	import com.leyou.net.cmd.Cmd_Seven;
 	import com.leyou.net.cmd.Cmd_TaskMarket;
 	import com.leyou.net.cmd.Cmd_TobeStrong;
@@ -166,9 +165,9 @@ package com.ace.manager
 					}
 					break;
 				case WindowEnum.RANK:
-					if(!contains(wndKey, CmdEnum.SM_RAK_I)){
-						Cmd_Rank.cm_RAK_I(1, 0, 1, 12);
-						addCmd(wndKey, CmdEnum.SM_RAK_I);
+					if(!contains(wndKey, CmdEnum.SM_RAK_Y)){
+						Cmd_Rank.cm_RAK_Y();
+						addCmd(wndKey, CmdEnum.SM_RAK_Y);
 					}
 					break;
 				case WindowEnum.ACHIEVEMENT:
@@ -291,6 +290,12 @@ package com.ace.manager
 					if(!contains(WindowEnum.TASK_MARKET, CmdEnum.SM_YD_I)){
 						Cmd_TaskMarket.cm_TaskMarket_I();
 						addCmd(wndKey, CmdEnum.SM_YD_I);
+					}
+					break;
+				case WindowEnum.COMBINE_RECHARGE:
+					if(!contains(WindowEnum.COMBINE_RECHARGE, CmdEnum.SM_HCCZ_I)){
+						Cmd_HCCZ.cm_HCCZ_I();
+						addCmd(wndKey, CmdEnum.SM_HCCZ_I);
 					}
 					break;
 			}

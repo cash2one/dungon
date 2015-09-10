@@ -105,7 +105,7 @@ package com.leyou.data.aution
 		/**
 		 * <T>金币数量</T>
 		 */		
-		public var item_type:Object;
+		public var item_type:int;
 		
 		public var tips:TipsInfo = new TipsInfo();
 		

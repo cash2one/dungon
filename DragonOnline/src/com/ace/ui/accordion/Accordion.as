@@ -1,7 +1,8 @@
 package com.ace.ui.accordion {
 
 	import com.ace.ui.menu.data.MenuInfo;
-	
+	import com.greensock.TweenLite;
+
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 	import flash.geom.Rectangle;
@@ -12,21 +13,30 @@ package com.ace.ui.accordion {
 		private var _h:Number=0
 
 		private var itemVec:Vector.<AccordionItem>;
+		private var itemPathVec:Array=[];
 
 		public var selectIndex:int=0;
 
+		private static var selectCount:int=0;
+
+		private var treeCount:int=0;
+
 		public var leftSpace:Number=0;
 		private var _titleHegiht:Number=25;
+
+		public var isSencond:Boolean=false;
 
 		public function Accordion(_w:Number=200, _h:Number=400, _titleH:Number=30) {
 			this._h=_h;
 			this._w=_w;
 			this._titleHegiht=_titleH;
 			this.init();
+			this.mouseEnabled=false;
 		}
 
 		private function init():void {
 			this.itemVec=new Vector.<AccordionItem>();
+
 		}
 
 		/**
@@ -38,7 +48,7 @@ package com.ace.ui.accordion {
 		 *
 		 */
 		public function addItem(title:String="", num:String="", data:Array=null, menuVec:Vector.<MenuInfo>=null):AccordionItem {
-			var item:AccordionItem=new AccordionItem(this.itemVec.length, _w, 0, _titleHegiht);
+			var item:AccordionItem=new AccordionItem(treeCount, _w, 0, _titleHegiht, this.isSencond);
 			item.setTitleTxt(title);
 			item.setNumTxt(num);
 			item.setMenu(menuVec);
@@ -56,6 +66,9 @@ package com.ace.ui.accordion {
 			this.updateContentUi();
 			closeItem(this.itemVec.length - 1);
 			openItem(0);
+
+
+			treeCount++;
 
 			return item;
 		}
@@ -123,9 +136,10 @@ package com.ace.ui.accordion {
 			var item:AccordionItem;
 			var i:int=0;
 			for each (item in this.itemVec) {
-				item.y=i;
+				TweenLite.to(item, 0.1, {y: i});
 				i+=item.getHeight() + 1;
 			}
+
 		}
 
 		/**
@@ -170,11 +184,41 @@ package com.ace.ui.accordion {
 
 		private function onClick(e:MouseEvent):void {
 
-			this.itemVec[selectIndex].states=false;
-			selectIndex=this.itemVec.indexOf(e.currentTarget as AccordionItem);
-			this.itemVec[selectIndex].states=true;
+			if (e.target is LabelButton) {
 
+				var lb:AccordionItem=e.currentTarget as AccordionItem;
+				var index:int=this.itemVec.indexOf(lb);
+
+//				if (!lb.isSecond) {
+//					
+//					if (selectIndex != index) {
+//						if (this.selectIndex != -1)
+//							this.itemVec[selectIndex].states=false;
+//						
+//						selectIndex=index;
+//						this.itemVec[selectIndex].states=true;
+//					} else {
+//						this.itemVec[selectIndex].states=!this.itemVec[selectIndex].states;
+//					}
+//
+//				} else {
+
+				if (selectIndex != index) {
+					if (this.selectIndex != -1)
+						this.itemVec[selectIndex].states=false;
+
+					selectIndex=index;
+					this.itemVec[selectIndex].states=true;
+				} else {
+					this.itemVec[selectIndex].states=!this.itemVec[selectIndex].states;
+				}
+//				}
+			}
+
+//			this.updateContentUi();
 			this.updateContentlist();
+
+			e.stopImmediatePropagation();
 		}
 
 		public function set titleHeight(v:Number):void {
@@ -190,6 +234,10 @@ package com.ace.ui.accordion {
 		private function closeItem(i:int):void {
 			this.itemVec[i].states=false;
 			this.updateContentlist();
+		}
+
+		public function saveData():void {
+			treeCount=0;
 		}
 
 	}

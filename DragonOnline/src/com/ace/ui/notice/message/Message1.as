@@ -34,6 +34,11 @@ package com.ace.ui.notice.message {
 		}
 
 		public function broadcast(notice:String, values:Array):void {
+			if((null  == values) || ((null != values) && (0 == values.length))){
+				if(-1 != queue.indexOf(notice)){
+					return;
+				}
+			}
 			queue.push(notice);
 			valuesArr.push(values);
 			pointsArr.push(new Point(NoticeManager.getInstance().con.stage.mouseX, NoticeManager.getInstance().con.stage.mouseY));

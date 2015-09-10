@@ -4,9 +4,11 @@ package com.leyou.ui.chat
 	import com.ace.enum.KeysEnum;
 	import com.ace.game.scene.ui.SceneUIManager;
 	import com.ace.game.utils.SceneUtil;
+	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.table.TNoticeInfo;
 	import com.ace.manager.UIManager;
 	import com.ace.ui.input.children.HideInput;
+	import com.ace.ui.notice.NoticeManager;
 	import com.leyou.data.chat_II.ChatContentInfo;
 	import com.leyou.enum.ChatEnum;
 	import com.leyou.ui.chat.child.ChatMessageView;
@@ -178,11 +180,20 @@ package com.leyou.ui.chat
 			controller.pushContent(content);
 		}
 		
+		private var filterTool:TextField = new TextField();
+		
 		// 获得物品重要提示
 		public function onSysNotice_II(obj:Object):void{
 			if((null != Core.me) && (null != Core.me.info)){
 				var content:ChatContentInfo = ChatUtil.creatNotice_II(obj);
 				controller.pushContent(content);
+				var msgId:int=obj.msgid;
+				var noticeInfo:TNoticeInfo=TableManager.getInstance().getSystemNotice(obj.msgid);
+				if((7 == noticeInfo.screenId1) || (7 == noticeInfo.screenId2) || (7 == noticeInfo.screenId3)){
+					filterTool.htmlText = content.content.replace(content.channelName, "");
+					var systemPostStr:String = filterTool.text;
+					NoticeManager.getInstance().ass_II(7, systemPostStr);
+				}
 			}
 		}
 		

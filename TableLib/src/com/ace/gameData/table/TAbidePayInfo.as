@@ -31,6 +31,19 @@ package com.ace.gameData.table
 			dayItem1Num = xml.@item1_num;
 			dayItem2Num = xml.@item2_num;
 		}
+		public function getCombineReward($day:int):int{
+			switch($day){
+				case 1:
+					return day1;
+				case 3:
+					return day2;
+				case 6:
+					return day3;
+				default:
+					return day1;
+			}
+			return day1;
+		}
 		
 		public function getRewardByDay($day:int):int{
 			switch($day){

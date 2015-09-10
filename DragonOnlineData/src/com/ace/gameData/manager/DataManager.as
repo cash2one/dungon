@@ -15,6 +15,7 @@ package com.ace.gameData.manager {
 	import com.leyou.data.celebrate.AreaCelebrateData;
 	import com.leyou.data.cityBattle.CityBattleData;
 	import com.leyou.data.collectioin.CollectionData;
+	import com.leyou.data.combineData.CombineData;
 	import com.leyou.data.convenient.ConvenientData;
 	import com.leyou.data.dargonball.DragonBallData;
 	import com.leyou.data.fieldboss.FieldBossData;
@@ -28,6 +29,7 @@ package com.ace.gameData.manager {
 	import com.leyou.data.missinMarket.MissionMarketData;
 	import com.leyou.data.online.OnlineRewardData;
 	import com.leyou.data.paypromotion.PayPromotionData;
+	import com.leyou.data.paypromotion.PayPromotionDataII;
 	import com.leyou.data.payrank.PayRankData;
 	import com.leyou.data.pet.PetData;
 	import com.leyou.data.popupNumber.PopupNumberData;
@@ -72,7 +74,9 @@ package com.ace.gameData.manager {
 		
 		public var bossCopyData:BossCopyData; // boss副本
 		
-		public var payPromotionData:PayPromotionData; // 充值返利数据
+//		public var payPromotionData:PayPromotionData; // 充值返利数据
+		
+		public var payPromotionData_II:PayPromotionDataII; // 充值返利数据新版
 		
 		public var tobeStrongData:TobeStrongData; // 我要变强
 		
@@ -95,6 +99,8 @@ package com.ace.gameData.manager {
 		public var integralData:IntegralData; // 积分数据
 		
 		public var abidePayData:AbidePayData; // 持续充值
+		
+		public var combineData:CombineData; // 合服连冲
 		
 		public var serverData:ServerData; // 服务器信息
 		
@@ -181,7 +187,8 @@ package com.ace.gameData.manager {
 			this.luckdrawData=new LuckDrawData();
 			this.fieldBossData=new FieldBossData();
 			this.bossCopyData=new BossCopyData();
-			this.payPromotionData=new PayPromotionData();
+//			this.payPromotionData=new PayPromotionData();
+			this.payPromotionData_II=new PayPromotionDataII();
 			this.tobeStrongData=new TobeStrongData();
 			this.sevenDayData=new SevenDayData();
 			this.investData=new InvestData();
@@ -204,6 +211,7 @@ package com.ace.gameData.manager {
 			this.blackStoreData=new BlackStoreData();
 			this.popupNumData=new PopupNumberData();
 			this.missionMarketData=new MissionMarketData();
+			this.combineData=new CombineData();
 		}
 	}
 }

@@ -323,6 +323,8 @@ manaRevive	5	法力回复速度/S
 		public static var MountTradeOpenLv:int;
 		public static var WingOpenLv:int;
 		
+		public static var buff1:int;
+		
 		public static var ShopOpenLv:int;
 		public static var NckOpenLv:int;
 		public static var BadgeOpenLv:int;
@@ -384,6 +386,7 @@ manaRevive	5	法力回复速度/S
 		public static var taskDailyOpenLv:int;
 		public static var taskDailySum:int;
 		public static var taskDailyCost1:String;
+		public static var taskDailyCost2:String;
 		
 		public static var taskDailyStar1:Number;
 		public static var taskDailyStar2:Number;
@@ -453,6 +456,8 @@ manaRevive	5	法力回复速度/S
 		public static var RankOpenLevel:int;
 		// 野外boss开启等级
 		public static var FieldBossOpenLevel:int;
+		// 野外boss高于等级
+		public static var FieldBossForbiddenLeve:int;
 		
 		// 排行榜总战力开启成就ID
 		public static var rank1:int;
@@ -470,6 +475,9 @@ manaRevive	5	法力回复速度/S
 		public static var rank8:int;
 		// 每日排行榜可投票次数
 		public static var rank9:int;
+		public static var rank11:int;
+		public static var rank12:String;
+		public static var rank13:String;
 		// 活跃度最大值
 		public static var activeMaxCount:int;
 		// 世界经验等级
@@ -481,6 +489,20 @@ manaRevive	5	法力回复速度/S
 		// 我要变强系数
 		public static var tobeStr2:int;
 		
+		// 限时活动
+		public static var Sale_Daily1:int;
+		public static var Sale_Daily2:int;
+		public static var Sale_Daily3:int;
+		public static var Sale_Daily4:int;
+		public static var Sale_Daily5:int;
+		public static var Sale_Daily6:int;
+		public static var Sale_Daily7:int;
+		public static var Sale_Daily8:int;
+		public static var Sale_Daily9:String;
+		public static var Sale_Daily10:String;
+		public static var Sale_Daily11:String;
+		public static var Sale_Daily12:String;
+		
 		// 龙珠
 		public static var DragonBall5:int;
 		public static var DragonBall6:int;
@@ -488,6 +510,7 @@ manaRevive	5	法力回复速度/S
 		public static var DragonBall8:String;
 		public static var DragonBall9:String;
 		public static var DragonBall10:int;
+		public static var DragonBall11:int;
 		
 		// 霜炎战场
 		public static var OpbattleOpenLv:int;
@@ -533,11 +556,15 @@ manaRevive	5	法力回复速度/S
 		public static var servent22:int;
 		public static var servent23:int;
 		public static var servent24:int;
-		public static var servent25:int;
-		public static var servent26:int;
-		public static var servent27:int;
-		public static var servent28:int;
-		public static var servent29:int;
+		public static var servent25:String;
+		public static var servent26:String;
+		public static var servent27:String;
+		public static var servent28:String;
+		public static var servent29:String;
+		public static var servent30:int;
+		public static var servent31:int;
+		public static var servent32:int;
+		public static var servent34:int;
 		
 		// 神器合成
 		public static var Artifact1:int;
@@ -678,6 +705,19 @@ manaRevive	5	法力回复速度/S
 		public static var lxcz10:String;
 		public static var lxcz11:String;
 		
+		public static var hflc1:String;
+		public static var hflc2:String;
+		public static var hflc3:String;
+		public static var hflc4:String;
+		public static var hflc5:String;
+		public static var hflc6:String;
+		public static var hflc7:String;
+		public static var hflc8:String;
+		public static var hflc9:String;
+		public static var hflc10:String;
+		public static var hflc11:String;
+		public static var hflc12:String;
+		
 		public static var Exp_Fb4:int;
 		public static var Exp_Fb2:int;
 		public static var Exp_Fb3:int;
@@ -721,11 +761,22 @@ manaRevive	5	法力回复速度/S
 		public static var welfare19:int;
 		
 		public static var ReturnCash1:String;
+		public static var ReturnCash4:String;
 		
 		public static var qqvip1:String;
 		public static var qqvip2:int;
 		public static var qqvip3:String;
 		public static var qqvip4:int;
+		
+		public static var auto1:int;
+		public static var auto2:Number;
+		public static var auto3:int;
+		public static var auto4:int;
+		public static var auto5:int;
+		public static var auto6:int;
+		public static var auto7:int;
+		public static var auto8:int;
+		public static var auto9:int;
 		
 		public static var GUbattle2:int;
 		public static var GUbattle9:String;
@@ -734,6 +785,7 @@ manaRevive	5	法力回复速度/S
 		public static var dayAward1:int;
 		public static var dayAward5:int;
 		public static var dayAward3:String;
+		public static var dayAward7:int;
 		
 		public static var worship1:int;
 		public static var worship2:int;
@@ -795,6 +847,7 @@ manaRevive	5	法力回复速度/S
 		public static var Gem5:int;
 		public static var Gem6:int;
 		public static var Gem7:int;
+		public static var Alchemy1:int;
 		
 		public static var TeamDungeon1:int;
 		public static var TeamDungeon6:int;
@@ -808,6 +861,20 @@ manaRevive	5	法力回复速度/S
 		
 		public static var TaskMarket1:int;
 		public static var TaskMarket2:int;
+		
+		public static var chat1:int;
+		public static var chat2:int;
+		
+		public static var Union_Bless1:int;
+		public static var Union_Bless2:int;
+		public static var Union_Bless3:int;
+		
+		public static var Babel1:int;
+		public static var Babel2:int;
+		public static var Babel3:int;
+		public static var Babel4:int;
+		public static var Babel5:int;
+		public static var Babel6:int;
 		
 		
 		public function ConfigEnum() {
@@ -830,6 +897,11 @@ manaRevive	5	法力回复速度/S
 			Mount18=xml.syscfg.(@Id == "mount18")[0].@val;
 			Mount19=xml.syscfg.(@Id == "mount19")[0].@val;
 			MountTradeOpenLv=xml.syscfg.(@Id == "mount20")[0].@val;
+			
+			buff1=xml.syscfg.(@Id == "buff1")[0].@val;
+			
+			chat1 = xml.syscfg.(@Id == "chat1")[0].@val;
+			chat2 = xml.syscfg.(@Id == "chat2")[0].@val;
 			
 			WingItem=xml.syscfg.(@Id == "wing3")[0].@val;
 			WingbindItem=xml.syscfg.(@Id == "wing4")[0].@val;
@@ -886,12 +958,26 @@ manaRevive	5	法力回复速度/S
 			taskDailyOpenLv=xml.syscfg.(@Id == "Open13")[0].@val;
 			taskDailySum=xml.syscfg.(@Id == "DailySum")[0].@val;
 			taskDailyCost1=xml.syscfg.(@Id == "DailyCost1")[0].@val;
+			taskDailyCost2=xml.syscfg.(@Id == "DailyCost2")[0].@val;
 			
 			taskDailyStar1=xml.syscfg.(@Id == "DailyStar1")[0].@val;
 			taskDailyStar2=xml.syscfg.(@Id == "DailyStar2")[0].@val;
 			taskDailyStar3=xml.syscfg.(@Id == "DailyStar3")[0].@val;
 			taskDailyStar4=xml.syscfg.(@Id == "DailyStar4")[0].@val;
 			taskDailyStar5=xml.syscfg.(@Id == "DailyStar5")[0].@val;
+			
+			Sale_Daily1=xml.syscfg.(@Id == "Sale_Daily1")[0].@val;
+			Sale_Daily2=xml.syscfg.(@Id == "Sale_Daily2")[0].@val;
+			Sale_Daily3=xml.syscfg.(@Id == "Sale_Daily3")[0].@val;
+			Sale_Daily4=xml.syscfg.(@Id == "Sale_Daily4")[0].@val;
+			Sale_Daily5=xml.syscfg.(@Id == "Sale_Daily5")[0].@val;
+			Sale_Daily6=xml.syscfg.(@Id == "Sale_Daily6")[0].@val;
+			Sale_Daily7=xml.syscfg.(@Id == "Sale_Daily7")[0].@val;
+			Sale_Daily8=xml.syscfg.(@Id == "Sale_Daily8")[0].@val;
+			Sale_Daily9=xml.syscfg.(@Id == "Sale_Daily9")[0].@val;
+			Sale_Daily10=xml.syscfg.(@Id == "Sale_Daily10")[0].@val;
+			Sale_Daily11=xml.syscfg.(@Id == "Sale_Daily11")[0].@val;
+			Sale_Daily12=xml.syscfg.(@Id == "Sale_Daily12")[0].@val;
 			
 			// 任务集市
 			TaskMarket1 = xml.syscfg.(@Id == "TaskMarket1")[0].@val;
@@ -915,6 +1001,7 @@ manaRevive	5	法力回复速度/S
 			FarmOpenLevel = xml.syscfg.(@Id == "farm10")[0].@val;
 			FarmCatalyticCopeCost = xml.syscfg.(@Id == "farm11")[0].@val;
 			FieldBossOpenLevel = xml.syscfg.(@Id == "bossOut1")[0].@val;
+			FieldBossForbiddenLeve = xml.syscfg.(@Id == "bossOut4")[0].@val;
 			// 世界经验
 			worldExp1 = xml.syscfg.(@Id == "worldExp1")[0].@val;
 			worldExp2 = xml.syscfg.(@Id == "worldExp2")[0].@val;
@@ -931,6 +1018,18 @@ manaRevive	5	法力回复速度/S
 			tobeStr1 = xml.syscfg.(@Id == "tobestr1")[0].@val;
 			tobeStr2 = xml.syscfg.(@Id == "tobestr1")[0].@val;
 			
+			// 挂机
+			auto1 = xml.syscfg.(@Id == "auto1")[0].@val;
+			auto2 = xml.syscfg.(@Id == "auto2")[0].@val;
+			auto3 = xml.syscfg.(@Id == "auto3")[0].@val;
+			auto4 = xml.syscfg.(@Id == "auto4")[0].@val;
+			auto5 = xml.syscfg.(@Id == "auto5")[0].@val;
+			auto6 = xml.syscfg.(@Id == "auto6")[0].@val;
+			auto7 = xml.syscfg.(@Id == "auto7")[0].@val;
+			auto8 = xml.syscfg.(@Id == "auto8")[0].@val;
+			auto9 = xml.syscfg.(@Id == "auto9")[0].@val;
+			
+			
 			// 龙珠
 			DragonBall5 = xml.syscfg.(@Id == "DragonBall5")[0].@val;
 			DragonBall6 = xml.syscfg.(@Id == "DragonBall6")[0].@val;
@@ -938,6 +1037,7 @@ manaRevive	5	法力回复速度/S
 			DragonBall8 = xml.syscfg.(@Id == "DragonBall8")[0].@val;
 			DragonBall9 = xml.syscfg.(@Id == "DragonBall9")[0].@val;
 			DragonBall10 = xml.syscfg.(@Id == "DragonBall10")[0].@val;
+			DragonBall11 = xml.syscfg.(@Id == "DragonBall11")[0].@val;
 			
 			// 霜炎战场
 			OpbattleOpenLv = xml.syscfg.(@Id == "Opbattle1")[0].@val;
@@ -988,6 +1088,10 @@ manaRevive	5	法力回复速度/S
 			servent27 = xml.syscfg.(@Id == "servent27")[0].@val;
 			servent28 = xml.syscfg.(@Id == "servent28")[0].@val;
 			servent29 = xml.syscfg.(@Id == "servent29")[0].@val;
+			servent30 = xml.syscfg.(@Id == "servent30")[0].@val;
+			servent31 = xml.syscfg.(@Id == "servent31")[0].@val;
+			servent32 = xml.syscfg.(@Id == "servent32")[0].@val;
+			servent34 = xml.syscfg.(@Id == "servent34")[0].@val;
 			
 			// 首冲好礼
 			dayMoney2 = xml.syscfg.(@Id == "dayMoney2")[0].@val;
@@ -1053,6 +1157,7 @@ manaRevive	5	法力回复速度/S
 			warCity27=xml.syscfg.(@Id == "warCity27")[0].@val;
 			
 			ReturnCash1=xml.syscfg.(@Id == "ReturnCash1")[0].@val;
+			ReturnCash4=xml.syscfg.(@Id == "ReturnCash4")[0].@val;
 			
 			// 神器
 			Artifact1=xml.syscfg.(@Id == "Artifact1")[0].@val;
@@ -1069,6 +1174,9 @@ manaRevive	5	法力回复速度/S
 			rank7 = xml.syscfg.(@Id == "rank7")[0].@val;
 			rank8 = xml.syscfg.(@Id == "rank8")[0].@val;
 			rank9 = xml.syscfg.(@Id == "rank9")[0].@val;
+			rank11 = xml.syscfg.(@Id == "rank11")[0].@val;
+			rank12 = xml.syscfg.(@Id == "rank12")[0].@val;
+			rank13 = xml.syscfg.(@Id == "rank13")[0].@val;
 			
 			Luck_draw1 = xml.syscfg.(@Id == "Luck_draw1")[0].@val;
 			Luck_draw2 = xml.syscfg.(@Id == "Luck_draw2")[0].@val;
@@ -1151,6 +1259,19 @@ manaRevive	5	法力回复速度/S
 			lxcz10 = xml.syscfg.(@Id == "lxzc10")[0].@val;
 			lxcz11 = xml.syscfg.(@Id == "lxzc11")[0].@val;
 			
+			hflc1 = xml.syscfg.(@Id == "hflc1")[0].@val;
+			hflc2 = xml.syscfg.(@Id == "hflc2")[0].@val;
+			hflc3 = xml.syscfg.(@Id == "hflc3")[0].@val;
+			hflc4 = xml.syscfg.(@Id == "hflc4")[0].@val;
+			hflc5 = xml.syscfg.(@Id == "hflc5")[0].@val;
+			hflc6 = xml.syscfg.(@Id == "hflc6")[0].@val;
+			hflc7 = xml.syscfg.(@Id == "hflc7")[0].@val;
+			hflc8 = xml.syscfg.(@Id == "hflc8")[0].@val;
+			hflc9 = xml.syscfg.(@Id == "hflc9")[0].@val;
+			hflc10 = xml.syscfg.(@Id == "hflc10")[0].@val;
+			hflc11 = xml.syscfg.(@Id == "hflc11")[0].@val;
+			hflc12 = xml.syscfg.(@Id == "hflc12")[0].@val;
+			
 			question1=xml.syscfg.(@Id == "question1")[0].@val;
 			question6=xml.syscfg.(@Id == "question6")[0].@val;
 			question10=xml.syscfg.(@Id == "question10")[0].@val;
@@ -1211,6 +1332,7 @@ manaRevive	5	法力回复速度/S
 			dayAward1=xml.syscfg.(@Id == "dayAward1")[0].@val;
 			dayAward5=xml.syscfg.(@Id == "dayAward5")[0].@val;
 			dayAward3=xml.syscfg.(@Id == "dayAward3")[0].@val;
+			dayAward7=xml.syscfg.(@Id == "dayAward7")[0].@val;
 			
 			manaRevive=xml.syscfg.(@Id == "manaRevive")[0].@val;
 			
@@ -1258,6 +1380,7 @@ manaRevive	5	法力回复速度/S
 			Gem5=xml.syscfg.(@Id == "Gem5")[0].@val;
 			Gem6=xml.syscfg.(@Id == "Gem6")[0].@val;
 			Gem7=xml.syscfg.(@Id == "Gem7")[0].@val;
+			Alchemy1=xml.syscfg.(@Id == "Alchemy1")[0].@val;
 			
 			TeamDungeon1=xml.syscfg.(@Id == "TeamDungeon1")[0].@val;
 			TeamDungeon6=xml.syscfg.(@Id == "TeamDungeon6")[0].@val;
@@ -1268,8 +1391,18 @@ manaRevive	5	法力回复速度/S
 			wing15=xml.syscfg.(@Id == "wing15")[0].@val;
 			wing16=xml.syscfg.(@Id == "wing16")[0].@val;
 			wing17=xml.syscfg.(@Id == "wing17")[0].@val;
-			 
 			
+			Union_Bless1=xml.syscfg.(@Id == "Union_Bless1")[0].@val;
+			Union_Bless2=xml.syscfg.(@Id == "Union_Bless2")[0].@val;
+			Union_Bless3=xml.syscfg.(@Id == "Union_Bless3")[0].@val;
+			
+			Babel1=xml.syscfg.(@Id == "Babel1")[0].@val;
+			Babel2=xml.syscfg.(@Id == "Babel2")[0].@val;
+			Babel3=xml.syscfg.(@Id == "Babel3")[0].@val;
+			Babel4=xml.syscfg.(@Id == "Babel4")[0].@val;
+			Babel5=xml.syscfg.(@Id == "Babel5")[0].@val;
+			Babel6=xml.syscfg.(@Id == "Babel6")[0].@val;
+			 
 		}
 	}
 }

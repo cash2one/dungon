@@ -34,7 +34,7 @@ package com.leyou.ui.skill.childs {
 		private var lvLbl:Label;
 
 		private var fuwenImg1:Image;
-		private var fuwenImg2:Image;
+		public var fuwenImg2:Image;
 		private var fuwenImg3:Image;
 		private var fuwenImg4:Image;
 
@@ -281,7 +281,7 @@ package com.leyou.ui.skill.childs {
 				if (this.runeindex == arr.indexOf(2, 3))
 					return;
 
-				this.runeindex = arr.indexOf(2, 3)
+				this.runeindex=arr.indexOf(2, 3)
 
 				if (twen != null) {
 					twen.pause();
@@ -303,10 +303,11 @@ package com.leyou.ui.skill.childs {
 					twen=null;
 				}
 
-				if (arr[0] == 1)
+				if (arr[0] == 1) {
 					twen=TweenMax.to(this.fuwenImg1, 2, {glowFilter: {color: 0xfa9611, alpha: 1, blurX: 12, blurY: 12, strength: 2}, yoyo: true, repeat: -1});
+					this.runeindex=1;
 
-				this.runeindex=1;
+				}
 			}
 
 //			else if (arr.length == 7 && String(arr[6]).indexOf("2") != -1)

@@ -85,6 +85,7 @@ package com.leyou.ui.moldOpen
 			// 佣兵
 			if(Core.me.info.level >= ConfigEnum.servent1){
 				UIManager.getInstance().toolsWnd.unlockButton(MoldEnum.SERVENT);
+				UIManager.getInstance().petIconbar.checkActive();
 			}
 			// 搜集
 			if (Core.me.info.level >= ConfigEnum.setin1) {

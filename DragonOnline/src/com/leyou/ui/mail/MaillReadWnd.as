@@ -55,6 +55,7 @@ package com.leyou.ui.mail {
 			starts = [];
 			subjectLbl = getUIbyID("subjectLbl") as Label;
 			msgLbl = getUIbyID("msgLbl") as TextArea;
+			msgLbl.tf.selectable = true;
 			deleteBtn = getUIbyID("deleteBtn") as NormalButton;
 			onekeyGetBtn = getUIbyID("onekeyGetBtn") as NormalButton;
 
@@ -133,7 +134,7 @@ package com.leyou.ui.mail {
 			switch (btnName) {
 				case "deleteBtn":
 					if(mailLink.mailInfo.hasStuff){
-						var warnStr:String = PropUtils.getStringById(1783);
+						var warnStr:String = PropUtils.getStringById(1784);
 						PopupManager.showConfirm(warnStr, deleteMailRequest, null, false, "wnd.mailRead.delete");
 //						var pWnd:WindInfo = WindInfo.getConfirmInfo(warnStr, deleteMailRequest);
 //						PopWindow.showWnd(UIEnum.WND_TYPE_CONFIRM, pWnd, "wnd.mailRead.delete");

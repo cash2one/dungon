@@ -43,6 +43,8 @@ package com.leyou.ui.cityBattle
 			clsBtn.y -= 14;
 			proRBtn.turnOn(false);
 			type = 1;
+			
+			ybRBtn.text = "      " + ConfigEnum.warCity6;
 		}
 		
 		protected function onBtnClick(event:MouseEvent):void{

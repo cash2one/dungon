@@ -42,7 +42,7 @@ package com.leyou.ui.backpack {
 	import com.leyou.utils.ItemUtil;
 	import com.leyou.utils.PayUtil;
 	import com.leyou.utils.PropUtils;
-
+	
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import flash.display.Sprite;
@@ -111,6 +111,16 @@ package com.leyou.ui.backpack {
 		 *  荣誉
 		 */
 		public var honour:int=0;
+		
+		/**
+		 *  巨龙点数
+		 */
+		public var jl:int=0;
+		
+		/**
+		 *龙魂 
+		 */		
+		public var lh:int=0;
 
 		/**
 		 * 当前开启的格子数
@@ -513,9 +523,12 @@ package com.leyou.ui.backpack {
 
 				cross=false;
 				g=this.gridVec[i] as GridBase;
-				if ((this.bagTabBar.turnOnIndex > 0) && (arr[i] == null || arr[i].info == null))
-					g.visible=false;
-				else {
+				if ((this.bagTabBar.turnOnIndex > 0) && (arr[i] == null || arr[i].info == null)){
+//					g.visible=false;
+					
+					BackpackGrid(g).setLockState();
+					
+				} else {
 
 					if (i < ItemEnum.BACKPACK_GRID_OPEN) {
 						if (arr.length > i && arr[i] != null) {
@@ -594,7 +607,7 @@ package com.leyou.ui.backpack {
 			MyInfoManager.getInstance().bagItems.length=itemCount;
 
 			if (currentItemCount >= itemCount && this.visible)
-				GuideManager.getInstance().showGuide(79, this);
+				GuideManager.getInstance().showGuide(79, this.fastShopBtn);
 			else
 				GuideManager.getInstance().removeGuide(79);
 		}

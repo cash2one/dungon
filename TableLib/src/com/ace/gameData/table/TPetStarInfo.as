@@ -12,6 +12,12 @@ package com.ace.gameData.table
 		
 		public var money:int;
 		
+		public var critRate:int;
+		
+		public var hitRate:int;
+		
+		public var slayRate:int;
+		
 		public var pnfId1:int;
 		
 		public var pnfId2:int;
@@ -37,6 +43,9 @@ package com.ace.gameData.table
 		public function TPetStarInfo(xml:XML){
 			id = xml.@serId;
 			starLv = xml.@starLv;
+			critRate = xml.@critRate;
+			hitRate = xml.@hitRate;
+			slayRate = xml.@slayRate;
 			item = xml.@item;
 			itemNum = xml.@itemNum;
 			money = xml.@money;

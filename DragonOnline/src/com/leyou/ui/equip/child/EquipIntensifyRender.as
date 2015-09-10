@@ -143,6 +143,11 @@ package com.leyou.ui.equip.child {
 				clearInterval(autoStrengid);
 				autoStrengid=0;
 				this.confirmBtn.updateIcons("ui/equip/btn_qhzb.png");
+				this.intensifyBar.targetLv=0;
+				this.intensifyBar.setAutoEnbale(true);
+				this.equipgrid.setEnable(true);
+				
+				UIManager.getInstance().equipWnd.BagRender.mouseChildren=true;
 				return;
 			}
 
@@ -154,7 +159,10 @@ package com.leyou.ui.equip.child {
 
 			if (!this.equipgrid.isEmpty) {
 
+				this.equipgrid.setEnable(false);
+
 				if (this.intensifyBar.autoSuccess) {
+					this.intensifyBar.setAutoEnbale(false);
 					this.confirmBtn.updateIcons("ui/equip/btn_qxqh.png");
 					autoStrengid=setInterval(sendStrenth, 2000);
 					sendStrenth();
@@ -184,7 +192,7 @@ package com.leyou.ui.equip.child {
 			if (this.equipgrid.data.hasOwnProperty("pos")) {
 
 				if (this.equipgrid.data.num == 0) {
-					pos=equipgrid.data.info.subclassid-13;
+					pos=equipgrid.data.info.subclassid - 13;
 					type=40;
 				} else {
 					pos=equipgrid.data.pos;
@@ -219,8 +227,11 @@ package com.leyou.ui.equip.child {
 					clearInterval(autoStrengid);
 					autoStrengid=0;
 					this.confirmBtn.updateIcons("ui/equip/btn_qhzb.png");
+					this.intensifyBar.targetLv=0;
 				}
 
+				this.equipgrid.setEnable(true);
+				this.intensifyBar.setAutoEnbale(true);
 				UIManager.getInstance().equipWnd.BagRender.mouseChildren=true;
 				this.confirmBtn.setToolTip("");
 				this.confirmBtn.setActive(true, 1, true);
@@ -251,8 +262,11 @@ package com.leyou.ui.equip.child {
 					clearInterval(autoStrengid);
 					autoStrengid=0;
 					this.confirmBtn.updateIcons("ui/equip/btn_qhzb.png");
+					this.intensifyBar.targetLv=0;
 				}
 
+				this.intensifyBar.setAutoEnbale(true);
+				this.equipgrid.setEnable(true);
 				this.confirmBtn.setToolTip("");
 				this.confirmBtn.setActive(true, 1, true);
 				return false;
@@ -264,8 +278,11 @@ package com.leyou.ui.equip.child {
 					clearInterval(autoStrengid);
 					autoStrengid=0;
 					this.confirmBtn.updateIcons("ui/equip/btn_qhzb.png");
+					this.intensifyBar.targetLv=0;
 				}
 
+				this.equipgrid.setEnable(true);
+				this.intensifyBar.setAutoEnbale(true);
 				this.confirmBtn.setToolTip("");
 				this.confirmBtn.setActive(true, 1, true);
 				NoticeManager.getInstance().broadcast(TableManager.getInstance().getSystemNotice(2406));
@@ -375,12 +392,6 @@ package com.leyou.ui.equip.child {
 
 				SoundManager.getInstance().play(21);
 
-				if (autoStrengid > 0) {
-					clearInterval(autoStrengid);
-					this.confirmBtn.updateIcons("ui/equip/btn_qhzb.png");
-					autoStrengid=0;
-				}
-
 				this.confirmBtn.setActive(true, 1, true);
 				this.confirmBtn.setToolTip("");
 
@@ -401,15 +412,30 @@ package com.leyou.ui.equip.child {
 					starEffect.visible=false;
 				});
 
-				UIManager.getInstance().equipWnd.BagRender.mouseChildren=true;
 				UIManager.getInstance().equipWnd.BagRender.update();
 
 				this.setStarvisiable(int(this.infodata.info.maxlevel));
 				this.setStarView(this.infodata.tips.qh);
 
+				if (autoStrengid > 0) {
+					if (!this.intensifyBar.autoSuccess || this.infodata.tips.qh == this.intensifyBar.targetLv) {
+						clearInterval(autoStrengid);
+						this.confirmBtn.updateIcons("ui/equip/btn_qhzb.png");
+						autoStrengid=0;
+						this.intensifyBar.targetLv=0;
+						this.intensifyBar.setAutoEnbale(true);
+						this.equipgrid.setEnable(true);
+					}
+
+				} else
+					this.equipgrid.setEnable(true);
+
 				this.intensifyBar.visible=true;
 				this.intensifyBar.updateData(this.infodata.tips);
 				this.equipgrid.updataInfo(this.infodata);
+
+
+				UIManager.getInstance().equipWnd.BagRender.mouseChildren=true;
 			}
 
 		}
@@ -438,10 +464,11 @@ package com.leyou.ui.equip.child {
 		public function clearAllData():void {
 			this.clearData();
 			this.infodata=null;
-			if (!this.equipgrid.isEmpty){
+			if (!this.equipgrid.isEmpty) {
 				this.equipgrid.resetGrid();
 				this.equipgrid.delItemHandler();
 			}
+
 		}
 
 		private function clearData():void {
@@ -476,6 +503,10 @@ package com.leyou.ui.equip.child {
 			this.intensifyBar.visible=false;
 			this.confirmBtn.setActive(false, .6, true);
 			this.confirmBtn.setToolTip(TableManager.getInstance().getSystemNotice(2407).content);
+
+			this.intensifyBar.targetLv=0;
+			this.intensifyBar.setAutoEnbale(true);
+			this.intensifyBar.clearData();
 		}
 
 	}

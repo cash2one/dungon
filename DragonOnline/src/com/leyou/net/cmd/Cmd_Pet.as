@@ -12,7 +12,13 @@ package com.leyou.net.cmd
 		public static function sm_PET_L(obj:Object):void{
 			DataManager.getInstance().petData.loadData_L(obj);
 			UIOpenBufferManager.getInstance().removeCmd(WindowEnum.PET, CmdEnum.SM_PET_L);
-			UIManager.getInstance().petWnd.updatePetList();
+			if(UIManager.getInstance().getWindow(WindowEnum.PET)){
+				UIManager.getInstance().petWnd.updatePetInfo();
+				UIManager.getInstance().petWnd.updatePetList();
+			}
+			if(UIManager.getInstance().getWindow(WindowEnum.PET_SELECT)){
+				UIManager.getInstance().petSelectWnd.updateInfo();
+			}
 		}
 		
 		public static function cm_PET_L():void{
@@ -21,7 +27,11 @@ package com.leyou.net.cmd
 		
 		public static function sm_PET_I(obj:Object):void{
 			DataManager.getInstance().petData.loadData_I(obj);
-			UIManager.getInstance().petWnd.updatePetInfo();
+			if(UIManager.getInstance().getWindow(WindowEnum.PET)){
+				UIManager.getInstance().petWnd.updatePetInfo();
+				UIManager.getInstance().petWnd.updatePetList();
+			}
+			UIManager.getInstance().petIconbar.updateInfo();
 		}
 		
 		public static function cm_PET_I(pid:int):void{
@@ -60,6 +70,7 @@ package com.leyou.net.cmd
 		public static function sm_PET_T(obj:Object):void{
 			DataManager.getInstance().petData.loadData_T(obj);
 			UIManager.getInstance().petWnd.updatePetInfo();
+			UIManager.getInstance().petWnd.updatePetList();
 		}
 		
 		public static function cm_PET_T():void{
@@ -86,6 +97,10 @@ package com.leyou.net.cmd
 			NetGate.getInstance().send(CmdEnum.CM_PET_G+pid);
 		}
 		
+		public static function sm_PET_G(obj:Object):void{
+			UIManager.getInstance().petWnd.flyQmGift();
+		}
+		
 		//		佣兵技能学习/升级
 		//		-------------------------------------------------------------------------------- 
 		//		上行：pet|Spid,psklid,sklpos
@@ -99,6 +114,15 @@ package com.leyou.net.cmd
 		//		上行：pet|Fpid,sklpos
 		public static function cm_PET_F(pid:int, spos:int):void{
 			NetGate.getInstance().send(CmdEnum.CM_PET_F+pid+","+spos);
+		}
+		
+		public static function sm_PET_K(obj:Object):void{
+			DataManager.getInstance().petData.loadData_K(obj);
+			UIManager.getInstance().petIconbar.updateInfo();
+		}
+		
+		public static function cm_PET_K(id:int, pos:int):void{
+			NetGate.getInstance().send(CmdEnum.CM_PET_K+id+","+pos);
 		}
 	}
 }

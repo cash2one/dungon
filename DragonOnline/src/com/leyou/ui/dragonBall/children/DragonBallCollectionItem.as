@@ -6,6 +6,7 @@ package com.leyou.ui.dragonBall.children
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.table.TEquipInfo;
 	import com.ace.gameData.table.TItemInfo;
+	import com.ace.loader.child.SwfLoader;
 	import com.ace.manager.ToolTipManager;
 	import com.ace.ui.img.child.Image;
 	import com.greensock.TweenMax;
@@ -23,7 +24,7 @@ package com.leyou.ui.dragonBall.children
 	{
 		private static var speed:int = 10; 
 		
-		private var effectImg:Image;
+//		private var effectImg:Image;
 		
 		private var ballImg:Image;
 		
@@ -41,15 +42,17 @@ package com.leyou.ui.dragonBall.children
 		
 		private var isTurnOn:Boolean;
 		
-		private var selectFun:Function;
+//		private var selectFun:Function;
 		
 		private var ballPanel:Sprite;
 		
-		private var gridPanel:Sprite;
+//		private var gridPanel:Sprite;
+//		
+//		private var grid:MarketGrid;
+//		
+//		private var gridBg:Image;
 		
-		private var grid:MarketGrid;
-		
-		private var gridBg:Image;
+		private var effectSwf:SwfLoader;
 		
 		public function DragonBallCollectionItem(){
 			init();
@@ -64,49 +67,53 @@ package com.leyou.ui.dragonBall.children
 			
 			ballPanel = new Sprite();
 			addChild(ballPanel);
-			effectImg = new Image("ui/dragonBall/guang.png");
-			ballPanel.addChild(effectImg);
+//			effectImg = new Image("ui/dragonBall/guang.png");
+//			ballPanel.addChild(effectImg);
+			effectSwf = new SwfLoader();
 			ballImg = new Image();
 			ballPanel.addChild(ballImg);
-			ballImg.x = 20;
-			ballImg.y = 20;
+			ballPanel.addChild(effectSwf);
+			effectSwf.x = 15;
+			effectSwf.y = 15;
+			ballImg.x = 19;
+			ballImg.y = 19;
 			ballPanel.addEventListener(MouseEvent.MOUSE_OVER, onMouseover);
 			ballPanel.x = -49;
 			ballPanel.y = -49;
 			
-			gridPanel = new Sprite();
-			addChild(gridPanel);
-			gridBg = new Image("ui/other/icon_prop_bigframe.png");
-			gridPanel.addChild(gridBg);
-			grid = new MarketGrid();
-			grid.x = 11;
-			grid.y = 11;
-			grid.isShowPrice = false;
-			gridPanel.addChild(grid);
-			gridPanel.x = -45;
-			gridPanel.y = -45;
+//			gridPanel = new Sprite();
+//			addChild(gridPanel);
+//			gridBg = new Image("ui/other/icon_prop_bigframe.png");
+//			gridPanel.addChild(gridBg);
+//			grid = new MarketGrid();
+//			grid.x = 11;
+//			grid.y = 11;
+//			grid.isShowPrice = false;
+//			gridPanel.addChild(grid);
+//			gridPanel.x = -45;
+//			gridPanel.y = -45;
 			
-			addEventListener(MouseEvent.CLICK, onMouseClick);
+//			addEventListener(MouseEvent.CLICK, onMouseClick);
 			
 			isTurnOn = false;
-			effectImg.visible = true;
+//			effectImg.visible = true;
 			ballImg.filters = [FilterEnum.enable];
 			ballPanel.filters = null;
 		}
 		
-		protected function onMouseClick(event:MouseEvent):void{
-			if(1 == DataManager.getInstance().dragonBallData.status){
-				var content:String = TableManager.getInstance().getSystemNotice(20005).content;
-				PopupManager.showConfirm(content, selectItem, null, false, "dragon.ball.confirm");
-			}
-		}
+//		protected function onMouseClick(event:MouseEvent):void{
+//			if(1 == DataManager.getInstance().dragonBallData.status){
+//				var content:String = TableManager.getInstance().getSystemNotice(20005).content;
+//				PopupManager.showConfirm(content, selectItem, null, false, "dragon.ball.confirm");
+//			}
+//		}
 		
-		private function selectItem():void{
-			Cmd_Longz.cm_Longz_W(index);
-			if(null != selectFun){
-				selectFun.call(this, this);
-			}
-		}
+//		private function selectItem():void{
+//			Cmd_Longz.cm_Longz_W(index);
+//			if(null != selectFun){
+//				selectFun.call(this, this);
+//			}
+//		}
 		
 		protected function onMouseover(event:MouseEvent):void{
 			if(itemId <= 0){
@@ -149,18 +156,20 @@ package com.leyou.ui.dragonBall.children
 			}
 			_itemId = $itemId;
 			_itemNum = $itemNum;
-			var status:int = DataManager.getInstance().dragonBallData.status;
-			ballPanel.visible = (0 == status);
-			gridPanel.visible = (1 == status);
-			if(0 == status){
-				if(_itemNum > 0){
-					turnOn();
-				}else{
-					turnOff();
-				}
-			}else if(1 == status){
-				grid.updataInfo({itemId:_itemId, count:_itemNum});
+			var info:TItemInfo = TableManager.getInstance().getItemInfo(_itemId);
+//			var status:int = DataManager.getInstance().dragonBallData.status;
+//			ballPanel.visible = (0 == status);
+//			gridPanel.visible = (1 == status);
+//			if(0 == status){
+			if(_itemNum > 0){
+				turnOn();
+				effectSwf.update(int(info.effect1));
+			}else{
+				turnOff();
 			}
+//			}else if(1 == status){
+//				grid.updataInfo({itemId:_itemId, count:_itemNum});
+//			}
 		}
 		
 		private function turnOn():void{
@@ -169,8 +178,9 @@ package com.leyou.ui.dragonBall.children
 			}
 			isTurnOn = true;
 			ballImg.filters = null;
-			effectImg.visible = false;
-			TweenMax.to(ballPanel, 2, {glowFilter: {color: 0xFFD700, alpha: 1, blurX: 18, blurY: 18, strength: 4}, yoyo: true, repeat: -1});
+//			effectImg.visible = false;
+			effectSwf.visible = true;
+//			TweenMax.to(ballPanel, 2, {glowFilter: {color: 0xFFD700, alpha: 1, blurX: 18, blurY: 18, strength: 4}, yoyo: true, repeat: -1});
 		}
 		
 		private function turnOff():void{
@@ -178,14 +188,15 @@ package com.leyou.ui.dragonBall.children
 				return;
 			}
 			isTurnOn = false;
-			effectImg.visible = true;
-			ballImg.filters = [FilterEnum.enable];
-			TweenMax.killTweensOf(ballPanel);
+//			effectImg.visible = true;
+			effectSwf.visible = false;
+//			ballImg.filters = [FilterEnum.enable];
+//			TweenMax.killTweensOf(ballPanel);
 			ballPanel.filters = null;
 		}
 		
-		public function registerSelect(onChoice:Function):void{
-			selectFun = onChoice;
-		}
+//		public function registerSelect(onChoice:Function):void{
+//			selectFun = onChoice;
+//		}
 	}
 }

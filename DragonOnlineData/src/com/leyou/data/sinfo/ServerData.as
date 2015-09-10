@@ -16,5 +16,9 @@ package com.leyou.data.sinfo
 			stime = obj.stime;
 			etime = obj.etime;
 		}
+		
+		public function isOpening():Boolean{
+			return (status == 1);
+		}
 	}
 }

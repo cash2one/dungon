@@ -72,7 +72,7 @@ package com.leyou.ui.friend.child {
 			if(2 == relation){
 				item.unshiftItem(friendItem, 20);
 			}else{
-				var num:int = (3 != relation) ? 50 : 20;
+				var num:int = (3 != relation) ? 100 : 20;
 				item.pushItem(friendItem, num);
 			}
 			item.sortItemsPosition();

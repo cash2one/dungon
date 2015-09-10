@@ -19,13 +19,13 @@ package com.leyou.utils {
 
 			switch (i) {
 				case 1:
-					return PropUtils.getStringById(36);
+					return PropUtils.getStringEasyById(36);
 				case 2:
-					return PropUtils.getStringById(37);
+					return PropUtils.getStringEasyById(37);
 				case 3:
-					return PropUtils.getStringById(38);
+					return PropUtils.getStringEasyById(38);
 				case 4:
-					return PropUtils.propArr[37];
+					return PropUtils.getStringEasyById(39);
 			}
 
 			return "";

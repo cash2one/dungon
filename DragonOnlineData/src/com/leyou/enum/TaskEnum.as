@@ -242,7 +242,8 @@ A读取item_id	B读取x
 A读取minlevel
 </pre>
 */
-		public static var taskTypeNpcField:Array=[["npc_name"], ["monster_name", "monster_num"], ["monster_name", "item_name", "item_number"], ["box_name", "item_name", "item_number"], ["item_name", "npc_name"], ["item_name", "item_number"], ["minlevel"], ["npc_name"], ["N_OBJ_Num"], ["NJJC_Num"], ["Y_Blood_Num"], ["Y_Mount_lv"], ["Y_Dungeon_ID"], ["Y_ST_lv"], ["Y_Ele_Time"]];
+//		public static var taskTypeNpcField:Array=[["npc_name"], ["monster_name", "monster_num"], ["monster_name", "item_name", "item_number"], ["box_name", "item_name", "item_number"], ["item_name", "npc_name"], ["item_name", "item_number"], ["minlevel"], ["npc_name"], ["N_OBJ_Num"], ["NJJC_Num"], ["Y_Blood_Num"], ["Y_Mount_lv"], ["Y_Dungeon_ID"], ["Y_ST_lv"], ["Y_Ele_Time"]];
+		public static var taskTypeNpcField:Array=[["npc_id"], ["monster_id", "monster_num"], ["monster_id", "item_id", "item_number"], ["box_id", "item_id", "item_number"], ["item_id", "npc_id"], ["item_id", "item_number"], ["minlevel"], ["npc_id"], ["N_OBJ_Num"], ["NJJC_Num"], ["Y_Blood_Num"], ["Y_Mount_lv"], ["Y_Dungeon_ID"], ["Y_ST_lv"], ["Y_Ele_Time"]];
 
 
 		/**

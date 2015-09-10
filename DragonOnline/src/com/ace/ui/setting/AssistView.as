@@ -28,6 +28,7 @@ package com.ace.ui.setting {
 	import com.ace.ui.img.child.Image;
 	import com.ace.ui.scrollBar.event.ScrollBarEvent;
 	import com.ace.ui.slider.children.HSlider;
+	import com.leyou.enum.ConfigEnum;
 	import com.leyou.enum.QualityEnum;
 	import com.leyou.net.cmd.Cmd_Assist;
 	import com.leyou.utils.PropUtils;
@@ -43,7 +44,7 @@ package com.ace.ui.setting {
 		private static const SKILLS:Array=[100, 104, 108, 112, 300, 304, 308, 312, 500, 504, 508, 512, 700, 704, 708, 712];
 
 		// 默认挂机配置
-		private static const DEFAULT_CONFIG:Array=[1, 2, 0.5, 2, 0.5, 2, 20101, 1, 20401, 1, 1, 4, -1, -1, -1, -1, 2, 1, QualityEnum.QUA_COMMON];
+		private static var DEFAULT_CONFIG:Array=[1, 2, 0.5, 2, 0.5, 2, 20101, 1, 20401, 1, 1, 4, -1, -1, -1, -1, 2, 1, QualityEnum.QUA_COMMON];
 
 		public var reliveCheckBox:CheckBox;
 
@@ -244,10 +245,10 @@ package com.ace.ui.setting {
 			super.visible = value;
 			if(value){
 				if(!buyHpCheckBox.isOn){
-					GuideManager.getInstance().showGuide(46, this);
+					GuideManager.getInstance().showGuide(46, buyHpCheckBox);
 				}
 				if(!pickEquipCheckBox.isOn){
-					GuideManager.getInstance().showGuide(85, this);
+					GuideManager.getInstance().showGuide(85, pickEquipCheckBox);
 				}
 				GuideManager.getInstance().removeGuide(45);
 				GuideManager.getInstance().removeGuide(42);
@@ -278,6 +279,15 @@ package com.ace.ui.setting {
 			var config:Array=value.split(",");
 			if ("" == value) {
 				config=DEFAULT_CONFIG;
+				config[1] = (1 == ConfigEnum.auto1) ? 2 : 1;
+				config[2] = ConfigEnum.auto2;
+				config[5] = (1 == ConfigEnum.auto3) ? 2 : 1;
+				config[6] = ConfigEnum.auto4;
+				config[9] = (1 == ConfigEnum.auto6) ? 2 : 1;
+				config[10] = (1 == ConfigEnum.auto7) ? 2 : 1;
+				config[16] = (0 == ConfigEnum.auto8) ? 2 : 1;
+				config[17] = (1 == ConfigEnum.auto8) ? 2 : 1;
+				config[18] = ConfigEnum.auto9;
 			}
 			initConfig(config);
 		}

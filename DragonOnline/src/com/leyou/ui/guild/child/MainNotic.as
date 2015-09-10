@@ -8,7 +8,8 @@ package com.leyou.ui.guild.child {
 	import com.ace.ui.lable.children.TextArea;
 	import com.leyou.net.cmd.Cmd_Guild;
 	import com.leyou.utils.PropUtils;
-	
+	import com.leyou.utils.StringUtil_II;
+
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
@@ -70,9 +71,14 @@ package com.leyou.ui.guild.child {
 //				if(this.contentLbl.tf.numLines==10)
 //				trace(this.contentLbl.tf.getLineLength(9),this.contentLbl.tf.getLineOffset(9),this.contentLbl.tf.getLineText(9));
 
-			if (this.contentLbl.tf.numLines >= 8)
-				this.contentLbl.tf.text=this.contentLbl.tf.text.substring(0, this.contentLbl.tf.getLineOffset(7) + this.contentLbl.tf.getLineLength(7));
+			var str:String;
+			if (this.contentLbl.tf.numLines >= 8) {
+				str=this.contentLbl.tf.text.substring(0, this.contentLbl.tf.getLineOffset(7) + this.contentLbl.tf.getLineLength(7));
+			} else {
+				str=this.contentLbl.tf.text;
+			}
 
+			this.contentLbl.tf.text=StringUtil_II.getGuildFilterWord(str);
 		}
 
 		private function onKeyUp(e:KeyboardEvent):void {

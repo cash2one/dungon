@@ -10,6 +10,8 @@ package com.leyou.data.missinMarket
 		
 		public var status:int;
 		
+		public var jlc:int;
+		
 		public function MissionMarketChapterData(){
 		}
 		
@@ -17,6 +19,7 @@ package com.leyou.data.missinMarket
 			finishedNum = odata[0];
 			totalNum = odata[1];
 			status = odata[2];
+			jlc = odata[3];
 		}
 	}
 }

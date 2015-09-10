@@ -5,10 +5,9 @@ package com.leyou.ui.day7.child {
 	import com.ace.gameData.table.TItemInfo;
 	import com.ace.manager.ToolTipManager;
 	import com.leyou.ui.arena.childs.ArenaGrid;
-	import com.leyou.ui.backpack.child.BackpackGrid;
 	import com.leyou.utils.FilterUtil;
 	import com.leyou.utils.PropUtils;
-
+	
 	import flash.geom.Point;
 
 	public class Day7Grid extends ArenaGrid {

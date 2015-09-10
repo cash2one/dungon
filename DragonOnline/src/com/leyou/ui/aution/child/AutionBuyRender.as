@@ -403,6 +403,7 @@ package com.leyou.ui.aution.child {
 		public function resetPage():void {
 			currentPage=0;
 			pageLbl.text="1/" + pageCount;
+			reset();
 		}
 
 		// 刷新当前页面数据

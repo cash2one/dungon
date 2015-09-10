@@ -71,7 +71,7 @@ package com.leyou.ui.arena.childs {
 
 		private function onTipsMouseOver(e:DisplayObject):void {
 			var tinfo:TTitle=TableManager.getInstance().getTitleByName(this.mName);
-			ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, StringUtil.substitute(TableManager.getInstance().getSystemNotice(4718).content, [tinfo.name,  tinfo.value1]), new Point(this.stage.mouseX, this.stage.mouseY));
+			ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, StringUtil.substitute(TableManager.getInstance().getSystemNotice(4718).content, [tinfo.name,  tinfo.value1,tinfo.value2]), new Point(this.stage.mouseX, this.stage.mouseY));
 		}
 
 		private function onTipsMouseOut(e:DisplayObject):void {

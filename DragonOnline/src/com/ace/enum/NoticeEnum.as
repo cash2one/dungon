@@ -76,13 +76,14 @@ package com.ace.enum {
 		//消息7
 		public static const MESSAGE7_PY:int=25; //文本位置Y偏移，底部偏移
 		public static const MESSAGE7_LENGTH:int=140; //文本长度
-		public static const MESSAGE7_SPEED:int=2; //消息数量
+		public static const MESSAGE7_SPEED:int=5; //消息移动速度
+		public static const MESSAGE7_TIMES:int=1; //显示次数
 		
 		
 		//消息8
 		public static const MESSAGE8_NUM:int = 8;
 		public static const MESSAGE8_PX:int = 415; //横坐标偏移,屏幕中心偏移
-		public static const MESSAGE8_PY:int = 100;  //纵坐标偏移,屏幕底部偏移
+		public static const MESSAGE8_PY:int = 145;  //纵坐标偏移,屏幕底部偏移
 		
 		//消息9(战斗力)
 		public static const MESSAGE9_PY:int = 300; //纵坐标偏移,屏幕底部为偏移

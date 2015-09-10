@@ -4,6 +4,7 @@ package com.leyou.ui.chat.child {
 	import com.greensock.TweenLite;
 	import com.leyou.data.chat_II.ChatContentInfo;
 	import com.leyou.enum.ChatEnum;
+	import com.leyou.enum.ConfigEnum;
 	
 	import flash.events.Event;
 	
@@ -76,13 +77,13 @@ package com.leyou.ui.chat.child {
 			}else{
 				var interval:uint = new Date().time - tick; // 计算当前显示信息已显示时间
 				if(e){
-					if(interval >= ChatEnum.TIME_DISAPPEAR_HORN){
+					if(interval >= ConfigEnum.chat1){
 						textField.clear();
 						tweenHide();
 						tick = -1; // 消失并重置时间戳
 					}
 				}else{
-					if(interval >= ChatEnum.TIME_DISAPPEAR_HORN){
+					if(interval >=  ConfigEnum.chat1){
 						tick = -1; // 重置时间戳
 					}
 				}

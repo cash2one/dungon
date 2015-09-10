@@ -17,9 +17,9 @@ package com.leyou.ui.die
 		
 		private var panel:ScrollPane;
 		
-		private var rightBtn:ImgButton;
-		
-		private var leftBtn:ImgButton;
+//		private var rightBtn:ImgButton;
+//		
+//		private var leftBtn:ImgButton;
 		
 		private var iconPanel:Sprite;
 		
@@ -27,9 +27,9 @@ package com.leyou.ui.die
 		
 		private var texts:Vector.<String>;
 		
-		private var scrollPanel:Sprite;
+//		private var scrollPanel:Sprite;
 		
-		private var icons:Vector.<DieTobeStrongStar>;
+//		private var icons:Vector.<DieTobeStrongStar>;
 		private var threshold:int;
 		
 		public function DieWnd(){
@@ -40,62 +40,62 @@ package com.leyou.ui.die
 		public function init():void{
 			mouseEnabled = true;
 			panel = getUIbyID("viewPanel") as ScrollPane;
-			leftBtn = getUIbyID("leftBtn") as ImgButton;
-			rightBtn = getUIbyID("rightBtn") as ImgButton;
+//			leftBtn = getUIbyID("leftBtn") as ImgButton;
+//			rightBtn = getUIbyID("rightBtn") as ImgButton;
 			texts = new Vector.<String>();
 			textRenders = new Vector.<DieTobeStrongMeg>(TEXT_MAX_COUNT);
 			clsBtn.x -= 6;
 			clsBtn.y -= 14;
-			scrollPanel = new Sprite();
-			scrollPanel.mouseEnabled = false;
-			scrollPanel.x = 50;
-			scrollPanel.y = 284;
-			scrollPanel.scrollRect = new Rectangle(0, 0, 280, 80);
-			addChild(scrollPanel);
-			icons = new Vector.<DieTobeStrongStar>();
-			for(var n:int = 0; n < 6; n++){
-				var star:DieTobeStrongStar = new DieTobeStrongStar();
-				star.setType(n+1);
-				scrollPanel.addChild(star);
-				star.x = n * 100;
-				icons.push(star);
-			}
-			leftBtn.addEventListener(MouseEvent.CLICK, onBtnClick);
-			rightBtn.addEventListener(MouseEvent.CLICK, onBtnClick);
-			leftBtn.visible = false;
+//			scrollPanel = new Sprite();
+//			scrollPanel.mouseEnabled = false;
+//			scrollPanel.x = 50;
+//			scrollPanel.y = 284;
+//			scrollPanel.scrollRect = new Rectangle(0, 0, 280, 80);
+//			addChild(scrollPanel);
+//			icons = new Vector.<DieTobeStrongStar>();
+//			for(var n:int = 0; n < 6; n++){
+//				var star:DieTobeStrongStar = new DieTobeStrongStar();
+//				star.setType(n+1);
+//				scrollPanel.addChild(star);
+//				star.x = n * 100;
+//				icons.push(star);
+//			}
+//			leftBtn.addEventListener(MouseEvent.CLICK, onBtnClick);
+//			rightBtn.addEventListener(MouseEvent.CLICK, onBtnClick);
+//			leftBtn.visible = false;
 		}
 		
-		protected function onBtnClick(event:MouseEvent):void{
-			switch(event.target.name){
-				case "leftBtn":
-					scrollToX(0);
-					break;
-				case "rightBtn":
-					scrollToX(300);
-					break;
-			}
-		}
+//		protected function onBtnClick(event:MouseEvent):void{
+//			switch(event.target.name){
+//				case "leftBtn":
+//					scrollToX(0);
+//					break;
+//				case "rightBtn":
+//					scrollToX(300);
+//					break;
+//			}
+//		}
 		
-		protected function scrollToX($threshold:int):void{
-			threshold = $threshold;
-			addEventListener(Event.ENTER_FRAME, onEnterFrame);
-			rightBtn.visible = (threshold == 0);
-			leftBtn.visible = (threshold == 300);
-		}
+//		protected function scrollToX($threshold:int):void{
+//			threshold = $threshold;
+//			addEventListener(Event.ENTER_FRAME, onEnterFrame);
+//			rightBtn.visible = (threshold == 0);
+//			leftBtn.visible = (threshold == 300);
+//		}
 		
-		protected function onEnterFrame(event:Event):void{
-			var rect:Rectangle = scrollPanel.scrollRect;
-			var dValue:int = threshold - rect.x;
-			if(Math.abs(dValue) < 35){
-				rect.x = threshold;
-				removeEventListener(Event.ENTER_FRAME, onEnterFrame);
-			}else if(dValue > 35){
-				rect.x += 35;
-			}else if(dValue < 35){
-				rect.x -= 35;
-			}
-			scrollPanel.scrollRect = rect;
-		}
+//		protected function onEnterFrame(event:Event):void{
+//			var rect:Rectangle = scrollPanel.scrollRect;
+//			var dValue:int = threshold - rect.x;
+//			if(Math.abs(dValue) < 35){
+//				rect.x = threshold;
+//				removeEventListener(Event.ENTER_FRAME, onEnterFrame);
+//			}else if(dValue > 35){
+//				rect.x += 35;
+//			}else if(dValue < 35){
+//				rect.x -= 35;
+//			}
+//			scrollPanel.scrollRect = rect;
+//		}
 		
 		public function getTextRender(index:int):DieTobeStrongMeg{
 			if(index >= 0 && index < textRenders.length){
@@ -129,11 +129,11 @@ package com.leyou.ui.die
 			}
 		}
 		
-		public function updateInfo():void{
-			for each(var item:DieTobeStrongStar in icons){
-				item.updateStars();
-			}
-		}
+//		public function updateInfo():void{
+//			for each(var item:DieTobeStrongStar in icons){
+//				item.updateStars();
+//			}
+//		}
 		
 		public override function show(toTop:Boolean=true, $layer:int=1, toCenter:Boolean=true):void{
 			super.show(toTop, $layer, toCenter);

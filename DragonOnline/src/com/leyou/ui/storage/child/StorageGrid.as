@@ -45,11 +45,11 @@ package com.leyou.ui.storage.child {
 			this.iconBmp.bitmapData=LibManager.getInstance().getImg("ui/backpack/lock.png");
 			this.selectBmp.bitmapData=LibManager.getInstance().getImg("ui/backpack/select.png");
 
-			this.iconBmp.x=3;
+			this.iconBmp.x=1;
 			this.iconBmp.y=3;
 
-			this.selectBmp.x=0; //-1.9;
-			this.selectBmp.y=0; //-1.8;
+			this.selectBmp.x=-2; //-1.9;
+			this.selectBmp.y=-2; //-1.8;
 
 			this.mouseChildren=true;
 		}

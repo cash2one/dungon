@@ -6,12 +6,12 @@ package com.leyou.ui.boss.children
 	import com.ace.gameData.table.TCopyInfo;
 	import com.ace.gameData.table.TLivingInfo;
 	import com.ace.loader.child.SwfLoader;
+	import com.ace.manager.GuideManager;
 	import com.ace.manager.LibManager;
 	import com.ace.ui.auto.AutoSprite;
 	import com.ace.ui.button.children.ImgButton;
 	import com.ace.ui.img.child.Image;
 	import com.ace.ui.lable.Label;
-	import com.ace.utils.StringUtil;
 	import com.leyou.data.bossCopy.BossCopyBossData;
 	import com.leyou.data.bossCopy.BossCopyData;
 	import com.leyou.manager.PopupManager;
@@ -289,6 +289,10 @@ package com.leyou.ui.boss.children
 		
 		public function updateCount():void{
 			timeLbl.text = DataManager.getInstance().bossCopyData.remainCount+"";
+		}
+		
+		public function removeGuide():void{
+			GuideManager.getInstance().removeGuide(64);
 		}
 	}
 }

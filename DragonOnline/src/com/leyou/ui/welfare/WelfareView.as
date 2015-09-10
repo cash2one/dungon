@@ -11,6 +11,7 @@ package com.leyou.ui.welfare
 	import com.leyou.ui.welfare.child.page.WelfareOutlinePage;
 	import com.leyou.ui.welfare.child.page.WelfareTimePage;
 	
+	import flash.display.DisplayObjectContainer;
 	import flash.events.Event;
 
 	/**
@@ -100,17 +101,19 @@ package com.leyou.ui.welfare
 				case 1:
 					welfareTime.addTimer();
 					Cmd_Welfare.cm_OL_I();
+					GuideManager.getInstance().removeGuide(48);
 					break;
 				case 2:
 					welfareTime.removeTimer();
 					Cmd_Welfare.cm_ULV_I();
+					GuideManager.getInstance().removeGuide(48);
 					break;
 				case 3:
 					welfareTime.removeTimer();
 					Cmd_Welfare.cm_OFL_I();
+					GuideManager.getInstance().removeGuide(48);
 					break;
 			}
-			GuideManager.getInstance().removeGuide(48);
 		}
 		
 		public override function show(toTop:Boolean=true, $layer:int=1, toCenter:Boolean=true):void{

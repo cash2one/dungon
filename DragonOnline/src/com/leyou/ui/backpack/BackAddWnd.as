@@ -25,6 +25,9 @@ package com.leyou.ui.backpack {
 		private var byb:RadioButton;
 		private var yb:RadioButton;
 
+		private var bybLbl:Label;
+		private var ybLbl:Label;
+
 		private var timeLbl:Label;
 
 		private var timer:int=0;
@@ -46,6 +49,9 @@ package com.leyou.ui.backpack {
 //			this.expLbl=this.getUIbyID("expLbl") as Label;
 
 			this.hpLbl=this.getUIbyID("hpLbl") as Label;
+
+			this.bybLbl=this.getUIbyID("bybLbl") as Label;
+			this.ybLbl=this.getUIbyID("ybLbl") as Label;
 
 			this.byb=this.getUIbyID("byb") as RadioButton;
 			this.yb=this.getUIbyID("yb") as RadioButton;
@@ -81,8 +87,8 @@ package com.leyou.ui.backpack {
 //			this.expLbl.text=obj.exp + "";
 
 			this.hpLbl.text=obj.hp + "";
-			this.yb.text="   " + obj.yb + "";
-			this.byb.text="   " + obj.byb + "";
+			this.ybLbl.text=obj.yb + "";
+			this.bybLbl.text=obj.byb + "";
 
 			timer=obj.time;
 

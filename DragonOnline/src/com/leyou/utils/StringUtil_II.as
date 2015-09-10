@@ -1,9 +1,10 @@
 package com.leyou.utils {
+	import com.ace.config.Core;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.manager.LibManager;
 	import com.ace.manager.UIManager;
 	import com.leyou.enum.ChatEnum;
-	
+
 	import flash.text.TextField;
 	import flash.utils.ByteArray;
 
@@ -74,22 +75,22 @@ package com.leyou.utils {
 			}
 			return str;
 		}
-		
-		public static function sertSign(num:Number, sign:String=","):String{
-			var value:String = num+"";
+
+		public static function sertSign(num:Number, sign:String=","):String {
+			var value:String=num + "";
 			var fraction:String;
-			var index:int = value.indexOf(".");
-			if(index > -1){
-				fraction = value.substr(index);
-				value = value.substr(0, index);
+			var index:int=value.indexOf(".");
+			if (index > -1) {
+				fraction=value.substr(index);
+				value=value.substr(0, index);
 			}
-			var length:int = value.length;
-			while((length-4) > 0){
-				value = value.substr(0, length-4) + sign + value.substr(length-4);
-				length -= 4;
+			var length:int=value.length;
+			while ((length - 4) > 0) {
+				value=value.substr(0, length - 4) + sign + value.substr(length - 4);
+				length-=4;
 			}
-			if(index > -1){
-				value += ("." + fraction);
+			if (index > -1) {
+				value+=("." + fraction);
 			}
 			return value;
 		}
@@ -230,12 +231,12 @@ package com.leyou.utils {
 				case ChatEnum.CHANNEL_GUILD:
 //					str=PropUtils.getStringById(2046);
 //					str=getColorStr(str, ChatEnum.COLOR_GUILD);
-					str = "\\64 ";
+					str="\\64 ";
 					break;
 				case ChatEnum.CHANNEL_HORN:
 //					str=PropUtils.getStringById(2047);
 //					str=getColorStr(str, ChatEnum.COLOR_HORN);
-					str = "\\65 ";
+					str="\\65 ";
 					break;
 				case ChatEnum.CHANNEL_MAP:
 					str=PropUtils.getStringById(2048);
@@ -244,27 +245,27 @@ package com.leyou.utils {
 				case ChatEnum.CHANNEL_PRIVATE:
 //					str=PropUtils.getStringById(2049);
 //					str=getColorStr(str, ChatEnum.COLOR_PRIVATE);
-					str = "\\62 ";
+					str="\\62 ";
 					break;
 				case ChatEnum.CHANNEL_SYSTEM:
 //					str=PropUtils.getStringById(2050);
 //					str=getColorStr(str, ChatEnum.COLOR_SYSTEM);
-					str = "\\60 ";
+					str="\\60 ";
 					break;
 				case ChatEnum.CHANNEL_TEAM:
 //					str=PropUtils.getStringById(2051);
 //					str=getColorStr(str, ChatEnum.COLOR_TEAM);
-					str = "\\63 ";
+					str="\\63 ";
 					break;
 				case ChatEnum.CHANNEL_WORLD:
 //					str=PropUtils.getStringById(2052);
 //					str=getColorStr(str, ChatEnum.COLOR_WORLD);
-					str = "\\61 ";
+					str="\\61 ";
 					break;
 				default:
 //					str=PropUtils.getStringById(2050);
 //					str=getColorStr(str, ChatEnum.COLOR_SYSTEM);
-					str = "\\60 ";
+					str="\\60 ";
 					break;
 			}
 			return str;
@@ -306,16 +307,16 @@ package com.leyou.utils {
 		 *
 		 */
 		public static function translate(ps:String, ... args):String {
-			var count:int = 1;
+			var count:int=1;
 			var c:int=args.length;
 			for (var n:int=0; n < c; n++) {
-				if(args[n] is Array){
-					var l:int = args[n].length;
-					for(var m:int = 0; m < l; m++){
+				if (args[n] is Array) {
+					var l:int=args[n].length;
+					for (var m:int=0; m < l; m++) {
 						ps=ps.replace("{" + count + "}", args[n][m]);
 						count++;
 					}
-				}else{
+				} else {
 					ps=ps.replace("{" + (n + 1) + "}", args[n]);
 				}
 			}
@@ -470,7 +471,92 @@ package com.leyou.utils {
 			return false;
 		}
 
+		/**
+		 * 行会违法禁字
+		 * @param s
+		 * @return
+		 *
+		 */
+		public static function getGuildFilterWord(s:String):String {
+
+			if (s == null || s == "")
+				return "";
+
+			var by:ByteArray=LibManager.getInstance().getBinary("config/table/keyword.txt");
+			by.position=0;
+			var content:String=by.readMultiByte(by.length, "utf-8");
+
+			content=content.replace(/\r+/g, "");
+
+			var ctx:Array=content.split("-----");
+			var word:Array=ctx[0].split("\n");
+
+			for (var i:int=0; i < word.length; i++) {
+				if (word[i] != "" && word[i] != null && s.indexOf(word[i]) > -1)
+					s=s.replace(word[i], "***");
+			}
+
+			word=ctx[1].split("\n");
+
+			var cword:Array=[];
+			var bword:Array=[];
+			var _i:int=0;
+			var sp:int=9999;
+			var ep:int=-1;
+			var ps:int=-1;
+			for (i=0; i < word.length; i++) {
+
+				cword=word[i].split("");
+				_i=0;
+				sp=9999;
+				ep=-1;
+				ps=-1;
+				for (var j:int=0; j < cword.length; j++) {
+					if (cword[j] != "" && cword[j] != null && s.indexOf(cword[j]) > -1) {
+
+						ps=s.indexOf(cword[j]);
+
+						if (ps < sp)
+							sp=ps;
+
+						if (ps > ep)
+							ep=ps;
+
+						_i++;
+					}
+				}
+
+				//				if (cword.length == _i)
+				//					return "";
+
+				//				trace(ep, sp, ps, _i, j,cword)
+
+				if (_i == j) {
+					//					trace(cword[j], "|", cword)
+					bword=s.split("");
+					for (j=sp; j <= ep; j++) {
+						bword[j]="*";
+					}
+
+					s=bword.join("");
+				}
+					//else if (ep - sp >= 10) {
+					//					s="语言中包含敏感词语";
+					//					NoticeManager.getInstance().broadcast();
+					//	UIManager.getInstance().chatWnd.chatNotice(TableManager.getInstance().getSystemNotice(3411).content);
+					//	return "";
+					//}
+
+			}
+
+			return s;
+
+		}
+
 		public static function getFilterWord(s:String):String {
+
+			if (!Core.KEYWORD_OPEN)
+				return s;
 
 			if (s == null || s == "")
 				return "";

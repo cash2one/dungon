@@ -24,6 +24,8 @@ package com.ace.gameData.table
 		
 		public var groupId:int;
 		
+		public var act_con:int;
+		
 		public function TGuideInfo(xml:XML){
 			groupId = xml.@group;
 			id = xml.@id;
@@ -37,6 +39,7 @@ package com.ace.gameData.table
 			act_num = xml.@act_num;
 			ox = xml.@win_X;
 			oy = xml.@win_y;
+			act_con = xml.@act_con;
 		}
 	}
 }

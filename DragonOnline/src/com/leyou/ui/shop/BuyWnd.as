@@ -29,7 +29,7 @@ package com.leyou.ui.shop {
 	import com.leyou.ui.shop.child.ShopGrid;
 	import com.leyou.utils.ItemUtil;
 	import com.leyou.utils.ShopUtil;
-	
+
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.events.TextEvent;
@@ -140,6 +140,8 @@ package com.leyou.ui.shop {
 			else if (this.buyType == 4) {
 				if (this.subbuyType == 1)
 					current=MyInfoManager.getInstance().getBagItemNumById(30401);
+				else if (this.subbuyType == 3)
+					current=ShopUtil.getIndexTotMoney(7);
 			} else
 				current=ShopUtil.getIndexTotMoney(this.moneyId);
 
@@ -166,6 +168,8 @@ package com.leyou.ui.shop {
 			else if (this.buyType == 4) {
 				if (this.subbuyType == 1)
 					current=MyInfoManager.getInstance().getBagItemNumById(30401);
+				else if (this.subbuyType == 3)
+					current=ShopUtil.getIndexTotMoney(7);
 			} else
 				current=ShopUtil.getIndexTotMoney(this.moneyId);
 
@@ -195,6 +199,8 @@ package com.leyou.ui.shop {
 			else if (this.buyType == 4) {
 				if (this.subbuyType == 1)
 					current=MyInfoManager.getInstance().getBagItemNumById(30401);
+				else if (this.subbuyType == 3)
+					current=ShopUtil.getIndexTotMoney(7);
 			} else
 				current=ShopUtil.getIndexTotMoney(this.moneyId);
 
@@ -244,6 +250,8 @@ package com.leyou.ui.shop {
 						Cmd_Shp.cm_shpBuy(2, this.index, int(this.numStep.value));
 					} else if (this.buyType == 5) {
 						Cmd_CLI.cm_CLI_B(DataManager.getInstance().integralData.itemId, int(this.numStep.value));
+					} else if (this.buyType == 6) {
+						Cmd_Market.cm_Mak_G(UIManager.getInstance().marketWnd.promotionRender.pid, int(this.numStep.value));
 					}
 
 					if (this.sumPrice.textColor != 0xff0000)
@@ -260,9 +268,12 @@ package com.leyou.ui.shop {
 
 						if (this.buyType == 1)
 							current=UIManager.getInstance().guildWnd.guildContribute;
-						else if (this.buyType == 4)
-							current=MyInfoManager.getInstance().getBagItemNumById(30401);
-						else
+						else if (this.buyType == 4) {
+							if (this.subbuyType == 1)
+								current=MyInfoManager.getInstance().getBagItemNumById(30401);
+							else if (this.subbuyType == 3)
+								current=ShopUtil.getIndexTotMoney(7);
+						} else
 							current=ShopUtil.getIndexTotMoney(this.moneyId);
 
 						if (current < count)
@@ -289,9 +300,12 @@ package com.leyou.ui.shop {
 
 					if (this.buyType == 1)
 						current=UIManager.getInstance().guildWnd.guildContribute;
-					else if (this.buyType == 4)
-						current=MyInfoManager.getInstance().getBagItemNumById(30401);
-					else
+					else if (this.buyType == 4) {
+						if (this.subbuyType == 1)
+							current=MyInfoManager.getInstance().getBagItemNumById(30401);
+						else if (this.subbuyType == 3)
+							current=ShopUtil.getIndexTotMoney(7);
+					} else
 						current=ShopUtil.getIndexTotMoney(this.moneyId);
 
 					if (current < count)
@@ -332,6 +346,8 @@ package com.leyou.ui.shop {
 //				else 
 				if (this.subbuyType == 1)
 					current=MyInfoManager.getInstance().getBagItemNumById(30401);
+				else if (this.subbuyType == 3)
+					current=ShopUtil.getIndexTotMoney(7);
 			} else
 				current=ShopUtil.getIndexTotMoney(this.moneyId);
 
@@ -369,9 +385,11 @@ package com.leyou.ui.shop {
 //				table=TableManager.getInstance().getItemInfo(info.itemId);
 //				} else {
 				table=TableManager.getInstance().getEquipInfo(info.itemId);
+				if(table==null)
+					table=TableManager.getInstance().getItemInfo(info.itemId);
 //				}
 
-				if (info.tagId == "2") {
+				if (info.tagId == "2" || info.tagId == "3") {
 					this.unitPriceLbl.text=info.moneyNum + "";
 				} else if (info.tagId == "1") {
 					this.unitPriceLbl.text=info.itemNum + "";
@@ -386,7 +404,17 @@ package com.leyou.ui.shop {
 			}
 
 			var current:int=0
-			if (info.tagId == "2") {
+			if (info.tagId == "3") {
+
+				current=ShopUtil.getBuyCountByMoneyOrBagNum(7, int(this.unitPriceLbl.text), table.maxgroup);
+				this.numStep.maximum=(current <= 0 ? 1 : current);
+				this.numStep.value=1;
+				this.silder.progress=1 / this.numStep.maximum;
+
+				this.priceImg.updateBmp(ItemUtil.getExchangeIcon(6));
+				this.totalPriceImg.updateBmp(ItemUtil.getExchangeIcon(6));
+
+			} else if (info.tagId == "2") {
 
 				current=ShopUtil.getBuyCountByMoneyOrBagNum(moneyId, int(this.unitPriceLbl.text), table.maxgroup);
 				this.numStep.maximum=(current <= 0 ? 1 : current);
@@ -533,7 +561,7 @@ package com.leyou.ui.shop {
 		 * <T>商城购买</T>
 		 */
 		public function updateMarket(marketItem:MarketItemInfo):void {
-			this.buyType=2;
+			this.buyType=marketItem.buyType;
 			this.numInput.text="1";
 
 			table=TableManager.getInstance().getItemInfo(marketItem.itemId);
@@ -565,33 +593,33 @@ package com.leyou.ui.shop {
 			this.priceImg.updateBmp(sourcePath);
 			this.totalPriceImg.updateBmp(sourcePath);
 		}
-		
-		public function updateIntegral(item:IntegralShopItem):void{
+
+		public function updateIntegral(item:IntegralShopItem):void {
 			this.buyType=5;
 			this.numInput.text="1";
-			
+
 			table=TableManager.getInstance().getItemInfo(item.itemId);
 			if (null == table) {
 				table=TableManager.getInstance().getEquipInfo(item.itemId);
 			}
-			
-			var current:int = DataManager.getInstance().integralData.integral/item.tshopData.moneyNum;
+
+			var current:int=DataManager.getInstance().integralData.integral / item.tshopData.moneyNum;
 			this.numStep.maximum=(current <= 0 ? 1 : current);
 			this.numStep.value=1;
 			this.silder.progress=1 / this.numStep.maximum;
-			
-			this.moneyId = 6;
+
+			this.moneyId=6;
 			this.nameLbl.text=table.name;
 			this.nameLbl.textColor=ItemUtil.getColorByQuality(table.quality);
 			this.stackLbl.text=table.maxgroup;
-			this.unitPriceLbl.text=TableManager.getInstance().getShopItem(item.itemId).moneyNum+"";
+			this.unitPriceLbl.text=TableManager.getInstance().getShopItem(item.itemId).moneyNum + "";
 			this.sumPrice.text=int(this.unitPriceLbl.text) * this.numStep.value + "";
-			
+
 			if (current < 1)
 				this.sumPrice.textColor=0xff0000;
 			else
 				this.sumPrice.textColor=0xffffff;
-			
+
 			var sourcePath:String="ui/xffl/icon_jifen.png";
 			this.grid.updataInfo(table);
 			this.priceImg.updateBmp(sourcePath);

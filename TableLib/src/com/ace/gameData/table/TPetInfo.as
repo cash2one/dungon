@@ -8,9 +8,21 @@ package com.ace.gameData.table
 		
 		public var race:int;
 		
+		public var visible:Boolean;
+		
+		public var headUrl:String;
+		
+		public var foreBg:String;
+		
+		public var backBg:String;
+		
+		public var des:String;
+		
 		public var activeItem:int;
 		
 		public var itemCount:int;
+		
+		public var raceSkill:int;
 		
 		public var skill1:int;
 		
@@ -47,9 +59,15 @@ package com.ace.gameData.table
 		public var fixedDef:int;
 		
 		public function TPetInfo(xml:XML){
+			raceSkill = xml.@raceSkill;
 			id = xml.@id;
 			name = xml.@name;
 			race = xml.@race;
+			visible = ("1" == xml.@visible);
+			headUrl = xml.@img;
+			foreBg = xml.@bg_img01;
+			backBg = xml.@bg_img02;
+			des = xml.@des;
 			activeItem = xml.@item;
 			itemCount = xml.@itemNum;
 			skill1 = xml.@skill;

@@ -10,6 +10,7 @@ package com.leyou.ui.arena.childs {
 	import com.ace.ui.button.children.ImgButton;
 	import com.ace.ui.scrollPane.children.ScrollPane;
 	import com.ace.utils.LoadUtil;
+	import com.greensock.TweenLite;
 	import com.leyou.net.cmd.Cmd_Arena;
 	import com.leyou.ui.task.child.TaskTrackBtn;
 
@@ -100,8 +101,12 @@ package com.leyou.ui.arena.childs {
 
 			if (st == 0) {
 
-				if (UIManager.getInstance().isCreate(WindowEnum.ARENA) && UIManager.getInstance().arenaWnd.visible)
-					GuideManager.getInstance().showGuide(65, UIManager.getInstance().arenaWnd.reAwardBtn);
+				if (UIManager.getInstance().isCreate(WindowEnum.ARENA)) {
+					TweenLite.delayedCall(0.6, function():void {
+						if (UIManager.getInstance().arenaWnd.visible)
+							GuideManager.getInstance().showGuide(65, UIManager.getInstance().arenaWnd.reAwardBtn);
+					});
+				}
 
 				this.accpetRewardBtn.setActive(true, 1, true);
 				this.accpetRewardBtn.updateIcons("ui/mission/title_lqjl.png");

@@ -57,7 +57,9 @@
     <classEntry path="com.ace.gameData.table.TPetAttackInfo"/>
     <classEntry path="com.ace.gameData.table.TPetSkillInfo"/>
     <classEntry path="com.ace.gameData.table.TPetFriendlyInfo"/>
-
+    <classEntry path="com.ace.gameData.table.TUnion_Bless"/>
+    <classEntry path="com.ace.gameData.table.TAlchemy"/>
+    <classEntry path="com.ace.gameData.table.TLaba"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

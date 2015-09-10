@@ -12,7 +12,7 @@ package com.leyou.ui.title.child {
 	import com.ace.ui.menu.MenuButton;
 	import com.leyou.net.cmd.Cmd_Nck;
 	import com.leyou.utils.FilterUtil;
-	
+
 	import flash.events.MouseEvent;
 	import flash.geom.Rectangle;
 
@@ -66,7 +66,8 @@ package com.leyou.ui.title.child {
 
 			this.openCb.addEventListener(MouseEvent.CLICK, onStateClick);
 
-			this.scrollRect=new Rectangle(0,0,238,59)
+			this.BgState=false;
+			this.scrollRect=new Rectangle(0, 0, 238, 59)
 			this.x=5;
 		}
 
@@ -182,7 +183,7 @@ package com.leyou.ui.title.child {
 				//如果是有倒计时的xxxx
 				if (this.info.time > 0) {
 
-					var d:Date=new Date();
+//					var d:Date=new Date();
 
 //					if ((int(d.time / 1000) - (this.time + UIManager.getInstance().roleWnd.titlePanel.serverDiffTime)) > this.info.time) {
 					if (this.time <= 0) {
@@ -196,6 +197,13 @@ package com.leyou.ui.title.child {
 					this.useImg.visible=false;
 				}
 			}
+		}
+
+		public function set enableTime(v:Boolean):void {
+			this.openCb.turnOff();
+			this.enable=false;
+			this.timeImg.visible=false;
+			this.useImg.visible=false;
 		}
 
 		public function set enable(v:Boolean):void {

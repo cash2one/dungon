@@ -39,7 +39,7 @@ package com.leyou.data.element {
 		/**
 		 *守护元素的id
 		 */
-		public var guildIdx:int; //
+		public var guildIdx:int=-1; //
 		/**
 		 *切换守护元素花费的道具 的id
 		 */

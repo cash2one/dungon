@@ -9,7 +9,7 @@ package com.leyou.ui.dungeonTeam.childs {
 	import com.leyou.net.cmd.Cmd_CpTm;
 	import com.leyou.utils.PlayerUtil;
 	import com.leyou.utils.PropUtils;
-
+	
 	import flash.events.MouseEvent;
 
 	public class DungeonTeam1PlayerBar extends AutoSprite {

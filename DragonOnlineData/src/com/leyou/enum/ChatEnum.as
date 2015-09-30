@@ -132,6 +132,7 @@ package com.leyou.enum {
 		public static const REMOVE_FAIEND:int=8;
 		public static const TRACK:int=9;
 		public static const DUEL:int=10;
+		public static const PROPOSAL:int=11;
 
 		// 窗体缩放标准尺寸[宽, 高]
 		public static const STATUS_BG_SIZE:Array=[[296, 190], [296, 390]];

@@ -161,6 +161,7 @@ package com.leyou.ui.chat.child {
 			menuArr.push(new MenuInfo(ChatEnum.CLICK_MENU_II[9], ChatEnum.TRACK));
 			menuArr.push(new MenuInfo(ChatEnum.CLICK_MENU_II[10], ChatEnum.DUEL));
 			menuArr.push(new MenuInfo(ChatEnum.CLICK_MENU_II[7], ChatEnum.SUE));
+			menuArr.push(new MenuInfo(PropUtils.getStringById(2242), ChatEnum.PROPOSAL));
 
 			var index:int=getChildIndex(chatInput);
 			removeChild(chatInput);
@@ -754,6 +755,9 @@ package com.leyou.ui.chat.child {
 					break;
 				case ChatEnum.DUEL:
 					Cmd_Duel.cm_DUEL_T(currPlayer);
+					break;
+				case ChatEnum.PROPOSAL:
+					UIManager.getInstance().roleWnd.startMarry(currPlayer);
 					break;
 			}
 		}

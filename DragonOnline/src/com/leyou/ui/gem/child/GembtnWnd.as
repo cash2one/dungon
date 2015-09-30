@@ -12,7 +12,7 @@ package com.leyou.ui.gem.child {
 	import com.ace.ui.lable.Label;
 	import com.leyou.utils.ItemUtil;
 	import com.leyou.utils.PlayerUtil;
-
+	
 	import flash.sampler.getInvocationCount;
 
 	public class GembtnWnd extends AutoSprite {
@@ -20,6 +20,8 @@ package com.leyou.ui.gem.child {
 		private var nameLbl:Label;
 		private var itemImg:Image;
 		private var imgBtn:ImgButton;
+		
+		private var itemid:int=0;
 
 		private var id:int=0;
 
@@ -41,12 +43,15 @@ package com.leyou.ui.gem.child {
 
 		public function updateInfo(tinfo:TAlchemy):void {
 
+			 
+			
 			var num:int=int.MAX_VALUE;
 			var d:int=0;
 			var rate:int=0;
 			for (var i:int=0; i < 5; i++) {
 				if (tinfo["Datum" + (i + 1)] > 0) {
-					d=MyInfoManager.getInstance().getBagItemNumById(tinfo["Datum" + (i + 1)]);
+					this.itemid=tinfo["Datum" + (i + 1)]
+					d=MyInfoManager.getInstance().getBagItemNumById(this.itemid);
 					if (d < tinfo["Datum_Num" + (i + 1)]) {
 						num=0;
 						rate=0;
@@ -71,7 +76,7 @@ package com.leyou.ui.gem.child {
 						info=TableManager.getInstance().getItemInfo(tinfo["Product" + (i + 1)]);
 					else
 						info=TableManager.getInstance().getEquipInfo(tinfo["Product" + (i + 1)]);
-
+					
 					this.itemImg.updateBmp("ico/items/" + info.icon + ".png");
 					break;
 				}
@@ -84,6 +89,10 @@ package com.leyou.ui.gem.child {
 
 		public function getID():int {
 			return this.id;
+		}
+		
+		public function getItemID():int {
+			return this.itemid;
 		}
 
 		public function setSelectState(v:Boolean):void {

@@ -1,11 +1,11 @@
 package com.leyou.ui.gem.child {
+	import com.ace.config.Core;
 	import com.ace.enum.FontEnum;
 	import com.ace.enum.PlayerEnum;
 	import com.ace.enum.TipEnum;
 	import com.ace.gameData.manager.MyInfoManager;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.table.TAlchemy;
-	import com.ace.gameData.table.TEquipInfo;
 	import com.ace.gameData.table.TItemInfo;
 	import com.ace.loader.child.SwfLoader;
 	import com.ace.manager.LibManager;
@@ -22,12 +22,11 @@ package com.leyou.ui.gem.child {
 	import com.ace.ui.input.children.TextInput;
 	import com.ace.ui.lable.Label;
 	import com.ace.utils.StringUtil;
+	import com.greensock.TweenLite;
 	import com.leyou.data.tips.TipsInfo;
 	import com.leyou.enum.ConfigEnum;
 	import com.leyou.net.cmd.Cmd_Alchemy;
-	import com.leyou.net.cmd.Cmd_Gem;
 	import com.leyou.utils.EffectUtil;
-	import com.leyou.utils.FilterUtil;
 	import com.leyou.utils.ItemUtil;
 	import com.leyou.utils.PropUtils;
 
@@ -46,7 +45,11 @@ package com.leyou.ui.gem.child {
 
 		private var nameLbl:Label;
 		private var moneyLbl:Label;
+		private var costLbl:Label;
 		private var buyLbl:Label;
+
+		private var succLbl:Label;
+		private var rateLbl:Label;
 
 		private var itemCb:CheckBox;
 		private var ybCb:CheckBox;
@@ -110,6 +113,10 @@ package com.leyou.ui.gem.child {
 
 			this.nameLbl=this.getUIbyID("nameLbl") as Label;
 			this.moneyLbl=this.getUIbyID("moneyLbl") as Label;
+			this.costLbl=this.getUIbyID("costLbl") as Label;
+
+			this.succLbl=this.getUIbyID("succLbl") as Label;
+			this.rateLbl=this.getUIbyID("rateLbl") as Label;
 			//			this.buyLbl=this.getUIbyID("buyLbl") as Label;
 
 			this.itemCb=this.getUIbyID("itemCb") as CheckBox;
@@ -349,28 +356,58 @@ package com.leyou.ui.gem.child {
 
 			}
 
+			var tinfo:TAlchemy=TableManager.getInstance().getGemByID(currentid);
+			if (tinfo == null)
+				return;
+
 			if (this.ybCb.visible) {
 				if (this.ybCb.isOn || this.itemCb.isOn)
-					this.succImg.updateBmp("ui/gem/font_cgl100.png");
+					this.rateLbl.text="100%";
 				else
-					this.succImg.updateBmp("ui/gem/font_cgl75.png");
+					this.rateLbl.text="" + (tinfo.Al_Rate / 100) + "%";
 			}
 
-			if (UIManager.getInstance().backpackWnd.jb < int(this.moneyNum * this.currentCount)) {
-				this.moneyLbl.defaultTextFormat=FontEnum.getTextFormat("Red12");
-			} else {
-				this.moneyLbl.defaultTextFormat=FontEnum.getTextFormat("Gode12ForMoney");
+			this.itemCb.text="    ×" + (tinfo.AlKey_Num * this.currentCount) + " 100% " + PropUtils.getStringById(1719);
+			this.ybCb.text="    ×" + (tinfo.Al_Yb * this.currentCount) + " 100% " + PropUtils.getStringById(1719);
+
+
+			if (tinfo.Al_Cost > 0) {
+
+				if (UIManager.getInstance().backpackWnd.jb < int(this.moneyNum * this.currentCount)) {
+					this.moneyLbl.defaultTextFormat=FontEnum.getTextFormat("Red12");
+				} else {
+					this.moneyLbl.defaultTextFormat=FontEnum.getTextFormat("Gode12ForMoney");
+				}
+
+			} else if (tinfo.Al_soul > 0) {
+
+				if (Core.me.info.baseInfo.hunL < int(this.moneyNum * this.currentCount)) {
+					this.moneyLbl.defaultTextFormat=FontEnum.getTextFormat("Red12");
+				} else {
+					this.moneyLbl.defaultTextFormat=FontEnum.getTextFormat("Gode12ForMoney");
+				}
+
+			} else if (tinfo.Cost_byb > 0) {
+
+				if (UIManager.getInstance().backpackWnd.byb < int(this.moneyNum * this.currentCount)) {
+					this.moneyLbl.defaultTextFormat=FontEnum.getTextFormat("Red12");
+				} else {
+					this.moneyLbl.defaultTextFormat=FontEnum.getTextFormat("Gode12ForMoney");
+				}
+
+			} else if (tinfo.Cost_yb > 0) {
+
+				if (UIManager.getInstance().backpackWnd.yb < int(this.moneyNum * this.currentCount)) {
+					this.moneyLbl.defaultTextFormat=FontEnum.getTextFormat("Red12");
+				} else {
+					this.moneyLbl.defaultTextFormat=FontEnum.getTextFormat("Gode12ForMoney");
+				}
+
 			}
 
 			this.moneyLbl.text=(this.moneyNum * this.currentCount) + "";
 			this.numInput.text="" + this.currentCount;
 
-			var tinfo:TAlchemy=TableManager.getInstance().getGemByID(currentid);
-			if (tinfo == null)
-				return;
-
-			this.itemCb.text="    ×" + (tinfo.AlKey_Num * this.currentCount) + " 100% " + PropUtils.getStringById(1719);
-			this.ybCb.text="    ×" + (tinfo.Al_Yb * this.currentCount) + " 100% " + PropUtils.getStringById(1719);
 		}
 
 		private function stopplay22():void {
@@ -421,24 +458,74 @@ package com.leyou.ui.gem.child {
 			num=this.setTargetGrid(tinfo);
 			this.setItemGrid(tinfo);
 
-			this.moneyNum=tinfo.Al_Cost;
-
 			this.ybCb.visible=this.ybImg.visible=(tinfo.Al_Yb > 0);
 			this.itemCb.visible=this.itemImg.visible=(tinfo.Al_Key > 0);
 
-			if (tinfo.Al_Rate == 10000)
-				this.succImg.updateBmp("ui/gem/font_cgl100.png");
-			else
-				this.succImg.updateBmp("ui/gem/font_cgl75.png");
-
-			if (UIManager.getInstance().backpackWnd.jb < int(this.moneyNum * this.currentCount)) {
-				this.moneyLbl.defaultTextFormat=FontEnum.getTextFormat("Red12");
+			if (tinfo.Al_RateFont != null && tinfo.Al_RateFont != "") {
+				this.rateLbl.text="" + tinfo.Al_RateFont;
 			} else {
-				this.moneyLbl.defaultTextFormat=FontEnum.getTextFormat("Gode12ForMoney");
+				this.rateLbl.text="" + (tinfo.Al_Rate / 100) + "%";
 			}
 
+			this.moneyLbl.visible=true;
+			this.goldImg.visible=true;
+			this.costLbl.visible=true;
+
+			if (tinfo.Al_Cost > 0) {
+				this.costLbl.text="" + StringUtil.substitute(PropUtils.getStringById(2210), [PropUtils.getStringEasyById(32)]);
+				this.moneyNum=tinfo.Al_Cost;
+				this.goldImg.updateBmp(ItemUtil.getExchangeIcon(0));
+
+				if (UIManager.getInstance().backpackWnd.jb < int(this.moneyNum * this.currentCount)) {
+					this.moneyLbl.defaultTextFormat=FontEnum.getTextFormat("Red12");
+				} else {
+					this.moneyLbl.defaultTextFormat=FontEnum.getTextFormat("Gode12ForMoney");
+				}
+
+			} else if (tinfo.Al_soul > 0) {
+				this.costLbl.text="" + StringUtil.substitute(PropUtils.getStringById(2210), [PropUtils.getStringEasyById(29)]);
+				this.moneyNum=tinfo.Al_soul;
+				this.goldImg.updateBmp(ItemUtil.getExchangeIcon(3));
+
+				if (Core.me.info.baseInfo.hunL < int(this.moneyNum * this.currentCount)) {
+					this.moneyLbl.defaultTextFormat=FontEnum.getTextFormat("Red12");
+				} else {
+					this.moneyLbl.defaultTextFormat=FontEnum.getTextFormat("Gode12ForMoney");
+				}
+
+			} else if (tinfo.Cost_byb > 0) {
+				this.costLbl.text="" + StringUtil.substitute(PropUtils.getStringById(2210), [PropUtils.getStringEasyById(33)]);
+				this.moneyNum=tinfo.Cost_byb;
+				this.goldImg.updateBmp(ItemUtil.getExchangeIcon(1));
+
+				if (UIManager.getInstance().backpackWnd.byb < int(this.moneyNum * this.currentCount)) {
+					this.moneyLbl.defaultTextFormat=FontEnum.getTextFormat("Red12");
+				} else {
+					this.moneyLbl.defaultTextFormat=FontEnum.getTextFormat("Gode12ForMoney");
+				}
+
+			} else if (tinfo.Cost_yb > 0) {
+				this.costLbl.text="" + StringUtil.substitute(PropUtils.getStringById(2210), [PropUtils.getStringEasyById(40)]);
+				this.moneyNum=tinfo.Cost_yb;
+				this.goldImg.updateBmp(ItemUtil.getExchangeIcon(2));
+
+				if (UIManager.getInstance().backpackWnd.yb < int(this.moneyNum * this.currentCount)) {
+					this.moneyLbl.defaultTextFormat=FontEnum.getTextFormat("Red12");
+				} else {
+					this.moneyLbl.defaultTextFormat=FontEnum.getTextFormat("Gode12ForMoney");
+				}
+
+			} else {
+				this.moneyLbl.visible=false;
+				this.goldImg.visible=false;
+				this.costLbl.visible=false;
+			}
+
+
+
+
 			this.numInput.text="" + this.currentCount;
-			this.moneyLbl.text="" + tinfo.Al_Cost;
+			this.moneyLbl.text="" + this.moneyNum;
 
 			if (num > 3) {
 				var itemInfo:Object;
@@ -531,6 +618,12 @@ package com.leyou.ui.gem.child {
 						this.gridArr[i].updataInfo(TableManager.getInstance().getEquipInfo(tinfo["Product" + (i + 1)]));
 
 					this.gridArr[i].setBgBmp(2);
+
+					if (tinfo["Product" + (i + 1) + "_Num"] > 1)
+						this.gridArr[i].setDaNum("" + tinfo["Product" + (i + 1) + "_Num"]);
+					else
+						this.gridArr[i].setDaNum("");
+
 					this.gridArr[i].x=cx + 97.5 * i;
 				} else {
 					this.gridArr[i].visible=false;
@@ -565,11 +658,11 @@ package com.leyou.ui.gem.child {
 			} else {
 
 				if (o.success > 0)
-					EffectUtil.flyWordEffect(StringUtil.substitute(TableManager.getInstance().getSystemNotice(6405).content, [o.success]), new Point(this.stage.mouseX, this.stage.mouseY));
+					EffectUtil.flyWordEffect(StringUtil.substitute(TableManager.getInstance().getSystemNotice(6407).content, [o.success]), new Point(this.stage.mouseX, this.stage.mouseY));
 
-				if (o.lose > 0)
-					EffectUtil.flyWordEffect(StringUtil.substitute(TableManager.getInstance().getSystemNotice(6404).content, [o.lose]), new Point(this.stage.mouseX, this.stage.mouseY));
- 
+				if (o.lose > 0) {
+					TweenLite.delayedCall(0.5, EffectUtil.flyWordEffect, [StringUtil.substitute(TableManager.getInstance().getSystemNotice(6408).content, [o.lose]), new Point(this.stage.mouseX, this.stage.mouseY)]);
+				}
 
 			}
 
@@ -582,11 +675,11 @@ package com.leyou.ui.gem.child {
 				for (var i:int=0; i < this.gridArr.length; i++) {
 					for (var j:int=0; j < arr.length; j++)
 //						for (var k:int=0; k < arr[j][1]; k++) {
-							if (this.gridArr[i].visible && this.gridArr[i].getItemID() == arr[j][0]) {
-								itemArr.push(arr[j][0]);
-								itemPointArr.push(this.gridArr[i].parent.localToGlobal(new Point(this.gridArr[i].x - 30, this.gridArr[i].y + 30)));
-								itemSizeArr.push([60, 60]);
-							}
+						if (this.gridArr[i].visible && this.gridArr[i].getItemID() == arr[j][0]) {
+							itemArr.push(arr[j][0]);
+							itemPointArr.push(this.gridArr[i].parent.localToGlobal(new Point(this.gridArr[i].x - 30, this.gridArr[i].y + 30)));
+							itemSizeArr.push([60, 60]);
+						}
 //						}
 				}
 

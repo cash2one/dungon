@@ -33,7 +33,7 @@ package com.ace.game.proxy {
 	import com.leyou.ui.convenientuse.ConvenientUseManager;
 	import com.test.Test200;
 	import com.test.TestScene;
-	
+
 	import flash.geom.Point;
 	import flash.utils.setTimeout;
 
@@ -66,11 +66,11 @@ package com.ace.game.proxy {
 			if (UIManager.getInstance().isCreate(WindowEnum.BOSS)) {
 				UIManager.getInstance().bossWnd.refreshBossItem();
 			}
-			
-			if(UIManager.getInstance().isCreate(WindowEnum.DUNGEON_TEAM)){
+
+			if (UIManager.getInstance().isCreate(WindowEnum.DUNGEON_TEAM)) {
 				UIManager.getInstance().teamCopyWnd.updatePage();
 			}
-			
+
 			UIManager.getInstance().toolsWnd.openFuncToLevel();
 
 			UIManager.getInstance().roleWnd.openWingBuy();
@@ -248,9 +248,13 @@ package com.ace.game.proxy {
 			}
 
 			//在安全区不允许相互攻击
-			if (Core.me.pInfo.isInSafety || //
-				AreaUtil.checkSafe(SceneUtil.screenXToTileX(living.x), SceneUtil.screenYToTileY(living.y))) {
+			if (Core.me.pInfo.isInSafety) {
 				NoticeManager.getInstance().broadcastById(9976);
+				return false;
+			}
+
+			if (AreaUtil.checkSafe(SceneUtil.screenXToTileX(living.x), SceneUtil.screenYToTileY(living.y))) {
+				NoticeManager.getInstance().broadcastById(9977);
 				return false;
 			}
 

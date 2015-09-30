@@ -23,6 +23,8 @@ package com.leyou.ui.promotion.children
 	{
 		private static const SPAN_NUM:int = 6;
 		
+		private static const INTERVAL:int = 3;
+		
 		private var exItemGrids:Vector.<GridBase>;
 		
 		private var itemGrids:Vector.<GridBase>;
@@ -88,7 +90,7 @@ package com.leyou.ui.promotion.children
 			}else{
 				gw = 64;
 				beginY = 20;
-				itemDis = 110;
+				itemDis = 106;
 				cls = MarketGrid;
 			}
 			// 兑换物格子
@@ -129,7 +131,7 @@ package com.leyou.ui.promotion.children
 					if(null == plusImg){
 						plusImg = new Image("ui/lianz/icon_plus.png");
 					}
-					plusImg.x = exItemGrids[m].x + gw + 5;;
+					plusImg.x = exItemGrids[m].x + gw + 3;;
 					plusImg.y = 32;
 					plusSignImgs[m] = plusImg;
 					addChild(plusImg);
@@ -143,7 +145,7 @@ package com.leyou.ui.promotion.children
 			}
 			plusSignImgs.length = exItemNum - 1;
 			// 等号
-			equalSignImg.x = exItemGrids[exItemNum-1].x + gw + 5;
+			equalSignImg.x = exItemGrids[exItemNum-1].x + gw + 3;
 			equalSignImg.y = 32;
 			// 被兑换格子
 			if(itemGrids.length < itemNum){

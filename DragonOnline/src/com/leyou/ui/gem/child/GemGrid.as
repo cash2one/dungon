@@ -13,7 +13,7 @@ package com.leyou.ui.gem.child {
 	import com.leyou.data.tips.TipsInfo;
 	import com.leyou.net.cmd.Cmd_Gem;
 	import com.leyou.utils.FilterUtil;
-	
+
 	import flash.geom.Point;
 
 	public class GemGrid extends GridBase {
@@ -134,6 +134,12 @@ package com.leyou.ui.gem.child {
 			this.numLbl.x=40 - this.numLbl.textWidth - 5;
 		}
 
+		public function setDaNum(num:String):void {
+			this.numLbl.text="" + num;
+			this.numLbl.x=60 - this.numLbl.textWidth-2;
+			this.numLbl.y=60 - this.numLbl.textHeight+2;
+		}
+
 		public function getItemID():int {
 			return this.tips.itemid;
 		}
@@ -144,14 +150,14 @@ package com.leyou.ui.gem.child {
 			if (this.isEmpty)
 				return;
 
-			
+
 			tips.isdiff=false;
-			
+
 			var type:int=TipEnum.TYPE_GEM_OTHER;
-			if(this.tips.itemid>10000){
+			if (this.tips.itemid > 10000) {
 				type=TipEnum.TYPE_EQUIP_ITEM;
 			}
-			
+
 			ToolTipManager.getInstance().show(type, tips, new Point(this.stage.mouseX + this.width, this.stage.mouseY + this.height));
 		}
 

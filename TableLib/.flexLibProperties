@@ -60,6 +60,9 @@
     <classEntry path="com.ace.gameData.table.TUnion_Bless"/>
     <classEntry path="com.ace.gameData.table.TAlchemy"/>
     <classEntry path="com.ace.gameData.table.TLaba"/>
+    <classEntry path="com.ace.gameData.table.TMarry_lv"/>
+    <classEntry path="com.ace.gameData.table.TMarry_ring"/>
+    <classEntry path="com.ace.gameData.table.TRing_intensify"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

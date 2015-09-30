@@ -186,6 +186,21 @@ package com.leyou.ui.promotion.children
 			buy1Btn.addEventListener(MouseEvent.CLICK, onBtnClick);
 			buy2Btn.addEventListener(MouseEvent.CLICK, onBtnClick);
 			
+			title1Img.visible = (0 == ConfigEnum.Sale_Daily13);
+			title2Img.visible = (0 == ConfigEnum.Sale_Daily13);
+			title3Img.visible = (0 == ConfigEnum.Sale_Daily13);
+			title4Img.visible = (0 == ConfigEnum.Sale_Daily13);
+			buy1Btn.visible = (0 == ConfigEnum.Sale_Daily13);
+			buy2Btn.visible = (0 == ConfigEnum.Sale_Daily13);
+			getUIbyID("gr1").visible = (0 == ConfigEnum.Sale_Daily13);
+			getUIbyID("cost1Lbl").visible = (0 == ConfigEnum.Sale_Daily13);
+			getUIbyID("money1Img").visible = (0 == ConfigEnum.Sale_Daily13);
+			getUIbyID("gr2").visible = (0 == ConfigEnum.Sale_Daily13);
+			getUIbyID("gr12").visible = (0 == ConfigEnum.Sale_Daily13);
+			getUIbyID("cost2Lbl").visible = (0 == ConfigEnum.Sale_Daily13);
+			getUIbyID("money2Img").visible = (0 == ConfigEnum.Sale_Daily13);
+			getUIbyID("gr5").visible = (0 == ConfigEnum.Sale_Daily13);
+			
 			loopOrder=new Vector.<int>();
 			loopOrder.push(0, 1, 2, 4, 7, 6, 5, 3);
 		}

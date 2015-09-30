@@ -6,6 +6,7 @@ package com.leyou.ui.aution {
 	import com.ace.manager.GuideManager;
 	import com.ace.manager.LibManager;
 	import com.ace.manager.ToolTipManager;
+	import com.ace.manager.TweenManager;
 	import com.ace.manager.UILayoutManager;
 	import com.ace.manager.UIManager;
 	import com.ace.ui.auto.AutoWindow;
@@ -161,6 +162,7 @@ package com.leyou.ui.aution {
 			super.hide();
 			UIManager.getInstance().backpackWnd.hidBind(false);
 			UILayoutManager.getInstance().composingWnd(WindowEnum.AUTION);
+			TweenManager.getInstance().lightingCompnent(UIManager.getInstance().toolsWnd.getUIbyID("shiCBtn"));
 		}
 		
 		/**

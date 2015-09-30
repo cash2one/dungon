@@ -17,6 +17,7 @@ package com.leyou.ui.guild.child {
 	import com.ace.ui.scrollPane.children.ScrollPane;
 	import com.ace.ui.window.children.SimpleWindow;
 	import com.ace.utils.StringUtil;
+	import com.leyou.enum.ChatEnum;
 	import com.leyou.enum.GuildEnum;
 	import com.leyou.manager.PopupManager;
 	import com.leyou.net.cmd.Cmd_Duel;
@@ -291,6 +292,9 @@ package com.leyou.ui.guild.child {
 				case 11:
 					Cmd_Duel.cm_DUEL_T(this.useArr[this.selectIndex][0]);
 					break;
+				case 12:
+					UIManager.getInstance().roleWnd.startMarry(this.useArr[this.selectIndex][0]);
+					break;
 			}
 
 		}
@@ -331,11 +335,12 @@ package com.leyou.ui.guild.child {
 					menuVec.push(new MenuInfo(PropUtils.getStringById(1733), 7));
 
 				menuVec.push(new MenuInfo(PropUtils.getStringById(1734), 5));
-
 				menuVec.push(new MenuInfo(PropUtils.getStringById(1735), 10));
 
 				if (UIManager.getInstance().guildWnd.memberPrice[GuildEnum.ADMINI_PRICE_KILL_PEOPLE] == 1)
 					menuVec.push(new MenuInfo(PropUtils.getStringById(1736), 8));
+				
+				menuVec.push(new MenuInfo(PropUtils.getStringById(2242), 12));
 
 				var p:Point=new Point(e.stageX - 30, e.stageY);
 				MenuManager.getInstance().show(menuVec, this, p);

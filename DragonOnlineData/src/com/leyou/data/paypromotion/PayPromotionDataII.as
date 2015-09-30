@@ -18,12 +18,17 @@ package com.leyou.data.paypromotion
 		public var title3Status:int;
 		public var title4Status:int;
 
-		private var serverTick:Number;
+		private var _serverTick:Number;
 		
 		public function PayPromotionDataII(){
 		}
 		
 		// 检查预告
+
+		public function get serverTick():Number{
+			return _serverTick;
+		}
+
 		public function checkForecast():void{
 			var promotionDic:Object = TableManager.getInstance().getPromotionDic();
 			for(var key:String in promotionDic){
@@ -35,7 +40,7 @@ package com.leyou.data.paypromotion
 				sdate.time = Date.parse(DateUtil.convertDateStr(vnInfo.start_time));
 				if(bdate.time == sdate.time) continue;
 				edate.time = Date.parse(DateUtil.convertDateStr(vnInfo.end_time));
-				if(serverTick > bdate.time && serverTick < edate.time){
+				if(_serverTick > bdate.time && _serverTick < edate.time){
 					var itemVec:Vector.<PayPromotionItem> = dataDic[vnInfo.type];
 					if(null == itemVec){
 						itemVec = new Vector.<PayPromotionItem>();
@@ -56,6 +61,7 @@ package com.leyou.data.paypromotion
 		
 		public function getMinV(type:int):int{
 			var infoArr:Vector.<PayPromotionItem> = dataDic[type];
+			if(null == infoArr) return -1;
 			var min:int = int.MAX_VALUE;
 			var l:int = infoArr.length;
 			for(var n:int = 0; n < l; n++){
@@ -153,7 +159,7 @@ package com.leyou.data.paypromotion
 					delete dataDic[dkey];
 				}
 			}
-			serverTick = Number(obj.stime)*1000;
+			_serverTick = Number(obj.stime)*1000;
 		}
 		
 		public function loadData_J(obj:Object):void{

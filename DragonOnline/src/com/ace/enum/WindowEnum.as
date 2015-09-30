@@ -505,5 +505,16 @@ package com.ace.enum {
 		 */		
 		public static const LABA_DESC:int = 136;
 		
+		// 副本通关排行
+		public static const COPY_RANK:int = 137;
+		
+		/**
+		 *结婚 
+		 */		
+		public static const MARRY4:int = 138;
+		public static const MARRY2:int = 139;
+		public static const MARRY3:int = 140;
+		public static const MARRY1:int = 141;
+		
 	}
 }

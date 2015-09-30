@@ -6,6 +6,8 @@ package com.leyou.ui.pet {
 	import com.ace.gameData.table.TPetInfo;
 	import com.ace.gameData.table.TPetStarInfo;
 	import com.ace.manager.LibManager;
+	import com.ace.manager.TweenManager;
+	import com.ace.manager.UIManager;
 	import com.ace.ui.auto.AutoWindow;
 	import com.ace.ui.button.children.RadioButton;
 	import com.ace.ui.scrollPane.children.ScrollPane;
@@ -133,6 +135,11 @@ package com.leyou.ui.pet {
 			selectItem(petList[0]);
 		}
 		
+		public override function hide():void{
+			super.hide();
+			TweenManager.getInstance().lightingCompnent(UIManager.getInstance().toolsWnd.getUIbyID("mercenaryBtn"));
+		}
+		
 		protected function onMouseClick(event:MouseEvent):void{
 			switch(event.target.name){
 				case "allPetRBtn":
@@ -210,6 +217,7 @@ package com.leyou.ui.pet {
 			var l:int = data.petListCount;
 			for(var n:int = 0; n < l; n++){
 				var petEntry:PetEntryData = data.getPetByIdx(n);
+				if(null == petEntry) continue;
 				var petInfo:TPetInfo = TableManager.getInstance().getPetInfo(petEntry.id);
 				try{
 					var petRender:PetListRender = petList[n];
@@ -246,23 +254,24 @@ package com.leyou.ui.pet {
 				var petEntry:PetEntryData = DataManager.getInstance().petData.getPetById(petTId);
 				
 				var npetStarInfo:TPetStarInfo = TableManager.getInstance().getPetStarLvInfo(petTId, petEntry.starLv + 1);
-				petBar.setTabActive(1, (null != npetStarInfo));
+//				petBar.setTabActive(1, (null != npetStarInfo));
 				
 				var nPetLvInfo:TPetAttackInfo = TableManager.getInstance().getPetLvInfo(petEntry.starLv, petEntry.level+ 1);
-				petBar.setTabActive(2, (null != nPetLvInfo));
+//				petBar.setTabActive(2, (null != nPetLvInfo));
 				
 				var petQmInfo:TPetFriendlyInfo = TableManager.getInstance().getPetFriendlyInfo(petEntry.qmdLv + 1);
-				petBar.setTabActive(3, (null != petQmInfo));
+//				petBar.setTabActive(3, (null != petQmInfo));
 				
-				if(null != npetStarInfo){
-					petBar.turnToTab(1);
-				}else if(null != nPetLvInfo){
-					petBar.turnToTab(2);
-				}else if(null != petQmInfo){
-					petBar.turnToTab(3);
-				}else{
-					petBar.turnToTab(4);
-				}
+//				if(null != npetStarInfo){
+//					petBar.turnToTab(1);
+//				}else if(null != nPetLvInfo){
+//					petBar.turnToTab(2);
+//				}else if(null != petQmInfo){
+//					petBar.turnToTab(3);
+//				}else{
+//					petBar.turnToTab(4);
+//				}
+				petBar.turnToTab(1);
 			}else{
 				petBar.turnToTab(0);
 				petBar.setTabVisible(0, true);

@@ -2,6 +2,7 @@ package com.leyou.ui.farm {
 	import com.ace.config.Core;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.manager.GuideManager;
+	import com.ace.manager.TweenManager;
 	import com.ace.manager.UIManager;
 	import com.ace.utils.StringUtil;
 	import com.leyou.enum.ConfigEnum;
@@ -300,6 +301,7 @@ package com.leyou.ui.farm {
 		public override function hide():void {
 			super.hide();
 			removeGuide();
+			TweenManager.getInstance().lightingCompnent(UIManager.getInstance().toolsWnd.getUIbyID("framBtn"));
 		}
 
 		/**

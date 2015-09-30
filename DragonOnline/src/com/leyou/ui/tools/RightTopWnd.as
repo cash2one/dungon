@@ -107,6 +107,7 @@ package com.leyou.ui.tools {
 			btnIdx=1;
 			packButton("achievementBtn", btnIdx++, 1);
 			packButton("rankBtn", btnIdx++, 1);
+			packButton("copyRBtn", btnIdx++, 1);
 			packButton("bossCopyBtn", btnIdx++, 1);
 			packButton("teamCopyBtn", btnIdx++, 1);
 			packButton("arenaBtn", btnIdx++, 1);
@@ -829,6 +830,9 @@ package com.leyou.ui.tools {
 				case "gambleBtn":
 					UILayoutManager.getInstance().open(WindowEnum.LABA);
 					break;
+				case "copyRBtn":
+					UIOpenBufferManager.getInstance().open(WindowEnum.COPY_RANK);
+					break;
 			}
 		}
 
@@ -1108,6 +1112,10 @@ package com.leyou.ui.tools {
 
 			if (level >= ConfigEnum.StoryCopyOpenLevel) {
 				active("teamCopyBtn");
+			}
+			
+			if(level >= ConfigEnum.FastTop1){
+				active("copyRBtn");
 			}
 
 			// 任务集市

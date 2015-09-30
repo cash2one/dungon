@@ -71,6 +71,8 @@ package com.leyou.ui.pet.children {
 		private var grid:MarketGrid;
 		
 		private var finishedImg:Image;
+		
+		private var nextLbl:Label;
 
 		public function PetBosomPage() {
 			super(LibManager.getInstance().getXML("config/ui/pet/serventQM.xml"));
@@ -86,6 +88,7 @@ package com.leyou.ui.pet.children {
 			nQmdLbl=getUIbyID("nQmdLbl") as Label;
 			cAddLbl=getUIbyID("cAddLbl") as Label;
 			nAddLbl=getUIbyID("nAddLbl") as Label;
+			nextLbl=getUIbyID("nextLbl") as Label;
 			cAddAttLbl=getUIbyID("cAddAttLbl") as Label;
 			nAddAttLbl=getUIbyID("nAddAttLbl") as Label;
 			taskLbl=getUIbyID("taskLbl") as Label;
@@ -183,6 +186,17 @@ package com.leyou.ui.pet.children {
 			nAddLbl.text=StringUtil.substitute("+{1}%", int(nrate * 100));
 			cAddAttLbl.text="" + int(ZDLUtil.computation(petInfo.hp, 0, petInfo.phyAtt, petInfo.phyDef, petInfo.magicAtt, petInfo.magicDef, petInfo.crit, petInfo.tenacity, petInfo.hit, petInfo.dodge, petInfo.slay, petInfo.guard, petInfo.fixedAtt, petInfo.fixedDef) * Math.pow((10000 + ConfigEnum.servent20) / 10000, (qmdLv - 1)));
 			nAddAttLbl.text="" + int(ZDLUtil.computation(petInfo.hp, 0, petInfo.phyAtt, petInfo.phyDef, petInfo.magicAtt, petInfo.magicDef, petInfo.crit, petInfo.tenacity, petInfo.hit, petInfo.dodge, petInfo.slay, petInfo.guard, petInfo.fixedAtt, petInfo.fixedDef) * Math.pow((10000 + ConfigEnum.servent20) / 10000, qmdLv));
+			if(qmdLv >= ConfigEnum.servent23){
+				nextLbl.visible = false;
+				nQmdLbl.visible = false;
+				nAddLbl.visible = false;
+				nAddAttLbl.visible = false;
+			}else{
+				nextLbl.visible = true;
+				nQmdLbl.visible = true;
+				nAddLbl.visible = true;
+				nAddAttLbl.visible = true;
+			}
 
 			var petData:PetData=DataManager.getInstance().petData;
 			var taskId:int=petData.qmdTaskId;
@@ -205,6 +219,10 @@ package com.leyou.ui.pet.children {
 			} else {
 				receiveBtn.text=PropUtils.getStringById(1892);
 				receiveBtn.setActive((1 == petData.qmdTaskStatus), 1, true);
+			}
+			
+			if(petEntry.qmMissionComplete){
+				receiveBtn.setActive(false, 1, true);
 			}
 		}
 	}

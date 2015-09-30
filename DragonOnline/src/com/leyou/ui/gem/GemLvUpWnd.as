@@ -1,25 +1,27 @@
 package com.leyou.ui.gem {
 
-
 	import com.ace.enum.WindowEnum;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.table.TAlchemy;
 	import com.ace.manager.LibManager;
 	import com.ace.manager.UILayoutManager;
 	import com.ace.ui.accordion.Accordion;
+	import com.ace.ui.accordion.LabelButton;
 	import com.ace.ui.auto.AutoWindow;
 	import com.ace.ui.img.child.Image;
 	import com.ace.ui.scrollPane.children.ScrollPane;
 	import com.leyou.ui.gem.child.AlchemyRender;
+	import com.leyou.ui.gem.child.FoldMenu;
 	import com.leyou.ui.gem.child.GembtnWnd;
-	import com.leyou.utils.PropUtils;
-
+	
 	import flash.events.MouseEvent;
+	import flash.geom.Rectangle;
 
 	public class GemLvUpWnd extends AutoWindow {
 
 		private var itemList:ScrollPane;
 		private var accordMenu:Accordion;
+		private var foldMenu:FoldMenu;
 		private var render:AlchemyRender;
 
 		private var currentid:int=1;
@@ -47,11 +49,20 @@ package com.leyou.ui.gem {
 		private function init():void {
 
 			this.itemList=this.getUIbyID("itemList") as ScrollPane;
+			this.itemList.visible=false;
 
-			this.accordMenu=new Accordion(200, 480);
-			this.itemList.addToPane(this.accordMenu);
+//			this.accordMenu=new Accordion(200, 480);
+//			this.itemList.addToPane(this.accordMenu);
 
-			var items:Object=TableManager.getInstance().getGemListNameByType();
+			this.foldMenu=new FoldMenu(220, 455);
+			this.addChild(this.foldMenu);
+			this.foldMenu.x=20;
+			this.foldMenu.y=55;
+//			this.itemList.addToPane(this.foldMenu);
+
+			var items:Array=TableManager.getInstance().getGemListNameByType();
+
+			items.sortOn("Al_ID", Array.CASEINSENSITIVE | Array.NUMERIC);
 
 			var tinfo:TAlchemy;
 			var tinfo1:TAlchemy;
@@ -69,49 +80,64 @@ package com.leyou.ui.gem {
 
 			var accorMenu1:Accordion;
 
+			var rect:Rectangle;
+			var res:String;
+			var gname:String;
+			var lb:LabelButton
 
-			for each (tinfo in items) {
-				itemsName.push(tinfo.AlT_Nam);
-				item2=TableManager.getInstance().getGemListNameByType(0,tinfo.Al_Type, 2);
+			var i1:int=0;
+			var i2:int=0;
+			var i3:int=0;
 
-				accorMenu1=new Accordion(200, 410, 25);
-				accorMenu1.isSencond=true;
-				data2=[];
+			for (i1=0; i1 < items.length; i1++) {
 
-				for each (tinfo1 in item2) {
+				tinfo=items[i1];
+				item2=TableManager.getInstance().getGemListNameByType(0, tinfo.Al_Type, 2);
 
-					item3=TableManager.getInstance().getGemListNameByType(tinfo.Al_Type,tinfo1.Al_second, 3);
+				item2.sortOn("Al_ID", Array.CASEINSENSITIVE | Array.NUMERIC);
 
-					data1=[];
+				res="ui/other/button_type1.png";
+				rect=new Rectangle(12, 26, 233, 22);
+				gname="accordion_ttt";
+
+				lb=new LabelButton(LibManager.getInstance().getImg(res), rect, 200, 30, gname, true);
+				this.foldMenu.addItem(lb, "0");
+				lb.setTitleTxt(tinfo.AlT_Nam);
+
+
+				for (i2=0; i2 < item2.length; i2++) {
+
+					tinfo1=item2[i2];
+
+					res="ui/alchemy/btn_2.png";
+					rect=new Rectangle(0, 0, 190, 75);
+					gname="accordion_tttt";
+
+					lb=new LabelButton(LibManager.getInstance().getImg(res), rect, 190, 25, gname, true);
+					this.foldMenu.addItem(lb, "0_" + i1);
+					lb.setTitleTxt(tinfo1.Als_Nam);
+					lb.CrossVisible=true;
+					lb.setCrossState(false);
+
+					item3=TableManager.getInstance().getGemListNameByType(tinfo.Al_Type, tinfo1.Al_second, 3);
+					item3.sortOn("Al_ID", Array.CASEINSENSITIVE | Array.NUMERIC);
+
 					for (var i:int=0; i < item3.length; i++) {
 
 						render=new GembtnWnd();
 						render.updateInfo(item3[i]);
 
-						data1.push(render);
-						
 						render.addEventListener(MouseEvent.CLICK, onTreeClick);
 						this.renderArr.push(render);
+
+						this.foldMenu.addItem(render, "0_" + i1 + "_" + i2);
 					}
 
-					accorMenu1.addItem(tinfo1.Als_Nam, "", data1);
-//					accorMenu1.addEventListener(MouseEvent.CLICK, onTreeClick);
 				}
 
-				data2.push(accorMenu1);
-				this.accordMenu.addItem(tinfo.AlT_Nam, "", data2);
 			}
 
-//			this.accordMenu.addItem(PropUtils.getStringById(1716), "", data1);
-//			this.accordMenu.addItem(PropUtils.getStringById(1717), "", data2);
-//			this.accordMenu.addItem(PropUtils.getStringById(1718), "", data3);
-
-//			this.accordMenu.addEventListener(MouseEvent.CLICK, onTreeClick);
-
-
-
-//			this.accordMenu.y=70;
-//			this.accordMenu.x=13;
+			this.foldMenu.updateInfo();
 
 			this.render=new AlchemyRender();
 			this.addChild(this.render);
@@ -146,8 +172,19 @@ package com.leyou.ui.gem {
 			super.show(toTop, $layer, toCenter);
 
 			this.updateList();
-			this.renderArr[0].getChildAt(0).dispatchEvent(new MouseEvent(MouseEvent.CLICK));
 
+			this.renderArr[0].getChildAt(0).dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+			this.renderArr[0].dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+
+		}
+
+		public function setSelectById(id:int):void {
+			for (var i:int=0; i < this.renderArr.length; i++) {
+				if (this.renderArr[i].getItemID() == id) {
+					this.renderArr[i].getChildAt(0).dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+					this.renderArr[i].dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+				}
+			}
 		}
 
 		public function updateList():void {
@@ -164,11 +201,7 @@ package com.leyou.ui.gem {
 		}
 
 		public function clearData():void {
-
-
 			this.currentCount=1;
-
-
 		}
 
 		override public function get width():Number {

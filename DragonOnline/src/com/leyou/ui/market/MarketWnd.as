@@ -7,6 +7,7 @@ package com.leyou.ui.market {
 	import com.ace.manager.LibManager;
 	import com.ace.manager.TimeManager;
 	import com.ace.manager.ToolTipManager;
+	import com.ace.manager.TweenManager;
 	import com.ace.manager.UIManager;
 	import com.ace.ui.auto.AutoWindow;
 	import com.ace.ui.button.children.ImgButton;
@@ -233,6 +234,7 @@ package com.leyou.ui.market {
 			if(MarketItemRender.buyWnd){
 				MarketItemRender.buyWnd.hide();
 			}
+			TweenManager.getInstance().lightingCompnent(UIManager.getInstance().toolsWnd.getUIbyID("shopBtn"));
 		}
 		
 		/**

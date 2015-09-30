@@ -74,6 +74,8 @@ package com.leyou.ui.pet.children
 		
 		private var ncattLbl:Label;
 		
+		private var nAttributeLbl:Label;
+		
 		public function PetStarUpgradePage(){
 			super(LibManager.getInstance().getXML("config/ui/pet/serventSX.xml"));
 			init();
@@ -85,6 +87,7 @@ package com.leyou.ui.pet.children
 			nAttLbl = getUIbyID("nAttLbl") as Label;
 			cHpLbl = getUIbyID("cHpLbl") as Label;
 			nHpLbl = getUIbyID("nHpLbl") as Label;
+			nAttributeLbl = getUIbyID("nAttributeLbl") as Label;
 			cSpeedLbl = getUIbyID("cSpeedLbl") as Label;
 			nSpeedLbl = getUIbyID("nSpeedLbl") as Label;
 			cSmartLbl = getUIbyID("cSmartLbl") as Label;
@@ -224,7 +227,20 @@ package com.leyou.ui.pet.children
 			chitLbl.text = int(cpetStarInfo.hitRate/100) + "%";
 			ccattLbl.text = int(cpetStarInfo.slayRate/100) + "%";
 				
-			if(null != npetStarInfo){
+			if(starLv < ConfigEnum.servent9){
+				nAttributeLbl.visible = true;
+				nAttLbl.visible = true;
+				nHpLbl.visible = true;
+				nSpeedLbl.visible = true;
+				nSmartLbl.visible = true;
+				nReviveLbl.visible = true;
+				ncritLbl.visible = true;
+				nhitLbl.visible = true;
+				ncattLbl.visible = true;
+				for each(var simg:Image in nstars){
+					simg.visible = true;
+				}
+				
 				nHpLbl.text = int(npetStarInfo.hp + npetLvInfo.hp)+"";
 				nAttLbl.text = int(npetStarInfo.fixedAtt + npetLvInfo.fixedAtt)+"";
 				nSpeedLbl.text = npetStarInfo.attSpeed/1000+PropUtils.getStringById(2157);
@@ -233,6 +249,19 @@ package com.leyou.ui.pet.children
 				ncritLbl.text = int(npetStarInfo.critRate/100) + "%";
 				nhitLbl.text = int(npetStarInfo.hitRate/100) + "%";
 				ncattLbl.text = int(npetStarInfo.slayRate/100) + "%";
+			}else{
+				nAttributeLbl.visible = false;
+				nAttLbl.visible = false;
+				nHpLbl.visible = false;
+				nSpeedLbl.visible = false;
+				nSmartLbl.visible = false;
+				nReviveLbl.visible = false;
+				ncritLbl.visible = false;
+				nhitLbl.visible = false;
+				ncattLbl.visible = false;
+				for each(var img:Image in nstars){
+					img.visible = false;
+				}
 			}
 			
 			var rnum:int = MyInfoManager.getInstance().getBagItemNumById(cpetStarInfo.item);

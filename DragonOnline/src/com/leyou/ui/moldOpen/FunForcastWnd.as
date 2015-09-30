@@ -87,7 +87,7 @@ package com.leyou.ui.moldOpen {
 		}
 
 		public function resize():void {
-			y=UIManager.getInstance().roleHeadWnd.y + 182;
+			y=UIManager.getInstance().roleHeadWnd.y + 242;
 		}
 
 		public function checkFunction(level:int):void {

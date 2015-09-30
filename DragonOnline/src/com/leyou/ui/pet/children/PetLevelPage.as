@@ -72,6 +72,8 @@ package com.leyou.ui.pet.children {
 		private var petTId:int;
 		
 		private var finishedImg:Image;
+		
+		private var nextLbl:Label;
 
 		public function PetLevelPage() {
 			super(LibManager.getInstance().getXML("config/ui/pet/serventDJ.xml"));
@@ -87,6 +89,7 @@ package com.leyou.ui.pet.children {
 			attLbl=getUIbyID("attLbl") as Label;
 			nAttLbl=getUIbyID("nAttLbl") as Label;
 			hpLbl=getUIbyID("hpLbl") as Label;
+			nextLbl=getUIbyID("nextLbl") as Label;
 			nHpLbl=getUIbyID("nHpLbl") as Label;
 			reviveLbl=getUIbyID("reviveLbl") as Label;
 			nReviveLbl=getUIbyID("nReviveLbl") as Label;
@@ -200,10 +203,21 @@ package com.leyou.ui.pet.children {
 			attLbl.text = int(petStarInfo.fixedAtt + petLvInfo.fixedAtt)+"";
 			hpLbl.text = int(petStarInfo.hp + petLvInfo.hp)+"";
 			reviveLbl.text = (petStarInfo.revive+petLvInfo.revive)+PropUtils.getStringById(2146);
-			if(null != nPetLvInfo){
+			if(level < ConfigEnum.servent15){
 				nHpLbl.text = int(petStarInfo.hp + nPetLvInfo.hp)+"";
 				nAttLbl.text = int(petStarInfo.fixedAtt + nPetLvInfo.fixedAtt)+"";
 				nReviveLbl.text = (petStarInfo.revive+nPetLvInfo.revive)+PropUtils.getStringById(2146);
+				nextLbl.visible = true;
+				nLvLbl.visible = true;
+				nAttLbl.visible = true;
+				nHpLbl.visible = true;
+				nReviveLbl.visible = true;
+			}else{
+				nextLbl.visible = false;
+				nLvLbl.visible = false;
+				nAttLbl.visible = false;
+				nHpLbl.visible = false;
+				nReviveLbl.visible = false;
 			}
 			
 			var petData:PetData = DataManager.getInstance().petData;

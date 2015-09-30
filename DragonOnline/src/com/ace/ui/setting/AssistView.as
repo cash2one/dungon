@@ -18,6 +18,7 @@ package com.ace.ui.setting {
 	import com.ace.manager.LayerManager;
 	import com.ace.manager.LibManager;
 	import com.ace.manager.TimeManager;
+	import com.ace.manager.TweenManager;
 	import com.ace.manager.UIManager;
 	import com.ace.ui.auto.AutoWindow;
 	import com.ace.ui.button.children.CheckBox;
@@ -266,6 +267,7 @@ package com.ace.ui.setting {
 		public override function hide():void {
 			super.hide();
 			Cmd_Assist.cm_Ass_S(info.serialize());
+			TweenManager.getInstance().lightingCompnent(UIManager.getInstance().toolsWnd.getUIbyID("guaJBtn"));
 		}
 
 		/**

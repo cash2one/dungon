@@ -2,6 +2,8 @@ package com.leyou.ui.collection
 {
 	import com.ace.enum.UIEnum;
 	import com.ace.manager.LibManager;
+	import com.ace.manager.TweenManager;
+	import com.ace.manager.UIManager;
 	import com.ace.ui.auto.AutoWindow;
 	import com.ace.ui.tabbar.children.TabBar;
 	import com.leyou.ui.collection.children.CollectionPreciousPage;
@@ -40,6 +42,11 @@ package com.leyou.ui.collection
 		public function resize():void{
 			x = (UIEnum.WIDTH - width)*0.5;
 			y = (UIEnum.HEIGHT - height)*0.5;
+		}
+		
+		public override function hide():void{
+			super.hide();
+			TweenManager.getInstance().lightingCompnent(UIManager.getInstance().toolsWnd.getUIbyID("collectBtn"));
 		}
 	}
 }

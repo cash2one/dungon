@@ -95,8 +95,10 @@ package com.ace.manager {
 			StartObjs[WindowEnum.GEM_LV]=toolsWnd.getUIbyID("alchmyBtn");
 			StartObjs[WindowEnum.BADAGE]=toolsWnd.getUIbyID("wenZBtn");
 			StartObjs[WindowEnum.FRIEND]=toolsWnd.getUIbyID("friendBtn");
+			StartObjs[WindowEnum.SEVENDAY]=toolsWnd.getUIbyID("mercenaryBtn");
 			StartObjs[WindowEnum.MAILL]=UIManager.getInstance().smallMapWnd.getUIbyID("mailBtn");
 			StartObjs[WindowEnum.FARM]=rightTopWnd.getWidget("farmBtn");
+			StartObjs[WindowEnum.COPY_RANK]=rightTopWnd.getWidget("copyRBtn");
 //			StartObjs[WindowEnum.STORYCOPY]=rightTopWnd.getWidget("storyCopyBtn");
 //			StartObjs[WindowEnum.BOSSCOPY]=rightTopWnd.getWidget("bossCopyBtn");
 			StartObjs[WindowEnum.BOSS]=rightTopWnd.getWidget("bossCopyBtn");
@@ -148,7 +150,7 @@ package com.ace.manager {
 			LinkWnds[WindowEnum.AUTION]=[WindowEnum.AUTION, WindowEnum.BACKPACK];
 			LinkWnds[WindowEnum.MAILL]=[WindowEnum.MAILL, WindowEnum.BACKPACK];
 			LinkWnds[WindowEnum.ROLE]=[WindowEnum.ROLE, WindowEnum.BACKPACK,WindowEnum.GEM_LV];
-			LinkWnds[WindowEnum.BACKPACK]=[WindowEnum.MAILL, WindowEnum.AUTION, WindowEnum.ROLE, WindowEnum.BACKPACK,WindowEnum.GEM_LV];
+			LinkWnds[WindowEnum.BACKPACK]=[WindowEnum.BACKPACK,WindowEnum.MAILL, WindowEnum.AUTION, WindowEnum.ROLE,WindowEnum.GEM_LV];
 			LinkWnds[WindowEnum.STOREGE]=[WindowEnum.STOREGE, WindowEnum.BACKPACK];
 			LinkWnds[WindowEnum.SHOP]=[WindowEnum.SHOP, WindowEnum.BACKPACK];
 			LinkWnds[WindowEnum.LABA_DESC]=[WindowEnum.LABA,WindowEnum.LABA_DESC];
@@ -158,7 +160,7 @@ package com.ace.manager {
 			//				  界面枚举:[子界面枚举数组]
 			//------------------------------------------------------------
 			ChildrenWnds={};
-			ChildrenWnds[WindowEnum.ROLE]=[WindowEnum.MOUTLVUP, WindowEnum.MOUTTRADEUP,WindowEnum.MEDIC,WindowEnum.WING_FLY, WindowEnum.WINGLVUP,WindowEnum.QUICK_BUY];
+			ChildrenWnds[WindowEnum.ROLE]=[WindowEnum.MOUTLVUP, WindowEnum.MOUTTRADEUP,WindowEnum.MEDIC,WindowEnum.WING_FLY, WindowEnum.WINGLVUP,WindowEnum.QUICK_BUY,WindowEnum.MARRY4];
 			ChildrenWnds[WindowEnum.SKILL]=[WindowEnum.RUNE, WindowEnum.QUICK_BUY];
 			ChildrenWnds[WindowEnum.EQUIP]=[WindowEnum.QUICK_BUY];
 			ChildrenWnds[WindowEnum.MAILL]=[WindowEnum.MAILL_READ];

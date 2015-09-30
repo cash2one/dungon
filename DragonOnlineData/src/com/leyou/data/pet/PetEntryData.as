@@ -78,8 +78,6 @@ package com.leyou.data.pet
 			qmdLv = tmpQmdLv;
 		}
 		
-		private var count:int;
-		
 		public function unserialize_I(petInfo:Array, petSl:Array=null):void{
 			if(petInfo.length <= 0){
 				return;
@@ -93,6 +91,7 @@ package com.leyou.data.pet
 			exp = petInfo[4];
 			qmd = petInfo[5];
 			var tmpQmdLv:int = petInfo[6];
+			_callt = petInfo[7];
 			if((-1 != level) && (level != tmpLV)){
 				EventManager.getInstance().dispatchEvent("petLvUp", id);
 			}

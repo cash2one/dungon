@@ -18,9 +18,10 @@ package com.ace.manager {
 	import com.leyou.ui.tips.TipsFieldBossTip;
 	import com.leyou.ui.tips.TipsGemEquipWnd;
 	import com.leyou.ui.tips.TipsGemWnd;
+	import com.leyou.ui.tips.TipsMarryWnd;
 	import com.leyou.ui.tips.TipsMissionWnd;
-	import com.leyou.ui.tips.TipsRuneTip;
 	import com.leyou.ui.tips.TipsPetTip;
+	import com.leyou.ui.tips.TipsRuneTip;
 	import com.leyou.ui.tips.TipsSkillTip;
 	import com.leyou.ui.tips.TipsTzWnd;
 	import com.leyou.ui.tips.TipsVipBlessTip;
@@ -76,6 +77,7 @@ package com.ace.manager {
 			this.classDic[TipEnum.TYPE_GUILD_BLESS]=GuildSciTips;
 			this.classDic[TipEnum.TYPE_TITLE]=TitleTips;
 			this.classDic[TipEnum.TYPE_PET]=TipsPetTip;
+			this.classDic[TipEnum.TYPE_MARRY]=TipsMarryWnd;
 		}
 
 	}

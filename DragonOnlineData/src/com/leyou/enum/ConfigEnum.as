@@ -502,6 +502,7 @@ manaRevive	5	法力回复速度/S
 		public static var Sale_Daily10:String;
 		public static var Sale_Daily11:String;
 		public static var Sale_Daily12:String;
+		public static var Sale_Daily13:int;
 		
 		// 龙珠
 		public static var DragonBall5:int;
@@ -859,6 +860,11 @@ manaRevive	5	法力回复速度/S
 		public static var wing16:int;
 		public static var wing17:int;
 		
+		public static var FastTop1:int;
+		public static var FastTop2:int;
+		public static var FastTop3:int;
+		public static var FastTop4:int;
+		
 		public static var TaskMarket1:int;
 		public static var TaskMarket2:int;
 		
@@ -875,6 +881,14 @@ manaRevive	5	法力回复速度/S
 		public static var Babel4:int;
 		public static var Babel5:int;
 		public static var Babel6:int;
+		
+		public static var marry1:int;
+		public static var marry2:int;
+		public static var marry3:int;
+		public static var marry4:int;
+		public static var marry5:int;
+		public static var marry6:int;
+		public static var marry7:int;
 		
 		
 		public function ConfigEnum() {
@@ -978,6 +992,7 @@ manaRevive	5	法力回复速度/S
 			Sale_Daily10=xml.syscfg.(@Id == "Sale_Daily10")[0].@val;
 			Sale_Daily11=xml.syscfg.(@Id == "Sale_Daily11")[0].@val;
 			Sale_Daily12=xml.syscfg.(@Id == "Sale_Daily12")[0].@val;
+			Sale_Daily13=xml.syscfg.(@Id == "Sale_Daily13")[0].@val;
 			
 			// 任务集市
 			TaskMarket1 = xml.syscfg.(@Id == "TaskMarket1")[0].@val;
@@ -1392,6 +1407,11 @@ manaRevive	5	法力回复速度/S
 			wing16=xml.syscfg.(@Id == "wing16")[0].@val;
 			wing17=xml.syscfg.(@Id == "wing17")[0].@val;
 			
+			FastTop1=xml.syscfg.(@Id == "FastTop1")[0].@val;
+			FastTop2=xml.syscfg.(@Id == "FastTop2")[0].@val;
+			FastTop3=xml.syscfg.(@Id == "FastTop3")[0].@val;
+			FastTop4=xml.syscfg.(@Id == "FastTop4")[0].@val;
+			
 			Union_Bless1=xml.syscfg.(@Id == "Union_Bless1")[0].@val;
 			Union_Bless2=xml.syscfg.(@Id == "Union_Bless2")[0].@val;
 			Union_Bless3=xml.syscfg.(@Id == "Union_Bless3")[0].@val;
@@ -1402,6 +1422,14 @@ manaRevive	5	法力回复速度/S
 			Babel4=xml.syscfg.(@Id == "Babel4")[0].@val;
 			Babel5=xml.syscfg.(@Id == "Babel5")[0].@val;
 			Babel6=xml.syscfg.(@Id == "Babel6")[0].@val;
+			
+			marry1=xml.syscfg.(@Id == "marry1")[0].@val;
+			marry2=xml.syscfg.(@Id == "marry2")[0].@val;
+			marry3=xml.syscfg.(@Id == "marry3")[0].@val;
+			marry4=xml.syscfg.(@Id == "marry4")[0].@val;
+			marry5=xml.syscfg.(@Id == "marry5")[0].@val;
+			marry6=xml.syscfg.(@Id == "marry6")[0].@val;
+			marry7=xml.syscfg.(@Id == "marry7")[0].@val;
 			 
 		}
 	}

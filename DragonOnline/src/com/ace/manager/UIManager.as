@@ -81,6 +81,7 @@ package com.ace.manager {
 	import com.leyou.ui.convenientuse.ConvenientUseWnd;
 	import com.leyou.ui.convenientuse.ConvenientWearWnd;
 	import com.leyou.ui.copy.StoryCopyRewarWnd;
+	import com.leyou.ui.copyRank.CopyRankWnd;
 	import com.leyou.ui.copyTrack.ExpCopyTrackBar;
 	import com.leyou.ui.copyTrack.StoryCopyTrackBar;
 	import com.leyou.ui.creatUser.CreatUserWnd;
@@ -132,6 +133,10 @@ package com.ace.manager {
 	import com.leyou.ui.mail.MaillReadWnd;
 	import com.leyou.ui.market.MarketWnd;
 	import com.leyou.ui.market.TencentMarketWnd;
+	import com.leyou.ui.marry.MarryWnd1;
+	import com.leyou.ui.marry.MarryWnd2;
+	import com.leyou.ui.marry.MarryWnd3;
+	import com.leyou.ui.marry.MarryWnd4;
 	import com.leyou.ui.medic.RoleMedicWnd;
 	import com.leyou.ui.missionMarket.MissionMarketWnd;
 	import com.leyou.ui.moldOpen.FunForcastWnd;
@@ -312,6 +317,11 @@ package com.ace.manager {
 		
 		public var labaWnd:LabaWnd;
 		public var labaDescWnd:LabaOpWnd;
+		
+		public var marryWnd1:MarryWnd1;
+		public var marryWnd2:MarryWnd2;
+		public var marryWnd3:MarryWnd3;
+		public var marryWnd4:MarryWnd4;
 
 		public var funForcastWnd:FunForcastWnd;
 		//		public var onlineReward:OnlineReward;
@@ -390,6 +400,7 @@ package com.ace.manager {
 		public var petIconbar:PetShortcutBar;
 		public var petSelectWnd:PetSelectWnd;
 		public var petHead:PetHead;
+		public var copyRankWnd:CopyRankWnd;
 		// 功能开启
 		public var moldWnd:MoldOpenWnd;
 		// 快捷换装
@@ -507,6 +518,10 @@ package com.ace.manager {
 			_claDic[WindowEnum.TTT_TRACK]=[TttTrack,"ttttackWnd"];
 			_claDic[WindowEnum.LABA]=[LabaWnd,"labaWnd"];
 			_claDic[WindowEnum.LABA_DESC]=[LabaOpWnd,"labaDescWnd"];
+			_claDic[WindowEnum.MARRY1]=[MarryWnd1,"marryWnd1"];
+			_claDic[WindowEnum.MARRY2]=[MarryWnd2,"marryWnd2"];
+			_claDic[WindowEnum.MARRY3]=[MarryWnd3,"marryWnd3"];
+			_claDic[WindowEnum.MARRY4]=[MarryWnd4,"marryWnd4"];
 
 			_claDic[WindowEnum.ARENA_NOTICE]=[ArenaMsgWnd, "arenaMegWnd"];
 			_claDic[WindowEnum.CDKEY]=[CDKeyReceiveWnd, "receiveWnd"];
@@ -572,7 +587,9 @@ package com.ace.manager {
 			_claDic[WindowEnum.TASK_MARKET]=[MissionMarketWnd, "missionMarketWnd"];
 			_claDic[WindowEnum.COMBINE_RECHARGE]=[AbidePayIIWnd, "combineRechargeWnd"];
 			_claDic[WindowEnum.PRO_LUCKDRAW]=[ProLuckDraw, "proLuckDrawWnd"];
-			_claDic[WindowEnum.PET_SELECT]=[PetSelectWnd, "petSelectWnd"]
+			_claDic[WindowEnum.PET_SELECT]=[PetSelectWnd, "petSelectWnd"];
+			_claDic[WindowEnum.COPY_RANK]=[CopyRankWnd, "copyRankWnd"];
+			
 			
 			//			this.mountLvUpwnd=new MountLvUpWnd();
 			//			this.mountTradeWnd=new MountTradeWnd();

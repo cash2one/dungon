@@ -17,6 +17,7 @@ package com.leyou.net {
 	import com.leyou.net.cmd.Cmd_CCZ;
 	import com.leyou.net.cmd.Cmd_CD;
 	import com.leyou.net.cmd.Cmd_CLI;
+	import com.leyou.net.cmd.Cmd_CPRAK;
 	import com.leyou.net.cmd.Cmd_Chat;
 	import com.leyou.net.cmd.Cmd_Collection;
 	import com.leyou.net.cmd.Cmd_CpTm;
@@ -51,6 +52,7 @@ package com.leyou.net {
 	import com.leyou.net.cmd.Cmd_Longz;
 	import com.leyou.net.cmd.Cmd_Mail;
 	import com.leyou.net.cmd.Cmd_Market;
+	import com.leyou.net.cmd.Cmd_Marry;
 	import com.leyou.net.cmd.Cmd_Mount;
 	import com.leyou.net.cmd.Cmd_Nck;
 	import com.leyou.net.cmd.Cmd_Npc;
@@ -484,6 +486,9 @@ package com.leyou.net {
 				dict[CmdEnum.SM_BCP_T]=Cmd_BCP.sm_BCP_T;
 				dict[CmdEnum.SM_BCP_X]=Cmd_BCP.sm_BCP_X;
 				dict[CmdEnum.SM_BCP_R]=Cmd_BCP.sm_BCP_R;
+				
+				// 副本通关
+				dict[CmdEnum.SM_CPRAK_I]=Cmd_CPRAK.sm_CPRAK_I;
 
 				// 七天任务
 				dict[CmdEnum.SM_SEVD_D]=Cmd_Seven.sm_SEVD_D;
@@ -580,6 +585,7 @@ package com.leyou.net {
 				
 				dict[CmdEnum.SM_SFCZ_A]=Cmd_SFCZ.sm_SFCZ_A;
 
+				// 充值排行
 				dict[CmdEnum.SM_CRANK_I]=Cmd_PayRank.sm_PayRank_I;
 				dict[CmdEnum.SM_CRANK_A]=Cmd_PayRank.sm_PayRank_A
 
@@ -684,6 +690,12 @@ package com.leyou.net {
 				dict[CmdEnum.SM_LABA_I]=Cmd_Laba.sm_laba_I;
 				dict[CmdEnum.SM_LABA_D]=Cmd_Laba.sm_laba_D;
 				dict[CmdEnum.SM_LABA_H]=Cmd_Laba.sm_laba_H;
+				
+				//结婚
+				dict[CmdEnum.SM_MARRY_I]=Cmd_Marry.sm_marry_I;
+				dict[CmdEnum.SM_MARRY_P]=Cmd_Marry.sm_marry_P;
+				dict[CmdEnum.SM_MARRY_R]=Cmd_Marry.sm_marry_R;
+				dict[CmdEnum.SM_MARRY_Y]=Cmd_Marry.sm_marry_Y;
 			}
 		}
 
@@ -694,8 +706,6 @@ package com.leyou.net {
 				NetGate.DEBUG && trace("☆☆☆☆☆☆☆ 【警告！暂时还没有该类[" + cmd + "]" + data + "】 ☆☆☆☆☆☆☆");
 				return;
 			}
-
-			trace()
 
 			fun(data);
 		}

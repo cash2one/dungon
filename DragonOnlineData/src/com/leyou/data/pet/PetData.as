@@ -43,9 +43,9 @@ package com.leyou.data.pet
 			var pl:Array = obj.petlist;
 			var length:int = pl.length;
 			var gfList:Array = obj.gift_f;
-			petList.length = length;
+//			petList.length = length;
 			for(var n:int = 0; n < length; n++){
-				var petEntryData:PetEntryData = getPetById(pl[0]);
+				var petEntryData:PetEntryData = getPetById(pl[n][0]);
 				if(null == petEntryData){
 					petEntryData = new PetEntryData();
 					petList.push(petEntryData);
@@ -95,6 +95,9 @@ package com.leyou.data.pet
 			var length:int = petList.length;
 			for(var n:int = 0; n < length; n++){
 				var petEntryData:PetEntryData = petList[n];
+				if(null == petEntryData){
+					continue;
+				}
 				petEntryData.lvMissionComplete = (expf.indexOf(petEntryData.id) > -1);
 				petEntryData.qmMissionComplete = (qmdf.indexOf(petEntryData.id) > -1);
 			}
@@ -140,7 +143,7 @@ package com.leyou.data.pet
 					petShortcutList[n] = petEntryData;
 				}
 				petEntryData.unserialize_I(pl[n]);
-				if(!containsPet(petEntryData.id)){
+				if((0 != petEntryData.id) && !containsPet(petEntryData.id)){
 					var pn:PetEntryData = new PetEntryData();
 					pn.unserialize_I(pl[n]);
 					petList.push(pn);

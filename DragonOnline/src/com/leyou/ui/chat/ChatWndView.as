@@ -67,6 +67,9 @@ package com.leyou.ui.chat
 		 * 
 		 */		
 		protected function onMouseOut(event:MouseEvent):void{
+			if(event.target is ImgButton){
+				return;
+			}
 			var display:DisplayObject = event.relatedObject;
 			if(!display || !contains(display)){
 				messageView.tweenHide();

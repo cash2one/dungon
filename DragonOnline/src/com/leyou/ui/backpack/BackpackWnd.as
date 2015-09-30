@@ -19,7 +19,6 @@ package com.leyou.ui.backpack {
 	import com.leyou.enum.ConfigEnum;
 	import com.leyou.manager.PopupManager;
 	import com.leyou.net.cmd.Cmd_Bag;
-	import com.leyou.net.cmd.Cmd_CD;
 	import com.leyou.net.cmd.Cmd_Mount;
 	import com.leyou.net.cmd.Cmd_Wig;
 	import com.leyou.ui.backpack.child.BackpackGrid;

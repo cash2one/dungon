@@ -35,6 +35,7 @@ package com.ace.game.scene.ui.head {
 	import com.leyou.net.cmd.Cmd_Guild;
 	import com.leyou.net.cmd.Cmd_Tm;
 	import com.leyou.utils.PlayerUtil;
+	import com.leyou.utils.PropUtils;
 	
 	import flash.display.Sprite;
 	import flash.events.Event;
@@ -378,6 +379,7 @@ package com.ace.game.scene.ui.head {
 				info2.push(new MenuInfo(ChatEnum.CLICK_MENU_II[6], ChatEnum.COPY));
 				info2.push(new MenuInfo(ChatEnum.CLICK_MENU_II[10], ChatEnum.DUEL));
 				info2.push(new MenuInfo(ChatEnum.CLICK_MENU_II[7], ChatEnum.SUE));
+				info2.push(new MenuInfo(PropUtils.getStringById(2242), ChatEnum.PROPOSAL));
 			}
 			MenuManager.getInstance().show(info2, this);
 		}
@@ -417,6 +419,9 @@ package com.ace.game.scene.ui.head {
 					break;
 				case ChatEnum.DUEL:
 					Cmd_Duel.cm_DUEL_T(currPlayer);
+					break;
+				case ChatEnum.PROPOSAL:
+					UIManager.getInstance().roleWnd.startMarry(currPlayer);
 					break;
 			}
 		}

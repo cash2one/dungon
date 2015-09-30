@@ -20,6 +20,7 @@ package com.leyou.ui.role.child.children {
 	import com.leyou.data.role.RoleInfo;
 	import com.leyou.enum.QualityEnum;
 	import com.leyou.utils.FilterUtil;
+	import com.leyou.utils.PropUtils;
 
 	import flash.display.DisplayObject;
 	import flash.geom.Point;
@@ -27,6 +28,7 @@ package com.leyou.ui.role.child.children {
 	public class RoleEquipUpWnd extends AutoSprite {
 
 		private var nameLbl:Label;
+		private var nameLbl0:Label;
 		private var raceImg:Image;
 		private var lvLbl:Label;
 
@@ -52,6 +54,7 @@ package com.leyou.ui.role.child.children {
 			this.raceImg=this.getUIbyID("raceImg") as Image;
 			this.lvLbl=this.getUIbyID("lvLbl") as Label;
 			this.nameLbl=this.getUIbyID("nameLbl") as Label;
+			this.nameLbl0=this.getUIbyID("nameLbl0") as Label;
 
 			this.buffArr.push(this.getUIbyID("qh8img") as Image);
 			this.buffArr.push(this.getUIbyID("qh12img") as Image);
@@ -163,6 +166,13 @@ package com.leyou.ui.role.child.children {
 			this.nameLbl.x=this.raceImg.x + 34;
 //			this.lvLbl.text="等级:" + o.lv;
 
+		}
+
+		public function setCpName(n:String):void {
+			if (n == null)
+				this.nameLbl0.text="";
+			else
+				this.nameLbl0.text=n + "" + PropUtils.getStringById(2241);
 		}
 
 		public function updateEquip(otherPlayer:Boolean=false):void {

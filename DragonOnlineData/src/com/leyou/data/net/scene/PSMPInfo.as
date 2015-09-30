@@ -163,6 +163,12 @@ package com.leyou.data.net.scene {
 //			tmpArr=tmpStr.split(",");
 //			info.equipLv=tmpArr[0];
 //			info.equipColor=tmpArr[1];
+			
+			//B
+			tmpStr=arr[16];
+			tmpStr=tmpStr.substr(1);
+			tmpArr=tmpStr.split(",");
+			info.partnerName=tmpArr[0];
 			return fInfo;
 
 

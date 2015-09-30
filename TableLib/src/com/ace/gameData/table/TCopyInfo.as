@@ -4,6 +4,8 @@ package com.ace.gameData.table
 	{
 		public var id:int;
 		
+		public var type:int;
+		
 		public var sceneId:int;
 		
 		public var name:String;
@@ -40,6 +42,8 @@ package com.ace.gameData.table
 		
 		public var firstItemCount2:int;
 		
+		public var fastTop:Boolean;
+		
 		public var item1Data:Array;
 		public var item2Data:Array;
 		public var item3Data:Array;
@@ -59,8 +63,7 @@ package com.ace.gameData.table
 		public var ticketC4:int;
 		
 		public function TCopyInfo(xml:XML=null){
-			if(xml == null)
-				return;
+			this.type=xml.@Dungeon_Type;
 			this.id=xml.@Dungeon_ID;
 			this.sceneId=xml.@Dungeon_Scene;
 			this.name=xml.@Dungeon_Name;
@@ -106,6 +109,8 @@ package com.ace.gameData.table
 			ticketC2 = xml.@DT_Num2;
 			ticketC3 = xml.@DT_Num3;
 			ticketC4 = xml.@DT_Num4;
+			
+			fastTop = ("1" == xml.@D_FastTop);
 		}
 	}
 }

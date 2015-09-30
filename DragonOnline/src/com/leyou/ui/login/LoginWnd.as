@@ -266,6 +266,12 @@ package com.leyou.ui.login {
 //			this.userNameTinput.text="lgn|Puserid=dev1,svrid=dev1,fcm=1,timestamp=1438937942,sign=394e4c616998f159a252aad7da9dcda2";
 //			this.userNameTinput.text="lgn|Puserid=dev1,svrid=dev1,fcm=1,timestamp=1440555153,sign=456afe8639a8e3da42c95cb5446e0b08";
 //			this.userNameTinput.text="http://192.168.10.16/dragon/game/index.php?qid=dev5&server_id=dev1&time=1437527353&sign=01f3f0c152a9e133843a11885c47ed75&isAdult=1&key=TW";
+//			this.userNameTinput.text="lgn|Puserid=dev1,svrid=dev1,fcm=1,timestamp=1443000922,sign=7c7b1b651d94f88d0cc16393ebcd2b02";
+//			this.userNameTinput.text="lgn|Puserid=dev2,svrid=dev1,fcm=1,timestamp=1443005081,sign=27a500dd0c7ff9c45a44389bfb52904a";
+//			this.userNameTinput.text="lgn|Puserid=dev3,svrid=dev1,fcm=1,timestamp=1443005584,sign=96c9e44e68d8884021fbc611b1324758";
+//			this.userNameTinput.text="lgn|Puserid=dev5,svrid=dev1,fcm=1,timestamp=1443007629,sign=8f5336531cb2e939e5af614b8f30bea0";
+			this.userNameTinput.text="lgn|Puserid=devqweasd112,svrid=dev1,fcm=1,timestamp=1443059094,sign=37b95addf5509b51c9c7e2ffe707e117";
+//			this.userNameTinput.text="lgn|Puserid=devzxcasdad111a1,svrid=dev1,fcm=1,timestamp=1443060827,sign=a71756a60b08e5dfbb29819fd2bd7518";
 			
 //			this.userNameTinput.text="http://192.168.10.16/dragon/game/?ip=192.168.10.88?port=9932?lgn|Puserid=dev1212,svrid=dev1,fcm=1,timestamp=1431419816,sign=50c13694517e451a564b2486d533f394";
 //			this.userNameTinput.text="lgn|Puserid=dev2,svrid=dev1,fcm=1,timestamp=1433939439,sign=07aa684b730b5e8a821126cddfb43aae";

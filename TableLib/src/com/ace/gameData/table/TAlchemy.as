@@ -26,8 +26,13 @@ package com.ace.gameData.table {
 		public var Datum5:int;
 		public var Datum_Num5:int;
 		public var Al_Cost:int;
+		
+		public var Al_soul:int;
+		public var Cost_byb:int;
+		public var Cost_yb:int;
 
 		public var Al_Rate:int;
+		public var Al_RateFont:String;
 		public var Al_Key:int;
 		public var AlKey_Num:int;
 
@@ -68,6 +73,10 @@ package com.ace.gameData.table {
 			this.Datum5=data.@Datum5;
 			this.Datum_Num5=data.@Datum_Num5;
 			this.Al_Cost=data.@Al_Cost;
+			this.Al_soul=data.@Al_soul;
+			this.Cost_byb=data.@Cost_byb;
+			this.Cost_yb=data.@Cost_yb;
+			this.Al_RateFont=data.@AL_RateFont;
 			this.Al_Rate=data.@Al_Rate;
 			this.Al_Key=data.@Al_Key;
 			this.AlKey_Num=data.@AlKey_Num;

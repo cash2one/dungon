@@ -162,7 +162,7 @@ package com.leyou.ui.backpack.child {
 			this.addChild(this.disableBmp);
 			this.addChild(this.numLbl);
 
-			if (info.aid == 31961  || info.aid == 31964)
+			if (info.aid == int(ConfigEnum.Sale_Daily9) || info.aid == int(ConfigEnum.Sale_Daily10))
 				Cmd_Bag.cm_bagUse(info.pos);
 
 		}
@@ -964,13 +964,13 @@ package com.leyou.ui.backpack.child {
 //							UILayoutManager.getInstance().show_II(WindowEnum.ROLE);
 //						else
 //							UIManager.getInstance().roleWnd.setGemSlot(dataId);
-//
-//						TweenMax.delayedCall(.6, function():void {
-//
-//							UIManager.getInstance().roleWnd.setTabIndex(2);
 
-							UILayoutManager.getInstance().show_II(WindowEnum.GEM_LV);
-//						});
+						UILayoutManager.getInstance().show_II(WindowEnum.ROLE, WindowEnum.GEM_LV, -20);
+//						UILayoutManager.getInstance().show_II(WindowEnum.GEM_LV);
+
+						TweenMax.delayedCall(.6, function():void {
+							UIManager.getInstance().gemLvWnd.setSelectById(data.aid);
+						});
 					} else {
 						Cmd_Bag.cm_bagUse(this.dataId);
 					}
@@ -990,9 +990,7 @@ package com.leyou.ui.backpack.child {
 					TweenMax.delayedCall(.6, function():void {
 
 						UIManager.getInstance().roleWnd.setTabIndex(2);
-
-
-						UILayoutManager.getInstance().show_II(WindowEnum.ROLE, WindowEnum.GEM_LV, -20);
+//						UILayoutManager.getInstance().show_II(WindowEnum.ROLE, WindowEnum.GEM_LV, -20);
 					});
 
 
@@ -1253,8 +1251,16 @@ package com.leyou.ui.backpack.child {
 //
 //							UIManager.getInstance().roleWnd.setTabIndex(2);
 
-							UILayoutManager.getInstance().show_II(WindowEnum.ROLE, WindowEnum.GEM_LV, -20);
+//							UILayoutManager.getInstance().show_II(WindowEnum.ROLE, WindowEnum.GEM_LV, -20);
 //						});
+
+						UILayoutManager.getInstance().show_II(WindowEnum.ROLE, WindowEnum.GEM_LV, -20);
+
+						TweenMax.delayedCall(.6, function():void {
+							UIManager.getInstance().gemLvWnd.setSelectById(data.aid);
+						});
+
+
 					} else {
 						Cmd_Bag.cm_bagUse(this.dataId);
 					}
@@ -1273,7 +1279,7 @@ package com.leyou.ui.backpack.child {
 
 					TweenMax.delayedCall(.6, function():void {
 						UIManager.getInstance().roleWnd.setTabIndex(2);
-						UILayoutManager.getInstance().show_II(WindowEnum.ROLE, WindowEnum.GEM_LV, -20);
+//						UILayoutManager.getInstance().show_II(WindowEnum.ROLE, WindowEnum.GEM_LV, -20);
 					});
 
 				} else {

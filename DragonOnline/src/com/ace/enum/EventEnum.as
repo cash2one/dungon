@@ -2,6 +2,8 @@ package com.ace.enum {
 
 	public class EventEnum {
 
+		//特效
+		static public const EFFECT_FLOWER:String="flowerEffect";
 		//设置完毕
 		static public const FLASH_SETTING_OVER:String="settingOver";
 

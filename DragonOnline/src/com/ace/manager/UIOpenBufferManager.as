@@ -10,6 +10,7 @@ package com.ace.manager
 	import com.leyou.net.cmd.Cmd_BlackStore;
 	import com.leyou.net.cmd.Cmd_CCZ;
 	import com.leyou.net.cmd.Cmd_CLI;
+	import com.leyou.net.cmd.Cmd_CPRAK;
 	import com.leyou.net.cmd.Cmd_Collection;
 	import com.leyou.net.cmd.Cmd_FCZ;
 	import com.leyou.net.cmd.Cmd_Fanl;
@@ -296,6 +297,12 @@ package com.ace.manager
 					if(!contains(WindowEnum.COMBINE_RECHARGE, CmdEnum.SM_HCCZ_I)){
 						Cmd_HCCZ.cm_HCCZ_I();
 						addCmd(wndKey, CmdEnum.SM_HCCZ_I);
+					}
+					break;
+				case WindowEnum.COPY_RANK:
+					if(!contains(WindowEnum.COPY_RANK, CmdEnum.SM_CPRAK_I)){
+						Cmd_CPRAK.cm_CPRAK_I();
+						addCmd(wndKey, CmdEnum.SM_CPRAK_I);
 					}
 					break;
 			}

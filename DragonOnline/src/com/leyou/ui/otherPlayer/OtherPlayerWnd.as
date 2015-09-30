@@ -2,20 +2,28 @@ package com.leyou.ui.otherPlayer {
 
 	import com.ace.config.Core;
 	import com.ace.enum.PlayerEnum;
+	import com.ace.enum.TipEnum;
 	import com.ace.enum.WindowEnum;
 	import com.ace.game.scene.player.big.BigAvatar;
+	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.player.child.FeatureInfo;
+	import com.ace.gameData.table.TMarry_ring;
 	import com.ace.loader.child.SwfLoader;
 	import com.ace.manager.LibManager;
+	import com.ace.manager.ToolTipManager;
 	import com.ace.manager.UIManager;
 	import com.ace.ui.auto.AutoWindow;
+	import com.ace.ui.button.children.NormalButton;
+	import com.ace.ui.img.child.Image;
 	import com.ace.ui.tabbar.TabbarModel;
 	import com.ace.ui.tabbar.children.TabBar;
 	import com.ace.utils.PnfUtil;
 	import com.leyou.data.element.ElementInfo;
 	import com.leyou.data.role.RoleInfo;
+	import com.leyou.data.tips.TipsInfo;
 	import com.leyou.enum.ConfigEnum;
 	import com.leyou.net.cmd.Cmd_Gem;
+	import com.leyou.net.cmd.Cmd_Marry;
 	import com.leyou.net.cmd.Cmd_Mount;
 	import com.leyou.net.cmd.Cmd_Role;
 	import com.leyou.net.cmd.Cmd_Wig;
@@ -32,6 +40,7 @@ package com.leyou.ui.otherPlayer {
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+	import flash.geom.Point;
 
 	//格式化代码
 	public class OtherPlayerWnd extends AutoWindow {
@@ -73,12 +82,27 @@ package com.leyou.ui.otherPlayer {
 
 		private var bgsp:Sprite;
 		
+		private var marryBtn:NormalButton;
+		private var marryiconImg:Image;
+		private var marryiconImgbg:Image;
+		private var marryiconImgSwf:SwfLoader;
+		
+		private var marryName:String;
+		private var img1SSwf:Sprite;
+		
+		private var tipinfo:TipsInfo;
+		
 		public function OtherPlayerWnd() {
 			super(LibManager.getInstance().getXML("config/ui/RoleWnd.xml"));
 			this.init();
 		}
 
 		private function init():void {
+			
+			this.marryBtn=this.getUIbyID("marryBtn") as NormalButton;
+			this.marryiconImg=this.getUIbyID("marryiconImg") as Image;
+			this.marryiconImgbg=this.getUIbyID("marryiconImgbg") as Image;
+			
 			this.roleTabBar=this.getUIbyID("RoleTabBar") as TabBar;
 			this.roleTabBar.addEventListener(TabbarModel.changeTurnOnIndex, onTabBarChangeIndex);
 
@@ -150,8 +174,77 @@ package com.leyou.ui.otherPlayer {
 			
 //			bgsp.addEventListener(MouseEvent.CLICK, onEffClick);
 			
+			this.marryBtn.visible=false;
+			
+			this.addChild(this.marryBtn);
+			this.addChild(this.marryiconImgbg);
+			this.addChild(this.marryiconImg);
+			
+			this.marryiconImgSwf=new SwfLoader();
+			this.addChild(this.marryiconImgSwf);
+			
+			this.marryiconImgSwf.x=this.marryiconImg.x;
+			this.marryiconImgSwf.y=this.marryiconImg.y;
+			
+			this.marryiconImgSwf.visible=false;
+			
+			this.img1SSwf=new Sprite();
+			this.img1SSwf.graphics.beginFill(0x000000);
+			this.img1SSwf.graphics.drawRect(0, 0, 40, 40);
+			this.img1SSwf.graphics.endFill();
+			
+			this.addChild(this.img1SSwf);
+			
+			this.img1SSwf.alpha=0;
+			
+			this.img1SSwf.x=this.marryiconImg.x;
+			this.img1SSwf.y=this.marryiconImg.y;
+			
+			this.img1SSwf.addEventListener(MouseEvent.MOUSE_OVER, onTipsMouseOver);
+			this.img1SSwf.addEventListener(MouseEvent.MOUSE_OUT, onTipsMouseOut);
+			
+			this.tipinfo=new TipsInfo();
+			//			this.scrollRect=new Rectangle(-256, 0, 745, 524);
 		}
-
+		
+		private function onTipsMouseOver(e:MouseEvent):void {
+			if (this.marryName != null)
+				ToolTipManager.getInstance().show(TipEnum.TYPE_MARRY, this.tipinfo, new Point(this.stage.mouseX, this.stage.mouseY));
+		}
+		
+		private function onTipsMouseOut(e:MouseEvent):void {
+			ToolTipManager.getInstance().hide();
+		}
+			
+		public function updateMarryInfo(o:Object):void {
+			
+			if (o.hasOwnProperty("marry_name")) {
+				this.marryName=o.marry_name;
+				var info:TMarry_ring=TableManager.getInstance().getMarryRingByid(o.mtype);
+				this.marryiconImg.updateBmp("ico/items/" + info.Ring_Pic);
+				this.marryiconImg.setWH(40, 40);
+				
+				this.marryiconImgSwf.update(info.Ring_Eff);
+				this.marryiconImgSwf.visible=true;
+				
+				this.tipinfo.itemid=o.mtype;
+				this.tipinfo.zf=o.mmd_l;
+				this.tipinfo.qh=o.m_ring;
+				
+				this.img1SSwf.visible=true;
+				
+				
+			} else {
+				this.marryiconImg.fillEmptyBmd();
+				this.marryiconImgSwf.visible=false;
+				this.marryName=null;
+				
+				this.img1SSwf.visible=false;
+			}
+			
+			this.roleEquipUp.setCpName(this.marryName);
+		}
+		 
 		private function onEffClick(e:MouseEvent):void {
 			this.bigAvatar.showII(Core.me.info.featureInfo, true, Core.me.info.profession);
 		}
@@ -196,6 +289,7 @@ package com.leyou.ui.otherPlayer {
 			Cmd_Gem.cmGemInit(playName);
 			Cmd_Mount.cmMouInit(playName);
 			Cmd_Wig.cm_WigInit(playName);
+			Cmd_Marry.cmMarryInit(playName);
 		}
 
 		override public function show(toTop:Boolean=true, $layer:int=1, toCenter:Boolean=true):void {
@@ -273,7 +367,18 @@ package com.leyou.ui.otherPlayer {
 				this.updateWingEffect(this.roleEquipUp.currentEquip);
 				
 //				this.bgsp.visible=true;
+				this.marryBtn.visible=false;
+				this.marryiconImg.visible=true;
+				this.marryiconImgSwf.visible=true;
+				this.img1SSwf.visible=true;
+				this.marryiconImgbg.visible=true;
 			} else {
+				
+				this.marryBtn.visible=false;
+				this.marryiconImg.visible=false;
+				this.marryiconImgbg.visible=false;
+				this.marryiconImgSwf.visible=false;
+				this.img1SSwf.visible=false;
 				
 //				this.bgsp.visible=false;
 				

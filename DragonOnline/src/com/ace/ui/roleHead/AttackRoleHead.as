@@ -19,6 +19,7 @@ package com.ace.ui.roleHead
 	import com.leyou.net.cmd.Cmd_Guild;
 	import com.leyou.net.cmd.Cmd_Tm;
 	import com.leyou.utils.PlayerUtil;
+	import com.leyou.utils.PropUtils;
 	
 	import flash.events.MouseEvent;
 	import flash.system.System;
@@ -90,6 +91,7 @@ package com.ace.ui.roleHead
 						menuInfo.push(new MenuInfo(ChatEnum.CLICK_MENU_II[5], ChatEnum.ADD_GUILD));
 						menuInfo.push(new MenuInfo(ChatEnum.CLICK_MENU_II[6], ChatEnum.COPY));
 						menuInfo.push(new MenuInfo(ChatEnum.CLICK_MENU_II[7], ChatEnum.SUE));
+						menuInfo.push(new MenuInfo(PropUtils.getStringById(2242), ChatEnum.PROPOSAL));
 					}
 					MenuManager.getInstance().show(menuInfo, this);
 					break;
@@ -133,6 +135,9 @@ package com.ace.ui.roleHead
 					break;
 				case ChatEnum.COPY: // 复制
 					System.setClipboard(currPlayer);
+					break;
+				case ChatEnum.PROPOSAL:
+					UIManager.getInstance().roleWnd.startMarry(currPlayer);
 					break;
 			}
 		}

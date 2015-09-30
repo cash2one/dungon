@@ -17,6 +17,7 @@ package com.ace.gameData.manager {
 	import com.leyou.data.collectioin.CollectionData;
 	import com.leyou.data.combineData.CombineData;
 	import com.leyou.data.convenient.ConvenientData;
+	import com.leyou.data.copyRank.CopyRankData;
 	import com.leyou.data.dargonball.DragonBallData;
 	import com.leyou.data.fieldboss.FieldBossData;
 	import com.leyou.data.friend.FriendData;
@@ -124,6 +125,8 @@ package com.ace.gameData.manager {
 		
 		public var missionMarketData:MissionMarketData; // 任务集市
 		
+		public var copyRankData:CopyRankData; // 副本通关排行
+		
 		public function DataManager() {
 		}
 		
@@ -212,6 +215,7 @@ package com.ace.gameData.manager {
 			this.popupNumData=new PopupNumberData();
 			this.missionMarketData=new MissionMarketData();
 			this.combineData=new CombineData();
+			this.copyRankData=new CopyRankData();
 		}
 	}
 }

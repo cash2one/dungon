@@ -178,6 +178,11 @@ zdl      --战斗力
 		 *限时时间 
 		 */		
 		public var dtime:int;
+		
+		/**
+		 *祝福 
+		 */		
+		public var zf:int;
 		 
 		/**
 		 *0 游戏币

@@ -1,7 +1,7 @@
 package com.leyou.ui.friend {
 	import com.ace.enum.WindowEnum;
 	import com.ace.manager.LibManager;
-	import com.ace.manager.UILayoutManager;
+	import com.ace.manager.TweenManager;
 	import com.ace.manager.UIManager;
 	import com.ace.ui.auto.AutoWindow;
 	import com.ace.ui.button.children.ImgButton;
@@ -10,7 +10,6 @@ package com.leyou.ui.friend {
 	import com.leyou.data.friend.FriendInfo;
 	import com.leyou.enum.ChatEnum;
 	import com.leyou.net.cmd.Cmd_Duel;
-	import com.leyou.net.cmd.Cmd_Friend;
 	import com.leyou.net.cmd.Cmd_Guild;
 	import com.leyou.net.cmd.Cmd_Tm;
 	import com.leyou.ui.friend.child.Accordion;
@@ -54,6 +53,7 @@ package com.leyou.ui.friend {
 			menu1Vec.push(new MenuInfo(ChatEnum.CLICK_MENU_II[9], ChatEnum.TRACK, trackPlayer));
 			menu1Vec.push(new MenuInfo(ChatEnum.CLICK_MENU_II[10], ChatEnum.DUEL, onDuel));
 			menu1Vec.push(new MenuInfo(ChatEnum.CLICK_MENU_II[7], ChatEnum.SUE, sue));
+			menu1Vec.push(new MenuInfo(PropUtils.getStringById(2242), ChatEnum.PROPOSAL, onProposal));
 				
 			menu2Vec = new Vector.<MenuInfo>();
 			menu2Vec.push(new MenuInfo(PropUtils.getStringById(1711), 0, addFriendRequest));
@@ -84,6 +84,11 @@ package com.leyou.ui.friend {
 			acc.addItem(PropUtils.getStringById(1713), "(0/100)", null, menu1Vec);
 			acc.addItem(PropUtils.getStringById(1714), "(0/20)", null, menu2Vec);
 			acc.addItem(PropUtils.getStringById(1715), "(0/20)", null, menu3Vec);
+		}
+		
+		private function onProposal(info:FriendInfo):void
+		{
+			UIManager.getInstance().roleWnd.startMarry(info.name);
 		}
 		
 		private function onDuel(info:FriendInfo):void{
@@ -160,6 +165,7 @@ package com.leyou.ui.friend {
 		public override function hide():void{
 			super.hide();
 			UIManager.getInstance().hideWindow(WindowEnum.FRIEDN_ADD);
+			TweenManager.getInstance().lightingCompnent(UIManager.getInstance().toolsWnd.getUIbyID("friendBtn"));
 		}
 		
 		/**

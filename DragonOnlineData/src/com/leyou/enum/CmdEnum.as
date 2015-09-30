@@ -169,6 +169,10 @@ package com.leyou.enum {
 		public static const SM_WIG_Z:String="wig_z";
 		public static const SM_WIG_N:String="wig_n";
 		public static const SM_WIG_F:String="wig_f";
+		
+		// 副本排行
+		public static const SM_CPRAK_I:String="cprak_i";
+		public static const CM_CPRAK_I:String="cprak|I";
 
 		//好友
 		public static const SM_FND_I:String="fnd_i";
@@ -888,6 +892,20 @@ package com.leyou.enum {
 		public static const CM_LABA_D:String="laba|D";
 		public static const SM_LABA_D:String="laba_d";
 		public static const CM_LABA_J:String="laba|J";
+		
+		//结婚
+		public static const CM_MARRY_I:String="marry|I";
+		public static const SM_MARRY_I:String="marry_i";
+		public static const CM_MARRY_R:String="marry|R";
+		public static const SM_MARRY_R:String="marry_r";
+		public static const CM_MARRY_Y:String="marry|Y";
+		public static const SM_MARRY_Y:String="marry_y";
+		public static const CM_MARRY_P:String="marry|P";
+		public static const SM_MARRY_P:String="marry_p";
+		public static const CM_MARRY_U:String="marry|U";
+		public static const CM_MARRY_C:String="marry|C";
+		public static const CM_MARRY_J:String="marry|J";
+		public static const CM_MARRY_L:String="marry|L";
 		
 		/**
 		 *背包

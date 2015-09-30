@@ -290,6 +290,7 @@ package com.leyou.net.cmd {
 					SceneUIManager.getInstance().addEffect(living, EffectEnum.BUBBLE_LINE, 0, EffectEnum.COLOR_RED, EffectEnum.MIAN_YI);
 				}
 			}
+			
 			if (living == Core.me) {
 				UIManager.getInstance().roleHeadWnd.checkBuffChange();
 				UIManager.getInstance().roleHeadWnd.resetPosition();
@@ -323,11 +324,11 @@ package com.leyou.net.cmd {
 			var op:Number=visible ? 1 : 0.3;
 			living.info.isHiding=!visible;
 			(living == Core.me) ? living.opacity(op) : living.visual(visible);
-			if (living.info.petId != 0) {
-				tmpLiving=UIManager.getInstance().gameScene.getPlayer(living.info.petId);
-				tmpLiving.info.isHiding=!visible;
-				(living == Core.me) ? tmpLiving.opacity(op) : tmpLiving.visual(visible);
-			}
+//			if (living.info.petId != 0) {
+//				tmpLiving=UIManager.getInstance().gameScene.getPlayer(living.info.petId);
+//				tmpLiving.info.isHiding=!visible;
+//				(living == Core.me) ? tmpLiving.opacity(op) : tmpLiving.visual(visible);
+//			}
 			if (living.info.shenQiId != 0) {
 				tmpLiving=UIManager.getInstance().gameScene.getPlayer(living.info.shenQiId);
 				tmpLiving.info.isHiding=!visible;
@@ -337,6 +338,9 @@ package com.leyou.net.cmd {
 			//
 			if (Core.me.pInfo.lockAttackName == living.info.name) {
 				EventManager.getInstance().dispatchEvent(living.info.isHiding ? EventEnum.LOCK_TARGET_OUT : EventEnum.LOCK_TARGET_IN);
+			}
+			if (Core.me.pInfo.recordLookTargetId == living.id) {
+				SceneCore.me.info.clearLookTarget();
 			}
 		}
 

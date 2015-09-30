@@ -1,6 +1,5 @@
 package com.leyou.ui.pet.children
 {
-	import com.ace.loader.child.SwfLoader;
 	import com.ace.ui.button.children.ImgButton;
 	import com.ace.ui.img.child.Image;
 	import com.ace.utils.StringUtil;
@@ -15,10 +14,16 @@ package com.leyou.ui.pet.children
 		
 		private var keyImg:Image;
 		
+		private var _isDown:Boolean;
+		
 		public function PetHeadGrid(){
 			init();
 		}
 		
+		public function get isDown():Boolean{
+			return _isDown;
+		}
+
 		private function init():void{
 			grid = new PetIconGird();
 			addChild(grid);
@@ -74,11 +79,17 @@ package com.leyou.ui.pet.children
 		}
 		
 		public function iconDown():void{
-			grid.iconDown();
+			if(!_isDown){
+				grid.iconDown();
+				_isDown = true;
+			}
 		}
 		
 		public function iconUp():void{
-			grid.iconUp();
+			if(_isDown){
+				grid.iconUp();
+				_isDown = false;
+			}
 		}
 	}
 }

@@ -18,6 +18,7 @@ package com.ace.gameData.player {
 		public var pfVipType:int; // 0 -- 不是黄钻 1 -- 普通黄钻 2 -- 年费黄钻
 
 		public var camp:int; // 0 无阵营 1 -- 寒霜 2 -- 烈红
+		public var partnerName:String;//伴侣名称
 
 		public function LivingInfo($info:LivingInfo=null) {
 			super($info);

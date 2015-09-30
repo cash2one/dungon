@@ -2,15 +2,14 @@ package com.ace.game.scene.ui.child {
 	import com.ace.config.Core;
 	import com.ace.enum.FilterEnum;
 	import com.ace.enum.FontEnum;
-	import com.ace.enum.PlatformEnum;
 	import com.ace.enum.SceneEnum;
-	import com.ace.enum.UIEnum;
 	import com.ace.game.scene.player.part.LivingBase;
 	import com.ace.gameData.manager.MapInfoManager;
 	import com.ace.gameData.manager.MyInfoManager;
 	import com.ace.gameData.manager.SettingManager;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.player.LivingInfo;
+	import com.ace.gameData.player.PlayerInfo;
 	import com.ace.gameData.table.TTitle;
 	import com.ace.manager.UIManager;
 	import com.ace.ui.component.ProgressImage;
@@ -18,6 +17,7 @@ package com.ace.game.scene.ui.child {
 	import com.ace.ui.lable.Label;
 	import com.ace.utils.StringUtil;
 	import com.leyou.enum.PkMode;
+	import com.leyou.utils.PropUtils;
 	import com.leyou.utils.StringUtil_II;
 	
 	import flash.display.DisplayObject;
@@ -35,12 +35,13 @@ package com.ace.game.scene.ui.child {
 		private var titleNameLbl:Label; //称号
 		private var guildNameLbl:Label; //行会名称七个字
 		private var teamImg:Image; //组队标识
+		private var partnerLbl:Label;
 		private var pfImg:Image;
 		private var blodBgImg:Image;
 		private var blodImg:ProgressImage;
 		private var titles:Vector.<TitleRender>;
 		private var nameLblWidth:int;
-		private var _info:*;
+		private var _info:PlayerInfo;
 
 		private var baseX:int;
 
@@ -53,10 +54,13 @@ package com.ace.game.scene.ui.child {
 			super.init();
 			titleNameLbl=new Label("", FontEnum.getTextFormat("Purple14Center"));
 			guildNameLbl=new Label("", FontEnum.getTextFormat("Green12center"));
+			partnerLbl=new Label("", FontEnum.getTextFormat("Green12center"));
 			titleNameLbl.autoSize=TextFieldAutoSize.LEFT;
 			guildNameLbl.autoSize=TextFieldAutoSize.LEFT;
+			partnerLbl.autoSize=TextFieldAutoSize.LEFT;
 			addChild(titleNameLbl);
 			addChild(guildNameLbl);
+			addChild(partnerLbl);
 			guildNameLbl.y = 17;
 			teamImg = new Image("ui/team/flag_blue.png");
 			elementImg = new Image();
@@ -78,6 +82,7 @@ package com.ace.game.scene.ui.child {
 			elementImg.visible = false;
 			titleNameLbl.visible=false;
 			guildNameLbl.visible = false;
+			partnerLbl.visible=false;
 
 			nameLbl.filters = [FilterEnum.hei_miaobian];
 			titleNameLbl.filters = [FilterEnum.hei_miaobian];
@@ -100,7 +105,8 @@ package com.ace.game.scene.ui.child {
 		/**显示玩家名称*/
 		public override function showName(info:*):void {
 //			var str:String=info.name + "[" + info.id + "][lv" + info.level + "][" + info.speed + "]";
-			_info = info;
+			_info = info as PlayerInfo;
+			showPartnerName(info.partnerName);
 			var str:String=info.name + "[lv" + info.level + "]";
 			// 行会战争
 			var guildInfo:Array = MyInfoManager.getInstance().guildArr;
@@ -203,6 +209,7 @@ package com.ace.game.scene.ui.child {
 		public override function showTitles(info:LivingInfo):void {
 			removeTitle();
 			showGuildName(info.tileNames[0]);
+			showPartnerName(info.partnerName);
 			var tInfo:TTitle;
 			for (var i:int=1; i < info.tileNames.length; i++) {
 				if (info.tileNames[i] == "")
@@ -229,7 +236,15 @@ package com.ace.game.scene.ui.child {
 			switchVisible(!SettingManager.getInstance().assitInfo.isHideOther);
 //			adjustLocation();
 		}
-
+		
+		private function showPartnerName($partnerName:String):void{
+			if (null == $partnerName || $partnerName == ""){
+				partnerLbl.visible=false;
+				return;
+			}
+			partnerLbl.visible=true;
+			partnerLbl.text=$partnerName+PropUtils.getStringById(2241);
+		}
 
 		/**
 		 * 调整各个位置
@@ -263,16 +278,27 @@ package com.ace.game.scene.ui.child {
 			}
 			titleNameLbl.x=baseX + (maxW - titleNameLbl.width) * 0.5;
 			guildNameLbl.x=baseX + (maxW - guildNameLbl.width) * 0.5;
+			partnerLbl.x=baseX + (maxW - partnerLbl.width) * 0.5;
 			blodBgImg.x=baseX + (maxW - /*blodBgImg.width*/ 42) * 0.5;
 			blodImg.x=blodBgImg.x;
 
 			// 调整纵向坐标
 			guildNameLbl.y=nameLbl.y - guildNameLbl.height;
-			if (guildNameLbl.visible) {
-				titleNameLbl.y=guildNameLbl.y - titleNameLbl.height;
-			} else {
-				titleNameLbl.y=nameLbl.y - titleNameLbl.height;
+			if(partnerLbl.visible){
+				if (guildNameLbl.visible) {
+					partnerLbl.y=guildNameLbl.y - guildNameLbl.height;
+				} else {
+					partnerLbl.y=nameLbl.y - partnerLbl.height;
+				}
+				titleNameLbl.y=partnerLbl.y - partnerLbl.height;
+			}else{
+				if (guildNameLbl.visible) {
+					titleNameLbl.y=guildNameLbl.y - titleNameLbl.height;
+				} else {
+					titleNameLbl.y=nameLbl.y - titleNameLbl.height;
+				}
 			}
+			
 			//			nameLbl.y = guildNameLbl.y + guildNameLbl.height;
 			vipImg.y=nameLbl.y + nameLbl.height * 0.5 - /*vipImg.height*/ 16 * 0.5;
 			elementImg.y=nameLbl.y + nameLbl.height * 0.5 - /*elementImg.height*/ 16 * 0.5;
@@ -285,6 +311,8 @@ package com.ace.game.scene.ui.child {
 				var baseY:Number=0;
 				if (titleNameLbl.visible) {
 					baseY=titleNameLbl.y;
+				}else if(partnerLbl.visible){
+					baseY=partnerLbl.y;
 				} else if (guildNameLbl.visible) {
 					baseY=guildNameLbl.y;
 				} else {

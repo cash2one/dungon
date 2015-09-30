@@ -38,6 +38,8 @@ package com.ace.gameData.manager {
 	import com.ace.gameData.table.TLegendaryWeaponInfo;
 	import com.ace.gameData.table.TLevelGiftInfo;
 	import com.ace.gameData.table.TMarketInfo;
+	import com.ace.gameData.table.TMarry_lv;
+	import com.ace.gameData.table.TMarry_ring;
 	import com.ace.gameData.table.TMissionDate;
 	import com.ace.gameData.table.TMissionMarketInfo;
 	import com.ace.gameData.table.TMissionMarketRewardInfo;
@@ -58,6 +60,7 @@ package com.ace.gameData.manager {
 	import com.ace.gameData.table.TQQVipNewRewardInfo;
 	import com.ace.gameData.table.TQuestion;
 	import com.ace.gameData.table.TRankRewardInfo;
+	import com.ace.gameData.table.TRing_intensify;
 	import com.ace.gameData.table.TSevenDayInfo;
 	import com.ace.gameData.table.TSevenDayRewardInfo;
 	import com.ace.gameData.table.TShop;
@@ -170,6 +173,10 @@ package com.ace.gameData.manager {
 		private var dragonBallPropertyDic:Object;
 		private var alchemyDic:Object;
 		private var labaDic:Object;
+		
+		private var marryLvDic:Object;
+		private var marryRingDic:Object;
+		private var Ring_intensifyDic:Object;
 
 		public function TableManager() {
 			super();
@@ -278,6 +285,9 @@ package com.ace.gameData.manager {
 			this.dragonBallPropertyDic={};
 			this.alchemyDic={};
 			this.labaDic={};
+			this.marryLvDic={};
+			this.marryRingDic={};
+			this.Ring_intensifyDic={};
 			
 			var info:XML;
 			var render:XML;
@@ -775,6 +785,24 @@ package com.ace.gameData.manager {
 			for each(render in info.children()){
 				this.labaDic[render.@id]=new TLaba(render); 
 			}
+			
+			//结婚
+			info=LibManager.getInstance().getXML("config/table/marry_lv.xml");
+			for each(render in info.children()){
+				this.marryLvDic[render.@lv]=new TMarry_lv(render); 
+			}
+			
+			//结婚
+			info=LibManager.getInstance().getXML("config/table/marry_ring.xml");
+			for each(render in info.children()){
+				this.marryRingDic[render.@ID]=new TMarry_ring(render); 
+			}
+			
+			//结婚
+			info=LibManager.getInstance().getXML("config/table/Ring_intensify.xml");
+			for each(render in info.children()){
+				this.Ring_intensifyDic[render.@RI_Lv]=new TRing_intensify(render); 
+			}
 		}
 
 		//=====================================获取===================================================================
@@ -1066,6 +1094,10 @@ package com.ace.gameData.manager {
 
 		public function getShopItem(id:int):TShop {
 			return this.shopDic[id];
+		}
+		
+		public function getCopyDic():Object{
+			return this.copyDic;
 		}
 
 		public function getCopyInfo(id:int):TCopyInfo {
@@ -1761,6 +1793,57 @@ package com.ace.gameData.manager {
 		public function getLabaById(id:int):TLaba{
 			return this.labaDic[id];
 		}
+		
+		public function getMarryLvBylv(i:int):TMarry_lv{
+			return this.marryLvDic[i];
+		}
+		
+		public function getMarryLvLen():int{
+			var i:int=0;
+			var tm:TMarry_lv;
+			for each(tm in this.marryLvDic){
+				i++;
+			}
+			
+			return i;
+		}
+		
+		public function getMarryLvMaxLv():int{
+			var i:int=0;
+			var tm:TMarry_lv;
+			for each(tm in this.marryLvDic){
+				if(i<tm.lv)
+					i=tm.lv;
+			}
+			
+			return i;
+		}
+		
+		public function getMarryRingByid(i:int):TMarry_ring{
+			return this.marryRingDic[i];
+		}
+		
+		public function getRing_intensifyByLv(i:int):TRing_intensify{
+			return this.Ring_intensifyDic[i];
+		}
+		
+		public function getMarryRingAll():Object{
+			return this.marryRingDic
+		}
+		
+		public function getRing_intensifyMaxLv():int{
+			
+			var lv:int=0;
+			var tinfo:TRing_intensify;
+			for each(tinfo in this.Ring_intensifyDic){
+				if(tinfo.RI_Lv>lv)
+					lv=tinfo.RI_Lv;
+			}
+			
+			return lv;
+		}
+		
+		
 
 	}
 }

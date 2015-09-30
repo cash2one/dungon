@@ -31,8 +31,6 @@ package com.leyou.ui.pet
 		
 		private var currentIcon:PetHeadGrid;
 		
-		private var isDown:Boolean = false;
-		
 		public function PetShortcutBar(){
 			super(LibManager.getInstance().getXML("config/ui/pet/serventBar.xml"));
 			init();
@@ -66,9 +64,6 @@ package com.leyou.ui.pet
 		}
 		
 		private function onKeyDown(event:KeyboardEvent):void{
-			if(isDown){
-				return;
-			}
 			if(Core.me.info.level < ConfigEnum.servent1){
 				return;
 			}
@@ -85,17 +80,13 @@ package com.leyou.ui.pet
 					petGrid = icons[2];
 					break;
 			}
-			if(petGrid.dataId <= 0){
+			if(petGrid.isDown && petGrid.dataId <= 0){
 				return;
 			}
-			isDown = true;
 			petGrid.iconDown();;
 		}
 		
 		private function onKeyUp(event:KeyboardEvent):void{
-			if(!isDown){
-				return;
-			}
 			if(Core.me.info.level < ConfigEnum.servent1){
 				return;
 			}
@@ -112,10 +103,9 @@ package com.leyou.ui.pet
 					petGrid = icons[2];
 					break;
 			}
-			if(petGrid.dataId <= 0){
+			if(!petGrid.isDown && petGrid.dataId <= 0){
 				return;
 			}
-			isDown = false;
 			petGrid.iconUp();
 			callPet(petGrid.content);
 		}

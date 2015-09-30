@@ -16,6 +16,7 @@ package com.leyou.ui.promotion
 	import com.leyou.ui.promotion.children.PromotionExchangeRender;
 	import com.leyou.ui.promotion.children.PromotionLotteryRender;
 	import com.leyou.ui.promotion.children.PromotionSpendRender;
+	import com.leyou.util.DateUtil;
 	import com.leyou.utils.PayUtil;
 	
 	import flash.events.Event;
@@ -95,12 +96,19 @@ package com.leyou.ui.promotion
 		private function getPayPromotionInfo(type:int):TPayPromotion{
 			var pInfo:TPayPromotion;
 			var proDic:Object = TableManager.getInstance().getPromotionDic();
+			var serverTick:Number = DataManager.getInstance().payPromotionData_II.serverTick;
 			for(var key:String in proDic){
 				var payPromotion:TPayPromotion = proDic[key];
-				if(null == pInfo && payPromotion.type == type){
-					pInfo = payPromotion;
-				}else if(null != pInfo && payPromotion.type == type && payPromotion.id < pInfo.id){
-					pInfo = payPromotion;
+				var sdate:Date = new Date();
+				var edate:Date = new Date();
+				sdate.time = Date.parse(DateUtil.convertDateStr(payPromotion.start_time));
+				edate.time = Date.parse(DateUtil.convertDateStr(payPromotion.end_time));
+				if(serverTick > sdate.time && serverTick < edate.time){
+					if((null == pInfo) && (payPromotion.type == type)){
+						pInfo = payPromotion;
+					}else if((null != pInfo) && (payPromotion.type == type) && (payPromotion.id < pInfo.id)){
+						pInfo = payPromotion;
+					}
 				}
 			}
 			return pInfo;
@@ -149,7 +157,7 @@ package com.leyou.ui.promotion
 			for(var n:int = tbuttons.length - 1; n >= 0; n--){
 				var btn:TabButton = tbuttons[n];
 				var type:int = int(btn.name.substr(4));
-				if(null == dataDic[type]){
+				if(((6 != type) && (null == dataDic[type])) || ((6 == type) && (null == data.lotteryData1))){
 					if(btn.hasEventListener(MouseEvent.CLICK)){
 						btn.removeEventListener(MouseEvent.CLICK, onMouseClick);
 					}

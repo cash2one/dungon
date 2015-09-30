@@ -2,9 +2,8 @@ package com.ace.ui.accordion {
 	import com.ace.tools.ScaleBitmap;
 	import com.ace.ui.button.GroupButton;
 	import com.ace.ui.button.children.ImgButton;
-	import com.ace.ui.img.child.Image;
 	import com.ace.ui.lable.Label;
-
+	
 	import flash.display.BitmapData;
 	import flash.events.Event;
 	import flash.events.MouseEvent;

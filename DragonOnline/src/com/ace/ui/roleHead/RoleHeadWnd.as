@@ -660,10 +660,10 @@ package com.ace.ui.roleHead {
 		 */
 		public function updateCurrce():void {
 			var byb:uint=UIManager.getInstance().backpackWnd.byb;
-			if ((byb / 100000000) > 1) {
+			if ((byb / 100000000) >= 1) {
 				byb/=100000000;
 				bybLbl.text=byb + PropUtils.getStringById(1531);
-			} else if ((byb / 10000) > 1) {
+			} else if ((byb / 10000) >= 1) {
 				byb/=10000;
 				bybLbl.text=byb + PropUtils.getStringById(1532);
 			} else {
@@ -671,10 +671,10 @@ package com.ace.ui.roleHead {
 			}
 
 			var yb:uint=UIManager.getInstance().backpackWnd.yb;
-			if ((yb / 100000000) > 1) {
+			if ((yb / 100000000) >= 1) {
 				yb/=100000000;
 				ybLbl.text=yb + PropUtils.getStringById(1531);
-			} else if ((yb / 10000) > 1) {
+			} else if ((yb / 10000) >= 1) {
 				yb/=10000;
 				ybLbl.text=yb + PropUtils.getStringById(1532);
 			} else {

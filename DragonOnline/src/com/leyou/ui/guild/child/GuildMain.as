@@ -5,8 +5,10 @@ package com.leyou.ui.guild.child {
 	import com.ace.enum.CursorEnum;
 	import com.ace.enum.FontEnum;
 	import com.ace.enum.TipEnum;
+	import com.ace.enum.UIEnum;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.manager.CursorManager;
+	import com.ace.manager.LayerManager;
 	import com.ace.manager.LibManager;
 	import com.ace.manager.MenuManager;
 	import com.ace.manager.ToolTipManager;
@@ -24,8 +26,9 @@ package com.leyou.ui.guild.child {
 	import com.leyou.enum.GuildEnum;
 	import com.leyou.manager.PopupManager;
 	import com.leyou.net.cmd.Cmd_Guild;
+	import com.leyou.ui.ttt.MessageCnSeWnd;
 	import com.leyou.utils.PropUtils;
-	
+
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
@@ -55,10 +58,13 @@ package com.leyou.ui.guild.child {
 
 		private var contributeBtn:NormalButton;
 		private var upgradeBtn:NormalButton;
+		private var callBtn:NormalButton;
 
 		private var mainActive:MainActive;
 		private var mainManifesto:MainManifesto;
 		private var mainNotice:MainNotic;
+
+		private var msgBox:MessageCnSeWnd;
 
 		public function GuildMain() {
 			super(LibManager.getInstance().getXML("config/ui/guild/guildMain.xml"));
@@ -86,16 +92,18 @@ package com.leyou.ui.guild.child {
 
 			this.contributeBtn=this.getUIbyID("contributeBtn") as NormalButton;
 			this.upgradeBtn=this.getUIbyID("upgradeBtn") as NormalButton;
+			this.callBtn=this.getUIbyID("callBtn") as NormalButton;
 
 			this.contributeBtn.addEventListener(MouseEvent.CLICK, onClick);
 			this.upgradeBtn.addEventListener(MouseEvent.CLICK, onClick);
+			this.callBtn.addEventListener(MouseEvent.CLICK, onClick);
 
 			this.nameLbl.addEventListener(MouseEvent.CLICK, onClick);
 			this.bossLbl.addEventListener(MouseEvent.CLICK, onClick);
-			
+
 			this.nameLbl.styleSheet=FontEnum.DEFAULT_LINK_STYLE;
 			this.bossLbl.styleSheet=FontEnum.DEFAULT_LINK_STYLE;
-			
+
 			this.nameLbl.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
 			this.bossLbl.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
 
@@ -110,9 +118,10 @@ package com.leyou.ui.guild.child {
 			this.mainNotice=new MainNotic();
 
 			this.mainTabber.addToTab(this.mainNotice, 0);
-			this.mainTabber.addToTab(this.mainActive, 1);
-			this.mainTabber.addToTab(this.mainManifesto, 2);
+//			this.mainTabber.addToTab(this.mainActive, 1);
+			this.mainTabber.addToTab(this.mainManifesto, 1);
 
+//			this.mainTabber.setTabVisible(1,false);
 			this.mainTabber.addEventListener(TabbarModel.changeTurnOnIndex, onChangeIndex);
 
 //			this.saveCostTxt.setToolTip(TableManager.getInstance().getSystemNotice(3048).content);
@@ -132,6 +141,11 @@ package com.leyou.ui.guild.child {
 
 			spr.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 			spr.addEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
+
+			this.msgBox=new MessageCnSeWnd();
+			LayerManager.getInstance().windowLayer.addChild(this.msgBox);
+			this.msgBox.x=(UIEnum.WIDTH - this.msgBox.width) >> 1;
+			this.msgBox.y=(UIEnum.HEIGHT - this.msgBox.height) >> 1;
 
 			this.y+=5;
 			this.x=-14;
@@ -157,10 +171,10 @@ package com.leyou.ui.guild.child {
 				case 0:
 					Cmd_Guild.cm_GuildNotice(UIManager.getInstance().guildWnd.guildId, 1);
 					break
+//				case 1:
+//					Cmd_Guild.cm_GuildActive(100);
+//					break
 				case 1:
-					Cmd_Guild.cm_GuildActive(100);
-					break
-				case 2:
 					Cmd_Guild.cm_GuildNotice(UIManager.getInstance().guildWnd.guildId, 2);
 					break
 			}
@@ -194,6 +208,12 @@ package com.leyou.ui.guild.child {
 
 					p=new Point(e.stageX - 30, e.stageY);
 					MenuManager.getInstance().show(menuVec, this, p);
+					break;
+				case "callBtn":
+					if (UIManager.getInstance().guildWnd.guildWarc == 1 && UIManager.getInstance().guildWnd.memberPrice[GuildEnum.ADMINI_PRICE_MANAGER] == 1) {
+						Cmd_Guild.cm_GuildCall(0);
+					} else
+						this.msgBox.showPanel(2, 0);
 					break;
 			}
 
@@ -230,8 +250,10 @@ package com.leyou.ui.guild.child {
 
 			if (UIManager.getInstance().guildWnd.memberPrice[GuildEnum.ADMINI_PRICE_UPGRADE] == 1) {
 				this.upgradeBtn.setActive(true, 1, true);
+//				this.callBtn.visible=true;
 			} else {
 				this.upgradeBtn.setActive(false, 0.6, true);
+//				this.callBtn.visible=false;
 			}
 
 		}
@@ -295,6 +317,8 @@ package com.leyou.ui.guild.child {
 				} else
 					this.upgradeCostLbl.text="" + o.lnum;
 			}
+
+			Cmd_Guild.cm_GuildNotice(UIManager.getInstance().guildWnd.guildId, 1);
 		}
 
 		/**

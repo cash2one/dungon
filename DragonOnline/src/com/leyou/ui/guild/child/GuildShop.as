@@ -10,10 +10,11 @@ package com.leyou.ui.guild.child {
 	import com.ace.ui.auto.AutoSprite;
 	import com.ace.ui.button.children.CheckBox;
 	import com.ace.ui.button.children.RadioButton;
+	import com.ace.ui.notice.NoticeManager;
 	import com.ace.ui.scrollPane.children.ScrollPane;
 	import com.leyou.manager.PopupManager;
 	import com.leyou.net.cmd.Cmd_Guild;
-
+	
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 
@@ -68,7 +69,7 @@ package com.leyou.ui.guild.child {
 			this.shopbarVec=new Vector.<GuildShopBar>();
 
 			this.y+=5;
-			this.x=-13;
+			this.x=-28;
 		}
 
 		/**
@@ -90,6 +91,7 @@ package com.leyou.ui.guild.child {
 
 				if (sbar.infoXml.@Shop_Level > UIManager.getInstance().guildWnd.guildLv) {
 //					trace(GuildShopBar(e.target).infoXml.@Shop_Level, UIManager.getInstance().guildWnd.guildLv, GuildShopBar(e.target).infoXml.@Shop_Level > UIManager.getInstance().guildWnd.guildLv);
+					NoticeManager.getInstance().broadcastById(3019);
 					return;
 				}
 
@@ -140,7 +142,12 @@ package com.leyou.ui.guild.child {
 				gs.tipsInfo.moneyType=ItemEnum.CURRENCY_TYPE_GUILD_MONEY;
 				gs.tipsInfo.moneyNum=gs.getPrice();
 
-				ToolTipManager.getInstance().show(TipEnum.TYPE_EMPTY_ITEM, gs.tipsInfo, new Point(e.stageX, e.stageY));
+				var type:int=TipEnum.TYPE_EMPTY_ITEM;
+				if(gs.tipsInfo.itemid>7000 && gs.tipsInfo.itemid<7100){
+					type=TipEnum.TYPE_GEM_OTHER;
+				}
+				
+				ToolTipManager.getInstance().show(type, gs.tipsInfo, new Point(e.stageX, e.stageY));
 			}
 
 			e.stopImmediatePropagation();
@@ -179,8 +186,8 @@ package com.leyou.ui.guild.child {
 				shopbar=new GuildShopBar();
 				shopbar.updateInfo(xmllist[i]);
 
-				shopbar.x=int(this.shopbarVec.length % 3) * (195);
-				shopbar.y=int(this.shopbarVec.length / 3) * (78);
+				shopbar.x=int(this.shopbarVec.length % 4) * (178);
+				shopbar.y=int(this.shopbarVec.length / 4) * (63);
 
 				this.shoprender.addToPane(shopbar);
 				this.shopbarVec.push(shopbar);

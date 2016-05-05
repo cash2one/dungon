@@ -14,6 +14,7 @@ package com.leyou.ui.abidePay
 	import com.leyou.enum.ConfigEnum;
 	import com.leyou.net.cmd.Cmd_CCZ;
 	import com.leyou.net.cmd.Cmd_HCCZ;
+	import com.leyou.net.cmd.Cmd_Twlc;
 	import com.leyou.ui.abidePay.children.AbidePayRewardBox;
 	import com.leyou.ui.mail.child.MaillGrid;
 	import com.leyou.utils.PropUtils;
@@ -74,12 +75,12 @@ package com.leyou.ui.abidePay
 //			addChild(grid);
 //			grid.x = 120;
 //			grid.y = 100;
-			clsBtn.x -= 6;
-			clsBtn.y -= 14;
+//			clsBtn.x -= 6;
+//			clsBtn.y -= 14;
 		}
 		
 		public function updateCombineInfo(box:AbidePayRewardBox):void{
-			var data:CombineData = DataManager.getInstance().combineData;
+			var data:CombineData = (2 == _belongType) ? DataManager.getInstance().combineData : DataManager.getInstance().twlcData;
 			_day = box.day;
 			_type = box.type;
 			_belongType = box.belongType;
@@ -118,10 +119,10 @@ package com.leyou.ui.abidePay
 		}
 		
 		private function getCombineRewardArr(_type:int, _day:int):Array{
-			var tdata1:TAbidePayInfo = TableManager.getInstance().getCombinePayInfo(1);
-			var tdata2:TAbidePayInfo = TableManager.getInstance().getCombinePayInfo(2);
-			var tdata3:TAbidePayInfo = TableManager.getInstance().getCombinePayInfo(3);
-			var dayArr:Array = ConfigEnum.hflc2.split(",");
+			var tdata1:TAbidePayInfo = (2 == _belongType) ? TableManager.getInstance().getCombinePayInfo(1) : TableManager.getInstance().getLCTW(1);
+			var tdata2:TAbidePayInfo = (2 == _belongType) ? TableManager.getInstance().getCombinePayInfo(2) : TableManager.getInstance().getLCTW(2);
+			var tdata3:TAbidePayInfo = (2 == _belongType) ? TableManager.getInstance().getCombinePayInfo(3) : TableManager.getInstance().getLCTW(3);
+			var dayArr:Array = (2 == _belongType) ? ConfigEnum.hflc2.split(",") : ConfigEnum.lxtw2.split(",");
 			var index:int = dayArr.indexOf(_day+"")*3;
 			if(tdata1.ib == _type){
 				index += 0;
@@ -131,7 +132,12 @@ package com.leyou.ui.abidePay
 				index += 2;
 			}
 			index += 3;
-			return ConfigEnum["hflc"+index].split("|");
+			if(2 == _belongType){
+				return ConfigEnum["hflc"+index].split("|");
+			}else if(3 == _belongType){
+				return ConfigEnum["lxtw"+index].split("|");
+			}
+			return null;
 		}
 		
 		public function updateInfo(box:AbidePayRewardBox):void{
@@ -216,8 +222,10 @@ package com.leyou.ui.abidePay
 		protected function onBtnClick(event:MouseEvent):void{
 			if(1 == _belongType){
 				Cmd_CCZ.cm_CCZ_C(_type, _day);
-			}else{
+			}else if(2 == _belongType){
 				Cmd_HCCZ.cm_HCCZ_C(_type, _day);
+			}else if(3 == _belongType){
+				Cmd_Twlc.cm_LXTW_C(_type, _day);
 			}
 		}
 	}

@@ -73,8 +73,8 @@ package com.leyou.ui.friend
 //			searchBtn.addEventListener(MouseEvent.CLICK, onMouseClick);
 			addEventListener(MouseEvent.CLICK, onMouseClick);
 			this.hideBg();
-			clsBtn.x -= 6;
-			clsBtn.y -= 14;
+//			clsBtn.x -= 6;
+//			clsBtn.y -= 14;
 		}
 		
 		protected function onTextInput(event:Event):void{

@@ -1,7 +1,5 @@
 package com.ace.ui.setting
 {
-	import com.ace.game.utils.AutoUtil;
-
 	public class AssistWnd extends AssistView
 	{
 		private static var instance:AssistWnd;
@@ -11,13 +9,6 @@ package com.ace.ui.setting
 				instance=new AssistWnd();
 			
 			return instance;
-		}
-		
-		public function AssistWnd(){
-		}
-		
-		protected override function autoEat():void{
-			AutoUtil.autoEat();
 		}
 		
 	}

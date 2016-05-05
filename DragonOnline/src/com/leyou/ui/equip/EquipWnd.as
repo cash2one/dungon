@@ -3,6 +3,8 @@ package com.leyou.ui.equip {
 	import com.ace.config.Core;
 	import com.ace.enum.UIEnum;
 	import com.ace.enum.WindowEnum;
+	import com.ace.gameData.manager.MyInfoManager;
+	import com.ace.manager.GuideArrowDirectManager;
 	import com.ace.manager.GuideManager;
 	import com.ace.manager.LibManager;
 	import com.ace.manager.TweenManager;
@@ -17,6 +19,7 @@ package com.leyou.ui.equip {
 	import com.leyou.enum.TaskEnum;
 	import com.leyou.ui.equip.child.EquipBagRender;
 	import com.leyou.ui.equip.child.EquipBreakRender;
+	import com.leyou.ui.equip.child.EquipElementRender;
 	import com.leyou.ui.equip.child.EquipIntensifyRender;
 	import com.leyou.ui.equip.child.EquipLvupRender;
 	import com.leyou.ui.equip.child.EquipRecastRender;
@@ -24,8 +27,8 @@ package com.leyou.ui.equip {
 	import com.leyou.ui.equip.child.EquipStrengGrid;
 	import com.leyou.ui.equip.child.EquipTransRender;
 
+	import flash.display.DisplayObject;
 	import flash.events.Event;
-	import flash.geom.Rectangle;
 
 	public class EquipWnd extends AutoWindow {
 
@@ -37,10 +40,13 @@ package com.leyou.ui.equip {
 		private var equipReclassRender:EquipReclassRender;
 		private var equipBreakRender:EquipBreakRender;
 		private var equipLvupRender:EquipLvupRender;
+		private var equipElementRender:EquipElementRender;
 
 		private var equipBagRender:EquipBagRender;
 
 		private var currentIndex:int=0;
+
+		private var gridArr:Array=[];
 
 		public function EquipWnd() {
 			super(LibManager.getInstance().getXML("config/ui/EquipWnd.xml"));
@@ -57,6 +63,7 @@ package com.leyou.ui.equip {
 			this.equipReclassRender=new EquipReclassRender();
 			this.equipBreakRender=new EquipBreakRender();
 			this.equipLvupRender=new EquipLvupRender();
+			this.equipElementRender=new EquipElementRender();
 
 			this.bagTabBar.addToTab(this.equipIntensifyRender, 0);
 			this.bagTabBar.addToTab(this.equipTransRender, 1);
@@ -64,19 +71,44 @@ package com.leyou.ui.equip {
 //			this.bagTabBar.addToTab(this.equipReclassRender, 3);
 			this.bagTabBar.addToTab(this.equipBreakRender, 4);
 			this.bagTabBar.addToTab(this.equipLvupRender, 5);
+			this.bagTabBar.addToTab(this.equipElementRender, 6);
 
 			this.bagTabBar.addEventListener(TabbarModel.changeTurnOnIndex, onChangeTab);
 
 			//右侧数据
 			this.equipBagRender=new EquipBagRender();
 			this.addChild(this.equipBagRender);
+			
+			this.equipBagRender.x=467;
+			this.equipBagRender.y=97;
 
-			this.equipBagRender.x=346;
-			this.equipBagRender.y=60;
-
+			this.addChild(this.bagTabBar);
 			this.bagTabBar.turnToTab(0);
 
-			this.scrollRect=new Rectangle(0, 0, 614, 522);
+//			var eq:Object=MyInfoManager.getInstance().equips;
+//			var grid:EquipGrid;
+//			var eqinfo:EquipInfo;
+//			var i:int=0;
+//			for (i=0; i < 14; i++) {
+//
+//				if (eq[i] == null)
+//					continue;
+//
+//				grid=new EquipGrid();
+//
+//				if (i < 7) {
+//					grid.x=19;
+//					grid.y=127 + i * 52;
+//				} else {
+//					grid.x=397;
+//					grid.y=127 + (i - 7) * 52;
+//				}
+//
+//				grid.updataInfo(eq[i]);
+//				this.addChild(grid);
+//			}
+
+//			this.scrollRect=new Rectangle(0, 0, 698, 544);
 		}
 
 		private function onChangeTab(e:Event):void {
@@ -91,6 +123,9 @@ package com.leyou.ui.equip {
 					this.equipReclassRender.clearAllData();
 					this.equipBreakRender.clearAllData();
 					this.LvupRender.clearAllData();
+					this.equipElementRender.clearAllData();
+
+					this.updateEquipIntensify();
 					break;
 				case 1:
 					this.equipIntensifyRender.clearAllData();
@@ -98,6 +133,7 @@ package com.leyou.ui.equip {
 					this.equipReclassRender.clearAllData();
 					this.equipBreakRender.clearAllData();
 					this.LvupRender.clearAllData();
+					this.equipElementRender.clearAllData();
 					break;
 				case 2:
 					this.equipIntensifyRender.clearAllData();
@@ -105,9 +141,9 @@ package com.leyou.ui.equip {
 					this.equipReclassRender.clearAllData();
 					this.equipBreakRender.clearAllData();
 					this.LvupRender.clearAllData();
-					
-					GuideManager.getInstance().removeGuide(115);	
-					
+					this.equipElementRender.clearAllData();
+					GuideManager.getInstance().removeGuide(115);
+
 					break;
 				case 3:
 					this.equipIntensifyRender.clearAllData();
@@ -116,6 +152,7 @@ package com.leyou.ui.equip {
 					this.equipReclassRender.updateBagItems();
 					this.equipBreakRender.clearAllData();
 					this.LvupRender.clearAllData();
+					this.equipElementRender.clearAllData();
 					break;
 				case 4:
 					this.equipIntensifyRender.clearAllData();
@@ -124,9 +161,9 @@ package com.leyou.ui.equip {
 					this.equipReclassRender.clearAllData();
 					this.LvupRender.clearAllData();
 					this.equipBreakRender.setChange();
-					
+					this.equipElementRender.clearAllData();
 					GuideManager.getInstance().removeGuide(114);
-					
+
 					break;
 				case 5:
 					this.equipIntensifyRender.clearAllData();
@@ -135,15 +172,28 @@ package com.leyou.ui.equip {
 					this.equipReclassRender.clearAllData();
 					this.equipBreakRender.clearAllData();
 					this.LvupRender.clearAllData();
-					
+					this.equipElementRender.clearAllData();
 					GuideManager.getInstance().removeGuide(113);
-			 
+
+					break;
+				case 6:
+					this.equipIntensifyRender.clearAllData();
+					this.equipTransRender.clearAllData();
+					this.equipRecastRender.clearAllData();
+					this.equipReclassRender.clearAllData();
+					this.equipBreakRender.clearAllData();
+					this.LvupRender.clearAllData();
+
 					break;
 			}
 
 
 			if (this.bagTabBar.turnOnIndex != this.currentIndex) {
+
 				this.equipBagRender.update();
+
+				if (this.bagTabBar.turnOnIndex == 6)
+					this.equipElementRender.setChangeBag();
 
 				if (EquipStrengGrid.selectState != null) {
 					EquipStrengGrid.selectState.setSelectState(false);
@@ -189,6 +239,10 @@ package com.leyou.ui.equip {
 			return this.equipLvupRender;
 		}
 
+		public function get ElementRender():EquipElementRender {
+			return this.equipElementRender;
+		}
+
 		public function setDownItem(binfo:Baginfo, beinfo:EquipInfo):void {
 			if (ConfigEnum.EquipTransOpenLv > Core.me.info.level) {
 				return;
@@ -196,6 +250,28 @@ package com.leyou.ui.equip {
 
 			this.bagTabBar.turnToTab(1);
 			this.equipTransRender.setDownItemOrBody(binfo, beinfo);
+		}
+
+		/**
+		 * 自动填充装备
+		 *
+		 */
+		private function updateEquipIntensify():void {
+
+			var bvec:Vector.<EquipStrengGrid>=this.equipBagRender.getBodyGridAll();
+			var i:int=0;
+			var idx:int=0;
+			var qh:int=int.MAX_VALUE;
+			for (i=0; i < bvec.length; i++) {
+
+				if (bvec[i] != null && bvec[i].data != null && bvec[i].data.tips.qh < 16) {
+					this.equipIntensifyRender.setDownItem(bvec[i]);
+					break;
+				}
+
+			}
+
+
 		}
 
 		override public function show(toTop:Boolean=true, $layer:int=1, toCenter:Boolean=true):void {
@@ -237,13 +313,19 @@ package com.leyou.ui.equip {
 				this.bagTabBar.setTabVisible(4, true);
 				GuideManager.getInstance().showGuide(114, this.bagTabBar.getTabButton(4));
 			}
-			
+
 
 			if (ConfigEnum.equip24 > Core.me.info.level) {
 				this.bagTabBar.setTabVisible(5, false);
 			} else {
 				this.bagTabBar.setTabVisible(5, true);
 				GuideManager.getInstance().showGuide(113, this.bagTabBar.getTabButton(5));
+			}
+
+			if (ConfigEnum.ElementOpenLv > Core.me.info.level) {
+				this.bagTabBar.setTabVisible(6, false);
+			} else {
+				this.bagTabBar.setTabVisible(6, true);
 			}
 
 			if (EquipStrengGrid.selectState != null) {
@@ -267,9 +349,8 @@ package com.leyou.ui.equip {
 			GuideManager.getInstance().removeGuide(106);
 
 			UIManager.getInstance().taskTrack.setGuideViewhide(TaskEnum.taskType_EquitTopLv);
-			
-			
-			
+
+			this.updateEquipIntensify();
 		}
 
 		public function updateBagRender():void {
@@ -291,13 +372,14 @@ package com.leyou.ui.equip {
 				EquipStrengGrid.selectStateII=null;
 			}
 
-		 
+
 			this.equipIntensifyRender.clearAllData();
 			this.equipTransRender.clearAllData();
 			this.equipRecastRender.clearAllData();
 			this.equipReclassRender.clearAllData();
 			this.equipBreakRender.clearAllData();
 			this.LvupRender.clearAllData();
+			this.equipElementRender.clearAllData();
 
 			this.equipBagRender.update();
 //			this.equipBagRender.updateBag([-1]);
@@ -335,7 +417,9 @@ package com.leyou.ui.equip {
 
 			GuideManager.getInstance().removeGuide(113);
 			GuideManager.getInstance().removeGuide(114);
-			GuideManager.getInstance().removeGuide(115);			
+			GuideManager.getInstance().removeGuide(115);
+
+			GuideArrowDirectManager.getInstance().delArrow(WindowEnum.EQUIP + "");
 		}
 
 		override public function sendOpenPanelProtocol(... parameters):void {
@@ -355,15 +439,25 @@ package com.leyou.ui.equip {
 		}
 
 		override public function get height():Number {
-			return 522;
+			return 544;
 		}
 
 		override public function get width():Number {
-			return 614;
+			return 698;
 		}
 
 		public function changeTable(index:int):void {
 			this.bagTabBar.turnToTab(index);
 		}
+
+		override public function getUIbyID(id:String):DisplayObject {
+			var ds:DisplayObject=super.getUIbyID(id);
+
+			if (ds == null)
+				ds=equipIntensifyRender.getUIbyID(id);
+
+			return ds;
+		}
+
 	}
 }

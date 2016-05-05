@@ -68,8 +68,8 @@ package com.leyou.ui.integral {
 			addChild(integralShop);
 			integralShop.x=172;
 			integralShop.y=221;
-			clsBtn.x+=4;
-			clsBtn.y+=14;
+//			clsBtn.x+=4;
+//			clsBtn.y+=14;
 			integralBtn.turnOn();
 			thresholdLbl.wordWrap=true;
 			thresholdLbl.multiline=true;

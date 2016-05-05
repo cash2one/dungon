@@ -26,8 +26,8 @@ package com.leyou.ui.tools.child
 			cancelBtn = getUIbyID("cancelBtn") as NormalButton;
 			confirmBtn.addEventListener(MouseEvent.CLICK, onButtonClick);
 			cancelBtn.addEventListener(MouseEvent.CLICK, onButtonClick);
-			clsBtn.x -= 6;
-			clsBtn.y -= 14;
+//			clsBtn.x -= 6;
+//			clsBtn.y -= 14;
 		}
 		
 		protected function onButtonClick(event:Event):void{

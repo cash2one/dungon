@@ -10,6 +10,7 @@ package com.leyou.ui.backpack {
 	import com.ace.enum.WindowEnum;
 	import com.ace.game.backpack.GridBase;
 	import com.ace.gameData.manager.MyInfoManager;
+	import com.ace.gameData.manager.SettingManager;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.table.TBackpackAdd;
 	import com.ace.gameData.table.TItemInfo;
@@ -38,11 +39,12 @@ package com.leyou.ui.backpack {
 	import com.leyou.data.bag.Baginfo;
 	import com.leyou.manager.TimerManager;
 	import com.leyou.net.cmd.Cmd_Bag;
+	import com.leyou.net.cmd.Cmd_Equip;
 	import com.leyou.ui.backpack.child.BackpackGrid;
 	import com.leyou.utils.ItemUtil;
 	import com.leyou.utils.PayUtil;
 	import com.leyou.utils.PropUtils;
-	
+
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import flash.display.Sprite;
@@ -60,7 +62,7 @@ package com.leyou.ui.backpack {
 
 		private var gridList:ScrollPane;
 		private var storageBtn:NormalButton;
-		private var fastShopBtn:NormalButton;
+		private var fastShopBtn:ImgLabelButton;
 		private var stallBtn:ImgLabelButton;
 		private var bagTabBar:TabBar;
 		private var coinLbl:Label;
@@ -111,16 +113,21 @@ package com.leyou.ui.backpack {
 		 *  荣誉
 		 */
 		public var honour:int=0;
-		
+
 		/**
 		 *  巨龙点数
 		 */
 		public var jl:int=0;
-		
+
 		/**
-		 *龙魂 
-		 */		
+		 *龙魂
+		 */
 		public var lh:int=0;
+
+		/**
+		 *功勋
+		 */
+		public var gx:int=0;
 
 		/**
 		 * 当前开启的格子数
@@ -158,6 +165,7 @@ package com.leyou.ui.backpack {
 
 		private var tweenArr:Array=[];
 
+		public var isFull:Boolean=false;
 
 		public function BackpackWndView() {
 			super(LibManager.getInstance().getXML("config/ui/BackpackWnd.xml"));
@@ -175,7 +183,7 @@ package com.leyou.ui.backpack {
 			this.ybbindImg=this.getUIbyID("ybbindImg") as Image;
 			this.ybImg=this.getUIbyID("ybImg") as Image;
 
-			this.fastShopBtn=this.getUIbyID("fastShopBtn") as NormalButton;
+			this.fastShopBtn=this.getUIbyID("fastShopBtn") as ImgLabelButton;
 
 			this.neatenBtn=this.getUIbyID("neatenBtn") as NormalButton;
 			this.shopBtn=this.getUIbyID("shopBtn") as NormalButton;
@@ -211,8 +219,8 @@ package com.leyou.ui.backpack {
 
 				g=new BackpackGrid(i);
 
-				g.x=4 + (i % ItemEnum.GRID_HORIZONTAL) * (ItemEnum.ITEM_BG_WIDTH + ItemEnum.GRID_SPACE);
-				g.y=3 + int(i / ItemEnum.GRID_HORIZONTAL) * (ItemEnum.ITEM_BG_HEIGHT + ItemEnum.GRID_SPACE);
+				g.x=4 + (i % ItemEnum.GRID_HORIZONTAL) * (44 + 6);
+				g.y=3 + int(i / ItemEnum.GRID_HORIZONTAL) * (44 + 6);
 
 //				DragManager.getInstance().addGrid(g);
 
@@ -436,10 +444,8 @@ package com.leyou.ui.backpack {
 				binfo=tmp1[i];
 
 				if (binfo != null && binfo.info != null) {
-//					trace(binfo.aid,BackpackGrid(gridVec[i]).getCDTime())
 					if (BackpackGrid(gridVec[i]).getCDTime() > 0) {
 						binfo.cdtime=BackpackGrid(gridVec[i]).getCDTime();
-//						trace(binfo.cdtime, BackpackGrid(gridVec[i]).getCDTime(), i);
 					} else if (BackpackGrid(gridVec[i]).getCDTime() < 0) {
 						binfo.cdtime=0;
 					}
@@ -523,11 +529,11 @@ package com.leyou.ui.backpack {
 
 				cross=false;
 				g=this.gridVec[i] as GridBase;
-				if ((this.bagTabBar.turnOnIndex > 0) && (arr[i] == null || arr[i].info == null)){
-//					g.visible=false;
-					
-					BackpackGrid(g).setLockState();
-					
+				if ((this.bagTabBar.turnOnIndex > 0) && (arr[i] == null || arr[i].info == null)) {
+					g.visible=false;
+
+//					BackpackGrid(g).setLockState();
+					g.isEmpty=false;
 				} else {
 
 					if (i < ItemEnum.BACKPACK_GRID_OPEN) {
@@ -562,8 +568,13 @@ package com.leyou.ui.backpack {
 									g.enable=true;
 							}
 
-						} else
+						} else {
 							g.updataInfo(null);
+						}
+					} else {
+						BackpackGrid(g).setLockState()
+						g.isLock=false;
+						g.isEmpty=true;
 					}
 
 					g.visible=true;
@@ -571,8 +582,8 @@ package com.leyou.ui.backpack {
 
 				g.scaleX=g.scaleY=1;
 
-				g.x=4 + (i % ItemEnum.GRID_HORIZONTAL) * (ItemEnum.ITEM_BG_WIDTH + ItemEnum.GRID_SPACE);
-				g.y=3 + int(i / ItemEnum.GRID_HORIZONTAL) * (ItemEnum.ITEM_BG_HEIGHT + ItemEnum.GRID_SPACE);
+				g.x=8 + (i % ItemEnum.GRID_HORIZONTAL) * (44 + 6);
+				g.y=3 + int(i / ItemEnum.GRID_HORIZONTAL) * (44 + 6);
 			}
 
 			var p:Number=this.gridList.scrollBar_Y.progress;
@@ -606,9 +617,22 @@ package com.leyou.ui.backpack {
 
 			MyInfoManager.getInstance().bagItems.length=itemCount;
 
-			if (currentItemCount >= itemCount && this.visible)
+			if (currentItemCount >= itemCount && this.visible) {
 				GuideManager.getInstance().showGuide(79, this.fastShopBtn);
-			else
+				this.isFull=true;
+
+				if (SettingManager.getInstance().assitInfo.isAutoExtract) {
+
+					var qu:int=SettingManager.getInstance().assitInfo.extractionQuality;
+					for (i=1; i <= qu; i++) {
+						var pArr:Array=MyInfoManager.getInstance().getBagItemByQuality(i);
+
+						if (pArr.length > 0)
+							Cmd_Equip.cm_EquipBreakItemList(pArr);
+					}
+				}
+
+			} else
 				GuideManager.getInstance().removeGuide(79);
 		}
 

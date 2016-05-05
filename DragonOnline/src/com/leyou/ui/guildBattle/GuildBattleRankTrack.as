@@ -1,9 +1,11 @@
 package com.leyou.ui.guildBattle {
+	import com.ace.enum.TipEnum;
 	import com.ace.enum.UIEnum;
 	import com.ace.gameData.manager.DataManager;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.manager.LibManager;
 	import com.ace.manager.TimeManager;
+	import com.ace.manager.ToolTipManager;
 	import com.ace.ui.auto.AutoSprite;
 	import com.ace.ui.button.children.ImgButton;
 	import com.ace.ui.lable.Label;
@@ -17,10 +19,11 @@ package com.leyou.ui.guildBattle {
 	import com.leyou.net.cmd.Cmd_GuildBattle;
 	import com.leyou.ui.guildBattle.children.GuildBattleRankTrackItem;
 	import com.leyou.utils.PropUtils;
-
+	
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+	import flash.geom.Point;
 
 	public class GuildBattleRankTrack extends AutoSprite {
 		private var items:Vector.<GuildBattleRankTrackItem>;
@@ -58,6 +61,8 @@ package com.leyou.ui.guildBattle {
 		private var _currentIdx:int=0;
 
 		private var pane:Sprite;
+		
+		private var regulationLbl:Label;
 
 		public function GuildBattleRankTrack() {
 			super(LibManager.getInstance().getXML("config/ui/guildBattle/warGuildTrack.xml"));
@@ -84,6 +89,7 @@ package com.leyou.ui.guildBattle {
 			delLbl=getUIbyID("delLbl") as Label;
 			hideBtn=getUIbyID("hideBtn") as ImgButton;
 			remianTLbl=getUIbyID("remianTLbl") as Label;
+			regulationLbl = getUIbyID("regulationLbl") as Label;
 			delLbl.multiline=true;
 			delLbl.wordWrap=true;
 			addChild(hideBtn);
@@ -92,8 +98,16 @@ package com.leyou.ui.guildBattle {
 			guildBattleTrack.addEventListener(TabbarModel.changeTurnOnIndex, onTabChange);
 			changeDes(DataManager.getInstance().guildBattleData.ctype);
 			guildBattleTrack.turnToTab(1);
+			
+			regulationLbl.mouseEnabled = true;
+			regulationLbl.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
 		}
-
+		
+		protected function onMouseOver(event:MouseEvent):void{
+			var content:String = TableManager.getInstance().getSystemNotice(10162).content;
+			ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, content, new Point(stage.mouseX, stage.mouseY));
+		}
+		
 		protected function onTabChange(event:Event):void {
 			if (_currentIdx == guildBattleTrack.turnOnIndex) {
 				return;

@@ -1,101 +1,7 @@
 package com.leyou.net {
 	import com.ace.config.Core;
 	import com.leyou.enum.CmdEnum;
-	import com.leyou.net.cmd.Cmd_Achievement;
-	import com.leyou.net.cmd.Cmd_Act;
-	import com.leyou.net.cmd.Cmd_Active;
-	import com.leyou.net.cmd.Cmd_Alchemy;
-	import com.leyou.net.cmd.Cmd_Arena;
-	import com.leyou.net.cmd.Cmd_Assist;
-	import com.leyou.net.cmd.Cmd_Attack;
-	import com.leyou.net.cmd.Cmd_Aution;
-	import com.leyou.net.cmd.Cmd_BCP;
-	import com.leyou.net.cmd.Cmd_Bag;
-	import com.leyou.net.cmd.Cmd_BlackStore;
-	import com.leyou.net.cmd.Cmd_Bld;
-	import com.leyou.net.cmd.Cmd_Blt;
-	import com.leyou.net.cmd.Cmd_CCZ;
-	import com.leyou.net.cmd.Cmd_CD;
-	import com.leyou.net.cmd.Cmd_CLI;
-	import com.leyou.net.cmd.Cmd_CPRAK;
-	import com.leyou.net.cmd.Cmd_Chat;
-	import com.leyou.net.cmd.Cmd_Collection;
-	import com.leyou.net.cmd.Cmd_CpTm;
-	import com.leyou.net.cmd.Cmd_Cpy;
-	import com.leyou.net.cmd.Cmd_Day7;
-	import com.leyou.net.cmd.Cmd_Duel;
-	import com.leyou.net.cmd.Cmd_EXPC;
-	import com.leyou.net.cmd.Cmd_Ecp;
-	import com.leyou.net.cmd.Cmd_Element;
-	import com.leyou.net.cmd.Cmd_Equip;
-	import com.leyou.net.cmd.Cmd_FCZ;
-	import com.leyou.net.cmd.Cmd_Fanl;
-	import com.leyou.net.cmd.Cmd_Farm;
-	import com.leyou.net.cmd.Cmd_Fcm;
-	import com.leyou.net.cmd.Cmd_Friend;
-	import com.leyou.net.cmd.Cmd_GBUY;
-	import com.leyou.net.cmd.Cmd_GM;
-	import com.leyou.net.cmd.Cmd_Gem;
-	import com.leyou.net.cmd.Cmd_Go;
-	import com.leyou.net.cmd.Cmd_Guide;
-	import com.leyou.net.cmd.Cmd_Guild;
-	import com.leyou.net.cmd.Cmd_GuildBattle;
-	import com.leyou.net.cmd.Cmd_HCCZ;
-	import com.leyou.net.cmd.Cmd_ITU;
-	import com.leyou.net.cmd.Cmd_Invest;
-	import com.leyou.net.cmd.Cmd_KF;
-	import com.leyou.net.cmd.Cmd_LDW;
-	import com.leyou.net.cmd.Cmd_LZ;
-	import com.leyou.net.cmd.Cmd_Laba;
-	import com.leyou.net.cmd.Cmd_Link;
-	import com.leyou.net.cmd.Cmd_Login;
-	import com.leyou.net.cmd.Cmd_Longz;
-	import com.leyou.net.cmd.Cmd_Mail;
-	import com.leyou.net.cmd.Cmd_Market;
-	import com.leyou.net.cmd.Cmd_Marry;
-	import com.leyou.net.cmd.Cmd_Mount;
-	import com.leyou.net.cmd.Cmd_Nck;
-	import com.leyou.net.cmd.Cmd_Npc;
-	import com.leyou.net.cmd.Cmd_ONL;
-	import com.leyou.net.cmd.Cmd_PM;
-	import com.leyou.net.cmd.Cmd_PayRank;
-	import com.leyou.net.cmd.Cmd_Pet;
-	import com.leyou.net.cmd.Cmd_Pkm;
-	import com.leyou.net.cmd.Cmd_Prop;
-	import com.leyou.net.cmd.Cmd_QQVip;
-	import com.leyou.net.cmd.Cmd_Qa;
-	import com.leyou.net.cmd.Cmd_Rank;
-	import com.leyou.net.cmd.Cmd_Role;
-	import com.leyou.net.cmd.Cmd_SCP;
-	import com.leyou.net.cmd.Cmd_SFCZ;
-	import com.leyou.net.cmd.Cmd_Scene;
-	import com.leyou.net.cmd.Cmd_Seven;
-	import com.leyou.net.cmd.Cmd_Shp;
-	import com.leyou.net.cmd.Cmd_Sinfo;
-	import com.leyou.net.cmd.Cmd_Skill;
-	import com.leyou.net.cmd.Cmd_Stime;
-	import com.leyou.net.cmd.Cmd_SystemNotice;
-	import com.leyou.net.cmd.Cmd_TCS;
-	import com.leyou.net.cmd.Cmd_TaskMarket;
-	import com.leyou.net.cmd.Cmd_Tm;
-	import com.leyou.net.cmd.Cmd_TobeStrong;
-	import com.leyou.net.cmd.Cmd_Tsk;
-	import com.leyou.net.cmd.Cmd_Ttt;
-	import com.leyou.net.cmd.Cmd_Ucp;
-	import com.leyou.net.cmd.Cmd_Unw;
-	import com.leyou.net.cmd.Cmd_Vip;
-	import com.leyou.net.cmd.Cmd_WARC;
-	import com.leyou.net.cmd.Cmd_WExp;
-	import com.leyou.net.cmd.Cmd_Wbox;
-	import com.leyou.net.cmd.Cmd_Wbs;
-	import com.leyou.net.cmd.Cmd_Welfare;
-	import com.leyou.net.cmd.Cmd_Wig;
-	import com.leyou.net.cmd.Cmd_Worship;
-	import com.leyou.net.cmd.Cmd_YBS;
-	import com.leyou.net.cmd.Cmd_Yct;
-	import com.leyou.net.cmd.Cmd_ZC;
-	import com.leyou.net.cmd.Cmd_ddsc;
-	import com.leyou.net.cmd.Cmd_unb;
+	import com.leyou.net.cmd.*;
 
 
 	public class ServerFunDic {
@@ -118,8 +24,10 @@ package com.leyou.net {
 				dict[CmdEnum.SM_COV_E]=Cmd_Login.sm_covE;
 				dict[CmdEnum.SM_COV_P]=Cmd_Login.sm_covP;
 				dict[CmdEnum.SM_COV_L]=Cmd_Login.sm_covL;
-				
-				
+				dict[CmdEnum.SM_DV_O]=Cmd_Login.sm_dv_o;
+				dict[CmdEnum.SM_DV_I]=Cmd_Login.sm_dv_i;
+
+
 				// 服务器和服信息
 				dict[CmdEnum.SM_SINFO_I]=Cmd_Sinfo.sm_Sinfo_I;
 
@@ -206,6 +114,7 @@ package com.leyou.net {
 				dict[CmdEnum.SM_ELEMENT_ELE_S]=Cmd_Element.sm_ele_s;
 				dict[CmdEnum.SM_ELEMENT_ELE_M]=Cmd_Element.sm_ele_M;
 				dict[CmdEnum.SM_ELEMENT_ELE_Z]=Cmd_Element.sm_ele_Z;
+				dict[CmdEnum.SM_ELEMENT_ELE_TRANS_C]=Cmd_Element.sm_ele_trans_c;
 
 				//技能
 				dict[CmdEnum.SM_SKL_A]=Cmd_Skill.sm_skl_A;
@@ -229,6 +138,7 @@ package com.leyou.net {
 				dict[CmdEnum.SM_SHP_I]=Cmd_Shp.sm_shp_I;
 				dict[CmdEnum.SM_SHP_O]=Cmd_Shp.sm_shp_O;
 				dict[CmdEnum.SM_SHP_N]=Cmd_Shp.sm_shp_N;
+				dict[CmdEnum.SM_SHP_G]=Cmd_Shp.sm_shp_G;
 
 				//任务
 				dict[CmdEnum.SM_TSK_A]=Cmd_Tsk.sm_tsk_A;
@@ -326,7 +236,7 @@ package com.leyou.net {
 				dict[CmdEnum.SM_GUILD_PK_R]=Cmd_Unw.sm_Guild_pk_R;
 				dict[CmdEnum.SM_GUILD_PK_S]=Cmd_Unw.sm_Guild_pk_S;
 				dict[CmdEnum.SM_GUILD_PK_D]=Cmd_Unw.sm_Guild_pk_D;
-				
+
 				//行会科技
 				dict[CmdEnum.SM_GUILD_BLESS_I]=Cmd_unb.sm_GuildBless_I;
 
@@ -336,24 +246,29 @@ package com.leyou.net {
 				dict[CmdEnum.SM_MAK_A]=Cmd_Market.sm_Mak_A;
 				dict[CmdEnum.SM_MAK_F]=Cmd_Market.sm_Mak_F;
 				dict[CmdEnum.SM_MAK_W]=Cmd_Market.sm_Mak_W;
-				
+
 				// 积分
 				dict[CmdEnum.SM_CLI_I]=Cmd_CLI.sm_CLI_I;
 				dict[CmdEnum.SM_CLI_B]=Cmd_CLI.sm_CLI_B;
-				
+
 				// 连续充值
 				dict[CmdEnum.SM_CCZ_I]=Cmd_CCZ.sm_CCZ_I;
 				dict[CmdEnum.SM_CCZ_L]=Cmd_CCZ.sm_CCZ_L;
 				dict[CmdEnum.SM_CCZ_C]=Cmd_CCZ.sm_CCZ_C;
-				
+
 				// 合服连冲
 				dict[CmdEnum.SM_HCCZ_I]=Cmd_HCCZ.sm_HCCZ_I;
 				dict[CmdEnum.SM_HCCZ_C]=Cmd_HCCZ.sm_HCCZ_C;
+
+				// 台湾连冲
+				dict[CmdEnum.SM_LXTW_I]=Cmd_Twlc.sm_LXTW_I;
+				dict[CmdEnum.SM_LXTW_C]=Cmd_Twlc.sm_LXTW_C;
 
 				// 充值返利
 				dict[CmdEnum.SM_FANL_I]=Cmd_Fanl.sm_Fanl_I;
 				dict[CmdEnum.SM_FANL_J]=Cmd_Fanl.sm_Fanl_J;
 				dict[CmdEnum.SM_FANL_D]=Cmd_Fanl.sm_Fanl_D;
+				dict[CmdEnum.SM_FANL_K]=Cmd_Fanl.sm_Fanl_K;
 
 				// 寄售
 				dict[CmdEnum.SM_CGT_I]=Cmd_Aution.sm_Aution_I;
@@ -385,6 +300,15 @@ package com.leyou.net {
 
 				// 我要变强
 				dict[CmdEnum.SM_RISE_I]=Cmd_TobeStrong.sm_RISE_I;
+
+				// 跨服
+				dict[CmdEnum.SM_ACROSS_I]=Cmd_Across.sm_ACROSS_I;
+				dict[CmdEnum.SM_ACROSS_T]=Cmd_Across.sm_ACROSS_T;
+				dict[CmdEnum.SM_ACROSS_R]=Cmd_Across.sm_ACROSS_L;
+				dict[CmdEnum.SM_ACROSS_S]=Cmd_Across.sm_ACROSS_S;
+				dict[CmdEnum.SM_ACROSS_G]=Cmd_Across.sm_ACROSS_G;
+				dict[CmdEnum.SM_ACROSS_Y]=Cmd_Across.sm_ACROSS_Y;
+				dict[CmdEnum.SM_ACROSS_K]=Cmd_Across.sm_ACROSS_K;
 
 				// 挂机
 				dict[CmdEnum.SM_ASS_I]=Cmd_Assist.sm_Ass_I;
@@ -425,6 +349,7 @@ package com.leyou.net {
 				dict[CmdEnum.SM_JJC_J]=Cmd_Arena.sm_Arena_J;
 				dict[CmdEnum.SM_JJC_K]=Cmd_Arena.sm_Arena_K;
 				dict[CmdEnum.SM_JJC_X]=Cmd_Arena.sm_Arena_X;
+				dict[CmdEnum.SM_JJC_A]=Cmd_Arena.sm_Arena_A;
 
 				// qqVIP奖励
 				dict[CmdEnum.SM_TX_D]=Cmd_QQVip.sm_TX_D;
@@ -445,7 +370,7 @@ package com.leyou.net {
 				dict[CmdEnum.SM_SCP_T]=Cmd_SCP.sm_SCP_T;
 				dict[CmdEnum.SM_SCP_X]=Cmd_SCP.sm_SCP_X;
 				dict[CmdEnum.SM_SCP_U]=Cmd_SCP.sm_SCP_U;
-				
+
 				// 主城争霸
 				dict[CmdEnum.SM_WARC_I]=Cmd_WARC.sm_WARC_I;
 				dict[CmdEnum.SM_WARC_T]=Cmd_WARC.sm_WARC_T;
@@ -457,12 +382,12 @@ package com.leyou.net {
 				dict[CmdEnum.SM_UNZ_L]=Cmd_GuildBattle.sm_UNZ_L;
 				dict[CmdEnum.SM_UNZ_N]=Cmd_GuildBattle.sm_UNZ_N;
 				dict[CmdEnum.SM_UNZ_U]=Cmd_GuildBattle.sm_UNZ_U;
-				
+
 				// 团购
 				dict[CmdEnum.SM_GBUY_I]=Cmd_GBUY.sm_GBUY_I;
 				dict[CmdEnum.SM_GBUY_J]=Cmd_GBUY.sm_GBUY_J;
 				dict[CmdEnum.SM_GBUY_B]=Cmd_GBUY.sm_GBUY_B;
-				
+
 				// 拍卖
 				dict[CmdEnum.SM_PM_I]=Cmd_PM.sm_PM_I;
 				dict[CmdEnum.SM_PM_F]=Cmd_PM.sm_PM_F;
@@ -474,6 +399,7 @@ package com.leyou.net {
 				dict[CmdEnum.SM_LBOX_D]=Cmd_LDW.sm_LDW_D;
 				dict[CmdEnum.SM_LBOX_B]=Cmd_LDW.sm_LDW_B;
 				dict[CmdEnum.SM_LBOX_U]=Cmd_LDW.sm_LDW_U;
+				dict[CmdEnum.SM_LBOX_J]=Cmd_LDW.sm_LDW_J;
 
 				// 开服庆典
 				dict[CmdEnum.SM_KF_I]=Cmd_KF.sm_KF_I;
@@ -486,7 +412,7 @@ package com.leyou.net {
 				dict[CmdEnum.SM_BCP_T]=Cmd_BCP.sm_BCP_T;
 				dict[CmdEnum.SM_BCP_X]=Cmd_BCP.sm_BCP_X;
 				dict[CmdEnum.SM_BCP_R]=Cmd_BCP.sm_BCP_R;
-				
+
 				// 副本通关
 				dict[CmdEnum.SM_CPRAK_I]=Cmd_CPRAK.sm_CPRAK_I;
 
@@ -503,6 +429,7 @@ package com.leyou.net {
 				dict[CmdEnum.SM_YBS_T]=Cmd_YBS.sm_YBS_T;
 				dict[CmdEnum.SM_YBS_X]=Cmd_YBS.sm_YBS_X;
 				dict[CmdEnum.SM_YBS_L]=Cmd_YBS.sm_YBS_L;
+				dict[CmdEnum.SM_YBS_Y]=Cmd_YBS.sm_YBS_Y;
 
 				//答题
 				dict[CmdEnum.SM_QA_J]=Cmd_Qa.sm_Qa_J;
@@ -537,6 +464,7 @@ package com.leyou.net {
 				dict[CmdEnum.SM_ULV_I]=Cmd_Welfare.sm_ULV_I;
 				dict[CmdEnum.SM_ULV_Z]=Cmd_Welfare.sm_ULV_Z;
 				dict[CmdEnum.SM_OFL_I]=Cmd_Welfare.sm_OFL_I;
+				dict[CmdEnum.SM_FBK_I]=Cmd_Welfare.sm_FBK_I;
 
 				// 在线累计奖励
 				dict[CmdEnum.SM_ONL_I]=Cmd_ONL.sm_ONL_I;
@@ -582,7 +510,7 @@ package com.leyou.net {
 				dict[CmdEnum.SM_FCZ_I]=Cmd_FCZ.sm_FCZ_I;
 				dict[CmdEnum.SM_FCZ_J]=Cmd_FCZ.sm_FCZ_J;
 				dict[CmdEnum.SM_FCZ_A]=Cmd_FCZ.sm_FCZ_A;
-				
+
 				dict[CmdEnum.SM_SFCZ_A]=Cmd_SFCZ.sm_SFCZ_A;
 
 				// 充值排行
@@ -595,7 +523,7 @@ package com.leyou.net {
 				dict[CmdEnum.SM_TZ_C]=Cmd_Invest.sm_TZ_C;
 				dict[CmdEnum.SM_TZ_L]=Cmd_Invest.sm_TZ_L;
 				dict[CmdEnum.SM_TZ_D]=Cmd_Invest.sm_TZ_D;
-				
+
 				// 龙珠
 				dict[CmdEnum.SM_LONGZ_I]=Cmd_Longz.sm_Longz_I;
 				dict[CmdEnum.SM_LONGZ_C]=Cmd_Longz.sm_Longz_C;
@@ -604,12 +532,12 @@ package com.leyou.net {
 				dict[CmdEnum.SM_LONGZ_T]=Cmd_Longz.sm_Longz_T;
 				dict[CmdEnum.SM_LONGZ_A]=Cmd_Longz.sm_Longz_A;
 				dict[CmdEnum.SM_LONGZ_H]=Cmd_Longz.sm_Longz_H;
-				
+
 				// 黑市
 				dict[CmdEnum.SM_BMAK_A]=Cmd_BlackStore.sm_BMAK_A;
 				dict[CmdEnum.SM_BMAK_I]=Cmd_BlackStore.sm_BMAK_I;
 				dict[CmdEnum.SM_BMAK_B]=Cmd_BlackStore.sm_BMAK_B;
-				
+
 				// 宠物
 				dict[CmdEnum.SM_PET_L]=Cmd_Pet.sm_PET_L;
 				dict[CmdEnum.SM_PET_I]=Cmd_Pet.sm_PET_I;
@@ -619,7 +547,7 @@ package com.leyou.net {
 				dict[CmdEnum.SM_PET_T]=Cmd_Pet.sm_PET_T;
 				dict[CmdEnum.SM_PET_K]=Cmd_Pet.sm_PET_K;
 				dict[CmdEnum.SM_PET_G]=Cmd_Pet.sm_PET_G;
-				
+
 				// 霜炎战场
 				dict[CmdEnum.SM_ZC_C]=Cmd_ZC.sm_ZC_C;
 				dict[CmdEnum.SM_ZC_L]=Cmd_ZC.sm_ZC_L;
@@ -631,7 +559,7 @@ package com.leyou.net {
 
 				// 城主膜拜
 				dict[CmdEnum.SM_WSP_I]=Cmd_Worship.sm_WSP_I;
-				
+
 				// 道具抽奖
 				dict[CmdEnum.SM_ITU_L]=Cmd_ITU.sm_OTU_L;
 
@@ -643,6 +571,7 @@ package com.leyou.net {
 				dict[CmdEnum.SM_VIP_U]=Cmd_Vip.sm_VIP_U;
 				dict[CmdEnum.SM_VIP_J]=Cmd_Vip.sm_VIP_J;
 				dict[CmdEnum.SM_VIP_L]=Cmd_Vip.sm_VIP_L;
+				dict[CmdEnum.SM_V3_T]=Cmd_V3Exp.smV3_T;
 
 				//天天首充
 				dict[CmdEnum.SM_DDSC_I]=Cmd_ddsc.sm_Ddsc_I;
@@ -656,7 +585,7 @@ package com.leyou.net {
 				//宝石
 				dict[CmdEnum.SM_GEM_I]=Cmd_Gem.sm_Gem_I;
 				dict[CmdEnum.SM_GEM_H]=Cmd_Gem.sm_Gem_H;
-				
+
 				dict[CmdEnum.SM_LJ_H]=Cmd_Alchemy.sm_lj_H;
 
 				//time
@@ -670,12 +599,17 @@ package com.leyou.net {
 				dict[CmdEnum.SM_TEAM_COPY_S]=Cmd_CpTm.sm_TeamCopy_S;
 				dict[CmdEnum.SM_TEAM_COPY_G]=Cmd_CpTm.sm_TeamCopy_G;
 
-                // 任务集市
+				// 元素
+				dict[CmdEnum.SM_ELEP_I]=Cmd_ELEP.sm_ELEP_I;
+				dict[CmdEnum.SM_ELEP_A]=Cmd_ELEP.sm_ELEP_A;
+				dict[CmdEnum.SM_ELEP_U]=Cmd_ELEP.sm_ELEP_U;
+
+				// 任务集市
 				dict[CmdEnum.SM_YD_I]=Cmd_TaskMarket.sm_TaskMarket_I;
 				dict[CmdEnum.SM_YD_L]=Cmd_TaskMarket.sm_TaskMarket_L;
 				dict[CmdEnum.SM_YD_J]=Cmd_TaskMarket.sm_TaskMarket_J;
 				dict[CmdEnum.SM_YD_T]=Cmd_TaskMarket.sm_TaskMarket_T;
-				
+
 				//7日登陆
 				dict[CmdEnum.SM_DAY7_I]=Cmd_Day7.sm_day_I;
 				dict[CmdEnum.SM_DAY7_J]=Cmd_Day7.sm_day_J;
@@ -685,17 +619,29 @@ package com.leyou.net {
 				dict[CmdEnum.SM_TTT_U]=Cmd_Ttt.sm_ttt_U;
 				dict[CmdEnum.SM_TTT_T]=Cmd_Ttt.sm_ttt_T;
 				dict[CmdEnum.SM_TTT_R]=Cmd_Ttt.sm_ttt_R;
-				
+				dict[CmdEnum.SM_TTT_H]=Cmd_Ttt.sm_ttt_H;
+
 				//拉霸
 				dict[CmdEnum.SM_LABA_I]=Cmd_Laba.sm_laba_I;
 				dict[CmdEnum.SM_LABA_D]=Cmd_Laba.sm_laba_D;
 				dict[CmdEnum.SM_LABA_H]=Cmd_Laba.sm_laba_H;
-				
+
 				//结婚
 				dict[CmdEnum.SM_MARRY_I]=Cmd_Marry.sm_marry_I;
 				dict[CmdEnum.SM_MARRY_P]=Cmd_Marry.sm_marry_P;
 				dict[CmdEnum.SM_MARRY_R]=Cmd_Marry.sm_marry_R;
 				dict[CmdEnum.SM_MARRY_Y]=Cmd_Marry.sm_marry_Y;
+
+				//开服竞技
+				dict[CmdEnum.SM_RNKJ_I]=Cmd_Rnkj.sm_rnkj_I;
+				
+				//试衣间
+				dict[CmdEnum.SM_SYJ_I]=Cmd_Syj.sm_syj_I;
+				dict[CmdEnum.SM_SYJ_F]=Cmd_Syj.sm_syj_F;
+				dict[CmdEnum.SM_SYJ_G]=Cmd_Syj.sm_syj_G;
+				
+				//微端
+				dict[CmdEnum.SM_DLJL_I]=Cmd_WeiDuan.sm_dljl_I;
 			}
 		}
 
@@ -706,6 +652,8 @@ package com.leyou.net {
 				NetGate.DEBUG && trace("☆☆☆☆☆☆☆ 【警告！暂时还没有该类[" + cmd + "]" + data + "】 ☆☆☆☆☆☆☆");
 				return;
 			}
+
+//			trace("收到协议【[" + cmd + "]" + data + "】");
 
 			fun(data);
 		}

@@ -17,7 +17,7 @@ package com.leyou.ui.aution.child {
 	import flash.geom.Matrix;
 
 	public class AutionBuyRender extends AutoSprite {
-		private static const ITEM_PAGE_COUNT_MAX:int=7;
+		private static const ITEM_PAGE_COUNT_MAX:int=8;
 
 		private var pageLbl:Label;
 		private var nameTxt:TextInput;

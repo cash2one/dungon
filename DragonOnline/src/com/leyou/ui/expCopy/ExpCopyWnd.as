@@ -48,7 +48,7 @@ package com.leyou.ui.expCopy
 			commonCopy.id = 1;
 			doubleCopy = new ExpCopyRender();
 			doubleCopy.id = 2;
-			commonCopy.x = 15;
+			commonCopy.x = 5;
 			commonCopy.y = 10;
 			doubleCopy.x = 390;
 			doubleCopy.y = 10;
@@ -112,7 +112,7 @@ package com.leyou.ui.expCopy
 //				level += 10;
 //			}
 			
-			x = -29;
+			x = 3;
 			y = 3;
 		}
 		

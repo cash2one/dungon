@@ -24,8 +24,8 @@ package com.leyou.ui.cityBattle
 		}
 		
 		private function init():void{
-			clsBtn.x -= 6;
-			clsBtn.y -= 14;
+//			clsBtn.x -= 6;
+//			clsBtn.y -= 14;
 			
 			announceText = getUIbyID("announceText") as TextInput;
 			announceText.input.maxChars = 150;

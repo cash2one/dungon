@@ -12,6 +12,7 @@ package com.ace.gameData.table {
 		public var Al_Third:int;
 
 		public var AlThird_Nam:String;
+		public var limit:int;
 		public var Datum1:int;
 		public var Datum_Num1:int;
 
@@ -62,6 +63,7 @@ package com.ace.gameData.table {
 			this.Als_Nam=data.@Als_Nam;
 			this.Al_Third=data.@Al_Third;
 			this.AlThird_Nam=data.@AlThird_Nam;
+			this.limit=data.@limit;
 			this.Datum1=data.@Datum1;
 			this.Datum_Num1=data.@Datum_Num1;
 			this.Datum2=data.@Datum2;

@@ -11,12 +11,13 @@ package com.leyou.ui.mount {
 	import com.ace.gameData.table.TItemInfo;
 	import com.ace.gameData.table.TMount;
 	import com.ace.loader.child.SwfLoader;
+	import com.ace.manager.GuideArrowDirectManager;
+	import com.ace.manager.GuideDirectManager;
 	import com.ace.manager.GuideManager;
 	import com.ace.manager.LibManager;
 	import com.ace.manager.MouseManagerII;
 	import com.ace.manager.SoundManager;
 	import com.ace.manager.ToolTipManager;
-	import com.ace.manager.TweenManager;
 	import com.ace.manager.UILayoutManager;
 	import com.ace.manager.UIManager;
 	import com.ace.manager.child.MouseEventInfo;
@@ -41,7 +42,7 @@ package com.leyou.ui.mount {
 	import com.leyou.ui.role.child.children.ImgRolling;
 	import com.leyou.utils.EffectUtil;
 	import com.leyou.utils.PropUtils;
-
+	
 	import flash.display.Bitmap;
 	import flash.display.DisplayObject;
 	import flash.display.Sprite;
@@ -179,8 +180,8 @@ package com.leyou.ui.mount {
 
 			this.starEffect=new StarChangeEffect(10, true);
 			this.addChild(this.starEffect);
-			this.starEffect.x=52;
-			this.starEffect.y=340;
+			this.starEffect.x=42;
+			this.starEffect.y=320;
 
 			this.tipsinfo=new TipsInfo();
 			this.tipsinfo.itemid=ConfigEnum.MountItem;
@@ -214,7 +215,7 @@ package com.leyou.ui.mount {
 			this.swfTips.addEventListener(MouseEvent.MOUSE_MOVE, onMouseOver);
 			this.swfTips.addEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
 
-			this.clsBtn.y=35;
+//			this.clsBtn.y=15;
 			this.allowDrag=false;
 
 			var einfo:MouseEventInfo=new MouseEventInfo();
@@ -312,7 +313,7 @@ package com.leyou.ui.mount {
 
 			this.updateProgress();
 
-			GuideManager.getInstance().showGuide(5, this.autoUpBtn);
+//			GuideManager.getInstance().showGuide(5, this.autoUpBtn);
 
 			UIManager.getInstance().taskTrack.setGuideViewhide(TaskEnum.taskType_MountLv);
 		}
@@ -332,8 +333,10 @@ package com.leyou.ui.mount {
 
 			this.upBtn.mouseChildren=this.upBtn.mouseEnabled=this.autoUpBtn.mouseChildren=this.autoUpBtn.mouseEnabled=true;
 			UILayoutManager.getInstance().composingWnd(WindowEnum.ROLE);
-			GuideManager.getInstance().removeGuide(5);
+//			GuideManager.getInstance().removeGuide(5);
 			GuideManager.getInstance().removeGuide(89);
+
+			GuideArrowDirectManager.getInstance().delArrow(WindowEnum.ROLE + "," + WindowEnum.MOUTLVUP);
 
 			UIManager.getInstance().taskTrack.setGuideView(TaskEnum.taskType_MountLv);
 		}
@@ -343,7 +346,7 @@ package com.leyou.ui.mount {
 			swnd.pushItem(ConfigEnum.MountItem, ConfigEnum.MountbindItem);
 
 			if (ConfigEnum.MarketOpenLevel <= Core.me.info.level)
-				UILayoutManager.getInstance().show(WindowEnum.ROLE, WindowEnum.QUICK_BUY, UILayoutManager.SPACE_X, UILayoutManager.SPACE_Y + 40);
+				UILayoutManager.getInstance().show(WindowEnum.ROLE, WindowEnum.QUICK_BUY); //, UILayoutManager.SPACE_X, UILayoutManager.SPACE_Y + 55);
 		}
 
 		private function buyItem():Boolean {
@@ -356,7 +359,7 @@ package com.leyou.ui.mount {
 			if (!UIManager.getInstance().quickBuyWnd.isAutoBuy(ConfigEnum.MountItem, ConfigEnum.MountbindItem)) {
 
 				if (ConfigEnum.MarketOpenLevel <= Core.me.info.level)
-					UILayoutManager.getInstance().show(WindowEnum.ROLE, WindowEnum.QUICK_BUY, UILayoutManager.SPACE_X, UILayoutManager.SPACE_Y + 40);
+					UILayoutManager.getInstance().show(WindowEnum.ROLE, WindowEnum.QUICK_BUY); //, UILayoutManager.SPACE_X, UILayoutManager.SPACE_Y + 40);
 
 				UIManager.getInstance().quickBuyWnd.pushItem(ConfigEnum.MountItem, ConfigEnum.MountbindItem, int(arr[1]));
 
@@ -439,14 +442,16 @@ package com.leyou.ui.mount {
 
 			if (evt.target.name == "autoEvoBtn") {
 
-				GuideManager.getInstance().removeGuide(5);
+				GuideArrowDirectManager.getInstance().delArrow(WindowEnum.ROLE + "," + WindowEnum.MOUTLVUP);
+				
+//				GuideManager.getInstance().removeGuide(5);
 				GuideManager.getInstance().removeGuide(89);
 
 				if (rate > 0) {
 
 					if (this.autoUpBtn.text.indexOf(PropUtils.getStringById(1804)) > -1) {
-
-						wnd=PopupManager.showConfirm(PropUtils.getStringById(1806), startEve, null, false, "moutLv");
+						startEve();
+//						wnd=PopupManager.showConfirm(PropUtils.getStringById(1806), startEve, null, false, "moutLv");
 
 					} else {
 
@@ -455,7 +460,6 @@ package com.leyou.ui.mount {
 						autoTimeId=0;
 
 						this.upBtn.mouseChildren=this.upBtn.mouseEnabled=this.autoUpBtn.mouseChildren=this.autoUpBtn.mouseEnabled=true;
-
 					}
 				}
 
@@ -619,24 +623,24 @@ package com.leyou.ui.mount {
 				TweenLite.delayedCall(2, EffectUtil.flyWordEffect, ["+" + (o.ad * r) + " " + PropUtils.getStringById(1808), p]);
 			}
 
-			if (o.hasOwnProperty("mlv") && this.autoLv != o.mlv) {
-				this.autoLv=o.mlv;
+			if (o.hasOwnProperty("mlv") && this.autoLv != o.el) {
+				this.autoLv=o.el;
 				this.endRoll();
-				
+
 				if (this.autoLv != 0) {
 					this.closeTime();
-					
-					//					if (successEffect.isLoaded) {
+
+//					if (successEffect.isLoaded) {
 //					successEffect.visible=true;
 //					successEffect.playAct(PlayerEnum.ACT_STAND, -1, false, function():void {
 //						successEffect.visible=false;
 //					});
-//					//					}
+//					}
 //					
 //					SoundManager.getInstance().play(22);
 				}
 			}
-			
+
 		}
 
 		private function updateProgress():void {
@@ -644,6 +648,7 @@ package com.leyou.ui.mount {
 			if (data.hasOwnProperty("ev")) {
 				this.lvProgress.text=data.ev + "/" + this.info.exp;
 //				this.proceTextArea.scaleX=(int(data.ev) / this.info.exp) > 1 ? 1 : (int(data.ev) / this.info.exp);
+//				this.proceTextArea.width=1;
 
 				if (this.mlv != 0) {
 					if (data.mlv == this.mlv) {
@@ -672,17 +677,17 @@ package com.leyou.ui.mount {
 			this.starEffect.setStarPos(i % 10 - 1);
 
 			this.proceTextArea.visible=true;
-			this.proceTextArea.setSize(0, 12);
-			
-			
+			this.proceTextArea.x=38;
+			this.proceTextArea.setSize(0, 22);
+
 			successEffect.visible=true;
 			successEffect.playAct(PlayerEnum.ACT_STAND, -1, false, function():void {
 				successEffect.visible=false;
 			});
 			//					}
-			
+
 			SoundManager.getInstance().play(22);
-			
+
 		}
 
 		private function updateCompleteProgress():void {
@@ -690,7 +695,7 @@ package com.leyou.ui.mount {
 				this.proceTextArea.visible=false;
 			} else {
 				this.proceTextArea.visible=true;
-				this.proceTextArea.setSize(Number((int(data.ev) / this.info.exp) > 1 ? 1 : (int(data.ev) / this.info.exp)) * 214, 12);
+				this.proceTextArea.setSize(Number((int(data.ev) / this.info.exp) > 1 ? 1 : (int(data.ev) / this.info.exp)) * 214, 22);
 			}
 
 			this.starEffect.setStarPos(data.mlv % 10 - 1);
@@ -699,8 +704,8 @@ package com.leyou.ui.mount {
 			if (this.data.hasOwnProperty("el")) {
 
 				lv=this.data.el;
-				if (int(this.data.mlv) % 10 == 9)
-					lv=lv + 1;
+//				if (int(this.data.mlv) % 10 == 9)
+				lv=lv + 1;
 
 				if (this.data.el == 10)
 					lv=10;
@@ -716,6 +721,7 @@ package com.leyou.ui.mount {
 					this.effectBg.update(pid);
 
 			}
+
 			this.upBtn.mouseChildren=this.upBtn.mouseEnabled=this.autoUpBtn.mouseChildren=this.autoUpBtn.mouseEnabled=true;
 
 		}
@@ -759,11 +765,12 @@ package com.leyou.ui.mount {
 		}
 
 		override public function get width():Number {
-			return 306;
+//			return 306;
+			return 288;
 		}
 
 		override public function get height():Number {
-			return 524;
+			return 544;
 		}
 
 	}

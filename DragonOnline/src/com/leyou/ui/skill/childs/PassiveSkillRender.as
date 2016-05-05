@@ -42,7 +42,8 @@ package com.leyou.ui.skill.childs {
 			this.stateBtn=this.getUIbyID("stateBtn") as SwitchButton;
 			this.effSwf=this.getUIbyID("effSwf") as SwfLoader;
 
-			this.effSwf.update(99989);
+//			this.effSwf.update(99989);
+			this.effSwf.update(99913);
 			this.effSwf.visible=false;
 
 			this.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);

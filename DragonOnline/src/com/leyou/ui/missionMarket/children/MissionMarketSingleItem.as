@@ -74,7 +74,7 @@ package com.leyou.ui.missionMarket.children
 			var ids:Array = [];
 			var starts:Array = [];
 			for  each(var grid:MaillGrid in grids){
-				if(grid.visible && (0 != grid.dataId)){
+				if(grid.visible && (0 != grid.dataId) && (ItemEnum.ENERGY_VIR_ITEM_ID == grid.dataId) && (ItemEnum.EXP_VIR_ITEM_ID == grid.dataId)){
 					ids.push(grid.dataId);
 					starts.push(grid.localToGlobal(new Point(0, 0)));
 				}

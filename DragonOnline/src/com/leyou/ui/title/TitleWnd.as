@@ -28,7 +28,7 @@ package com.leyou.ui.title {
 	import flash.geom.Point;
 
 	public class TitleWnd extends AutoSprite implements IMenu {
-
+ 
 		private var previewTitleLbl:Label;
 		private var titleNameLbl:Label;
 		private var descLbl:TextArea;
@@ -73,10 +73,10 @@ package com.leyou.ui.title {
 
 		public function TitleWnd() {
 			super(LibManager.getInstance().getXML("config/ui/title/titleWnd.xml"));
-			this.init();
+//			this.init();
 			this.mouseChildren=true;
 		}
-
+/**
 		private function init():void {
 
 			this.properNameArr=new Vector.<Label>;
@@ -318,7 +318,7 @@ package com.leyou.ui.title {
 			//				MenuManager.getInstance().show(arr, this, this.localToGlobal(new Point(this.mouseX, this.mouseY)));
 
 		}
-
+*/
 		public function onMenuClick(i:int):void {
 
 			switch (i) {
@@ -331,9 +331,9 @@ package com.leyou.ui.title {
 			}
 
 		}
-
+/**
 		private function updateTitleProgress(tinfo:TTitle):void {
-
+ 
 			switch (int(tinfo.factor)) {
 				case 1:
 
@@ -386,7 +386,7 @@ package com.leyou.ui.title {
 				default:
 					this.setProgressVisiable(false);
 			}
-
+ 
 		}
 
 		private function updateProgressUi(cur:int, target:int):void {
@@ -481,171 +481,171 @@ package com.leyou.ui.title {
 				this.rollPower.x=(300 - this.rollPower.width) >> 1;
 			}
 		}
-
+*/
 		/**
 		 *更新激活列表
 		 * @param obj
 		 *
 		 */
-		public function updateActiveList(obj:Object, m:Boolean=true):void {
-			var render:TitleBar;
-			var key:String;
-			var item:Array;
-
-			for (key in obj) {
-
-				item=obj[key];
-				if (item != null) {
-					render=this.titleBarList[obj[key][0]];
-					render.updateData(item);
-
-					if (m && key == "0")
-						this.updateSelectData(render);
-
-					if (render.parent == null) {
-						this.titleTree.getItem(1).addItemUnshift(render);
-					}
-
-				}
-			}
-
-		}
-
-
-		/**
-		 * 更新开启格子
-		 * @param obj
-		 *
-		 */
-		public function updateStartNick(o:Object):void {
-			var render:TitleBar=this.titleBarList[o.curNckid];
-
-			if (render.getType() != 2)
-				this.updateActiveByType(render.getType());
-
-			render.setState(true);
-			render.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
-			render.isclick=false;
-		}
-
-		public function updateLastTime(o:Object):void {
-
-			var bar:TitleBar=this.titleBarList[o.id] as TitleBar;
-
-			if (bar.isclick) {
-				this.currentTime=o.time;
-				this.properNameArr[this.pos].text=PropUtils.getStringById(1941) + ":";
-				this.properkeyArr[this.pos].text="" + TimeUtil.getIntToDateTime(currentTime);
-
-				TimerManager.getInstance().add(exeTimer, "nickTime");
-			}
-
-			if (bar.mouseChildren && this.isOver) {
-				this.tipsInfo.t=o.time;
-				ToolTipManager.getInstance().show(TipEnum.TYPE_TITLE, this.tipsInfo, new Point(this.stage.mouseX, this.stage.mouseY));
-			}
-
+//		public function updateActiveList(obj:Object, m:Boolean=true):void {
 //			var render:TitleBar;
-//			
-//			for each (render in this.titleBarList) {
-//				if (render.getType() == 1 || render.getType() == 2) {
-//					 if(render.getTid()==o.id)
-//						 return render;
+//			var key:String;
+//			var item:Array;
+//
+//			for (key in obj) {
+//
+//				item=obj[key];
+//				if (item != null) {
+//					render=this.titleBarList[obj[key][0]];
+//					render.updateData(item);
+//
+////					if (m && key == "0")
+////						this.updateSelectData(render);
+//
+//					if (render.parent == null) {
+//						this.titleTree.getItem(1).addItemUnshift(render);
+//					}
+//
 //				}
 //			}
-
-		}
-
-		private function exeTimer(i:int):void {
-
-			if (currentTime - i > 0)
-				properkeyArr[pos].text="" + TimeUtil.getIntToDateTime(currentTime - i);
-			else {
-				currentTime=0;
-				TimerManager.getInstance().removeBykey("nickTime");
-
-				properNameArr[pos].text="";
-				properNameArr[pos].setToolTip("");
-				properkeyArr[pos].text="";
-
-				startBtn.setActive(false, .6, true);
-			}
-
-
-		}
-
-		/**
-		 * 取消称号
-		 * @param id
-		 *
-		 */
-		public function updateUninstall(o:Object):void {
-			var render:TitleBar=this.titleBarList[o.curNckid];
-
-			if (render.getType() != 2)
-				this.updateActiveByType(render.getType());
-
-			this.startBtn.text=PropUtils.getStringById(1958);
-			this.startBtn.setToolTip(TableManager.getInstance().getSystemNotice(1401).content);
-
-			render.setState(false);
-		}
-
-		public function updatedelete(o:Object):void {
-			var render:TitleBar=this.titleBarList[o.curNckid];
-
-			if (render.getType() != 2)
-				this.updateActiveByType(render.getType());
-
-			this.startBtn.text=PropUtils.getStringById(1958);
-			this.startBtn.setToolTip(TableManager.getInstance().getSystemNotice(1401).content);
-
-			render.enableTime=false;
-
-			currentTime=0;
-			TimerManager.getInstance().removeBykey("nickTime");
-
-			if (pos > -1) {
-				properNameArr[pos].text="";
-				properNameArr[pos].setToolTip("");
-				properkeyArr[pos].text="";
-			}
-
-			startBtn.setActive(false, .6, true);
-		}
-
-		private function updateClickByType(type:int):void {
-			var render:TitleBar;
-
-			for each (render in this.titleBarList) {
-				if (render.getType() == type) {
-					render.isclick=false;
-					render.BgState=false;
-				}
-			}
-
-		}
-
-		private function updateActiveByType(type:int):void {
-			var render:TitleBar;
-
-			for each (render in this.titleBarList) {
-				if (render.getType() == type) {
-					render.setState(false);
-				}
-			}
-
-		}
-
-		private function setProgressVisiable(v:Boolean):void {
-			this.progressBg.visible=v;
-			this.progressImg.visible=v;
-			this.progressLbl.visible=v;
-		}
-
-		private function onItemClick(e:MouseEvent):void {
-//			trace("eee", e.target);
-		}
+//
+//		}
+//
+//
+//		/**
+//		 * 更新开启格子
+//		 * @param obj
+//		 *
+//		 */
+//		public function updateStartNick(o:Object):void {
+//			var render:TitleBar=this.titleBarList[o.curNckid];
+//
+//			if (render.getType() != 2)
+//				this.updateActiveByType(render.getType());
+//
+//			render.setState(true);
+//			render.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+//			render.isclick=false;
+//		}
+//
+//		public function updateLastTime(o:Object):void {
+//
+//			var bar:TitleBar=this.titleBarList[o.id] as TitleBar;
+//
+//			if (bar.isclick) {
+//				this.currentTime=o.time;
+//				this.properNameArr[this.pos].text=PropUtils.getStringById(1941) + ":";
+//				this.properkeyArr[this.pos].text="" + TimeUtil.getIntToDateTime(currentTime);
+//
+//				TimerManager.getInstance().add(exeTimer, "nickTime");
+//			}
+//
+//			if (bar.mouseChildren && this.isOver) {
+//				this.tipsInfo.t=o.time;
+//				ToolTipManager.getInstance().show(TipEnum.TYPE_TITLE, this.tipsInfo, new Point(this.stage.mouseX, this.stage.mouseY));
+//			}
+//
+////			var render:TitleBar;
+////			
+////			for each (render in this.titleBarList) {
+////				if (render.getType() == 1 || render.getType() == 2) {
+////					 if(render.getTid()==o.id)
+////						 return render;
+////				}
+////			}
+//
+//		}
+//
+//		private function exeTimer(i:int):void {
+//
+//			if (currentTime - i > 0)
+//				properkeyArr[pos].text="" + TimeUtil.getIntToDateTime(currentTime - i);
+//			else {
+//				currentTime=0;
+//				TimerManager.getInstance().removeBykey("nickTime");
+//
+//				properNameArr[pos].text="";
+//				properNameArr[pos].setToolTip("");
+//				properkeyArr[pos].text="";
+//
+//				startBtn.setActive(false, .6, true);
+//			}
+//
+//
+//		}
+//
+//		/**
+//		 * 取消称号
+//		 * @param id
+//		 *
+//		 */
+//		public function updateUninstall(o:Object):void {
+//			var render:TitleBar=this.titleBarList[o.curNckid];
+//
+//			if (render.getType() != 2)
+//				this.updateActiveByType(render.getType());
+//
+//			this.startBtn.text=PropUtils.getStringById(1958);
+//			this.startBtn.setToolTip(TableManager.getInstance().getSystemNotice(1401).content);
+//
+//			render.setState(false);
+//		}
+//
+//		public function updatedelete(o:Object):void {
+//			var render:TitleBar=this.titleBarList[o.curNckid];
+//
+//			if (render.getType() != 2)
+//				this.updateActiveByType(render.getType());
+//
+//			this.startBtn.text=PropUtils.getStringById(1958);
+//			this.startBtn.setToolTip(TableManager.getInstance().getSystemNotice(1401).content);
+//
+//			render.enableTime=false;
+//
+//			currentTime=0;
+//			TimerManager.getInstance().removeBykey("nickTime");
+//
+//			if (pos > -1) {
+//				properNameArr[pos].text="";
+//				properNameArr[pos].setToolTip("");
+//				properkeyArr[pos].text="";
+//			}
+//
+//			startBtn.setActive(false, .6, true);
+//		}
+//
+//		private function updateClickByType(type:int):void {
+//			var render:TitleBar;
+//
+//			for each (render in this.titleBarList) {
+//				if (render.getType() == type) {
+//					render.isclick=false;
+//					render.BgState=false;
+//				}
+//			}
+//
+//		}
+//
+//		private function updateActiveByType(type:int):void {
+//			var render:TitleBar;
+//
+//			for each (render in this.titleBarList) {
+//				if (render.getType() == type) {
+//					render.setState(false);
+//				}
+//			}
+//
+//		}
+//
+//		private function setProgressVisiable(v:Boolean):void {
+//			this.progressBg.visible=v;
+//			this.progressImg.visible=v;
+//			this.progressLbl.visible=v;
+//		}
+//
+//		private function onItemClick(e:MouseEvent):void {
+////			trace("eee", e.target);
+//		}
 
 	}
 }

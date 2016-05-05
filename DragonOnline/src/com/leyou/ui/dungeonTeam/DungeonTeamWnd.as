@@ -60,7 +60,6 @@ package com.leyou.ui.dungeonTeam {
 		public function DungeonTeamWnd() {
 			super(LibManager.getInstance().getXML("config/ui/dungeonTeamWnd.xml"));
 			this.init();
-			this.hideBg()
 			this.mouseChildren=true;
 			this.mouseEnabled=true;
 
@@ -117,8 +116,6 @@ package com.leyou.ui.dungeonTeam {
 			TweenLite.delayedCall(0.6, function():void {
 				setTabIndex(2);
 			});
-
-
 		}
 
 		private function onChange(e:Event):void {
@@ -203,6 +200,7 @@ package com.leyou.ui.dungeonTeam {
 		 */
 		public function updateTeamCopy(o:Object):void {
 			UIManager.getInstance().showPanelCallback(WindowEnum.DUNGEON_TEAM);
+ 
 			this.teamCopy.updateInfo(o);
 		}
 
@@ -294,7 +292,7 @@ package com.leyou.ui.dungeonTeam {
 		}
 
 		override public function get height():Number {
-			return 496
+			return 544;
 		}
 
 	}

@@ -25,6 +25,7 @@ package com.leyou.ui.equip.child {
 	public class EquipTransRender extends AutoSprite {
 
 		private var goldLbl:Label;
+		private var ruleLbl:Label;
 		private var descLbl:Label;
 		private var confirmBtn:ImgButton;
 
@@ -33,6 +34,8 @@ package com.leyou.ui.equip.child {
 
 		private var equipTransBar:EquipTransBar;
 
+		private var succeffSwf:SwfLoader;
+		
 		private var targetEffect:SwfLoader;
 		private var costEffect:SwfLoader;
 
@@ -47,20 +50,25 @@ package com.leyou.ui.equip.child {
 
 			this.goldLbl=this.getUIbyID("goldLbl") as Label;
 			this.descLbl=this.getUIbyID("descLbl") as Label;
+			this.ruleLbl=this.getUIbyID("ruleLbl") as Label;
 			this.confirmBtn=this.getUIbyID("confirmBtn") as ImgButton;
+			
+			this.succeffSwf=this.getUIbyID("succeffSwf") as SwfLoader;
+			this.succeffSwf.visible=false;
 
 			this.targetGrid=new EquipStrengGrid();
 			this.addChild(this.targetGrid);
-			this.targetGrid.x=54;
-			this.targetGrid.y=53;
+			this.targetGrid.x=45;
+			this.targetGrid.y=139;
 			this.targetGrid.setSize(60, 60);
 			this.targetGrid.dataId=1;
 
 			this.CostGrid=new EquipStrengGrid();
 			this.addChild(this.CostGrid);
-			this.CostGrid.x=206;
-			this.CostGrid.y=60;
+			this.CostGrid.x=244;
+			this.CostGrid.y=41;
 			this.CostGrid.dataId=2;
+			this.CostGrid.setSize(38, 38);
 
 			this.targetGrid.selectState();
 			this.CostGrid.selectState();
@@ -68,8 +76,8 @@ package com.leyou.ui.equip.child {
 			this.equipTransBar=new EquipTransBar();
 			this.addChild(this.equipTransBar);
 
-			this.equipTransBar.x=27;
-			this.equipTransBar.y=199;
+			this.equipTransBar.x=30;
+			this.equipTransBar.y=237;
 
 			this.confirmBtn.addEventListener(MouseEvent.CLICK, onClick);
 			this.equipTransBar.visible=false;
@@ -91,13 +99,14 @@ package com.leyou.ui.equip.child {
 
 			this.costEffect.visible=false;
 
-			this.descLbl.htmlText="" + TableManager.getInstance().getSystemNotice(2509).content;
-			this.descLbl.height=306;
-			this.descLbl.width=279;
-			this.descLbl.wordWrap=true;
+			this.ruleLbl.setToolTip(TableManager.getInstance().getSystemNotice(2509).content);
+//			this.descLbl.htmlText="" + TableManager.getInstance().getSystemNotice(2509).content;
+//			this.descLbl.height=306;
+//			this.descLbl.width=279;
+//			this.descLbl.wordWrap=true;
 
 			this.y=1;
-			this.x=-10;
+			this.x=60;
 		}
 
 		private function onClick(e:MouseEvent):void {
@@ -160,6 +169,13 @@ package com.leyou.ui.equip.child {
 		 *
 		 */
 		public function updateSucc():void {
+			
+			this.succeffSwf.visible=true;
+			
+			succeffSwf.playAct(PlayerEnum.ACT_STAND, -1, false, function():void {
+				succeffSwf.visible=false;
+			});
+			
 			this.targetGrid.resetGrid();
 			this.CostGrid.resetGrid();
 
@@ -257,24 +273,24 @@ package com.leyou.ui.equip.child {
 			this.CostGrid.updataInfo(beinfo);
 
 			this.updateViewState(d);
-			
+
 			if (!this.CostGrid.getGridEmpty() && !this.targetGrid.getGridEmpty()) {
-				
+
 				this.equipTransBar.updateData(this.targetGrid.data.tips, 1);
 				this.equipTransBar.updateData(this.CostGrid.data.tips, 2);
-				
+
 				this.equipTransBar.visible=true;
 				this.confirmBtn.setActive(true, 1, true);
 				this.confirmBtn.setToolTip("");
-				this.descLbl.visible=false;
-				
+//				this.descLbl.visible=false;
+
 			} else {
-				
+
 				this.equipTransBar.visible=false;
-				this.descLbl.visible=true;
+//				this.descLbl.visible=true;
 				this.confirmBtn.setActive(false, .6, true);
 				this.confirmBtn.setToolTip(TableManager.getInstance().getSystemNotice(2508).content);
-				
+
 			}
 		}
 
@@ -297,12 +313,12 @@ package com.leyou.ui.equip.child {
 
 				this.updateViewState(d);
 			} else {
-				
+
 				if (info.qh == 0)
 					this.targetGrid.updataInfo(d);
 				else
 					this.CostGrid.updataInfo(d);
-				
+
 			}
 
 
@@ -314,12 +330,12 @@ package com.leyou.ui.equip.child {
 				this.equipTransBar.visible=true;
 				this.confirmBtn.setActive(true, 1, true);
 				this.confirmBtn.setToolTip("");
-				this.descLbl.visible=false;
+//				this.descLbl.visible=false;
 
 			} else {
-				
+
 				this.equipTransBar.visible=false;
-				this.descLbl.visible=true;
+//				this.descLbl.visible=true;
 				this.confirmBtn.setActive(false, .6, true);
 				this.confirmBtn.setToolTip(TableManager.getInstance().getSystemNotice(2508).content);
 
@@ -451,7 +467,7 @@ package com.leyou.ui.equip.child {
 
 			this.equipTransBar.clearData();
 			this.equipTransBar.visible=false;
-			this.descLbl.visible=true;
+//			this.descLbl.visible=true;
 
 			this.targetGrid.resetGrid();
 			this.CostGrid.resetGrid();

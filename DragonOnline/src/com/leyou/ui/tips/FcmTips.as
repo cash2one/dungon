@@ -34,8 +34,8 @@ package com.leyou.ui.tips {
 			this.descLbl.visibleOfBg=false;
 			
 			this.reSize();
- 			this.clsBtn.y=-5;
-			this.clsBtn.x=195;
+// 			this.clsBtn.y=-5;
+//			this.clsBtn.x=195;
 			this.allowDrag=false;
 		}
 

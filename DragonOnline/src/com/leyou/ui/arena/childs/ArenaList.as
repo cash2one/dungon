@@ -27,7 +27,7 @@ package com.leyou.ui.arena.childs {
 		public function ArenaList() {
 			super(LibManager.getInstance().getXML("config/ui/arena/arenaList.xml"));
 			this.init();
-			this.clsBtn.y-=10;
+//			this.clsBtn.y-=10;
 		}
 
 		private function init():void {

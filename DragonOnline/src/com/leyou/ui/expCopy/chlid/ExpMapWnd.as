@@ -50,8 +50,8 @@ package com.leyou.ui.expCopy.chlid
 //			priceLbl = getUIbyID("priceLbl") as Label;
 			buttons = new Vector.<ExpCopyButton>(POINTS_MAX_NUM);
 			hideBg();
-			clsBtn.x -= 6;
-			clsBtn.y -= 11;
+//			clsBtn.x -= 6;
+//			clsBtn.y -= 11;
 		}
 		
 		public function loadMap($copyId:int):void{

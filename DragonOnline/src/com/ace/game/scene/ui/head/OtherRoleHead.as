@@ -10,9 +10,11 @@ package com.ace.game.scene.ui.head {
 	import com.ace.enum.EventEnum;
 	import com.ace.enum.FilterEnum;
 	import com.ace.enum.KeysEnum;
+	import com.ace.enum.SceneEnum;
 	import com.ace.enum.TipEnum;
 	import com.ace.game.scene.player.part.LivingModel;
 	import com.ace.gameData.buff.child.BuffInfo;
+	import com.ace.gameData.manager.MapInfoManager;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.player.LivingInfo;
 	import com.ace.gameData.table.TBuffInfo;
@@ -368,6 +370,10 @@ package com.ace.game.scene.ui.head {
 
 
 		private function lookOtherRole():void {
+			if(SceneEnum.SCENE_TYPE_ACROSS == MapInfoManager.getInstance().type){
+				NoticeManager.getInstance().broadcastById(11006);
+				return;
+			}
 			if (null == info2) {
 				info2=new Vector.<MenuInfo>;
 				info2.push(new MenuInfo(ChatEnum.CLICK_MENU_II[0], ChatEnum.PRIVATE_CHAT));

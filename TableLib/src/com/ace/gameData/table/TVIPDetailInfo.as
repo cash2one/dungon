@@ -20,6 +20,14 @@ package com.ace.gameData.table
 		
 		public var show2PicUrl:String;
 		
+		public var show3PicUrl:String;
+		
+		public var pic1Des:String;
+		
+		public var pic2Des:String;
+		
+		public var pic3Des:String;
+		
 		public var item1:String;
 		
 		public var num1:int;
@@ -60,6 +68,10 @@ package com.ace.gameData.table
 			equipSourceurl = xml.@name_pic;
 			show1PicUrl = xml.@ad1_pic;
 			show2PicUrl = xml.@ad2_pic;
+			show3PicUrl = xml.@ad3_pic;
+			pic1Des = xml.@ad1_des;
+			pic2Des = xml.@ad2_des;
+			pic3Des = xml.@ad3_des;
 			item1 = xml.@item1;
 			item2 = xml.@item2;
 			item3 = xml.@item3;

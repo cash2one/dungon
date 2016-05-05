@@ -1,5 +1,7 @@
 package com.leyou.ui.market.child {
+	import com.ace.enum.SceneEnum;
 	import com.ace.enum.TipEnum;
+	import com.ace.gameData.manager.MapInfoManager;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.manager.LayerManager;
 	import com.ace.manager.LibManager;
@@ -8,6 +10,8 @@ package com.leyou.ui.market.child {
 	import com.ace.ui.button.children.NormalButton;
 	import com.ace.ui.img.child.Image;
 	import com.ace.ui.lable.Label;
+	import com.ace.ui.notice.NoticeManager;
+	import com.ace.utils.StringUtil;
 	import com.leyou.data.market.MarketItemInfo;
 	import com.leyou.net.cmd.Cmd_Market;
 	import com.leyou.ui.shop.BuyWnd;
@@ -23,18 +27,22 @@ package com.leyou.ui.market.child {
 	import flash.text.TextFormat;
 
 	public class MarketItemRender extends AutoSprite {
+		
 		private var nameLbl:Label;
-		private var typeLbl:Label;
-		private var applyLbl:Label;
+//		private var typeLbl:Label;
+//		private var applyLbl:Label;
 		private var nowPriceValueLbl:Label;
 		private var priceValueLbl:Label;
 		private var buyBtn:NormalButton;
-		private var dicountLbl:Label;
+//		private var dicountLbl:Label;
 		private var nowPriceImg:Image;
 		private var priceImg:Image;
 		private var hotImg:Image;
 		private var priceLbl:Label;
 		private var newPriceLbl:Label;
+		
+		private var discountVLbl:Label;
+		private var dtimeLbl:Label;
 		
 //		private var line:Shape;
 		
@@ -56,15 +64,17 @@ package com.leyou.ui.market.child {
 		private function init():void{
 			mouseChildren=true;
 			nameLbl=getUIbyID("nameLbl") as Label;
-			typeLbl=getUIbyID("typeLbl") as Label;
-			applyLbl=getUIbyID("applyLbl") as Label;
+//			typeLbl=getUIbyID("typeLbl") as Label;
+//			applyLbl=getUIbyID("applyLbl") as Label;
 			priceValueLbl=getUIbyID("priceValueLbl") as Label;
 			nowPriceValueLbl=getUIbyID("nowPriceValueLbl") as Label;
 			buyBtn=getUIbyID("buyBtn") as NormalButton;
-			dicountLbl=getUIbyID("dicountLbl") as Label;
+//			dicountLbl=getUIbyID("dicountLbl") as Label;
 			hotImg=getUIbyID("hotImg") as Image;
 			priceLbl=getUIbyID("priceLbl") as Label;
 			newPriceLbl=getUIbyID("newPriceLbl") as Label;
+			discountVLbl=getUIbyID("discountVLbl") as Label;
+			dtimeLbl=getUIbyID("dtimeLbl") as Label;
 			
 			nowPriceImg=getUIbyID("nowPriceImg") as Image;
 			var container:Sprite = new Sprite();
@@ -79,25 +89,25 @@ package com.leyou.ui.market.child {
 			priceImg.parent.addChild(container);
 			container.addChild(priceImg);
 			
-			typeLbl.multiline = true;
-			typeLbl.wordWrap = true;
-			var textForat:TextFormat = new TextFormat();
-			textForat.leading = 3;
-			typeLbl.defaultTextFormat = textForat;
-			dicountLbl.mouseEnabled = true;
-			var style:StyleSheet = new StyleSheet()
-			style.setStyle("body", {leading:0.5});
-			style.setStyle("a:hover", {color:"#ff0000"});
-			dicountLbl.styleSheet = style;
-			dicountLbl.htmlText = StringUtil_II.addEventString(dicountLbl.text, dicountLbl.text, true);
-			dicountLbl.addEventListener(TextEvent.LINK, onBtnClick);
+//			typeLbl.multiline = true;
+//			typeLbl.wordWrap = true;
+//			var textForat:TextFormat = new TextFormat();
+//			textForat.leading = 3;
+//			typeLbl.defaultTextFormat = textForat;
+//			dicountLbl.mouseEnabled = true;
+//			var style:StyleSheet = new StyleSheet()
+//			style.setStyle("body", {leading:0.5});
+//			style.setStyle("a:hover", {color:"#ff0000"});
+//			dicountLbl.styleSheet = style;
+//			dicountLbl.htmlText = StringUtil_II.addEventString(dicountLbl.text, dicountLbl.text, true);
+//			dicountLbl.addEventListener(TextEvent.LINK, onBtnClick);
 			
 			buyBtn.addEventListener(MouseEvent.CLICK, onBtnClick, false, 0, true);
 //			dicountLbl.addEventListener(MouseEvent.CLICK, onBtnClick, false, 0, true);
 			
-			grid=new MarketGrid();
-			grid.x=10;
-			grid.y=10; 
+			grid = new MarketGrid();
+			grid.x = 32;
+			grid.y = 46; 
 			addChild(grid);
 			grid.isShowPrice = true;
 		}
@@ -136,6 +146,10 @@ package com.leyou.ui.market.child {
 				LayerManager.getInstance().addPopWnd(false, buyWnd);
 				buyWnd.show();
 			}else if(evt.target.name=="dicountLbl"){//打折按钮
+				if(SceneEnum.SCENE_TYPE_ACROSS == MapInfoManager.getInstance().type){
+					NoticeManager.getInstance().broadcastById(11006);
+					return;
+				}
 				Cmd_Market.cm_Mak_A(dataLink.pageType, dataLink.itemId);
 			}
 		}
@@ -172,14 +186,12 @@ package com.leyou.ui.market.child {
 				info = TableManager.getInstance().getEquipInfo(dataLink.itemId);
 			}
 			itemName = info.name;
-			typeLbl.text = info.des;
+//			typeLbl.text = info.des;
 			color = ItemUtil.getColorByQuality(parseInt(info.quality));
-			nameLbl.htmlText = "<Font face='SimSun' size = '12' color='#"+ color.toString(16).replace("0x") + "'>" + itemName + "</Font>";
+			nameLbl.htmlText = "<Font face='SimSun' color='#"+ color.toString(16).replace("0x") + "'>" + itemName + "</Font>";
 			
 			priceValueLbl.text = dataLink.price+"";
 			nowPriceValueLbl.text = dataLink.nowPrice+"";
-			applyLbl.visible = dataLink.isapply;
-			dicountLbl.visible = (dataLink.acceptDiscount && !dataLink.isapply);
 			
 			var sourcePath:String = ItemUtil.getExchangeIcon(dataLink.moneyType)
 			priceImg.updateBmp(sourcePath);
@@ -191,6 +203,22 @@ package com.leyou.ui.market.child {
 			priceValueLbl.visible = dataLink.discount;
 			priceImg.visible = dataLink.discount;
 			priceLbl.visible = dataLink.discount;
+			
+			if(null == dataLink.stime || "" == dataLink.stime){
+				discountVLbl.visible = false;
+				dtimeLbl.visible = false;
+//				typeLbl.visible = true;
+//				applyLbl.visible = dataLink.isapply;
+//				dicountLbl.visible = (dataLink.acceptDiscount && !dataLink.isapply);
+			}else{
+				discountVLbl.visible = true;
+				dtimeLbl.visible = true;
+//				typeLbl.visible = false;
+//				applyLbl.visible = false;
+//				dicountLbl.visible = false;
+				dtimeLbl.text = StringUtil.substitute("{1}-{2}", dataLink.stime, dataLink.etime);
+				discountVLbl.text = StringUtil.substitute("{1}%OFF",dataLink.poff);
+			}
 		}
 		
 		/**
@@ -201,7 +229,7 @@ package com.leyou.ui.market.child {
 			dataLink.render = null;
 			dataLink = null;
 			buyBtn.removeEventListener(MouseEvent.CLICK,onBtnClick);
-			dicountLbl.removeEventListener(MouseEvent.CLICK,onBtnClick);
+//			dicountLbl.removeEventListener(MouseEvent.CLICK,onBtnClick);
 		}
 	}
 }

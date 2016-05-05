@@ -10,6 +10,7 @@ package com.leyou.ui.rank.child
 	
 	import flash.events.MouseEvent;
 	
+	//英雄榜render
 	public class RankHeroItemRender extends AutoSprite
 	{
 		private var rankTitleImg:Image;
@@ -78,10 +79,16 @@ package com.leyou.ui.rank.child
 					rankTitleImg.updateBmp("ui/rank/title_djjfb.png");
 					break;
 				case 7:
-					rankTitleImg.updateBmp("ui/rank/title_cfph.png");
+					rankTitleImg.updateBmp("ui/rank/title_cfph.png");//xxxxxxxxxxxxx
 					break;
 				case 8:
-					rankTitleImg.updateBmp("ui/rank/font_xfphb.png");
+					rankTitleImg.updateBmp("ui/rank/font_xfphb.png");//xxxxxxxxxxxxx
+					break;
+				case 9:
+					rankTitleImg.updateBmp("ui/rank/font_yszlb.png");
+					break;
+				case 10:
+					rankTitleImg.updateBmp("ui/rank/font_xzzlb.png");
 					break;
 			}
 		}

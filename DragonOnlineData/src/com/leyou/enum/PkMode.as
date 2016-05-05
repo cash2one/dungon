@@ -25,8 +25,11 @@ package com.leyou.enum
 		// 阵营模式
 		public static const PK_MODE_CAMP:int = 7;
 		
+		// 跨服模式
+		public static const PK_MODE_ACROSS:int = 8;
+		
 		// 模式数量
-		public static const PK_MODE_COUNT:int = 8;
+		public static const PK_MODE_COUNT:int = 9
 		
 		// 菜单
 		public static const PK_MODE_MENU:Array = [ PropUtils.getStringById(2082), 

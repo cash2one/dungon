@@ -3,11 +3,13 @@ package com.leyou.ui.task {
 	import com.ace.config.Core;
 	import com.ace.delayCall.DelayCallManager;
 	import com.ace.enum.EventEnum;
+	import com.ace.enum.PlayerEnum;
 	import com.ace.enum.UIEnum;
 	import com.ace.enum.WindowEnum;
 	import com.ace.game.proxy.SceneProxy;
 	import com.ace.game.utils.SceneUtil;
 	import com.ace.gameData.manager.DataManager;
+	import com.ace.gameData.manager.MapInfoManager;
 	import com.ace.gameData.manager.MyInfoManager;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.table.TItemInfo;
@@ -19,6 +21,7 @@ package com.leyou.ui.task {
 	import com.ace.manager.SoundManager;
 	import com.ace.manager.UILayoutManager;
 	import com.ace.manager.UIManager;
+	import com.ace.manager.UIOpenBufferManager;
 	import com.ace.ui.auto.AutoSprite;
 	import com.ace.ui.button.children.ImgButton;
 	import com.ace.ui.img.child.Image;
@@ -34,6 +37,7 @@ package com.leyou.ui.task {
 	import com.leyou.net.cmd.Cmd_Qa;
 	import com.leyou.net.cmd.Cmd_Tsk;
 	import com.leyou.net.cmd.Cmd_Yct;
+	import com.leyou.ui.equip.EquipWnd;
 	import com.leyou.ui.task.child.MissionSoulBar;
 	import com.leyou.ui.task.child.MissionTrackRender;
 	import com.leyou.ui.task.child.TaskTrackBtn;
@@ -42,6 +46,8 @@ package com.leyou.ui.task {
 	import com.leyou.utils.TaskUtil;
 
 	import flash.display.DisplayObject;
+	import flash.display.DisplayObjectContainer;
+	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 
@@ -56,6 +62,7 @@ package com.leyou.ui.task {
 		private var bgImg:Image;
 
 		private var missionSoulBar:MissionSoulBar;
+		private var missionContainer:Sprite;
 		private var arrowBtn:ImgButton;
 		private var arrowIcon:Image;
 
@@ -78,6 +85,7 @@ package com.leyou.ui.task {
 		public var taskID:int=0;
 
 		public var taskOneInfo:Object;
+		public var taskLoopInfo:Object;
 		private var linkArr:Array=[];
 		private var taskList:Array=[];
 
@@ -111,9 +119,15 @@ package com.leyou.ui.task {
 
 			this.gridList.mouseChildren=true;
 
+			this.missionContainer=new Sprite();
+			this.addChild(this.missionContainer);
+
 			this.missionSoulBar=new MissionSoulBar();
-			this.addChild(this.missionSoulBar);
+			this.missionContainer.addChild(this.missionSoulBar);
+
 			this.missionSoulBar.y=-this.missionSoulBar.height;
+
+//			this.missionContainer.opaqueBackground=0xff0000;
 
 			this.arrowIcon=new Image("ui/mission/rwzz_bg.png");
 //			this.arrowIcon.y=this.arrowBtn.y+this.arrowBtn.height;
@@ -153,6 +167,8 @@ package com.leyou.ui.task {
 			this.addEventListener(MouseEvent.CLICK, onMouseClick);
 
 			EventManager.getInstance().addEvent(EventEnum.FIRST_LOGIN_CLICK, onComplete);
+
+			this.hide();
 		}
 
 		private function onComplete():void {
@@ -196,15 +212,48 @@ package com.leyou.ui.task {
 			this.missionSoulBar.onCompleteHallow()
 		}
 
+		/**
+		 *
+		 * @param v
+		 *
+		 */
+		public function setSoulBarState(v:Boolean):void {
+			this.missionSoulBar.visible=v;
+		}
+
+		/**
+		 * 添加其他容器
+		 * @param dis
+		 *
+		 */
+		public function setSoulContainerAddOther(dis:DisplayObjectContainer):void {
+			this.missionSoulBar.visible=false;
+			dis.x=missionSoulBar.x;
+			dis.y=missionSoulBar.y;
+			this.missionContainer.addChild(dis);
+		}
+
+		/**
+		 * 删除其他容器
+		 * @param dis
+		 *
+		 */
+		public function setSoulContainerRemoveOther(dis:DisplayObjectContainer):void {
+			this.missionSoulBar.visible=true;
+			if (missionContainer.contains(dis)) {
+				this.missionContainer.removeChild(dis);
+			}
+		}
+
 		private function onClick(e:MouseEvent):void {
 
 			var w:int=this.width;
 			var i:int=w - 30;
 
-			if (this.missionSoulBar.visible) {
+			if (this.missionContainer.visible) {
 
 				TweenLite.to(this, 1, {x: UIEnum.WIDTH - 20, onComplete: function():void {
-					missionSoulBar.visible=gridList.visible=false;
+					missionContainer.visible=gridList.visible=false;
 					arrowBtn.updataBmd("ui/funForcast/btn_left.png");
 					arrowIcon.visible=true;
 					bgImg.visible=false;
@@ -215,7 +264,7 @@ package com.leyou.ui.task {
 			} else {
 
 				bgImg.visible=true;
-				missionSoulBar.visible=gridList.visible=true;
+				missionContainer.visible=gridList.visible=true;
 				arrowIcon.visible=false;
 				TweenLite.to(this, 1, {x: UIEnum.WIDTH - this.width + 7, onComplete: function():void {
 					arrowBtn.updataBmd("ui/funForcast/btn_right.png");
@@ -223,6 +272,37 @@ package com.leyou.ui.task {
 
 				TweenLite.to(this.arrowBtn, 1, {x: this.width - this.arrowBtn.width - 15});
 			}
+
+		}
+
+		public function setScalePanelState(v:Boolean):void {
+
+			var w:int=this.width;
+			var i:int=w - 30;
+
+			if (!v) {
+
+				TweenLite.to(this, 1, {x: UIEnum.WIDTH - 20, onComplete: function():void {
+					missionContainer.visible=gridList.visible=false;
+					arrowBtn.updataBmd("ui/funForcast/btn_left.png");
+					arrowIcon.visible=true;
+					bgImg.visible=false;
+				}});
+
+				TweenLite.to(this.arrowBtn, 1, {x: 2});
+
+			} else {
+
+				bgImg.visible=true;
+				missionContainer.visible=gridList.visible=true;
+				arrowIcon.visible=false;
+				TweenLite.to(this, 1, {x: UIEnum.WIDTH - this.width + 7, onComplete: function():void {
+					arrowBtn.updataBmd("ui/funForcast/btn_right.png");
+				}});
+
+				TweenLite.to(this.arrowBtn, 1, {x: this.width - this.arrowBtn.width - 15});
+			}
+
 		}
 
 		private function updateTaskItem(o:Object):void {
@@ -242,11 +322,11 @@ package com.leyou.ui.task {
 
 				if (this.renderVec[int(minfo.type)] == null) {
 					item=new MissionTrackRender();
-				} else{
+				} else {
 					item=this.renderVec[minfo.type];
 					item.visible=true;
 				}
-				
+
 				item.y=this.taskCount;
 				this.taskCount+=item.height;
 
@@ -278,7 +358,9 @@ package com.leyou.ui.task {
 
 					while (tartxt.indexOf("##") > -1) {
 
-						if (tarval[i].indexOf("num") > -1 || tarval[i].indexOf("Num") > -1 || tarval[i].indexOf("number") > -1) {
+						if (int(minfo.dtype) == TaskEnum.taskType_Mercenary) {
+							tartxt=tartxt.replace("##", "<font color='#00ff00'><u><a href='event:mercenary'>" + TableManager.getInstance().getPetInfo(minfo[tarval[i]]).name + "</a></u></font>");
+						} else if (tarval[i].indexOf("num") > -1 || tarval[i].indexOf("Num") > -1 || tarval[i].indexOf("number") > -1) {
 							tartxt=tartxt.replace("##", "<font color='#ff0000'>(" + o["var"] + "/" + minfo[tarval[i]] + ")</font>");
 						} else if (tarval[i].indexOf("lv") > -1) {
 							tartxt=tartxt.replace("##", "<font color='#ff0000'>(" + minfo[tarval[i]] + ")</font>");
@@ -290,7 +372,12 @@ package com.leyou.ui.task {
 
 								bname=String(tarval[i]).split("_")[0] + "_id";
 
-								if (bname.indexOf("npc") > -1) { // || bname.indexOf("box") > -1) {
+								if (tarval[i].indexOf("Y_Currency") > -1) { // || bname.indexOf("box") > -1) {
+									tartxt=tartxt.replace("##", "<font color='#ff0000'>" + minfo[tarval[i]] + "</font>");
+								} else if (int(minfo.dtype) == TaskEnum.taskType_Delivery) {
+									this.linkArr[int(minfo.type)].push(tarval[0]);
+									tartxt=tartxt.replace("##", "<font color='#00ff00'><u><a href='event:" + tarval[0] + "'>" + TaskUtil.getTaskTargetName("npc_id", 47) + "</a></u></font>");
+								} else if (bname.indexOf("npc") > -1) { // || bname.indexOf("box") > -1) {
 									this.linkArr[int(minfo.type)].push(bname + "--" + minfo[bname]);
 									tartxt=tartxt.replace("##", "<font color='#00ff00'><u><a href='event:" + bname + "--" + minfo[bname] + "'>" + TaskUtil.getTaskTargetName(tarval[i], minfo[tarval[i]]) + "</a></u></font>");
 								} else {
@@ -300,9 +387,10 @@ package com.leyou.ui.task {
 										tartxt=tartxt.replace("##", "<font color='#00ff00'><u><a href='event:" + String(tarval[0]).split("_")[0] + "_id" + "--" + minfo.target_point + "'>" + TaskUtil.getTaskTargetName(tarval[i], minfo[tarval[i]]) + "</a></u></font>");
 									else if (int(minfo.dtype) == TaskEnum.taskType_collect)
 										tartxt=tartxt.replace("##", "<font color='#00ff00'><u><a href='event:" + String(tarval[0]).split("_")[0] + "_id" + "--" + minfo.target_point + "'>" + TaskUtil.getTaskTargetName(tarval[i], minfo[tarval[i]]) + "</a></u></font>");
-									else if (int(minfo.dtype) == TaskEnum.taskType_Exchange)
+									else if (int(minfo.dtype) == TaskEnum.taskType_Exchange) {
 										tartxt=tartxt.replace("##", "<font color='#00ff00'><u><a href='event:" + bname + "--" + minfo.item_id + "'>" + TaskUtil.getTaskTargetName(tarval[i], minfo[tarval[i]]) + "</a></u></font>");
-									else if (int(minfo.dtype) == TaskEnum.taskType_CopySuccess) {
+										this.linkArr[int(minfo.type)][0]=bname + "--" + minfo.item_id;
+									} else if (int(minfo.dtype) == TaskEnum.taskType_CopySuccess) {
 										tartxt=tartxt.replace("##", "<font color='#00ff00'><u><a href='event:copysuccess'>" + TableManager.getInstance().getCopyInfo(minfo[tarval[i]]).name + "</a></u></font>");
 									} else if (int(minfo.dtype) == TaskEnum.taskType_ElementFlagNum) {
 										tartxt=tartxt.replace("##", "<font color='#00ff00'><u><a href='event:elements'>" + minfo[tarval[i]] + "</a></u></font>");
@@ -361,7 +449,8 @@ package com.leyou.ui.task {
 
 				if (int(minfo.type) == TaskEnum.taskLevel_mainLine) {
 
-					taskID=o.tid;
+					MyInfoManager.getInstance().currentTaskId=taskID=o.tid;
+
 					this.mainTaskType=int(minfo.dtype);
 
 					this.renderStateBtn.y=item.height + 10;
@@ -370,10 +459,10 @@ package com.leyou.ui.task {
 					this.renderStateBtn.addEventListener(MouseEvent.CLICK, ontaskClick);
 					this.taskCount+=(this.renderStateBtn.height + 20);
 
-					if (o.tid == 96)
-						GuideManager.getInstance().showGuide(104, this); //.getWidget("expCopyBtn"));
+//					if (o.tid == 96)
+//						GuideManager.getInstance().showGuide(104, this); //.getWidget("expCopyBtn"));
 
-					if (o.tid == 110) {
+					if (o.tid == TableManager.getInstance().getGuideInfo(83).act_con) {
 						GuideManager.getInstance().showGuide(83, UIManager.getInstance().rightTopWnd.getWidget("teamCopyBtn"));
 					} else
 						GuideManager.getInstance().removeGuide(83);
@@ -415,13 +504,11 @@ package com.leyou.ui.task {
 								UIManager.getInstance().roleWnd.setTabIndex(1);
 							});
 
-
-
 							if (this.taskOneInfo == null)
 								dc=2;
 
 							TweenLite.delayedCall(dc, function():void {
-								UILayoutManager.getInstance().show_II(WindowEnum.ROLE, WindowEnum.MOUTLVUP, UILayoutManager.SPACE_X, UILayoutManager.SPACE_Y);
+								UILayoutManager.getInstance().show_II(WindowEnum.ROLE, WindowEnum.MOUTLVUP);
 							});
 
 						} else if (this.mainTaskType == TaskEnum.taskType_CopySuccess) {
@@ -441,19 +528,21 @@ package com.leyou.ui.task {
 
 							if (!UIManager.getInstance().isCreate(WindowEnum.TASK) || !UIManager.getInstance().taskWnd.visible)
 								UILayoutManager.getInstance().show_II(WindowEnum.TASK);
+
 							TweenLite.delayedCall(0.3, UIManager.getInstance().taskWnd.changeTab, [1]);
+							TweenLite.delayedCall(0.3, GuideManager.getInstance().showGuide, [104, UIManager.getInstance().taskWnd]);
 						} else if (this.mainTaskType == TaskEnum.taskType_ElementFlagNum) {
 							if (lv < ConfigEnum.ElementOpenLv) {
 								NoticeManager.getInstance().broadcastById(9963, [ConfigEnum.ElementOpenLv]);
 							}
 
-							if (!UIManager.getInstance().isCreate(WindowEnum.ROLE) || !UIManager.getInstance().roleWnd.visible)
-								UILayoutManager.getInstance().show_II(WindowEnum.ROLE);
+//							if (!UIManager.getInstance().isCreate(WindowEnum.ROLE) || !UIManager.getInstance().roleWnd.visible)
+							UIOpenBufferManager.getInstance().open(WindowEnum.ELEMENT);
 
-							if (this.taskOneInfo == null)
-								dc=2;
-
-							TweenLite.delayedCall(dc, UIManager.getInstance().roleWnd.setTabIndex, [3]);
+//							if (this.taskOneInfo == null)
+//								dc=2;
+//
+//							TweenLite.delayedCall(dc, UIManager.getInstance().roleWnd.setTabIndex, [3]);
 						} else if (this.mainTaskType == TaskEnum.taskType_ArenaPkNum) {
 							if (lv < ConfigEnum.ArenaOpenLv) {
 								NoticeManager.getInstance().broadcastById(9963, [ConfigEnum.ArenaOpenLv]);
@@ -461,6 +550,87 @@ package com.leyou.ui.task {
 
 							if (!UIManager.getInstance().isCreate(WindowEnum.ARENA) || !UIManager.getInstance().arenaWnd.visible)
 								UILayoutManager.getInstance().show_II(WindowEnum.ARENA);
+						} else if (this.mainTaskType == TaskEnum.taskType_Mercenary) {
+
+							if (UIManager.getInstance().isCreate(WindowEnum.PET) && UIManager.getInstance().petWnd.visible) {
+								return;
+							}
+
+							UIOpenBufferManager.getInstance().open(WindowEnum.PET);
+//							TweenLite.delayedCall(0.6, GuideManager.getInstance().showGuide, [123, UIManager.getInstance().petWnd.getBuyBtn()]);
+							TweenLite.delayedCall(0.6, GuideManager.getInstance().showGuide, [123, UIManager.getInstance().petWnd]);
+						} else if (this.mainTaskType == TaskEnum.taskType_UpgradeMainSkill) {
+
+							if (UIManager.getInstance().isCreate(WindowEnum.SKILL) && UIManager.getInstance().skillWnd.visible) {
+								return;
+							}
+
+							UILayoutManager.getInstance().show_II(WindowEnum.SKILL);
+							TweenLite.delayedCall(0.3, UIManager.getInstance().skillWnd.setTabIndex, [0]);
+						} else if (this.mainTaskType == TaskEnum.taskType_UpgradePassivitySkill) {
+
+							if (UIManager.getInstance().isCreate(WindowEnum.SKILL) && UIManager.getInstance().skillWnd.visible) {
+								return;
+							}
+
+							UILayoutManager.getInstance().show_II(WindowEnum.SKILL);
+							TweenLite.delayedCall(0.3, UIManager.getInstance().skillWnd.setTabIndex, [1]);
+						} else if (this.mainTaskType == TaskEnum.taskType_Delivery) {
+
+//							if (UIManager.getInstance().deliveryWnd.visible) {
+//								return;
+//							}
+//
+//							UIManager.getInstance().deliveryWnd(WindowEnum.DELIVERY);
+						} else if (this.mainTaskType == TaskEnum.taskType_Gem) {
+
+							if (UIManager.getInstance().isCreate(WindowEnum.ROLE) && UIManager.getInstance().roleWnd.visible) {
+								return;
+							}
+
+							UILayoutManager.getInstance().show_II(WindowEnum.ROLE);
+
+							TweenLite.delayedCall(1.2, function():void {
+								UIManager.getInstance().roleWnd.setTabIndex(2);
+							});
+						} else if (this.mainTaskType == TaskEnum.taskType_UpgradeGem) {
+
+							if (UIManager.getInstance().isCreate(WindowEnum.GEM_LV) && UIManager.getInstance().gemLvWnd.visible) {
+								return;
+							}
+
+							UILayoutManager.getInstance().show(WindowEnum.GEM_LV);
+						} else if (this.mainTaskType == TaskEnum.taskType_Guild) {
+
+							if (UIManager.getInstance().isCreate(WindowEnum.GUILD) && UIManager.getInstance().guildWnd.visible) {
+								return;
+							}
+
+							UILayoutManager.getInstance().show_II(WindowEnum.GUILD);
+						} else if (this.mainTaskType == TaskEnum.taskType_Fram) {
+
+							if (UIManager.getInstance().isCreate(WindowEnum.FARM) && UIManager.getInstance().farmWnd.visible) {
+								return;
+							}
+
+							UIOpenBufferManager.getInstance().open(WindowEnum.FARM);
+						} else if (this.mainTaskType == TaskEnum.taskType_EquipUpgrade) {
+
+							if (UIManager.getInstance().isCreate(WindowEnum.EQUIP) && UIManager.getInstance().equipWnd.visible) {
+								return;
+							}
+
+							UILayoutManager.getInstance().show(WindowEnum.EQUIP);
+							TweenLite.delayedCall(1.2, function():void {
+								UIManager.getInstance().equipWnd.changeTable(5);
+							});
+						} else if (this.mainTaskType == TaskEnum.taskType_SaveElement) {
+
+							if (UIManager.getInstance().isCreate(WindowEnum.ELEMENT) && UIManager.getInstance().elementWnd.visible) {
+								return;
+							}
+
+							UILayoutManager.getInstance().show(WindowEnum.ELEMENT);
 						}
 					}
 
@@ -504,17 +674,22 @@ package com.leyou.ui.task {
 						item.setTrBtnVisible(true);
 
 					item.setYbOnKeyVisible(Core.me.info.vipLv >= DataManager.getInstance().vipData.taskPrivilegeVipLv());
-					UIManager.getInstance().taskWnd.setVipLvState(Core.me.info.vipLv)
+					UIManager.getInstance().taskWnd.setVipLvState(Core.me.info.vipLv);
+
 				} else if (int(minfo.type) == TaskEnum.taskLevel_mercenaryCloseLine || int(minfo.type) == TaskEnum.taskLevel_mercenaryExpLine) {
 
 					if (o.st == 1) {
-						SceneProxy.onTaskComplete();
 
-						item.taskNameTxt(minfo.name + " <font color='#00ff00'><u><a href='event:mercenary--'>领取奖励</a></u></font>");
-						item.setTrBtnVisible(false);
-						item.targetVisible.visible=false;
+						if (item.targetVisible.visible) {
+							SceneProxy.onTaskComplete();
+
+							item.taskNameTxt(minfo.name + " <font color='#00ff00'><u><a href='event:mercenary--'>领取奖励</a></u></font>");
+							item.setTrBtnVisible(false);
+							item.targetVisible.visible=false;
+						}
+
 						taskCount-=20;
-					} else{
+					} else {
 						item.setTrBtnVisible(true);
 						item.targetVisible.visible=true;
 					}
@@ -535,6 +710,19 @@ package com.leyou.ui.task {
 					}
 
 					this.taskOneInfo=o;
+				} else if (int(minfo.type) == TaskEnum.taskLevel_switchLine) {
+
+					if (this.taskLoopInfo != null) {
+
+						if (int(o.st) == 0 && o["var"] == 0 && this.taskLoopInfo.tid != o.tid) {
+							if (this.linkArr[int(minfo.type)][0] != null) {
+								item.autoAstar(this.linkArr[int(minfo.type)][0]);
+							}
+						}
+					}
+
+					this.taskLoopInfo=o;
+
 				}
 
 			} else if (o.hasOwnProperty("award")) {
@@ -557,7 +745,7 @@ package com.leyou.ui.task {
 				item.setTrBtnVisible(false);
 				item.setYbOnKeyVisible(false);
 
-				
+
 				UIManager.getInstance().taskWnd.setVipLvState();
 
 				if (o.award == 0) {
@@ -671,18 +859,30 @@ package com.leyou.ui.task {
 			if (Core.me == null)
 				return;
 
+			if (Core.isDvt) {
+				this.gridList.visible=false;
+				this.arrowIcon.visible=false;
+				this.bgImg.visible=false;
+				this.arrowBtn.visible=false;
+			} else {
+				this.gridList.visible=true;
+//				this.arrowIcon.visible=true;
+				this.bgImg.visible=true;
+				this.arrowBtn.visible=true;
+			}
+
 			this.taskCount=0;
 			this._taskInfo=o;
 
 			var tr:Array=o.tr;
 			tr.sortOn("type", Array.CASEINSENSITIVE | Array.NUMERIC);
 
-			if(this.renderVec[TaskEnum.taskLevel_mercenaryCloseLine]!=null)
+			if (this.renderVec[TaskEnum.taskLevel_mercenaryCloseLine] != null)
 				this.renderVec[TaskEnum.taskLevel_mercenaryCloseLine].visible=false;
-			
-			if(this.renderVec[TaskEnum.taskLevel_mercenaryExpLine]!=null)
+
+			if (this.renderVec[TaskEnum.taskLevel_mercenaryExpLine] != null)
 				this.renderVec[TaskEnum.taskLevel_mercenaryExpLine].visible=false;
-			
+
 			var tritem:Object;
 			for each (tritem in tr) {
 				if (tritem != null) {
@@ -690,12 +890,16 @@ package com.leyou.ui.task {
 
 					} else {
 						this.updateTaskItem(tritem);
+						UIManager.getInstance().taskTrack3.updateMainTask(tritem);
 					}
 				}
 			}
-			
-			
-			
+
+//			if(!UIManager.getInstance().isCreate(WindowEnum.TASKTRACE2))
+//				UIManager.getInstance().creatWindow(WindowEnum.TASKTRACE2);
+
+//			UIManager.getInstance().taskTrack2.updateInfo(o);
+
 
 			this.firstAutoAstar=false;
 
@@ -940,7 +1144,8 @@ package com.leyou.ui.task {
 		 */
 		public function updateQuestion(o:Object=null):void {
 
-			if (Core.me == null || ConfigEnum.question1 > Core.me.info.level)
+
+			if (Core.me == null || ConfigEnum.question1 > Core.me.info.level || MapInfoManager.getInstance().type == 18)
 				return;
 
 			var item:MissionTrackRender;
@@ -1136,7 +1341,7 @@ package com.leyou.ui.task {
 			}
 
 
-			var delayTime:Number=0.5;
+			var delayTime:Number=0.6;
 			var info:TPointInfo;
 			if (_type == TaskEnum.taskLevel_switchLine) {
 
@@ -1144,6 +1349,13 @@ package com.leyou.ui.task {
 
 					info=TableManager.getInstance().getPointInfo(int(this.linkArr[_type][0].split("--")[1]));
 					Cmd_Go.cmGoPoint(int(info.sceneId), info.tx, info.ty);
+					Core.me.pInfo.currentTaskType=this.linkArr[_type][0].indexOf("monster") > -1 ? PlayerEnum.TASK_MONSTER : PlayerEnum.TASK_COLLECT;
+
+
+//					TweenLite.delayedCall(delayTime, function():void {
+//						if (linkArr[_type][0] != null)
+//							renderVec[_type].autoAstar(linkArr[_type][0]);
+//					});
 
 				} else if (this.linkArr[_type][0] != null) {
 
@@ -1182,6 +1394,8 @@ package com.leyou.ui.task {
 					if (this.linkArr[_type][0].indexOf("monster") > -1 || this.linkArr[_type][0].indexOf("box") > -1) {
 						info=TableManager.getInstance().getPointInfo(int(this.linkArr[_type][0].split("--")[1]));
 						Cmd_Go.cmGoPoint(int(info.sceneId), info.tx, info.ty);
+
+						Core.me.pInfo.currentTaskType=this.linkArr[_type][0].indexOf("monster") > -1 ? PlayerEnum.TASK_MONSTER : PlayerEnum.TASK_COLLECT;
 
 					} else if (this.linkArr[_type][0] != null) {
 						Cmd_Go.cmGoNpc(this.linkArr[_type][0].split("--")[1]);
@@ -1265,7 +1479,7 @@ package com.leyou.ui.task {
 
 					UILayoutManager.getInstance().show_II(WindowEnum.ROLE);
 
-					TweenLite.delayedCall(0.6, function():void {
+					TweenLite.delayedCall(1.2, function():void {
 						UILayoutManager.getInstance().show(WindowEnum.ROLE, WindowEnum.MOUTLVUP, UILayoutManager.SPACE_X, UILayoutManager.SPACE_Y);
 						UIManager.getInstance().roleWnd.setTabIndex(1);
 					});
@@ -1295,18 +1509,21 @@ package com.leyou.ui.task {
 
 					UILayoutManager.getInstance().show_II(WindowEnum.TASK);
 					TweenLite.delayedCall(0.3, UIManager.getInstance().taskWnd.changeTab, [1]);
+					TweenLite.delayedCall(0.3, GuideManager.getInstance().showGuide, [104, UIManager.getInstance().taskWnd]);
 				} else if (this.mainTaskType == TaskEnum.taskType_ElementFlagNum) {
 					if (lv < ConfigEnum.ElementOpenLv) {
 						NoticeManager.getInstance().broadcastById(9963, [ConfigEnum.ElementOpenLv]);
 						return;
 					}
 
-					if (UIManager.getInstance().isCreate(WindowEnum.ROLE) && UIManager.getInstance().roleWnd.visible) {
-						return;
-					}
+					UIOpenBufferManager.getInstance().open(WindowEnum.ELEMENT);
 
-					UILayoutManager.getInstance().show_II(WindowEnum.ROLE);
-					TweenLite.delayedCall(0.3, UIManager.getInstance().roleWnd.setTabIndex, [3]);
+//					if (UIManager.getInstance().isCreate(WindowEnum.ROLE) && UIManager.getInstance().roleWnd.visible) {
+//						return;
+//					}
+//
+//					UILayoutManager.getInstance().show_II(WindowEnum.ROLE);
+//					TweenLite.delayedCall(0.3, UIManager.getInstance().roleWnd.setTabIndex, [3]);
 				} else if (this.mainTaskType == TaskEnum.taskType_ArenaPkNum) {
 					if (lv < ConfigEnum.ArenaOpenLv) {
 						NoticeManager.getInstance().broadcastById(9963, [ConfigEnum.ArenaOpenLv]);
@@ -1318,6 +1535,92 @@ package com.leyou.ui.task {
 					}
 
 					UILayoutManager.getInstance().show_II(WindowEnum.ARENA);
+				} else if (this.mainTaskType == TaskEnum.taskType_Mercenary) {
+//					if (lv < ConfigEnum.) {
+//						NoticeManager.getInstance().broadcastById(9963, [ConfigEnum.ArenaOpenLv]);
+//						return;
+//					}
+
+					if (UIManager.getInstance().isCreate(WindowEnum.PET) && UIManager.getInstance().petWnd.visible) {
+						return;
+					}
+
+					UIOpenBufferManager.getInstance().open(WindowEnum.PET);
+//					TweenLite.delayedCall(0.6, GuideManager.getInstance().showGuide, [123, UIManager.getInstance().petWnd.getBuyBtn()]);
+					TweenLite.delayedCall(0.6, GuideManager.getInstance().showGuide, [123, UIManager.getInstance().petWnd]);
+				} else if (this.mainTaskType == TaskEnum.taskType_UpgradeMainSkill) {
+
+					if (UIManager.getInstance().isCreate(WindowEnum.SKILL) && UIManager.getInstance().skillWnd.visible) {
+						return;
+					}
+
+					UILayoutManager.getInstance().show_II(WindowEnum.SKILL);
+					TweenLite.delayedCall(0.3, UIManager.getInstance().skillWnd.setTabIndex, [0]);
+				} else if (this.mainTaskType == TaskEnum.taskType_UpgradePassivitySkill) {
+
+					if (UIManager.getInstance().isCreate(WindowEnum.SKILL) && UIManager.getInstance().skillWnd.visible) {
+						return;
+					}
+
+					UILayoutManager.getInstance().show_II(WindowEnum.SKILL);
+					TweenLite.delayedCall(0.3, UIManager.getInstance().skillWnd.setTabIndex, [1]);
+//				} else if (this.mainTaskType == TaskEnum.taskType_Delivery) {
+
+//					if (UIManager.getInstance().isCreate(WindowEnum.DELIVERY) && UIManager.getInstance().deliveryWnd.visible) {
+//						return;
+//					}
+//
+//					UILayoutManager.getInstance().show_II(WindowEnum.DELIVERY);
+				} else if (this.mainTaskType == TaskEnum.taskType_Gem) {
+
+					if (UIManager.getInstance().isCreate(WindowEnum.ROLE) && UIManager.getInstance().roleWnd.visible) {
+						return;
+					}
+
+					UILayoutManager.getInstance().show_II(WindowEnum.ROLE);
+
+					TweenLite.delayedCall(1.2, function():void {
+						UIManager.getInstance().roleWnd.setTabIndex(2);
+					});
+				} else if (this.mainTaskType == TaskEnum.taskType_UpgradeGem) {
+
+					if (UIManager.getInstance().isCreate(WindowEnum.GEM_LV) && UIManager.getInstance().gemLvWnd.visible) {
+						return;
+					}
+
+					UILayoutManager.getInstance().show(WindowEnum.GEM_LV);
+				} else if (this.mainTaskType == TaskEnum.taskType_Guild) {
+
+					if (UIManager.getInstance().isCreate(WindowEnum.GUILD) && UIManager.getInstance().guildWnd.visible) {
+						return;
+					}
+
+					UILayoutManager.getInstance().show_II(WindowEnum.GUILD);
+				} else if (this.mainTaskType == TaskEnum.taskType_Fram) {
+
+					if (UIManager.getInstance().isCreate(WindowEnum.FARM) && UIManager.getInstance().farmWnd.visible) {
+						return;
+					}
+
+					UIOpenBufferManager.getInstance().open(WindowEnum.FARM);
+				} else if (this.mainTaskType == TaskEnum.taskType_EquipUpgrade) {
+
+					if (UIManager.getInstance().isCreate(WindowEnum.EQUIP) && UIManager.getInstance().equipWnd.visible) {
+						return;
+					}
+
+					UILayoutManager.getInstance().show(WindowEnum.EQUIP);
+					TweenLite.delayedCall(1.2, function():void {
+						UIManager.getInstance().equipWnd.changeTable(5);
+					});
+				} else if (this.mainTaskType == TaskEnum.taskType_SaveElement) {
+
+					if (UIManager.getInstance().isCreate(WindowEnum.ELEMENT) && UIManager.getInstance().elementWnd.visible) {
+						return;
+					}
+
+					UILayoutManager.getInstance().show(WindowEnum.ELEMENT);
+
 				} else {
 					stateTxt="ee2211";
 
@@ -1342,7 +1645,7 @@ package com.leyou.ui.task {
 		}
 
 		public function resize():void {
-			if (this.missionSoulBar.visible) {
+			if (this.missionContainer.visible) {
 				this.x=(UIEnum.WIDTH - 271); //933=真实宽度
 				this.y=((UIEnum.HEIGHT - 246) >> 1); //107=真实高度
 			} else {

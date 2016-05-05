@@ -89,7 +89,7 @@ package com.leyou.ui.dungeonTeam.childs {
 			this.powerLbl.addEventListener(Event.CHANGE, onKeyUp);
 			this.passwardLbl.addEventListener(Event.CHANGE, onKeyUp);
 
-			this.clsBtn.y=5;
+//			this.clsBtn.y=5;
 		}
 
 		private function onKeyUp(e:Event):void {

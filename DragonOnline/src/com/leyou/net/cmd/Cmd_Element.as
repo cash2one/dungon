@@ -158,6 +158,26 @@ eid  --想要切换成的元素id(1金 2木 3水 4火 5土)
 			sm_ele_c(o);
 		}
 
+		public static function sm_ele_trans_c(o:Object):void {
+			UIManager.getInstance().equipWnd.ElementRender.updateSuccess(o);
+		}
+
+		/**
+		 * <pre>
+		 *元素转换
+
+上行:elec|Cbtype,pos,ctype
+btype -- 背包类型(1背包 3人物身上)
+	  pos   -- 位置
+			ctype -- 转换类型(1元素转换 2元素重置)
+
+下行:elec|{"mk":C}
+* @return
+   *</pre>
+		   */
+		public static function cm_ele_trans_c(type:int, pos:int, ctype:int, btype:int=0):void {
+			NetGate.getInstance().send("elec|C" + type + "," + pos + "," + ctype + "," + btype);
+		}
 
 	}
 }

@@ -61,7 +61,7 @@ package com.leyou.ui.guild {
 			super(LibManager.getInstance().getXML("config/ui/guild/guildDonateMessage.xml"));
 			this.init();
 			this.hideBg();
-			this.clsBtn.y-=10;
+//			this.clsBtn.y-=10;
 			this.mouseChildren=true;
 			this.mouseEnabled=true;
 		}

@@ -21,7 +21,7 @@ package com.leyou.ui.boss.children {
 	import com.leyou.enum.TaskEnum;
 	import com.leyou.net.cmd.Cmd_YBS;
 	import com.leyou.utils.PropUtils;
-
+	
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 
@@ -201,12 +201,14 @@ package com.leyou.ui.boss.children {
 				var monsterInfo:TLivingInfo=TableManager.getInstance().getLivingInfo(bossInfo.monsterId);
 				var fbInfo:FieldBossInfo=DataManager.getInstance().fieldBossData.getBossInfo(bossRender.bossId);
 				var content:String="        {1}<font color='#ff00'><u><a href='event:other_ycp--{2}'>" + PropUtils.getStringById(1570) + "</a></u></font>";
+				content=StringUtil.substitute(PropUtils.getStringById(2452),DataManager.getInstance().fieldBossData.lastCount);
 				if (0 == fbInfo.status) {
 					content="        {1}<font color='#ff0000'><u><a href='event:other_ycp--{2}'>" + PropUtils.getStringById(1572) + "</a></u></font>";
+					content=PropUtils.getStringById(2454);
 				}
-				content=StringUtil.substitute(content, monsterInfo.name, bossRender.bossId);
-				var arr:Array=[PropUtils.getStringById(1571), content, "", "", Cmd_YBS.callBack, "", onBtnClick];
-				UIManager.getInstance().taskTrack.updateOhterTrack(TaskEnum.taskLevel_fieldbossCopyLine, arr);
+//				content=StringUtil.substitute(content, monsterInfo.name, bossRender.bossId);
+				var arr:Array=[PropUtils.getStringById(2423),"<a href='event:other_ycp--"+monsterInfo.name+"'>" + PropUtils.getStringById(2439) + "</a>", content, "", Cmd_YBS.callBack, "", onBtnClick];
+				UIManager.getInstance().taskTrack.updateOtherTrack(TaskEnum.taskLevel_fieldbossCopyLine, arr);
 			} else {
 				reBossItem=null;
 				data.setRemind(0);
@@ -230,29 +232,29 @@ package com.leyou.ui.boss.children {
 				grids[n].clear();
 			}
 			var index:int=0;
-			if(bossInfo.showItem1[0] > 0){
-				grids[index++].updataInfo({itemId:bossInfo.showItem1[0], count:bossInfo.showItem1[1]});
+			if (bossInfo.showItem1[0] > 0) {
+				grids[index++].updataInfo({itemId: bossInfo.showItem1[0], count: bossInfo.showItem1[1]});
 			}
-			if(bossInfo.showItem2[0] > 0){
-				grids[index++].updataInfo({itemId:bossInfo.showItem2[0], count:bossInfo.showItem2[1]});
+			if (bossInfo.showItem2[0] > 0) {
+				grids[index++].updataInfo({itemId: bossInfo.showItem2[0], count: bossInfo.showItem2[1]});
 			}
-			if(bossInfo.showItem3[0] > 0){
-				grids[index++].updataInfo({itemId:bossInfo.showItem3[0], count:bossInfo.showItem3[1]});
+			if (bossInfo.showItem3[0] > 0) {
+				grids[index++].updataInfo({itemId: bossInfo.showItem3[0], count: bossInfo.showItem3[1]});
 			}
-			if(bossInfo.showItem4[0] > 0){
-				grids[index++].updataInfo({itemId:bossInfo.showItem4[0], count:bossInfo.showItem4[1]});
+			if (bossInfo.showItem4[0] > 0) {
+				grids[index++].updataInfo({itemId: bossInfo.showItem4[0], count: bossInfo.showItem4[1]});
 			}
-			if(bossInfo.showItem5[0] > 0){
-				grids[index++].updataInfo({itemId:bossInfo.showItem5[0], count:bossInfo.showItem5[1]});
+			if (bossInfo.showItem5[0] > 0) {
+				grids[index++].updataInfo({itemId: bossInfo.showItem5[0], count: bossInfo.showItem5[1]});
 			}
-			if(bossInfo.showItem6[0] > 0){
-				grids[index++].updataInfo({itemId:bossInfo.showItem6[0], count:bossInfo.showItem6[1]});
+			if (bossInfo.showItem6[0] > 0) {
+				grids[index++].updataInfo({itemId: bossInfo.showItem6[0], count: bossInfo.showItem6[1]});
 			}
-			if(bossInfo.showItem7[0] > 0){
-				grids[index++].updataInfo({itemId:bossInfo.showItem7[0], count:bossInfo.showItem7[1]});
+			if (bossInfo.showItem7[0] > 0) {
+				grids[index++].updataInfo({itemId: bossInfo.showItem7[0], count: bossInfo.showItem7[1]});
 			}
-			if(bossInfo.showItem8[0] > 0){
-				grids[index++].updataInfo({itemId:bossInfo.showItem8[0], count:bossInfo.showItem8[1]});
+			if (bossInfo.showItem8[0] > 0) {
+				grids[index++].updataInfo({itemId: bossInfo.showItem8[0], count: bossInfo.showItem8[1]});
 			}
 		}
 
@@ -277,6 +279,9 @@ package com.leyou.ui.boss.children {
 		}
 
 		public function refreshBossOpenStatus():void {
+
+			DataManager.getInstance().fieldBossData.lastCount=0;
+
 			for each (var item:BossWorldLableRender in items) {
 				if (null != item) {
 					var tbInfo:TFieldBossInfo=TableManager.getInstance().getFieldBossInfo(item.bossId);
@@ -291,6 +296,8 @@ package com.leyou.ui.boss.children {
 						item.mouseEnabled=true;
 						item.mouseChildren=true;
 						item.filters=null;
+
+						DataManager.getInstance().fieldBossData.lastCount++;
 					}
 				}
 			}

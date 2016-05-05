@@ -1,7 +1,6 @@
 package com.leyou.ui.boss {
 	import com.ace.config.Core;
 	import com.ace.enum.UIEnum;
-	import com.ace.enum.WindowEnum;
 	import com.ace.manager.LibManager;
 	import com.ace.manager.UIManager;
 	import com.ace.ui.auto.AutoWindow;
@@ -9,12 +8,9 @@ package com.leyou.ui.boss {
 	import com.ace.ui.tabbar.children.TabBar;
 	import com.leyou.enum.ConfigEnum;
 	import com.leyou.net.cmd.Cmd_Act;
-	import com.leyou.net.cmd.Cmd_BCP;
 	import com.leyou.net.cmd.Cmd_YBS;
-	import com.leyou.ui.boss.children.BossCopyRender;
 	import com.leyou.ui.boss.children.BossNormalRender;
 	import com.leyou.ui.boss.children.BossWorldRender;
-	import com.leyou.ui.pkCopy.DungeonTZWnd;
 	
 	import flash.events.Event;
 
@@ -35,7 +31,6 @@ package com.leyou.ui.boss {
 		}
 
 		private function init():void {
-			hideBg();
 			bossTabBar=getUIbyID("bossTabBar") as TabBar;
 			lowBossPage=new BossNormalRender();
 			worldBossPage=new BossWorldRender();
@@ -57,10 +52,10 @@ package com.leyou.ui.boss {
 				bossTabBar.setTabVisible(1, true);
 			}
 
-			lowBossPage.x-=15;
-			lowBossPage.y+=3;
-			worldBossPage.x-=15;
-			worldBossPage.y+=3;
+//			lowBossPage.x-=15;
+//			lowBossPage.y+=3;
+//			worldBossPage.x-=15;
+//			worldBossPage.y+=3;
 //			copyBossPage.x -= 15;
 //			copyBossPage.y += 3;
 		}

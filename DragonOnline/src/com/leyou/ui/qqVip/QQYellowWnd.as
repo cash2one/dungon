@@ -24,8 +24,8 @@ package com.leyou.ui.qqVip
 		private function init():void{
 			payYellowBtn = getUIbyID("payYellowBtn") as ImgButton;
 			payYellowBtn.addEventListener(MouseEvent.CLICK, onBtnClick);
-			clsBtn.x -= 6;
-			clsBtn.y -= 14;
+//			clsBtn.x -= 6;
+//			clsBtn.y -= 14;
 			
 			grid = new MarketGrid();
 			grid.isShowPrice = false;

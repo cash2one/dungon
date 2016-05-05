@@ -7,6 +7,7 @@ package com.leyou.ui.rank.child
 	
 	import flash.events.MouseEvent;
 	
+	//英雄榜列表
 	public class RankHeroRender extends AutoSprite
 	{
 		private const RankCount:int = 8;
@@ -49,9 +50,11 @@ package com.leyou.ui.rank.child
 				case 5:
 					return 5;
 				case 6:
-					return 7;
+//					return 7;
+					return 9;
 				case 7:
-					return 8;
+//					return 8;
+					return 10;
 			}
 			return 0;
 		}

@@ -220,8 +220,8 @@ package com.leyou.ui.vip
 			if(null == tipsInfo){
 				tipsInfo = new TipVipEquipInfo();
 			}
-			tipsInfo.lv = Core.me.info.level;
-			tipsInfo.vipLv = Core.me.info.vipLv;
+//			tipsInfo.lv = Core.me.info.level;
+//			tipsInfo.vipLv = Core.me.info.vipLv;
 			ToolTipManager.getInstance().show(TipEnum.TYPE_VIP_QUEIP, tipsInfo, new Point(stage.mouseX, stage.mouseY));
 		}
 		

@@ -3,7 +3,6 @@ package com.ace.ui.roleHead
 	import com.ace.ICommon.ILivingHead;
 	import com.ace.config.Core;
 	import com.ace.enum.EventEnum;
-	import com.ace.enum.UIEnum;
 	import com.ace.game.scene.player.part.LivingModel;
 	import com.ace.gameData.manager.DataManager;
 	import com.ace.gameData.manager.TableManager;
@@ -13,9 +12,13 @@ package com.ace.ui.roleHead
 	import com.ace.manager.LibManager;
 	import com.ace.manager.UIManager;
 	import com.ace.ui.auto.AutoSprite;
+	import com.ace.ui.button.children.ImgButton;
 	import com.ace.ui.img.child.Image;
 	import com.ace.ui.lable.Label;
 	import com.ace.utils.StringUtil;
+	import com.leyou.net.cmd.Cmd_Pet;
+	
+	import flash.events.MouseEvent;
 	
 	public class PetHead extends AutoSprite implements ILivingHead
 	{
@@ -29,18 +32,30 @@ package com.ace.ui.roleHead
 		
 		private var hpLbl:Label;
 		
+		private var modeBtn:ImgButton;
+		
+		private var lvLbl:Label;
+		
 		public function PetHead(){
 			super(LibManager.getInstance().getXML("config/ui/pet/serventHeadWnd.xml"));
 			init();
 		}
 		
 		private function init():void{
+			mouseChildren = true;
+			modeBtn = getUIbyID("modeBtn") as ImgButton;
+			lvLbl = getUIbyID("lvLbl") as Label;
 			headImg = getUIbyID("headImg") as Image;
 			nameLbl = getUIbyID("nameLbl") as Label;
 			elementImg = getUIbyID("elementImg") as Image;
 			hpImg = getUIbyID("hpImg") as Image;
 			hpLbl = getUIbyID("hpLbl") as Label;
 			hide();
+			modeBtn.addEventListener(MouseEvent.CLICK, onBtnClick);
+		}
+		
+		protected function onBtnClick(event:MouseEvent):void{
+			Cmd_Pet.cm_PET_B(DataManager.getInstance().petData.currentPetId);
 		}
 		
 		public function addMyOwnPetEvent():void{
@@ -125,6 +140,9 @@ package com.ace.ui.roleHead
 			hpImg.scaleX = $info.baseInfo.hp / $info.baseInfo.maxHp;
 			var petInfo:TPetInfo = TableManager.getInstance().getPetInfo($info.tId);
 			headImg.updateBmp("ui/servent/" + petInfo.headUrl);
+			var id:int = Core.me.info.id;
+			modeBtn.visible = ($info.id == Core.me.info.petId);
+			lvLbl.visible = ($info.id == Core.me.info.petId);
 			switch ($info.baseInfo.yuanS) {
 				case 0:
 					elementImg.visible=false;

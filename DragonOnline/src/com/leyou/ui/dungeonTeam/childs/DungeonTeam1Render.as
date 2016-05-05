@@ -6,7 +6,7 @@ package com.leyou.ui.dungeonTeam.childs {
 	import com.ace.ui.auto.AutoSprite;
 	import com.ace.ui.button.children.RadioButton;
 	import com.leyou.net.cmd.Cmd_CpTm;
-
+	
 	import flash.events.MouseEvent;
 
 	public class DungeonTeam1Render extends AutoSprite {
@@ -112,6 +112,10 @@ package com.leyou.ui.dungeonTeam.childs {
 			}
 
 			return false;
+		}
+	 
+		public function setBtnState(v:Boolean):void{
+			this.teamRender.setBtnState(v);
 		}
 
 	}

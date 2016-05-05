@@ -54,18 +54,18 @@ package com.ace.game.utils {
 					Cmd_Npc.cmNpcClick(living.info.idTag);
 				} else {
 					// tid 是2014时是boss副本的宝箱
-					if(UIManager.getInstance().backpackWnd.yb >= ConfigEnum.BossBoxOpenCost){
+					if (UIManager.getInstance().backpackWnd.yb >= ConfigEnum.BossBoxOpenCost) {
 						rareBoxidTag=living.info.idTag;
-						var cid:int = (Core.isSF ? 30001 : 4405);
+						var cid:int=(Core.isSF ? 30001 : 4405);
 						var content:String=TableManager.getInstance().getSystemNotice(cid).content;
 						content=StringUtil.substitute(content, ConfigEnum.BossBoxOpenCost);
 						PopupManager.showConfirm(content, onClickRareBox, null, false, "rareBox.click");
-					}else{
+					} else {
 						NoticeManager.getInstance().broadcastById(2008);
 					}
 				}
 			} else {
-					Cmd_Npc.cmNpcClick(living.info.tId.toString());
+				Cmd_Npc.cmNpcClick(living.info.tId.toString());
 			}
 		}
 

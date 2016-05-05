@@ -13,6 +13,7 @@ package com.leyou.ui.guild.child {
 		private var lvLbl:Label;
 		private var numLbl:Label;
 		private var figthLbl:Label;
+		private var sortLbl:Label;
 
 		private var state:int=-1;
 		
@@ -31,6 +32,7 @@ package com.leyou.ui.guild.child {
 			this.lvLbl=this.getUIbyID("lvLbl") as Label;
 			this.numLbl=this.getUIbyID("numLbl") as Label;
 			this.figthLbl=this.getUIbyID("figthLbl") as Label;
+			this.sortLbl=this.getUIbyID("sortLbl") as Label;
 
 		}
 
@@ -43,6 +45,7 @@ package com.leyou.ui.guild.child {
 			this.lvLbl.text="" + info[2];
 			this.numLbl.text="" + info[3];
 			this.figthLbl.text="" + info[5];
+			this.sortLbl.text="" + info[8];
 
 		}
 		

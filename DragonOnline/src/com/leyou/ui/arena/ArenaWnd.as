@@ -12,6 +12,7 @@ package com.leyou.ui.arena {
 	import com.ace.manager.CursorManager;
 	import com.ace.manager.EventManager;
 	import com.ace.manager.GuideManager;
+	import com.ace.manager.LayerManager;
 	import com.ace.manager.LibManager;
 	import com.ace.manager.MenuManager;
 	import com.ace.manager.SoundManager;
@@ -33,18 +34,23 @@ package com.leyou.ui.arena {
 	import com.leyou.net.cmd.Cmd_Friend;
 	import com.leyou.net.cmd.Cmd_Guild;
 	import com.leyou.net.cmd.Cmd_Tm;
+	import com.leyou.ui.arena.childs.ArenaChallange;
 	import com.leyou.ui.arena.childs.ArenaRender;
 	import com.leyou.ui.question.childs.QuestionQBtn;
+	import com.leyou.ui.ttt.MessageCnSeWnd;
 	import com.leyou.util.DateUtil;
 	import com.leyou.utils.ArenaUtil;
 	import com.leyou.utils.PropUtils;
 	import com.leyou.utils.TimeUtil;
-
+	
+	import flash.display.DisplayObject;
+	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 	import flash.events.TextEvent;
 
 	public class ArenaWnd extends AutoWindow implements IMenu {
 
+		private var ruleLbl:Label;
 		private var proLbl:Label;
 		private var integralLbl:Label;
 		private var topLbl:Label;
@@ -60,6 +66,7 @@ package com.leyou.ui.arena {
 		private var refreshBtn:ImgButton;
 		private var topBtn:ImgButton;
 		private var addPkCountBtn:ImgButton;
+		private var rightBtn:ImgButton;
 
 		private var logTxt:TextArea;
 
@@ -78,6 +85,11 @@ package com.leyou.ui.arena {
 
 		private var quitBtn:QuestionQBtn;
 
+		private var msgBox:MessageCnSeWnd;
+		private var chalWnd:ArenaChallange;
+
+		private var maskSpr:Sprite;
+
 		public function ArenaWnd() {
 			super(LibManager.getInstance().getXML("config/ui/arenaWnd.xml"));
 			this.init();
@@ -85,6 +97,7 @@ package com.leyou.ui.arena {
 
 		private function init():void {
 
+			this.ruleLbl=this.getUIbyID("ruleLbl") as Label;
 			this.proLbl=this.getUIbyID("proLbl") as Label;
 			this.integralLbl=this.getUIbyID("integralLbl") as Label;
 			this.topLbl=this.getUIbyID("topLbl") as Label;
@@ -100,6 +113,7 @@ package com.leyou.ui.arena {
 			this.logBtn=this.getUIbyID("logBtn") as ImgButton;
 			this.refreshBtn=this.getUIbyID("refreshBtn") as ImgButton;
 			this.topBtn=this.getUIbyID("topBtn") as ImgButton;
+			this.rightBtn=this.getUIbyID("rightBtn") as ImgButton;
 
 			this.logTxt=this.getUIbyID("logTxt") as TextArea;
 			this.logTxt.visibleOfBg=false;
@@ -108,6 +122,7 @@ package com.leyou.ui.arena {
 
 			this.logTxt.tf.styleSheet=FontEnum.DEFAULT_LINK_STYLE;
 
+			this.rightBtn.addEventListener(MouseEvent.CLICK, onRightClick);
 			this.rewardBtn.addEventListener(MouseEvent.CLICK, onBtnClick);
 			this.logBtn.addEventListener(MouseEvent.CLICK, onBtnClick);
 			this.refreshBtn.addEventListener(MouseEvent.CLICK, onBtnClick);
@@ -126,6 +141,10 @@ package com.leyou.ui.arena {
 			this.addFreeCountLbl.mouseEnabled=true;
 
 			this.addFreeCountLbl.styleSheet=FontEnum.DEFAULT_LINK_STYLE;
+			this.addFreeCountLbl.visible=false;
+			
+			this.ruleLbl.mouseEnabled=true;
+			this.ruleLbl.setToolTip(TableManager.getInstance().getSystemNotice(10169).content);
 
 			this.playVec=new Vector.<ArenaRender>();
 
@@ -135,36 +154,36 @@ package com.leyou.ui.arena {
 			this.playVec.push(render);
 			this.addChild(render);
 
-			render.x=18;
-			render.y=315;
-
-			render=new ArenaRender();
-			this.playVec.push(render);
-			this.addChild(render);
-
-			render.x=160;
+			render.x=65;
 			render.y=350;
 
 			render=new ArenaRender();
 			this.playVec.push(render);
 			this.addChild(render);
 
-			render.x=306;
-			render.y=314;
+			render.x=202;
+			render.y=380;
 
 			render=new ArenaRender();
 			this.playVec.push(render);
 			this.addChild(render);
 
-			render.x=457;
-			render.y=363;
+			render.x=349;
+			render.y=344;
 
 			render=new ArenaRender();
 			this.playVec.push(render);
 			this.addChild(render);
 
-			render.x=593;
-			render.y=319;
+			render.x=497;
+			render.y=393;
+
+			render=new ArenaRender();
+			this.playVec.push(render);
+			this.addChild(render);
+
+			render.x=636;
+			render.y=345;
 
 			for (var i:int=0; i < this.playVec.length; i++) {
 //				this.playVec[i].addEventListener(MouseEvent.CLICK, onPlayClick);
@@ -186,6 +205,35 @@ package com.leyou.ui.arena {
 //			LayerManager.getInstance().windowLayer.addChild(this.quitBtn);
 
 			EventManager.getInstance().addEvent(EventEnum.COPY_QUIT, onQuitClick);
+
+			this.msgBox=new MessageCnSeWnd();
+			LayerManager.getInstance().windowLayer.addChild(this.msgBox);
+
+			this.msgBox.x=(UIEnum.WIDTH - this.msgBox.width) >> 1;
+			this.msgBox.y=(UIEnum.HEIGHT - this.msgBox.height) >> 1;
+
+
+			this.chalWnd=new ArenaChallange();
+			this.addChild(this.chalWnd);
+
+			this.chalWnd.x=8;
+			this.chalWnd.y=59;
+
+			this.maskSpr=new Sprite();
+
+			this.maskSpr.graphics.beginFill(0x000000);
+			this.maskSpr.graphics.drawRect(0, 0, 830, 478);
+			this.maskSpr.graphics.endFill();
+
+			this.addChild(this.maskSpr);
+
+			this.maskSpr.x=8;
+			this.maskSpr.y=59;
+
+			this.chalWnd.mask=this.maskSpr;
+			this.chalWnd.visible=false;
+			
+			this.freeTimeTxt.visible=false;
 		}
 
 		private function onQuitClick(e:MouseEvent):void {
@@ -194,6 +242,12 @@ package com.leyou.ui.arena {
 					Cmd_Arena.cm_ArenaQuit();
 				}, null, false, "quitarena");
 			}
+		}
+
+		private function onRightClick(e:MouseEvent):void {
+//			TweenLite.to(this.chalWnd, 1, {x: 8, y: 59});
+			this.chalWnd.visible=true;
+			GuideManager.getInstance().removeGuide(66);
 		}
 
 		private function onPKClick(e:MouseEvent):void {
@@ -286,9 +340,11 @@ package com.leyou.ui.arena {
 //							Cmd_Arena.cm_ArenaRefresh();
 //						}, null, false, "arenaRefresh");
 
-						wnd=PopupManager.showRadioConfirm(ctx, ConfigEnum.Miliyary4.split("|")[0] + "", ConfigEnum.Miliyary4.split("|")[1] + "", function(i:int):void {
-							Cmd_Arena.cm_ArenaRefresh((i == 0 ? 1 : 0))
-						}, null, false, "arenaPkCount");
+//						wnd=PopupManager.showRadioConfirm(ctx, ConfigEnum.Miliyary4.split("|")[0] + "", ConfigEnum.Miliyary4.split("|")[1] + "", function(i:int):void {
+//							Cmd_Arena.cm_ArenaRefresh((i == 0 ? 1 : 0))
+//						}, null, false, "arenaPkCount");
+
+						this.msgBox.showPanel(3, 1);
 
 					} else {
 						Cmd_Arena.cm_ArenaRefresh(1);
@@ -305,9 +361,11 @@ package com.leyou.ui.arena {
 //						Cmd_Arena.cm_ArenaBuyPkCount()
 //					}, null, false, "arenaPkCount");
 
-					wnd=PopupManager.showRadioConfirm(ctx, this.addPKCountCost + "", this.addPKCountCost1 + "", function(i:int):void {
-						Cmd_Arena.cm_ArenaBuyPkCount((i == 0 ? 1 : 0))
-					}, null, false, "arenaPkCount");
+//					wnd=PopupManager.showRadioConfirm(ctx, this.addPKCountCost + "", this.addPKCountCost1 + "", function(i:int):void {
+//						Cmd_Arena.cm_ArenaBuyPkCount((i == 0 ? 1 : 0))
+//					}, null, false, "arenaPkCount");
+
+					this.msgBox.showPanel(3, 2);
 
 					break;
 			}
@@ -339,11 +397,11 @@ package com.leyou.ui.arena {
 		}
 
 		override public function get width():Number {
-			return 778;
+			return 842;
 		}
 
 		override public function get height():Number {
-			return 482;
+			return 544;
 		}
 
 		private function onTextLink(e:TextEvent):void {
@@ -371,6 +429,7 @@ package com.leyou.ui.arena {
 
 			UIManager.getInstance().showPanelCallback(WindowEnum.ARENA);
 
+//			this.proLbl.text="" + TableManager.getInstance().get[3 - 1];
 			this.proLbl.text="" + ArenaUtil.ArenaPro[int(o.jxlevel) - 1];
 			this.integralLbl.text="" + o.score;
 			this.topLbl.text="" + o.jrank;
@@ -380,16 +439,18 @@ package com.leyou.ui.arena {
 			this.addPKCountCost1=o.buyf1;
 			this.lastPkCount=o.sfight;
 
+			this.chalWnd.updateInfo(o);
+
 			if (!UIManager.getInstance().isCreate(WindowEnum.ARENAAWARD))
 				UIManager.getInstance().creatWindow(WindowEnum.ARENAAWARD);
 
-			UIManager.getInstance().arenaAwardWnd.updateInfo(int(o.jxlevel) - 1, o.jlst);
+			UIManager.getInstance().arenaAwardWnd.updateInfo(int(o.jrank), o.jlst);
 
 //			if (this.freeTime == 0)
 			this.freeTime=o.avoidt;
 
-			this.addFreeCountLbl.visible=(this.freeTime <= 0)
-			this.freeTimeTxt.visible=!this.addFreeCountLbl.visible;
+//			this.addFreeCountLbl.visible=(this.freeTime <= 0)
+//			this.freeTimeTxt.visible=!this.addFreeCountLbl.visible;
 
 			TimerManager.getInstance().remove(exeFreeTime);
 			if (this.freeTime > 0)
@@ -411,7 +472,7 @@ package com.leyou.ui.arena {
 
 			}
 
-			this.addFreeCountLbl.visible=((this.freeTime - i) <= 0)
+//			this.addFreeCountLbl.visible=((this.freeTime - i) <= 0)
 		}
 
 		/**
@@ -492,6 +553,7 @@ package com.leyou.ui.arena {
 
 
 			this.logTxt.setHtmlText(str);
+			this.chalWnd.updateLog(str);
 		}
 
 		private function exePkTime(i:int):void {
@@ -522,7 +584,7 @@ package com.leyou.ui.arena {
 //			Cmd_Arena.cm_ArenaRecord(3);
 //			Cmd_Arena.cm_ArenaList();
 
-			GuideManager.getInstance().showGuide(33, this);
+//			GuideManager.getInstance().showGuide(33, this);
 
 			GuideManager.getInstance().removeGuide(31);
 			GuideManager.getInstance().removeGuide(32);
@@ -536,6 +598,11 @@ package com.leyou.ui.arena {
 			Cmd_Arena.cm_ArenaInit();
 			Cmd_Arena.cm_ArenaRecord(3);
 			Cmd_Arena.cm_ArenaList();
+			Cmd_Arena.cm_ArenaTop3List();
+		}
+
+		public function updatechalList(o:Object):void {
+			this.chalWnd.updateAvatarUl(o);
 		}
 
 		override public function hide():void {
@@ -546,16 +613,25 @@ package com.leyou.ui.arena {
 				wnd=null;
 			}
 
-			GuideManager.getInstance().removeGuide(33);
+//			GuideManager.getInstance().removeGuide(33);
 			GuideManager.getInstance().removeGuide(66);
 			GuideManager.getInstance().removeGuide(65);
 
+			PopupManager.closeConfirm("arenaTop3");
 			UIManager.getInstance().taskTrack.setGuideView(TaskEnum.taskType_ArenaPkNum);
 		}
 
 		public function resise():void {
 			this.x=(UIEnum.WIDTH - this.width) / 2;
 			this.y=(UIEnum.HEIGHT - this.height) / 2;
+		}
+
+		public function reAddchild():void {
+			this.addChild(this.chalWnd);
+		}
+
+		public function chalAddchild(d:DisplayObject):void {
+			this.chalWnd.addChild(d);
 		}
 
 		public function reBtnsise():void {

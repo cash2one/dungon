@@ -4,6 +4,7 @@ package com.ace.game.scene.ui.child {
 	import com.ace.enum.FontEnum;
 	import com.ace.enum.SceneEnum;
 	import com.ace.game.scene.player.part.LivingBase;
+	import com.ace.gameData.manager.DataManager;
 	import com.ace.gameData.manager.MapInfoManager;
 	import com.ace.gameData.manager.MyInfoManager;
 	import com.ace.gameData.manager.SettingManager;
@@ -64,6 +65,7 @@ package com.ace.game.scene.ui.child {
 			guildNameLbl.y = 17;
 			teamImg = new Image("ui/team/flag_blue.png");
 			elementImg = new Image();
+			elementImg.scaleX=elementImg.scaleY=2/3;
 			blodBgImg = new Image("ui/other/HP_BG_mini.png");
 			pfImg = new Image();
 			addChild(pfImg);
@@ -116,37 +118,21 @@ package com.ace.game.scene.ui.child {
 			var guildBattle:Boolean = ((type == SceneEnum.SCENE_TYPE_GUCJ) || (type == SceneEnum.SCENE_TYPE_CYCJ)) && (Core.me.info.guildName != info.tileNames[0]);
 			// 霜炎战场
 			var isEnemy:Boolean = (Core.me.info.camp != info.camp);
-			if(guildWar || guildBattle || isEnemy){
+			// 跨服
+			var sn:String = info.name;
+			sn = sn.substring(sn.indexOf("[")+1, sn.indexOf("]"));
+			var isAcross:Boolean = !DataManager.getInstance().crossServerData.contains(sn) && (MapInfoManager.getInstance().type == SceneEnum.SCENE_TYPE_ACROSS);
+			if(guildWar || guildBattle || isEnemy || isAcross){
 				nameLbl.htmlText=StringUtil_II.getColorStr(str, getColor(PkMode.PK_COLOR_ORANGE));
 			}else{
 				nameLbl.htmlText=StringUtil_II.getColorStr(str, getColor(info.color));
 			}
 			// 更新元素状态
-			elementImg.visible=true;
-			switch (info.baseInfo.yuanS) {
-				case 0:
-					elementImg.visible=false;
-					break;
-				//0无元素 1金 2木 3水 4火 5土
-				case 1:
-					elementImg.updateBmp("ui/name/el_gold.png");
-					break;
-				case 2:
-					elementImg.updateBmp("ui/name/el_wood.png");
-					break;
-				case 3:
-					elementImg.updateBmp("ui/name/el_water.png");
-					break;
-				case 4:
-					elementImg.updateBmp("ui/name/el_fire.png");
-					break;
-				case 5:
-					elementImg.updateBmp("ui/name/el_dirt.png");
-					break;
-				default:
-					trace("error")          
-					break;
+			elementImg.visible=info.junXLv;
+			if(info.junXLv!=0){
+				elementImg.updateBmp("ui/arena/arena_0" + info.junXLv + ".png");
 			}
+			
 			// 更新vip
 			vipImg.visible=true;
 			switch (info.vipLv) {
@@ -254,6 +240,12 @@ package com.ace.game.scene.ui.child {
 			// 调整横向坐标
 			baseX = nameLbl.x;
 			var maxW:uint = nameLbl.width;
+			
+			if(teamImg.visible){
+				maxW += 16;
+				teamImg.x = baseX - 16;
+				baseX = teamImg.x;
+			}
 			if(vipImg.visible) {
 				maxW += 34;
 				vipImg.x = baseX - 34;
@@ -272,9 +264,6 @@ package com.ace.game.scene.ui.child {
 			}
 			if (elementImg.visible) {
 				elementImg.x=nameLbl.x +nameLbl.width;
-				teamImg.x=elementImg.x + /*elementImg.width*/ 16;
-			} else {
-				teamImg.x = nameLbl.x +nameLbl.width;
 			}
 			titleNameLbl.x=baseX + (maxW - titleNameLbl.width) * 0.5;
 			guildNameLbl.x=baseX + (maxW - guildNameLbl.width) * 0.5;
@@ -301,7 +290,7 @@ package com.ace.game.scene.ui.child {
 			
 			//			nameLbl.y = guildNameLbl.y + guildNameLbl.height;
 			vipImg.y=nameLbl.y + nameLbl.height * 0.5 - /*vipImg.height*/ 16 * 0.5;
-			elementImg.y=nameLbl.y + nameLbl.height * 0.5 - /*elementImg.height*/ 16 * 0.5;
+			elementImg.y=nameLbl.y + nameLbl.height * 0.5 - /*elementImg.height*/ 40 * 0.5;
 			teamImg.y=nameLbl.y + nameLbl.height * 0.5 - /*teamImg.height*/ 18 * 0.5;
 			pfImg.y=nameLbl.y + nameLbl.height * 0.5 - 16;
 			blodBgImg.y=nameLbl.y + nameLbl.height+3;

@@ -9,6 +9,7 @@ package com.ace.ui.setting {
 	import com.ace.enum.EventEnum;
 	import com.ace.game.proxy.ModuleProxy;
 	import com.ace.game.scene.ui.ReviveWnd;
+	import com.ace.game.utils.AutoUtil;
 	import com.ace.gameData.manager.SettingManager;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.setting.AssistInfo;
@@ -27,62 +28,64 @@ package com.ace.ui.setting {
 	import com.ace.ui.dropMenu.children.ComboBox;
 	import com.ace.ui.dropMenu.event.DropMenuEvent;
 	import com.ace.ui.img.child.Image;
-	import com.ace.ui.scrollBar.event.ScrollBarEvent;
-	import com.ace.ui.slider.children.HSlider;
+	import com.ace.ui.input.children.TextInput;
+	import com.ace.ui.notice.NoticeManager;
 	import com.leyou.enum.ConfigEnum;
 	import com.leyou.enum.QualityEnum;
 	import com.leyou.net.cmd.Cmd_Assist;
 	import com.leyou.utils.PropUtils;
-	
+
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 
 	public class AssistView extends AutoWindow {
-		// 技能格子数量
-		private static const GRID_COUNT:int=4;
-
-		// 挂机可用技能ID
-		private static const SKILLS:Array=[100, 104, 108, 112, 300, 304, 308, 312, 500, 504, 508, 512, 700, 704, 708, 712];
 
 		// 默认挂机配置
-		private static var DEFAULT_CONFIG:Array=[1, 2, 0.5, 2, 0.5, 2, 20101, 1, 20401, 1, 1, 4, -1, -1, -1, -1, 2, 1, QualityEnum.QUA_COMMON];
+		private static var DEFAULT_CONFIG:Array=[1, 2, 0.5, 2, 0.5, 2, 20101, 1, 20401, 1, 1, 4, -1, -1, -1, -1, 2, 1, QualityEnum.QUA_COMMON, //拾取道具品质18
+			QualityEnum.QUA_COMMON, //拾取装备品质19
+			2, //战斗范围当前屏幕20
+			1, //战斗范围定点21
+			1, //VIP自动萃取22
+			QualityEnum.QUA_TERRIFIC]; //VIP自动萃取品质23
+
+		// 保护设置
+		private var autoEatCBox:CheckBox;
+
+		private var autoBuyCBox:CheckBox;
+
+		private var hpThresholdLbl:TextInput;
+
+		// 挂机设置
+		private var autoPickItemCBox:CheckBox;
+
+		private var autoPickEquipCBox:CheckBox;
+
+		private var pickIQuality:ComboBox;
+
+		private var pickEQuality:ComboBox;
+
+		private var pickRBtn:RadioButton;
+
+		private var fightRBtn:RadioButton;
+
+		private var rangeRBtn:RadioButton;
+
+		private var positionRBtn:RadioButton;
 
 		public var reliveCheckBox:CheckBox;
 
-		private var hpCheckBox:CheckBox;
+		// VIP3特权
+		private var autoExtractCBox:CheckBox;
 
-		private var mpCheckBox:CheckBox;
-
-		private var buyHpCheckBox:CheckBox;
-
-		private var buyMpCheckBox:CheckBox;
-
-		private var pickEquipCheckBox:CheckBox;
-
-		private var pickItemCheckBox:CheckBox;
-
-		public var hpHslider:HSlider;
-
-		public var mpHslider:HSlider;
-
-		private var hpCbox:ComboBox;
-
-		private var mpCbox:ComboBox;
+		private var extractionQuality:ComboBox;
 
 		private var autoBtn:ImgButton;
-
-		//		private var grids:Vector.<AssistSkillGrid>;
 
 		private var btnImg:Image;
 
 		private var hpItemArr:Array;
-		
-		private var pickRBtn:RadioButton;
-		private var fightRBtn:RadioButton;
-		private var pickQuality:ComboBox;
 
 		public function AssistView() {
-			//			AutoUtil.autoBuyHp()
 			super(LibManager.getInstance().getXML("config/ui/setting/assistWnd.xml"));
 			this.init();
 			LayerManager.getInstance().windowLayer.addChild(this);
@@ -93,112 +96,106 @@ package com.ace.ui.setting {
 		 *
 		 */
 		protected function init():void {
-			autoBtn=getUIbyID("autoBtn") as ImgButton;
+			// 保护设置
+			autoEatCBox=getUIbyID("autoEatCBox") as CheckBox;
+			autoBuyCBox=getUIbyID("autoBuyCBox") as CheckBox;
+			hpThresholdLbl=getUIbyID("hpThresholdLbl") as TextInput;
+			autoEatCBox.addEventListener(MouseEvent.CLICK, onCheckBoxClick);
+			autoBuyCBox.addEventListener(MouseEvent.CLICK, onCheckBoxClick);
+			hpThresholdLbl.addEventListener(Event.CHANGE, onTextChange);
+			hpThresholdLbl.restrict="0-9";
+			hpThresholdLbl.input.maxChars=2;
+			// 挂机设置
+			autoPickItemCBox=getUIbyID("autoPickItemCBox") as CheckBox;
+			autoPickEquipCBox=getUIbyID("autoPickEquipCBox") as CheckBox;
+			pickIQuality=getUIbyID("pickIQuality") as ComboBox;
+			pickEQuality=getUIbyID("pickEQuality") as ComboBox;
+			pickRBtn=getUIbyID("pickRBtn") as RadioButton;
+			fightRBtn=getUIbyID("fightRBtn") as RadioButton;
+			rangeRBtn=getUIbyID("rangeRBtn") as RadioButton;
+			positionRBtn=getUIbyID("positionRBtn") as RadioButton;
 			reliveCheckBox=getUIbyID("reliveCheckBox") as CheckBox;
-			hpCheckBox=getUIbyID("hpCheckBox") as CheckBox;
-			mpCheckBox=getUIbyID("mpCheckBox") as CheckBox;
-			buyHpCheckBox=getUIbyID("buyHpCheckBox") as CheckBox;
-			buyMpCheckBox=getUIbyID("buyMpCheckBox") as CheckBox;
-			pickEquipCheckBox=getUIbyID("pickEquipCheckBox") as CheckBox;
-			pickItemCheckBox=getUIbyID("pickItemCheckBox") as CheckBox;
-			hpHslider=getUIbyID("hpHslider") as HSlider;
-			mpHslider=getUIbyID("mpHslider") as HSlider;
-			hpCbox=getUIbyID("hpCbox") as ComboBox;
-			mpCbox=getUIbyID("mpCbox") as ComboBox;
-			btnImg=getUIbyID("btnImg") as Image;
-			pickRBtn = getUIbyID("pickRBtn") as RadioButton;
-			fightRBtn = getUIbyID("fightRBtn") as RadioButton;
-			pickQuality = getUIbyID("pickQuality") as ComboBox;
-
+			autoPickItemCBox.addEventListener(MouseEvent.CLICK, onCheckBoxClick);
+			autoPickEquipCBox.addEventListener(MouseEvent.CLICK, onCheckBoxClick);
+			pickIQuality.addEventListener(DropMenuEvent.Item_Selected, onComboBoxClick);
+			pickEQuality.addEventListener(DropMenuEvent.Item_Selected, onComboBoxClick);
 			pickRBtn.addEventListener(MouseEvent.CLICK, onRadioButton);
 			fightRBtn.addEventListener(MouseEvent.CLICK, onRadioButton);
-			pickQuality.addEventListener(DropMenuEvent.Item_Selected, onComboBoxClick);
-			//			autoBtn.addEventListener(MouseEvent.CLICK, onButtonClick);
-			autoBtn.addEventListener(MouseEvent.CLICK, onButtonClick);
+			rangeRBtn.addEventListener(MouseEvent.CLICK, onRadioButton);
+			positionRBtn.addEventListener(MouseEvent.CLICK, onRadioButton);
 			reliveCheckBox.addEventListener(MouseEvent.CLICK, onCheckBoxClick);
-			hpCheckBox.addEventListener(MouseEvent.CLICK, onCheckBoxClick);
-			//			mpCheckBox.addEventListener(MouseEvent.CLICK, onCheckBoxClick);
-			buyHpCheckBox.addEventListener(MouseEvent.CLICK, onCheckBoxClick);
-			//			buyMpCheckBox.addEventListener(MouseEvent.CLICK, onCheckBoxClick);
-			pickEquipCheckBox.addEventListener(MouseEvent.CLICK, onCheckBoxClick);
-			pickItemCheckBox.addEventListener(MouseEvent.CLICK, onCheckBoxClick);
-			hpHslider.addEventListener(ScrollBarEvent.Progress_Update, onSliderScroll);
-			//			mpHslider.addEventListener(ScrollBarEvent.Progress_Update, onSliderScroll);
-			hpCbox.addEventListener(DropMenuEvent.Item_Selected, onComboBoxClick);
-			//			mpCbox.addEventListener(DropMenuEvent.Item_Selected, onComboBoxClick);
-			//			grids = new Vector.<AssistSkillGrid>(GRID_COUNT);
-			//			for (var n:int = 0; n < GRID_COUNT; n++) {
-			//				var grid:AssistSkillGrid = new AssistSkillGrid();
-			//				grid.name = n + "";
-			//				grid.x = 66 + n*41;
-			//				grid.y = 157;
-			//				grid.switchListener = onSkillSwitch;
-			//				addChild(grid);
-			//				grids[n] = grid;
-			//			}
+			// VIP特权
+			autoExtractCBox=getUIbyID("autoExtractCBox") as CheckBox;
+			extractionQuality=getUIbyID("extractionQuality") as ComboBox;
+			autoBtn=getUIbyID("autoBtn") as ImgButton;
+			btnImg=getUIbyID("btnImg") as Image;
+			autoExtractCBox.addEventListener(MouseEvent.CLICK, onCheckBoxClick);
+			extractionQuality.addEventListener(DropMenuEvent.Item_Selected, onComboBoxClick);
+			autoBtn.addEventListener(MouseEvent.CLICK, onButtonClick);
 
-//			hpCbox.list.addRends([{label: "轻微治疗药剂", uid: 20101}, {label: "轻型治疗药剂", uid: 20103}, {label: "治疗药剂   ", uid: 20105}, {label: "中型治疗药剂", uid: 20107}]);
+			var content:String=TableManager.getInstance().getSystemNotice(10034).content;
+			var qarray:Array=[{label: content, uid: QualityEnum.QUA_COMMON}];
+			content=TableManager.getInstance().getSystemNotice(10035).content;
+			qarray.push({label: content, uid: QualityEnum.QUA_EXCELLENT});
+			content=TableManager.getInstance().getSystemNotice(10036).content;
+			qarray.push({label: content, uid: QualityEnum.QUA_TERRIFIC});
+			content=TableManager.getInstance().getSystemNotice(10037).content;
+			qarray.push({label: content, uid: QualityEnum.QUA_INCREDIBLE});
+			pickIQuality.list.addRends(qarray);
+			pickEQuality.list.addRends(qarray);
 
-			var content:String = TableManager.getInstance().getSystemNotice(10034).content;
-			var qarray:Array = [{label:content, uid:QualityEnum.QUA_COMMON}];
-			content = TableManager.getInstance().getSystemNotice(10035).content;
-			qarray.push({label:content, uid:QualityEnum.QUA_EXCELLENT});
-			content = TableManager.getInstance().getSystemNotice(10036).content;
-			qarray.push({label:content, uid:QualityEnum.QUA_TERRIFIC});
-			content = TableManager.getInstance().getSystemNotice(10037).content;
-			qarray.push({label:content, uid:QualityEnum.QUA_INCREDIBLE});
-			pickQuality.list.addRends(qarray);
+			content=PropUtils.getStringById(2332);
+			var exarray:Array=[{label: content, uid: QualityEnum.QUA_TERRIFIC}];
+			content=PropUtils.getStringById(2331);
+			exarray.push({label: content, uid: QualityEnum.QUA_INCREDIBLE});
+			content=PropUtils.getStringById(2330);
+			exarray.push({label: content, uid: QualityEnum.QUA_LEGEND});
+			extractionQuality.list.addRends(exarray);
 
-
-			EventManager.getInstance().addEvent(EventEnum.SETTING_AUTO_MONSTER, this.onButtonClick);
+			EventManager.getInstance().addEvent(EventEnum.SETTING_AUTO_MONSTER, onButtonClick);
 		}
-		
-		protected function onRadioButton(event:MouseEvent):void{
-			switch(event.target.name){
+
+		protected function onTextChange(event:Event):void {
+			var value:Number=int(hpThresholdLbl.text) / 100;
+			info.minHPProgress=value;
+			UIManager.getInstance().toolsWnd.updateSlider(value);
+		}
+
+		protected function onRadioButton(event:MouseEvent):void {
+			switch (event.target.name) {
 				case "pickRBtn":
 				case "fightRBtn":
-					info.isAutoPickupFirst = pickRBtn.isOn;
-					info.isAutoAttackFirst = fightRBtn.isOn;
+					info.isAutoPickupFirst=pickRBtn.isOn;
+					info.isAutoAttackFirst=fightRBtn.isOn;
+					break;
+				case "rangeRBtn":
+				case "positionRBtn":
+					info.autoRangeScreen=rangeRBtn.isOn;
+					info.autoRangePosition=positionRBtn.isOn;
 					break;
 			}
-		}		
-		
-		public function refreshHpItem():void{
-			var tmpArr:Array = [{label: PropUtils.getStringById(1540), uid: 20101},
-						{label:PropUtils.getStringById(1541), uid: 20103}, 
-						{label: PropUtils.getStringById(1542), uid: 20105}, 
-						{label: PropUtils.getStringById(1543), uid: 20107},
-						{label: PropUtils.getStringById(1548), uid: 20109}];
-			for(var n:int = tmpArr.length-1; n >= 0; n--){
-				var itemInfo:TItemInfo = TableManager.getInstance().getItemInfo(tmpArr[n].uid);
-				if(Core.me.info.level < int(itemInfo.level)){
+		}
+
+		public function refreshHpItem():void {
+			var tmpArr:Array=[{label: PropUtils.getStringById(1540), uid: 20101}, {label: PropUtils.getStringById(1541), uid: 20103}, {label: PropUtils.getStringById(1542), uid: 20105}, {label: PropUtils.getStringById(1543), uid: 20107}, {label: PropUtils.getStringById(1548), uid: 20109}];
+			for (var n:int=tmpArr.length - 1; n >= 0; n--) {
+				var itemInfo:TItemInfo=TableManager.getInstance().getItemInfo(tmpArr[n].uid);
+				if (Core.me.info.level < int(itemInfo.level)) {
 					tmpArr.splice(n, 1);
 				}
 			}
-			var hpId:int = (0 == info.hpItem) ? 20101 : info.hpItem;
-			if(null == hpItemArr){
-				hpItemArr = tmpArr;
-			}
-			if(tmpArr.length != hpItemArr.length){
-				hpId = tmpArr[tmpArr.length-1].uid;
-				hpItemArr = tmpArr;
-			}
-			hpCbox.list.addRends(hpItemArr);
-			hpCbox.list.selectByUid(hpId + "");
-//			info.hpItem = hpId;
+			var hpId:int=(0 == info.hpItem) ? 20101 : info.hpItem;
+//			if(null == hpItemArr){
+//				hpItemArr = tmpArr;
+//			}
+//			if(tmpArr.length != hpItemArr.length){
+			hpId=tmpArr[tmpArr.length - 1].uid;
+//				hpItemArr = tmpArr;
+//			}
+//			hpCbox.list.addRends(hpItemArr);
+//			hpCbox.list.selectByUid(hpId + "");
+			info.hpItem=hpId;
 		}
-
-		/**
-		 * <T>技能拖动交换施放顺序</T>
-		 *
-		 */
-		//		public function onSkillSwitch():void{
-		//			var useSkills:Array = info.skills;
-		//			for (var n:int = 0; n < GRID_COUNT; n++) {
-		//				var grid:AssistSkillGrid = grids[n];
-		//				useSkills[n] = grid.dataId;
-		//			}
-		//		}
 
 		/**
 		 * <T>加载配置</T>
@@ -207,59 +204,58 @@ package com.ace.ui.setting {
 		public function initConfig(config:Array):void {
 			info.unserialize(config);
 			var configInfo:AssistInfo=info;
+			// 保护设置
+			configInfo.isAutoEatHP ? autoEatCBox.turnOn() : autoEatCBox.turnOff();
+			configInfo.isAutoBuyHP ? autoBuyCBox.turnOn() : autoBuyCBox.turnOff();
+			hpThresholdLbl.text=int(configInfo.minHPProgress * 100) + "";
+			// 挂机设置
+			configInfo.isAutopickupItem ? autoPickItemCBox.turnOn() : autoPickItemCBox.turnOff();
+			configInfo.isAutoPickupEquip ? autoPickEquipCBox.turnOn() : autoPickEquipCBox.turnOff();
 			configInfo.isAutoRevive ? reliveCheckBox.turnOn() : reliveCheckBox.turnOff();
-			configInfo.isAutoEatHP ? hpCheckBox.turnOn() : hpCheckBox.turnOff();
-			//			configInfo.isAutoEatMP ? mpCheckBox.turnOn() : mpCheckBox.turnOff();
-			configInfo.isAutoBuyHP ? buyHpCheckBox.turnOn() : buyHpCheckBox.turnOff();
-			//			configInfo.isAutoBuyMP ? buyMpCheckBox.turnOn() : buyMpCheckBox.turnOff();
-			configInfo.isAutoPickupEquip ? pickEquipCheckBox.turnOn() : pickEquipCheckBox.turnOff();
-			configInfo.isAutopickupItem ? pickItemCheckBox.turnOn() : pickItemCheckBox.turnOff();
 			configInfo.isAutoPickupFirst ? pickRBtn.turnOn() : pickRBtn.turnOff();
 			configInfo.isAutoAttackFirst ? fightRBtn.turnOn() : fightRBtn.turnOff();
-			hpHslider.progress=configInfo.minHP / Core.me.info.baseInfo.maxHp;
-			//			mpHslider.progress = configInfo.minMP/Core.me.info.baseInfo.maxMp;
-			hpCbox.list.selectByUid(configInfo.hpItem + "");
-			pickQuality.list.selectByUid(configInfo.autoPickQuality+"");
-			//			mpCbox.list.selectByUid(configInfo.mpItem+"");
-
-			UIManager.getInstance().toolsWnd.updateAutoMagicList();
+			configInfo.autoRangeScreen ? rangeRBtn.turnOn() : rangeRBtn.turnOff();
+			configInfo.autoRangePosition ? positionRBtn.turnOn() : positionRBtn.turnOff();
+			pickIQuality.list.selectByUid(configInfo.autoPickItemQuality + "");
+			pickEQuality.list.selectByUid(configInfo.autoPickEquipQuality + "");
+			// VIP特权
+			configInfo.isAutoExtract ? autoExtractCBox.turnOn() : autoExtractCBox.turnOff();
+			extractionQuality.list.selectByUid(configInfo.extractionQuality + "");
 			// 设置头像处阀值显示
-			UIManager.getInstance().toolsWnd.updateSlider(hpHslider.progress);
-			//			UIManager.getInstance().roleHeadWnd.setThreshold(hpHslider.progress, mpHslider.progress);
+			UIManager.getInstance().toolsWnd.updateSlider(configInfo.minHPProgress);
 			var reviveCkBox:CheckBox=ReviveWnd.getInstance().autoCKBox;
 			configInfo.isAutoRevive ? reviveCkBox.turnOn() : reviveCkBox.turnOff();
+			UIManager.getInstance().toolsWnd.updateAutoMagicList();
 			addTimer();
 		}
 
-//		/**
-//		 * <T>面板打开</T>
-//		 *
-//		 */
-//		public override function show(toTop:Boolean=true, $layer:int=1, toCenter:Boolean=true):void{
-//			super.show(toTop, $layer, toCenter);
-//			if(!hpCheckBox.isOn){
-//				GuideManager.getInstance().showGuide(46, this);
-//			}
-//		}
-		
-		public override function set visible(value:Boolean):void{
-			super.visible = value;
-			if(value){
-				if(!buyHpCheckBox.isOn){
-					GuideManager.getInstance().showGuide(46, buyHpCheckBox);
+		public override function set visible(value:Boolean):void {
+			super.visible=value;
+			if (value) {
+				if (!autoBuyCBox.isOn) {
+					GuideManager.getInstance().showGuide(46, autoBuyCBox);
 				}
-				if(!pickEquipCheckBox.isOn){
-					GuideManager.getInstance().showGuide(85, pickEquipCheckBox);
+				if (!autoPickEquipCBox.isOn) {
+					GuideManager.getInstance().showGuide(85, autoPickEquipCBox);
 				}
+
+//				if (43 == Core.me.info.level) {
+				GuideManager.getInstance().showGuide(122, this);
+//				}
+
 				GuideManager.getInstance().removeGuide(45);
 				GuideManager.getInstance().removeGuide(42);
 				GuideManager.getInstance().removeGuide(84);
-			}else{
+
+			} else {
+
 				GuideManager.getInstance().removeGuide(46);
 				GuideManager.getInstance().removeGuide(85);
+				GuideManager.getInstance().removeGuide(122);
+
 			}
 		}
-		
+
 		/**
 		 * <T>面板关闭</T>
 		 *
@@ -267,7 +263,7 @@ package com.ace.ui.setting {
 		public override function hide():void {
 			super.hide();
 			Cmd_Assist.cm_Ass_S(info.serialize());
-			TweenManager.getInstance().lightingCompnent(UIManager.getInstance().toolsWnd.getUIbyID("guaJBtn"));
+//			TweenManager.getInstance().lightingCompnent(UIManager.getInstance().toolsWnd.getUIbyID("guaJBtn"));
 		}
 
 		/**
@@ -281,15 +277,15 @@ package com.ace.ui.setting {
 			var config:Array=value.split(",");
 			if ("" == value) {
 				config=DEFAULT_CONFIG;
-				config[1] = (1 == ConfigEnum.auto1) ? 2 : 1;
-				config[2] = ConfigEnum.auto2;
-				config[5] = (1 == ConfigEnum.auto3) ? 2 : 1;
-				config[6] = ConfigEnum.auto4;
-				config[9] = (1 == ConfigEnum.auto6) ? 2 : 1;
-				config[10] = (1 == ConfigEnum.auto7) ? 2 : 1;
-				config[16] = (0 == ConfigEnum.auto8) ? 2 : 1;
-				config[17] = (1 == ConfigEnum.auto8) ? 2 : 1;
-				config[18] = ConfigEnum.auto9;
+				config[1]=(1 == ConfigEnum.auto1) ? 2 : 1;
+				config[2]=ConfigEnum.auto2;
+				config[5]=(1 == ConfigEnum.auto3) ? 2 : 1;
+				config[6]=ConfigEnum.auto4;
+				config[9]=(1 == ConfigEnum.auto6) ? 2 : 1;
+				config[10]=(1 == ConfigEnum.auto7) ? 2 : 1;
+				config[16]=(0 == ConfigEnum.auto8) ? 2 : 1;
+				config[17]=(1 == ConfigEnum.auto8) ? 2 : 1;
+				config[18]=ConfigEnum.auto9;
 			}
 			initConfig(config);
 		}
@@ -302,22 +298,16 @@ package com.ace.ui.setting {
 		 */
 		protected function onComboBoxClick(event:Event):void {
 			var n:String=event.target.name;
-//			hpCbox.list.selectByInd(0);
 			switch (n) {
-				case "hpCbox":
-//					var itemId:int = hpCbox.value.uid;
-//					var info:TItemInfo = TableManager.getInstance().getItemInfo(itemId);
-//					if(int(info.level) > Core.me.info.level){
-//						
-//					}
-					info.hpItem=hpCbox.value.uid;
+				case "extractionQuality":
+					info.extractionQuality=extractionQuality.value.uid;
 					break;
-				case "pickQuality":
-					info.autoPickQuality = pickQuality.value.uid;
+				case "pickIQuality":
+					info.autoPickItemQuality=pickIQuality.value.uid;
 					break;
-//				case "mpCbox":
-//					info.mpItem=mpCbox.value.uid;
-//					break;
+				case "pickEQuality":
+					info.autoPickEquipQuality=pickEQuality.value.uid;
+					break;
 			}
 		}
 
@@ -354,29 +344,7 @@ package com.ace.ui.setting {
 		}
 
 		protected function autoEat():void {
-		}
-
-		/**
-		 * <T>滚动条更新事件处理</T>
-		 *
-		 * @param event 滚动事件
-		 *
-		 */
-		protected function onSliderScroll(event:Event):void {
-			var n:String=event.target.name;
-			switch (n) {
-				case "hpHslider":
-//					info.minHP = Core.me.info.baseInfo.maxHp*hpHslider.progress;
-					info.minHPProgress=hpHslider.progress;
-					break;
-				case "mpHslider":
-					info.minMP=Core.me.info.baseInfo.maxMp * mpHslider.progress;
-					break;
-			}
-			// 同步头像处阀值
-			//			UIManager.getInstance().roleHeadWnd.setThreshold(hpHslider.progress, mpHslider.progress);
-			UIManager.getInstance().toolsWnd.updateSlider(hpHslider.progress);
-			//			autoEat();
+			AutoUtil.autoEat();
 		}
 
 		/**
@@ -388,17 +356,11 @@ package com.ace.ui.setting {
 		 */
 		public function setProgress(hp:Number, mp:Number):void {
 			if (-1 != hp) {
-				hpHslider.progress=hp;
-				info.minHPProgress=hpHslider.progress;
-//				info.minHP = Core.me.info.baseInfo.maxHp*hpHslider.progress;
+				hpThresholdLbl.text=int(hp * 100) + "";
+				info.minHPProgress=hp;
 			}
-			if (-1 != mp) {
-				mpHslider.progress=mp;
-				info.minMP=Core.me.info.baseInfo.maxMp * mpHslider.progress;
-			}
-			//			autoEat();
-			hpCheckBox.turnOn();
-			info.isAutoEatHP=hpCheckBox.isOn;
+			autoEatCBox.turnOn();
+			info.isAutoEatHP=autoEatCBox.isOn;
 			// 自动补血
 			addTimer();
 		}
@@ -425,25 +387,25 @@ package com.ace.ui.setting {
 					var reviveCkBox:CheckBox=ReviveWnd.getInstance().autoCKBox;
 					info.isAutoRevive ? reviveCkBox.turnOn() : reviveCkBox.turnOff();
 					break;
-				case "hpCheckBox":
-					info.isAutoEatHP=hpCheckBox.isOn;
+				case "autoEatCBox":
+					info.isAutoEatHP=autoEatCBox.isOn;
 					break;
-				case "mpCheckBox":
-					info.isAutoEatMP=mpCheckBox.isOn;
-					break;
-				case "buyHpCheckBox":
-					info.isAutoBuyHP=buyHpCheckBox.isOn;
+				case "autoBuyCBox":
+					info.isAutoBuyHP=autoBuyCBox.isOn;
 					GuideManager.getInstance().removeGuide(46);
 					break;
-				case "buyMpCheckBox":
-					info.isAutoBuyMP=buyMpCheckBox.isOn;
+				case "autoPickEquipCBox":
+					info.isAutoPickupEquip=autoPickEquipCBox.isOn;
 					break;
-				case "pickEquipCheckBox":
-					info.isAutoPickupEquip=pickEquipCheckBox.isOn;
-					GuideManager.getInstance().removeGuide(85);
+				case "autoPickItemCBox":
+					info.isAutopickupItem=autoPickItemCBox.isOn;
 					break;
-				case "pickItemCheckBox":
-					info.isAutopickupItem=pickItemCheckBox.isOn;
+				case "autoExtractCBox":
+					if (Core.me.info.vipLv >= 3) {
+						info.isAutoExtract=autoExtractCBox.isOn;
+					} else {
+						NoticeManager.getInstance().broadcastById(10137);
+					}
 					break;
 			}
 			addTimer();
@@ -460,77 +422,9 @@ package com.ace.ui.setting {
 			}
 		}
 
-		//		/**
-		//		 * <T>获得技能所在索引</T>
-		//		 * 
-		//		 * @param skillId 技能编号
-		//		 * @return        所在索引,-1为不存在
-		//		 * 
-		//		 */		
-		//		public function indexOfSkill(skillId:int):int{
-		//			var skills:Array = info.skills;
-		//			for(var n:int = 0; n < GRID_COUNT; n++){
-		//				var skid:int = grids[n].dataId;
-		//				if(-1 != skid && 0 != skid){
-		//					var skill:TSkillInfo = TableManager.getInstance().getSkillById(skid);
-		//					if(skill.skillId == skillId){
-		//						return n;
-		//					}
-		//				}
-		//			}
-		//			return -1;
-		//		}
-		//		
-		//		/**
-		//		 * <T>获得索引</T>
-		//		 * 
-		//		 * @param skillData 技能数据
-		//		 * @return          索引
-		//		 * 
-		//		 */		
-		//		public function getIndex(skillData:Array):int{
-		//			var index:int = 0;
-		//			if (2 == skillData[3]){
-		//				index = 1;
-		//			}else if(2 == skillData[4]){
-		//				index = 2;
-		//			}else if(2 == skillData[5]){
-		//				index = 3;
-		//			}
-		//			return index;
-		//		}
-		//		
-		//		/**
-		//		 * <T>更新挂机技能</T>
-		//		 * 
-		//		 * @param data 技能数据
-		//		 * 
-		//		 */		
-		//		public function updataSkill(data:SkillInfo):void{
-		//			var currGIdx:int = 0;
-		//			var useSkills:Array = info.skills;
-		//			var skillDatas:Array = data.skillItems;
-		//			var count:int = skillDatas.length;
-		//			for(var n:int = 1; n < count; n++){
-		//				var skillData:Array = skillDatas[n];
-		//				var index:int = getIndex(skillData);
-		//				var skillInfo:TSkillInfo = TableManager.getInstance().getSkillByIdAndRune(skillData[1], index);
-		//				// 是否可用
-		//				var canUse:Boolean = (-1 != SKILLS.indexOf(int(skillInfo.id)-index));
-		//				// 是否已学会
-		//				var has:Boolean = (1 == skillData[0]);
-		//				if((currGIdx < GRID_COUNT) && canUse && has){
-		//					// 是否已存在
-		//					var i:int = indexOfSkill(skillInfo.skillId);
-		//					if(-1 != i){
-		//						useSkills[i] = skillInfo.id;
-		//						currGIdx = i+1;
-		//					}else{
-		//						useSkills[currGIdx] = skillInfo.id;
-		//						grids[currGIdx++].updataInfo(skillInfo);
-		//					}
-		//				}
-		//			}
-		//		}
+		public override function get height():Number {
+			return 544;
+		}
+
 	}
 }

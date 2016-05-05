@@ -7,7 +7,6 @@ package com.leyou.ui.marry {
 	import com.ace.ui.button.children.NormalButton;
 	import com.ace.ui.lable.Label;
 	import com.ace.utils.StringUtil;
-	import com.leyou.utils.StringUtil_II;
 	
 	import flash.events.MouseEvent;
 

@@ -7,6 +7,7 @@ package com.leyou.ui.mail.child {
 	import com.ace.game.backpack.GridBase;
 	import com.ace.game.utils.ObjectCopyUtil;
 	import com.ace.gameData.manager.TableManager;
+	import com.ace.gameData.table.TBuffInfo;
 	import com.ace.gameData.table.TEquipInfo;
 	import com.ace.gameData.table.TItemInfo;
 	import com.ace.manager.LibManager;
@@ -21,7 +22,7 @@ package com.leyou.ui.mail.child {
 	import com.leyou.utils.FilterUtil;
 	import com.leyou.utils.ItemUtil;
 	import com.leyou.utils.PropUtils;
-
+	
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.net.registerClassAlias;
@@ -100,6 +101,11 @@ package com.leyou.ui.mail.child {
 		 */
 		public override function mouseOverHandler($x:Number, $y:Number):void {
 			selectBmp.visible=true;
+			var tb:TBuffInfo=TableManager.getInstance().getBuffInfo(dataId);
+			if (null != tb) {
+				ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, tb.des, new Point(stage.mouseX, stage.mouseY));
+				return;
+			}
 			if ((null != tips) && (0 != dataId)) {
 				// 找到物品信息
 				var itemInfo:TItemInfo=TableManager.getInstance().getItemInfo(dataId);
@@ -143,21 +149,21 @@ package com.leyou.ui.mail.child {
 			count=$count;
 			dataId=itemId;
 			tips.itemid=dataId;
-			var sourceName:String;
+//			var sourceName:String;
+			var iconUrl:String
 			var itemInfo:Object=TableManager.getInstance().getItemInfo(dataId);
 			if (null != itemInfo) {
-				sourceName=itemInfo.icon + ".png";
+				iconUrl=GameFileEnum.URL_ITEM_ICO+itemInfo.icon + ".png";
 				limitTimeLbl.visible=(itemInfo.limitTime > 0);
 			} else {
 				itemInfo=TableManager.getInstance().getEquipInfo(dataId);
 				if (null != itemInfo) {
-					sourceName=itemInfo.icon + ".png";
+					iconUrl=GameFileEnum.URL_ITEM_ICO+itemInfo.icon + ".png";
 				} else {
-					itemInfo=TableManager.getInstance().getItemInfo(65535);
-					sourceName=itemInfo.icon + ".png";
+					var buffInfo:TBuffInfo = TableManager.getInstance().getBuffInfo(dataId);
+					iconUrl = GameFileEnum.URL_SKILL_ICO + buffInfo.icon+".png";
 				}
 			}
-			var iconUrl:String=GameFileEnum.URL_ITEM_ICO + sourceName;
 			iconBmp.updateBmp(iconUrl, null, false, 35, 35);
 			if (count > 10000) {
 				numLbl.text=int(count / 10000) + PropUtils.getStringById(1532);
@@ -171,7 +177,7 @@ package com.leyou.ui.mail.child {
 			iconBmp.x=(ItemEnum.ITEM_BG_WIDTH - ItemEnum.ITEM_ICO_WIDTH) >> 1;
 			iconBmp.y=(ItemEnum.ITEM_BG_WIDTH - ItemEnum.ITEM_ICO_WIDTH) >> 1;
 			stopMc();
-			if (itemInfo.effect != null && itemInfo.effect != "0") {
+			if (itemInfo != null && itemInfo.effect != null && itemInfo.effect != "0") {
 				playeMc(int(itemInfo.effect));
 			}
 			addChild(numLbl);
@@ -242,6 +248,15 @@ package com.leyou.ui.mail.child {
 			stopMc();
 			tips.clear();
 			intensifyLbl.bitmapData=null;
+		}
+		
+		public override function die():void{
+			clear();
+			numLbl = null;
+			limitTimeLbl = null;
+			iconBmp = null;
+			tips = null;
+			intensifyLbl.die();
 		}
 
 		public function uddateInfoByBag(info:Baginfo):void {

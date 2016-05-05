@@ -28,7 +28,7 @@ package com.leyou.ui.team {
 			super(LibManager.getInstance().getXML("config/ui/team/TeamInviteWnd.xml"));
 			this.init();
 			this.hideBg();
-			this.clsBtn.y-=10;
+//			this.clsBtn.y-=10;
 		}
 
 		private function init():void {

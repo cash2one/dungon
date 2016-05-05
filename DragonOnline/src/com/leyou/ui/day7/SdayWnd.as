@@ -50,8 +50,8 @@ package com.leyou.ui.day7 {
 			this.hideBg();
 			this.mouseChildren=true;
 
-			this.clsBtn.y=60;
-			this.clsBtn.x-=40;
+			this.clsBtn.y=40;
+			this.clsBtn.x-=50;
 		}
 
 		private function init():void {

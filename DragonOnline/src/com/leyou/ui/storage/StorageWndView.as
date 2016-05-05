@@ -26,7 +26,7 @@ package com.leyou.ui.storage {
 	import com.leyou.ui.backpack.child.BackpackGrid;
 	import com.leyou.ui.storage.child.StorageGrid;
 	import com.leyou.utils.PropUtils;
-	
+
 	import flash.display.DisplayObjectContainer;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
@@ -108,8 +108,8 @@ package com.leyou.ui.storage {
 			for (var i:int=0; i < ItemEnum.BACKPACK_GRID_TOTAL; i++) {
 				g=new StorageGrid(i);
 
-				g.x=8 + (i % ItemEnum.GRID_HORIZONTAL) * (ItemEnum.ITEM_BG_WIDTH + ItemEnum.GRID_SPACE);
-				g.y=2 + int(i / ItemEnum.GRID_HORIZONTAL) * (ItemEnum.ITEM_BG_HEIGHT + ItemEnum.GRID_SPACE);
+				g.x=8 + (i % ItemEnum.GRID_HORIZONTAL) * (44 + 6);
+				g.y=2 + int(i / ItemEnum.GRID_HORIZONTAL) * (44 + 6);
 
 				//DragManager.getInstance().addGrid(g);
 
@@ -146,18 +146,24 @@ package com.leyou.ui.storage {
 
 				g=gridVec[i];
 
-				if (this.storageTabBar.turnOnIndex > 0 && (arr.length <= i || arr[0].info == null))
-					StorageGrid(g).setLockState();
-
-				if (i < ItemEnum.STORAGE_GRIDE_OPEN) {
-					if (arr.length <= i && this.storageTabBar.turnOnIndex > 0)
-						StorageGrid(g).setLockState();
-					else
-						g.updataInfo(arr[i]);
-
-					g.canMove=true;
+				if (this.storageTabBar.turnOnIndex > 0 && (arr.length <= i || arr[0].info == null)) {
+					g.visible=false;
+//					StorageGrid(g).setLockState();
 				} else {
-					g.isLock=false;
+					g.visible=true;
+					if (i < ItemEnum.STORAGE_GRIDE_OPEN) {
+						if (arr.length <= i && this.storageTabBar.turnOnIndex > 0)
+							StorageGrid(g).setLockState();
+						else
+							g.updataInfo(arr[i]);
+
+						g.canMove=true;
+					} else {
+						g.isLock=false;
+//						StorageGrid(g).setLockState();
+						g.isEmpty=true;
+//						StorageGrid(g).selectstate(true);
+					}
 				}
 			}
 
@@ -409,7 +415,7 @@ package com.leyou.ui.storage {
 		}
 
 		override public function get width():Number {
-			return 369;
+			return 396;
 		}
 
 		public function cancelBatchStore():void {

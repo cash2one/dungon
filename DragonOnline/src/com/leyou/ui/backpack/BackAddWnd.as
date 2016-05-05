@@ -38,7 +38,7 @@ package com.leyou.ui.backpack {
 			super(LibManager.getInstance().getXML("config/ui/backPack/BackAddWnd.xml"));
 			this.init();
 			this.hideBg();
-			this.clsBtn.y-=10;
+//			this.clsBtn.y-=10;
 		}
 
 		private function init():void {

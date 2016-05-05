@@ -8,11 +8,11 @@ package com.leyou.ui.equip.child {
 	import com.ace.manager.LibManager;
 	import com.ace.manager.ToolTipManager;
 	import com.ace.manager.UIManager;
+	import com.ace.tools.ScaleBitmap;
 	import com.ace.ui.FlyManager;
 	import com.ace.ui.auto.AutoSprite;
 	import com.ace.ui.button.children.CheckBox;
 	import com.ace.ui.button.children.ImgButton;
-	import com.ace.ui.img.child.Image;
 	import com.ace.ui.lable.Label;
 	import com.ace.ui.notice.NoticeManager;
 	import com.ace.utils.StringUtil;
@@ -24,14 +24,14 @@ package com.leyou.ui.equip.child {
 	import com.leyou.net.cmd.Cmd_Equip;
 	import com.leyou.ui.shop.child.ShopGrid;
 	import com.leyou.utils.EffectUtil;
-
+	
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 
 	public class EquipBreakRender extends AutoSprite {
 
-		private var progressImg:Image;
+		private var progressImg:ScaleBitmap;
 
 		private var confirmBtn:ImgButton;
 
@@ -43,6 +43,8 @@ package com.leyou.ui.equip.child {
 		private var cb2Lbl:CheckBox;
 		private var cb3Lbl:CheckBox;
 		private var cb4Lbl:CheckBox;
+		
+		private var succeffSwf:SwfLoader;
 
 		private var cbArr:Array=[false, false, false, false, false];
 		private var cbUiArr:Array=[];
@@ -71,7 +73,7 @@ package com.leyou.ui.equip.child {
 
 		private function init():void {
 
-			this.progressImg=this.getUIbyID("progressImg") as Image;
+			this.progressImg=this.getUIbyID("progressImg") as ScaleBitmap;
 
 			this.confirmBtn=this.getUIbyID("confirmBtn") as ImgButton;
 
@@ -83,6 +85,8 @@ package com.leyou.ui.equip.child {
 			this.cb2Lbl=this.getUIbyID("cb2Lbl") as CheckBox;
 			this.cb3Lbl=this.getUIbyID("cb3Lbl") as CheckBox;
 			this.cb4Lbl=this.getUIbyID("cb4Lbl") as CheckBox;
+			this.succeffSwf=this.getUIbyID("succeffSwf") as SwfLoader;
+			this.succeffSwf.visible=false;
 
 			this.confirmBtn.addEventListener(MouseEvent.CLICK, onClick);
 
@@ -101,10 +105,10 @@ package com.leyou.ui.equip.child {
 			this.cbUiArr[3]=this.cb3Lbl;
 			this.cbUiArr[4]=this.cb4Lbl;
 
-			this.cb1Lbl.text="       ";
-			this.cb2Lbl.text="       ";
-			this.cb3Lbl.text="       ";
-			this.cb4Lbl.text="       ";
+//			this.cb1Lbl.text="       ";
+//			this.cb2Lbl.text="       ";
+//			this.cb3Lbl.text="       ";
+//			this.cb4Lbl.text="       ";
 
 //			this.cb1Lbl.turnOn();
 //			this.cb2Lbl.turnOff();
@@ -125,12 +129,13 @@ package com.leyou.ui.equip.child {
 			var g:EquipStrengGrid;
 			var costEffect:SwfLoader;
 
-			for (var i:int=0; i < 10; i++) {
+			for (var i:int=0; i < 8; i++) {
 				g=new EquipStrengGrid();
 
-				g.x=35 + (i % 5) * 58;
-				g.y=35 + Math.floor(i / 5) * 60;
+				g.x=85 + (i % 4) * 55;
+				g.y=27 + Math.floor(i / 4) * 55;
 
+				g.setSize(38, 38);
 				g.selectState();
 				g.dataId=5;
 
@@ -138,6 +143,7 @@ package com.leyou.ui.equip.child {
 				this.gridList.push(g);
 
 				g.updataInfo(null);
+				g.setBgVisible(false);
 
 				costEffect=new SwfLoader(99907);
 				this.addChild(costEffect);
@@ -155,8 +161,8 @@ package com.leyou.ui.equip.child {
 			this.Biggrid.type=2;
 			this.addChild(this.Biggrid);
 
-			this.Biggrid.x=134;
-			this.Biggrid.y=212;
+			this.Biggrid.x=15;
+			this.Biggrid.y=157;
 
 //			this.progressSpr=new Sprite();
 //			this.progressSpr.graphics.beginFill(0xff0000);
@@ -170,8 +176,9 @@ package com.leyou.ui.equip.child {
 //
 //			this.progressSpr.alpha=0;
 
+			this.addChild(this.succeffSwf);
 			this.y=1;
-			this.x=-10;
+			this.x=60;
 		}
 
 
@@ -256,7 +263,7 @@ package com.leyou.ui.equip.child {
 
 			this.gridPosArr.length=0;
 
-			for (var i:int=0; i < 10; i++)
+			for (var i:int=0; i < 8; i++)
 				if (!this.gridList[i].isEmpty) {
 					this.gridPosArr.push(this.gridList[i].data.pos);
 
@@ -276,8 +283,10 @@ package com.leyou.ui.equip.child {
 
 			if (this.currentExt == -1) {
 				this.progressLbl.text=o.ext + "/" + ConfigEnum.equip17;
-				this.progressImg.setWH(int(o.ext) / ConfigEnum.equip17 * 222, 18);
+				this.progressImg.setSize(int(o.ext) / ConfigEnum.equip17 * 160, 23);
 				this.oldcurrentExt=o.ext;
+
+				this.progressImg.visible=(this.oldcurrentExt > 0)
 
 //				this.progressImg.setSize(int(o.ext) / ConfigEnum.equip17 * 248, 18);
 //				this.progressSpr.scaleX=int(o.ext) / ConfigEnum.equip17;
@@ -297,6 +306,14 @@ package com.leyou.ui.equip.child {
 
 			EffectUtil.flyWordEffect(StringUtil.substitute(TableManager.getInstance().getSystemNotice(2619).content, [o.addext]), this.localToGlobal(new Point(this.progressLbl.x + this.progressLbl.width / 2 - 10, this.progressLbl.y - 30)));
 
+			this.succeffSwf.visible=true;
+			
+			this.succeffSwf.playAct(PlayerEnum.ACT_STAND, -1, false, function():void {
+				succeffSwf.visible=false;
+			});
+			
+			this.progressImg.visible=true;
+
 			if (o.additem > 0) {
 
 				NoticeManager.getInstance().broadcastById(2620, [o.additem]);
@@ -307,15 +324,15 @@ package com.leyou.ui.equip.child {
 				tlime.active=true;
 
 				for (var i:int=0; i < o.additem; i++) {
-					tlime.append(TweenMax.to(this.progressImg, 1, {width: 222, ease: Linear.easeInOut, onComplete: setProgressImg, onUpdate: updateProgress}));
+					tlime.append(TweenMax.to(this.progressImg, 1, {width: 160, ease: Linear.easeInOut, onComplete: setProgressImg, onUpdate: updateProgress}));
 				}
 
-				tlime.append(TweenMax.to(this.progressImg, Number((1 * Number(((this.currentExt) / ConfigEnum.equip17).toExponential(2))).toExponential(2)), {width: Number(((this.currentExt / ConfigEnum.equip17) * 222).toExponential(2)), ease: Linear.easeInOut, onComplete: CompleteProgressImg, onUpdate: updateProgress}));
+				tlime.append(TweenMax.to(this.progressImg, Number((1 * Number(((this.currentExt) / ConfigEnum.equip17).toExponential(2))).toExponential(2)), {width: Number(((this.currentExt / ConfigEnum.equip17) * 160).toExponential(2)), ease: Linear.easeInOut, onComplete: CompleteProgressImg, onUpdate: updateProgress}));
 
 			} else {
 
 //				trace(this.currentExt - this.oldcurrentExt,this.currentExt,this.oldcurrentExt,((this.currentExt - this.oldcurrentExt) / ConfigEnum.equip17))
-				TweenMax.to(this.progressImg, Number((1 * Number(((this.currentExt - this.oldcurrentExt) / ConfigEnum.equip17).toExponential(2))).toExponential(2)), {width: Number(((this.currentExt / ConfigEnum.equip17) * 222).toExponential(2)), ease: Linear.easeInOut, onComplete: CompleteProgressImg, onUpdate: updateProgress})
+				TweenMax.to(this.progressImg, Number((1 * Number(((this.currentExt - this.oldcurrentExt) / ConfigEnum.equip17).toExponential(2))).toExponential(2)), {width: Number(((this.currentExt / ConfigEnum.equip17) * 160).toExponential(2)), ease: Linear.easeInOut, onComplete: CompleteProgressImg, onUpdate: updateProgress})
 			}
 
 		}
@@ -329,14 +346,16 @@ package com.leyou.ui.equip.child {
 //				}
 
 			this.progressLbl.text=this.currentExt + "/" + ConfigEnum.equip17;
-			this.progressImg.setWH(Number(((this.currentExt / ConfigEnum.equip17) * 222).toExponential(2)), 18);
+			this.progressImg.setSize(Number(((this.currentExt / ConfigEnum.equip17) * 160).toExponential(2)), 23);
 
 			this.oldcurrentExt=this.currentExt;
+
+			this.progressImg.visible=(this.oldcurrentExt > 0)
 		}
 
 		private function setProgressImg():void {
 			this.progressLbl.text="0/" + ConfigEnum.equip17;
-			this.progressImg.setWH(1, 18);
+			this.progressImg.setSize(1, 23);
 			this.oldcurrentExt=0;
 
 			if (this.visible && UIManager.getInstance().equipWnd.getTabIndex() == 4) {
@@ -346,7 +365,7 @@ package com.leyou.ui.equip.child {
 		}
 
 		private function updateProgress():void {
-			this.progressLbl.text=Math.ceil(ConfigEnum.equip17 * (this.progressImg.width / 222)) + "/" + ConfigEnum.equip17;
+			this.progressLbl.text=Math.ceil(ConfigEnum.equip17 * (this.progressImg.width / 160)) + "/" + ConfigEnum.equip17;
 //			this.progressLbl.text=Math.ceil(ConfigEnum.equip17 * (this.progressImg.scaleX)) + "/" + ConfigEnum.equip17;
 //			this.progressImg.setSize(Math.ceil(this.progressSpr.scaleX * 248), 18);
 		}
@@ -369,23 +388,23 @@ package com.leyou.ui.equip.child {
 
 		public function isExist(pos:int):Boolean {
 
-			for (var i:int=0; i < 10; i++) {
+			for (var i:int=0; i < 8; i++) {
 				if (this.gridList[i].data != null && this.gridList[i].data.pos == pos)
 					return true;
 			}
 
 			return false;
 		}
- 
+
 		public function setDownItem(g:EquipStrengGrid):void {
 
-			if (g.data.info.quality == 0)
+			if (g.data.info.quality == 0 || g.data.info.quality == 5)
 				return;
 
 			var i:int=0;
 
 			if (this.isExist(g.data.pos)) {
-				for (i=0; i < 10; i++) {
+				for (i=0; i < 8; i++) {
 					if (!this.gridList[i].isEmpty && this.gridList[i].data.pos == g.data.pos) {
 						this.gridList[i].resetGrid();
 						this.gridList[i].delItemHandler();
@@ -399,7 +418,7 @@ package com.leyou.ui.equip.child {
 
 				g.setSelectState(true);
 
-				for (i=0; i < 10; i++) {
+				for (i=0; i < 8; i++) {
 					if (this.gridList[i].isEmpty) {
 						this.gridList[i].updataInfo(g.data);
 						break;
@@ -506,7 +525,7 @@ package com.leyou.ui.equip.child {
 
 				if (this.currentExt != -1) {
 					this.progressLbl.text=this.currentExt + "/" + ConfigEnum.equip17;
-					this.progressImg.setWH(this.currentExt / ConfigEnum.equip17 * 222, 18);
+					this.progressImg.setSize(this.currentExt / ConfigEnum.equip17 * 160, 23);
 				}
 			}
 

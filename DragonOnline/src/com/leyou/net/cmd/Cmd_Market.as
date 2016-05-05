@@ -79,7 +79,7 @@ package com.leyou.net.cmd
 		 */		
 		public static function sm_Mak_L(o:Object):void{
 			if(o.hasOwnProperty("list")){
-				UIManager.getInstance().marketWnd.onDiscountListResponse(o);
+//				UIManager.getInstance().marketWnd.onDiscountListResponse(o);
 			}
 		}
 		

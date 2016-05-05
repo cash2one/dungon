@@ -31,8 +31,8 @@ package com.leyou.ui.guildBattle
 		
 		private function init():void{
 			hideBg();
-			clsBtn.x -= 6;
-			clsBtn.y -= 14;
+//			clsBtn.x -= 6;
+//			clsBtn.y -= 14;
 			guildBattleReward = getUIbyID("guildBattleReward") as TabBar;
 			
 			guildRankRender = new GuildBattleGuildRankRender();
@@ -43,23 +43,23 @@ package com.leyou.ui.guildBattle
 //			guildBattleReward.addToTab(guildMemberRankRender, 2);
 			guildBattleReward.addEventListener(TabbarModel.changeTurnOnIndex, onTabClick);
 			
-			guildRankRender.x = -12;
-			guildRankRender.y = 2;
-			memberRankRender.x = -12;
-			memberRankRender.y = 2;
+//			guildRankRender.x = -12;
+//			guildRankRender.y = 2;
+//			memberRankRender.x = -12;
+//			memberRankRender.y = 2;
 //			guildMemberRankRender.x = -12;
 //			guildMemberRankRender.y = 2;
-			guildBattleReward.y += 5;
+//			guildBattleReward.y += 5;
 //			guildBattleReward.setTabVisible(2, false);
 		}
 		
-		public override function get width():Number{
-			return 442;
-		}
-		
-		public override function get height():Number{
-			return 460;
-		}
+//		public override function get width():Number{
+//			return 442;
+//		}
+//		
+//		public override function get height():Number{
+//			return 460;
+//		}
 		
 		protected function onTabClick(event:Event):void{
 			if (_currentIdx == guildBattleReward.turnOnIndex){

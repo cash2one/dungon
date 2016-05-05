@@ -44,8 +44,8 @@ package com.ace.ui.window.children
 			confirmBtn.addEventListener(MouseEvent.CLICK, onBtnClick);
 			bybRadio.turnOn();
 			update(info);
-			clsBtn.x -= 6;
-			clsBtn.y -= 14;
+//			clsBtn.x -= 6;
+//			clsBtn.y -= 14;
 		}
 		
 		protected function onBtnClick(event:MouseEvent):void{

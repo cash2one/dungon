@@ -3,6 +3,7 @@ package com.leyou.net.cmd {
 	import com.ace.enum.EffectEnum;
 	import com.ace.enum.EventEnum;
 	import com.ace.enum.PlayerEnum;
+	import com.ace.enum.WindowEnum;
 	import com.ace.game.core.SceneCore;
 	import com.ace.game.manager.BulletManager;
 	import com.ace.game.scene.player.Living;
@@ -21,20 +22,24 @@ package com.leyou.net.cmd {
 	import com.ace.gameData.player.child.FeatureInfo;
 	import com.ace.gameData.table.TBuffInfo;
 	import com.ace.gameData.table.TSkillEffectInfo;
+	import com.ace.gameData.table.TSkillInfo;
 	import com.ace.manager.EventManager;
 	import com.ace.manager.GuideManager;
 	import com.ace.manager.LayerManager;
+	import com.ace.manager.SoundManager;
 	import com.ace.manager.UIManager;
 	import com.ace.ui.setting.AssistWnd;
 	import com.ace.utils.DebugUtil;
 	import com.leyou.enum.CmdEnum;
 	import com.leyou.enum.PkMode;
 	import com.leyou.net.NetGate;
+	import com.leyou.ui.element.ElementUtil;
 	import com.leyou.utils.EffectUtil;
-
+	
 	import flash.geom.Point;
 	import flash.utils.ByteArray;
 	import flash.utils.Endian;
+	import flash.utils.getTimer;
 
 	public class Cmd_Attack {
 
@@ -53,7 +58,7 @@ package com.leyou.net.cmd {
 		 *
 		 */
 		static public function cm_3010(skillId:int, targetId:int, mx:int, my:int, playerX:int, playerY:int):void {
-			//			trace("发送攻击：" + skillId, targetId, SceneUtil.screenToTile(mx, my), SceneUtil.screenToTile(playerX, playerY));
+//			trace("发送攻击：" + skillId, targetId, SceneUtil.screenToTile(mx, my), SceneUtil.screenToTile(playerX, playerY));
 			//			trace("距离：", Point.distance(new Point(mx, my), new Point(playerX, playerY)));
 			//			ModuleProxy.showChatMsg("攻击技能：" + skillId +"攻击者id："+ targetId);
 			var br:ByteArray=new ByteArray();
@@ -110,6 +115,11 @@ package com.leyou.net.cmd {
 
 
 			if (sendId == Core.me.id) {
+				if (skillId >= 1200 && skillId <= 1400) {
+					var skillInfo:TSkillInfo=TableManager.getInstance().getSkillInfo(skillId);
+					var effectInfo:TSkillEffectInfo=TableManager.getInstance().getSkillEffectInfo(skillInfo.getEffectId(Core.me.info.skillEffectId));
+					SoundManager.getInstance().play(effectInfo.sound);
+				}
 				return;
 			}
 			var player:LivingModel=UIManager.getInstance().gameScene.getPlayer(sendId);
@@ -137,60 +147,108 @@ package com.leyou.net.cmd {
 			var bulletId:int=br.readUnsignedShort();
 			br.position++;
 			var sendId:int=br.readUnsignedShort();
+			// 发起攻击实体
 			var sendLiving:LivingModel=UIManager.getInstance().gameScene.getPlayer(sendId);
+
 			if (null == sendLiving) {
 				return;
 			}
-			//			trace("+++++++++++++++++++sm.3011++begin++tick = "+new Date().toString())
+
+			if (skillId != 10000)
+				var times:int=TableUtil.getDamTimes(skillId, sendLiving.info.skillEffectId);
+
+
+//						trace("+++++++++++++++++++sm.3011++begin++tick = "+new Date().toString())
 			while (br.bytesAvailable) {
 				br.position++;
 				var stag:int=br.readUnsignedShort();
+				living=UIManager.getInstance().gameScene.getPlayer(stag);
+
 				br.position++;
 				var hurtNum:int=br.readByte();
-				br.position++;
-				var hurtType:int=br.readByte(); //（1普通攻击，2暴击，3闪避...）
-				br.position++;
-				var propName:int=br.readByte();
-				br.position++;
-				var value:int=br.readInt();
-				living=UIManager.getInstance().gameScene.getPlayer(stag);
-				if (!living)
-					continue;
-				if (living == Core.me) {
-					var typeName:String=EffectUtil.getEffectName(hurtType);
-					if (propName == 1) {
-						SceneUIManager.getInstance().addEffect(living, EffectEnum.BUBBLE_RIGHT, value, EffectEnum.COLOR_YELLOW, EffectUtil.getEffectName(hurtType));
+				for (var i:int=0; i < hurtNum; i++) {
+					br.position++;
+					var hurtType:int=br.readByte(); //（1普通攻击，2暴击，3闪避...）
+					br.position++;
+					var propName:int=br.readByte(); //(1掉血，2 掉蓝, 3 元素伤害)
+					br.position++;
+					var value:int=br.readInt();
+					// 被攻击实体
+					if (!living)
+						continue;
+//					trace("-------------------------------战斗伤害" + living.info.name + "|" + propName + "-" + value);
+					var color:String;
+					var strFront:Boolean;
+					if (living == Core.me) {
+						if (propName == 1) {
+							// 区别佣兵
+							if (sendLiving.race == PlayerEnum.RACE_PET && 3 != hurtType) {
+								color=EffectEnum.COLOR_PURPLE;
+								// 佣兵使用100，伤害前加佣兵两字
+								hurtType=100;
+								strFront=false;
+							} else {
+								strFront=true;
+								color=EffectEnum.COLOR_YELLOW;
+							}
+							SceneUIManager.getInstance().addEffect(living, EffectEnum.BUBBLE_LEFT, value, color, EffectUtil.getEffectName(hurtType), "", null, false, strFront, times);
+						} else if (propName == 2) {
+							SceneUIManager.getInstance().addEffect(living, EffectEnum.BUBBLE_LEFT, value, EffectEnum.COLOR_BLUE, EffectUtil.getEffectName(hurtType), "", null, false, true, times);
+						} else {
+							strFront=false;
+							hurtType=ElementUtil.getHurtType(sendLiving.info.baseInfo.yuanS, living.info.baseInfo.yuanS, true);
+							SceneUIManager.getInstance().addEffect(living, EffectEnum.BUBBLE_RIGHT, value, EffectEnum.COLOR_YELLOW, EffectUtil.getEffectName(hurtType), "", null, false, strFront, times);
+						}
+						// 和平模式下被攻击
+						if ((sendLiving.race == PlayerEnum.RACE_HUMAN) && (PkMode.PK_MODE_PEACE == Core.me.info.pkMode)) {
+							GuideManager.getInstance().showGuide(7, UIManager.getInstance().roleHeadWnd.getUIbyID("modeBtn"));
+						}
 					} else {
-						SceneUIManager.getInstance().addEffect(living, EffectEnum.BUBBLE_RIGHT, value, EffectEnum.COLOR_BLUE, EffectUtil.getEffectName(hurtType));
-					}
-					// 和平模式下被攻击
-					if ((sendLiving.race == PlayerEnum.RACE_HUMAN) && (PkMode.PK_MODE_PEACE == Core.me.info.pkMode)) {
-						GuideManager.getInstance().showGuide(7, UIManager.getInstance().roleHeadWnd.getUIbyID("modeBtn"));
-					}
-				} else {
-					//					var log:String = "------------------------cmd_attack.3011--stag={1},hurtNum={2},hurtNum={3},propName={4},value={5}";
-					//					trace(StringUtil.substitute(log, stag, hurtNum, hurtType, propName, value))
-					if (!sendLiving) {
-						SceneUIManager.getInstance().addEffect(living, EffectEnum.BUBBLE_LINE, value, EffectEnum.COLOR_RED, EffectUtil.getEffectName(hurtType));
-					} else {
-						SceneUIManager.getInstance().addEffect(living, EffectEnum.BUBBLE_RIGHT, value, EffectEnum.COLOR_RED, EffectUtil.getEffectName(hurtType), "", [new Point(sendLiving.x, sendLiving.y - sendLiving.radius), new Point(living.x, living.y - living.radius)]);
-					}
-					if (living.race == PlayerEnum.RACE_MONSTER && !SceneCore.sceneModel.isHideAll) {
-						living.addLivingUI(true);
+						//					var log:String = "------------------------cmd_attack.3011--stag={1},hurtNum={2},hurtNum={3},propName={4},value={5}";
+						//					trace(StringUtil.substitute(log, stag, hurtNum, hurtType, propName, value))
+						if (!sendLiving) {
+							SceneUIManager.getInstance().addEffect(living, EffectEnum.BUBBLE_LINE, value, EffectEnum.COLOR_RED, EffectUtil.getEffectName(hurtType), "", null, false, true, times);
+						} else {
+							// 元素伤害
+							if (propName == 3) {
+								strFront=false;
+								hurtType=ElementUtil.getHurtType(sendLiving.info.baseInfo.yuanS, living.info.baseInfo.yuanS);
+								SceneUIManager.getInstance().addEffect(living, EffectEnum.BUBBLE_LEFT, value, color, EffectUtil.getEffectName(hurtType), "", //
+									[new Point(sendLiving.x, sendLiving.y - sendLiving.radius), new Point(living.x, living.y - living.radius * 2)], false, strFront, times);
+							} else {
+								// 区别佣兵
+								if (sendLiving.race == PlayerEnum.RACE_PET && 3 != hurtType) {
+									color=EffectEnum.COLOR_PURPLE;
+									// 佣兵使用100，伤害前加佣兵两字
+									hurtType=100;
+									strFront=false;
+								} else {
+									strFront=true;
+									color=EffectEnum.COLOR_RED;
+								}
+								SceneUIManager.getInstance().addEffect(living, EffectEnum.BUBBLE_RIGHT, value, color, EffectUtil.getEffectName(hurtType), "", //
+									[new Point(sendLiving.x, sendLiving.y - sendLiving.radius), new Point(living.x, living.y - living.radius)], false, strFront, times);
+							}
+						}
+						if (living.race == PlayerEnum.RACE_MONSTER && !SceneCore.sceneModel.isHideAll) {
+							living.addLivingUI(true);
+						}
+
+						if (living.race == PlayerEnum.RACE_MONSTER && sendLiving == Core.me) {
+							living.beatOff();
+						}
+//												trace("-------------------------------战斗伤害" + living.info.name + "|" + propName + "-" + value);
 					}
 
-					if (living.race == PlayerEnum.RACE_MONSTER && sendLiving == Core.me) {
-						living.beatOff();
-					}
-						//					trace("-------------------------------战斗伤害" + living.info.name + "|" + propName + "-" + value);
-				}
+
 //				trace("施暴者方向：",sendLiving.info.name,sendLiving.info.currentDir);
-				(skillId != 10000) && living.addEffect(TableUtil.getHurtPnfId(skillId));
-				//晕！10000为buff伤害
-				/*(skillId != 10000) && */
-				living.beHurt(sendId, TableUtil.getHurtPnfId(skillId));
+					(skillId != 10000) && living.addEffect(TableUtil.getHurtPnfId(skillId, sendLiving.info.skillEffectId));
+					//晕！10000为buff伤害
+					/*(skillId != 10000) && */
+					living.beHurt(sendId, TableUtil.getHurtPnfId(skillId, sendLiving.info.skillEffectId));
+				}
 			}
-			//			trace("+++++++++++++++++++sm.3011++end")
+//						trace("+++++++++++++++++++sm.3011++end")
 		}
 
 		//同步血、蓝值
@@ -290,7 +348,7 @@ package com.leyou.net.cmd {
 					SceneUIManager.getInstance().addEffect(living, EffectEnum.BUBBLE_LINE, 0, EffectEnum.COLOR_RED, EffectEnum.MIAN_YI);
 				}
 			}
-			
+
 			if (living == Core.me) {
 				UIManager.getInstance().roleHeadWnd.checkBuffChange();
 				UIManager.getInstance().roleHeadWnd.resetPosition();
@@ -408,6 +466,10 @@ package com.leyou.net.cmd {
 			var tx:int=br.readUnsignedShort();
 			br.position++;
 			var ty:int=br.readUnsignedShort();
+			br.position++;
+			var sendId:int=br.readUnsignedShort();
+			br.position++;
+			var receiveId:int=br.readUnsignedShort();
 
 			if (skillId == 0) {
 				DebugUtil.throwError("收到协议：技能id为0");
@@ -416,20 +478,32 @@ package com.leyou.net.cmd {
 			//			DebugUtil.addFlag(fx, fy, UIManager.getInstance().gameScene, tt);
 			//			DebugUtil.addFlag(tx, ty, UIManager.getInstance().gameScene, tt);
 
-			if (stag < 20000) {
-				var effectInfo:TSkillEffectInfo=TableManager.getInstance().getSkillEffectInfo(TableManager.getInstance().getSkillInfo(skillId).skillEffectId);
+			var sendLiving:LivingModel=UIManager.getInstance().gameScene.getPlayer(sendId);
 
+			if (!sendLiving)
+				return;
+			var effectInfo:TSkillEffectInfo=TableManager.getInstance().getSkillEffectInfo(TableManager.getInstance().getSkillInfo(skillId).getEffectId(sendLiving.info.skillEffectId));
+
+			if (stag < 20000 && stag > 0) {
 				if (effectInfo.sceneEffect1 != 0) {
-					UIManager.getInstance().gameScene.addBuff(stag, effectInfo.sceneEffect1, fx, fy, sendName, skillId);
+					UIManager.getInstance().gameScene.addBuff(stag, effectInfo.sceneEffect1, fx, fy, sendName, skillId, sendLiving.info.skillEffectId);
 				}
 				if (effectInfo.sceneEffect2 != 0) {
-					UIManager.getInstance().gameScene.addBuff(stag, effectInfo.sceneEffect2, fx, fy, sendName, skillId);
+					UIManager.getInstance().gameScene.addBuff(stag, effectInfo.sceneEffect2, fx, fy, sendName, skillId, sendLiving.info.skillEffectId);
 				}
 			} else {
-				BulletManager.getInstance().addBulletII(fx, fy, tx, ty, skillId, stag);
+//				BulletManager.getInstance().addBulletII(fx, fy, tx, ty, skillId, stag);
+//				if(sendId==0)
+				if (skillId == 832 || skillId == 834 || skillId == 836 || skillId == 838) {
+					trace("添加子弹：", getTimer(), sendLiving.info.name, effectInfo.times, skillId, tx, ty);
+				}
+				if (effectInfo.times == 1) {
+					BulletManager.getInstance().addBullet(sendId, receiveId, SceneUtil.screenXToTileX(tx), SceneUtil.screenYToTileY(ty), skillId, sendLiving.info.skillEffectId);
+				}
 			}
 		}
 
+		//移除子弹
 		static public function sm_3022(br:ByteArray):void {
 			br.position=3;
 
@@ -452,7 +526,10 @@ package com.leyou.net.cmd {
 
 			br.position++;
 			var tsid:int=br.readUnsignedShort();
-			UIManager.getInstance().roleWnd.playVipSkillCd(tsid);
+			if (UIManager.getInstance().isCreate(WindowEnum.ELEMENT)) {
+				UIManager.getInstance().elementWnd.playCD(tsid);
+			}
+//			UIManager.getInstance().roleWnd.playVipSkillCd(tsid);
 		}
 
 		//死亡通知

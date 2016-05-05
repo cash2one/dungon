@@ -49,6 +49,10 @@ package com.leyou.ui.copyRank
 			ctype = 1;
 		}
 		
+		public override function get height():Number{
+			return 544;
+		}
+		
 		public override function show(toTop:Boolean=true, $layer:int=1, toCenter:Boolean=true):void{
 			super.show(toTop, $layer, toCenter);
 			ctype = 1;

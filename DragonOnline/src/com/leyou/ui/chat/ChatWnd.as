@@ -206,5 +206,28 @@ package com.leyou.ui.chat
 		public function addFace(key:String):void{
 			controller.addFace(key);
 		}
+		
+		public function switchToAcross():void{
+			controller.switchToAcross();
+		}
+		
+		public function switchToNormal():void{
+			controller.switchToNormal();
+		}
+		
+		/**
+		 * 反转聊天面板显示状态
+		*/
+		public function reversePanelVisible(v:Boolean):void{
+			if(v){
+				showBtn.visible = false;
+				sprite.visible = true;
+				controller.setVisible(true);
+			}else{
+				showBtn.visible = true;
+				sprite.visible = false;
+				controller.setVisible(false);
+			}
+		}
 	}
 }

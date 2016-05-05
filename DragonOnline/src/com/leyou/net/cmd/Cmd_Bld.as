@@ -1,7 +1,9 @@
 package com.leyou.net.cmd {
 
+	import com.ace.enum.WindowEnum;
 	import com.ace.manager.UIManager;
 	import com.leyou.net.NetGate;
+	import com.leyou.utils.BadgeUtil;
 
 	public class Cmd_Bld {
 
@@ -47,10 +49,13 @@ package com.leyou.net.cmd {
 		 *
 		 */
 		public static function sm_bld_O(o:Object):void {
-			if(o==null || !o.hasOwnProperty("ls"))
-				return ;
-			
-			UIManager.getInstance().badgeWnd.updateList(o);
+			if (o == null || !o.hasOwnProperty("ls"))
+				return;
+
+			BadgeUtil.BadgeCurrentPoint=o.ls;
+
+			if (UIManager.getInstance().isCreate(WindowEnum.BADAGE))
+				UIManager.getInstance().badgeWnd.updateList(o);
 		}
 
 		/**
@@ -74,6 +79,7 @@ package com.leyou.net.cmd {
 		public static function sm_bld_P(o:Object):void {
 			if (o.hasOwnProperty("nx")) {
 				UIManager.getInstance().badgeWnd.updateNode(o);
+
 			}
 		}
 
@@ -87,10 +93,10 @@ package com.leyou.net.cmd {
 			if (o == null || !o.hasOwnProperty("ws"))
 				return;
 
-			if (isxl){
+			if (isxl) {
 				Cmd_Bld.cm_bldOpen();
 				isxl=false;
-			}else
+			} else
 				UIManager.getInstance().badgeWnd.updatePoint(o);
 		}
 

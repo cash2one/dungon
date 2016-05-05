@@ -32,6 +32,7 @@ package com.leyou.ui.equip.child {
 
 			var g:GridBase;
 			for (var i:int=0; i < 14; i++) {
+
 				g=new EquipStrengGrid();
 				g.gridType=ItemEnum.TYPE_GRID_EQUIP_BODY;
 
@@ -39,9 +40,19 @@ package com.leyou.ui.equip.child {
 				this.addChild(g);
 
 				g.updataInfo(null);
+				EquipStrengGrid(g).setBgVisible(false);
 
-				g.x=10 + i % 5 * (g.width + 3);
-				g.y=32 + Math.floor(i / 5) * (g.height + 3)
+//				g.x=19 + i % 4 * (g.width + 3);
+//				g.y=127 + Math.floor(i / 4) * (g.height + 3)
+
+				if (i < 7) {
+					g.x=-447;
+					g.y=30 + i * 52;
+				} else {
+					g.x=-70;
+					g.y=30 + (i - 7) * 52;
+				}
+
 			}
 
 			this.bagEquipVec=new Vector.<EquipStrengGrid>();
@@ -59,8 +70,8 @@ package com.leyou.ui.equip.child {
 //				g.x=10 + i % 7 * (g.width);
 //				g.y=115 + g.height + Math.floor(i / 7) * (g.height + 3)
 
-				g.x=5 + i % 5 * (g.width);
-				g.y=5 + Math.floor(i / 5) * (g.height)
+				g.x=5 + i % 4 * (49);
+				g.y=5 + Math.floor(i / 4) * (49)
 			}
 
 			this.mountEquipVec=new Vector.<EquipStrengGrid>();
@@ -78,8 +89,8 @@ package com.leyou.ui.equip.child {
 				//				g.x=10 + i % 7 * (g.width);
 				//				g.y=115 + g.height + Math.floor(i / 7) * (g.height + 3)
 
-				g.x=15 + i % 5 * (g.width);
-				g.y=185;
+				g.x=4 + i % 4 * (50);
+				g.y=43;
 			}
 
 		}
@@ -147,20 +158,23 @@ package com.leyou.ui.equip.child {
 
 			var i:int=0;
 
-			for each (einfo in equip) {
+			for (i=0; i < 14; i++) {
 
-				if (einfo != null) {
-					this.bodyEquipVec[i].updataInfo(einfo);
+				if (equip[i] != null) {
+					this.bodyEquipVec[i].updataInfo(equip[i]);
 					this.bodyEquipVec[i].setRemask(false);
-					i++;
+				} else {
+					this.bodyEquipVec[i].updataInfo(null);
+					this.bodyEquipVec[i].setRemask(false);
 				}
+
 			}
 
-			while (i < this.bodyEquipVec.length) {
-				this.bodyEquipVec[i].updataInfo(null);
-				this.bodyEquipVec[i].setRemask(false);
-				i++;
-			}
+//			while (i < this.bodyEquipVec.length) {
+//				this.bodyEquipVec[i].updataInfo(null);
+//				this.bodyEquipVec[i].setRemask(false);
+//				i++;
+//			}
 
 		}
 
@@ -209,10 +223,7 @@ package com.leyou.ui.equip.child {
 
 				this.mountEquipVec[i].setRemask(false);
 				this.mountEquipVec[i].selectSt=false;
-
 			}
-
-
 		}
 
 
@@ -416,13 +427,13 @@ package com.leyou.ui.equip.child {
 				tmp=this.bagEquipVec[i].data;
 				if (tmp != null) {
 
-					if (0 == int(tmp.info.quality))
+					if (0 == int(tmp.info.quality) || 5 == int(tmp.info.quality))
 						this.bagEquipVec[i].setRemask(true);
 				}
-
 			}
 
 		}
+
 
 		public function updateMountEnable(v:Boolean=true):void {
 
@@ -443,10 +454,10 @@ package com.leyou.ui.equip.child {
 		}
 
 		/**
-		 * 
+		 *
 		 * @param id
-		 * 
-		 */		
+		 *
+		 */
 		public function updateAllByID(id:int):void {
 			var i:int=0;
 
@@ -466,15 +477,58 @@ package com.leyou.ui.equip.child {
 			}
 		}
 
+
+		/**
+		 * @param arr
+		 * @param v
+		 */
+		public function updateBagAndBodyByLevelAndQuality(lv:int, qu:int):void {
+			var i:int=0;
+
+			for (i=0; i < this.bagEquipVec.length; i++) {
+				if (!this.bagEquipVec[i].isEmpty && (this.bagEquipVec[i].data.info.level < lv || this.bagEquipVec[i].data.info.quality < qu))
+					this.bagEquipVec[i].setRemask(true);
+				else
+					this.bagEquipVec[i].setRemask(false);
+			}
+
+			for (i=0; i < this.bodyEquipVec.length; i++) {
+				if (!this.bodyEquipVec[i].isEmpty && (this.bodyEquipVec[i].data.info.level < lv || this.bodyEquipVec[i].data.info.quality < qu))
+					this.bodyEquipVec[i].setRemask(true);
+				else
+					this.bodyEquipVec[i].setRemask(false);
+			}
+
+			for (i=0; i < this.mountEquipVec.length; i++) {
+				if (!this.mountEquipVec[i].isEmpty && (this.mountEquipVec[i].data.info.level < lv || this.mountEquipVec[i].data.info.quality < qu))
+					this.mountEquipVec[i].setRemask(true);
+				else
+					this.mountEquipVec[i].setRemask(false);
+			}
+
+		}
+
+
+
 		private function clearData():void {
 			var i:int=0;
 
-			for (i=0; i < this.bodyEquipVec.length; i++)
+			for (i=0; i < this.bodyEquipVec.length; i++) {
 				this.bodyEquipVec[i].updataInfo(null);
+				EquipStrengGrid(this.bodyEquipVec[i]).setBgVisible(false);
+			}
 
 			for (i=0; i < this.bagEquipVec.length; i++)
 				this.bagEquipVec[i].updataInfo(null);
 
+		}
+
+		public function getBodyGridAll():Vector.<EquipStrengGrid> {
+			return this.bodyEquipVec;
+		}
+		
+		public function getBagGridAll():Vector.<EquipStrengGrid> {
+			return this.bagEquipVec;
 		}
 
 		/**

@@ -555,7 +555,7 @@ package com.leyou.ui.role.child {
 					this.info.elements[i].flag=false;
 				}
 
-				GuideManager.getInstance().removeGuide(11);
+//				GuideManager.getInstance().removeGuide(11);
 				this.info.elements[this.guildElement].flag=true;
 			}
 		}
@@ -651,7 +651,7 @@ package com.leyou.ui.role.child {
 					break;
 			}
 
-			GuideManager.getInstance().removeGuide(11);
+//			GuideManager.getInstance().removeGuide(11);
 		}
 
 		private function setImg(arr:Array):void {

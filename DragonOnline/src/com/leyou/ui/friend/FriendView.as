@@ -78,8 +78,8 @@ package com.leyou.ui.friend {
 			
 			// 生成显示结构
 			acc = new Accordion(256, 443);
-			acc.x = 25;
-			acc.y = 52;
+			acc.x = 12;
+			acc.y = 62;
 			addChild(acc);
 			acc.addItem(PropUtils.getStringById(1713), "(0/100)", null, menu1Vec);
 			acc.addItem(PropUtils.getStringById(1714), "(0/20)", null, menu2Vec);
@@ -155,11 +155,11 @@ package com.leyou.ui.friend {
 		}
 		
 		public override function get width():Number{
-			return 310;
+			return 280;
 		}
 		
 		public override function get height():Number{
-			return 526;
+			return 544;
 		}
 		
 		public override function hide():void{

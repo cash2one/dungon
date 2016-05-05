@@ -24,7 +24,7 @@ package com.ace.manager {
 
 		// 面板间距
 		public static const SPACE_X:Number=-18;
-		public static const SPACE_Y:Number=1;
+		public static const SPACE_Y:Number=5;
 
 		// 单个界面的互斥
 		private static var Mutex_Signle_Wnds:Object;
@@ -94,10 +94,15 @@ package com.ace.manager {
 			StartObjs[WindowEnum.SKILL]=toolsWnd.getUIbyID("skillBtn");
 			StartObjs[WindowEnum.GEM_LV]=toolsWnd.getUIbyID("alchmyBtn");
 			StartObjs[WindowEnum.BADAGE]=toolsWnd.getUIbyID("wenZBtn");
+			StartObjs[WindowEnum.SHIYI]=toolsWnd.getUIbyID("fittingBtn");
 			StartObjs[WindowEnum.FRIEND]=toolsWnd.getUIbyID("friendBtn");
-			StartObjs[WindowEnum.SEVENDAY]=toolsWnd.getUIbyID("mercenaryBtn");
+			StartObjs[WindowEnum.PET]=toolsWnd.getUIbyID("mercenaryBtn");
+			StartObjs[WindowEnum.COLLECTION]=toolsWnd.getUIbyID("collectBtn");
+			StartObjs[WindowEnum.FARM]=toolsWnd.getUIbyID("framBtn");
+			StartObjs[WindowEnum.ELEMENT]=toolsWnd.getUIbyID("eleBtn");
+			StartObjs[WindowEnum.WORSHIP]=toolsWnd.getUIbyID("worshipBtn");
 			StartObjs[WindowEnum.MAILL]=UIManager.getInstance().smallMapWnd.getUIbyID("mailBtn");
-			StartObjs[WindowEnum.FARM]=rightTopWnd.getWidget("farmBtn");
+//			StartObjs[WindowEnum.FARM]=rightTopWnd.getWidget("farmBtn");
 			StartObjs[WindowEnum.COPY_RANK]=rightTopWnd.getWidget("copyRBtn");
 //			StartObjs[WindowEnum.STORYCOPY]=rightTopWnd.getWidget("storyCopyBtn");
 //			StartObjs[WindowEnum.BOSSCOPY]=rightTopWnd.getWidget("bossCopyBtn");
@@ -112,9 +117,10 @@ package com.ace.manager {
 			StartObjs[WindowEnum.PKCOPY]=rightTopWnd.getWidget("deliveryBtn");
 			StartObjs[WindowEnum.RANK]=rightTopWnd.getWidget("rankBtn");
 			StartObjs[WindowEnum.ACTIVE]=rightTopWnd.getWidget("activityBtn");
-			StartObjs[WindowEnum.ACHIEVEMENT]=rightTopWnd.getWidget("achievementBtn");
+			StartObjs[WindowEnum.ACHIEVEMENT]=rightTopWnd.getUIbyID("achievementBtn");
 			StartObjs[WindowEnum.LUCKDRAW]=rightTopWnd.getWidget("lotteryBtn");
-			StartObjs[WindowEnum.WORSHIP]=rightTopWnd.getWidget("worshipBtn");
+			StartObjs[WindowEnum.VIP3EXP]=rightTopWnd.getWidget("v3expBtn");
+			StartObjs[WindowEnum.CLIENT_WND]=rightTopWnd.getWidget("v0");
 			StartObjs[WindowEnum.CDKEY]=rightTopWnd.getWidget("keyBtn");
 			StartObjs[WindowEnum.PAY_PROMOTION]=rightTopWnd.getWidget("promotionBtn");
 			StartObjs[WindowEnum.TOBE_STRONG]=rightTopWnd.getWidget("tobeStrong");
@@ -136,7 +142,7 @@ package com.ace.manager {
 			StartObjs[WindowEnum.VENDUE]=rightTopWnd.getWidget("saleBtn");
 			StartObjs[WindowEnum.LEGENDAREY_WEAPON]=rightTopWnd.getWidget("legendaryBtn");
 			StartObjs[WindowEnum.BLACK_STROE]=rightTopWnd.getWidget("blackStoreBtn");
-			StartObjs[WindowEnum.PET]=rightTopWnd.getWidget("petBtn");
+//			StartObjs[WindowEnum.PET]=rightTopWnd.getWidget("petBtn");
 			StartObjs[WindowEnum.TASK_MARKET]=rightTopWnd.getWidget("taskMarketBtn");
 			StartObjs[WindowEnum.KEEP_7]=rightTopWnd.getWidget("sevenDayBtn");
 			StartObjs[WindowEnum.TTT]=rightTopWnd.getWidget("towerBtn");
@@ -149,24 +155,27 @@ package com.ace.manager {
 			LinkWnds={};
 			LinkWnds[WindowEnum.AUTION]=[WindowEnum.AUTION, WindowEnum.BACKPACK];
 			LinkWnds[WindowEnum.MAILL]=[WindowEnum.MAILL, WindowEnum.BACKPACK];
-			LinkWnds[WindowEnum.ROLE]=[WindowEnum.ROLE, WindowEnum.BACKPACK,WindowEnum.GEM_LV];
-			LinkWnds[WindowEnum.BACKPACK]=[WindowEnum.BACKPACK,WindowEnum.MAILL, WindowEnum.AUTION, WindowEnum.ROLE,WindowEnum.GEM_LV];
+			LinkWnds[WindowEnum.ROLE]=[WindowEnum.ROLE, WindowEnum.BACKPACK, WindowEnum.GEM_LV];
+			LinkWnds[WindowEnum.BACKPACK]=[WindowEnum.ROLE, WindowEnum.BACKPACK, WindowEnum.MAILL, WindowEnum.AUTION, WindowEnum.GEM_LV];
 			LinkWnds[WindowEnum.STOREGE]=[WindowEnum.STOREGE, WindowEnum.BACKPACK];
 			LinkWnds[WindowEnum.SHOP]=[WindowEnum.SHOP, WindowEnum.BACKPACK];
-			LinkWnds[WindowEnum.LABA_DESC]=[WindowEnum.LABA,WindowEnum.LABA_DESC];
-			
+			LinkWnds[WindowEnum.LABA_DESC]=[WindowEnum.LABA, WindowEnum.LABA_DESC];
+
 			//------------------------------------------------------------
 			// 子界面注册,格式:
 			//				  界面枚举:[子界面枚举数组]
 			//------------------------------------------------------------
 			ChildrenWnds={};
-			ChildrenWnds[WindowEnum.ROLE]=[WindowEnum.MOUTLVUP, WindowEnum.MOUTTRADEUP,WindowEnum.MEDIC,WindowEnum.WING_FLY, WindowEnum.WINGLVUP,WindowEnum.QUICK_BUY,WindowEnum.MARRY4];
+			ChildrenWnds[WindowEnum.ROLE]=[WindowEnum.MOUTLVUP, WindowEnum.MOUTTRADEUP, WindowEnum.MEDIC, WindowEnum.WING_FLY, WindowEnum.WINGLVUP, WindowEnum.QUICK_BUY, WindowEnum.MARRY4];
 			ChildrenWnds[WindowEnum.SKILL]=[WindowEnum.RUNE, WindowEnum.QUICK_BUY];
+			ChildrenWnds[WindowEnum.BACKPACK]=[WindowEnum.SELLEXPEFFECT];
 			ChildrenWnds[WindowEnum.EQUIP]=[WindowEnum.QUICK_BUY];
 			ChildrenWnds[WindowEnum.MAILL]=[WindowEnum.MAILL_READ];
+			ChildrenWnds[WindowEnum.PET]=[WindowEnum.QUICK_BUY];
 			ChildrenWnds[WindowEnum.LUCKDRAW]=[WindowEnum.LUCKDRAW_STORE];
-			
-			
+			ChildrenWnds[WindowEnum.ELEMENT]=[WindowEnum.ELEMENT_UPGRADE, WindowEnum.QUICK_BUY];
+
+
 			Offsets={};
 		}
 
@@ -701,7 +710,7 @@ package com.ace.manager {
 			stopAll(ids);
 			// 获得缓动起始点数组
 			var spArr:Array=getStartPoints(ids);
-			// 获得结束点数组
+			/** 获得结束点数组*/
 			var epArr:Array=getEndPoints(ids);
 			// 开始缓动
 			startMove(ids, spArr, epArr, compos);

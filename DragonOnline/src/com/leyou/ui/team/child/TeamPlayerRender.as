@@ -49,7 +49,7 @@ package com.leyou.ui.team.child {
 			this.proLbl=this.getUIbyID("proLbl") as Label;
 			this.attLbl=this.getUIbyID("attLbl") as Label;
 			this.mapLbl=this.getUIbyID("mapLbl") as Label;
-			this.lvLbl=this.getUIbyID("lvLbl") as Label;
+//			this.lvLbl=this.getUIbyID("lvLbl") as Label;
 
 			this.bg=new Image("ui/team/team_mate_select.png");
 			this.addChild(this.bg);
@@ -129,8 +129,8 @@ package com.leyou.ui.team.child {
 		public function updateInfo(o:Array, i:int):void {
 
 			this.playNameLbl.text="" + o[0];
-			this.proLbl.text="" + PlayerUtil.getPlayerRaceByIdx(o[1]);
-			this.lvLbl.text="" + o[2];
+			this.proLbl.text="LV "+o[2]+" " + PlayerUtil.getPlayerRaceByIdx(o[1]);
+//			this.lvLbl.text="" + o[2];
 			this.attLbl.text="" + o[3];
 
 			this.mapLbl.text="" + o[4];
@@ -141,8 +141,8 @@ package com.leyou.ui.team.child {
 //				this.unLineImg.visible=false;
 
 			this.showAvatar(o);
-			this.bigAvatar.x=this.x + 80;
-			this.bigAvatar.y=this.y + 300;
+			this.bigAvatar.x=this.x + 88;
+			this.bigAvatar.y=this.y + 337;
 
 		}
 
@@ -173,7 +173,7 @@ package com.leyou.ui.team.child {
 		public function setboosImgTop():void {
 
 			this.bossImg.x=this.x + this.bossImg.x;
-			this.bossImg.y=50; //this.y + this.bossImg.y;
+			this.bossImg.y=60; //this.y + this.bossImg.y;
 
 			UIManager.getInstance().teamWnd.addChild(this.bossImg);
 		}

@@ -5,10 +5,8 @@ package com.leyou.ui.marry {
 	import com.ace.gameData.table.TMarry_ring;
 	import com.ace.loader.child.SwfLoader;
 	import com.ace.manager.LibManager;
-	import com.ace.manager.MouseManagerII;
 	import com.ace.manager.ToolTipManager;
 	import com.ace.manager.UIManager;
-	import com.ace.manager.child.MouseEventInfo;
 	import com.ace.ui.auto.AutoWindow;
 	import com.ace.ui.button.children.ImgButton;
 	import com.ace.ui.img.child.Image;
@@ -16,9 +14,7 @@ package com.leyou.ui.marry {
 	import com.ace.utils.StringUtil;
 	import com.greensock.TweenLite;
 	import com.leyou.data.tips.TipsInfo;
-	import com.leyou.manager.TimerManager;
 	import com.leyou.net.cmd.Cmd_Marry;
-	import com.leyou.util.DateUtil;
 	import com.leyou.utils.PlayerUtil;
 	
 	import flash.display.Sprite;

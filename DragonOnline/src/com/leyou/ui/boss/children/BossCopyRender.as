@@ -14,6 +14,7 @@ package com.leyou.ui.boss.children
 	import com.ace.ui.lable.Label;
 	import com.leyou.data.bossCopy.BossCopyBossData;
 	import com.leyou.data.bossCopy.BossCopyData;
+	import com.leyou.enum.ConfigEnum;
 	import com.leyou.manager.PopupManager;
 	import com.leyou.net.cmd.Cmd_BCP;
 	
@@ -26,11 +27,13 @@ package com.leyou.ui.boss.children
 	{
 		private static const GRID_COUNT:int = 12;
 		
+		private static const VIEW_PANEL_WIDTH:int = 479;
 		
-		private static const VIEW_PANEL_WIDTH:int = 478;
 		private var timeLbl:Label;
 		
 		private var nameLbl:Label;
+		
+		private var pageLbl:Label;
 		
 		private var receiveImg:Image;
 		
@@ -65,6 +68,7 @@ package com.leyou.ui.boss.children
 			mouseChildren = true;
 			timeLbl = getUIbyID("timeLbl") as Label;
 			nameLbl = getUIbyID("nameLbl") as Label;
+			pageLbl = getUIbyID("pageLbl") as Label;
 			receiveImg = getUIbyID("receiveImg") as Image;
 			addBtn = getUIbyID("addBtn") as ImgButton;
 			preBtn = getUIbyID("preBtn") as ImgButton;
@@ -78,15 +82,15 @@ package com.leyou.ui.boss.children
 			
 			big = new SwfLoader();
 			big.mouseEnabled = false;
-			big.x = 730-65;
-			big.y = 200;
+			big.x = 620;
+			big.y = 220;
 			addChild(big);
 			swapChildren(nameLbl, big);
 			
 			pannel = new Sprite();
-			pannel.x = 34;
-			pannel.y = 40;
-			pannel.scrollRect = new Rectangle(0, 0, VIEW_PANEL_WIDTH, 327);
+			pannel.x = 8;
+			pannel.y = 54;
+			pannel.scrollRect = new Rectangle(0, 0, VIEW_PANEL_WIDTH, 304);
 			addChild(pannel);
 			pannel.addEventListener(MouseEvent.CLICK, onBossClick);
 			
@@ -96,17 +100,17 @@ package com.leyou.ui.boss.children
 			for(var n:int = 0; n < GRID_COUNT; n++){
 				var grid:CopyRewardGrid = new CopyRewardGrid();
 				if(n < 4){
-					grid.x = 564 + n%4*50;
-					grid.y = 240;
+					grid.x = 539 + n%4*52;
+					grid.y = 278;
 				}else{
-					grid.x = 564 + n%4*50;
-					grid.y = 302 + (int(n/4)-1)*44;
+					grid.x = 539 + n%4*52;
+					grid.y = 345 + (int(n/4)-1)*44;
 				}
 				addChildAt(grid, 23);
 				grids[n] = grid;
 			}
 			addChild(receiveImg);
-			x = -29;
+			x = 3;
 			y = 3;
 		}
 		
@@ -121,10 +125,10 @@ package com.leyou.ui.boss.children
 			switch(event.target.name){
 				case "addBtn":
 					var costyb:int = DataManager.getInstance().bossCopyData.costyb;
-					var costbyb:int = DataManager.getInstance().bossCopyData.costbyb;
+//					var costbyb:int = DataManager.getInstance().bossCopyData.costbyb;
 					var content:String = TableManager.getInstance().getSystemNotice(4904).content;
 //					content = StringUtil.substitute(content, cost)
-					PopupManager.showRadioConfirm(content, costyb+"", costbyb+"", confirmAdd, null, false, "bossCpy.add");
+					PopupManager.showRadioIIConfirm(content, costyb+"", ConfigEnum.Dekaron_Fb11.split("|")[0], confirmAdd, null, false, "bossCpy.add");
 					break;
 				case "preBtn":
 					previousColumn();
@@ -139,8 +143,7 @@ package com.leyou.ui.boss.children
 		}
 		
 		private function confirmAdd(type:int):void{
-			var rtype:int = ((0 == type) ? 1 : 0);
-			Cmd_BCP.cm_BCP_A(rtype);
+			Cmd_BCP.cm_BCP_A(type);
 		}
 		
 		/**
@@ -152,8 +155,8 @@ package com.leyou.ui.boss.children
 		protected function scrollToX($threshold:int):void{
 			threshold = $threshold;
 			addEventListener(Event.ENTER_FRAME, onEnterFrame);
-			preBtn.visible = (threshold > 0);
-			nextBtn.visible = (threshold < (items.length-3)*(VIEW_PANEL_WIDTH/3));
+//			preBtn.visible = (threshold > 0);
+//			nextBtn.visible = (threshold < (items.length-3)*(VIEW_PANEL_WIDTH/3));
 		}
 		
 		protected function onEnterFrame(event:Event):void{

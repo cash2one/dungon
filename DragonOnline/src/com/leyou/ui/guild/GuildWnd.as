@@ -1,6 +1,5 @@
 package com.leyou.ui.guild {
 
-	import com.ace.config.Core;
 	import com.ace.enum.TipEnum;
 	import com.ace.enum.UIEnum;
 	import com.ace.enum.WindowEnum;
@@ -15,9 +14,9 @@ package com.leyou.ui.guild {
 	import com.ace.manager.child.MouseEventInfo;
 	import com.ace.ui.auto.AutoWindow;
 	import com.ace.ui.button.children.CheckBox;
+	import com.ace.ui.button.children.ImgButton;
 	import com.ace.ui.img.child.Image;
 	import com.ace.ui.lable.Label;
-	import com.ace.ui.tabbar.TabbarModel;
 	import com.ace.ui.tabbar.children.TabBar;
 	import com.greensock.TweenLite;
 	import com.leyou.enum.ConfigEnum;
@@ -60,6 +59,12 @@ package com.leyou.ui.guild {
 		private var autoAccCb:CheckBox;
 
 		private var guildTabbar:TabBar;
+
+		private var mainBtn:ImgButton;
+		private var memBtn:ImgButton;
+		private var kjBtn:ImgButton;
+		private var shopBtn:ImgButton;
+		private var listBtn:ImgButton;
 
 		private var guildMain:GuildMain;
 		private var guildMember:GuildMember;
@@ -129,16 +134,18 @@ gl -- 管理 (0,1)
 */
 		public var memberPrice:Object={};
 
+		/**
+		 *是否争霸
+		 */
+		public var guildWarc:int=0;
+
 		public var guildSciData:Array=[];
-
-
 
 		private var ischeckUset:int=0;
 
 
-
 		private var changeTabIndex:int=0;
-
+		private var changeTabName:String;
 
 
 		public function GuildWnd() {
@@ -158,33 +165,88 @@ gl -- 管理 (0,1)
 			this.contributeTxt=this.getUIbyID("contributeTxt") as Label;
 			this.bgIcon=this.getUIbyID("bgIcon") as Image;
 
-			this.autoAccCb=this.getUIbyID("autoAccCb") as CheckBox;
-			this.guildTabbar=this.getUIbyID("guildTabbar") as TabBar;
+//			this.autoAccCb=this.getUIbyID("autoAccCb") as CheckBox;
+//			this.guildTabbar=this.getUIbyID("guildTabbar") as TabBar;
 
-			this.autoAccCb.addEventListener(MouseEvent.CLICK, onClick);
-			this.guildTabbar.addEventListener(TabbarModel.changeTurnOnIndex, onChangeIndex);
+			this.mainBtn=this.getUIbyID("mainBtn") as ImgButton;
+			this.memBtn=this.getUIbyID("memBtn") as ImgButton;
+			this.kjBtn=this.getUIbyID("kjBtn") as ImgButton;
+			this.shopBtn=this.getUIbyID("shopBtn") as ImgButton;
+			this.listBtn=this.getUIbyID("listBtn") as ImgButton;
 
-			this.autoAccCb.setActive(false);
+			this.mainBtn.addEventListener(MouseEvent.CLICK, onItemClick);
+			this.memBtn.addEventListener(MouseEvent.CLICK, onItemClick);
+			this.kjBtn.addEventListener(MouseEvent.CLICK, onItemClick);
+			this.shopBtn.addEventListener(MouseEvent.CLICK, onItemClick);
+			this.listBtn.addEventListener(MouseEvent.CLICK, onItemClick);
+
+//			this.autoAccCb.addEventListener(MouseEvent.CLICK, onClick);
+//			this.guildTabbar.addEventListener(TabbarModel.changeTurnOnIndex, onChangeIndex);
+
+//			this.autoAccCb.setActive(false);
 
 			this.guildMain=new GuildMain();
-			this.guildMember=new GuildMember();
-			this.guildShop=new GuildShop();
-			this.guildCreat=new GuildCreat();
-			this.guildList=new GuildList();
-			this.guildSci=new GuildSci();
-			this.guildCopy=new GuildDungeon();
-			this.guildPk=new GuildWar();
-			this.guildZc=new GuildZC();
+			this.addChild(this.guildMain);
+			this.guildMain.x=5;
+			this.guildMain.y=60;
 
-			this.guildTabbar.addToTab(this.guildMain, 0);
-			this.guildTabbar.addToTab(this.guildMember, 1);
-			this.guildTabbar.addToTab(this.guildSci, 2);
+			this.guildMember=new GuildMember();
+			this.addChild(this.guildMember);
+			this.guildMember.x=5;
+			this.guildMember.y=60;
+
+			this.guildShop=new GuildShop();
+			this.addChild(this.guildShop);
+			this.guildShop.x=5;
+			this.guildShop.y=60;
+
+			this.guildCreat=new GuildCreat();
+//			this.addChild(this.guildCreat);
+//			this.guildCreat.x=60;
+//			this.guildCreat.y=60;
+
+			this.guildList=new GuildList();
+			this.addChild(this.guildList);
+			this.guildList.x=5;
+			this.guildList.y=60;
+
+			this.guildSci=new GuildSci();
+			this.addChild(this.guildSci);
+			this.guildSci.x=5;
+			this.guildSci.y=60;
+
+			this.guildCopy=new GuildDungeon();
+//			this.addChild(this.guildCopy);
+
+			this.guildPk=new GuildWar();
+			this.addChild(this.guildPk);
+			this.guildPk.x=60;
+			this.guildPk.y=60;
+
+			this.guildZc=new GuildZC();
+			this.addChild(this.guildZc);
+			this.guildZc.x=60;
+			this.guildZc.y=60;
+
+			this.guildMain.visible=true;
+			this.guildMember.visible=false;
+			this.guildSci.visible=false;
+			this.guildShop.visible=false;
+			this.guildList.visible=false;
+			this.guildZc.visible=false;
+			this.guildPk.visible=false;
+			this.guildCreat.visible=false;
+
+//			this.guildTabbar.addToTab(this.guildMain, 0);
+//			this.guildTabbar.addToTab(this.guildMember, 1);
+//			this.guildTabbar.addToTab(this.guildSci, 2);
 //			this.guildTabbar.addToTab(this.guildCopy, 3);
 //			this.guildTabbar.addToTab(this.guildPk, 4);
-			this.guildTabbar.addToTab(this.guildShop, 5);
+//			this.guildTabbar.addToTab(this.guildShop, 5);
 //			this.guildTabbar.addToTab(this.guildZc, 6);
-			this.guildTabbar.addToTab(this.guildList, 7);
-			this.guildTabbar.addToTab(this.guildCreat, 8);
+//			this.guildTabbar.addToTab(this.guildList, 7);
+//			this.guildTabbar.addToTab(this.guildCreat, 8);
+
 
 			this.guildMemMessage=new GuildMemMessager();
 			this.guildPowManager=new GuildPowManager();
@@ -193,6 +255,26 @@ gl -- 管理 (0,1)
 			this.guildAddWnd=new GuildAddWnd();
 
 //			this.guildTabbar.turnToTab(0);
+
+			this.addChild(this.mainBtn);
+			this.addChild(this.memBtn);
+			this.addChild(this.kjBtn);
+			this.addChild(this.shopBtn);
+			this.addChild(this.listBtn);
+
+			this.addChild(this.getUIbyID("m1Img") as Image);
+			this.addChild(this.getUIbyID("m2Img") as Image);
+			this.addChild(this.getUIbyID("m3Img") as Image);
+			this.addChild(this.getUIbyID("m4Img") as Image);
+			this.addChild(this.getUIbyID("m5Img") as Image);
+
+			this.addChild(this.memNumLbl);
+			this.addChild(this.currentonlineLbl);
+			this.addChild(this.contributeLbl);
+			this.addChild(this.currOnLineTxt);
+			this.addChild(this.memNumTxt);
+			this.addChild(this.contributeTxt);
+			this.addChild(this.bgIcon);
 
 			var einfo:MouseEventInfo=new MouseEventInfo();
 			einfo.onMouseMove=onTipsMouseOver;
@@ -207,6 +289,116 @@ gl -- 管理 (0,1)
 
 		private function onTipsMouseOut(e:DisplayObject):void {
 			ToolTipManager.getInstance().hide();
+		}
+
+		private function onItemClick(e:MouseEvent):void {
+
+			this.mainBtn.turnOff();
+			this.memBtn.turnOff();
+			this.kjBtn.turnOff();
+			this.shopBtn.turnOff();
+			this.listBtn.turnOff();
+
+			switch (e.target.name) {
+				case "mainBtn":
+					this.guildMain.visible=true;
+					this.guildMember.visible=false;
+					this.guildSci.visible=false;
+					this.guildShop.visible=false;
+					this.guildList.visible=false;
+
+					this.mainBtn.turnOn();
+
+					Cmd_Guild.cm_GuildInfo();
+					this.guildAddWnd.hide();
+					UIManager.getInstance().buyWnd.hide();
+					break;
+				case "memBtn":
+					this.guildMain.visible=false;
+					this.guildMember.visible=true;
+					this.guildSci.visible=false;
+					this.guildShop.visible=false;
+					this.guildList.visible=false;
+
+					this.memBtn.turnOn();
+
+//					Cmd_Guild.cm_GuildMemList(1, this.guildMemNum);
+					Cmd_Guild.cm_GuildMemList(1, 1000);
+					this.guildDonateMessage.hide();
+					UIManager.getInstance().buyWnd.hide();
+					break;
+				case "kjBtn":
+					this.guildMain.visible=false;
+					this.guildMember.visible=false;
+					this.guildSci.visible=true;
+					this.guildShop.visible=false;
+					this.guildList.visible=false;
+
+					this.kjBtn.turnOn();
+					Cmd_unb.cmGuildBlessInit();
+//					this.updateGuildSci(null);
+//					Cmd_Guild.cm_GuildSkill();
+					this.guildDonateMessage.hide();
+					this.guildAddWnd.hide();
+					UIManager.getInstance().buyWnd.hide();
+					break;
+				case 3:
+					Cmd_Ucp.cm_GuildCpInit();
+					this.guildDonateMessage.hide();
+					this.guildAddWnd.hide();
+					UIManager.getInstance().buyWnd.hide();
+					break;
+				case 4:
+					Cmd_Unw.cm_GuildPkInit();
+					this.guildAddWnd.hide();
+					break;
+				case "shopBtn":
+
+					this.guildMain.visible=false;
+					this.guildMember.visible=false;
+					this.guildSci.visible=false;
+					this.guildShop.visible=true;
+					this.guildList.visible=false;
+
+					this.shopBtn.turnOn();
+
+					this.guildShop.updateData();
+					this.guildAddWnd.hide();
+					break;
+				case 6:
+					this.guildDonateMessage.hide();
+					this.guildAddWnd.hide();
+					UIManager.getInstance().buyWnd.hide();
+					Cmd_Guild.cm_GuildZCInit();
+					break;
+				case "listBtn":
+
+					this.guildMain.visible=false;
+					this.guildMember.visible=false;
+					this.guildSci.visible=false;
+					this.guildShop.visible=false;
+					this.guildList.visible=true;
+
+					this.listBtn.turnOn();
+
+					Cmd_Guild.cm_GuildList(1, 12);
+					this.guildDonateMessage.hide();
+					this.guildAddWnd.hide();
+					UIManager.getInstance().buyWnd.hide();
+					break;
+				case 8:
+					this.guildDonateMessage.hide();
+					this.guildAddWnd.hide();
+					UIManager.getInstance().buyWnd.hide();
+					break;
+
+			}
+
+			this.changeTabName=e.target.name;
+			//			this.guildSkill.clearData();
+			this.guildMember.clearData();
+			this.guildList.clearData();
+
 		}
 
 		/**
@@ -227,6 +419,19 @@ gl -- 管理 (0,1)
 		}
 
 		/**
+		 * 设置列表页邀请状态
+		 * @param yset
+		 *
+		 */
+		public function setGuildListInviteState(yset:int):void {
+			if (yset == 1) {
+				this.guildList.getAutoAccCb().turnOn();
+			} else {
+				this.guildList.getAutoAccCb().turnOff();
+			}
+		}
+
+		/**
 		 * 行会pk状态
 		 * @return
 		 *
@@ -238,7 +443,7 @@ gl -- 管理 (0,1)
 		public function setTabIndex(i:int):void {
 			if (this.guildName != "" && this.guildName != null) {
 				this.changeTabIndex=i;
-				this.guildTabbar.turnToTab(i);
+//				this.guildTabbar.turnToTab(i);
 			}
 		}
 
@@ -247,12 +452,12 @@ gl -- 管理 (0,1)
 		 * @param e
 		 *
 		 */
-		private function onClick(e:MouseEvent):void {
-			if (this.memberJob == GuildEnum.ADMINI_1)
-				Cmd_Guild.cm_GuildApplySet(this.autoAccCb.isOn ? 1 : 0);
-			else
-				Cmd_Guild.cm_GuildInviteSet(this.autoAccCb.isOn ? 1 : 0);
-		}
+//		private function onClick(e:MouseEvent):void {
+//			if (UIManager.getInstance().guildWnd.memberJob == GuildEnum.ADMINI_1)
+//				Cmd_Guild.cm_GuildApplySet(this.autoAccCb.isOn ? 1 : 0);
+//			else
+//				Cmd_Guild.cm_GuildInviteSet(this.autoAccCb.isOn ? 1 : 0);
+//		}
 
 		public function viewCopyOn():Boolean {
 			return this.guildCopy.isOn;
@@ -322,6 +527,10 @@ gl -- 管理 (0,1)
 			return this.guildTabbar.turnOnIndex;
 		}
 
+		public function getTabName():String {
+			return this.changeTabName;
+		}
+
 		/**
 		 *重刷会员列表
 		 */
@@ -335,23 +544,34 @@ gl -- 管理 (0,1)
 		 */
 		public function updateMain(o:Object):void {
 
-			this.guildTabbar.setTabVisible(0, true);
-			this.guildTabbar.setTabVisible(1, true);
+//			this.guildTabbar.setTabVisible(0, true);
+//			this.guildTabbar.setTabVisible(1, true);
 
-			this.guildTabbar.setTabVisible(3, false);
-			this.guildTabbar.setTabVisible(4, false);
-			this.guildTabbar.setTabVisible(5, true);
-			this.guildTabbar.setTabVisible(6, false);
-			this.guildTabbar.setTabVisible(7, true);
-			this.guildTabbar.setTabVisible(8, false);
+//			this.guildTabbar.setTabVisible(3, false);
+//			this.guildTabbar.setTabVisible(4, false);
+//			this.guildTabbar.setTabVisible(5, true);
+//			this.guildTabbar.setTabVisible(6, false);
+//			this.guildTabbar.setTabVisible(7, true);
+//			this.guildTabbar.setTabVisible(8, false);
 
+			this.memBtn.setActive(true, 1, true);
+			this.shopBtn.setActive(true, 1, true);
+			this.mainBtn.setActive(true, 1, true);
+
+//			this.mainBtn.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
 			//callback
 //			if (!this.visible)
 //				super.show();
 
 			if (this.firstOpen || this.guildId == "") {
-				this.guildTabbar.turnToTab(this.changeTabIndex);
+//				this.guildTabbar.turnToTab(this.changeTabIndex);
+				this.memBtn.turnOff();
+				this.kjBtn.turnOff();
+				this.shopBtn.turnOff();
+				this.listBtn.turnOff();
 
+//				this.mainBtn.turnOn();
+				this.mainBtn.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
 				this.firstOpen=false;
 			}
 
@@ -375,24 +595,26 @@ gl -- 管理 (0,1)
 				this.guildContribute=o.bg;
 			}
 
+			if (o.hasOwnProperty("warc")) {
+				this.guildWarc=o.warc;
+			} else
+				this.guildWarc=0;
+
 			if (o.hasOwnProperty("uset")) {
 				this.ischeckUset=o.uset;
-				if (o.uset == 1)
-					this.autoAccCb.turnOn();
-				else
-					this.autoAccCb.turnOff();
-
-				this.autoAccCb.visible=true;
+				this.guildMember.setAutoAccCb(o.uset);
 			}
+
+			this.guildList.getAutoAccCb().visible=false;
+			this.guildList.setBtnVisible(false);
 
 			if (o.hasOwnProperty("dmoney")) {
 				this.guildDonateMoney=o.dmoney;
-
 				this.guildDonateMessage.updateLastMoney();
 			}
 
-			if (this.guildTabbar.turnOnIndex == 0 && o.mk == "I")
-				Cmd_Guild.cm_GuildNotice(o.unionid, 1);
+//			if (this.guildTabbar.turnOnIndex == 0 && o.mk == "I")
+//				Cmd_Guild.cm_GuildNotice(o.unionid, 1);
 
 			this.guildMain.updateInfo(o);
 
@@ -402,8 +624,8 @@ gl -- 管理 (0,1)
 			this.bgIcon.visible=true;
 
 			if (this.guildLv >= ConfigEnum.Union_Bless1)
-				this.guildTabbar.setTabVisible(2, true);
-			
+				this.kjBtn.setActive(true, 1, true);
+
 			MyInfoManager.getInstance().isGuild=true;
 
 			if (!this.visible)
@@ -456,15 +678,17 @@ gl -- 管理 (0,1)
 
 			if (this.memberJob == GuildEnum.ADMINI_1) {
 //				this.autoAccCb.text="自动同意入会申请";
-			} else
-				this.autoAccCb.text=PropUtils.getStringById(1764);
+			} else {
+//				this.autoAccCb.text=PropUtils.getStringById(1764);
 
-			this.autoAccCb.setActive((o[4] == 1 ? true : false));
+				this.guildList.getAutoAccCb().visible=false;
+//				this.guildList.getAutoAccCb().setActive((o[4] == 1 ? true : false));
 
-			if (this.ischeckUset == 1)
-				this.autoAccCb.turnOn();
-			else
-				this.autoAccCb.turnOff();
+				if (this.ischeckUset == 1)
+					this.guildList.getAutoAccCb().turnOn();
+				else
+					this.guildList.getAutoAccCb().turnOff();
+			}
 
 //			if (this.memberPrice[GuildEnum.ADMINI_PRICE_MANAGER] == 1) {
 //
@@ -520,10 +744,10 @@ gl -- 管理 (0,1)
 			GuideManager.getInstance().removeGuide(102);
 			GuideManager.getInstance().removeGuide(103);
 
-			this.guildTabbar.setTabVisible(3, false);
-			this.guildTabbar.setTabVisible(4, false);
-			this.guildTabbar.setTabVisible(6, false);
-			
+//			this.guildTabbar.setTabVisible(3, false);
+//			this.guildTabbar.setTabVisible(4, false);
+//			this.guildTabbar.setTabVisible(6, false);
+
 		}
 
 //		override public function set visible(value:Boolean):void {
@@ -547,6 +771,7 @@ gl -- 管理 (0,1)
 			this.resetWnd();
 
 			this.changeTabIndex=0;
+
 			Cmd_Guild.cm_GuildMemInfo(MyInfoManager.getInstance().name);
 			Cmd_Guild.cm_GuildInfo();
 		}
@@ -555,25 +780,40 @@ gl -- 管理 (0,1)
 
 			if (this.guildName == null || this.guildName == "") {
 
-				this.guildTabbar.setTabVisible(0, false);
-				this.guildTabbar.setTabVisible(1, false);
-				this.guildTabbar.setTabVisible(2, false);
-				this.guildTabbar.setTabVisible(3, false);
-				this.guildTabbar.setTabVisible(4, false);
-				this.guildTabbar.setTabVisible(5, false);
-				this.guildTabbar.setTabVisible(6, false);
-				this.guildTabbar.setTabVisible(7, true);
-				this.guildTabbar.setTabVisible(8, true);
+//				this.guildTabbar.setTabVisible(0, false);
+//				this.guildTabbar.setTabVisible(1, false);
+//				this.guildTabbar.setTabVisible(2, false);
+//				this.guildTabbar.setTabVisible(3, false);
+//				this.guildTabbar.setTabVisible(4, false);
+//				this.guildTabbar.setTabVisible(5, false);
+//				this.guildTabbar.setTabVisible(6, false);
+//				this.guildTabbar.setTabVisible(7, true);
+//				this.guildTabbar.setTabVisible(8, true);
 
-//				this.firstOpen=false;
-				this.guildTabbar.turnToTab(7);
+				this.memBtn.turnOff();
+				this.kjBtn.turnOff();
+				this.shopBtn.turnOff();
+				this.mainBtn.turnOff();
+
+				this.memBtn.setActive(false, 0.6, true);
+				this.kjBtn.setActive(false, 0.6, true);
+				this.shopBtn.setActive(false, 0.6, true);
+				this.mainBtn.setActive(false, 0.6, true);
+
+//				this.listBtn.turnOn();
+				this.listBtn.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+//				this.guildCreat.visible=false;
+
+				this.firstOpen=false;
+				Cmd_Guild.cm_GuildList(1, 12);
+//				this.guildTabbar.turnToTab(7);
 			}
 
-			this.guildTabbar.setTabVisible(3, false);
-			this.guildTabbar.setTabVisible(4, false);
-			this.guildTabbar.setTabVisible(6, false);
-			
-			this.autoAccCb.visible=false;
+//			this.guildTabbar.setTabVisible(3, false);
+//			this.guildTabbar.setTabVisible(4, false);
+//			this.guildTabbar.setTabVisible(6, false);
+
+//			this.autoAccCb.visible=false;
 
 			this.currentonlineLbl.text="";
 			this.memNumLbl.text="";
@@ -586,6 +826,9 @@ gl -- 管理 (0,1)
 			this.bgIcon.visible=false;
 		}
 
+		public function showCreate():void {
+			this.guildCreat.show();
+		}
 
 		public function clearData():void {
 			this.currentonlineLbl.text="";
@@ -595,6 +838,9 @@ gl -- 管理 (0,1)
 			this.memNumTxt.text="";
 			this.currOnLineTxt.text="";
 			this.contributeTxt.text="";
+
+			this.guildList.getAutoAccCb().visible=true;
+			this.guildList.setBtnVisible(true);
 		}
 
 		public function resize():void {
@@ -603,11 +849,11 @@ gl -- 管理 (0,1)
 		}
 
 		override public function get width():Number {
-			return 644;
+			return 932;
 		}
 
 		override public function get height():Number {
-			return 522;
+			return 544;
 		}
 
 		override public function hide():void {
@@ -619,6 +865,7 @@ gl -- 管理 (0,1)
 			this.guildPowManager.hide();
 			this.guildDonateMessage.hide();
 			this.guildAddWnd.hide();
+			this.guildCreat.hide();
 			this.guildMember.clearData();
 
 //			this.guildSkill.clearData();
@@ -626,12 +873,12 @@ gl -- 管理 (0,1)
 			this.changeTabIndex=0;
 
 			PopupManager.closeConfirm("guildwarpk");
-			
+
 			PopupManager.closeConfirm("guildSciDel");
 			PopupManager.closeConfirm("guildSciGet");
 			PopupManager.closeConfirm("guildSciUpgrade");
 			PopupManager.closeConfirm("guildSciBuild");
-			
+
 			TweenManager.getInstance().lightingCompnent(UIManager.getInstance().toolsWnd.guildBtn);
 		}
 

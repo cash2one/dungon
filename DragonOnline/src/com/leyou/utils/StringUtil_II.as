@@ -1,10 +1,12 @@
 package com.leyou.utils {
 	import com.ace.config.Core;
+	import com.ace.enum.SceneEnum;
+	import com.ace.gameData.manager.MapInfoManager;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.manager.LibManager;
 	import com.ace.manager.UIManager;
 	import com.leyou.enum.ChatEnum;
-
+	
 	import flash.text.TextField;
 	import flash.utils.ByteArray;
 
@@ -260,7 +262,11 @@ package com.leyou.utils {
 				case ChatEnum.CHANNEL_WORLD:
 //					str=PropUtils.getStringById(2052);
 //					str=getColorStr(str, ChatEnum.COLOR_WORLD);
-					str="\\61 ";
+					if(MapInfoManager.getInstance().type == SceneEnum.SCENE_TYPE_ACROSS){
+						str="\\66";
+					}else{
+						str="\\61 ";
+					}
 					break;
 				default:
 //					str=PropUtils.getStringById(2050);

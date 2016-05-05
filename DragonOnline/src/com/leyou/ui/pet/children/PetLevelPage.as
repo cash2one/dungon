@@ -1,16 +1,20 @@
 package com.leyou.ui.pet.children {
 	import com.ace.config.Core;
 	import com.ace.enum.TipEnum;
+	import com.ace.enum.WindowEnum;
 	import com.ace.gameData.manager.DataManager;
 	import com.ace.gameData.manager.MyInfoManager;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.table.TMissionDate;
 	import com.ace.gameData.table.TPetAttackInfo;
+	import com.ace.gameData.table.TPetInfo;
 	import com.ace.gameData.table.TPetStarInfo;
 	import com.ace.gameData.table.TPointInfo;
 	import com.ace.manager.EventManager;
 	import com.ace.manager.LibManager;
+	import com.ace.manager.SoundManager;
 	import com.ace.manager.ToolTipManager;
+	import com.ace.manager.UILayoutManager;
 	import com.ace.manager.UIManager;
 	import com.ace.tools.ScaleBitmap;
 	import com.ace.ui.auto.AutoSprite;
@@ -70,10 +74,12 @@ package com.leyou.ui.pet.children {
 		private var grid:MarketGrid;
 
 		private var petTId:int;
-		
+		private var petTId2:int;
+
 		private var finishedImg:Image;
-		
+
 		private var nextLbl:Label;
+		private var slevel:int;
 
 		public function PetLevelPage() {
 			super(LibManager.getInstance().getXML("config/ui/pet/serventDJ.xml"));
@@ -119,54 +125,60 @@ package com.leyou.ui.pet.children {
 			useBtn.addEventListener(MouseEvent.CLICK, onMouseClick);
 			receiveBtn.addEventListener(MouseEvent.CLICK, onMouseClick);
 			maxNumBtn.addEventListener(MouseEvent.CLICK, onMouseClick);
-			
-			var tlabel:Label = getUIbyID("lv6801Lbl") as Label;
-			tlabel.mouseEnabled = true;
+
+			var tlabel:Label=getUIbyID("lv6801Lbl") as Label;
+			tlabel.mouseEnabled=true;
 			tlabel.addEventListener(MouseEvent.MOUSE_OVER, onTipsOver);
-			
-			tlabel = getUIbyID("att6803Lbl") as Label;
-			tlabel.mouseEnabled = true;
+
+			tlabel=getUIbyID("att6803Lbl") as Label;
+			tlabel.mouseEnabled=true;
 			tlabel.addEventListener(MouseEvent.MOUSE_OVER, onTipsOver);
-			
-			tlabel = getUIbyID("hp6804Lbl") as Label;
-			tlabel.mouseEnabled = true;
+
+			tlabel=getUIbyID("hp6804Lbl") as Label;
+			tlabel.mouseEnabled=true;
 			tlabel.addEventListener(MouseEvent.MOUSE_OVER, onTipsOver);
-			
-			tlabel = getUIbyID("call6807Lbl") as Label;
-			tlabel.mouseEnabled = true;
+
+			tlabel=getUIbyID("call6807Lbl") as Label;
+			tlabel.mouseEnabled=true;
 			tlabel.addEventListener(MouseEvent.MOUSE_OVER, onTipsOver);
-			
+
 			EventManager.getInstance().addEvent("petLvUp", onLevelUp);
 		}
-		
-		private function onLevelUp(pid:int):void{
+
+		private function onLevelUp(pid:int):void {
 			UIManager.getInstance().petWnd.playLvUpEffect(2);
 		}
-		
-		protected function onTipsOver(event:MouseEvent):void{
-			var codeStr:String = event.target.name;
-			codeStr = codeStr.match(/\d+/)[0];
-			var str:String = TableManager.getInstance().getSystemNotice(int(codeStr)).content;
-			str = StringUtil.substitute(str, ConfigEnum.servent2);
+
+		protected function onTipsOver(event:MouseEvent):void {
+			var codeStr:String=event.target.name;
+			codeStr=codeStr.match(/\d+/)[0];
+			var str:String=TableManager.getInstance().getSystemNotice(int(codeStr)).content;
+			str=StringUtil.substitute(str, ConfigEnum.servent2);
 			ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, str, new Point(stage.mouseX, stage.mouseY));
 		}
 
 		protected function onMouseClick(event:MouseEvent):void {
-			var petData:PetData = DataManager.getInstance().petData;
+			var petData:PetData=DataManager.getInstance().petData;
 			switch (event.target.name) {
 				case "taskLbl":
-					var petTaskInfo:TMissionDate = TableManager.getInstance().getMissionDataByID(petData.lvTaskId);
-					var pt:TPointInfo = TableManager.getInstance().getPointInfo(petTaskInfo.target_point);
+					var petTaskInfo:TMissionDate=TableManager.getInstance().getMissionDataByID(petData.lvTaskId);
+					var pt:TPointInfo=TableManager.getInstance().getPointInfo(petTaskInfo.target_point);
 					Core.me.gotoMap(new Point(pt.tx, pt.ty), pt.sceneId, true);
 //					Cmd_Pet.cm_PET_A(1, petTId);
 					break;
 				case "useBtn":
 					Cmd_Pet.cm_PET_U(1, petTId, int(numInput.text));
+					var itemId:int=ConfigEnum.servent12.split(",")[0];
+					var rnum:int=MyInfoManager.getInstance().getBagItemNumById(itemId);
+					if (rnum < int(numInput.text)) {
+						UILayoutManager.getInstance().open(WindowEnum.QUICK_BUY);
+						UIManager.getInstance().quickBuyWnd.pushItem(itemId, itemId);
+					}
 					break;
 				case "receiveBtn":
-					if((petData.lvPetId == petTId) && (1 == petData.lvTaskStatus)){
+					if ((petData.lvPetId == petTId) && (1 == petData.lvTaskStatus)) {
 						Cmd_Pet.cm_PET_D(1);
-					}else{
+					} else {
 						Cmd_Pet.cm_PET_A(1, petTId);
 					}
 					break;
@@ -186,63 +198,71 @@ package com.leyou.ui.pet.children {
 			var cExp:int=0;
 			var petEntry:PetEntryData=DataManager.getInstance().petData.getPetById(petTId);
 			if (null != petEntry) {
-				level=petEntry.level;
+
+				if (this.petTId2 != 0 && this.petTId2 == petTId && slevel != 0 && slevel != petEntry.level) {
+					var pinfo:TPetInfo=TableManager.getInstance().getPetInfo(petTId);
+					SoundManager.getInstance().play(pinfo.sound3);
+				}
+
+				level=this.slevel=petEntry.level;
 				starLv=petEntry.starLv;
 				cExp=petEntry.exp;
 			}
-			
-			var petStarInfo:TPetStarInfo = TableManager.getInstance().getPetStarLvInfo(petTId, starLv);
-			
-			var petLvInfo:TPetAttackInfo = TableManager.getInstance().getPetLvInfo(starLv, level);
-			var nPetLvInfo:TPetAttackInfo = TableManager.getInstance().getPetLvInfo(starLv, level+1);
-			progressLbl.text = cExp + "/" + petLvInfo.exp;
-			progressCImg.scrollRect = new Rectangle(0, 0, 326*cExp/petLvInfo.exp, 18);
-			lvLbl.text = level+"";
-			nLvLbl.text = (level+1)+"";
-			
-			attLbl.text = int(petStarInfo.fixedAtt + petLvInfo.fixedAtt)+"";
-			hpLbl.text = int(petStarInfo.hp + petLvInfo.hp)+"";
-			reviveLbl.text = (petStarInfo.revive+petLvInfo.revive)+PropUtils.getStringById(2146);
-			if(level < ConfigEnum.servent15){
-				nHpLbl.text = int(petStarInfo.hp + nPetLvInfo.hp)+"";
-				nAttLbl.text = int(petStarInfo.fixedAtt + nPetLvInfo.fixedAtt)+"";
-				nReviveLbl.text = (petStarInfo.revive+nPetLvInfo.revive)+PropUtils.getStringById(2146);
-				nextLbl.visible = true;
-				nLvLbl.visible = true;
-				nAttLbl.visible = true;
-				nHpLbl.visible = true;
-				nReviveLbl.visible = true;
-			}else{
-				nextLbl.visible = false;
-				nLvLbl.visible = false;
-				nAttLbl.visible = false;
-				nHpLbl.visible = false;
-				nReviveLbl.visible = false;
+
+			this.petTId2=petTId;
+
+			var petStarInfo:TPetStarInfo=TableManager.getInstance().getPetStarLvInfo(petTId, starLv);
+
+			var petLvInfo:TPetAttackInfo=TableManager.getInstance().getPetLvInfo(starLv, level);
+			var nPetLvInfo:TPetAttackInfo=TableManager.getInstance().getPetLvInfo(starLv, level + 1);
+			progressLbl.text=cExp + "/" + petLvInfo.exp;
+			progressCImg.scrollRect=new Rectangle(0, 0, 326 * cExp / petLvInfo.exp, 18);
+			lvLbl.text=level + "";
+			nLvLbl.text=(level + 1) + "";
+
+			attLbl.text=int(petStarInfo.fixedAtt + petLvInfo.fixedAtt) + "";
+			hpLbl.text=int(petStarInfo.hp + petLvInfo.hp) + "";
+			reviveLbl.text=(petStarInfo.revive + petLvInfo.revive) + PropUtils.getStringById(2146);
+			if (level < ConfigEnum.servent15) {
+				nHpLbl.text=int(petStarInfo.hp + nPetLvInfo.hp) + "";
+				nAttLbl.text=int(petStarInfo.fixedAtt + nPetLvInfo.fixedAtt) + "";
+				nReviveLbl.text=(petStarInfo.revive + nPetLvInfo.revive) + PropUtils.getStringById(2146);
+				nextLbl.visible=true;
+				nLvLbl.visible=true;
+				nAttLbl.visible=true;
+				nHpLbl.visible=true;
+				nReviveLbl.visible=true;
+			} else {
+				nextLbl.visible=false;
+				nLvLbl.visible=false;
+				nAttLbl.visible=false;
+				nHpLbl.visible=false;
+				nReviveLbl.visible=false;
 			}
-			
-			var petData:PetData = DataManager.getInstance().petData;
-			var taskId:int = petData.lvTaskId;
-			if(taskId <= 0){
-				finishedImg.visible = false;
+
+			var petData:PetData=DataManager.getInstance().petData;
+			var taskId:int=petData.lvTaskId;
+			if (taskId <= 0) {
+				finishedImg.visible=false;
 				return;
 			}
- 
-			var petTaskInfo:TMissionDate = TableManager.getInstance().getMissionDataByID(taskId);
-			var text:String = petTaskInfo.monster_name+"("+petData.lvPogress+"/"+petTaskInfo.monster_num+")";
-			text = StringUtil_II.addEventString(text, text, true);
-			taskLbl.htmlText = StringUtil_II.getColorStr(text, "#ff00");
-			rewardLbl.text = PropUtils.getStringById(2154)+ConfigEnum.servent10;
-			costLbl.text = ConfigEnum.servent11+"";
-			finishedImg.visible = petEntry.lvMissionComplete;
-			
-			if((0 == petData.lvPetId) || (petData.lvPetId != petTId)){
+
+			var petTaskInfo:TMissionDate=TableManager.getInstance().getMissionDataByID(taskId);
+			var text:String=petTaskInfo.monster_name + "(" + petData.lvPogress + "/" + petTaskInfo.monster_num + ")";
+			text=StringUtil_II.addEventString(text, text, true);
+			taskLbl.htmlText=StringUtil_II.getColorStr(text, "#ff00");
+			rewardLbl.text=PropUtils.getStringById(2154) + ConfigEnum.servent10;
+			costLbl.text=ConfigEnum.servent11 + "";
+			finishedImg.visible=petEntry.lvMissionComplete;
+
+			if ((0 == petData.lvPetId) || (petData.lvPetId != petTId)) {
 				receiveBtn.setActive(true, 1, true);
-				receiveBtn.text = PropUtils.getStringById(1891);
-			}else{
-				receiveBtn.text = PropUtils.getStringById(1892);
+				receiveBtn.text=PropUtils.getStringById(1891);
+			} else {
+				receiveBtn.text=PropUtils.getStringById(1892);
 				receiveBtn.setActive((1 == petData.lvTaskStatus), 1, true);
 			}
-			if(petEntry.lvMissionComplete){
+			if (petEntry.lvMissionComplete) {
 				receiveBtn.setActive(false, 1, true);
 			}
 		}

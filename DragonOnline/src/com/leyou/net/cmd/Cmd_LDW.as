@@ -27,10 +27,9 @@ package com.leyou.net.cmd
 			UIManager.getInstance().luckDrawWnd.updateInfo_I();
 		}
 		
-		public static function cm_LDW_I():void{
-			NetGate.getInstance().send(CmdEnum.CM_LBOX_I);
+		public static function cm_LDW_I(type:int):void{
+			NetGate.getInstance().send(CmdEnum.CM_LBOX_I+type);
 		}
-		
 		
 //		--------------------------
 //		开始抽奖
@@ -53,6 +52,11 @@ package com.leyou.net.cmd
 //		上行: lbox|J
 		public static function cm_LDW_J():void{
 			NetGate.getInstance().send(CmdEnum.CM_LBOX_J);
+		}
+		
+		public static function sm_LDW_J(obj:Object):void{
+			DataManager.getInstance().luckdrawData.lyb = obj.lyb;
+			UIManager.getInstance().luckDrawWnd.updateYb();
 		}
 		
 //		--------------------------

@@ -8,9 +8,11 @@ package com.leyou.ui.creatUser {
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.manager.LibManager;
 	import com.ace.manager.ResizeManager;
+	import com.ace.manager.SoundManager;
 	import com.ace.manager.TimeManager;
 	import com.ace.manager.ToolTipManager;
 	import com.ace.manager.UIManager;
+	import com.ace.tools.MathTools;
 	import com.ace.ui.auto.AutoSprite;
 	import com.ace.ui.button.children.CheckBox;
 	import com.ace.ui.button.children.ImgButton;
@@ -181,9 +183,11 @@ package com.leyou.ui.creatUser {
 			femaleNameQueue.pop();
 			maleNameQueue.pop();
 			surNameArr.pop();
-			selectSex=int(Math.random() * 10000) % 2;
-			selectRace=int(Math.random() * 10000) % 4 + 1;
-			turnOnButton(selectSex, selectRace);
+//			selectSex=int(Math.random() * 10000) % 2;
+//			selectRace=int(Math.random() * 10000) % 4 + 1;
+//			turnOnButton(selectSex, selectRace);
+
+
 			nameInput.text=randomName();
 			UIManager.getInstance().creatWindow(WindowEnum.FIRST_LOGIN);
 
@@ -194,7 +198,7 @@ package com.leyou.ui.creatUser {
 
 			nameInput.input.addEventListener(Event.CHANGE, onTextChange);
 			if (waitTime > 0) {
-				TimeManager.getInstance().addITick(1000, updateTime);
+				TimeManager.getInstance().addITick(waitTime, updateTime);
 			}
 			tick=getTimer();
 
@@ -214,6 +218,10 @@ package com.leyou.ui.creatUser {
 //				tf.htmlText="<FONT size='12' color='#9f8657'>" + randomName() + "</FONT> " + PropUtils.getStringById(1675);
 //			}
 //			rollName();
+
+
+			var btns:Array=[zsBtn, zsMBtn, fsBtn, fsMBtn, ssBtn, ssMBtn, yxBtn, yxMBtn];
+			this.onSelelectUser(btns[MathTools.randomAtoB(0, 7)]);
 		}
 
 //		private function rollName():void {
@@ -234,7 +242,7 @@ package com.leyou.ui.creatUser {
 				tf.y=(ROLL_NAME_NUM - 1) * 15;
 			}
 			if (0 == tf.alpha) {
-				tf.htmlText="<FONT size='12' color='#9f8657'>" + randomName() + "</FONT> "+PropUtils.getStringById(1675);
+				tf.htmlText="<FONT size='12' color='#9f8657'>" + randomName() + "</FONT> " + PropUtils.getStringById(1675);
 				tf.alpha=1;
 			}
 			var obj:Object;
@@ -290,6 +298,16 @@ package com.leyou.ui.creatUser {
 			if (!(tar is ImgButton)) {
 				return;
 			}
+
+			if (tar.name != "enterBtn") {
+				tick=getTimer();
+			}
+
+			this.onSelelectUser(tar);
+		}
+
+		private function onSelelectUser(tar:ImgButton):void {
+
 			if ((tar.name != "enterBtn") && (tar.name != "randomBtn")) {
 				if (null != selectBtn) {
 					selectBtn.turnOff();
@@ -297,9 +315,7 @@ package com.leyou.ui.creatUser {
 				selectBtn=tar;
 				selectBtn.turnOn();
 			}
-			if (tar.name != "enterBtn") {
-				tick=getTimer();
-			}
+
 			var sex:int;
 			switch (tar.name) {
 				case "enterBtn":
@@ -345,8 +361,10 @@ package com.leyou.ui.creatUser {
 				selectSex=sex;
 				nameInput.text=randomName();
 			}
-
+			SoundManager.getInstance().play(this.sDic[tar.name]);
 		}
+
+		private var sDic:Object={zsBtn: 9000, zsMBtn: 9004, fsBtn: 9001, fsMBtn: 9005, ssBtn: 9002, ssMBtn: 9006, yxBtn: 9003, yxMBtn: 9007};
 
 		private function turnOnButton(sex:int, race:int):void {
 			//			var ss:int = PlayerEnum.SEX_BOY;

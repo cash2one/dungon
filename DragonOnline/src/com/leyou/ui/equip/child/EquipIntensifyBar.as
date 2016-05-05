@@ -22,6 +22,7 @@ package com.leyou.ui.equip.child {
 	import com.ace.ui.input.children.TextInput;
 	import com.ace.ui.lable.Label;
 	import com.leyou.data.tips.TipsInfo;
+	import com.leyou.enum.ConfigEnum;
 	import com.leyou.ui.quickBuy.QuickBuyWnd;
 	import com.leyou.utils.BadgeUtil;
 	import com.leyou.utils.FilterUtil;
@@ -32,6 +33,7 @@ package com.leyou.ui.equip.child {
 	import flash.events.MouseEvent;
 	import flash.events.TextEvent;
 	import flash.geom.Point;
+
 
 	public class EquipIntensifyBar extends AutoSprite {
 
@@ -67,7 +69,7 @@ package com.leyou.ui.equip.child {
 
 		private var targetlv:int;
 		private var loadtargetLv:int;
-
+		
 		public function EquipIntensifyBar() {
 			super(LibManager.getInstance().getXML("config/ui/equip/equipIntensifyBar.xml"));
 			this.init();
@@ -232,6 +234,15 @@ package com.leyou.ui.equip.child {
 //			this.succLbl.text="" + BadgeUtil.getTypeByRate(tmp1Xml.@sucessRate);
 			this.succLbl.text="" + tmp1Xml.@sucessRate + "%";
 
+//			var egold:String=ConfigEnum["equip" + int(this.lv2Lbl.text)];
+//			
+//			if (egold.split("|")[0] == 1)
+//				this.goldImg.updateBmp("ui/backpack/moneyIco.png");
+//			else if (egold.split("|")[0] == 2)
+//				this.goldImg.updateBmp("ui/backpack/yuanbaoIco.png");
+			
+//			this.needGoldLbl.text="" + egold.split("|")[1];
+			
 			this.needGoldLbl.text="" + int(tmp1Xml.@money);
 
 			var iteminfo:TItemInfo=TableManager.getInstance().getItemInfo(tmp1Xml.@item);
@@ -291,6 +302,15 @@ package com.leyou.ui.equip.child {
 			var tmp1Xml:XML=xml.strengthen[qh - 1];
 			this.succLbl.text="" + tmp1Xml.@sucessRate + "%";
 
+//			var egold:String=ConfigEnum["equip" + qh];
+//			
+//			if (egold.split("|")[0] == 1)
+//				this.goldImg.updateBmp("ui/backpack/moneyIco.png");
+//			else if (egold.split("|")[0] == 2)
+//				this.goldImg.updateBmp("ui/backpack/yuanbaoIco.png");
+//			
+//			this.needGoldLbl.text="" + egold.split("|")[1];
+			
 			this.needGoldLbl.text="" + int(tmp1Xml.@money);
 
 			var iteminfo:TItemInfo=TableManager.getInstance().getItemInfo(tmp1Xml.@item);
@@ -309,7 +329,7 @@ package com.leyou.ui.equip.child {
 
 			if (!UIManager.getInstance().quickBuyWnd.isAutoBuy(this.items[1], this.items[0])) {
 
-				UILayoutManager.getInstance().show(WindowEnum.EQUIP, WindowEnum.QUICK_BUY, UILayoutManager.SPACE_X, UILayoutManager.SPACE_Y + 40);
+				UILayoutManager.getInstance().show(WindowEnum.EQUIP, WindowEnum.QUICK_BUY); //, UILayoutManager.SPACE_X+50, UILayoutManager.SPACE_Y + 40);
 				UIManager.getInstance().quickBuyWnd.pushItem(this.items[1], this.items[0], needNum);
 
 				this.setAutoEnbale(true);
@@ -372,9 +392,9 @@ package com.leyou.ui.equip.child {
 		public function set targetLv(i:int):void {
 			this.targetlv=i;
 		}
-		
-		public function clearData():void{
-			
+
+		public function clearData():void {
+
 			this.loadtargetLv=0;
 		}
 

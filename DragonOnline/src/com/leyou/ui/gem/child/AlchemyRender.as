@@ -3,11 +3,13 @@ package com.leyou.ui.gem.child {
 	import com.ace.enum.FontEnum;
 	import com.ace.enum.PlayerEnum;
 	import com.ace.enum.TipEnum;
+	import com.ace.enum.WindowEnum;
 	import com.ace.gameData.manager.MyInfoManager;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.table.TAlchemy;
 	import com.ace.gameData.table.TItemInfo;
 	import com.ace.loader.child.SwfLoader;
+	import com.ace.manager.GuideArrowDirectManager;
 	import com.ace.manager.LibManager;
 	import com.ace.manager.MouseManagerII;
 	import com.ace.manager.ToolTipManager;
@@ -29,7 +31,7 @@ package com.leyou.ui.gem.child {
 	import com.leyou.utils.EffectUtil;
 	import com.leyou.utils.ItemUtil;
 	import com.leyou.utils.PropUtils;
-
+	
 	import flash.display.DisplayObject;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
@@ -94,6 +96,7 @@ package com.leyou.ui.gem.child {
 		private var numArr:Array=[];
 
 		private var rate:int=0;
+		private var tlv:int=0;
 
 
 		public function AlchemyRender() {
@@ -331,6 +334,8 @@ package com.leyou.ui.gem.child {
 					break;
 				case "compoundBtn":
 					if (this.currentid != -1 && this.currentCount >= 1) {
+						GuideArrowDirectManager.getInstance().delArrow(WindowEnum.GEM_LV+"");
+						
 //						Cmd_Gem.cmGemCompound(this.currentid, (this.itemCb.isOn ? 1 : (this.ybCb.isOn ? 2 : 0)), this.currentCount);
 						Cmd_Alchemy.cmljNow(currentid, (this.itemCb.isOn ? 1 : (this.ybCb.isOn ? 2 : 0)), this.currentCount);
 
@@ -426,22 +431,27 @@ package com.leyou.ui.gem.child {
 			if (tinfo == null)
 				return;
 
+			var keyid:Array=[];
+			var valId:Array=[];
 			var arr:Array=[];
 			var num:int=int.MAX_VALUE;
 			var d:int=0;
 			for (var i:int=0; i < 5; i++) {
 				if (tinfo["Datum" + (i + 1)] > 0) {
+
 					d=MyInfoManager.getInstance().getBagItemNumById(tinfo["Datum" + (i + 1)]);
-					if (d < int(tinfo["Datum_Num" + (i + 1)])) {
+					if (d < int(tinfo["Datum_Num" + (i + 1)]) || (arr.indexOf(tinfo["Datum" + (i + 1)]) > -1 && d - this.IsRepeatNum(tinfo["Datum" + (i + 1)], keyid) < int(tinfo["Datum_Num" + (i + 1)]))) {
 						this.currentMaxCount=0;
 						break;
 					} else {
 						if (d < num) {
 							num=d;
+
 							this.currentMaxCount=Math.floor(num / int(tinfo["Datum_Num" + (i + 1)]));
 						}
 					}
 
+					keyid[tinfo["Datum" + (i + 1)]]=(int(tinfo["Datum_Num" + (i + 1)]));
 					arr.push(tinfo["Datum" + (i + 1)]);
 				}
 			}
@@ -455,8 +465,8 @@ package com.leyou.ui.gem.child {
 			this.ybCb.turnOff();
 			this.itemCb.turnOff();
 
-			num=this.setTargetGrid(tinfo);
 			this.setItemGrid(tinfo);
+			num=this.setTargetGrid(tinfo);
 
 			this.ybCb.visible=this.ybImg.visible=(tinfo.Al_Yb > 0);
 			this.itemCb.visible=this.itemImg.visible=(tinfo.Al_Key > 0);
@@ -521,9 +531,6 @@ package com.leyou.ui.gem.child {
 				this.costLbl.visible=false;
 			}
 
-
-
-
 			this.numInput.text="" + this.currentCount;
 			this.moneyLbl.text="" + this.moneyNum;
 
@@ -551,14 +558,34 @@ package com.leyou.ui.gem.child {
 			if (this.currentMaxCount < 1)
 				return;
 
-			this.addBtn.setActive(true, 1, true);
-			this.reduceBtn.setActive(true, 1, true);
 			this.compoundBtn.setActive(true, 1, true);
-			this.maxBtn.setActive(true, 1, true);
-			this.numInput.mouseChildren=true;
+
+			if (tinfo.Al_Type != 5 && tinfo.Al_Type != 6) {
+				this.addBtn.setActive(true, 1, true);
+				this.reduceBtn.setActive(true, 1, true);
+
+				this.maxBtn.setActive(true, 1, true);
+				this.numInput.mouseChildren=true;
+			}
+		}
+
+		private function IsRepeatNum(sid:int, arr:Array):int {
+
+			var num:int=0;
+			var i:String;
+			for (i in arr) {
+				if (int(i) == sid) {
+					num+=int(arr[i]);
+				}
+			}
+
+			return num;
 		}
 
 		private function setItemGrid(tinfo:TAlchemy):void {
+
+			this.tlv=0;
+
 			var cx:int=23;
 			var i:int=0;
 			var num:int=0;
@@ -581,6 +608,13 @@ package com.leyou.ui.gem.child {
 					this.itemGridArr[i].updataInfo(TableManager.getInstance().getEquipInfo(tinfo["Datum" + (i + 1)]));
 
 				this.itemGridArr[i].setBgBmp(1);
+
+				if (tinfo["Datum" + (i + 1)] < 10000) {
+					this.tlv=MyInfoManager.getInstance().getBagItemStrengLvById(tinfo["Datum" + (i + 1)]);
+					if (this.tlv > 0)
+						this.itemGridArr[i].setIntensify(this.tlv + "");
+				}
+
 				this.itemGridArr[i].setNum(MyInfoManager.getInstance().getBagItemNumById(tinfo["Datum" + (i + 1)]) + "/" + tinfo["Datum_Num" + (i + 1)]);
 				this.itemGridArr[i].x=cx + 70 * i;
 				this.itemGridEffectArr[i].x=cx + 70 * i;
@@ -618,6 +652,13 @@ package com.leyou.ui.gem.child {
 						this.gridArr[i].updataInfo(TableManager.getInstance().getEquipInfo(tinfo["Product" + (i + 1)]));
 
 					this.gridArr[i].setBgBmp(2);
+
+					if (tinfo["Product" + (i + 1)] < 10000) {
+						if (this.tlv > 0)
+							this.gridArr[i].setIntensify(this.tlv + "");
+					}
+
+					this.gridArr[i].tinfo=tinfo;
 
 					if (tinfo["Product" + (i + 1) + "_Num"] > 1)
 						this.gridArr[i].setDaNum("" + tinfo["Product" + (i + 1) + "_Num"]);

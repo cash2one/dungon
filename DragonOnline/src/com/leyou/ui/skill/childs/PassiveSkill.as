@@ -3,9 +3,11 @@ package com.leyou.ui.skill.childs {
 	import com.ace.config.Core;
 	import com.ace.enum.PlayerEnum;
 	import com.ace.enum.TipEnum;
+	import com.ace.enum.WindowEnum;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.table.TUnion_attribute;
 	import com.ace.loader.child.SwfLoader;
+	import com.ace.manager.GuideArrowDirectManager;
 	import com.ace.manager.LibManager;
 	import com.ace.manager.MouseManagerII;
 	import com.ace.manager.ToolTipManager;
@@ -26,11 +28,12 @@ package com.leyou.ui.skill.childs {
 	public class PassiveSkill extends AutoSprite {
 
 		private var iconImg:Image;
-		private var upgradeBtn:ImgButton;
+		public var upgradeBtn:ImgButton;
 		private var moneyLbl:Label;
 		private var bgLbl:Label;
 		private var effSwf:SwfLoader;
 		private var succeffSwf:SwfLoader;
+		private var succeffSwf1:SwfLoader;
 		private var nameLbl:Label;
 		private var lvLbl:Label;
 
@@ -72,6 +75,11 @@ package com.leyou.ui.skill.childs {
 
 			this.succeffSwf.update(99906);
 			this.succeffSwf.visible=false;
+			
+			this.succeffSwf1=this.getUIbyID("succeffSwf1") as SwfLoader;
+
+//			this.succeffSwf1.update(99906);
+			this.succeffSwf1.visible=false;
 
 			this.upgradeBtn.addEventListener(MouseEvent.CLICK, onClick);
 			this.itemRender=new Vector.<PassiveSkillRender>();
@@ -116,6 +124,9 @@ package com.leyou.ui.skill.childs {
 		}
 
 		private function onClick(e:MouseEvent):void {
+
+			GuideArrowDirectManager.getInstance().delArrow(WindowEnum.SKILL + "");
+
 			if (this.currentAtt == -1 || this.itemRender[this.currentAtt] == null)
 				return;
 
@@ -198,6 +209,12 @@ package com.leyou.ui.skill.childs {
 						this.succeffSwf.playAct(PlayerEnum.ACT_STAND, -1, false, function():void {
 							succeffSwf.visible=false;
 						});
+						
+						this.succeffSwf1.visible=true;
+
+						this.succeffSwf1.playAct(PlayerEnum.ACT_STAND, -1, false, function():void {
+							succeffSwf1.visible=false;
+						});
 					}
 				}
 
@@ -218,8 +235,8 @@ package com.leyou.ui.skill.childs {
 					//					else
 					render.updateInfo(o.jlist[i]);
 
-					render.y=313;
-					render.x=50 + 158 * i;
+					render.y=90 + i * 146;
+					render.x=34;
 
 					render.addEventListener(MouseEvent.CLICK, onItemClick);
 
@@ -231,7 +248,7 @@ package com.leyou.ui.skill.childs {
 						if (info != null) {
 							this.moneyLbl.text=info.uMoney + "";
 							this.bgLbl.text=info.uEnergy + "";
-							 
+
 							this.nameLbl.text=info.name + "";
 							this.lvLbl.text="Lv:" + info.lv + "";
 						}
@@ -247,6 +264,18 @@ package com.leyou.ui.skill.childs {
 				}
 			}
 
+		}
+
+		public function getNextLvItem():DisplayObject {
+			var info:TUnion_attribute;
+
+			for (var i:int=0; i < this.itemRender.length; i++) {
+				if (this.itemRender[i].lv < Core.me.info.level) {
+					return this.itemRender[i];
+				}
+			}
+
+			return null;
 		}
 
 		public function clearData():void {

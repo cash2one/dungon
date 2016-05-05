@@ -21,7 +21,7 @@ package com.leyou.ui.day7.child {
 			this.reset();
 			this.unlocking();
 
-			//			super.updataInfo(info);
+			//			super.updataInfo(info); 
 
 			this.iconBmp.updateBmp("ico/items/" + info.icon + ".png");
 			this.iconBmp.x=this.iconBmp.y=(ItemEnum.ITEM_BG_WIDTH - ItemEnum.ITEM_ICO_WIDTH) / 2;

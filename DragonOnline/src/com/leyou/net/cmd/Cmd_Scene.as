@@ -45,7 +45,7 @@ package com.leyou.net.cmd {
 	import com.leyou.enum.CmdEnum;
 	import com.leyou.net.NetGate;
 	import com.test.TestPlayer;
-
+	
 	import flash.geom.Point;
 	import flash.utils.ByteArray;
 	import flash.utils.Endian;
@@ -89,7 +89,7 @@ package com.leyou.net.cmd {
 			NetGate.getInstance().send(CmdEnum.CM_ULOGI_I + UIEnum.PLAT_FORM_ID);
 		}
 
-		internal static var PRE_PS:Point;
+		public static var PRE_PS:Point;
 
 		//通知进入地图
 		public static function sm_r(obj:String):void {
@@ -112,19 +112,18 @@ package com.leyou.net.cmd {
 			cm_ulogi();
 		}
 
-		internal static var isFirst:Boolean=true; //
 
 		public static function cm_tx():void {
-			if (!isFirst)
+			if (!Core.isFirstLogin)
 				return;
-			isFirst=false;
+			Core.isFirstLogin=false;
 			NetGate.getInstance().send(CmdEnum.CM_TX + Core.TX_OPENID + "," + Core.TX_OPENKEY + "," + //
 				Core.TX_APPID + "," + Core.TX_SIG + "," + Core.TX_PF + "," + Core.TX_PFKey + "," + Core.TX_ZONEID);
 		}
 
 		//加载资源完毕
 		public static function cm_r():void {
-//			trace("qzq:发送资源加载完毕",getTimer());
+			trace("协议cm_r", getTimer());
 			EventManager.getInstance().dispatchEvent(EventEnum.SCENE_LOADED);
 			NetGate.getInstance().send(CmdEnum.CM_R);
 		}
@@ -167,6 +166,7 @@ package com.leyou.net.cmd {
 
 		//添加自己
 		public static function sm_3001(br:ByteArray):void {
+			trace("协议sm_3001", getTimer());
 			br.position=3;
 			br.position++;
 			var idTag:String=br.readMultiByte(br.readUnsignedByte(), "utf-8");
@@ -187,9 +187,9 @@ package com.leyou.net.cmd {
 			if (!MapInfoManager.getInstance().walkable(SceneUtil.screenXToTileX(px), SceneUtil.screenYToTileY(py))) {
 				DebugUtil.throwError("3011协议异常：人物传送到障碍点" + SceneUtil.screenToTile(px, py));
 			}
-			if (PRE_PS && SceneUtil.screenToTile(px, py).equals(PRE_PS)) {
-				DebugUtil.throwError("3011协议异常：人物和上次场景位置相同" + SceneUtil.screenToTile(px, py));
-			}
+//			if (PRE_PS && SceneUtil.screenToTile(px, py).equals(PRE_PS)) {
+//				DebugUtil.throwError("3011协议异常：人物和上次场景位置相同" + SceneUtil.screenToTile(px, py));
+//			}
 			var len:int=Core.me ? Core.me.info.scenePathArr.length : -1;
 			UIManager.getInstance().gameScene.gotoPt(SceneUtil.screenToTile(px, py));
 			UIManager.getInstance().gameScene.addMe(info);
@@ -238,6 +238,8 @@ package com.leyou.net.cmd {
 					sm_3002_check2(path, player);
 					sm_3002_check(path);
 				}
+
+//				trace('玩家路径：'+player.info.name,path);
 				Living(player).sm_walk(path);
 			}
 		}
@@ -453,8 +455,10 @@ package com.leyou.net.cmd {
 //				}
 			}
 
-			sm_shenQi(living.info.vipEquipId, living.info.id);
-			sm_equipEffect(living.info.id);
+			if (PlayerEnum.RACE_HUMAN == living.race)
+				sm_shenQi(living.info.baseInfo.yuanS, living.info.id);
+//			sm_equipEffect(living.info.id);
+			sm_equipEffectII(living);
 			sm_lockChange(living);
 			sm_hideGuidLiving(living);
 
@@ -505,6 +509,7 @@ package com.leyou.net.cmd {
 
 		//特殊强化装备特效
 		static public function sm_equipEffect(id:int):void {
+			return;
 			var livingModel:LivingModel=UIManager.getInstance().gameScene.getPlayer(id);
 //			livingModel.info.equipLv=8;
 			livingModel.removeEffectBy(-3);
@@ -527,6 +532,14 @@ package com.leyou.net.cmd {
 				livingModel.removeEffectBy(17);
 			}
 		}
+		
+		static public function sm_equipEffectII(living:LivingModel):void {
+			living.removeEffectBy(-3);
+			living.removeEffectBy(17);
+			if(living.info.equipEffectId==0)
+				return;
+			living.addEffect(living.info.equipEffectId);
+		}
 
 		/**
 		 * 神器
@@ -540,13 +553,13 @@ package com.leyou.net.cmd {
 				return;
 
 			if (id > 0 && !livingModel.info.hasShenQi()) {
-				UIManager.getInstance().gameScene.autoAddShenQi(TableManager.getInstance().getVipDetailInfo(id).modelSmallId, ownerId);
+				UIManager.getInstance().gameScene.autoAddShenQi(TableManager.getInstance().getElementInfo(id, 1).pnfId, ownerId);
 			}
 
 			if (id > 0 && livingModel.info.hasShenQi()) {
 				var shenqi:LivingModel=UIManager.getInstance().gameScene.getPlayer(livingModel.info.shenQiId);
-				if (shenqi.info.featureInfo.suit != TableManager.getInstance().getVipDetailInfo(id).modelSmallId) {
-					shenqi.info.featureInfo.suit=TableManager.getInstance().getVipDetailInfo(id).modelSmallId;
+				if (shenqi.info.featureInfo.suit != TableManager.getInstance().getElementInfo(id, 1).pnfId) {
+					shenqi.info.featureInfo.suit=TableManager.getInstance().getElementInfo(id, 1).pnfId;
 					shenqi.changeAvatars(shenqi.info.featureInfo, true);
 				}
 			}

@@ -1,17 +1,16 @@
 package com.leyou.ui.role.child.children {
 
 	import com.ace.config.Core;
+	import com.ace.enum.FontEnum;
 	import com.ace.enum.TipEnum;
 	import com.ace.enum.WindowEnum;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.player.PlayerBasicInfo;
 	import com.ace.loader.child.SwfLoader;
 	import com.ace.manager.LibManager;
-	import com.ace.manager.MouseManagerII;
 	import com.ace.manager.ToolTipManager;
 	import com.ace.manager.UILayoutManager;
 	import com.ace.manager.UIManager;
-	import com.ace.manager.child.MouseEventInfo;
 	import com.ace.ui.auto.AutoSprite;
 	import com.ace.ui.button.children.ImgButton;
 	import com.ace.ui.img.child.Image;
@@ -19,12 +18,10 @@ package com.leyou.ui.role.child.children {
 	import com.ace.utils.StringUtil;
 	import com.leyou.data.role.RoleInfo;
 	import com.leyou.enum.ConfigEnum;
-	import com.leyou.net.cmd.Cmd_Login;
 	import com.leyou.net.cmd.Cmd_Longz;
 	import com.leyou.utils.PlayerUtil;
 	import com.leyou.utils.PropUtils;
-	
-	import flash.display.DisplayObject;
+
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
@@ -56,6 +53,7 @@ package com.leyou.ui.role.child.children {
 		private var lvLbl:Label;
 		private var txt24:Label;
 		private var guildNameLbl:Label;
+		private var marryLbl:Label;
 
 		private var soulImgbg:Image;
 		private var hpImg:Image;
@@ -65,6 +63,10 @@ package com.leyou.ui.role.child.children {
 		private var eleSwf:SwfLoader;
 		private var eleBtn:ImgButton;
 		private var medicBtn:ImgButton;
+
+		private var etxtArr:Array=[];
+		private var eLblArr:Array=[];
+		private var etLblArr:Array=[];
 
 		private var currentElement:int=0;
 
@@ -110,6 +112,7 @@ package com.leyou.ui.role.child.children {
 			this.raceLbl=this.getUIbyID("raceLbl") as Label;
 			this.lvLbl=this.getUIbyID("lvLbl") as Label;
 			this.guildNameLbl=this.getUIbyID("guildNameLbl") as Label;
+			this.marryLbl=this.getUIbyID("marryLbl") as Label;
 
 			this.soulImgbg=this.getUIbyID("soulImgbg") as Image;
 			this.hpImg=this.getUIbyID("hpImg") as Image;
@@ -119,6 +122,19 @@ package com.leyou.ui.role.child.children {
 //			this.medicBtn=this.getUIbyID("medicBtn") as ImgButton;
 			this.elementImg=this.getUIbyID("elementImg") as Image;
 			this.eleSwf=this.getUIbyID("eleSwf") as SwfLoader;
+
+			var elb:Label;
+			for (var e:int=1; e <= 5; e++) {
+				elb=this.getUIbyID("etxt" + e) as Label;
+				elb.setToolTip(TableManager.getInstance().getSystemNotice(9561 + e).content);
+
+				this.etxtArr.push(elb);
+
+				this.eLblArr.push(this.getUIbyID("eLbl" + e) as Label);
+				this.etLblArr.push(this.getUIbyID("etLbl" + e) as Label);
+
+			}
+
 
 //			var einfo1:MouseEventInfo=new MouseEventInfo();
 //			einfo1.onMouseMove=onMouseOver;
@@ -131,13 +147,13 @@ package com.leyou.ui.role.child.children {
 			eleSpr.graphics.drawRect(0, 0, 180, 120);
 			eleSpr.graphics.endFill();
 
-			this.addChild(eleSpr);
+//			this.addChild(eleSpr);
 
 			eleSpr.y=330;
 			eleSpr.x=5;
 
 			eleSpr.alpha=0;
-			
+
 //			eleSpr.addEventListener(MouseEvent.CLICK, onClick);
 //			medicBtn.addEventListener(MouseEvent.CLICK, onClick);
 
@@ -145,7 +161,7 @@ package com.leyou.ui.role.child.children {
 //				this.eleBtn.visible=false;
 //				this.medicBtn.visible=false;
 			} else {
-				eleSpr.addEventListener(MouseEvent.CLICK, onClick);
+//				eleSpr.addEventListener(MouseEvent.CLICK, onClick);
 			}
 
 //			this.eleBtn.setToolTip(TableManager.getInstance().getSystemNotice(1015).content);
@@ -265,6 +281,7 @@ package com.leyou.ui.role.child.children {
 //			else
 //				this.soilLvLbl.text="等级" + info.elementArr[4];
 
+			/**
 			this.currentElement=info.currentElement;
 
 			switch (info.currentElement) {
@@ -304,6 +321,24 @@ package com.leyou.ui.role.child.children {
 			this.eleSwf.scaleX=this.eleSwf.scaleY=.6;
 
 			this.elementImg.setWH(47 * 0.6, 47 * 0.6);
+			*/
+
+			for (var i:int=0; i < info.elementArr.length; i++) {
+				this.eLblArr[i].text="" + info.elementArr[i][0];
+
+				if (info.currentElement - 1 == i) {
+					this.etLblArr[i].text="" + PropUtils.getStringById(1948);
+					this.etLblArr[i].setTextFormat(FontEnum.getTextFormat("Green12"));
+					this.eLblArr[i].setTextFormat(FontEnum.getTextFormat("Green12"));
+				} else {
+					this.etLblArr[i].text="" + PropUtils.getStringById(2291);
+					this.etLblArr[i].setTextFormat(FontEnum.getTextFormat("grey12"));
+					this.eLblArr[i].setTextFormat(FontEnum.getTextFormat("grey12"));
+				}
+
+			}
+
+
 			this.guardLvLbl.text=info.guaid + "";
 			this.pkLbl.text=info.pk + "";
 			this.hitLvLbl.text=info.hit + "";
@@ -381,6 +416,10 @@ package com.leyou.ui.role.child.children {
 
 		private function onMouseOut(e:MouseEvent):void {
 			ToolTipManager.getInstance().hide();
+		}
+
+		public function setMarryValue(n:String):void {
+			this.marryLbl.text="" + n;
 		}
 
 		private function getWW(ww:Number):Number {

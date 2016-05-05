@@ -15,7 +15,8 @@ package com.leyou.ui.farm {
 	import com.leyou.ui.farm.children.FarmShopRender;
 	import com.leyou.utils.PropUtils;
 	import com.leyou.utils.StringUtil_II;
-	
+
+	import flash.display.DisplayObject;
 	import flash.events.MouseEvent;
 	import flash.utils.getTimer;
 
@@ -80,15 +81,21 @@ package com.leyou.ui.farm {
 				shopRenders.push(shopRender);
 				addChild(shopRender);
 				if (n < 3) {
-					shopRender.x=20 + n * 168;
-					shopRender.y=140;
+					shopRender.x=12 + n * 168;
+					shopRender.y=155;
 				} else {
-					shopRender.x=20 + (n % 3) * 168;
-					shopRender.y=300;
+					shopRender.x=12 + (n % 3) * 168;
+					shopRender.y=315;
 				}
 			}
-			clsBtn.x-=6;
-			clsBtn.y-=14;
+//			clsBtn.x-=6;
+//			clsBtn.y-=14;
+		}
+
+		override public function getUIbyID(id:String):DisplayObject {
+			if (id == "growBtn")
+				return this.shopRenders[0].getUIbyID(id);
+			return super.getUIbyID(id);
 		}
 
 		public function get block():FarmBlock {
@@ -155,14 +162,14 @@ package com.leyou.ui.farm {
 					} else {
 						var c:String=TableManager.getInstance().getSystemNotice(2722).content;
 //						c=com.ace.utils.StringUtil.substitute(c, ConfigEnum.FarmRefreshCost);
-						PopupManager.showRadioConfirm(c, ConfigEnum.FarmRefreshCost.split("|")[0],ConfigEnum.FarmRefreshCost.split("|")[1], onRefresh, null, false, "farm.shop.refresh");
+						PopupManager.showRadioConfirm(c, ConfigEnum.FarmRefreshCost.split("|")[0], ConfigEnum.FarmRefreshCost.split("|")[1], onRefresh, null, false, "farm.shop.refresh");
 					}
 					break;
 			}
 		}
-		
-		private function onRefresh(type:int):void{
-			var ctype:int = ((0 == type) ? 2 : 1); 
+
+		private function onRefresh(type:int):void {
+			var ctype:int=((0 == type) ? 2 : 1);
 			Cmd_Farm.cm_FAM_F(ctype);
 		}
 

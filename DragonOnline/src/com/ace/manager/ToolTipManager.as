@@ -13,6 +13,8 @@ package com.ace.manager {
 	import com.leyou.ui.tips.TipsDMissonWnd;
 	import com.leyou.ui.tips.TipsElementWnd;
 	import com.leyou.ui.tips.TipsEmptyWnd;
+	import com.leyou.ui.tips.TipsEqStrWnd;
+	import com.leyou.ui.tips.TipsEqualityWnd;
 	import com.leyou.ui.tips.TipsEquipWnd;
 	import com.leyou.ui.tips.TipsFarmTip;
 	import com.leyou.ui.tips.TipsFieldBossTip;
@@ -78,6 +80,8 @@ package com.ace.manager {
 			this.classDic[TipEnum.TYPE_TITLE]=TitleTips;
 			this.classDic[TipEnum.TYPE_PET]=TipsPetTip;
 			this.classDic[TipEnum.TYPE_MARRY]=TipsMarryWnd;
+			this.classDic[TipEnum.TYPE_ROLE_EQUIP_LV]=TipsEqStrWnd;
+			this.classDic[TipEnum.TYPE_ROLE_QULITY]=TipsEqualityWnd;
 		}
 
 	}

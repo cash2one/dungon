@@ -147,7 +147,7 @@ package com.leyou.ui.copy.child
 					break;
 				case "beginBtn":
 					Cmd_SCP.cm_SCP_E(info.id);
-					GuideManager.getInstance().removeGuide(30);
+//					GuideManager.getInstance().removeGuide(30);
 					break;
 				case "catalysisBtn":
 					var content:String = TableManager.getInstance().getSystemNotice(4404).content;

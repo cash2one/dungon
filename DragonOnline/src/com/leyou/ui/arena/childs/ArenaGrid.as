@@ -139,7 +139,7 @@ package com.leyou.ui.arena.childs {
 
 		override public function mouseOverHandler($x:Number, $y:Number):void {
 //			if (this.dataId != -1) {
-//				this.tips.itemid=this.dataId;
+				this.tips.itemid=this.dataId;
 //				ToolTipManager.getInstance().show(TipEnum.TYPE_EQUIP_ITEM, this.tips, new Point($x, $y));
 //			} else {
 			switch (this.type) {
@@ -154,6 +154,9 @@ package com.leyou.ui.arena.childs {
 					break;
 				case 4:
 					ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, PropUtils.getStringById(2171) + ":" + this.num, new Point($x, $y));
+					break;
+				default:
+					ToolTipManager.getInstance().show(TipEnum.TYPE_EQUIP_ITEM, this.tips, new Point($x, $y));
 					break;
 			}
 //			}

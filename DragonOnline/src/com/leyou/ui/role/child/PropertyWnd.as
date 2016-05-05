@@ -28,14 +28,15 @@ package com.leyou.ui.role.child {
 
 			this.roleEquip=new RoleEquip();
 
-			this.roleEquip.x=-8;
-			this.roleEquip.y=4;
+			this.roleEquip.x=-10;
+			this.roleEquip.y=3;
 
 			this.addChild(this.roleEquip);
 
-			this.x=-4;
-			this.y=-3;
+			this.x=13;
+			this.y=0;
 			
+//			this.opaqueBackground=0xff0000;
 //			UIManager.getInstance().roleWnd.avatarSpr.addChild(this.bigAvatar);
 		}
 

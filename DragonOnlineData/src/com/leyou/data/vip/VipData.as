@@ -85,5 +85,18 @@ package com.leyou.data.vip
 			}
 			return -1;
 		}
+		
+		public function getDeliveryVipLv():int{
+			var tvipInfo:TVIPInfo = TableManager.getInstance().getVipInfo(29);
+			for(var n:int = 0; n < 11; n++){
+				var value:int = tvipInfo.getVipValue(n);
+				if(value > 0){
+					return n;
+				}
+			}
+			return -1;
+		}
+		
+	 
 	}
 }

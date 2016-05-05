@@ -28,7 +28,7 @@ package com.leyou.ui.guild.child {
 		public function GuildAddWnd() {
 			super(LibManager.getInstance().getXML("config/ui/guild/guildAddWnd.xml"));
 			this.init();
-			this.clsBtn.y-=10;
+//			this.clsBtn.y-=10;
 			this.mouseChildren=true;
 			this.mouseEnabled=true;
 		}

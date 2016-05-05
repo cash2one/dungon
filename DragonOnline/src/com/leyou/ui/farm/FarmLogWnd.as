@@ -25,8 +25,8 @@ package com.leyou.ui.farm
 			mouseChildren = true;
 			mouseEnabled = true;
 			addEventListener(MouseEvent.CLICK, onMouseClick);
-			clsBtn.x -= 6;
-			clsBtn.y -= 14;
+//			clsBtn.x -= 6;
+//			clsBtn.y -= 14;
 		}
 		
 		protected function onMouseClick(event:MouseEvent):void

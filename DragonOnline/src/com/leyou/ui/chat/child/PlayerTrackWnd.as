@@ -77,8 +77,8 @@ package com.leyou.ui.chat.child
 			menuArr.push(new MenuInfo(ChatEnum.CLICK_MENU_II[5], ChatEnum.ADD_GUILD));
 			menuArr.push(new MenuInfo(ChatEnum.CLICK_MENU_II[6], ChatEnum.COPY));
 			menuArr.push(new MenuInfo(ChatEnum.CLICK_MENU_II[7], ChatEnum.SUE));
-			clsBtn.x += 5;
-			clsBtn.y += 18;
+//			clsBtn.x += 5;
+//			clsBtn.y += 18;
 			hideBg();
 		}
 		

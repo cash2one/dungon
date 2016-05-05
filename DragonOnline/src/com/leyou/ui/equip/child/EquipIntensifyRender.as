@@ -1,51 +1,40 @@
 package com.leyou.ui.equip.child {
 
 	import com.ace.enum.PlayerEnum;
-	import com.ace.enum.TipEnum;
 	import com.ace.enum.WindowEnum;
 	import com.ace.game.backpack.GridBase;
 	import com.ace.game.manager.DragManager;
 	import com.ace.gameData.manager.MyInfoManager;
 	import com.ace.gameData.manager.TableManager;
-	import com.ace.gameData.table.TEquipInfo;
 	import com.ace.gameData.table.TItemInfo;
 	import com.ace.loader.child.SwfLoader;
+	import com.ace.manager.GuideArrowDirectManager;
 	import com.ace.manager.LibManager;
 	import com.ace.manager.SoundManager;
-	import com.ace.manager.ToolTipManager;
 	import com.ace.manager.UIManager;
 	import com.ace.ui.auto.AutoSprite;
 	import com.ace.ui.button.children.ImgButton;
-	import com.ace.ui.button.children.NormalButton;
-	import com.ace.ui.button.children.RadioButton;
 	import com.ace.ui.img.child.Image;
 	import com.ace.ui.lable.Label;
 	import com.ace.ui.notice.NoticeManager;
-	import com.ace.utils.PnfUtil;
-	import com.leyou.data.tips.TipsInfo;
 	import com.leyou.net.cmd.Cmd_Equip;
-	import com.leyou.ui.quickBuy.QuickBuyWnd;
-	import com.leyou.ui.task.child.TaskTrackBtn;
-	import com.leyou.utils.BadgeUtil;
-	import com.leyou.utils.ColorUtil;
-	import com.leyou.utils.FilterUtil;
-	import com.leyou.utils.PropUtils;
-
+	
 	import flash.events.MouseEvent;
-	import flash.events.TextEvent;
-	import flash.geom.Point;
 	import flash.utils.clearInterval;
 	import flash.utils.setInterval;
 
 	public class EquipIntensifyRender extends AutoSprite {
 
 		private var descLbl:Label;
+		private var ruleLbl:Label;
 
-		private var confirmBtn:TaskTrackBtn;
+//		private var confirmBtn:TaskTrackBtn;
+		private var confirmBtn:ImgButton;
 		private var equipgrid:EquipStrengGrid;
 
 		private var timecount:int=0;
 		private var succEffect:SwfLoader;
+		private var succeffSwf:SwfLoader;
 		private var starEffect:SwfLoader;
 		private var startEffect:SwfLoader;
 
@@ -70,21 +59,26 @@ package com.leyou.ui.equip.child {
 
 		private function init():void {
 			this.descLbl=this.getUIbyID("descLbl") as Label;
-			this.confirmBtn=new TaskTrackBtn(); //this.getUIbyID("confirmBtn") as ImgButton;
-			this.confirmBtn.updateIcons("ui/equip/btn_qhzb.png");
+			this.ruleLbl=this.getUIbyID("ruleLbl") as Label;
+			this.succeffSwf=this.getUIbyID("succeffSwf") as SwfLoader;
+			this.succeffSwf.visible=false;
+			
+//			this.confirmBtn=new TaskTrackBtn(); //this.getUIbyID("confirmBtn") as ImgButton;
+			this.confirmBtn=this.getUIbyID("confirmBtn") as ImgButton;
+//			this.confirmBtn.updateIcons("ui/equip/btn_qh.jpg");
 			this.confirmBtn.mouseChildren=this.confirmBtn.mouseEnabled=true;
-			this.addChild(this.confirmBtn);
+//			this.addChild(this.confirmBtn);
 
-			this.confirmBtn.x=78.5;
-			this.confirmBtn.y=391;
+//			this.confirmBtn.x=60.5;
+//			this.confirmBtn.y=385;
 
 			this.equipgrid=new EquipStrengGrid();
 			this.addChild(this.equipgrid);
 
 			this.equipgrid.dataId=1;
 
-			this.equipgrid.x=130;
-			this.equipgrid.y=50;
+			this.equipgrid.x=124;
+			this.equipgrid.y=80;
 
 			this.equipgrid.setSize(60, 60);
 			this.equipgrid.selectState();
@@ -105,7 +99,7 @@ package com.leyou.ui.equip.child {
 //				img.visible=false;
 				this.lvStarArr.push(img);
 			}
-
+			
 			this.succEffect=new SwfLoader(99977, null, false);
 			this.addChild(this.succEffect);
 			this.succEffect.x=160;
@@ -128,25 +122,30 @@ package com.leyou.ui.equip.child {
 
 			this.startEffect.visible=false;
 
+			this.addChild(this.succeffSwf);
+			
 			this.confirmBtn.setActive(false, .6, true);
 			this.confirmBtn.setToolTip(TableManager.getInstance().getSystemNotice(2407).content);
 
-			this.descLbl.htmlText="" + TableManager.getInstance().getSystemNotice(2408).content;
+//			this.descLbl.htmlText="" + TableManager.getInstance().getSystemNotice(2408).content;
+			this.ruleLbl.setToolTip(TableManager.getInstance().getSystemNotice(2408).content);
 
-			this.x=-10;
+			this.x=60;
 			this.y=1;
 		}
 
 		private function onClick(e:MouseEvent):void {
 
+			GuideArrowDirectManager.getInstance().delArrow(WindowEnum.EQUIP+"");
+			
 			if (autoStrengid > 0) {
 				clearInterval(autoStrengid);
 				autoStrengid=0;
-				this.confirmBtn.updateIcons("ui/equip/btn_qhzb.png");
+				this.confirmBtn.updataBmd("ui/equip/btn_qh.jpg");
 				this.intensifyBar.targetLv=0;
 				this.intensifyBar.setAutoEnbale(true);
 				this.equipgrid.setEnable(true);
-				
+
 				UIManager.getInstance().equipWnd.BagRender.mouseChildren=true;
 				return;
 			}
@@ -163,7 +162,7 @@ package com.leyou.ui.equip.child {
 
 				if (this.intensifyBar.autoSuccess) {
 					this.intensifyBar.setAutoEnbale(false);
-					this.confirmBtn.updateIcons("ui/equip/btn_qxqh.png");
+					this.confirmBtn.updataBmd("ui/equip/btn_qx.jpg");
 					autoStrengid=setInterval(sendStrenth, 2000);
 					sendStrenth();
 				} else {
@@ -226,7 +225,7 @@ package com.leyou.ui.equip.child {
 				if (autoStrengid > 0) {
 					clearInterval(autoStrengid);
 					autoStrengid=0;
-					this.confirmBtn.updateIcons("ui/equip/btn_qhzb.png");
+					this.confirmBtn.updataBmd("ui/equip/btn_qh.jpg");
 					this.intensifyBar.targetLv=0;
 				}
 
@@ -261,7 +260,7 @@ package com.leyou.ui.equip.child {
 				if (autoStrengid > 0) {
 					clearInterval(autoStrengid);
 					autoStrengid=0;
-					this.confirmBtn.updateIcons("ui/equip/btn_qhzb.png");
+					this.confirmBtn.updataBmd("ui/equip/btn_qh.jpg");
 					this.intensifyBar.targetLv=0;
 				}
 
@@ -277,7 +276,7 @@ package com.leyou.ui.equip.child {
 				if (autoStrengid > 0) {
 					clearInterval(autoStrengid);
 					autoStrengid=0;
-					this.confirmBtn.updateIcons("ui/equip/btn_qhzb.png");
+					this.confirmBtn.updataBmd("ui/equip/btn_qh.jpg");
 					this.intensifyBar.targetLv=0;
 				}
 
@@ -351,7 +350,7 @@ package com.leyou.ui.equip.child {
 
 			this.confirmBtn.setToolTip("");
 			this.confirmBtn.setActive(true, 1, true);
-			this.descLbl.visible=false;
+//			this.descLbl.visible=false;
 		}
 
 
@@ -370,6 +369,10 @@ package com.leyou.ui.equip.child {
 			function stopplay2():void {
 				succEffect.visible=false;
 			}
+			
+			function stopplay3():void {
+				succeffSwf.visible=false;
+			}
 
 			if (o.re == 0) {
 
@@ -386,6 +389,9 @@ package com.leyou.ui.equip.child {
 
 			} else {
 
+				this.succeffSwf.visible=true;
+				succeffSwf.playAct(PlayerEnum.ACT_STAND, -1, false, stopplay3);
+				
 				this.succEffect.visible=true;
 				this.succEffect.update(99902);
 				succEffect.playAct(PlayerEnum.ACT_STAND, -1, false, stopplay2);
@@ -420,7 +426,7 @@ package com.leyou.ui.equip.child {
 				if (autoStrengid > 0) {
 					if (!this.intensifyBar.autoSuccess || this.infodata.tips.qh == this.intensifyBar.targetLv) {
 						clearInterval(autoStrengid);
-						this.confirmBtn.updateIcons("ui/equip/btn_qhzb.png");
+						this.confirmBtn.updataBmd("ui/equip/btn_qh.jpg");
 						autoStrengid=0;
 						this.intensifyBar.targetLv=0;
 						this.intensifyBar.setAutoEnbale(true);
@@ -495,11 +501,11 @@ package com.leyou.ui.equip.child {
 
 			if (autoStrengid > 0) {
 				clearInterval(autoStrengid);
-				this.confirmBtn.updateIcons("ui/equip/btn_qhzb.png");
+				this.confirmBtn.updataBmd("ui/equip/btn_qh.jpg");
 				autoStrengid=0;
 			}
 
-			this.descLbl.visible=true;
+//			this.descLbl.visible=true;
 			this.intensifyBar.visible=false;
 			this.confirmBtn.setActive(false, .6, true);
 			this.confirmBtn.setToolTip(TableManager.getInstance().getSystemNotice(2407).content);

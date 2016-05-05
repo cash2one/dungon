@@ -62,11 +62,11 @@ package com.leyou.ui.marry {
 			this.render3=new Marry4Render3();
 			this.marryTabber.addToTab(this.render3, 2);
 
-			this.render1.x=-10;
-			this.render2.x=-10;
-			this.render3.x=-10;
+			this.render1.x=4;
+			this.render2.x=4;
+			this.render3.x=4;
 
-			this.clsBtn.y+=25;
+//			this.clsBtn.y+=15;
 			
 			
 			var einfo:MouseEventInfo=new MouseEventInfo();
@@ -129,5 +129,15 @@ package com.leyou.ui.marry {
 			PopupManager.closeConfirm("marry_exit");
 		}
 
+		
+		override public function get height():Number{
+			return 544;
+		}
+		
+		override public function get width():Number{
+			return 355;
+		}
+		
+		
 	}
 }

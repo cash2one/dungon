@@ -17,7 +17,7 @@ package com.ace.gameData.setting {
 	 *
 	 */
 	public class AssistInfo {
-
+ 
 		// 是否开启指引
 		public var GuideOpen:Boolean=true;
 
@@ -34,11 +34,17 @@ package com.ace.gameData.setting {
 		public var isAutoPickupFirst:Boolean=false;//拾取优先
 		public var isAutoAttackFirst:Boolean=true;//战斗优先
 		public var autoPickQuality:int=0;//拾取品质之上
+		public var autoRangeScreen:Boolean=true;//挂机范围屏幕内
+		public var autoRangePosition:Boolean=false;//挂机范围定点
+		public var autoPickItemQuality:int=0;//拾取道具品质之上
+		public var autoPickEquipQuality:int=0;//拾取装备品质之上
 
 		public var isAutoTask:Boolean=false; //是否任务打怪
 		private var _isAuto:Boolean=false; //是否开启自动挂机
 		public var preIsAuto:Boolean; //上一次挂机状态
 		public var isAutoPause:Boolean=false; //是否暂停自动挂机
+		public var isAutoExtract:Boolean; // 是否自动萃取
+		public var extractionQuality:int; // 自动萃取品质
 		//		public var skills:Array=[700, 704, 708, 712]; //技能列表，技能id
 		public var skills:Array=[]; //技能列表，技能id
 //		public var minHP:int; //hp最小多少时吃药  // 修改为实时计算
@@ -61,7 +67,7 @@ package com.ace.gameData.setting {
 		public var isHideScene:Boolean=false;
 		public var isHideTitle:Boolean=false; //隐藏称号
 		public var isHideGuid:Boolean=false; //隐藏同行会
-
+		
 		private var isInit:Boolean=false;
 
 		// 指引信息
@@ -188,7 +194,7 @@ package com.ace.gameData.setting {
 				return false;
 			}
 			if (null == guideInfo) {
-				return false;
+				return true;
 //				throw new Error("The guide info does not init");
 			}
 			var info:TGuideInfo=TableManager.getInstance().getGuideInfo(id);
@@ -196,11 +202,11 @@ package com.ace.gameData.setting {
 				throw new Error("Can not find guide info by this id. id=" + id);
 			}
 			// 检查前置ID
-			if (info.fr_id > 0) {
-				if (!guideInfo.hasOwnProperty(info.fr_id) || (guideInfo[info.fr_id] <= 0)) {
-					return false;
-				}
-			}
+//			if (info.fr_id > 0) {
+//				if (!guideInfo.hasOwnProperty(info.fr_id) || (guideInfo[info.fr_id] <= 0)) {
+//					return false;
+//				}
+//			}
 			// 检查限制等级
 			if (!Core.me || !Core.me.info) {
 				return false;
@@ -242,7 +248,6 @@ package com.ace.gameData.setting {
 			data.push(value);
 			value=isAutoEatHP ? 2 : 1;
 			data.push(value);
-//			value=Number((minHP / SceneCore.me.info.baseInfo.maxHp).toFixed(2));
 			value=minHPProgress;
 			data.push(value);
 			value=isAutoEatMP ? 2 : 1;
@@ -274,7 +279,15 @@ package com.ace.gameData.setting {
 			data.push(value);
 			value=isAutoAttackFirst ? 2 : 1;
 			data.push(value);
-			data.push(autoPickQuality);
+			data.push(autoPickItemQuality);
+			data.push(autoPickEquipQuality);
+			value=autoRangeScreen ? 2 : 1;
+			data.push(value);
+			value=autoRangePosition ? 2 : 1;
+			data.push(value);
+			value=isAutoExtract ? 2 : 1;
+			data.push(value);
+			data.push(extractionQuality);
 			return data.join(",");
 		}
 
@@ -288,7 +301,6 @@ package com.ace.gameData.setting {
 			isAutoRevive=(2 == data[index++]);
 			isAutoEatHP=(2 == data[index++]);
 			minHPProgress=data[index++];
-//			minHP=data[index++] * SceneCore.me.info.baseInfo.maxHp;
 			isAutoEatMP=(2 == data[index++]);
 			minMP=data[index++] * SceneCore.me.info.baseInfo.maxMp;
 			isAutoBuyHP=(2 == data[index++]);
@@ -309,11 +321,12 @@ package com.ace.gameData.setting {
 			index += length;
 			isAutoPickupFirst=(2 == data[index++]);
 			isAutoAttackFirst=(2 == data[index++]);
-			autoPickQuality=data[index++];
-			//			skills[0]=data[index++];
-			//			skills[1]=data[index++];
-			//			skills[2]=data[index++];
-			//			skills[3]=data[index++];
+			autoPickItemQuality=data[index++];
+			autoPickEquipQuality=data[index++];
+			autoRangeScreen=(2 == data[index++]);
+			autoRangePosition=(2 == data[index++]);
+			isAutoExtract=(2 == data[index++]);
+			extractionQuality=data[index++];
 		}
 	}
 }

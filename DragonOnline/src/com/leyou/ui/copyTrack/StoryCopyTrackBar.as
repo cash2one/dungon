@@ -24,7 +24,7 @@ package com.leyou.ui.copyTrack {
 
 		private var countLbls:Vector.<Label>;
 
-		private var costLbl:Label;
+		private var remainLbl:Label;
 
 //		private var addLbl:Label;
 //		
@@ -40,9 +40,19 @@ package com.leyou.ui.copyTrack {
 
 		private var tick:uint;
 
-		private var remainTime:int;
+		private var remainTime:uint;
+		
+		private var throughTime:uint;
 
 		private var complete:Boolean;
+		
+		private var throughLbl:Label;
+		
+		private var throughELbl:Label;
+		
+		private var bestLbl:Label;
+		
+		private var bestELbl:Label;
 
 		public function StoryCopyTrackBar() {
 			super(LibManager.getInstance().getXML("config/ui/dungeonTrack.xml"));
@@ -65,8 +75,12 @@ package com.leyou.ui.copyTrack {
 
 //			addLbl = getUIbyID("addLbl") as Label;
 //			iconImg = getUIbyID("iconImg") as Image;
-			costLbl=getUIbyID("remainLbl") as Label;
+			throughLbl=getUIbyID("throughLbl") as Label;
+			throughELbl=getUIbyID("throughELbl") as Label;
+			remainLbl=getUIbyID("remainLbl") as Label;
 			timeEdit=getUIbyID("remainELbl") as Label;
+			bestLbl=getUIbyID("bestLbl") as Label;
+			bestELbl=getUIbyID("bestELbl") as Label;
 //			leaveBtn = getUIbyID("leaveBtn") as ImgButton;
 //			promotionImg = getUIbyID("promotionImg") as Image;
 //			promotionBtn = getUIbyID("promotionBtn") as ImgButton;
@@ -143,9 +157,15 @@ package com.leyou.ui.copyTrack {
 		}
 
 		public function updateTime():void {
-			var re:int=remainTime - (getTimer() - tick) / 1000;
+			var interval:int = (getTimer() - tick);
+			var re:int = remainTime - interval / 1000;
 			re=(re >= 0 ? re : 0);
-			timeEdit.text=StringUtil_II.lpad(int(re / 60) + "", 2, "0") + ":" + StringUtil_II.lpad(int(re % 60) + "", 2, "0");
+			timeEdit.text = StringUtil_II.lpad(int(re / 60) + "", 2, "0") + ":" + StringUtil_II.lpad(int(re % 60) + "", 2, "0");
+			
+			re = throughTime + interval / 1000;
+			re=(re >= 0 ? re : 0);
+			
+			throughELbl.text = StringUtil_II.lpad(int(re / 60) + "", 2, "0") + ":" + StringUtil_II.lpad(int(re % 60) + "", 2, "0");
 		}
 
 		/**
@@ -177,7 +197,7 @@ package com.leyou.ui.copyTrack {
 						countLbl.textColor=(monster.cc == monster.mc) ? 0xff00 : 0xff0000
 						countLbl.text="(" + monster.cc + "/" + monster.mc + ")";
 						countLbl.x=monsterLbl.x + monsterLbl.width + 5;
-						if (monster.cc != monster.mc) {
+						if (monster.cc != monster.mc){
 							complete=false;
 						}
 					} else {
@@ -187,6 +207,8 @@ package com.leyou.ui.copyTrack {
 				}
 				tick=getTimer();
 				remainTime=obj.rt;
+				throughTime=obj.st;
+				bestELbl.text = obj.lt + PropUtils.getStringById(2146);
 			} else if (1 == type) { // boss副本追踪
 			}
 			if (!visible) {

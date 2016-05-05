@@ -4,6 +4,7 @@ package com.ace.ui.notice.message
 	import com.ace.enum.NoticeEnum;
 	import com.ace.enum.UIEnum;
 	import com.ace.enum.WindowEnum;
+	import com.ace.gameData.manager.MyInfoManager;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.table.TEquipInfo;
 	import com.ace.gameData.table.TItemInfo;
@@ -221,6 +222,28 @@ package com.ace.ui.notice.message
 			NoticeManager.getInstance().callBackFun.call(this, NoticeEnum.LINK_ICON, target.type, target.data);
 			NoticeManager.getInstance().noticeIconReuseDic.addToFree(target);
 //			GuideManager.getInstance().refreshGuide();
+		}
+		
+		public function removeType(type:int):void{
+			// 删除已经显示的
+			for (var n:int = renders.length-1; n >= 0; n--){
+				var render:NoticeIcon = renders[n];
+				if(type == renders[n].type){
+					renders.splice(renders.indexOf(render), 1);
+					removeChild(render);
+					adjustPos();
+					NoticeManager.getInstance().noticeIconReuseDic.addToFree(render);
+				}
+			}
+			// 删除队列中的
+			for(var m:int = noticeData.length-1; m >= 0; m--){
+				var info:TNoticeInfo = noticeInfo[m];
+				var content:String=info.content;
+				var flag:int=content.indexOf("|");
+				if(int(content.substring(0, flag)) == type){
+					noticeData.splice(m, 1);
+				}
+			}
 		}
 		
 		public function adjustPos():void{

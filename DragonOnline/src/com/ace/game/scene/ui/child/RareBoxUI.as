@@ -6,17 +6,22 @@ package com.ace.game.scene.ui.child {
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.player.LivingInfo;
 	import com.ace.gameData.table.TCopyInfo;
+	import com.ace.gameData.table.TItemInfo;
 	import com.ace.manager.LibManager;
 	import com.ace.ui.auto.AutoSprite;
 	import com.ace.ui.lable.Label;
 	import com.ace.utils.StringUtil;
 	import com.leyou.enum.ConfigEnum;
 	import com.leyou.ui.market.child.MarketGrid;
+	import com.leyou.utils.ItemUtil;
 
 	public class RareBoxUI extends AutoSprite implements ILivingUI {
 		private var desLbl:Label;
 
 		private var nameLbl:Label;
+		private var s1Lbl:Label;
+		private var s2Lbl:Label;
+		private var s3Lbl:Label;
 
 		private var grids:Vector.<MarketGrid>;
 
@@ -29,6 +34,11 @@ package com.ace.game.scene.ui.child {
 			mouseChildren=true;
 			desLbl=getUIbyID("desLbl") as Label;
 			nameLbl=getUIbyID("nameLbl") as Label;
+			
+			s1Lbl=getUIbyID("s1Lbl") as Label;
+			s2Lbl=getUIbyID("s2Lbl") as Label;
+			s3Lbl=getUIbyID("s3Lbl") as Label;
+			
 			grids=new Vector.<MarketGrid>(3);
 			for (var n:int=0; n < 3; n++) {
 				var grid:MarketGrid=grids[n];
@@ -64,6 +74,14 @@ package com.ace.game.scene.ui.child {
 			grids[0].updataInfo({itemId:copyInfo.item5Data[0], count:copyInfo.item5Data[1]});
 			grids[1].updataInfo({itemId:copyInfo.item6Data[0], count:copyInfo.item6Data[1]});
 			grids[2].updataInfo({itemId:copyInfo.item7Data[0], count:copyInfo.item7Data[1]});
+			
+			var itemInfo:TItemInfo=TableManager.getInstance().getItemInfo(copyInfo.item5Data[0]);
+			
+			s1Lbl.textColor=ItemUtil.getColorByQuality(itemInfo.quality);
+			itemInfo=TableManager.getInstance().getItemInfo(copyInfo.item6Data[0]);
+			s2Lbl.textColor=ItemUtil.getColorByQuality(itemInfo.quality);
+			itemInfo=TableManager.getInstance().getItemInfo(copyInfo.item7Data[0]);
+			s3Lbl.textColor=ItemUtil.getColorByQuality(itemInfo.quality);
 			
 		}
 

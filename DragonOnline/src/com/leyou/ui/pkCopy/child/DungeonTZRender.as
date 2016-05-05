@@ -18,7 +18,6 @@ package com.leyou.ui.pkCopy.child {
 		private var lvLbl:Label;
 		private var bgBtn:ImgButton;
 
-
 		public var id:int=0;
 
 		public var state:int=0;
@@ -88,7 +87,7 @@ package com.leyou.ui.pkCopy.child {
 		}
 
 		override public function get height():Number {
-			return 57;
+			return 58;
 		}
 
 	}

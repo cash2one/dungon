@@ -14,8 +14,7 @@ package com.leyou.ui.monsterInvade {
 	import com.leyou.ui.monsterInvade.child.MonsterInvadeRender2;
 	import com.leyou.ui.monsterInvade.child.MonsterInvadeRender3;
 	import com.leyou.util.DateUtil;
-	import com.leyou.utils.TimeUtil;
-
+	
 	import flash.events.MouseEvent;
 
 	public class MonsterInvadeWnd extends AutoSprite {

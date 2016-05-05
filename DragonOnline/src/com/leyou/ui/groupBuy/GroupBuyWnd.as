@@ -30,8 +30,8 @@ package com.leyou.ui.groupBuy
 			remainLbl = getUIbyID("remainLbl") as Label;
 			desLbl = getUIbyID("desLbl") as Label;
 			items = new Vector.<GroupBuyItem>();
-			clsBtn.x += 4;
-			clsBtn.y += 13;
+//			clsBtn.x += 4;
+//			clsBtn.y += 13;
 			desLbl.htmlText = TableManager.getInstance().getSystemNotice(10012).content;
 		}
 		

@@ -14,6 +14,7 @@ package com.leyou.ui.rank.child
 	
 	import flash.events.MouseEvent;
 	
+	//消费榜render
 	public class RankConsumeItemRender extends AutoSprite
 	{
 		private var lightImg:Image;

@@ -43,7 +43,7 @@ package com.leyou.ui.guild {
 			super(LibManager.getInstance().getXML("config/ui/guild/guildInviteWnd.xml"));
 			this.init();
 			this.hideBg();
-			this.clsBtn.y-=10;
+//			this.clsBtn.y-=10;
 		}
 
 		private function init():void {

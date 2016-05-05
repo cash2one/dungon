@@ -70,7 +70,7 @@ package com.leyou.ui.shop {
 			super(LibManager.getInstance().getXML("config/ui/shop/ShopBuyWnd.xml"));
 			this.init();
 			this.hideBg();
-			this.clsBtn.y-=10;
+//			this.clsBtn.y-=10;
 		}
 
 		private function init():void {
@@ -106,26 +106,26 @@ package com.leyou.ui.shop {
 			this.priceImg=this.getUIbyID("priceImg") as Image;
 			this.totalPriceImg=this.getUIbyID("totalPriceImg") as Image;
 
-			this.numInput.input.restrict="0-9";
-			this.numInput.input.defaultTextFormat=FontEnum.getTextFormat("Gode12ForMoneyCenter");
-			this.numInput.text="1";
-			this.numInput.input.addEventListener(Event.CHANGE, onInputChange);
-			this.numInput.input.addEventListener(MouseEvent.CLICK, onInputSelect);
+//			this.numInput.input.restrict="0-9";
+//			this.numInput.input.defaultTextFormat=FontEnum.getTextFormat("Gode12ForMoneyCenter");
+//			this.numInput.text="1";
+//			this.numInput.input.addEventListener(Event.CHANGE, onInputChange);
+//			this.numInput.input.addEventListener(MouseEvent.CLICK, onInputSelect);
 			//this.numInput.input.addEventListener(TextEvent.TEXT_INPUT, onInputTxt);
 
 			this.confirmBtn.addEventListener(MouseEvent.CLICK, onBtnClick);
 			this.cancelBtn.addEventListener(MouseEvent.CLICK, onBtnClick);
-			this.delBtn.addEventListener(MouseEvent.CLICK, onBtnClick);
-			this.addBtn.addEventListener(MouseEvent.CLICK, onBtnClick);
+//			this.delBtn.addEventListener(MouseEvent.CLICK, onBtnClick);
+//			this.addBtn.addEventListener(MouseEvent.CLICK, onBtnClick);
 
 			this.grid=new ShopGrid();
 			this.grid.x=43;
-			this.grid.y=64;
+			this.grid.y=70;
 			this.addChild(this.grid);
 
-			this.addBtn.visible=false;
-			this.delBtn.visible=false;
-			this.numInput.visible=false;
+//			this.addBtn.visible=false;
+//			this.delBtn.visible=false;
+//			this.numInput.visible=false;
 		}
 
 		private function onTextInput(e:TextEvent):void {
@@ -142,6 +142,8 @@ package com.leyou.ui.shop {
 					current=MyInfoManager.getInstance().getBagItemNumById(30401);
 				else if (this.subbuyType == 3)
 					current=ShopUtil.getIndexTotMoney(7);
+				else if (this.subbuyType == 4)
+					current=ShopUtil.getIndexTotMoney(8);
 			} else
 				current=ShopUtil.getIndexTotMoney(this.moneyId);
 
@@ -170,6 +172,8 @@ package com.leyou.ui.shop {
 					current=MyInfoManager.getInstance().getBagItemNumById(30401);
 				else if (this.subbuyType == 3)
 					current=ShopUtil.getIndexTotMoney(7);
+				else if (this.subbuyType == 4)
+					current=ShopUtil.getIndexTotMoney(8);
 			} else
 				current=ShopUtil.getIndexTotMoney(this.moneyId);
 
@@ -201,6 +205,8 @@ package com.leyou.ui.shop {
 					current=MyInfoManager.getInstance().getBagItemNumById(30401);
 				else if (this.subbuyType == 3)
 					current=ShopUtil.getIndexTotMoney(7);
+				else if (this.subbuyType == 4)
+					current=ShopUtil.getIndexTotMoney(8);
 			} else
 				current=ShopUtil.getIndexTotMoney(this.moneyId);
 
@@ -348,6 +354,8 @@ package com.leyou.ui.shop {
 					current=MyInfoManager.getInstance().getBagItemNumById(30401);
 				else if (this.subbuyType == 3)
 					current=ShopUtil.getIndexTotMoney(7);
+				else if (this.subbuyType == 4)
+					current=ShopUtil.getIndexTotMoney(8);
 			} else
 				current=ShopUtil.getIndexTotMoney(this.moneyId);
 
@@ -373,9 +381,9 @@ package com.leyou.ui.shop {
 			this.numStep.input.setSelection(0, this.numStep.input.text.length);
 		}
 
-		public function updateMystery(info:Object, index:int):void {
+		public function updateMystery(info:Object, index:int, maxNum:int=0):void {
 			this.index=index;
-			this.numInput.text="1";
+//			this.numInput.text="1";
 			this.buyType=4;
 			this.subbuyType=info.tagId;
 
@@ -385,11 +393,11 @@ package com.leyou.ui.shop {
 //				table=TableManager.getInstance().getItemInfo(info.itemId);
 //				} else {
 				table=TableManager.getInstance().getEquipInfo(info.itemId);
-				if(table==null)
+				if (table == null)
 					table=TableManager.getInstance().getItemInfo(info.itemId);
 //				}
 
-				if (info.tagId == "2" || info.tagId == "3") {
+				if (info.tagId == "2" || info.tagId == "3" || info.tagId == "4") {
 					this.unitPriceLbl.text=info.moneyNum + "";
 				} else if (info.tagId == "1") {
 					this.unitPriceLbl.text=info.itemNum + "";
@@ -404,7 +412,17 @@ package com.leyou.ui.shop {
 			}
 
 			var current:int=0
-			if (info.tagId == "3") {
+			if (info.tagId == "4") {
+
+				current=ShopUtil.getBuyCountByMoneyOrBagNum(8, int(this.unitPriceLbl.text), table.maxgroup);
+				this.numStep.maximum=(current <= 0 ? 1 : (current > maxNum ? maxNum : current));
+				this.numStep.value=1;
+				this.silder.progress=1 / this.numStep.maximum;
+
+				this.priceImg.updateBmp(ItemUtil.getExchangeIcon(7));
+				this.totalPriceImg.updateBmp(ItemUtil.getExchangeIcon(7));
+
+			} else if (info.tagId == "3") {
 
 				current=ShopUtil.getBuyCountByMoneyOrBagNum(7, int(this.unitPriceLbl.text), table.maxgroup);
 				this.numStep.maximum=(current <= 0 ? 1 : current);
@@ -464,7 +482,7 @@ package com.leyou.ui.shop {
 		public function update(info:Object, index:int, num:int=-1):void {
 			this.index=index;
 
-			this.numInput.text=(num == -1 ? "1" : num) + "";
+//			this.numInput.text=(num == -1 ? "1" : num) + "";
 
 			if (info is TShop) {
 
@@ -520,12 +538,12 @@ package com.leyou.ui.shop {
 		public function updateGuild(infoXml:XML):void {
 
 			this.buyType=1;
-			this.numInput.text="1";
+//			this.numInput.text="1";
 
-//			if (infoXml.@U_TagID == 3)
-//				table=TableManager.getInstance().getEquipInfo(infoXml.@U_ItemID);
-//			else
-			table=TableManager.getInstance().getItemInfo(infoXml.@U_ItemID);
+			if (int(infoXml.@U_ItemID) < 10000)
+				table=TableManager.getInstance().getEquipInfo(infoXml.@U_ItemID);
+			else
+				table=TableManager.getInstance().getItemInfo(infoXml.@U_ItemID);
 
 			this.priceImg.updateBmp(ItemUtil.getExchangeIcon(3));
 			this.totalPriceImg.updateBmp(ItemUtil.getExchangeIcon(3));
@@ -562,7 +580,7 @@ package com.leyou.ui.shop {
 		 */
 		public function updateMarket(marketItem:MarketItemInfo):void {
 			this.buyType=marketItem.buyType;
-			this.numInput.text="1";
+//			this.numInput.text="1";
 
 			table=TableManager.getInstance().getItemInfo(marketItem.itemId);
 			if (null == table) {
@@ -596,7 +614,7 @@ package com.leyou.ui.shop {
 
 		public function updateIntegral(item:IntegralShopItem):void {
 			this.buyType=5;
-			this.numInput.text="1";
+//			this.numInput.text="1";
 
 			table=TableManager.getInstance().getItemInfo(item.itemId);
 			if (null == table) {
@@ -631,7 +649,7 @@ package com.leyou.ui.shop {
 		 */
 		public function updateAution(autionData:AutionItemData):void {
 			this.buyType=3;
-			this.numInput.text="1";
+//			this.numInput.text="1";
 
 			table=TableManager.getInstance().getItemInfo(autionData.itemId);
 			if (null == table) {
@@ -699,11 +717,11 @@ package com.leyou.ui.shop {
 		override public function die():void {
 			super.die();
 
-			this.numInput.input.removeEventListener(Event.CHANGE, onInputChange);
+//			this.numInput.input.removeEventListener(Event.CHANGE, onInputChange);
 			this.confirmBtn.removeEventListener(MouseEvent.CLICK, onBtnClick);
 			this.cancelBtn.removeEventListener(MouseEvent.CLICK, onBtnClick);
-			this.delBtn.removeEventListener(MouseEvent.CLICK, onBtnClick);
-			this.addBtn.removeEventListener(MouseEvent.CLICK, onBtnClick);
+//			this.delBtn.removeEventListener(MouseEvent.CLICK, onBtnClick);
+//			this.addBtn.removeEventListener(MouseEvent.CLICK, onBtnClick);
 		}
 
 		public function resize():void {

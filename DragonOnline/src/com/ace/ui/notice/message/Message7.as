@@ -10,6 +10,7 @@ package com.ace.ui.notice.message {
 	import com.ace.enum.UIEnum;
 	import com.ace.tools.SpriteNoEvt;
 	import com.ace.ui.lable.Label;
+	import com.ace.utils.DebugUtil;
 	import com.ace.utils.StringUtil;
 	
 	import flash.display.Shape;
@@ -62,6 +63,8 @@ package com.ace.ui.notice.message {
 			this.lbl.visible=false;
 			this.bg.visible=false;
 			this.resize();
+			
+			this.lbl.cacheAsBitmap=true;
 		}
 
 		/**

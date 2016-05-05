@@ -7,6 +7,7 @@ package com.leyou.ui.gem {
 	import com.ace.gameData.manager.MyInfoManager;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.table.TEquipInfo;
+	import com.ace.manager.GuideManager;
 	import com.ace.manager.LibManager;
 	import com.ace.manager.ToolTipManager;
 	import com.ace.manager.UILayoutManager;
@@ -25,6 +26,7 @@ package com.leyou.ui.gem {
 	import com.leyou.enum.ConfigEnum;
 	import com.leyou.net.cmd.Cmd_Gem;
 	import com.leyou.ui.gem.child.GemGrid;
+	import com.leyou.utils.ItemUtil;
 	import com.leyou.utils.PropUtils;
 
 	import flash.display.BitmapData;
@@ -86,7 +88,7 @@ package com.leyou.ui.gem {
 
 
 		public function GemWnd(other:Boolean=false) {
-			super(LibManager.getInstance().getXML("config/ui/gem/gemWnd.xml"));
+			super(LibManager.getInstance().getXML("config/ui/gem/gemWnd.xml"), other);
 			this.otherPlayer=other;
 			this.init();
 			this.mouseChildren=true;
@@ -158,8 +160,8 @@ package com.leyou.ui.gem {
 			this.rollPower=new RollNumWidget();
 			this.rollPower.loadSource("ui/num/{num}_zdl.png");
 			this.addChild(this.rollPower);
-			this.rollPower.x=133
-			this.rollPower.y=411;
+			this.rollPower.x=153
+			this.rollPower.y=415;
 
 			this.addPropsBtn=this.getUIbyID("addPropsBtn") as NormalButton;
 			this.arrowImg=this.getUIbyID("arrowImg") as Image;
@@ -187,8 +189,8 @@ package com.leyou.ui.gem {
 
 			var grid:GemGrid=new GemGrid();
 			this.rollSpr.addChild(grid);
-			grid.x=202 - this.rollSpr.x;
-			grid.y=52 - this.rollSpr.y;
+			grid.x=228 - this.rollSpr.x;
+			grid.y=85 - this.rollSpr.y;
 
 			grid.dataId=0;
 			grid.effectGlow=this.effectGlow;
@@ -197,8 +199,8 @@ package com.leyou.ui.gem {
 
 			grid=new GemGrid();
 			this.rollSpr.addChild(grid);
-			grid.x=124 - this.rollSpr.x;
-			grid.y=190 - this.rollSpr.y;
+			grid.x=155 - this.rollSpr.x;
+			grid.y=220 - this.rollSpr.y;
 
 			grid.dataId=1;
 			grid.effectGlow=this.effectGlow;
@@ -207,8 +209,8 @@ package com.leyou.ui.gem {
 
 			grid=new GemGrid();
 			this.rollSpr.addChild(grid);
-			grid.x=281 - this.rollSpr.x;
-			grid.y=188 - this.rollSpr.y;
+			grid.x=307 - this.rollSpr.x;
+			grid.y=220 - this.rollSpr.y;
 
 			grid.dataId=2;
 			grid.effectGlow=this.effectGlow;
@@ -314,12 +316,16 @@ package com.leyou.ui.gem {
 				this.arrowImg.visible=true;
 			}
 
+//			this.gemGridVec[0].opaqueBackground=0xff0000;
+//			this.gemGridVec[1].opaqueBackground=0xff0000;
+//			this.gemGridVec[2].opaqueBackground=0xff0000;
+
 			var a:int=Math.sqrt(Math.pow(this.gemGridVec[0].x - this.gemGridVec[1].x, 2) + Math.pow(this.gemGridVec[1].y - this.gemGridVec[0].y, 2));
 			var b:int=Math.sqrt(Math.pow(this.gemGridVec[2].x - this.gemGridVec[0].x, 2) + Math.pow(this.gemGridVec[2].y - this.gemGridVec[0].y, 2));
 
 			r=Math.sqrt(Math.pow(a / 2, 2) + Math.pow(b / 2, 2));
 //			this.centerPoint=new Point(this.gemGridVec[0].x + 20, this.gemGridVec[0].y + r);
-			this.centerPoint=new Point(this.rollSpr.width / 2 - 6, this.rollSpr.height / 2 + 20 - 5);
+			this.centerPoint=new Point(this.rollSpr.width / 2 + 15, this.rollSpr.height / 2 + 45);
 			this.centerBgPoint=new Point(this.raceImg.width / 2, this.raceImg.height / 2);
 			this.centerCurPoint=new Point(this.curImg.width / 2, this.curImg.height / 2);
 			this.centerCurPowerPoint=new Point(this.curPowerImg.width / 2, this.curPowerImg.height / 2);
@@ -385,8 +391,10 @@ package com.leyou.ui.gem {
 
 			this.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 
-			this.x=-12;
-			this.y=3;
+			this.scrollRect=new Rectangle(0, 0, 501, 446);
+
+			this.x=4;
+			this.y=1;
 		}
 
 		private function onMouseUp(e:MouseEvent):void {
@@ -645,17 +653,17 @@ package com.leyou.ui.gem {
 
 					str+="<font color='#00ff00'>" + tequip.name + "：";
 
-//					this["g" + (i + 1) + "propArr"][0].text="" + tequip.name;
-//					this["g" + (i + 1) + "propArr"][0].textColor=ItemUtil.getColorByQuality(tequip.quality);
+					this["g" + (i + 1) + "propArr"][0].text="" + tequip.name;
+					this["g" + (i + 1) + "propArr"][0].textColor=ItemUtil.getColorByQuality(tequip.quality);
 
 					k=1;
 
 					for (p=0; p < PropUtils.GemEquipTableColumn.length; p++) {
 						if (int(tequip[PropUtils.GemEquipTableColumn[p]]) != 0) {
-//							this["g" + (i + 1) + "propArr"][k].text=PropUtils.propArr[PropUtils.GemEquipTableColumnIndex[p]] + ":" + tequip[PropUtils.GemEquipTableColumn[p]];
-//							this["g" + (i + 1) + "propArr"][k].textColor=ItemUtil.getColorByQuality(tequip.quality);
+							this["g" + (i + 1) + "propArr"][k].text=PropUtils.propArr[PropUtils.GemEquipTableColumnIndex[p]] + ":" + tequip[PropUtils.GemEquipTableColumn[p]];
+							this["g" + (i + 1) + "propArr"][k].textColor=ItemUtil.getColorByQuality(tequip.quality);
 
-							str+=PropUtils.propArr[PropUtils.GemEquipTableColumnIndex[p]] + " +" + tequip[PropUtils.GemEquipTableColumn[p]] + "，";
+//							str+=PropUtils.propArr[PropUtils.GemEquipTableColumnIndex[p]] + " +" + tequip[PropUtils.GemEquipTableColumn[p]] + "，";
 							k++;
 						}
 					}
@@ -669,7 +677,7 @@ package com.leyou.ui.gem {
 			}
 
 			this.ruleLbl.multiline=true;
-			this.ruleLbl.htmlText=str;
+//			this.ruleLbl.htmlText=str;
 
 			var lvstr:String=lv.toString();
 			this.curPowerImg.bitmapData=new BitmapData(15 * lvstr.length, 21)
@@ -737,8 +745,10 @@ package com.leyou.ui.gem {
 					this.rollPower.rollToNum(o.zdl);
 				}
 
-				this.rollPower.x=270 - o.zdl.toString().length * 15 >> 1;
+				this.rollPower.x=310 - o.zdl.toString().length * 15 >> 1;
 			}
+
+			var glist:Array=o.glist;
 
 			if (!this.otherPlayer) {
 				MyInfoManager.getInstance().gemArr=o.glist;
@@ -746,10 +756,13 @@ package com.leyou.ui.gem {
 				if (UIManager.getInstance().isCreate(WindowEnum.GEM_LV))
 					UIManager.getInstance().gemLvWnd.updateList();
 
+				if (glist.length > 0)
+					GuideManager.getInstance().removeGuide(146);
+
 			} else
 				MyInfoManager.getInstance().othergemArr=o.glist;
 
-			var glist:Array=o.glist;
+
 
 			var j:int=0;
 			var i:int=0;

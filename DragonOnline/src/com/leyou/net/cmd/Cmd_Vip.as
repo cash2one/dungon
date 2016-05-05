@@ -3,6 +3,7 @@ package com.leyou.net.cmd
 	import com.ace.enum.FunOpenEnum;
 	import com.ace.enum.WindowEnum;
 	import com.ace.gameData.manager.DataManager;
+	import com.ace.gameData.manager.MyInfoManager;
 	import com.ace.manager.UIManager;
 	import com.ace.manager.UIOpenBufferManager;
 	import com.leyou.enum.CmdEnum;
@@ -16,6 +17,12 @@ package com.leyou.net.cmd
 			if(UIManager.getInstance().vipWnd){
 				UIManager.getInstance().vipWnd.updateReward();
 			}
+			
+			if (!UIManager.getInstance().isCreate(WindowEnum.SELLEXPEFFECT)) {
+				UIManager.getInstance().creatWindow(WindowEnum.SELLEXPEFFECT);
+			}
+			
+			UIManager.getInstance().sellExpEffect.updateExp(MyInfoManager.getInstance().firstItem);
 		}
 		
 		public static function cm_VIP_I():void{

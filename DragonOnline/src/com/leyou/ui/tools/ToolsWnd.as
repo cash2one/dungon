@@ -2,10 +2,12 @@ package com.leyou.ui.tools {
 
 	import com.ace.config.Core;
 	import com.ace.enum.ItemEnum;
+	import com.ace.enum.SceneEnum;
 	import com.ace.enum.TipEnum;
 	import com.ace.enum.UIEnum;
 	import com.ace.enum.WindowEnum;
 	import com.ace.game.manager.SceneKeyManager;
+	import com.ace.gameData.manager.MapInfoManager;
 	import com.ace.gameData.manager.MyInfoManager;
 	import com.ace.gameData.manager.SettingManager;
 	import com.ace.gameData.manager.TableManager;
@@ -27,7 +29,7 @@ package com.leyou.ui.tools {
 	import com.ace.ui.notice.NoticeManager;
 	import com.ace.ui.setting.AssistWnd;
 	import com.ace.utils.StringUtil;
-	import com.greensock.TweenLite;
+	import com.greensock.TimelineMax;
 	import com.greensock.TweenMax;
 	import com.leyou.data.bag.Baginfo;
 	import com.leyou.enum.ConfigEnum;
@@ -40,6 +42,7 @@ package com.leyou.ui.tools {
 	import com.leyou.ui.tools.child.ToolsGridItemRender;
 	import com.leyou.ui.tools.child.ToolsHpAndMpProgress;
 
+	import flash.display.BlendMode;
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import flash.events.MouseEvent;
@@ -63,7 +66,7 @@ package com.leyou.ui.tools {
 		public var wenZBtn:ImgButton;
 		public var duanZBtn:ImgButton;
 		private var shiCBtn:ImgButton;
-		private var shopBtn:ImgButton;
+		public var shopBtn:ImgButton;
 
 		private var friendBtn:ImgButton;
 		public var teamBtn:ImgButton;
@@ -75,6 +78,12 @@ package com.leyou.ui.tools {
 		private var framBtn:ImgButton;
 		private var collectBtn:ImgButton;
 		private var alchmyBtn:ImgButton;
+		public var worshipBtn:ImgButton;
+
+		private var pkBtn:ImgButton;
+		private var restBtn:ImgButton;
+		public var eleBtn:ImgButton;
+		private var fittingBtn:ImgButton;
 
 		private var expImg:Image;
 		private var hunImg:Image;
@@ -95,6 +104,7 @@ package com.leyou.ui.tools {
 		private var gridList:ToolsGridItemRender;
 
 		private var firstOpen:Boolean=true;
+		private var pkState:Boolean=false;
 
 		/**
 		 * 单前使用药水,红0,蓝1
@@ -102,6 +112,20 @@ package com.leyou.ui.tools {
 		private var currentYaoshui:Array=[];
 
 		private var tweMax:TweenMax;
+
+		private var expStatetweMax:TweenMax;
+		private var hunStatetweMax:TweenMax;
+
+		private var infoLevel:int=0;
+		private var currentExp:int=0;
+		private var tline:TimelineMax;
+
+		private var expEff1:Image;
+		private var expEff2:Image;
+
+		private var isStop:Boolean=false;
+
+		private var fittEff:SwfLoader;
 
 		public function ToolsWnd() {
 			super(LibManager.getInstance().getXML("config/ui/ToolsWnd.xml"));
@@ -125,12 +149,19 @@ package com.leyou.ui.tools {
 			this.collectBtn=this.getUIbyID("collectBtn") as ImgButton;
 			this.alchmyBtn=this.getUIbyID("alchmyBtn") as ImgButton;
 
+			this.pkBtn=this.getUIbyID("pkBtn") as ImgButton;
+			this.mountBtn=this.getUIbyID("mountBtn") as ImgButton;
+			this.restBtn=this.getUIbyID("restBtn") as ImgButton;
+			this.eleBtn=this.getUIbyID("eleBtn") as ImgButton;
+			this.fittingBtn=this.getUIbyID("fittingBtn") as ImgButton;
+
 			this.friendBtn=this.getUIbyID("friendBtn") as ImgButton;
 			this.teamBtn=this.getUIbyID("teamBtn") as ImgButton;
 			this.guildBtn=this.getUIbyID("guildBtn") as ImgButton;
 			this.daZBtn=this.getUIbyID("daZBtn") as ImgButton;
 			this.mountBtn=this.getUIbyID("mountBtn") as ImgButton;
 			this.guaJBtn=this.getUIbyID("guaJBtn") as ImgButton;
+			this.worshipBtn=this.getUIbyID("worshipBtn") as ImgButton;
 
 			this.bbsBtn2=this.getUIbyID("bbsBtn2") as ImgButton;
 			this.bbsBtn1=this.getUIbyID("bbsBtn1") as ImgButton;
@@ -150,20 +181,34 @@ package com.leyou.ui.tools {
 			this.hunBg=this.getUIbyID("hunBg") as Image;
 
 			var arr:Array=[this.teamBtn, this.guildBtn, this.friendBtn, this.daZBtn, this.mountBtn, this.guaJBtn, this.playerBtn, this.backpackBtn, this.skillBtn, this.missionBtn, // 
-				this.duanZBtn, this.wenZBtn, this.shiCBtn, this.shopBtn, this.mercenaryBtn, this.framBtn, this.collectBtn, this.alchmyBtn];
+				this.duanZBtn, this.wenZBtn, this.shiCBtn, this.shopBtn, this.mercenaryBtn, this.framBtn] //, this.collectBtn, this.alchmyBtn];
 
 			var tipid:int=0;
 			for (var i:int=0; i < arr.length; i++) {
 				if (arr[i] != null) {
 					ImgButton(arr[i]).addEventListener(MouseEvent.CLICK, onBtnClick);
-					if (i + 1 == arr.length)
-						tipid=10048;
-					else
-						tipid=10017 + i;
+//					if (i + 1 == arr.length)
+//						tipid=10048;
+//					else
+					tipid=10017 + i;
 
 					ImgButton(arr[i]).setToolTip(TableManager.getInstance().getSystemNotice(tipid).content);
 				}
 			}
+
+			this.pkBtn.addEventListener(MouseEvent.CLICK, onBtnClick);
+			this.eleBtn.addEventListener(MouseEvent.CLICK, onBtnClick);
+			this.fittingBtn.addEventListener(MouseEvent.CLICK, onBtnClick);
+			this.worshipBtn.addEventListener(MouseEvent.CLICK, onBtnClick);
+			this.alchmyBtn.addEventListener(MouseEvent.CLICK, onBtnClick);
+
+			this.worshipBtn.setToolTip(TableManager.getInstance().getSystemNotice(10033).content);
+			this.alchmyBtn.setToolTip(TableManager.getInstance().getSystemNotice(10048).content);
+			this.pkBtn.setToolTip(TableManager.getInstance().getSystemNotice(10163).content);
+			this.eleBtn.setToolTip(TableManager.getInstance().getSystemNotice(10111).content);
+			this.fittingBtn.setToolTip(TableManager.getInstance().getSystemNotice(10112).content);
+			this.mountBtn.setToolTip(TableManager.getInstance().getSystemNotice(10107).content);
+			this.daZBtn.setToolTip(TableManager.getInstance().getSystemNotice(10109).content);
 
 //			this.mercenaryBtn.visible=false;
 
@@ -200,11 +245,28 @@ package com.leyou.ui.tools {
 			this.hunBg.alpha=0;
 
 
+			expEff1=new Image("ui/num/effect_exp.jpg")
+			this.addChild(expEff1);
+			expEff1.blendMode=BlendMode.ADD;
+
+			expEff1.visible=false;
+
+			expEff2=new Image("ui/num/effect_energy.jpg")
+			this.addChild(expEff2);
+			expEff2.blendMode=BlendMode.ADD;
+
+			expEff2.visible=false;
 
 			this.x=(UIEnum.WIDTH - this.width) >> 1;
 
 			this.mountBtn.setActive(false, .6, true);
-			
+			this.wenZBtn.setActive(false, .6, true);
+			this.shopBtn.setActive(false, .6, true);
+
+			this.fittEff=new SwfLoader(100029);
+			this.addChild(this.fittEff);
+			this.fittEff.x=this.fittingBtn.x-19;
+			this.fittEff.y=this.fittingBtn.y-10;
 		}
 
 		private function onClick(e:MouseEvent):void {
@@ -228,7 +290,7 @@ package com.leyou.ui.tools {
 				return;
 
 			this.hpAndmp.updateProgress();
-			
+
 			this.openFuncToLevel();
 		}
 
@@ -278,8 +340,58 @@ package com.leyou.ui.tools {
 			ToolTipManager.getInstance().hide();
 		}
 
+		public function updatePropPoint():void {
+			this.updataPropUI();
+		}
+
 		public function updataPropUI():void {
-			this.expImg.scaleX=Core.me.info.baseInfo.exp / Core.me.info.baseInfo.maxExp;
+
+			if (this.currentExp != Core.me.info.baseInfo.exp) {
+
+//				expEff1.scaleX=0.8;
+//				expEff1.scaleY=0.8;
+
+				var t:Number;
+				var cexp:int=Core.me.info.baseInfo.exp - this.currentExp;
+				if (cexp < Core.me.info.baseInfo.maxExp / 4) {
+					t=0.5;
+				} else {
+					t=cexp / Core.me.info.baseInfo.maxExp * 2;
+				}
+
+
+				if (this.infoLevel == 0 || this.infoLevel == Core.me.info.level) {
+//					this.expImg.scaleX=Core.me.info.baseInfo.exp / Core.me.info.baseInfo.maxExp;
+//					this.changeExpEffect();
+					if (cexp < 100)
+						this.expImg.scaleX=Core.me.info.baseInfo.exp / Core.me.info.baseInfo.maxExp;
+					else {
+
+						expEff1.visible=true;
+
+						if (expStatetweMax == null || expStatetweMax.currentProgress == 1)
+							this.expStatetweMax=TweenMax.to(this.expImg, t, {scaleX: (Core.me.info.baseInfo.exp / Core.me.info.baseInfo.maxExp), onUpdate: EffectUpdate, onComplete: changeExpEffect})
+					}
+
+				} else {
+					if (tline == null || tline.currentProgress == 1) {
+
+						expEff1.visible=true;
+
+						tline=new TimelineMax();
+						tline.active=true;
+						tline.append(TweenMax.to(this.expImg, t, {scaleX: 1, onComplete: completescaleX, onUpdate: EffectUpdate}));
+						tline.append(TweenMax.to(this.expImg, t, {scaleX: (Core.me.info.baseInfo.exp / Core.me.info.baseInfo.maxExp), onUpdate: EffectUpdate, onComplete: changeExpEffect}));
+					}
+				}
+
+				this.currentExp=Core.me.info.baseInfo.exp;
+				this.infoLevel=Core.me.info.level;
+			}
+
+			if (Core.me.info.level == 1)
+				this.expImg.scaleX=Core.me.info.baseInfo.exp / Core.me.info.baseInfo.maxExp;
+
 			var h:Number=Core.me.info.baseInfo.hunL / Core.me.info.baseInfo.maxHunL;
 			h=(h > 1 ? 1 : h);
 
@@ -296,10 +408,59 @@ package com.leyou.ui.tools {
 				this.hunImg.filters=[];
 			}
 
-			this.hunImg.scaleX=h;
+
+			if (this.hunImg.scaleX != h) {
+//				this.hunImg.scaleX=h;
+
+//				if (this.hunStatetweMax == null || this.hunStatetweMax.currentProgress == 1) {
+
+//				expEff2.scaleX=0.8;
+//				expEff2.scaleY=0.8;
+
+				expEff2.visible=true;
+
+				TweenMax.to(hunImg, 0.5, {scaleX: h, onComplete: complete, onUpdate: Effect1Update})
+//					this.hunStatetweMax=TweenMax.to(expEff2, 1, {transformAroundCenter: {scaleX: 0.8}, onComplete: complete, onCompleteParams: [expEff2]});
+//				}
+			}
 
 			this.updateHpAndMpProgress();
 			this.x=(UIEnum.WIDTH - this.width) >> 1;
+		}
+
+		private function EffectUpdate():void {
+			expEff1.x=this.expImg.x + this.expImg.width - 20;
+			expEff1.y=this.expImg.y - 12;
+		}
+
+		private function Effect1Update():void {
+			expEff2.x=this.hunImg.x + this.hunImg.width - 20;
+			expEff2.y=this.hunImg.y - 12;
+		}
+
+		private function complete():void {
+//			this.removeChild(img);
+			expEff2.visible=false;
+		}
+
+		private function completescaleX():void {
+			this.expImg.scaleX=0;
+		}
+
+		public function changeExpEffect():void {
+
+			expEff1.visible=false;
+
+//				this.expStatetweMax=TweenMax.to(expEff1, 1, {transformAroundCenter: {scaleX: 0.8}, onComplete: complete, onCompleteParams: [expEff1]});
+
+		}
+
+		public function getExpPos():Point {
+			return this.parent.localToGlobal(new Point(this.x + this.expImg.x + this.expImg.width + 15, this.y + this.expImg.y + 20));
+		}
+
+		public function getHunPos():Point {
+			return this.parent.localToGlobal(new Point(this.x + this.hunImg.x + this.hunImg.width + 15, this.y + this.hunImg.y + 20));
 		}
 
 		/**
@@ -340,7 +501,8 @@ package com.leyou.ui.tools {
 				case MoldEnum.GUlID:
 					return guildBtn;
 				case MoldEnum.MARKET:
-					return shopBtn;
+//					return shopBtn;
+					break;
 				case MoldEnum.MEDAL:
 					return wenZBtn;
 				case MoldEnum.STRENGTHEN:
@@ -359,8 +521,8 @@ package com.leyou.ui.tools {
 //					return null;
 //				case MoldEnum.DIVERT:
 //					return null;
-//				case MoldEnum.ELEMENT:
-//					return null;
+				case MoldEnum.ELEMENT:
+					return eleBtn;
 //				case MoldEnum.RECASTING:
 //					return null;
 //				case MoldEnum.RIDE:
@@ -403,8 +565,25 @@ package com.leyou.ui.tools {
 		}
 
 		public function delGrid(i:int):void {
-
 			this.shortCutDic[i].delGrid();
+		}
+
+		/**
+		 *
+		 * @param v true:停止技能;false:开启技能;
+		 *
+		 */
+		public function setStopState(v:Boolean):void {
+
+			this.isStop=v;
+
+			var keyGrid:ShortcutsGrid;
+			for each (keyGrid in this.shortCutDic) {
+				if (keyGrid != null && keyGrid.cloneGridType == ItemEnum.TYPE_GRID_SKILL) {
+					keyGrid.setStopIcon(this.isStop);
+				}
+			}
+
 
 		}
 
@@ -731,6 +910,7 @@ package com.leyou.ui.tools {
 
 			var sk:TSkillInfo
 			var keyGrid:ShortcutsGrid;
+
 			for each (keyGrid in this.shortCutDic) {
 				if (keyGrid != null && keyGrid.cloneGridType == ItemEnum.TYPE_GRID_SKILL) {
 
@@ -739,7 +919,7 @@ package com.leyou.ui.tools {
 					if (sk == null)
 						continue;
 
-					if (keyGrid.autoMagic || int(sk.id) == arr[0].id) {
+					if (keyGrid.autoMagic || sk.skillId == arr[0].skillId) {
 
 						if (sk.auto == 0) {
 							NoticeManager.getInstance().broadcast(TableManager.getInstance().getSystemNotice(2118))
@@ -754,6 +934,7 @@ package com.leyou.ui.tools {
 //						si=this.autoMagicArr.indexOf(int(sk.id));
 //						this.autoMagicArr.splice(si, 1);
 					}
+
 				}
 			}
 
@@ -771,8 +952,8 @@ package com.leyou.ui.tools {
 						if (sk == null)
 							continue;
 
-						if (int(sk.id) >= arr[0].id && int(sk.id) <= int(arr[0].id) + skNum) {
-//						if (int(sk.id) == arr[0].id) {
+//						if (int(sk.id) >= arr[0].id && int(sk.id) <= int(arr[0].id) + skNum) {
+						if (int(sk.id) == arr[0].id) {
 
 							keyGrid.setAutoMagic(true);
 							NoticeManager.getInstance().broadcast(TableManager.getInstance().getSystemNotice(2113), [sk.name]);
@@ -837,6 +1018,8 @@ package com.leyou.ui.tools {
 			else
 				this.alchmyBtn.setActive(false, 0.6, true);
 
+
+
 //			this.wenZBtn.setActive((ConfigEnum.BadgeOpenLv <= Core.me.info.level));
 		}
 
@@ -847,6 +1030,8 @@ package com.leyou.ui.tools {
 				case "daZBtn":
 					SceneKeyManager.getInstance().onKeyDown(Keyboard.Z);
 					GuideManager.getInstance().showGuides([77, 78], [this, this]);
+//					 trace(Core.me.info.isSit);
+					this.changeDazState(!Core.me.info.isSit);
 					break;
 				case "shiCBtn":
 					UIOpenBufferManager.getInstance().open(WindowEnum.AUTION)
@@ -894,18 +1079,17 @@ package com.leyou.ui.tools {
 					break;
 				case "teamBtn":
 					//UIManager.getInstance().teamWnd.open();
-
 					UILayoutManager.getInstance().open_II(WindowEnum.TEAM)
-
 					break;
 				case "missionBtn":
 
-					UILayoutManager.getInstance().open_II(WindowEnum.TASK)
+//					UILayoutManager.getInstance().open_II(WindowEnum.TASK)
 
 					break;
 				case "tradeBtn":
 					break;
 				case "mountBtn":
+
 					UIManager.getInstance().roleWnd.mountUpAndDown();
 					break;
 				case "mercenaryBtn": //佣兵
@@ -929,15 +1113,71 @@ package com.leyou.ui.tools {
 					if (Core.me.info.level >= ConfigEnum.Alchemy1)
 						UILayoutManager.getInstance().open(WindowEnum.GEM_LV);
 					break;
+				case "pkBtn":
+					this.changePkState();
+					break;
+				case "eleBtn":
+					UIOpenBufferManager.getInstance().open(WindowEnum.ELEMENT);
+					break;
+				case "fittingBtn":
+					UILayoutManager.getInstance().open(WindowEnum.SHIYI);
+					break;
+				case "worshipBtn":
+					UIOpenBufferManager.getInstance().open(WindowEnum.WORSHIP);
+					break;
 			}
 
 			evt.stopImmediatePropagation();
 		}
 
+		public function changePkState():void {
+			this.pkState=!this.pkState;
+			if (this.pkState) {
+				this.pkBtn.updataBmd("ui/mainUI/main_button_view.png");
+				this.pkBtn.setToolTip(TableManager.getInstance().getSystemNotice(10164).content);
+			} else {
+				this.pkBtn.updataBmd("ui/mainUI/main_button_unview.png");
+				this.pkBtn.setToolTip(TableManager.getInstance().getSystemNotice(10163).content);
+			}
+
+			UIManager.getInstance().chatWnd.reversePanelVisible(!this.pkState);
+			if (MapInfoManager.getInstance().type == SceneEnum.SCENE_TYPE_PTCJ && !Core.me.info.isTransport) {
+				UIManager.getInstance().rightTopWnd.reverseBarVisible(1, !this.pkState);
+			}
+
+			UIManager.getInstance().rightTopWnd.reverseBarVisible(2, !this.pkState);
+			UIManager.getInstance().rightTopWnd.reverseBarVisible(3, !this.pkState);
+
+			UIManager.getInstance().taskTrack.setScalePanelState(!this.pkState);
+			UIManager.getInstance().taskTrack2.setScalePanelState(!this.pkState);
+			UIManager.getInstance().pkCopyWnd.setTzBarState(!this.pkState);
+		}
+
+		public function changeMountState(v:Boolean):void {
+			if (!v) {
+				this.mountBtn.updataBmd("ui/mainUI/main_button_horse.png");
+				this.mountBtn.setToolTip(TableManager.getInstance().getSystemNotice(10107).content);
+			} else {
+				this.mountBtn.updataBmd("ui/mainUI/main_button_unhorse.png");
+				this.mountBtn.setToolTip(TableManager.getInstance().getSystemNotice(10108).content);
+			}
+		}
+
+		public function changeDazState(v:Boolean):void {
+			if (!v) {
+				this.daZBtn.updataBmd("ui/mainUI/main_button_dazou.png");
+				this.daZBtn.setToolTip(TableManager.getInstance().getSystemNotice(10109).content);
+			} else {
+				this.daZBtn.updataBmd("ui/mainUI/main_button_undazou.png");
+				this.daZBtn.setToolTip(TableManager.getInstance().getSystemNotice(10110).content);
+			}
+		}
+
+
 
 		public function useGrid(key:String, isDown:Boolean=false):int {
 
-			if (this.shortCutDic == null)
+			if (this.shortCutDic == null || this.isStop)
 				return -1;
 
 			var num:int=int(key);
@@ -1186,6 +1426,8 @@ package com.leyou.ui.tools {
 					}
 
 				}
+
+				this.updataPropUI();
 			}
 
 			this.updateDefaultYaoshui()
@@ -1330,6 +1572,36 @@ package com.leyou.ui.tools {
 				}
 			}
 
+		}
+
+		public function switchToAcross():void {
+			shiCBtn.setActive(false, 1, true);
+			guildBtn.setActive(false, 1, true);
+			framBtn.setActive(false, 1, true);
+			friendBtn.setActive(false, 1, true);
+		}
+
+		public function switchToNormal():void {
+
+			var level:int=0;
+			if (Core.me == null)
+				level=0;
+			else
+				level=Core.me.info.level;
+
+			if (level >= ConfigEnum.AutionOpenLevel) {
+				shiCBtn.setActive(true, 1, true);
+			}
+
+			if (level >= ConfigEnum.UnionOpenLv) {
+				guildBtn.setActive(true, 1, true);
+			}
+
+			if (level >= ConfigEnum.FarmOpenLevel) {
+				framBtn.setActive(true, 1, true);
+			}
+
+			friendBtn.setActive(true, 1, true);
 		}
 
 		public function get shortCutGrid():Object {

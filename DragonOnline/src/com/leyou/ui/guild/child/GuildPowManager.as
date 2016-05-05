@@ -11,7 +11,7 @@ package com.leyou.ui.guild.child {
 	import com.ace.ui.tabbar.TabbarModel;
 	import com.leyou.net.cmd.Cmd_Guild;
 	import com.leyou.utils.PropUtils;
-	
+
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 
@@ -30,7 +30,7 @@ package com.leyou.ui.guild.child {
 			super(LibManager.getInstance().getXML("config/ui/guild/guildPowMessage.xml"));
 			this.init();
 			this.hideBg();
-			this.clsBtn.y-=10;
+//			this.clsBtn.y-=10;
 			this.mouseChildren=true;
 			this.mouseEnabled=true;
 		}
@@ -48,6 +48,7 @@ package com.leyou.ui.guild.child {
 
 			this.cbVec=new Vector.<CheckBox>();
 
+			var l:int=0;
 			var cb:CheckBox;
 			for (var i:int=0; i < cbName.length; i++) {
 
@@ -55,10 +56,15 @@ package com.leyou.ui.guild.child {
 				cb.text="" + cbName[i];
 				this.cbVec.push(cb);
 
+				if (i == 3)
+					continue;
+
 				this.addToPane(cb);
 
-				cb.x=40 + ((i % 2) * (cb.width + 60));
-				cb.y=80 + (int(i / 2) * 35);
+				cb.x=49 + ((l % 2) * (cb.width + 60));
+				cb.y=96 + (int(l / 2) * 35);
+
+				l++;
 			}
 		}
 
@@ -68,13 +74,17 @@ package com.leyou.ui.guild.child {
 		}
 
 		public function updateInfo(info:Array):void {
-			 
+
 			for (var i:int=0; i < info.length; i++) {
+
+				if(i==3)
+					continue;
+				
 				if (int(this.jobCb.list.value.uid) == 1)
 					this.cbVec[i].setActive(false);
 				else
 					this.cbVec[i].setActive(true);
-				
+
 				if (info[i] == 1)
 					this.cbVec[i].turnOn();
 				else

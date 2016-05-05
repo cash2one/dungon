@@ -43,7 +43,7 @@ package com.leyou.ui.arena.childs {
 			super(LibManager.getInstance().getXML("config/ui/arena/arenaMessage.xml"));
 			this.init();
 			this.hideBg();
-			this.clsBtn.y-=10;
+//			this.clsBtn.y-=10;
 			this.mouseChildren=this.mouseEnabled=true;
 		}
 
@@ -63,7 +63,7 @@ package com.leyou.ui.arena.childs {
 			this.confirmBtn=this.getUIbyID("confirmBtn") as NormalButton;
 			this.cancelBtn=this.getUIbyID("cancelBtn") as NormalButton;
 
-			this.confirmBtn.addEventListener(MouseEvent.CLICK, onClick);
+//			this.confirmBtn.addEventListener(MouseEvent.CLICK, onClick);
 			this.cancelBtn.addEventListener(MouseEvent.CLICK, onClick);
 
 			this.hour12Btn.addEventListener(MouseEvent.CLICK, onClick);
@@ -104,9 +104,9 @@ package com.leyou.ui.arena.childs {
 			switch (e.target.name) {
 				case "confirmBtn":
 
-					Cmd_Arena.cm_ArenaBuyFreeCount(this.houeTime, (this.ybBtn.isOn ? 0 : 1));
+//					Cmd_Arena.cm_ArenaBuyFreeCount(this.houeTime, (this.ybBtn.isOn ? 0 : 1));
 
-					this.hide();
+//					this.hide();
 					break;
 				case "cancelBtn":
 					this.hide();

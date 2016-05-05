@@ -15,7 +15,7 @@ package com.leyou.ui.arrow {
 	import com.ace.ui.button.children.ImgButton;
 	import com.ace.ui.img.child.Image;
 	import com.greensock.TweenLite;
-	
+
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 
@@ -41,8 +41,8 @@ package com.leyou.ui.arrow {
 			this.init();
 			this.hideBg();
 			this.clsBtn.updataBmd("ui/common/close_type2.png");
-			this.clsBtn.y=0;
-			this.clsBtn.x=this.width - 25;
+//			this.clsBtn.y=0;
+//			this.clsBtn.x=this.width - 25;
 			this.allowDrag=false;
 			this.mouseChildren=true;
 			this.mouseEnabled=true;
@@ -166,10 +166,10 @@ package com.leyou.ui.arrow {
 						if (!UIManager.getInstance().isCreate(id)) {
 							UIManager.getInstance().creatWindow(id);
 						}
-						
-						if(WindowEnum.LUCKDRAW == id){
+
+						if (WindowEnum.LUCKDRAW == id) {
 							UIOpenBufferManager.getInstance().open(WindowEnum.LUCKDRAW);
-						}else{
+						} else {
 							UILayoutManager.getInstance().show(id);
 						}
 

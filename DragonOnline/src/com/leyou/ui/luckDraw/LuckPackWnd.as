@@ -2,7 +2,6 @@ package com.leyou.ui.luckDraw {
 	import com.ace.gameData.manager.DataManager;
 	import com.ace.manager.LibManager;
 	import com.ace.manager.TimeManager;
-	import com.ace.manager.UIManager;
 	import com.ace.ui.auto.AutoWindow;
 	import com.ace.ui.button.children.NormalButton;
 	import com.ace.ui.lable.Label;
@@ -16,6 +15,7 @@ package com.leyou.ui.luckDraw {
 	import flash.utils.getTimer;
 
 	public class LuckPackWnd extends AutoWindow {
+
 		private static const COUNT_TIME:int=30;
 
 		private var grids:Vector.<LuckPackGrid>;
@@ -40,8 +40,6 @@ package com.leyou.ui.luckDraw {
 		}
 
 		private function init():void {
-			hideBg();
-			clsBtn.y+=22;
 			countLbl=getUIbyID("countLbl") as Label;
 			gridPanel=getUIbyID("gridPanel") as ScrollPane;
 			rearrangeBtn=getUIbyID("rearrangeBtn") as NormalButton;
@@ -59,10 +57,6 @@ package com.leyou.ui.luckDraw {
 					gridPanel.addToPane(grid);
 				}
 			}
-		}
-
-		public override function get height():Number {
-			return 562;
 		}
 
 		protected function onMouseClick(event:MouseEvent):void {
@@ -113,6 +107,10 @@ package com.leyou.ui.luckDraw {
 			for (var n:int=0; n < l; n++) {
 				grids[n].clear();
 			}
+		}
+
+		public override function get height():Number {
+			return 544;
 		}
 	}
 }

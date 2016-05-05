@@ -23,8 +23,8 @@ package com.leyou.ui.collection
 			collectionBar = getUIbyID("collectionBar") as TabBar;
 			collectionPrecious = new CollectionPreciousPage();
 			collectionBar.addToTab(collectionPrecious, 0);
-			collectionPrecious.x = -30;
-			collectionPrecious.y = 3;
+			collectionPrecious.x = 5;
+			collectionPrecious.y = 2;
 		}
 		
 		public function showCollectionMap():void{
@@ -44,9 +44,13 @@ package com.leyou.ui.collection
 			y = (UIEnum.HEIGHT - height)*0.5;
 		}
 		
+		public override function get height():Number{
+			return 544;
+		}
+		
 		public override function hide():void{
 			super.hide();
-			TweenManager.getInstance().lightingCompnent(UIManager.getInstance().toolsWnd.getUIbyID("collectBtn"));
+//			TweenManager.getInstance().lightingCompnent(UIManager.getInstance().toolsWnd.getUIbyID("collectBtn"));
 		}
 	}
 }

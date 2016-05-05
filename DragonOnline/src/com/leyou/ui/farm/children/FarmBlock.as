@@ -104,15 +104,17 @@ package com.leyou.ui.farm.children
 			accelerateBtn.y = 7;
 			
 			uaContainer = new Sprite();
-			uaContainer.addChild(new Image("ui/farm/btn_bg.png"));
-			var img:Image = new Image("ui/farm/btn_bg.png");
-			img.x = 46;
-			uaContainer.addChild(img);
+//			uaContainer.addChild(new Image("ui/farm/btn_bg.png"));
+//			var img:Image = new Image("ui/farm/btn_bg.png");
+//			img.x = 46;
+//			uaContainer.addChild(img);
 			uaContainer.addChild(unearthBtn);
 			uaContainer.addChild(accelerateBtn);
 			addChild(uaContainer);
 			uaContainer.visible = false;
-			uaContainer.y = -40;
+//			uaContainer.y = -30;
+			
+//			this.opaqueBackground=Math.random()*0xFFFFFF;;
 			
 //			text = new TextField();
 			
@@ -141,6 +143,7 @@ package com.leyou.ui.farm.children
 		 * 
 		 */
 		public function mouseOver():void{
+			this.parent.addChild(this);
 			bg.turnOn(false);
 			maskImg.filters = [FilterUtil.yellowGlowFilter];
 			if(FarmEnum.BLOCK_RIPE == _status){

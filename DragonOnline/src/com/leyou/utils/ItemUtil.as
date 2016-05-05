@@ -7,12 +7,13 @@ package com.leyou.utils {
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.table.TEquipInfo;
 	import com.ace.gameData.table.TItemInfo;
+	import com.ace.manager.LibManager;
 	import com.ace.manager.ToolTipManager;
 	import com.ace.utils.StringUtil;
 	import com.leyou.data.role.EquipInfo;
 	import com.leyou.data.tips.TipsInfo;
 	import com.leyou.enum.QualityEnum;
-
+	
 	import flash.geom.Point;
 	import flash.globalization.NumberFormatter;
 
@@ -37,11 +38,12 @@ package com.leyou.utils {
 3 真气
 4 荣耀
 6 巨龙点数
+7 功勋
 *
 * @param i
-	   * @return
-			*
-		 */
+* @return
+*
+   */
 		public static function getExchangeIcon(i:int):String {
 
 			if (i == 0) {
@@ -56,6 +58,8 @@ package com.leyou.utils {
 				return "ui/backpack/honor.png";
 			} else if (i == 6) {
 				return "ui/common/jlbz.png";
+			} else if (i == 7) {
+				return "ui/common/gongx.png";
 			}
 
 
@@ -92,8 +96,8 @@ package com.leyou.utils {
 5   红
 * @param i
 * @return
-	   *
-			*/
+*
+*/
 		public static function getColorByQuality(i:int):uint {
 
 			switch (i) {
@@ -111,6 +115,26 @@ package com.leyou.utils {
 					return 0xee2211;
 			}
 			return 0xffffff;
+		}
+		
+		
+		public static function getColorByQuality2(i:int):String {
+
+			switch (i) {
+				case QualityEnum.QUA_COMMON:
+					return "ffffff";
+				case QualityEnum.QUA_EXCELLENT:
+					return "69e053";
+				case QualityEnum.QUA_TERRIFIC:
+					return "3fa6ed";
+				case QualityEnum.QUA_INCREDIBLE:
+					return "cc54ea";
+				case QualityEnum.QUA_LEGEND:
+					return "f6d654";
+				case QualityEnum.QUA_ARTIFACT:
+					return "ee2211";
+			}
+			return "ffffff";
 		}
 
 		/**
@@ -130,6 +154,26 @@ package com.leyou.utils {
 					return PropUtils.getStringById(40);
 			}
 			return null;
+		}
+
+		public static function getQualityStringByType(type:int):String {
+
+			switch (type) {
+				case QualityEnum.QUA_COMMON:
+					return PropUtils.getStringById(1604);
+				case QualityEnum.QUA_EXCELLENT:
+					return PropUtils.getStringById(1605);
+				case QualityEnum.QUA_TERRIFIC:
+					return PropUtils.getStringById(1606);
+				case QualityEnum.QUA_INCREDIBLE:
+					return PropUtils.getStringById(1607);
+				case QualityEnum.QUA_LEGEND:
+					return PropUtils.getStringById(1608);
+				case QualityEnum.QUA_ARTIFACT:
+					return PropUtils.getStringById(1609);
+			}
+
+			return "";
 		}
 
 		/**
@@ -246,6 +290,80 @@ package com.leyou.utils {
 			var color:String="#" + getColorByQuality(item.quality).toString(16).replace("0x");
 			return StringUtil_II.getColorStrByFace(item.name, color, "微软雅黑", size);
 		}
+
+		/**
+		 * tips 战斗力
+		 * @param tipinfo
+		 * @return
+		 *
+		 */
+		public static function getZdl(tipinfo:TipsInfo):Number {
+
+			var z:Number=0;
+			var p:Object=tipinfo.p;
+
+			for (var str:String in p) {
+				if (str.indexOf("_") > -1)
+					z+=(int(p[str]) * TableManager.getInstance().getZdlElement(int(str.split("_")[1])).rate);
+				else
+					z+=(int(p[str]) * TableManager.getInstance().getZdlElement(int(str)).rate);
+			}
+
+
+			if (tipinfo.elea > 0)
+				z+=(tipinfo.elea * TableManager.getInstance().getZdlElement(getElementToEleId(tipinfo.ele)).rate);
+
+
+			return z;
+		}
+		
+		public static function getElementToEleId(type:int):int{
+			
+			switch(type){
+				case 1:
+					return 43;
+				case 2:
+					return 44;
+				case 3:
+					return 45;
+				case 4:
+					return 46;
+				case 5:
+					return 47;
+			}
+			
+			return -1;
+		}
+
+		/**
+		 * tips 强满战斗力
+		 * @param tipinfo
+		 * @return
+		 *
+		 */
+		public static function getMZdl(tipinfo:TipsInfo):Number {
+
+			var itemid:TEquipInfo=TableManager.getInstance().getEquipInfo(tipinfo.itemid);
+
+			var xml:XML=LibManager.getInstance().getXML("config/table/strengthen.xml");
+			var rate:int=xml.strengthen[itemid.maxlevel].@addRate;
+
+			var z:int=0;
+			var p:Object=tipinfo.p;
+
+			for (var str:String in p) {
+				if (str.indexOf("_") == -1) {
+					z+=(int(p[str]) * TableManager.getInstance().getZdlElement(int(str)).rate);
+					z+=(Math.ceil(int(p[str]) * (rate / 100)) * TableManager.getInstance().getZdlElement(int(str)).rate);
+				}
+			}
+
+			if (tipinfo.elea > 0)
+				z+=(tipinfo.elea * TableManager.getInstance().getZdlElement(getElementToEleId(tipinfo.ele)).rate);
+
+			return z;
+		}
+
 
 	}
 }

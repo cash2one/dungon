@@ -78,9 +78,10 @@ package com.leyou.ui.role.child.children {
 //			this.canMove=false;
 //			}
 
+			this.iconBmp.setWH(38, 38);
 			this.iconBmp.x=(40 - 36) >> 1;
 			this.iconBmp.y=(40 - 36) >> 1;
-			this.iconBmp.setWH(36, 36);
+
 
 			this.stopMc();
 			if (info.info.effect != null && info.info.effect != "0")

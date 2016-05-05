@@ -24,10 +24,15 @@ package com.ace.gameData.table {
 		public var sceneEffect2:int; //场景特效2
 		public var bulletId:int; //子弹id
 		public var bombId:int; //爆炸id
-		public var hurtId:int;//受伤特效
-		public var shackFrame:int;//震屏
-		public var isHitOff:Boolean;//是否击飞
-		public var sound:int;//音效
+		public var hurtId:int; //受伤特效
+		public var shackFrame:int; //震屏
+		public var isHitOff:Boolean; //是否击飞
+		public var sound:int; //音效
+
+		public var angle:Array; //角度
+		public var perNum:Array; //每次多少个
+		public var times:int; //次数
+		public var interval:int; //间隔时间
 
 
 		public function TSkillEffectInfo(info:XML) {
@@ -46,6 +51,11 @@ package com.ace.gameData.table {
 			this.shackFrame=info.@shockFps;
 			this.isHitOff=StringUtil.intToBoolean(info.@punch);
 			this.sound=info.@sound;
+
+			this.angle=String(info.@buAngle).split(",");
+			this.perNum=String(info.@buNum).split(",");
+			this.times=info.@damNum;
+			this.interval=info.@damInTime;
 		}
 	}
 }

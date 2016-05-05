@@ -20,6 +20,7 @@ package com.ace.game.proxy {
 	import com.ace.gameData.manager.SettingManager;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.table.TLivingInfo;
+	import com.ace.manager.GuideDirectManager;
 	import com.ace.manager.GuideManager;
 	import com.ace.manager.UIManager;
 	import com.ace.ui.map.MapWnd;
@@ -33,7 +34,7 @@ package com.ace.game.proxy {
 	import com.leyou.ui.convenientuse.ConvenientUseManager;
 	import com.test.Test200;
 	import com.test.TestScene;
-
+	
 	import flash.geom.Point;
 	import flash.utils.setTimeout;
 
@@ -78,6 +79,10 @@ package com.ace.game.proxy {
 			if (UIManager.getInstance().isCreate(WindowEnum.MARKET)) {
 				UIManager.getInstance().marketWnd.updateADState();
 			}
+			
+			
+			GuideDirectManager.getInstance().checkLevelValid(level);
+			GuideDirectManager.getInstance().checkLevelValidII(level);
 		}
 
 		/**移动结束*/

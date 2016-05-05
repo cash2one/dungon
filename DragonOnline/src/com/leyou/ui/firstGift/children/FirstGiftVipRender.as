@@ -54,8 +54,8 @@ package com.leyou.ui.firstGift.children
 		}
 		
 		protected function onSptOver(event:MouseEvent):void{
-			tipsInfo.lv = Core.me.info.level;
-			tipsInfo.vipLv = 1;
+//			tipsInfo.lv = Core.me.info.level;
+//			tipsInfo.vipLv = 1;
 			ToolTipManager.getInstance().show(TipEnum.TYPE_VIP_QUEIP, tipsInfo, new Point(stage.mouseX, stage.mouseY));
 		}
 	}

@@ -3,8 +3,10 @@ package com.leyou.ui.backpack.child {
 	import com.ace.ICommon.IMenu;
 	import com.ace.config.Core;
 	import com.ace.enum.ItemEnum;
+	import com.ace.enum.PlatformEnum;
 	import com.ace.enum.PlayerEnum;
 	import com.ace.enum.TipEnum;
+	import com.ace.enum.UIEnum;
 	import com.ace.enum.WindowEnum;
 	import com.ace.game.backpack.GridBase;
 	import com.ace.game.manager.DragManager;
@@ -87,8 +89,8 @@ package com.leyou.ui.backpack.child {
 			this.iconBmp.updateBmp("ui/backpack/lock.png");
 			this.selectBmp.updateBmp("ui/backpack/select.png");
 
-			this.selectBmp.x=-1.9;
-			this.selectBmp.y=-1.8;
+			this.selectBmp.x=-0.9;
+			this.selectBmp.y=-0.8;
 
 			//			this.shap=new Shape();
 //			this.shap.graphics.beginFill(0xff0000, .3);
@@ -139,8 +141,8 @@ package com.leyou.ui.backpack.child {
 				this.bindingBmp.visible=false;
 
 			this.iconBmp.updateBmp("ico/items/" + Baginfo(info).info.icon + ".png");
-			this.iconBmp.x=this.iconBmp.y=(ItemEnum.ITEM_BG_WIDTH - ItemEnum.ITEM_ICO_WIDTH) / 2;
-			this.iconBmp.setWH(36, 36);
+			this.iconBmp.setWH(38, 38);
+			this.iconBmp.x=this.iconBmp.y=(this.bgBmp.width - this.iconBmp.width) / 2;
 			this.dataId=info.pos;
 
 			if (info.cdtime > 0) {
@@ -153,7 +155,7 @@ package com.leyou.ui.backpack.child {
 			this.updateTopIconState();
 
 			if (info.info.effect != null && info.info.effect != "0")
-				this.playeMc(int(info.info.effect));
+				this.playeMc(int(info.info.effect), new Point(1, 1));
 
 			if (int(info.tips.qh) > 0)
 				this.setIntensify("" + Baginfo(info).tips.qh);
@@ -162,8 +164,8 @@ package com.leyou.ui.backpack.child {
 			this.addChild(this.disableBmp);
 			this.addChild(this.numLbl);
 
-			if (info.aid == int(ConfigEnum.Sale_Daily9) || info.aid == int(ConfigEnum.Sale_Daily10))
-				Cmd_Bag.cm_bagUse(info.pos);
+//			if (info.aid == int(ConfigEnum.Sale_Daily9) || info.aid == int(ConfigEnum.Sale_Daily10))
+//				Cmd_Bag.cm_bagUse(info.pos);
 
 		}
 
@@ -182,13 +184,13 @@ package com.leyou.ui.backpack.child {
 			this.cdMc.clearCD();
 			this.cdMc.play(0, 0)
 
-			this.iconBmp.setWH(40, 40);
+			this.iconBmp.setWH(38, 38);
 			this.bgBmp.visible=true;
 		}
 
 		public function setSize(w:Number, h:Number):void {
 
-			this.bgBmp.setWH(w + 5, h + 5);
+			this.bgBmp.setWH(w + 3, h + 3);
 			this.bgBmp.visible=false;
 			this.selectBmp.bitmapData=null;
 			this.iconBmp.setWH(w, h);
@@ -207,14 +209,19 @@ package com.leyou.ui.backpack.child {
 					this.playeMc(int(this.data.info.effect1), new Point(0.5, 0));
 			}
 
-			this.numLbl.x=22 + (this.bgBmp.width - 40 - 3);
-			this.numLbl.y=24 + (this.bgBmp.height - 40 - 3);
+			this.iconBmp.x=this.iconBmp.y=(this.bgBmp.width - this.iconBmp.width) / 2;
+
+			this.numLbl.x=22 + (this.bgBmp.width - 35 - 3);
+			this.numLbl.y=24 + (this.bgBmp.height - 37 - 3);
 
 			if (int(this.data.tips.qh) > 0)
 				this.setIntensify("" + Baginfo(this.data).tips.qh);
 
-			this.bindingBmp.y=26 + (this.bgBmp.height - 40 - 5);
-			this.disableBmp.y=26 + (this.bgBmp.height - 40 - 5);
+			this.bindingBmp.y=26 + (this.bgBmp.height - 37 - 5);
+			this.disableBmp.y=26 + (this.bgBmp.height - 37 - 5);
+
+			this.bindingBmp.x=3;
+			this.disableBmp.x=3;
 
 			this.addChild(this.bindingBmp);
 			this.addChild(this.disableBmp);
@@ -226,12 +233,13 @@ package com.leyou.ui.backpack.child {
 			this.canMove=false;
 			this.iconBmp.updateBmp("ui/backpack/lock.png");
 
-			this.bgBmp.setWH(40, 40);
+			this.bgBmp.setWH(43, 43);
 			this.bgBmp.visible=false;
 			this.selectBmp.visible=false;
-			this.iconBmp.setWH(43, 43);
 			this.iconBmp.x=0;
 			this.iconBmp.y=0;
+
+			this.iconBmp.setWH(43, 43);
 		}
 
 		//经过事件
@@ -670,8 +678,12 @@ package com.leyou.ui.backpack.child {
 
 			menuArr.push(new MenuInfo(PropUtils.getStringById(1629), 5));
 
-			//if (data.boBind < 1)
-			menuArr.push(new MenuInfo(PropUtils.getStringById(1630), 6));
+			//throw new Error(UIEnum.PLAT_FORM_ID + "/" + PlatformEnum.LAN_TW)
+
+			if (UIEnum.MULTI_LAN == PlatformEnum.LAN_TW)
+				menuArr.push(new MenuInfo(PropUtils.getStringById(1630), 6));
+			else
+				menuArr.push(new MenuInfo(PropUtils.getStringById(1631), 6));
 
 			MenuManager.getInstance().show(menuArr, this, new Point($x - 30, $y));
 			ToolTipManager.getInstance().hide();
@@ -821,11 +833,11 @@ package com.leyou.ui.backpack.child {
 								if (!UIManager.getInstance().roleWnd.visible)
 									UILayoutManager.getInstance().show_II(WindowEnum.ROLE);
 
-								TweenMax.delayedCall(.6, function():void {
+								TweenMax.delayedCall(1, function():void {
 									UIManager.getInstance().roleWnd.setTabIndex(1);
 
 									if (!UIManager.getInstance().roleWnd.mountIsTopLv())
-										UILayoutManager.getInstance().show_II(WindowEnum.ROLE, WindowEnum.MOUTLVUP, -20);
+										UILayoutManager.getInstance().show_II(WindowEnum.ROLE, WindowEnum.MOUTLVUP);
 
 								});
 
@@ -839,11 +851,11 @@ package com.leyou.ui.backpack.child {
 								if (!UIManager.getInstance().roleWnd.visible)
 									UILayoutManager.getInstance().show_II(WindowEnum.ROLE);
 
-								TweenMax.delayedCall(.6, function():void {
+								TweenMax.delayedCall(1, function():void {
 									UIManager.getInstance().roleWnd.setTabIndex(6);
 
 									if (!UIManager.getInstance().roleWnd.wingIsTopLv())
-										UILayoutManager.getInstance().show_II(WindowEnum.ROLE, WindowEnum.WINGLVUP, -20);
+										UILayoutManager.getInstance().show(WindowEnum.ROLE, WindowEnum.WINGLVUP);
 
 								});
 								break;
@@ -853,10 +865,12 @@ package com.leyou.ui.backpack.child {
 									return;
 								}
 
-								UILayoutManager.getInstance().show_II(WindowEnum.ROLE);
-								TweenMax.delayedCall(.6, function():void {
-									UIManager.getInstance().roleWnd.setTabIndex(3);
-								});
+								UIOpenBufferManager.getInstance().open(WindowEnum.ELEMENT);
+
+//								UILayoutManager.getInstance().show_II(WindowEnum.ROLE);
+//								TweenMax.delayedCall(.6, function():void {
+//									UIManager.getInstance().roleWnd.setTabIndex(3);
+//								});
 								break;
 						}
 
@@ -913,10 +927,21 @@ package com.leyou.ui.backpack.child {
 							UIManager.getInstance().roleWnd.setTabIndex(6);
 
 							if (UIManager.getInstance().roleWnd.wingOpenTradeLv())
-								UILayoutManager.getInstance().show_II(WindowEnum.ROLE, WindowEnum.WING_FLY, -20);
+								UILayoutManager.getInstance().show_II(WindowEnum.ROLE, WindowEnum.WING_FLY);
 
 						});
+					} else if (int(this.data.info.subclassid) == 28) {
+						//						if (!UIManager.getInstance().roleWnd.openWing()) {
+						//							NoticeManager.getInstance().broadcast(TableManager.getInstance().getSystemNotice(9938));
+						//							return;
+						//						}
 
+						if (!UIManager.getInstance().roleWnd.visible)
+							UILayoutManager.getInstance().show_II(WindowEnum.ROLE);
+
+						TweenMax.delayedCall(.6, function():void {
+							UIManager.getInstance().roleWnd.setTabIndex(7);
+						});
 					} else if (this.data.info.id == 30403) {
 						UIOpenBufferManager.getInstance().open(WindowEnum.LUCKDRAW);
 					} else if (this.data.info.pay > 0) {
@@ -952,6 +977,9 @@ package com.leyou.ui.backpack.child {
 
 					} else if ((31839 == this.data.info.id) || (31840 == this.data.info.id) || (31841 == this.data.info.id) || (31842 == this.data.info.id)) {
 						UILayoutManager.getInstance().show(WindowEnum.LEGENDAREY_WEAPON);
+					} else if (this.data.info.subclassid == 16) {
+						Cmd_Bag.cm_bagUse(this.dataId);
+						Cmd_Longz.cm_Longz_H(MyInfoManager.getInstance().name);
 					} else if (this.data.info.subclassid == 36) {
 
 						if (ConfigEnum.Alchemy1 > Core.me.info.level) {
@@ -1103,11 +1131,11 @@ package com.leyou.ui.backpack.child {
 								if (!UIManager.getInstance().roleWnd.visible)
 									UILayoutManager.getInstance().show_II(WindowEnum.ROLE);
 
-								TweenMax.delayedCall(.6, function():void {
+								TweenMax.delayedCall(1, function():void {
 									UIManager.getInstance().roleWnd.setTabIndex(1);
 
 									if (!UIManager.getInstance().roleWnd.mountIsTopLv())
-										UILayoutManager.getInstance().show_II(WindowEnum.ROLE, WindowEnum.MOUTLVUP, -20);
+										UILayoutManager.getInstance().show_II(WindowEnum.ROLE, WindowEnum.MOUTLVUP);
 
 								});
 								break;
@@ -1120,10 +1148,10 @@ package com.leyou.ui.backpack.child {
 								if (!UIManager.getInstance().roleWnd.visible)
 									UILayoutManager.getInstance().show_II(WindowEnum.ROLE);
 
-								TweenMax.delayedCall(.6, function():void {
+								TweenMax.delayedCall(1, function():void {
 									UIManager.getInstance().roleWnd.setTabIndex(6);
 									if (!UIManager.getInstance().roleWnd.wingIsTopLv())
-										UILayoutManager.getInstance().show_II(WindowEnum.ROLE, WindowEnum.WINGLVUP, -20);
+										UILayoutManager.getInstance().show_II(WindowEnum.ROLE, WindowEnum.WINGLVUP);
 
 								});
 
@@ -1134,11 +1162,12 @@ package com.leyou.ui.backpack.child {
 									return;
 								}
 
-								UILayoutManager.getInstance().show_II(WindowEnum.ROLE);
-
-								TweenMax.delayedCall(.6, function():void {
-									UIManager.getInstance().roleWnd.setTabIndex(3);
-								});
+								UIOpenBufferManager.getInstance().open(WindowEnum.ELEMENT);
+//								UILayoutManager.getInstance().show_II(WindowEnum.ROLE);
+//
+//								TweenMax.delayedCall(.6, function():void {
+//									UIManager.getInstance().roleWnd.setTabIndex(3);
+//								});
 
 								break;
 						}
@@ -1178,8 +1207,20 @@ package com.leyou.ui.backpack.child {
 							UIManager.getInstance().roleWnd.setTabIndex(6);
 
 							if (UIManager.getInstance().roleWnd.wingOpenTradeLv())
-								UILayoutManager.getInstance().show_II(WindowEnum.ROLE, WindowEnum.WING_FLY, -20);
+								UILayoutManager.getInstance().show_II(WindowEnum.ROLE, WindowEnum.WING_FLY);
 
+						});
+					} else if (int(this.data.info.subclassid) == 28) {
+//						if (!UIManager.getInstance().roleWnd.openWing()) {
+//							NoticeManager.getInstance().broadcast(TableManager.getInstance().getSystemNotice(9938));
+//							return;
+//						}
+
+						if (!UIManager.getInstance().roleWnd.visible)
+							UILayoutManager.getInstance().show_II(WindowEnum.ROLE);
+
+						TweenMax.delayedCall(.6, function():void {
+							UIManager.getInstance().roleWnd.setTabIndex(7);
 						});
 
 					} else if (this.data.info.subclassid == 14) {
@@ -1235,6 +1276,9 @@ package com.leyou.ui.backpack.child {
 						Cmd_Longz.cm_Longz_D();
 					} else if ((31839 == this.data.info.id) || (31840 == this.data.info.id) || (31841 == this.data.info.id) || (31842 == this.data.info.id)) {
 						UILayoutManager.getInstance().show(WindowEnum.LEGENDAREY_WEAPON);
+					} else if (this.data.info.subclassid == 16) {
+						Cmd_Bag.cm_bagUse(this.dataId);
+						Cmd_Longz.cm_Longz_H(MyInfoManager.getInstance().name);
 					} else if (this.data.info.subclassid == 36) {
 
 						if (ConfigEnum.Alchemy1 > Core.me.info.level) {

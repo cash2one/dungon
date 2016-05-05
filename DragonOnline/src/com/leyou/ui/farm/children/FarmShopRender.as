@@ -3,6 +3,7 @@ package com.leyou.ui.farm.children {
 	import com.ace.gameData.table.TFarmLvInfo;
 	import com.ace.gameData.table.TFarmPlantInfo;
 	import com.ace.loader.child.SwfLoader;
+	import com.ace.manager.GuideManager;
 	import com.ace.manager.LibManager;
 	import com.ace.manager.UIManager;
 	import com.ace.ui.auto.AutoSprite;
@@ -15,7 +16,7 @@ package com.leyou.ui.farm.children {
 	import com.leyou.net.cmd.Cmd_Farm;
 	import com.leyou.utils.ItemUtil;
 	import com.leyou.utils.PropUtils;
-
+	
 	import flash.events.MouseEvent;
 
 	public class FarmShopRender extends AutoSprite {
@@ -82,6 +83,8 @@ package com.leyou.ui.farm.children {
 				Cmd_Farm.cm_FAM_G(UIManager.getInstance().farmShopWnd.blockId, seedId);
 				UIManager.getInstance().farmShopWnd.hide();
 			}
+			
+			GuideManager.getInstance().removeGuide(137);
 		}
 
 		/**

@@ -1,50 +1,28 @@
 package com.ace.manager {
+	import com.ace.ICommon.IGuide;
 	import com.ace.config.Core;
 	import com.ace.enum.EventEnum;
 	import com.ace.enum.GuideEnum;
+	import com.ace.gameData.manager.MyInfoManager;
 	import com.ace.gameData.manager.SettingManager;
 	import com.ace.gameData.manager.TableManager;
-	import com.ace.gameData.setting.AssistInfo;
 	import com.ace.gameData.table.TGuideInfo;
-	import com.ace.ui.guide.GuideEffectController;
-	import com.ace.ui.guide.GuidePointTip;
-	import com.greensock.TweenLite;
-	import com.leyou.enum.ConfigEnum;
-	import com.leyou.enum.MoldEnum;
-	import com.leyou.enum.TaskEnum;
+	import com.ace.ui.auto.AutoWindow;
+	import com.ace.ui.guide.GuidePointTipII;
+	import com.ace.ui.tabbar.children.TabBar;
+	import com.ace.utils.DebugUtil;
+	import com.greensock.TweenMax;
 	import com.leyou.net.cmd.Cmd_Guide;
 
 	import flash.display.DisplayObject;
-	import flash.display.DisplayObjectContainer;
+	import flash.display.Sprite;
+	import flash.geom.Point;
+	import flash.utils.clearTimeout;
 	import flash.utils.getTimer;
+	import flash.utils.setTimeout;
 
 	public class GuideManager {
-
-		private static const MUTEX_GUIDE:Array=[47, 50, 51, 52, 54];
-
 		private static var instance:GuideManager;
-
-		private static var con:DisplayObjectContainer;
-
-		private static var usePointTips:Array;
-
-		private static var freePointTips:Array;
-
-		private static var guideQueues:Object;
-
-		private var timeArr:Array;
-
-		private var tick:uint;
-
-		private var _rc:int;
-
-		private var useEffectController:Vector.<GuideEffectController>;
-
-		private var freeEffectController:Vector.<GuideEffectController>;
-
-		public function get rc():int {
-			return _rc;
-		}
 
 		public static function getInstance():GuideManager {
 			if (!instance) {
@@ -53,37 +31,459 @@ package com.ace.manager {
 			return instance;
 		}
 
+
+		private var freeTips:Vector.<GuidePointTipII>;
+		private var addTips:Vector.<GuidePointTipII>;
+		private var addEffects:Object={};
+		private var delayObj:Object={};
+		private var wndNoExist:Object={};
+
+
 		public function GuideManager():void {
-			this.setup(LayerManager.getInstance().guildeLayer);
+			this.init();
+
+			EventManager.getInstance().addEvent(EventEnum.WINDOW_SHOW, this.autoGuide);
+			EventManager.getInstance().addEvent(EventEnum.TASK_CHANGE, this.autoGuide);
 		}
 
 		private function init():void {
-			guideQueues={};
-			usePointTips=[];
-			usePointTips[1]=new Vector.<GuidePointTip>();
-			usePointTips[2]=new Vector.<GuidePointTip>();
-			usePointTips[3]=new Vector.<GuidePointTip>();
-			usePointTips[4]=new Vector.<GuidePointTip>();
+			this.freeTips=new Vector.<GuidePointTipII>;
+			this.addTips=new Vector.<GuidePointTipII>;
+		}
 
-			freePointTips=[];
-			freePointTips[1]=new Vector.<GuidePointTip>();
-			freePointTips[2]=new Vector.<GuidePointTip>();
-			freePointTips[3]=new Vector.<GuidePointTip>();
-			freePointTips[4]=new Vector.<GuidePointTip>();
 
-			useEffectController=new Vector.<GuideEffectController>();
-			freeEffectController=new Vector.<GuideEffectController>();
-			// 在线奖励计时
-			if (!TimeManager.getInstance().hasITick(onTimer)) {
-				TimeManager.getInstance().addITick(3000, onTimer);
+		private var tmpGInfo:TGuideInfo;
+		private var tmpCon:Sprite;
+		private var tmpTip:GuidePointTipII;
+
+		public function show(id:int):Boolean {
+			 
+			if (id == 49) {
+				trace("为什么不显示？");
 			}
-			EventManager.getInstance().addEvent(EventEnum.SHOW_CUTSCENE, hideGuide);
-			EventManager.getInstance().addEvent(EventEnum.END_CUTSCENE, resetGuide);
+			tmpGInfo=TableManager.getInstance().getGuideInfo(id);
+			if (!tmpGInfo) {
+				DebugUtil.throwError("添加引导id不存在：" + id);
+			}
+
+			if (!SettingManager.getInstance().assitInfo.needGuide(id)) {
+				return false;
+			}
+
+			var isOk:Boolean;
+			if (tmpGInfo.type == GuideEnum.GUIDE_EFFECT) {
+				isOk=this.addEffect(tmpGInfo);
+			} else {
+				isOk=this.addTip(tmpGInfo);
+			}
+
+			if (isOk) {
+				SettingManager.getInstance().assitInfo.addGuideTime(id);
+				Cmd_Guide.cm_GUD_F(id);
+			}
+			return isOk;
+		}
+
+		private function addTip(info:TGuideInfo, con:Sprite=null, pt:Point=null):Boolean {
+			if (this.isExist(tmpGInfo)) {
+				if (info.time > 0) { //更新
+					this.cancelDelay(info.id);
+					this.delayObj[info.id]=setTimeout(this.delayRemove, info.time, info.id);
+				}
+				return false;
+			}
+
+			//面板不存在
+			if (!LayerManager.getInstance().hasWnd(info.wndId)) {
+				this.wndNoExist[info.id]=info.wndId;
+				return false;
+			}
+
+			tmpTip=this.getTips();
+			tmpTip.update(info);
+
+			tmpCon=con ? con : LayerManager.getInstance().getWnd(info.wndId) as Sprite;
+			if (!tmpCon)
+				DebugUtil.throwError("引导表错误：" + info.id);
+			//			trace("引导表错误：" + info.id);
+			tmpCon.addChild(tmpTip);
+
+			//			if (info.uiId == "") {
+			//				DebugUtil.throwError("ui为空，检查表格，或手动实现" + info.id);
+			//			}
+
+
+			var ps:Point;
+			var dis:DisplayObject=this.getDis(info);
+			if (dis) {
+				if (tmpCon != dis.parent) {
+					ps=dis.parent.localToGlobal(new Point(dis.x, dis.y));
+					ps=tmpCon.globalToLocal(ps);
+				} else {
+					ps=new Point(dis.x, dis.y);
+				}
+				switch (info.type) {
+					case GuideEnum.GUIDE_POINT_UP: //↑
+						tmpTip.x=ps.x + dis.width / 2;
+						tmpTip.y=ps.y + dis.height;
+						break;
+					case GuideEnum.GUIDE_POINT_DOWN: //↓
+						tmpTip.x=ps.x + dis.width / 2;
+						tmpTip.y=ps.y;
+						break;
+					case GuideEnum.GUIDE_POINT_LEFT: //←
+						tmpTip.x=ps.x + dis.width;
+						tmpTip.y=ps.y + dis.height / 2;
+						break;
+					case GuideEnum.GUIDE_POINT_RIGHT: //→
+						tmpTip.x=ps.x;
+						tmpTip.y=ps.y + dis.height / 2;
+						break;
+				}
+			}
+
+			tmpTip.x+=info.ox;
+			tmpTip.y+=info.oy;
+
+			if (pt) {
+				tmpTip.x=pt.x, tmpTip.y=pt.y;
+			}
+
+			this.addTips.push(tmpTip);
+			this.addEvents(info, dis);
+			trace("++++指引：", info.id);
+			return true;
+		}
+
+		//引导是否存在
+		private function isExist(info:TGuideInfo):Boolean {
+			for each (tmpTip in this.addTips) {
+				if (info.id == tmpTip.tInfo.id || (info.groupId != 0 && info.groupId == tmpTip.tInfo.groupId)) {
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		private function findTip(info:TGuideInfo):GuidePointTipII {
+			for each (tmpTip in this.addTips) {
+				if (info.id == tmpTip.tInfo.id) {
+					return tmpTip;
+				}
+			}
+			return null;
+		}
+
+		private function cancelDelay(gid:int):void {
+			if (this.delayObj[gid]) {
+				clearTimeout(this.delayObj[gid]);
+				delete this.delayObj[gid];
+			}
+		}
+
+		private function addEffect(info:TGuideInfo):Boolean {
+			if (this.addEffects[info.id]) {
+				if (info.time > 0) { //更新
+					this.cancelDelay(info.id);
+					this.delayObj[info.id]=setTimeout(this.delayRemove, info.time, info.id);
+				}
+				return false;
+			}
+			//面板不存在
+			if (!LayerManager.getInstance().hasWnd(info.wndId)) {
+				this.wndNoExist[info.id]=info.wndId;
+				return false;
+			}
+			var dis:DisplayObject=this.getDis(info);
+			if (!dis) {
+				DebugUtil.throwError("引导表错误：" + info.id);
+			}
+			this.addEffects[info.id]=TweenMax.to(dis, 2, {glowFilter: {color: 0xFFD700, alpha: 1, blurX: 18, blurY: 18, strength: 4}, yoyo: true, repeat: -1});
+
+			this.addEvents(info, dis);
+			trace("++++指引：", info.id);
+			return true;
+		}
+
+		private function removeEffect(info:TGuideInfo, isAuto:Boolean):Boolean {
+			if (!this.addEffects[info.id]) {
+				return false;
+			}
+
+			var dis:DisplayObject=this.getDis(info);
+			if (dis) {
+				dis.filters=[];
+			}
+			trace("----指引：", info.id);
+			this.removeEvents(null, dis);
+			!isAuto && (this.addEffects[info.id] as TweenMax).kill();
+			this.showNext(info);
+			return true;
+		}
+
+		private function addEvents(info:TGuideInfo, dis:DisplayObject):void {
+			if (dis) {
+				try {
+					(dis as IGuide).removeGuide(info.id, this.remove);
+
+				} catch (error:Error) {
+					trace("引导组件不支持：", info.id);
+				}
+			}
+
+			if (info.time > 0) {
+				this.delayObj[info.id]=setTimeout(this.delayRemove, info.time, info.id);
+			}
+		}
+
+		private function removeEvents(info:TGuideInfo, dis:DisplayObject=null):void {
+			if (dis) {
+				try {
+					(dis as IGuide).removeGuideEvent();
+
+				} catch (error:Error) {
+
+				}
+				return;
+			}
+
+			if (info && info.time > 0) {
+				this.cancelDelay(info.id);
+			}
+		}
+
+		private function getDis(info:TGuideInfo):DisplayObject {
+			if (info.uiId == "")
+				return null;
+			try {
+				var dis:DisplayObject=LayerManager.getInstance().getWnd(info.wndId).getUIbyID(info.uiId);
+			} catch (error:Error) {
+				DebugUtil.throwError("引导表格ui错误：" + info.id);
+			}
+			if (dis is TabBar) {
+				dis=(dis as TabBar).getTabButton(info.uiIndex);
+			}
+			return dis;
+		}
+
+		private function delayRemove(id:int):void {
+			delete this.delayObj[id];
+			this.remove(id, true);
+		}
+
+		//按个移除
+		public function remove(id:int, isAuto:Boolean=false):Boolean {
+			if (id == 116) {
+				trace("下一个没显示？");
+			}
+			var isRemove:Boolean;
+			tmpGInfo=TableManager.getInstance().getGuideInfo(id);
+			if (!tmpGInfo) {
+				DebugUtil.throwError("移除引导id不存在：" + id);
+			}
+
+			this.removeEvents(tmpGInfo); //必须调用，延迟打开时，可能还没打开又移除
+			if (tmpGInfo.type == GuideEnum.GUIDE_EFFECT) {
+				return this.removeEffect(tmpGInfo, isAuto);
+			} else {
+				return this.removeTip(tmpGInfo);
+			}
+
+			return false;
+		}
+
+		//按组移除
+		public function removeByGuide(gId:int):Boolean {
+			var isRemove:Boolean;
+			for each (tmpTip in this.addTips) {
+				if (gId == tmpTip.tInfo.id) {
+					isRemove=true;
+					this.removeTip(tmpTip.tInfo, tmpTip);
+				}
+			}
+			return isRemove;
+		}
+
+
+		private function removeTip(info:TGuideInfo, tip:GuidePointTipII=null):Boolean {
+			tmpTip=tip ? tip : this.findTip(info);
+			if (!tmpTip) {
+				return false;
+			}
+
+			this.addTips.splice(this.addTips.indexOf(tmpTip), 1);
+			tmpTip.die();
+			this.freeTips.push(tmpTip); //回收
+
+			trace("----指引：", info.id);
+			this.removeEvents(null, this.getDis(info));
+			this.showNext(info);
+			return true;
+		}
+
+		//显示组引导的下一个
+		private function showNext(info:TGuideInfo):void {
+			if (info.nextId != 0) {
+				this.show(info.nextId);
+			}
+		}
+
+
+
+
+
+		private function getTips():GuidePointTipII {
+			if (this.freeTips.length == 0) {
+				this.freeTips.push(new GuidePointTipII());
+			}
+			return this.freeTips.pop();
+		}
+
+
+		//自动任务：任务、等级触发
+		public function autoGuide(info:Object=null):void {
+			if (info && (info.wndId == "-1" || !info.isShow))
+				return;
+			var tmpWnd:AutoWindow;
+			for each (var tInfo:TGuideInfo in TableManager.getInstance().guideDic) {
+				if (tInfo.id == 145) {
+					//				if (info.wndId == 212 && tInfo.id == 135) {
+					trace("got");
+				}
+
+				//-1非常规判断忽略
+				if (!tInfo.isGuideFirst || tInfo.act_con == -1)
+					continue;
+				if (info) {
+					tmpWnd=LayerManager.getInstance().getWnd(info.wndId) as AutoWindow;
+					if (!(tmpWnd && tmpWnd.isAboutMe(tInfo.wndId))) {
+						continue;
+					}
+
+					//界面打开
+					if (tInfo.act_con == 0) {
+						if (tInfo.guideType != 1 && Core.me.info.level >= tInfo.level) {
+							this.show(tInfo.id);
+						}
+					} else {
+						//任务判断 一级菜单
+						trace("YYY:", Core.me.info.level, MyInfoManager.getInstance().currentTaskId);
+						if (tInfo.guideType != 1 && tInfo.level <= Core.me.info.level && tInfo.act_con == MyInfoManager.getInstance().currentTaskId && !MyInfoManager.getInstance().isTaskOk) {
+							this.show(tInfo.id);
+						}
+					}
+				} else {
+					//等级判断：一级菜单
+					if (tInfo.act_con == 0) {
+						if (tInfo.guideType == 1 && Core.me.info.level == tInfo.level) {
+							this.show(tInfo.id);
+						}
+					} else {
+						//任务判断 一级菜单
+						if (tInfo.guideType == 1 && tInfo.level <= Core.me.info.level && tInfo.act_con == MyInfoManager.getInstance().currentTaskId && !MyInfoManager.getInstance().isTaskOk) {
+							this.show(tInfo.id);
+						}
+					}
+				}
+			}
+
+			if (info) {
+				this.checkWndNoExist(info.wndId);
+			}
+		}
+
+
+
+		private function checkWndNoExist(wndId:String):void {
+			for (var gId:String in this.wndNoExist) {
+				if (this.wndNoExist[gId] == wndId) {
+					this.show(int(gId));
+					delete this.wndNoExist[gId];
+				}
+			}
+		}
+
+
+
+		//===============================================保留以前接口=================================================================
+
+
+		public function showGuides(ids:Array, displays:Array):void {
+			this.show(ids[0]);
+		}
+
+		public function showGuide(id:int, display:DisplayObject=null, check:Boolean=false):void {
+			this.show(id);
+		}
+
+		public function removeGuide(id:int):void {
+			this.remove(id);
+		}
+
+		public function resize():void {
+
+		}
+
+		public function refreshGuide():void {
+
+		}
+
+		public function checkGuideByLevel(level:int):void {
+			//			for each (var tInfo:TGuideInfo in TableManager.getInstance().guideDic) {
+			//				if (tInfo.guideType == 1 && Core.me.info.level == tInfo.level) {
+			//					this.show(tInfo.id);
+			//				}
+			//			}
+			this.autoGuide();
+		}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		//===========================在线奖励tip提示======================================
+
+
+
+		private var _rc:int;
+		private var timeArr:Array;
+		private var tick:uint;
+
+		public function get rc():int {
+			return _rc;
 		}
 
 		public function rewardReducing():void {
 			_rc--;
+			if (_rc > 0)
+				this.show(50);
 			UIManager.getInstance().rightTopWnd.updateWelfare();
+		}
+
+		public function recordTime(obj:Object):void {
+			// 福利
+			var tl:Array=obj.tl;
+			if (null == timeArr) {
+				timeArr=[];
+			}
+			tick=getTimer();
+			//			timeArr=timeArr.concat(tl);
+			timeArr=tl;
 		}
 
 		protected function onTimer():void {
@@ -144,597 +544,21 @@ package com.ace.manager {
 					UIManager.getInstance().rightTopWnd.updateWelfare();
 				}
 			}
+			if (_rc > 0)
+				this.show(50);
 		}
 
-		public function setup($con:DisplayObjectContainer):void {
-			if (null != con) {
-				//				throw new Error("重复");
-				return;
-			}
-			con=$con;
-			init();
-		}
 
-		public function recordTime(obj:Object):void {
-			// 福利
-			var tl:Array=obj.tl;
-			if (null == timeArr) {
-				timeArr=[];
-			}
-			tick=getTimer();
-			timeArr=timeArr.concat(tl);
-		}
 
-		/**
-		 * 显示指引,若正在显示,执行并更新坐标
-		 *
-		 * @param id      指引ID
-		 * @param display 所属显示对象
-		 *
-		 */
-		public function showGuide(id:int, display:DisplayObject, check:Boolean=false):void {
-//			return;
-			if (null == con) {
-				throw new Error("the guide layer is null.")
-			}
-			if (null == display) {
-				throw new Error("要指引的显示对象为NULL,指引ID为:" + id);
-			}
-			if (assistInfo.needGuide(id) && (67 != id)) {
-				// 是否存在两两互斥列表中
-				var index:int=MUTEX_GUIDE.indexOf(id);
-				if (-1 != index) {
-					var length:int=MUTEX_GUIDE.length;
-					for (var n:int=0; n < length; n++) {
-						var cid:int=MUTEX_GUIDE[n];
-						if ((cid != id) && containsGuide(cid)) {
-							return;
-						}
-					}
-				}
 
-				if (check) {
-					// 检查显示对象是否出于显示状态
-					var p:DisplayObject=display;
-					while (p != display.root) {
-						if ((null == p) || !p.visible) {
-							return;
-						}
-						p=p.parent;
-					}
-				}
 
-				// 指引
-				var info:TGuideInfo=TableManager.getInstance().getGuideInfo(id);
-				if (GuideEnum.GUIDE_EFFECT != info.type) {
-//					trace("-----------------add point guide id = " + id)
-					// 箭头指引
-					var point:GuidePointTip=getTip(info.type, info.id);
-					point.updateInfo(info, display);
-					point.addToContainer(con);
-					point.setListenter(onPointTimerOver);
-					point.check=check;
-				} else {
-//					trace("-----------------add effect guide id = " + id)
-					// 发光特效指引
-					var effControl:GuideEffectController=getEffController(info.id);
-					effControl.updateInfo(info, display);
-					effControl.setListenter(onPointTimerOver);
-				}
-				// 增加指引次数
-				assistInfo.addGuideTime(id);
-				// 通知服务器
-				Cmd_Guide.cm_GUD_F(id);
-			}
-		}
 
-		private function getEffController(id:int):GuideEffectController {
-			var info:TGuideInfo=TableManager.getInstance().getGuideInfo(id);
-			var l:int=useEffectController.length;
-			for (var n:int=0; n < l; n++) {
-				if (useEffectController[n].guideInfo.id == id) {
-					return useEffectController[n];
-				}
-			}
-			var gec:GuideEffectController;
-			if (freeEffectController.length > 0) {
-				gec=freeEffectController.pop();
-			} else {
-				gec=new GuideEffectController();
-			}
-			useEffectController.push(gec);
-			return gec;
-		}
 
-		/**
-		 * 显示指引队列
-		 *
-		 * @param ids      指引ID列表
-		 * @param displays 所属显示对象列表
-		 *
-		 */
-		public function showGuides(ids:Array, displays:Array):void {
-			if (null == con) {
-				throw new Error("the guide layer is null.")
-			}
 
-			if ((null == ids) || (0 == ids.length)) {
-				return;
-			}
-			var info:TGuideInfo=TableManager.getInstance().getGuideInfo(ids[0]);
-			if (!guideQueues.hasOwnProperty(info.groupId)) {
-				guideQueues[info.groupId]=[ids, displays];
-				showGuide(ids.shift(), displays.shift());
-			}
-		}
 
-		/**
-		 * 此指引是否正在显示
-		 *
-		 * @param id 指引
-		 * @return   true -- 正在显示 false -- 没有显示
-		 *
-		 */
-		public function containsGuide(id:int):Boolean {
-			var info:TGuideInfo=TableManager.getInstance().getGuideInfo(id);
-			if (GuideEnum.GUIDE_EFFECT == info.type) {
-				var el:int=useEffectController.length;
-				for (var m:int=0; m < el; m++) {
-					if (useEffectController[m].guideInfo.id == id) {
-						return true;
-					}
-				}
-			} else {
-				var useArr:Vector.<GuidePointTip>=usePointTips[info.type];
-				var l:int=useArr.length;
-				for (var n:int=0; n < l; n++) {
-					if (useArr[n].guideInfo.id == info.id) {
-						return true;
-					}
-				}
-			}
-			return false;
-		}
 
-		/**
-		 * 移出指引
-		 *
-		 * @param id 指引ID
-		 *
-		 */
-		public function removeGuide(id:int):void {
-			//trace("-----------------remove guide id = " + id)
-			var info:TGuideInfo=TableManager.getInstance().getGuideInfo(id);
-			if (GuideEnum.GUIDE_EFFECT == info.type) {
-				var effect:GuideEffectController;
-				var el:int=useEffectController.length;
-				for (var i:int=0; i < el; i++) {
-					if (useEffectController[i].guideInfo.id == id) {
-						effect=useEffectController.splice(i, 1)[0];
-//						trace("-----------------remove effect guide success. id = " + id)
-						break;
-					}
-				}
-				if (null != effect) {
-					effect.clear();
-					freeEffectController.push(effect);
-				}
-			} else {
-				var freeArr:Vector.<GuidePointTip>=freePointTips[info.type];
-				var useArr:Vector.<GuidePointTip>=usePointTips[info.type];
-				var p:GuidePointTip;
-				var l:int=useArr.length;
-				for (var n:int=0; n < l; n++) {
-					if (useArr[n].guideInfo.id == id) {
-						p=useArr.splice(n, 1)[0];
-						//					trace("-----------------remove point guide success. id = " + id)
-						break;
-					}
-				}
-				if (null != p) {
-					p.clear();
-					freeArr.push(p);
-				}
-			}
-			// 处理后续指引
-			var data:Array=guideQueues[info.groupId];
-			if (null != data) {
-				var ids:Array=data[0];
-				var dis:Array=data[1];
-				if (0 == ids.length) {
-					delete guideQueues[info.groupId];
-					return;
-				}
-				showGuide(ids.shift(), dis.shift());
-			}
 
-		}
 
-		/**
-		 * 重置指引位置
-		 *
-		 */
-		public function resize():void {
-			for (var n:int=1; n < 5; n++) {
-				var useArr:Vector.<GuidePointTip>=usePointTips[n];
-				var l:int=useArr.length;
-				for (var m:int=0; m < l; m++) {
-					useArr[m].resize();
-				}
-			}
-		}
-
-		private function get assistInfo():AssistInfo {
-			return SettingManager.getInstance().assitInfo;
-		}
-
-		/**
-		 * 获得一个指引对象
-		 *
-		 * @param type 指引类型
-		 * @param id   指引ID
-		 * @return     指引对象
-		 *
-		 */
-		private function getTip(type:int, id:int):GuidePointTip {
-			// 是否在显示中的指引
-			var info:TGuideInfo=TableManager.getInstance().getGuideInfo(id);
-			var useArr:Vector.<GuidePointTip>=usePointTips[type];
-			var l:int=useArr.length;
-			for (var n:int=0; n < l; n++) {
-				if (useArr[n].guideInfo.id == id) {
-					return useArr[n];
-				}
-			}
-			// 获取一个新的指引
-			var freeArr:Vector.<GuidePointTip>=freePointTips[type];
-			//			var useArr:Vector.<PointTip> = usePointTips[type];
-			var p:GuidePointTip;
-			if (freeArr.length > 0) {
-				p=freeArr.pop();
-			} else {
-				p=new GuidePointTip("config/ui/introduction/arrowWnd.xml", type);
-			}
-			useArr.push(p);
-			return p;
-		}
-
-		/**
-		 * 指引计时完成触发函数
-		 *
-		 * @param evt 事件
-		 *
-		 */
-		public function onPointTimerOver(target:*):void {
-//			var p:GuidePointTip = evt.target as GuidePointTip;
-			removeGuide(target.guideInfo.id);
-		}
-
-		/**
-		 * 刷新所有引导,所属的显示对象被隐藏,引导也会被隐藏
-		 *
-		 */
-		public function refreshGuide():void {
-			var invalidIDs:Array=[];
-			for (var n:int=1; n < 5; n++) {
-				var useArr:Vector.<GuidePointTip>=usePointTips[n];
-				var l:int=useArr.length;
-				for (var m:int=0; m < l; m++) {
-					if (!useArr[m].valid()) {
-						invalidIDs.push(useArr[m].guideInfo.id);
-					}
-				}
-			}
-			for each (var id:int in invalidIDs) {
-				removeGuide(id);
-			}
-		}
-
-		public function hideGuide():void {
-			for (var n:int=1; n < 5; n++) {
-				var useArr:Vector.<GuidePointTip>=usePointTips[n];
-				var l:int=useArr.length;
-				for (var m:int=0; m < l; m++) {
-					if (null != useArr[m]) {
-						useArr[m].visible=false;
-					}
-				}
-			}
-		}
-
-		public function resetGuide():void {
-			for (var n:int=1; n < 5; n++) {
-				var useArr:Vector.<GuidePointTip>=usePointTips[n];
-				var l:int=useArr.length;
-				for (var m:int=0; m < l; m++) {
-					if (null != useArr[m]) {
-						useArr[m].visible=true;
-					}
-				}
-			}
-		}
-
-		// 等级检测,显示指引
-		public function checkGuideByLevel(level:int):void {
-			// 福利
-			if (ConfigEnum.WelfareOpenLvel == level) {
-				showGuide(47, UIManager.getInstance().rightTopWnd.getWidget("welfareBtn"), true);
-			}
-
-			// 商城
-			if (ConfigEnum.MarketOpenLevel == level) {
-				showGuide(16, UIManager.getInstance().toolsWnd.getButtonByType(MoldEnum.MARKET));
-			}
-
-			// 剧情副本
-			if (ConfigEnum.StoryCopyOpenLevel == level) {
-				showGuide(28, UIManager.getInstance().rightTopWnd.getWidget("teamCopyBtn"), true);
-			}
-
-			// BOSS副本
-			if (ConfigEnum.BossCopyOpenLevel == level) {
-				showGuide(64, UIManager.getInstance().rightTopWnd.getWidget("teamCopyBtn"), true);
-			}
-
-			// 战斗模式切换
-			if (40 == level) {
-				showGuide(6, UIManager.getInstance().roleHeadWnd.getUIbyID("modeBtn") as DisplayObject);
-			}
-
-			// 自动拾取
-			if (43 == level) {
-				showGuide(84, UIManager.getInstance().toolsWnd.getUIbyID("guaJBtn"));
-			}
-
-			// 农场
-			if (ConfigEnum.FarmOpenLevel == level) {
-				showGuide(24, UIManager.getInstance().toolsWnd.getUIbyID("framBtn"), true);
-			}
-
-			// 押镖
-			if (level == ConfigEnum.delivery19) {
-				
-			}
-
-			// 寄售
-			if (ConfigEnum.AutionOpenLevel == level) {
-				showGuide(34, UIManager.getInstance().toolsWnd.getButtonByType(MoldEnum.AUTION));
-			}
-
-			// 活跃度
-			if (ConfigEnum.ActiveOpenLevel == level) {
-				showGuide(38, UIManager.getInstance().rightTopWnd.getWidget("activityBtn"), true);
-			}
-
-			//坐骑
-			if (level == ConfigEnum.MountOpenLv) {
-				showGuide(1, UIManager.getInstance().toolsWnd.playerBtn);
-			}
-
-			// 竞技场
-			if (level == ConfigEnum.ArenaOpenLv) {
-				showGuide(31, UIManager.getInstance().rightTopWnd.getWidget("arenaBtn"), true);
-			}
-
-			// 答题
-			if (level == ConfigEnum.question1) {
-
-			}
-
-			//装备
-			if (level == ConfigEnum.EquipIntensifyOpenLv) {
-				showGuide(21, UIManager.getInstance().toolsWnd.duanZBtn);
-			}
-
-			//重铸
-			if (level == ConfigEnum.EquipRecastOpenLv) {
-				showGuide(22, UIManager.getInstance().toolsWnd.duanZBtn);
-			}
-
-			//纹章
-			if (level == ConfigEnum.BadgeOpenLv) {
-				showGuide(12, UIManager.getInstance().toolsWnd.wenZBtn);
-			}
-
-			//行会
-			if (level == ConfigEnum.UnionOpenLv) {
-				showGuide(41, UIManager.getInstance().toolsWnd.guildBtn);
-			}
-
-			//翅膀
-			if (level == ConfigEnum.WingOpenLv) {
-				showGuide(57, UIManager.getInstance().leftTopWnd.wingBtn);
-			}
-
-			//称号
-			if (level == ConfigEnum.NckOpenLv) {
-				showGuide(58, UIManager.getInstance().toolsWnd.playerBtn);
-			}
-
-			//技能
-			if (level == 5) {
-				showGuides([35, 36], [UIManager.getInstance().toolsWnd.skillBtn, UIManager.getInstance().toolsWnd.shortCutGrid[7]]);
-			}
-
-			if (level == 6) {
-				showGuide(63, UIManager.getInstance().toolsWnd.skillBtn);
-			}
-
-			if (level == 3) {
-				showGuide(69, UIManager.getInstance().toolsWnd);
-			}
-
-			//日常任务
-			if (level == ConfigEnum.taskDailyOpenLv) {
-				showGuide(17, UIManager.getInstance().toolsWnd.missionBtn);
-			}
-
-			//元素
-			if (level == ConfigEnum.ElementOpenLv) {
-				showGuide(9, UIManager.getInstance().toolsWnd.playerBtn);
-			}
-
-			//装备升级
-			if (level == ConfigEnum.equip24) {
-				showGuide(105, UIManager.getInstance().toolsWnd.duanZBtn);
-			}
-
-			//装备萃取
-			if (level == ConfigEnum.EquipBreakOpenLv) {
-				showGuide(106, UIManager.getInstance().toolsWnd.duanZBtn);
-			}
-
-			//宝石
-			if (level == ConfigEnum.Gem1) {
-				showGuide(109, UIManager.getInstance().toolsWnd.playerBtn);
-			}
-
-			//组队
-			if (level == TableManager.getInstance().getGuideInfo(111).level) {
-				showGuide(111, UIManager.getInstance().rightTopWnd.getWidget("teamCopyBtn"));
-			}
-
-			//任务集市
-			if (level == ConfigEnum.TaskMarket1) {
-				showGuide(108, UIManager.getInstance().rightTopWnd.getWidget("taskMarketBtn"));
-			}
-
-		}
-
-		//		/**
-		//		 * 如果指引正在显示,则不执行任何处理
-		//		 * 
-		//		 * @param id      引导ID
-		//		 * @param display 显示对象
-		//		 * 
-		//		 */		
-		//		public function showGuide_II(id:int, display:DisplayObjectContainer):void{
-		//			if (null == con) {
-		//				throw new Error("the guide layer is null.")
-		//			}
-		//			if(null == display){
-		//				throw new Error("要指引的显示对象为NULL,指引ID为:"+id);
-		//			}
-		//			// 检查显示对象是否出于显示状态
-		//			var p:DisplayObjectContainer = display;
-		//			while(p != display.root){
-		//				if((null == p) || !p.visible){
-		//					return;
-		//				}
-		//				p = p.parent;
-		//			}
-		//			if(assistInfo.needGuide(id) && !containsGuide(id)){
-		//				// 指引
-		//				var info:TGuideInfo = TableManager.getInstance().getGuideInfo(id);
-		//				var point:PointTip = getTip(info.type, info.id);
-		//				point.updateInfo(info, display);
-		//				point.addToContainer(con);
-		//				point.setListenter(onPointTimerOver);
-		//				// 增加指引次数
-		//				assistInfo.addGuideTime(id);
-		//				// 通知服务器
-		//				Cmd_Guide.cm_GUD_F(id);
-		//			}
-		//		}
-
-//		/**
-//		 * 重置指引位置
-//		 * 
-//		 * @param id 指引ID
-//		 * 
-//		 */		
-//		public function resizeByID(id:int):void{
-//			var info:TGuideInfo = TableManager.getInstance().getGuideInfo(id);
-//			var useArr:Vector.<PointTip> = usePointTips[info.type];
-//			var p:PointTip;
-//			var l:int = useArr.length;
-//			for (var n:int = 0; n < l; n++) {
-//				if (useArr[n].guideInfo.id == id) {
-//					p = useArr.splice(n, 1)[0];
-//					break;
-//				}
-//			}
-//			if (null != p) {
-//				p.resize();
-//			}
-//		}
-
-//		/**
-//		 * 获得一个新生成指引对象
-//		 * 
-//		 * @param type 指引类型
-//		 * @return     指引对象
-//		 * 
-//		 */		
-//		private function getNewTip(type:int):GuidePointTip {
-//			return new GuidePointTip("config/ui/introduction/arrowWnd.xml", type);
-//			switch (type) {
-//				case 1:
-//					return new PointTip("config/ui/introduction/arrowWnd.xml", 1);
-//				case 2:
-//					return new PointTip("config/ui/introduction/arrowWnd.xml", 2);
-//				case 3:
-//					return new PointTip("config/ui/introduction/arrowWnd.xml", 3);
-//				case 4:
-//					return new PointTip("config/ui/introduction/arrowWnd.xml", 4);
-//				default:
-//					throw new Error("Get unknow type PointTip.");
-//					break;
-//			}
-//		}
-
-		// simple test
-//		public function showGuideT(gid:int, gd:int, gx:int, gy:int):void {
-//			var dis:DisplayObjectContainer;
-//			switch (gid) {
-//				case 24:
-//				case 28:
-//				case 4:
-//					dis = UIManager.getInstance().toolsWnd;
-//					break;
-//				case 16:
-//				case 34:
-//					dis = UIManager.getInstance().toolsWnd;
-//					break;
-//				case 40:
-//					dis = UIManager.getInstance().convenientWear;
-//					break;
-//				case 25:
-//				case 26:
-//				case 27:
-//					dis = UIManager.getInstance().farmWnd;
-//					break;
-//				case 38:
-//					dis = UIManager.getInstance().activeWnd;
-//					break;
-//				case 47:
-//				case 48:
-//				case 49:
-//				case 50:
-//				case 51:
-//				case 52:
-//				case 53:
-//					dis = UIManager.getInstance().welfareWnd;
-//					break;
-//				case 6:
-//				case 7:
-//					dis = UIManager.getInstance().roleHeadWnd;
-//					break;
-//				case 23:
-//					dis = UIManager.getInstance().onlineReward;
-//					break;
-//			}
-//			if (null == dis || containsGuide(gid)) {
-//				return;
-//			}
-//			// 指引
-//			var info:TGuideInfo = TableManager.getInstance().getGuideInfo(gid);
-//			var point:PointTip = getTip(gd, gid);
-//			point.updateInfo(info, dis);
-//			point.addToContainer(con);
-//			point.setListenter(onPointTimerOver);
-//			point.x = gx;
-//			point.y = gy;
-//		}
 	}
 }
+

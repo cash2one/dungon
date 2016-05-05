@@ -16,12 +16,14 @@ package com.leyou.ui.wing {
 	import com.ace.ui.img.child.Image;
 	import com.ace.ui.lable.Label;
 	import com.ace.utils.StringUtil;
+	import com.greensock.TweenLite;
 	import com.leyou.enum.ConfigEnum;
 	import com.leyou.net.cmd.Cmd_Wig;
 	import com.leyou.utils.PropUtils;
-
+	
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
+	import flash.geom.Rectangle;
 
 	public class WingWnd extends AutoSprite {
 
@@ -31,7 +33,7 @@ package com.leyou.ui.wing {
 		private var jieImg:Image;
 		private var rightImgBtn:ImgButton;
 		private var leftImgBtn:ImgButton;
-		private var showBtn:ImgLabelButton;
+		private var showBtn:ImgButton;
 
 		private var fightKeyLbl:Label;
 		private var fightAddkeyLbl:Label;
@@ -65,6 +67,7 @@ package com.leyou.ui.wing {
 		private var reikiBackLbl:Label;
 		private var arrowImg:Image;
 		private var arrow1Img:Image;
+		private var wingImg:Image;
 
 //		private var fightBD:Bitmap;
 		private var rollPower:RollNumWidget;
@@ -105,7 +108,7 @@ package com.leyou.ui.wing {
 			this.jieImg=this.getUIbyID("jieImg") as Image;
 			this.rightImgBtn=this.getUIbyID("rightImgBtn") as ImgButton;
 			this.leftImgBtn=this.getUIbyID("leftImgBtn") as ImgButton;
-			this.showBtn=this.getUIbyID("showBtn") as ImgLabelButton;
+			this.showBtn=this.getUIbyID("showBtn") as ImgButton;
 
 			this.fightKeyLbl=this.getUIbyID("fightKeyLbl") as Label;
 			this.fightAddkeyLbl=this.getUIbyID("fightAddkeyLbl") as Label;
@@ -138,6 +141,7 @@ package com.leyou.ui.wing {
 			this.reikiUpLbl=this.getUIbyID("reikiUpLbl") as Label;
 			this.arrowImg=this.getUIbyID("arrowImg") as Image;
 			this.arrow1Img=this.getUIbyID("arrow1Img") as Image;
+			this.wingImg=this.getUIbyID("wingImg") as Image;
 
 			this.rollPower=new RollNumWidget();
 			this.rollPower.loadSource("ui/num/{num}_zdl.png");
@@ -157,11 +161,14 @@ package com.leyou.ui.wing {
 				this.showBtn.addEventListener(MouseEvent.CLICK, this.onBtnClick);
 				this.wingTradeBtn.addEventListener(MouseEvent.CLICK, this.onBtnClick);
 			} else {
+				this.wingTradeBtn.visible=false;
 				this.wingUpBtn.visible=false;
 				this.rightImgBtn.visible=false;
 				this.leftImgBtn.visible=false;
 				this.showBtn.visible=false;
 				this.arrowImg.visible=false;
+				this.arrow1Img.visible=false;
+				this.wingImg.visible=false;
 			}
 
 			this.viewList[PropUtils.getIndexByStr("物理攻击")]=this.phAttLbl;
@@ -230,13 +237,15 @@ package com.leyou.ui.wing {
 			this.setPropAddVisible(false);
 			this.wingUpBtn.setToolTip(TableManager.getInstance().getSystemNotice(1210).content);
 
-			this.starEffect=new StarChangeEffect(10, true);
+			this.starEffect=new StarChangeEffect(10, true, 200);
 			this.addChild(this.starEffect);
-			this.starEffect.x=35;
+			this.starEffect.x=-50;
 			this.starEffect.y=4;
 
-			this.y=1;
-			this.x=-12;
+			this.scrollRect=new Rectangle(0, 0, this.width, this.height);
+
+			this.y=3;
+			this.x=4;
 		}
 
 
@@ -295,7 +304,7 @@ package com.leyou.ui.wing {
 					else
 						this.rollPower.rollToNum(info.zdl);
 
-					this.rollPower.x=270 - this.rollPower.width >> 1;
+					this.rollPower.x=317 - this.rollPower.width >> 1;
 				}
 			}
 
@@ -318,7 +327,7 @@ package com.leyou.ui.wing {
 //						this.gridVec[int(key) - 1].canMove=false;
 //				}
 			}
-			
+
 			if (info.hasOwnProperty("wlv"))
 				this.starEffect.setStarPos(info.wlv % 10 - 1);
 
@@ -444,27 +453,29 @@ package com.leyou.ui.wing {
 			this.wingNameImg.updateBmp("ui/wing/wing_lv" + i + "_name.png");
 
 			if (this.otherPlay) {
-				UIManager.getInstance().otherPlayerWnd.updateWingAvatar(i);
+				UIManager.getInstance().otherPlayerWnd.updateWingAvatar(this.st);
 			} else if (UIManager.getInstance().roleWnd != null) {
-				UIManager.getInstance().roleWnd.updateWingAvatar(i);
+				UIManager.getInstance().roleWnd.updateWingAvatar(this.st);
 			}
 
-			if (--i < 1)
+//			if (--i < 1)
 				this.leftImgBtn.visible=false;
-			else
-				this.leftImgBtn.visible=true;
+//			else
+//				this.leftImgBtn.visible=true;
 
-			i=swfIndex;
-			if (++i > this.pageCount)
+//			i=swfIndex;
+//			if (++i > this.pageCount)
 				this.rightImgBtn.visible=false;
-			else
-				this.rightImgBtn.visible=true;
+//			else
+//				this.rightImgBtn.visible=true;
 
 			if (swfIndex == this.lv) {
 				if (swfIndex == this.lv && this.st > 0) {
-					this.showBtn.text=PropUtils.getStringById(1993);
+//					this.wingImg.updateBmp("ui/character/font_yc.png");
+					this.wingImg.updateBmp("ui/character/font_sy.png");
 				} else
-					this.showBtn.text=PropUtils.getStringById(1994);
+//					this.wingImg.updateBmp("ui/character/font_xs.png");
+					this.wingImg.updateBmp("ui/character/font_sy.png");
 			}
 
 			if ((swfIndex) > this.lv) {
@@ -487,7 +498,7 @@ package com.leyou.ui.wing {
 				if (UIManager.getInstance().wingLvUpWnd.isShow) {
 					UIManager.getInstance().wingLvUpWnd.hide();
 				} else
-					UILayoutManager.getInstance().show(WindowEnum.ROLE, WindowEnum.WINGLVUP, UILayoutManager.SPACE_X, UILayoutManager.SPACE_Y);
+					UILayoutManager.getInstance().show(WindowEnum.ROLE, WindowEnum.WINGLVUP); //, UILayoutManager.SPACE_X, UILayoutManager.SPACE_Y);
 
 
 			} else if (evt.target.name == "rightImgBtn") {
@@ -525,10 +536,13 @@ package com.leyou.ui.wing {
 
 				this.updateEffect(swfIndex);
 			} else if (evt.target.name == "showBtn") {
-				swfIndex=this.lv;
-
-				this.updateEffect(this.lv);
-				Cmd_Wig.cm_WigShow();
+//				swfIndex=this.lv;
+				
+				UILayoutManager.getInstance().show(WindowEnum.SHIYI);
+				TweenLite.delayedCall(0.6, UIManager.getInstance().shiyeWnd.setTabIndex, [3]);
+				
+//				this.updateEffect(this.lv);
+//				Cmd_Wig.cm_WigShow();
 			} else if (evt.target.name == "wingTradeBtn") {
 
 				UIManager.getInstance().mountLvUpwnd.hide();
@@ -539,7 +553,7 @@ package com.leyou.ui.wing {
 				if (UIManager.getInstance().wingTradeWnd.isShow) {
 					UIManager.getInstance().wingTradeWnd.hide();
 				} else
-					UILayoutManager.getInstance().show(WindowEnum.ROLE, WindowEnum.WING_FLY, UILayoutManager.SPACE_X, UILayoutManager.SPACE_Y);
+					UILayoutManager.getInstance().show(WindowEnum.ROLE, WindowEnum.WING_FLY); //, UILayoutManager.SPACE_X, UILayoutManager.SPACE_Y);
 
 			}
 
@@ -548,6 +562,14 @@ package com.leyou.ui.wing {
 
 		override public function hide():void {
 			super.hide();
+		}
+
+		override public function get width():Number {
+			return 501;
+		}
+
+		override public function get height():Number {
+			return 443;
 		}
 
 	}

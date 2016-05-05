@@ -4,11 +4,13 @@ package com.leyou.ui.arena.childs {
 	import com.ace.enum.PlayerEnum;
 	import com.ace.enum.TipEnum;
 	import com.ace.game.scene.player.Living;
+	import com.ace.game.scene.player.big.BigAvatar;
 	import com.ace.game.scene.ui.child.BaseLiving;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.player.LivingInfo;
 	import com.ace.gameData.player.child.FeatureInfo;
 	import com.ace.gameData.table.TTitle;
+	import com.ace.manager.GuideManager;
 	import com.ace.manager.LibManager;
 	import com.ace.manager.MouseManagerII;
 	import com.ace.manager.ToolTipManager;
@@ -20,9 +22,11 @@ package com.leyou.ui.arena.childs {
 	import com.ace.ui.lable.Label;
 	import com.ace.utils.PnfUtil;
 	import com.ace.utils.StringUtil;
+	import com.leyou.enum.ConfigEnum;
+	import com.leyou.manager.PopupManager;
 	import com.leyou.net.cmd.Cmd_Arena;
 	import com.leyou.utils.PropUtils;
-
+	
 	import flash.display.DisplayObject;
 	import flash.display.Sprite;
 	import flash.events.Event;
@@ -41,10 +45,11 @@ package com.leyou.ui.arena.childs {
 
 		private var living:Living;
 		private var livimgUI:BaseLiving;
+		private var bigAvatar:BigAvatar;
 
 		private var pkStateImg:Image;
 
-		private var pkImgBtn:ImgButton;
+		public var pkImgBtn:ImgButton;
 
 		private var _index:int=0;
 
@@ -54,7 +59,10 @@ package com.leyou.ui.arena.childs {
 		public var titleNameLbl:Label;
 
 		private var mName:String;
+		private var mtitleid:int;
 		private var mintegral:int=0;
+
+		public var isTop3:Boolean=false;
 
 		public function ArenaRender() {
 			super(LibManager.getInstance().getXML("config/ui/arena/arenaRender.xml"));
@@ -72,8 +80,8 @@ package com.leyou.ui.arena.childs {
 			this.pkStateImg=new Image("ui/arena/arena_dead.png");
 			this.addChild(this.pkStateImg);
 
-			this.pkStateImg.x=30;
-			this.pkStateImg.y=-140;
+			this.pkStateImg.x=20;
+			this.pkStateImg.y=-160;
 
 			this.feachInfo=new FeatureInfo();
 
@@ -84,6 +92,12 @@ package com.leyou.ui.arena.childs {
 //			this.living.mouseEnabled=true;
 
 			this.livimgUI=new BaseLiving();
+
+			this.bigAvatar=new BigAvatar();
+			this.addChild(bigAvatar);
+
+			this.bigAvatar.x=100;
+			this.bigAvatar.y=100;
 
 			arenaspr=new Sprite();
 			arenaspr.graphics.beginFill(0x000000);
@@ -116,19 +130,14 @@ package com.leyou.ui.arena.childs {
 
 			MouseManagerII.getInstance().addEvents(this.iconImg, einfo);
 
-			this.titleNameLbl=new Label("888");
-
-
+			this.titleNameLbl=new Label("");
 			this.titleNameLbl.defaultTextFormat=FontEnum.getTextFormat("Yellow14Center");
 
 		}
 
-		private function onTipsMouseOver(e:DisplayObject):void {
-			var tinfo:TTitle=TableManager.getInstance().getTitleByName(this.mName);
-			if (tinfo == null)
-				return;
 
-			ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, StringUtil.substitute(TableManager.getInstance().getSystemNotice(4717).content, [tinfo.name, this.mintegral, tinfo.value1]), new Point(this.stage.mouseX, this.stage.mouseY));
+		private function onTipsMouseOver(e:DisplayObject):void {
+			ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, this.mName, new Point(this.stage.mouseX, this.stage.mouseY));
 		}
 
 		private function onTipsMouseOut(e:DisplayObject):void {
@@ -144,7 +153,28 @@ package com.leyou.ui.arena.childs {
 			this.livimgUI.y=this.y - 50;
 
 			this.titleNameLbl.x=this.livimgUI.x + 15;
-			this.titleNameLbl.y=this.livimgUI.y + 15;
+			this.titleNameLbl.y=this.livimgUI.y + 10;
+
+			UIManager.getInstance().arenaWnd.reAddchild();
+
+			if (this.isTop3)
+				this.living.visible=false;
+		}
+
+		public function reAddchild():void {
+			UIManager.getInstance().arenaWnd.chalAddchild(this.living);
+			UIManager.getInstance().arenaWnd.chalAddchild(this.livimgUI);
+			UIManager.getInstance().arenaWnd.chalAddchild(this.titleNameLbl);
+
+			this.livimgUI.x=this.x;
+			this.livimgUI.y=this.y - 50;
+
+//			this.titleNameLbl.x=this.livimgUI.x + 15;
+			this.titleNameLbl.x=this.livimgUI.x + (134 - this.titleNameLbl.width) / 2;
+			this.titleNameLbl.y=this.livimgUI.y + 10;
+
+			if (this.isTop3)
+				this.living.visible=false;
 		}
 
 		private function onMouseOver(e:MouseEvent):void {
@@ -189,9 +219,18 @@ package com.leyou.ui.arena.childs {
 
 //			if (UIManager.getInstance().arenaWnd.lastPkCount > 0) 
 //				this.setPkState(false);
-			
-				Cmd_Arena.cm_ArenaPkPlayer(this.index);
 
+			if (this.isTop3) {
+//				Cmd_Arena.cm_ArenaPkPlayer(this.index);
+				var str:String=StringUtil.substitute(TableManager.getInstance().getSystemNotice(10170).content,[ConfigEnum.Miliyary3.split("|")[0]]);
+//				var str:String=StringUtil.substitute(TableManager.getInstance().getSystemNotice(10170).content,[2]);
+				PopupManager.showConfirm(str, function():void {
+					Cmd_Arena.cm_ArenaPkTop3(index + 1);
+				},null,false,"arenaTop3");
+			} else{
+				Cmd_Arena.cm_ArenaPkPlayer(this.index);
+				GuideManager.getInstance().removeGuide(33);
+			}
 		}
 
 		public function setPkState(v:Boolean):void {
@@ -229,13 +268,14 @@ package com.leyou.ui.arena.childs {
 			for each (minfo in item.data) {
 				if (minfo.@MR_Level == o[5]) {
 					mintegral=minfo.@MR_Integral;
-					mName=minfo.@MR_Name;
+					mtitleid=minfo.@MR_Title;
 					break;
 				}
 			}
 
 			this.powerLbl.text="" + o[4];
 			this.integralLbl.text="" + o[6];
+			this.mName="" + minfo.@MR_Name;
 
 			if (o[5] == 10) {
 				this.iconImg.updateBmp("ui/arena/arena_10.png");
@@ -272,25 +312,29 @@ package com.leyou.ui.arena.childs {
 
 			this.feachInfo.mount=avtArr[4];
 
-			if (this.feachInfo.mount == 0) {
+//			if (this.feachInfo.mount == 0) {
 
-				this.living.info.isOnMount=false;
-				this.feachInfo.weapon=PnfUtil.realAvtId(avtArr[1], false, u[3]);
-				this.feachInfo.suit=PnfUtil.realAvtId(avtArr[2], false, u[3]);
-				this.feachInfo.wing=PnfUtil.realWingId(avtArr[3], false, u[3], u[2]);
+			this.living.info.isOnMount=false;
+			this.feachInfo.weapon=PnfUtil.realAvtId(avtArr[1], false, u[3]);
+			this.feachInfo.suit=PnfUtil.realAvtId(avtArr[2], false, u[3]);
+			this.feachInfo.wing=PnfUtil.realWingId(avtArr[3], false, u[3], u[2]);
 
-			} else {
+//			} else {
+//
+//				this.living.info.isOnMount=true;
+//				this.feachInfo.mountWeapon=PnfUtil.realAvtId(avtArr[1], true, u[3]);
+//				this.feachInfo.mountSuit=PnfUtil.realAvtId(avtArr[2], true, u[3]);
+//				this.feachInfo.mountWing=PnfUtil.realWingId(avtArr[3], true, u[3], u[2]);
+//				this.feachInfo.autoNormalInfo(true, u[2], u[3]);
+//
+//			}
 
-				this.living.info.isOnMount=true;
-				this.feachInfo.mountWeapon=PnfUtil.realAvtId(avtArr[1], true, u[3]);
-				this.feachInfo.mountSuit=PnfUtil.realAvtId(avtArr[2], true, u[3]);
-				this.feachInfo.mountWing=PnfUtil.realWingId(avtArr[3], true, u[3], u[2]);
-				this.feachInfo.autoNormalInfo(true, u[2], u[3]);
-
+			if (this.isTop3)
+				this.bigAvatar.showII(this.feachInfo, false, u[2]);
+			else {
+				this.living.changeAvatars(this.feachInfo, true);
+				this.living.playAct(PlayerEnum.ACT_STAND, PlayerEnum.DIR_S);
 			}
-
-			this.living.changeAvatars(this.feachInfo, true);
-			this.living.playAct(PlayerEnum.ACT_STAND, PlayerEnum.DIR_ES);
 		}
 
 		private function showTitle(u:Array):void {
@@ -309,7 +353,10 @@ package com.leyou.ui.arena.childs {
 			else
 				this.titleNameLbl.htmlText=PropUtils.getStringById(101403) + ":" + u[9];
 
-			this.titleNameLbl.x=this.livimgUI.x + 15 + (134 - this.titleNameLbl.width) / 2;
+//			if (this.isTop3)
+//				this.titleNameLbl.x=this.livimgUI.x + (204 - this.titleNameLbl.width) / 2;
+//			else
+			this.titleNameLbl.x=this.livimgUI.x + (134 - this.titleNameLbl.width) / 2;
 
 			this.livimgUI.showName(this.living.info);
 //			this.livimgUI.x=this.x+(this.living.width-this.livimgUI.width)>>1;
@@ -320,29 +367,63 @@ package com.leyou.ui.arena.childs {
 
 			switch (v) {
 				case 1:
-					this.living.y=280;
-					this.living.x=100;
-					this.pkImgBtn.x=65;
+					this.living.y=300;
+					this.living.x=135;
+					this.pkImgBtn.x=50;
 					break;
 				case 2:
-					this.living.y=310;
-					this.living.x=230;
-					this.pkImgBtn.x=55;
+					this.living.y=335;
+					this.living.x=270;
+					this.pkImgBtn.x=50;
 					break;
 				case 3:
-					this.living.y=280;
-					this.living.x=380;
+					this.living.y=290;
+					this.living.x=420;
 					this.pkImgBtn.x=55;
 					break;
 				case 4:
-					this.living.y=320;
-					this.living.x=520;
+					this.living.y=350;
+					this.living.x=565;
 					this.pkImgBtn.x=45;
 					break;
 				case 5:
-					this.living.y=270;
+					this.living.y=300;
+					this.living.x=705;
+					this.pkImgBtn.x=45;
+					break;
+			}
+
+		}
+
+		public function setChalPos(i:int):void {
+
+			switch (i) {
+				case 0:
+					this.living.y=350;
+					this.living.x=190;
+
+					this.bigAvatar.y=-44
+					this.bigAvatar.x=70
+					this.pkImgBtn.x=45;
+					this.pkImgBtn.y=-145;
+					break;
+				case 1:
+					this.living.y=300;
+					this.living.x=400;
+
+					this.bigAvatar.y=-47
+					this.bigAvatar.x=60
+					this.pkImgBtn.x=45;
+					this.pkImgBtn.y=-145;
+					break;
+				case 2:
+					this.living.y=350;
 					this.living.x=660;
-					this.pkImgBtn.x=50;
+
+					this.bigAvatar.y=-44
+					this.bigAvatar.x=70
+					this.pkImgBtn.x=45;
+					this.pkImgBtn.y=-145;
 					break;
 			}
 

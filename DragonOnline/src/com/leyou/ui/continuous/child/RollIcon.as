@@ -13,7 +13,7 @@ package com.leyou.ui.continuous.child
 	import flash.geom.Rectangle;
 	import flash.utils.getTimer;
 
-	public class RollIcon extends SpriteNoEvt
+	public class RollIcon extends Sprite
 	{
 		private static const IMG_WIDTH:int = 62;
 		
@@ -48,6 +48,7 @@ package com.leyou.ui.continuous.child
 		}
 		
 		private function init():void{
+			mouseChildren = false;
 			bgImg = new Image("ui/tips/TIPS_bg_frame.png");
 			addChild(bgImg);
 			iconIdArr = new Vector.<int>();
@@ -137,6 +138,7 @@ package com.leyou.ui.continuous.child
 		}
 		
 		public function setShowItem(tid:int):void{
+			_showId = tid;
 			effect.visible = true;
 			var tb:TBuffInfo = TableManager.getInstance().getBuffInfo(tid);
 			var iconUrl:String = null;

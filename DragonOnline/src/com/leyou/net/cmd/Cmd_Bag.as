@@ -1,10 +1,13 @@
 package com.leyou.net.cmd {
 
+	import com.ace.config.Core;
 	import com.ace.enum.FunOpenEnum;
+	import com.ace.enum.GuideDirEnum;
 	import com.ace.enum.ItemEnum;
 	import com.ace.enum.WindowEnum;
 	import com.ace.gameData.manager.DataManager;
 	import com.ace.gameData.manager.MyInfoManager;
+	import com.ace.manager.GuideDirectManager;
 	import com.ace.manager.SoundManager;
 	import com.ace.manager.ToolTipManager;
 	import com.ace.manager.UIManager;
@@ -13,31 +16,32 @@ package com.leyou.net.cmd {
 	import com.leyou.enum.CmdEnum;
 	import com.leyou.net.NetGate;
 	import com.leyou.ui.convenientuse.ConvenientUseManager;
+	import com.leyou.utils.ItemUtil;
 
 	/**
 	 *下行指令：
   物品信息：  bag#{"mk":"S","t":1,"o":num,s:[{"id":id,"num":num,"pos":pos,"k":k}...],"k":k};
-																													加入新的物品：bag#{"mk":"L","t":1,s:[{"id":id,"num":num,"pos":pos,"k":k}...]}
+																															  加入新的物品：bag#{"mk":"L","t":1,s:[{"id":id,"num":num,"pos":pos,"k":k}...]}
   设置背包格子数量：bag#{"mk":"L","t":1,"o":num}
-																													金钱信息： bag#{"mk":"G","t":1,"g":"num","s":num,"l":num,"b":num,"bs":num};
+																															  金钱信息： bag#{"mk":"G","t":1,"g":"num","s":num,"l":num,"b":num,"bs":num};
   销毁物品： bag#{"mk":"D","t":1,"pos":pos};
-																													打开背包： bag#{"mk":"X","t":1};
+																															  打开背包： bag#{"mk":"X","t":1};
   清空背包： bag#{"mk":"R","t":1};
-																													卖出物品： bag#{"mk":"O","t":1,"pos":pos};
+																															  卖出物品： bag#{"mk":"O","t":1,"pos":pos};
 
 上行：
    挪动物品：bag|1|Mpos1,pos2
-																																											  移动到另一容器：bag|1|Vpos1,container2,pos2
+																																															 移动到另一容器：bag|1|Vpos1,container2,pos2
    拆分物品：bag|1|Spos,num
-																																											  销毁物品：bag|1|Dpos
+																																															 销毁物品：bag|1|Dpos
    重排背包：bag|1|R
-																																											  使用物品(普通物品)：bag|1|Upos
+																																															 使用物品(普通物品)：bag|1|Upos
    扩展容器：bag|1|E
-																																											  请求数据：bag|2|F
+																																															 请求数据：bag|2|F
    卖出物品：bag|1|Lpos
-																																							   *
+																																											  *
    *
-																																							mk: 操作标示 t： 背包类型 1：背包 2：仓库 3：人物装备 6:任务 15：卡片 30：药园
+																																										   mk: 操作标示 t： 背包类型 1：背包 2：仓库 3：人物装备 6:任务 15：卡片 30：药园
 	 *
 	 */
 	public class Cmd_Bag {
@@ -46,6 +50,8 @@ package com.leyou.net.cmd {
 		public static var movePos2:int=-1;
 		public static var moveTPos:int=-1;
 		public static var moveTPos2:Array=[];
+
+		public static var isfirst:Boolean=true;
 
 		public function Cmd_Bag() {
 
@@ -143,6 +149,11 @@ k	是否已加锁
 						tinfo.num=obj.num;
 						tinfo.tips=new TipsInfo(obj.tips);
 
+						if (tinfo.aid < 10000) {
+							tinfo.tips.zdl=ItemUtil.getZdl(tinfo.tips);
+							tinfo.tips.mzdl=ItemUtil.getMZdl(tinfo.tips);
+						}
+
 						MyInfoManager.getInstance().addItems(tinfo);
 
 						UIManager.getInstance().toolsWnd.setActiveCurrentItem(MyInfoManager.getInstance().bagItems[obj.pos]);
@@ -161,6 +172,13 @@ k	是否已加锁
 				if (UIManager.getInstance().isCreate(WindowEnum.GEM_LV))
 					UIManager.getInstance().gemLvWnd.updateList();
 
+				if (isfirst) {
+
+					Cmd_Bld.cm_bldOpen();
+					GuideDirectManager.getInstance().checkLevelValid(Core.me.info.level);
+					isfirst=false;
+				}
+
 			} else if (o.yb != null) {
 				sm_bag_J(o);
 			}
@@ -173,6 +191,13 @@ k	是否已加锁
 		 */
 		public static function sm_bag_J(o:Object):void {
 
+			if (UIManager.getInstance().backpackWnd.lh != o.lh && o.lh >= 10) {
+				UIManager.getInstance().backpackWnd.lh=o.lh;
+				GuideDirectManager.getInstance().getGuideByType(GuideDirEnum.CURRENY);
+			} else {
+				UIManager.getInstance().backpackWnd.lh=o.lh;
+			}
+
 			UIManager.getInstance().backpackWnd.jb=o.jb;
 			UIManager.getInstance().backpackWnd.bjb=o.bjb;
 			UIManager.getInstance().backpackWnd.yb=o.yb;
@@ -180,7 +205,7 @@ k	是否已加锁
 			UIManager.getInstance().backpackWnd.zq=o.zq;
 			UIManager.getInstance().backpackWnd.honour=o.honour;
 			UIManager.getInstance().backpackWnd.jl=o.bjf;
-			UIManager.getInstance().backpackWnd.lh=o.lh;
+			UIManager.getInstance().backpackWnd.gx=o.gx;
 
 			UIManager.getInstance().backpackWnd.updataMoney();
 
@@ -197,9 +222,9 @@ k	是否已加锁
 				UIManager.getInstance().myStore.updateItemNum();
 			}
 
-			if (UIManager.getInstance().isCreate(WindowEnum.LUCKDRAW)) {
-				UIManager.getInstance().luckDrawWnd.updateItemNum();
-			}
+//			if (UIManager.getInstance().isCreate(WindowEnum.LUCKDRAW)) {
+//				UIManager.getInstance().luckDrawWnd.updateItemNum();
+//			}
 
 			if (UIManager.getInstance().isCreate(WindowEnum.VENDUE)) {
 				UIManager.getInstance().vendueWnd.updataMoney();
@@ -208,9 +233,10 @@ k	是否已加锁
 			if (UIManager.getInstance().isCreateAndVisible(WindowEnum.LEGENDAREY_WEAPON)) {
 				UIManager.getInstance().legendaryWnd.updateMaterialCount();
 			}
-			
-			if(UIManager.getInstance().isCreate(WindowEnum.DRAGON_BALL)){
+
+			if (UIManager.getInstance().isCreate(WindowEnum.DRAGON_BALL)) {
 				UIManager.getInstance().dragonBallWnd.updateLh();
+				UIManager.getInstance().roleWnd.dragonBall.updateLh();
 			}
 
 			UIManager.getInstance().roleHeadWnd.updateCurrce();
@@ -354,6 +380,11 @@ mk	mk=X,打开背包
 				tinfo.num=o.s[i].num;
 				tinfo.tips=new TipsInfo(o.s[i].tips);
 
+				if (tinfo.aid < 10000) {
+					tinfo.tips.zdl=ItemUtil.getZdl(tinfo.tips);
+					tinfo.tips.mzdl=ItemUtil.getMZdl(tinfo.tips);
+				}
+
 				oitem=barr[movePos];
 
 				if (o.s.length == 1 && oitem != null && movePos > -1) {
@@ -482,12 +513,16 @@ pos  -- 道具在背包中的位置
 //						}
 //					}
 //				}
+
+				GuideDirectManager.getInstance().getGuideByType(GuideDirEnum.BAG);
 			}
 
 			// 神器物品刷新
 			if (UIManager.getInstance().isCreateAndVisible(WindowEnum.LEGENDAREY_WEAPON)) {
 				UIManager.getInstance().legendaryWnd.updateMaterialCount();
 			}
+
+
 		}
 
 		/**
@@ -672,9 +707,9 @@ S	英文逗号分割 位置，拆分出的数量
 -- pos道具位置
 -- 使用参数 (如定位道具 为玩家的名字)
 * @param pos
-   * @param name
-		   *
-		 */
+* @param name
+*
+*/
 		public static function cm_bagUseOf(pos:int, name:String):void {
 			NetGate.getInstance().send("bag|1|T" + pos + "," + name);
 		}

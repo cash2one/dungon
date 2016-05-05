@@ -147,8 +147,8 @@ package com.ace.game.scene.ui {
 			buyBtn.addEventListener(MouseEvent.CLICK, onCLick);
 			autoCKBox.addEventListener(MouseEvent.CLICK, onCLick);
 			grid=new MarketGrid();
-			grid.x=68;
-			grid.y=54;
+			grid.x=63;
+			grid.y=70;
 			addChild(grid);
 			
 			ybChek.addEventListener(MouseEvent.CLICK, onCLick);

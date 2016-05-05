@@ -17,6 +17,7 @@ package com.leyou.ui.wing {
 	import com.ace.manager.child.MouseEventInfo;
 	import com.ace.ui.auto.AutoWindow;
 	import com.ace.ui.button.children.ImgLabelButton;
+	import com.ace.ui.button.children.NormalButton;
 	import com.ace.ui.component.RollNumWidget;
 	import com.ace.ui.img.child.Image;
 	import com.ace.ui.lable.Label;
@@ -30,7 +31,7 @@ package com.leyou.ui.wing {
 	import com.leyou.ui.quickBuy.QuickBuyWnd;
 	import com.leyou.utils.EffectUtil;
 	import com.leyou.utils.PropUtils;
-
+	
 	import flash.display.DisplayObject;
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
@@ -53,8 +54,8 @@ package com.leyou.ui.wing {
 
 		private var effectSwf:SwfLoader;
 
-		private var autoUpBtn:ImgLabelButton;
-		private var upBtn:ImgLabelButton;
+		private var autoUpBtn:NormalButton;
+		private var upBtn:NormalButton;
 
 		private var x1ImgArr:Array=[];
 
@@ -75,14 +76,14 @@ package com.leyou.ui.wing {
 		private var tweenmax:TweenMax;
 		private var ulevel:int=-1;
 
-		private var pArr:Array=[0, 3, 4];
+		private var pArr:Array=[0, 2, 4];
 		private var flyLv:int=0;
 
 		public function WingTradeWnd() {
 			super(LibManager.getInstance().getXML("config/ui/wing/wingTradeWnd.xml"));
 			this.init();
 			this.hideBg();
-			this.clsBtn.y=40;
+//			this.clsBtn.y=15;
 			this.allowDrag=false;
 		}
 
@@ -91,6 +92,7 @@ package com.leyou.ui.wing {
 			var lb:Label;
 			for (var i:int=0; i < 10; i++) {
 
+				
 				if (i < 5) {
 					this.ptxt.push(this.getUIbyID("p" + (i + 1) + "txt") as Label);
 					this.patxtArr.push(this.getUIbyID("pa" + (i + 1) + "txt") as Label);
@@ -110,8 +112,8 @@ package com.leyou.ui.wing {
 			this.goldImg=this.getUIbyID("goldImg") as Image;
 			this.effectSwf=this.getUIbyID("effectSwf") as SwfLoader;
 
-			this.autoUpBtn=this.getUIbyID("autoUpBtn") as ImgLabelButton;
-			this.upBtn=this.getUIbyID("upBtn") as ImgLabelButton;
+			this.autoUpBtn=this.getUIbyID("autoUpBtn") as NormalButton;
+			this.upBtn=this.getUIbyID("upBtn") as NormalButton;
 
 			this.autoUpBtn.setToolTip(TableManager.getInstance().getSystemNotice(1226).content);
 			this.upBtn.setToolTip(StringUtil.substitute(TableManager.getInstance().getSystemNotice(1225).content, [ConfigEnum.wing15, ConfigEnum.wing16]));
@@ -147,7 +149,7 @@ package com.leyou.ui.wing {
 
 			this.effectSwf.mask=this.spr;
 
-			this.spr.x=107;
+			this.spr.x=98;
 			this.spr.y=286 + 90;
 
 			this.tipsSpr=new Sprite();
@@ -327,11 +329,11 @@ package com.leyou.ui.wing {
 				
 			}
 
-			this.unitroll.x=140 + (30 - this.unitroll.width) / 2;
-			this.unitroll.y=83;
+			this.unitroll.x=130 + (30 - this.unitroll.width) / 2;
+			this.unitroll.y=68;
 
 			this.levelroll.x=169 + (30 - this.levelroll.width) / 2;
-			this.levelroll.y=83;
+			this.levelroll.y=68;
 
 			this.itemNameLbl.text="" + TableManager.getInstance().getItemInfo(ConfigEnum.wing13).name; // + " x <font color='#ffff00'>" + TableManager.getInstance().getWingTradeByID(flv).itemNum+"</font>";
 			this.itemNumLbl.text=" x " + TableManager.getInstance().getWingTradeByID(flv).itemNum;
@@ -447,11 +449,11 @@ package com.leyou.ui.wing {
 		}
 
 		override public function get width():Number {
-			return 306;
+			return 288;
 		}
 
 		override public function get height():Number {
-			return 524;
+			return 544;
 		}
 	}
 }

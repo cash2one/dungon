@@ -37,8 +37,8 @@ package com.leyou.ui.cityBattle
 		}
 		
 		private function init():void{
-			clsBtn.x -= 6;
-			clsBtn.y -= 14;
+//			clsBtn.x -= 6;
+//			clsBtn.y -= 14;
 			desLbl = getUIbyID("desLbl") as Label;
 			rate0Btn = getUIbyID("rate0Btn") as RadioButton;
 			rate5Btn = getUIbyID("rate5Btn") as RadioButton;

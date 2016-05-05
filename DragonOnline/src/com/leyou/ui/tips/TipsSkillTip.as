@@ -121,6 +121,7 @@ package com.leyou.ui.tips {
 		public function updateInfo(info:Object):void {
 
 			var tipInfo:TipSkillInfo=info as TipSkillInfo;
+			tipInfo.hasRune = true;
 			var skill:TSkillInfo=tipInfo.skillInfo;
 			grid.updataInfo(skill);
 			nameLbl.text=skill.name;
@@ -130,11 +131,11 @@ package com.leyou.ui.tips {
 			var id:int=int(skill.id);
 
 			var skillInfo:TSkillInfo=TableManager.getInstance().getSkillById(id - id % 4);
-			var num1:int=(skillInfo.addition1 + skillInfo.addition2 * tipInfo.skillLv) / 100;
+			var num1:Number=(skillInfo.addition1 + skillInfo.addition2 * tipInfo.skillLv) / 100;
 			var num2:int=skillInfo.addition4 + skillInfo.addition3 * tipInfo.skillLv;
 			desLbl.htmlText=StringUtil.substitute(skill.des, num1, num2);
 			var openLv:int=skillInfo.autoLv;
-			var hasNext:Boolean=((id % 4 + 1) < 4);
+			var hasNext:Boolean = (openLv < 99);
 			if (((openLv <= Core.me.info.level) && hasNext) && !tipInfo.isPetSkill) {
 				num1=(skillInfo.addition1 + skillInfo.addition2 * (tipInfo.skillLv + 1)) / 100;
 				num2=skillInfo.addition4 + skillInfo.addition3 * (tipInfo.skillLv + 1);

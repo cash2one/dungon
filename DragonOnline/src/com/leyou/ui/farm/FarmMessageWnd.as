@@ -45,8 +45,8 @@ package com.leyou.ui.farm
 			bybRBtn.addEventListener(MouseEvent.CLICK, onBtnClick);
 			ybRBtn.addEventListener(MouseEvent.CLICK, onBtnClick);
 			bybRBtn.turnOn();
-			clsBtn.x -= 6;
-			clsBtn.y -= 14;
+//			clsBtn.x -= 6;
+//			clsBtn.y -= 14;
 			hideBg();
 		}
 		

@@ -44,7 +44,7 @@ package com.leyou.ui.tips {
 			var tInfo:TPassivitySkillInfo=TableManager.getInstance().getPassiveSkill(skillId);
 			nameLbl.text=tInfo.name;
 			cdLbl.text=tInfo.cd / 1000 + PropUtils.getStringById(2146);
-			desLbl.text=tInfo.des;
+			desLbl.htmlText=tInfo.des;
 			openLevelLbl.text="VIP" + tInfo.openLv + PropUtils.getStringById(1953)
 			icoImg.updateBmp("ico/skills/" + tInfo.ico, null, false, 64, 64);
 			openLevelLbl.visible=!tipInfo.isOpen;

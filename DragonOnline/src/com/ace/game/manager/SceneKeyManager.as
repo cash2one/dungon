@@ -15,7 +15,7 @@ package com.ace.game.manager {
 	import com.ace.manager.UIManager;
 	import com.ace.ui.setting.AssistWnd;
 	import com.ace.utils.DebugUtil;
-	
+
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	import flash.external.ExternalInterface;
@@ -43,7 +43,7 @@ package com.ace.game.manager {
 		override public function setup():void {
 			super.setup();
 			var arr:Array=[Keyboard.NUMBER_1, Keyboard.NUMBER_2, Keyboard.NUMBER_3, Keyboard.NUMBER_4, //
-						Keyboard.NUMBER_5, Keyboard.NUMBER_6, Keyboard.NUMBER_7,Keyboard.NUMBER_8];
+				Keyboard.NUMBER_5, Keyboard.NUMBER_6, Keyboard.NUMBER_7, Keyboard.NUMBER_8];
 
 
 			for (var i:int=0; i < arr.length; i++) {
@@ -51,7 +51,9 @@ package com.ace.game.manager {
 				KeysManager.getInstance().addKeyFun(arr[i], onShorCutDown, KeyboardEvent.KEY_UP);
 			}
 
+			KeysManager.getInstance().addKeyFun(Keyboard.Z, ondaz);
 			KeysManager.getInstance().addKeyFun(Keyboard.A, onAutoMonster);
+			KeysManager.getInstance().addKeyFun(Keyboard.I, onPk);
 			EventManager.getInstance().addEvent(EventEnum.SETTING_STOP_AUTO, this.onAutoMonster);
 			MouseManager.getInstance().addFun(MouseEvent.RIGHT_MOUSE_DOWN, onRightClick);
 			MouseManager.getInstance().addFun(MouseEvent.RIGHT_MOUSE_UP, onRightClick);
@@ -85,6 +87,14 @@ package com.ace.game.manager {
 			AssistWnd.getInstance().onButtonClick(null);
 		}
 
+		private function ondaz():void {
+			UIManager.getInstance().toolsWnd.changeDazState(!Core.me.info.isSit);
+		}
+
+		private function onPk():void {
+			UIManager.getInstance().toolsWnd.changePkState();
+		}
+
 		public function quitGame():void {
 //			Cmd_Scene.cm_quit();
 			DebugUtil.closePlayer();
@@ -98,7 +108,7 @@ package com.ace.game.manager {
 				KeysManager.getInstance().disPatchEvent(Keyboard.NUMBER_8, KeyboardEvent.KEY_UP);
 			}
 		}
- 
+
 //			1		命中特效
 //			2		子弹+命中特效
 //			108		施法者自身特效+命中特效
@@ -139,7 +149,7 @@ package com.ace.game.manager {
 				if ((Keyboard.NUMBER_1 <= evt.keyCode && evt.keyCode <= Keyboard.NUMBER_7) || evt.keyCode == Keyboard.NUMBER_8) {
 					skillId=UIManager.getInstance().toolsWnd.useGrid(num);
 				}
-				
+
 //				} else if (Keyboard.Q == evt.keyCode || Keyboard.W == evt.keyCode || Keyboard.E == evt.keyCode) {
 //					skillId=UIManager.getInstance().toolsWnd.useGrid(num);
 //				}

@@ -71,7 +71,7 @@ package com.leyou.net.cmd {
 			if (!o.hasOwnProperty("curNckid"))
 				return;
 
-			UIManager.getInstance().roleWnd.titlePanel.updateStartNick(o);
+//			UIManager.getInstance().roleWnd.titlePanel.updateStartNick(o);
 		}
 
 		/**
@@ -88,14 +88,14 @@ package com.leyou.net.cmd {
 			if (!o.hasOwnProperty("id"))
 				return;
 			
-			UIManager.getInstance().roleWnd.titlePanel.updateLastTime(o);
+//			UIManager.getInstance().roleWnd.titlePanel.updateLastTime(o);
 		}
 		
 		public static function sm_Nck_N(o:Object):void {
 			if (!o.hasOwnProperty("id"))
 				return;
 			
-			UIManager.getInstance().roleWnd.titlePanel.updateProgress(o);
+//			UIManager.getInstance().roleWnd.titlePanel.updateProgress(o);
 		}
 		
 		/**
@@ -116,14 +116,14 @@ npc|{"id":id,"time":time}
 			if (!o.hasOwnProperty("curNckid"))
 				return;
 
-			UIManager.getInstance().roleWnd.titlePanel.updateUninstall(o);
+//			UIManager.getInstance().roleWnd.titlePanel.updateUninstall(o);
 		}
 
 		public static function sm_Nck_D(o:Object):void {
 			if (!o.hasOwnProperty("curNckid"))
 				return;
 
-			UIManager.getInstance().roleWnd.titlePanel.updatedelete(o);
+//			UIManager.getInstance().roleWnd.titlePanel.updatedelete(o);
 		}
 
 		/**

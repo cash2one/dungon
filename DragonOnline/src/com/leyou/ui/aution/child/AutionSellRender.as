@@ -11,7 +11,7 @@ package com.leyou.ui.aution.child {
 
 	public class AutionSellRender extends AutoSprite {
 		// 每页显示最大数量
-		private static const ITEM_PAGE_COUNT_MAX:int = 7;
+		private static const ITEM_PAGE_COUNT_MAX:int = 8;
 		// 可出售最大数量
 		private static const ITEM_COUNT_MAX:int = 10;
 		// 主界面控件

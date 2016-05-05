@@ -2,6 +2,7 @@ package com.leyou.ui.welfare.child.page {
 	import com.ace.config.Core;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.table.TSignGiftInfo;
+	import com.ace.gameData.table.TVIPInfo;
 	import com.ace.manager.GuideManager;
 	import com.ace.manager.LibManager;
 	import com.ace.ui.FlyManager;
@@ -17,12 +18,15 @@ package com.leyou.ui.welfare.child.page {
 	import com.leyou.ui.welfare.child.component.WelfareLoginRender;
 	import com.leyou.utils.PropUtils;
 	import com.leyou.utils.StringUtil_II;
-
+	
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 
 	public class WelfareLoginPage extends AutoSprite {
+
+		private static const REWARD_COUNT:int=7;
+
 		private var calendar:CalendarRender;
 
 		private var monthImg:Image;
@@ -35,19 +39,26 @@ package com.leyou.ui.welfare.child.page {
 
 		private var welfareLogin:TabBar;
 
-		private var welfareRender:WelfareLoginRender;
+		private var rewardReders:Vector.<WelfareLoginRender>;
 
-		private var giftStatus:Object;
+		private var giftStatus:Array;
 
 		private var numWidget:RollNumWidget;
 
 		private var _currentIndex:int;
 
-		private var day:int;
-
 		// 补签消耗
 		private var _bprice:int;
+
 		private var _bc:int;
+
+		private var vipReceiveBtn:ImgButton;
+
+		private var receivedImg:Image;
+
+		private var receiveImg:Image;
+
+		private var vipRewardGrid:MarketGrid;
 
 		public function WelfareLoginPage() {
 			super(LibManager.getInstance().getXML("config/ui/welfare/welfareLogin.xml"));
@@ -64,38 +75,57 @@ package com.leyou.ui.welfare.child.page {
 
 		private function init():void {
 			mouseChildren=true;
-			giftStatus={};
-			calendar=new CalendarRender();
-			calendar.x=10;
-			calendar.y=65;
-			addChild(calendar);
-			welfareRender=new WelfareLoginRender();
-			welfareRender.x=3;
-			welfareRender.y=271;
-			addChild(welfareRender);
-			numWidget=new RollNumWidget();
-			numWidget.loadSource("ui/num/{num}_zdl.png");
-			numWidget.alignLeft();
-			numWidget.x=612;
-			numWidget.y=6;
-			addChild(numWidget);
-
+			giftStatus=[];
 			monthImg=getUIbyID("MonthImg") as Image;
 			signedImg=getUIbyID("signedImg") as Image;
 			signImg=getUIbyID("signImg") as Image;
 			signBtn=getUIbyID("signBtn") as ImgButton;
+			welfareLogin=getUIbyID("welfareLogin") as TabBar;
+			vipReceiveBtn=getUIbyID("vipReceiveBtn") as ImgButton;
+			receivedImg=getUIbyID("receivedImg") as Image;
+			receiveImg=getUIbyID("receiveImg") as Image;
+			// 日历
+			calendar=new CalendarRender();
+			calendar.x=28;
+			calendar.y=78;
+			addChild(calendar);
+			// 奖励
+			rewardReders=new Vector.<WelfareLoginRender>(REWARD_COUNT);
+			for (var n:int=0; n < REWARD_COUNT; n++) {
+				var welfareRender:WelfareLoginRender=new WelfareLoginRender();
+				rewardReders[n]=welfareRender;
+				welfareLogin.addToTab(welfareRender, n);
+			}
+			welfareLogin.addEventListener(TabbarModel.changeTurnOnIndex, onIndexChange);
+			// 签到数
+			numWidget=new RollNumWidget();
+			numWidget.loadSource("ui/num/{num}_zdl.png");
+			numWidget.alignLeft();
+			numWidget.x=142;
+			numWidget.y=265;
+			addChild(numWidget);
 			signBtn.addEventListener(MouseEvent.CLICK, onButtonClick);
+			// vip奖励
+			vipRewardGrid=new MarketGrid();
+			vipRewardGrid.isShowPrice=false;
+			vipRewardGrid.x=659 + 14;
+			vipRewardGrid.y=140 + 14;
+			addChild(vipRewardGrid);
+			vipReceiveBtn.addEventListener(MouseEvent.CLICK, onButtonClick);
 		}
 
 		protected function onButtonClick(event:MouseEvent):void {
 			var n:String=event.target.name;
 			switch (n) {
 				case "signBtn":
-					GuideManager.getInstance().removeGuide(48);
+//					GuideManager.getInstance().showGuide(49, this.vipReceiveBtn);
 					var day:int=calendar.getDay();
 					if (day > -1) {
 						Cmd_Welfare.cm_SIGN_S(day, 0);
 					}
+					break;
+				case "vipReceiveBtn":
+					Cmd_Welfare.cm_SIGN_V();
 					break;
 			}
 		}
@@ -105,10 +135,14 @@ package com.leyou.ui.welfare.child.page {
 				return;
 			}
 			_currentIndex=welfareLogin.turnOnIndex;
-			welfareRender.updateGift(giftStatus[_currentIndex][0], giftStatus[_currentIndex][1], giftStatus[_currentIndex][2], calendar.signCount);
+
+
+			rewardReders[_currentIndex].checkGuide();
 		}
 
+		
 		public function updateInfo(obj:Object):void {
+			// 日历显示
 			_bprice=obj.bprice;
 			_bc=obj.bc;
 			var signCount:int;
@@ -130,137 +164,77 @@ package com.leyou.ui.welfare.child.page {
 					}
 				}
 			}
+
 			calendar.updateUI();
+			numWidget.setNum(obj.zsc);
+			signedImg.visible=!signImg.visible;
+			signBtn.setActive(signImg.visible, 1, true);
+			signBtn.isActive ? GuideManager.getInstance().show(48) : GuideManager.getInstance().remove(48);
+			monthImg.updateBmp("ui/welfare/month_" + StringUtil_II.lpad(calendar.getMonth() + "", 2, "0") + ".png");
+
+			// 普通奖励处理
 			_currentIndex=-1;
 			var giftStatusList:Array=obj.sjl;
 			length=giftStatusList.length;
 			for (var m:int=0; m < length; m++) {
 				var giftData:Object=giftStatusList[m];
-				giftStatus[m]=[giftData[0], giftData[1], giftData[2]];
-				if ((1 != giftData[1]) || ((1 != giftData[2]) && (Core.me.info.vipLv > 0))) {
+				giftStatus[m]=[giftData[0], giftData[1]];
+				if (1 != giftData[1]) {
 					if (0 > _currentIndex) {
 						_currentIndex=m;
 					}
 				}
 			}
+
 			if (-1 == _currentIndex) {
 				_currentIndex=0;
 			}
-			welfareRender.updateGift(giftStatus[_currentIndex][0], giftStatus[_currentIndex][1], giftStatus[_currentIndex][2], calendar.signCount);
-			monthImg.updateBmp("ui/welfare/month_" + StringUtil_II.lpad(calendar.getMonth() + "", 2, "0") + ".png");
-			numWidget.setNum(signCount);
-			signedImg.visible=!signImg.visible;
-			signBtn.setActive(signImg.visible, 1, true);
-			if (null == welfareLogin) {
-				var tableNames:Array=[];
-				for (var l:int=0; l < length; l++) {
-					var tableData:Object=new Object();
-					tableData.label=PropUtils.getStringById(1978) + giftStatusList[l][0] + PropUtils.getStringById(1977);
-					tableNames[l]=tableData;
-				}
-				welfareLogin=new TabBar(tableNames, "welfareLogin", length * 82);
-				welfareLogin.addEventListener(TabbarModel.changeTurnOnIndex, onIndexChange);
-				addChild(welfareLogin);
-				welfareLogin.x=13;
-				welfareLogin.y=247;
-			}
+
 			welfareLogin.turnToTab(_currentIndex);
-			if (!signedImg.visible) {
-				GuideManager.getInstance().showGuide(48, signBtn);
+			for (var l:int=0; l < REWARD_COUNT; l++) {
+				var rewardRender:WelfareLoginRender=rewardReders[l];
+				rewardRender.updateGift(giftStatus[l][0], giftStatus[l][1], obj.zsc);
+				welfareLogin.getTabButton(l).label.text=PropUtils.getStringById(1978) + giftStatusList[l][0] + PropUtils.getStringById(1977);
 			}
-			//			checkGuide();
+			
+			rewardReders[_currentIndex].checkGuide();
+			// VIP奖励处理
+			var vipInfo:TVIPInfo=TableManager.getInstance().getVipInfo(24);
+			var vipLv:int=(Core.me.info.vipLv >= 2) ? Core.me.info.vipLv : 2;
+			vipRewardGrid.updataById(vipInfo.getVipValue(vipLv));
+			var vrStatus:Boolean=(int(obj.vjt) == 0);
+			var reached:Boolean=(Core.me.info.vipLv >= 2);
+			vipReceiveBtn.setActive((vrStatus && reached && signedImg.visible), 1, true);
+			vipReceiveBtn.isActive ? GuideManager.getInstance().show(154) : GuideManager.getInstance().remove(154)
+			if (!reached) {
+				receiveImg.visible=false;
+				receivedImg.updateBmp("ui/welfare/btn_lqjl3.png");
+			} else {
+				receivedImg.updateBmp("ui/welfare/btn_lqjl2.png");
+				receiveImg.visible=vrStatus;
+				receivedImg.visible=!vrStatus;
+			}
 		}
 
-		//		public function checkGuide():void{
-		//			if(!signedImg.visible){
-		//				GuideManager.getInstance().showGuide(48, signBtn);
-		//			}
-		//			welfareRender.checkGuide();	
-		//		}
-
-		public function flyItem():void {
-			if (-1 != welfareRender.flySignCount) {
-				var arr:Array;
-				for (var key:String in giftStatus) {
-					arr=giftStatus[key];
-					if (arr[0] == welfareRender.flySignCount) {
-						break;
+		public function flyItem(sign:int):void {
+			if (1 == sign) {
+				for (var n:int=0; n < REWARD_COUNT; n++) {
+					var rewardRender:WelfareLoginRender=rewardReders[n];
+					if (rewardRender.readyToFly) {
+						rewardRender.flyItem();
 					}
 				}
-				var index:int=0;
-				var aids:Array=[];
-				var starts:Array=[];
-				var grids:Vector.<MarketGrid>=welfareRender.grids;
-				var giftInfo:TSignGiftInfo=TableManager.getInstance().getSignGiftInfo(arr[0]);
-				var grid:MarketGrid=grids[index];
-				if (!welfareRender.isVip) {
-					if (giftInfo.exp > 0) {
-						index++;
-						aids.push(65534);
-						starts.push(grid.localToGlobal(new Point(0, 0)));
-					}
-					grid=grids[index];
-					if (giftInfo.money > 0) {
-						index++;
-						aids.push(65535);
-						starts.push(grid.localToGlobal(new Point(0, 0)));
-					}
-					grid=grids[index];
-					if (giftInfo.energy > 0) {
-						index++;
-						aids.push(65533);
-						starts.push(grid.localToGlobal(new Point(0, 0)));
-					}
-					grid=grids[index];
-					if (giftInfo.bIb > 0) {
-						index++;
-						aids.push(65532);
-						starts.push(grid.localToGlobal(new Point(0, 0)));
-					}
-					grid=grids[index];
-					if (giftInfo.item1 > 0) {
-						index++;
-						aids.push(giftInfo.item1);
-						starts.push(grid.localToGlobal(new Point(0, 0)));
-					}
-					grid=grids[index];
-					if (giftInfo.item2 > 0) {
-						index++;
-						aids.push(giftInfo.item2);
-						starts.push(grid.localToGlobal(new Point(0, 0)));
-					}
-					if (giftInfo.item3 > 0) {
-						index++;
-						aids.push(giftInfo.item3);
-						starts.push(grid.localToGlobal(new Point(0, 0)));
-					}
-					grid=grids[index];
-					if (giftInfo.item4 > 0) {
-						index++;
-						aids.push(giftInfo.item4);
-						starts.push(grid.localToGlobal(new Point(0, 0)));
-					}
-				} else {
-					index=4;
-					grid=grids[index];
-					if (giftInfo.vipItem1 > 0) {
-						index++;
-						aids.push(giftInfo.vipItem1);
-						starts.push(grid.localToGlobal(new Point(0, 0)));
-					}
-//					grid=grids[index];
-//					if (giftInfo.vipItem2 > 0) {
-//						index++;
-//						aids.push(giftInfo.vipItem2);
-//						starts.push(grid.localToGlobal(new Point(0, 0)));
-//					}
-				}
-				FlyManager.getInstance().flyBags(aids, starts)
+			} else if (2 == sign) {
+				FlyManager.getInstance().flyBags([vipRewardGrid.dataId], [vipRewardGrid.localToGlobal(new Point(0, 0))]);
 			}
 		}
 
 		public function signed():Boolean {
 			return signedImg.visible;
+		}
+
+		public function signdBtn():ImgButton {
+			return signBtn;
 		}
 
 		public function hasReward():Boolean {
@@ -272,6 +246,6 @@ package com.leyou.ui.welfare.child.page {
 			}
 			return false;
 		}
-		
+
 	}
 }

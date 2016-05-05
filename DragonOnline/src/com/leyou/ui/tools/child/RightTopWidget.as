@@ -7,7 +7,7 @@ package com.leyou.ui.tools.child {
 	import com.ace.ui.img.child.Image;
 	import com.ace.utils.StringUtil;
 	import com.leyou.utils.PropUtils;
-	
+
 	import flash.display.DisplayObject;
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
@@ -73,12 +73,12 @@ package com.leyou.ui.tools.child {
 			strText.width=20;
 			timeLbl.width=60;
 			timeLbl.height=20;
-			addChildAt(effectLoader, 0);
 			addChild(numBg1);
 			addChild(numBg2);
 			addChild(numText);
 			addChild(strText);
 			addChild(timeLbl);
+			addChild(effectLoader);
 			numBg1.updateBmp("ui/mainUI/main_num_bg.png");
 			numBg2.updateBmp("ui/mainUI/main_num_bg.png");
 			numBg1.x=32;
@@ -88,20 +88,20 @@ package com.leyou.ui.tools.child {
 			effectLoader.x=18;
 			effectLoader.y=20;
 			overV="";
-			
+
 			addEventListener(MouseEvent.CLICK, onMouseClick);
 		}
-		
-		protected function onMouseClick(event:MouseEvent):void{
-			if("onlineBtn" == name){
+
+		protected function onMouseClick(event:MouseEvent):void {
+			if ("onlineBtn" == name) {
 				GuideManager.getInstance().removeGuide(23);
 			}
 		}
-		
+
 		public function pushContent($display:DisplayObject):void {
 			display=$display;
 			name=display.name;
-			addChildAt(display, 1);
+			addChildAt(display, 0);
 			numText.visible=false;
 			numBg1.visible=false;
 			strText.visible=false;
@@ -161,7 +161,7 @@ package com.leyou.ui.tools.child {
 				TimeManager.getInstance().removeITick(updateTime);
 			}
 			timeLbl.text=overV;
-			if("onlineBtn" == name){
+			if ("onlineBtn" == name) {
 				GuideManager.getInstance().showGuide(23, this, true);
 			}
 		}
@@ -195,6 +195,10 @@ package com.leyou.ui.tools.child {
 			numText=null;
 			effectLoader.die();
 			effectLoader=null;
+		}
+
+		override public function get height():Number {
+			return 60;
 		}
 	}
 }

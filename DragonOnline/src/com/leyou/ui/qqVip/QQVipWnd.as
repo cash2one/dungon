@@ -42,8 +42,8 @@ package com.leyou.ui.qqVip
 		
 		private function init():void{
 			hideBg();
-			clsBtn.x += 4;
-			clsBtn.y += 12;
+//			clsBtn.x += 4;
+//			clsBtn.y += 12;
 			qqvipBar = getUIbyID("qqvipBar") as TabBar;
 			payVipBtn = getUIbyID("payVipBtn") as ImgButton;
 			payYearVipBtn = getUIbyID("payYearVipBtn") as ImgButton;

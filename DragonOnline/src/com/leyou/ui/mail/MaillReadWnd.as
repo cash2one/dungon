@@ -74,7 +74,7 @@ package com.leyou.ui.mail {
 		
 		public function flyItem():void{
 			if(0 != flyIds.length){
-				FlyManager.getInstance().flyBags(flyIds, starts);
+				FlyManager.getInstance().flyBags_II(flyIds, starts);
 			}
 		}
 			
@@ -89,9 +89,9 @@ package com.leyou.ui.mail {
 			UILayoutManager.getInstance().composingWnd(WindowEnum.MAILL);
 		}
 		
-		public override function get height():Number{
-			return super.height - 4;
-		}
+//		public override function get height():Number{
+//			return super.height - 4;
+//		}
 		
 		/**
 		 * <T>生成奖励的格子</T>
@@ -100,8 +100,8 @@ package com.leyou.ui.mail {
 		public function generateRewardGrid():void {
 			for(var i:int = 0; i < GRID_COUNT; i++) {
 				var rewardGrid:MaillGrid = new MaillGrid(i);
-				rewardGrid.x = 21 + i * rewardGrid.width;
-				rewardGrid.y = 368;
+				rewardGrid.x = 10 + i * 45;
+				rewardGrid.y = 441;
 				rewardGrid.isShowPrice = false;
 				addChild(rewardGrid);
 				gridVec.push(rewardGrid);
@@ -205,6 +205,8 @@ package com.leyou.ui.mail {
 						dataId = ItemEnum.HONOUR_VIR_ITEM_ID;
 					}else if("score" == key){
 						dataId = ItemEnum.CREDIT_VIR_ITEM_ID;
+					}else if("gx" == key){
+						dataId = ItemEnum.FANRONG_VIR_ITEM_ID;
 					}
 				}
 				if(currentIndex < GRID_COUNT){

@@ -1,14 +1,18 @@
 package com.ace.gameData.player {
 
+	import com.ace.enum.EventEnum;
 	import com.ace.enum.ItemEnum;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.player.mChild.MPlayerInfo;
+	import com.ace.manager.EventManager;
 	import com.leyou.data.bag.Baginfo;
 	import com.leyou.data.playerSkill.SkillInfo;
 	import com.leyou.data.store.StoreInfo;
 
 	public class PlayerInfo extends MPlayerInfo {
 
+		private var _currentTaskId:int;
+		private var _isTaskOk:Boolean;
 		public var bagItems:Array=[];
 		public var storeItems:Array=[];
 		public var skilldata:SkillInfo;
@@ -27,27 +31,56 @@ package com.ace.gameData.player {
 		 *vip剩余传送次数
 		 */
 		public var VipLastTransterCount:int=0;
-		
+
 		/**
-		 *蓝的标志 
-		 */		
+		 *蓝的标志
+		 */
 		public var Mp:int=0;
 
 		/**
-		 *坐骑装备 
-		 */		
+		 *坐骑装备
+		 */
 		public var mountEquipArr:Array=[];
-		
+
 		/**
-		 *宝石 
-		 */		
+		 *宝石
+		 */
 		public var gemArr:Array=[];
-		
-		
+
+
 		public var othergemArr:Array=[];
-		
+
+		public var firstItem:Object;
+
+		public var mercenaryClose:int=0;
+		public var mercenaryExp:int=0;
+		public var mercenaryCount:int=0;
+
 		public function PlayerInfo($info:LivingInfo=null) {
 			super($info);
+		}
+
+		public function get isTaskOk():Boolean
+		{
+			return _isTaskOk;
+		}
+
+		public function set isTaskOk(value:Boolean):void
+		{
+			_isTaskOk = value;
+		}
+
+		public function get currentTaskId():int {
+			return _currentTaskId;
+		}
+
+		public function set currentTaskId(value:int):void {
+			if(value==this._currentTaskId){
+				return;
+			}
+			trace("当前任务：",value);
+			_currentTaskId=value;
+			EventManager.getInstance().dispatchEvent(EventEnum.TASK_CHANGE);
 		}
 
 		public function addItems(data:Object):void {
@@ -189,6 +222,56 @@ package com.ace.gameData.player {
 		}
 
 		/**
+		 *
+		 * @param id
+		 * @return
+		 *
+		 */
+		public function getBagItemStrengLvById(id:int):int {
+
+			var i:int=0;
+			var lv:int=0;
+
+			for (i=0; i < this.bagItems.length; i++) {
+				if (this.bagItems[i] != null && this.bagItems[i].aid == id) {
+
+					if (lv < this.bagItems[i].tips.qh)
+						lv=this.bagItems[i].tips.qh;
+				}
+			}
+
+			return lv;
+		}
+
+		/**
+		 *
+		 * @param id
+		 * @return
+		 *
+		 */
+		public function getBagItemStrengLvIdById(id:int):int {
+
+			var i:int=0;
+			var lv:int=0;
+			var pos:int=0;
+			for (i=0; i < this.bagItems.length; i++) {
+				if (this.bagItems[i] != null && this.bagItems[i].aid == id) {
+
+					if (pos == 0)
+						pos=i;
+
+					if (lv < this.bagItems[i].tips.qh) {
+						lv=this.bagItems[i].tips.qh;
+						pos=i;
+					}
+
+				}
+			}
+
+			return pos;
+		}
+
+		/**
 		 * 通过名字--获取物品数量
 		 * @param name
 		 */
@@ -202,6 +285,25 @@ package com.ace.gameData.player {
 
 			return c;
 		}
+
+		/**
+		 *
+		 * @param qu
+		 * @return  [pos,pos]
+		 *
+		 */
+		public function getBagItemByQuality(qu:int):Array {
+			var i:int=0;
+			var pArr:Array=[];
+			for (i=0; i < this.bagItems.length; i++) {
+				if (this.bagItems[i] != null && this.bagItems[i].info != null && this.bagItems[i].info.classid == 1 && this.bagItems[i].info.quality == qu)
+					pArr.push(this.bagItems[i].pos);
+			}
+
+			return pArr;
+		}
+
+
 
 		/**
 		 * 药水bind取反
@@ -378,6 +480,20 @@ package com.ace.gameData.player {
 				}
 			}
 			return null;
+		}
+
+
+		public function getBagItemArrByid(id:int):Array {
+
+			var arr:Array=[];
+
+			for each (var baginfo:Baginfo in bagItems) {
+				if ((null != baginfo) && (baginfo.aid == int(id))) {
+					arr.push(baginfo);
+				}
+			}
+
+			return arr;
 		}
 
 		/**

@@ -11,17 +11,8 @@ package com.leyou.data.luckDraw
 		// 获得奖励列表
 		public var ownList:Array = [];
 		
-		// 剩余次数
-		public var remainCount:int;
-		
-		// 最大次数
-		public var maxCount:int;
-		
-		// 使用道具数量
-		public var costCount:int;
-		
-		// 拥有道具数量
-		public var ownCount:int;
+		// 奖池元宝
+		public var lyb:int;
 		
 		// 个人抽奖记录
 		private var selfLogList:Vector.<LuckDrawLogInfo> = new Vector.<LuckDrawLogInfo>();
@@ -31,6 +22,8 @@ package com.leyou.data.luckDraw
 		
 		// 巨龙仓库信息
 		private var store:Vector.<LuckDrawRewardInfo> = new Vector.<LuckDrawRewardInfo>();
+		
+		public var currentPage:int = 1;
 		
 		public function rewardLength():int{
 			return rewardList.length;
@@ -68,12 +61,7 @@ package com.leyou.data.luckDraw
 		}
 		
 		public function loadData_I(obj:Object):void{
-			var rewardInfo:Array = obj.item_d;
-			remainCount = rewardInfo[0];
-			maxCount = rewardInfo[1];
-			ownCount = rewardInfo[2];
-			costCount = rewardInfo[3];
-			
+			lyb = obj.lyb;
 			var nrList:Array = obj.dlist;
 			var nl:int = nrList.length;
 			rewardList.length = nl;
@@ -115,6 +103,7 @@ package com.leyou.data.luckDraw
 				logInfo.name = nList[n][1];
 				logInfo.itemid = nList[n][2];
 				logInfo.itemNum = nList[n][3];
+				logInfo.costType = nList[n][4];
 				var itemInfo:TItemInfo = TableManager.getInstance().getItemInfo(logInfo.itemid);
 			}
 		}
@@ -135,15 +124,15 @@ package com.leyou.data.luckDraw
 			}
 		}
 		
-		private var tmpArr:Vector.<LuckDrawRewardInfo> = new Vector.<LuckDrawRewardInfo>();
+//		private var tmpArr:Vector.<LuckDrawRewardInfo> = new Vector.<LuckDrawRewardInfo>();
 		
 		public function loadData_U(obj:Object):void{
 			var iList:Array = obj.hlist;
 			var count:int = iList.length;
-			if(otherLogList.length < count){
-				otherLogList.length = count;
-			}
-			tmpArr.length = 0;
+//			if(otherLogList.length < count){
+				otherLogList.length += count;
+//			}
+//			tmpArr.length = 0;
 			var type:int = obj.htype;
 			var length:int = otherLogList.length;
 			// 原数据向后移动,舍弃无用数据

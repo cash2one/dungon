@@ -32,7 +32,7 @@ package com.leyou.ui.team {
 		public function TeamAddPlayerWnd() {
 			super(LibManager.getInstance().getXML("config/ui/team/TeamAddPlayerWnd.xml"));
 			this.init();
-			this.clsBtn.y-=10;
+//			this.clsBtn.y-=10;
 		}
 
 		private function init():void {

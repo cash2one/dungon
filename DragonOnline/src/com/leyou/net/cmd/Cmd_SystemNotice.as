@@ -1,19 +1,25 @@
 package com.leyou.net.cmd {
 	import com.ace.config.Core;
 	import com.ace.enum.EffectEnum;
+	import com.ace.enum.NoticeEnum;
+	import com.ace.enum.SceneEnum;
 	import com.ace.enum.WindowEnum;
 	import com.ace.game.scene.ui.SceneUIManager;
+	import com.ace.gameData.manager.MapInfoManager;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.table.TEquipInfo;
 	import com.ace.gameData.table.TItemInfo;
 	import com.ace.gameData.table.TNoticeInfo;
 	import com.ace.manager.UIManager;
+	import com.ace.ui.FlyManager;
 	import com.ace.ui.notice.NoticeManager;
 	import com.ace.utils.DebugUtil;
 	import com.ace.utils.StringUtil;
 	import com.leyou.utils.EffectUtil;
 	import com.leyou.utils.ItemUtil;
 	import com.leyou.utils.StringUtil_II;
+	
+	import flash.geom.Point;
 
 
 	public class Cmd_SystemNotice {
@@ -34,8 +40,20 @@ package com.leyou.net.cmd {
 
 			if (notice.viewPsIs(10)) {
 				var arr:Array=com.ace.utils.StringUtil.substitute(notice.content, obj["var"]).split("|");
-				SceneUIManager.getInstance().addEffect(Core.me, EffectEnum.BUBBLE_LINE, arr[1], //
-					EffectEnum.COLOR_GREEN, EffectUtil.getPropName(arr[0]), "", null, true);
+				var etype:int = 0;
+				if(20 == arr[0]){
+					etype = 1;
+				}else if(29 == arr[0]){
+					etype = 2;
+				}
+				if(0 == etype){
+					SceneUIManager.getInstance().addEffect(Core.me, EffectEnum.BUBBLE_LINE, arr[1],
+						EffectEnum.COLOR_GREEN, EffectUtil.getPropName(arr[0]), "", null, true);
+				}else{
+//					var pt:Point = Core.me.localToGlobal(new Point());
+//					pt.y -= Core.me.bInfo.radius;
+//					FlyManager.getInstance().flyExpOrHonour(2, arr[1], etype, pt);
+				}
 			}
 
 			var values:Array=replaceItem(obj["var"]);
@@ -51,6 +69,15 @@ package com.leyou.net.cmd {
 					UIManager.getInstance().creatWindow(WindowEnum.DELIVERYPANEL);
 
 				UIManager.getInstance().deliveryPanel.updateDesc(com.ace.utils.StringUtil.substitute(notice.content,replaceItem(obj["var"])));
+			}
+			
+			if(MapInfoManager.getInstance().type == SceneEnum.SCENE_TYPE_ACROSS){
+				var content:String = notice.content;
+				var flag:int = content.indexOf("|");
+				var type:int = int(content.substring(0, flag));
+				if(type == NoticeEnum.ICON_LINK_MAIL || type == NoticeEnum.ICON_LINK_GUILD || type == NoticeEnum.ICON_LINK_FARM){
+					return;
+				}
 			}
 
 			NoticeManager.getInstance().broadcast(notice, values);

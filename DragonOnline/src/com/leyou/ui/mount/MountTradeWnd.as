@@ -242,7 +242,7 @@ package com.leyou.ui.mount {
 			this.saveBtn.setToolTip(TableManager.getInstance().getSystemNotice(1138).content);
 			this.tradeBtn.setToolTip(TableManager.getInstance().getSystemNotice(1137).content);
 
-			this.clsBtn.y=40;
+//			this.clsBtn.y=15;
 			this.allowDrag=false;
 
 			var einfo:MouseEventInfo=new MouseEventInfo();
@@ -602,8 +602,12 @@ package com.leyou.ui.mount {
 			UILayoutManager.getInstance().composingWnd(WindowEnum.ROLE);
 		}
 
+		override public function get width():Number {
+			return 288;
+		}
+		
 		override public function get height():Number {
-			return 524;
+			return 544;
 		}
 
 	}

@@ -18,11 +18,11 @@ package com.leyou.ui.rank {
 	import com.leyou.ui.rank.child.RankHeroRender;
 	import com.leyou.ui.rank.child.RankListRender;
 	import com.leyou.ui.rank.child.RankLockRender;
-	
+
 	import flash.events.MouseEvent;
 
 	public class RankWnd extends AutoWindow {
-		
+
 		private var zdlBtn:TabButton;
 
 		private var zbBtn:TabButton;
@@ -35,11 +35,11 @@ package com.leyou.ui.rank {
 
 		private var lvBtn:TabButton;
 
-		private var cfBtn:TabButton;
-		
+		private var cfBtn:TabButton; //xxxxxxxxxxxxxxx
+
 		private var heroBtn:TabButton;
-		
-		private var spendBtn:TabButton;
+
+		private var spendBtn:TabButton; //xxxxxxxxxxxxx
 
 //		private var timeLbl:Label;
 
@@ -66,15 +66,21 @@ package com.leyou.ui.rank {
 		private var lvRankPage:RankListRender;
 
 		private var cfRankPage:RankListRender;
-		
+
+
+		private var ysBtn:TabButton;
+		private var xzBtn:TabButton;
+		private var ysRankPage:RankListRender; //元素
+		private var xzRankPage:RankListRender; //星座
+
 		private var heroRankePage:RankHeroRender;
-		
+
 		private var consumeRankPage:RankConsumeRender;
 
 		private var lockPage:RankLockRender;
 
 		protected var playerMovie:BigAvatar;
-		
+
 		protected var rideMovie:BigAvatar;
 
 		private var fInfo:FeatureInfo;
@@ -82,11 +88,11 @@ package com.leyou.ui.rank {
 		public var playerName:String;
 
 		private var countLbl:Label;
-		
+
 		private var effectMovie:SwfLoader;
-		
+
 		private var movieBgImg:Image;
-		
+
 		private var titleRender:TitleRender;
 
 		public function RankWnd() {
@@ -96,13 +102,13 @@ package com.leyou.ui.rank {
 
 //		(1总战斗力 2坐骑 3翅膀 4装备 5军衔 6等级 7财富)
 		private function init():void {
-			titleRender = new TitleRender();
-			titleRender.x = 594;
-			titleRender.y = 70;
+			titleRender=new TitleRender();
+			titleRender.x=574;
+			titleRender.y=70;
 			pane.addChild(titleRender);
 			lockPage=new RankLockRender();
-			lockPage.x=150;
-			lockPage.y=47;
+			lockPage.x=134;
+			lockPage.y=64;
 			zdlBtn=getUIbyID("zdlBtn") as TabButton;
 			zbBtn=getUIbyID("zbBtn") as TabButton;
 			zqBtn=getUIbyID("zqBtn") as TabButton;
@@ -112,23 +118,27 @@ package com.leyou.ui.rank {
 			cfBtn=getUIbyID("cfBtn") as TabButton;
 			heroBtn=getUIbyID("heroBtn") as TabButton;
 			spendBtn=getUIbyID("spendBtn") as TabButton;
+			ysBtn=getUIbyID("ysBtn") as TabButton;
+			xzBtn=getUIbyID("xzBtn") as TabButton;
 			applaudBtn=getUIbyID("applaudBtn") as ImgButton;
 			disdainBtn=getUIbyID("disdainBtn") as ImgButton;
 			applaudLbl=getUIbyID("applaudLbl") as Label;
 			disdainLbl=getUIbyID("disdainLbl") as Label;
 			movieBgImg=getUIbyID("movieBgImg") as Image;
 
+//			this.cfBtn.visible=this.spendBtn.visible=false;
+
 			countLbl=getUIbyID("countLbl") as Label;
 //			timeLbl=getUIbyID("timeLbl") as Label;
-			rideMovie = new BigAvatar();
+			rideMovie=new BigAvatar();
 			pane.addChild(rideMovie);
 			playerMovie=new BigAvatar();
-			playerMovie.x=685;
-			playerMovie.y=415;
+			playerMovie.x=665;
+			playerMovie.y=460;
 			pane.addChild(playerMovie);
-			effectMovie = new SwfLoader();
-			effectMovie.x = 685;
-			effectMovie.y = 415;
+			effectMovie=new SwfLoader();
+			effectMovie.x=665;
+			effectMovie.y=415;
 			pane.addChild(effectMovie);
 
 			zdlRankPage=new RankListRender(1);
@@ -152,13 +162,23 @@ package com.leyou.ui.rank {
 			cfRankPage=new RankListRender(7);
 			cfRankPage.visible=false;
 			pane.addChild(cfRankPage);
-			heroRankePage = new RankHeroRender();
+
+			ysRankPage=new RankListRender(9);
+			ysRankPage.visible=false;
+			pane.addChild(ysRankPage);
+
+			xzRankPage=new RankListRender(10);
+			xzRankPage.visible=false;
+			pane.addChild(xzRankPage);
+
+
+			heroRankePage=new RankHeroRender();
 			heroRankePage.visible=false;
 			pane.addChild(heroRankePage);
 			consumeRankPage=new RankConsumeRender();
 			consumeRankPage.visible=false;
 			pane.addChild(consumeRankPage);
-			
+
 //			zdlRankPage.initByType();
 //			zbRankPage.initByType();
 //			zqRankPage.initByType();
@@ -167,6 +187,10 @@ package com.leyou.ui.rank {
 //			lvRankPage.initByType();
 //			cfRankPage.initByType();
 
+
+
+			ysBtn.addEventListener(MouseEvent.CLICK, onBtnClick);
+			xzBtn.addEventListener(MouseEvent.CLICK, onBtnClick);
 			lvBtn.addEventListener(MouseEvent.CLICK, onBtnClick);
 			cfBtn.addEventListener(MouseEvent.CLICK, onBtnClick);
 			zdlBtn.addEventListener(MouseEvent.CLICK, onBtnClick);
@@ -185,6 +209,14 @@ package com.leyou.ui.rank {
 		public function selectPageByType(type:int):void {
 			var sPage:RankListRender;
 			switch (type) {
+				case 9:
+					sPage=ysRankPage;
+					ysBtn.turnOn();
+					break;
+				case 10:
+					sPage=xzRankPage;
+					xzBtn.turnOn();
+					break;
 				case 1:
 					sPage=zdlRankPage;
 					zdlBtn.turnOn();
@@ -228,12 +260,12 @@ package com.leyou.ui.rank {
 		}
 
 		public override function get height():Number {
-			return bg.height;
+			return 544;
 		}
 
 		public function palyerInfo(obj:Object):void {
-			var myCount:int = obj.mysc;
-			countLbl.visible = true;
+			var myCount:int=obj.mysc;
+			countLbl.visible=true;
 			countLbl.text=obj.mysc;
 			var pn:String=obj.name;
 			applaudLbl.text=obj.like;
@@ -243,23 +275,23 @@ package com.leyou.ui.rank {
 		}
 
 		public function showAvatar(avaStr:String, sex:int, pro:int, titleId:int=0):void {
-			if(null == avaStr){
-				titleRender.visible = false;
-				rideMovie.visible = false;
-				playerMovie.visible = false;
-				countLbl.visible = false;
-				applaudLbl.text = "0";
-				disdainLbl.text = "0";
+			if (null == avaStr) {
+				titleRender.visible=false;
+				rideMovie.visible=false;
+				playerMovie.visible=false;
+				countLbl.visible=false;
+				applaudLbl.text="0";
+				disdainLbl.text="0";
 				applaudBtn.setActive(false, 1, true);
 				disdainBtn.setActive(false, 1, true);
 				return;
 			}
-			if(titleId > 0){
-				titleRender.visible = true;
-				var titleInfo:TTitle = TableManager.getInstance().getTitleByID(titleId);
+			if (titleId > 0) {
+				titleRender.visible=true;
+				var titleInfo:TTitle=TableManager.getInstance().getTitleByID(titleId);
 				titleRender.updateInfo(titleInfo);
-			}else{
-				titleRender.visible = false;
+			} else {
+				titleRender.visible=false;
 			}
 			if (null == fInfo) {
 				fInfo=new FeatureInfo();
@@ -271,31 +303,31 @@ package com.leyou.ui.rank {
 //			fInfo.wing=PnfUtil.realWingId(avaArr[3], false, sex, pro);
 //			big.show(fInfo, false, pro);
 //			big.showEquipEffect(avaArr[5], avaArr[4])
-				
-			var avaArr:Array = avaStr.split(",");
+
+			var avaArr:Array=avaStr.split(",");
 //			if(1 == avaArr.length){
 //				var bigAvaId:int = PnfUtil.realBigAvtId(avaArr[0]);
 //				big.show([bigAvaId]);
 //				big.playAct(PlayerEnum.ACT_STAND, 3);
 //				return;
 //			}
-			if(avaArr.length <= 1){
-				playerMovie.visible = false;
-				fInfo.suit = avaArr[0];
+			if (avaArr.length <= 1) {
+				playerMovie.visible=false;
+				fInfo.suit=avaArr[0];
 				rideMovie.show(fInfo);
-				rideMovie.x = playerMovie.x;
-				rideMovie.y = playerMovie.y;
-			}else{
-				rideMovie.x = playerMovie.x + 82;
-				rideMovie.y = playerMovie.y - 31;
-				playerMovie.visible = true;
-				fInfo.weapon = PnfUtil.realAvtId(avaArr[1], false, sex);
-				fInfo.suit = PnfUtil.realAvtId(avaArr[2], false, sex);
-				fInfo.wing = PnfUtil.realWingId(avaArr[3], false, sex, pro);
+				rideMovie.x=playerMovie.x;
+				rideMovie.y=playerMovie.y;
+			} else {
+				rideMovie.x=playerMovie.x + 82;
+				rideMovie.y=playerMovie.y - 31;
+				playerMovie.visible=true;
+				fInfo.weapon=PnfUtil.realAvtId(avaArr[1], false, sex);
+				fInfo.suit=PnfUtil.realAvtId(avaArr[2], false, sex);
+				fInfo.wing=PnfUtil.realWingId(avaArr[3], false, sex, pro);
 				playerMovie.showII(fInfo, true, pro);
 				playerMovie.showEquipEffect(avaArr[6], avaArr[5]);
 				fInfo.clear();
-				fInfo.suit = avaArr[4];
+				fInfo.suit=avaArr[4];
 				rideMovie.show(fInfo);
 			}
 			playerMovie.playAct(PlayerEnum.ACT_STAND, 4);
@@ -304,7 +336,7 @@ package com.leyou.ui.rank {
 
 		public override function show(toTop:Boolean=true, $layer:int=1, toCenter:Boolean=true):void {
 			super.show(toTop, $layer, toCenter);
-			if(currentPage is RankConsumeRender){
+			if (currentPage is RankConsumeRender) {
 				currentPage.requestInfo();
 			}
 //			addEventListener(Event.ENTER_FRAME, updateTime);
@@ -328,6 +360,12 @@ package com.leyou.ui.rank {
 		protected function onBtnClick(event:MouseEvent):void {
 			var sPage:RankListRender;
 			switch (event.target.name) {
+				case "ysBtn":
+					sPage=ysRankPage;
+					break;
+				case "xzBtn":
+					sPage=xzRankPage;
+					break;
 				case "zdlBtn":
 					sPage=zdlRankPage;
 					break;
@@ -368,96 +406,96 @@ package com.leyou.ui.rank {
 			}
 			selectPage(sPage);
 		}
-		
-		private function switchToSpendRank():void{
+
+		private function switchToSpendRank():void {
 			spendBtn.turnOn();
-			titleRender.visible = true;
-			playerMovie.visible = true;
-			rideMovie.visible = true;
-			movieBgImg.visible = true;
+			titleRender.visible=true;
+			playerMovie.visible=true;
+			rideMovie.visible=true;
+			movieBgImg.visible=true;
 			if (currentPage != consumeRankPage) {
-				
+
 				playerMovie.visible=false;
 				if (contains(lockPage)) {
 					removeChild(lockPage);
 				}
-				
+
 				if (null == currentPage) {
 					currentPage=consumeRankPage;
 				} else if (currentPage.visible) {
 					currentPage.visible=false;
-					if(currentPage.hasOwnProperty("removeSwitchTimer")){
+					if (currentPage.hasOwnProperty("removeSwitchTimer")) {
 						currentPage.removeSwitchTimer();
 					}
 					currentPage=consumeRankPage;
 				}
 				currentPage.visible=true;
-				currentPage.x=150;
-				currentPage.y=50;
+				currentPage.x=132;
+				currentPage.y=64;
 				currentPage.requestInfo();
 			}
 		}
-		
-		private function switchToHeroRank():void{
-			titleRender.visible = false;
-			playerMovie.visible = false;
-			rideMovie.visible = false;
-			movieBgImg.visible = false;
+
+		private function switchToHeroRank():void {
+			titleRender.visible=false;
+			playerMovie.visible=false;
+			rideMovie.visible=false;
+			movieBgImg.visible=false;
 			if (currentPage != heroRankePage) {
-				
+
 				playerMovie.visible=false;
 				if (contains(lockPage)) {
 					removeChild(lockPage);
 				}
-				
+
 				if (null == currentPage) {
 					currentPage=heroRankePage;
 				} else if (currentPage.visible) {
 					currentPage.visible=false;
-					if(currentPage.hasOwnProperty("removeSwitchTimer")){
+					if (currentPage.hasOwnProperty("removeSwitchTimer")) {
 						currentPage.removeSwitchTimer();
 					}
 					currentPage=heroRankePage;
 				}
 				currentPage.visible=true;
-				currentPage.x=150;
-				currentPage.y=50;
+				currentPage.x=132;
+				currentPage.y=64;
 				currentPage.requestInfo();
 			}
 		}
 
 		protected function selectPage(page:RankListRender):void {
-			titleRender.visible = false;
-			playerMovie.visible = true;
-			rideMovie.visible = true;
-			movieBgImg.visible = true;
-			if(currentPage == heroRankePage){
+			titleRender.visible=false;
+			playerMovie.visible=true;
+			rideMovie.visible=true;
+			movieBgImg.visible=true;
+			if (currentPage == heroRankePage) {
 				currentPage.visible=false;
-				currentPage = null;
+				currentPage=null;
 			}
 			if (currentPage != page) {
 				if (null == currentPage) {
 					currentPage=page;
 				} else if (currentPage.visible) {
 					currentPage.visible=false;
-					if(currentPage.hasOwnProperty("removeSwitchTimer")){
+					if (currentPage.hasOwnProperty("removeSwitchTimer")) {
 						currentPage.removeSwitchTimer();
 					}
 					currentPage=page;
 				}
 				currentPage.addSwitchTimer();
 				currentPage.visible=true;
-				currentPage.x=149;
-				currentPage.y=47;
+				currentPage.x=132;
+				currentPage.y=64;
 				currentPage.requestInfo(1);
 			}
 		}
-		
-		public function updateConsumeInfo(obj:Object):void{
+
+		public function updateConsumeInfo(obj:Object):void {
 			consumeRankPage.updateInfo(obj);
 		}
-		
-		public function updateHeroInfo(obj:Object):void{
+
+		public function updateHeroInfo(obj:Object):void {
 			heroRankePage.updateInfo(obj);
 		}
 
@@ -469,6 +507,7 @@ package com.leyou.ui.rank {
 			if (currentPage.isLock) {
 				lockPage.updateInfo(currentPage.type);
 				addChild(lockPage);
+				//currentPage.visible=false;
 				playerMovie.visible=false;
 			} else {
 				playerMovie.visible=true;
@@ -476,6 +515,7 @@ package com.leyou.ui.rank {
 					removeChild(lockPage);
 				}
 				currentPage.loadRankList(obj);
+					//currentPage.visible=true;
 			}
 		}
 	}

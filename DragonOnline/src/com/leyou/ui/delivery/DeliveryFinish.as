@@ -1,6 +1,7 @@
 package com.leyou.ui.delivery {
 
 
+	import com.ace.config.Core;
 	import com.ace.enum.UIEnum;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.manager.LibManager;
@@ -12,7 +13,7 @@ package com.leyou.ui.delivery {
 	import com.ace.utils.StringUtil;
 	import com.leyou.net.cmd.Cmd_Yct;
 	import com.leyou.utils.PropUtils;
-
+	
 	import flash.events.MouseEvent;
 
 	public class DeliveryFinish extends AutoWindow {

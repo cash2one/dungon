@@ -9,11 +9,12 @@ package com.ace.gameData.table {
 		public var pnfId:int; //子弹特效id
 		public var radius:int; //子弹半径
 		public var isRotation:Boolean; //子弹是否旋转
-		//		public var follow:int; //跟随谁显示
+//		public var follow:int; //跟随谁显示
 		public var px:int; //相对于人出现的位置偏移X
 		public var py:int; //相对于人出现的位置偏移Y
 		public var carrier:int; //载体类型
 		public var lastTime:int; //持续时间
+		public var distance:int;//持续距离
 		public var track:int; //轨迹
 		private var _speed:Number; //速度
 		public var crash:Boolean; //是否碰撞爆炸
@@ -27,11 +28,12 @@ package com.ace.gameData.table {
 			this.pnfId=info.@modelId;
 			this.radius=info.@buWide;
 			this.isRotation=StringUtil.intToBoolean(info.@isRotation);
-			//			this.follow=info.@followType;
+//			this.follow=info.@followType;
 			this.px=info.@x;
 			this.py=info.@y;
 			this.carrier=info.@carrier;
 			this.lastTime=info.@effTime;
+			this.distance=info.@buRange;
 			this.track=info.@track;
 			this.speed=info.@buspeed;
 			//			this.speed/=Number(UIEnum.FRAME / UIEnum.SERVER_FRAME); //按照服务器的速度配置

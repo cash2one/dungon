@@ -6,14 +6,10 @@ package com.leyou.ui.equip.child {
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.table.TEquipInfo;
 	import com.ace.manager.LibManager;
-	import com.ace.manager.UIManager;
 	import com.ace.ui.auto.AutoSprite;
-	import com.ace.ui.img.child.Image;
 	import com.ace.ui.lable.Label;
-	import com.leyou.data.bag.Baginfo;
-	import com.leyou.data.tips.TipsInfo;
 	import com.leyou.utils.PropUtils;
-
+	
 	import flash.events.MouseEvent;
 
 	public class EquipTransItem extends AutoSprite {

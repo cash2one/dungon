@@ -80,6 +80,8 @@ package com.ace.enum {
 		 *通天塔 
 		 */		
 		public static const SCENE_TYPE_TTT:int=17;
+		 
+		public static const SCENE_TYPE_ACROSS:int=18; //跨服场景
 		
 		
 		public static const SCREEN_RECTANGLE:Point=new Point(100, 80); //屏幕中央不移动的区域

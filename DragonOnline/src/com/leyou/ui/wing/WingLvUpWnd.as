@@ -10,6 +10,7 @@ package com.leyou.ui.wing {
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.table.TItemInfo;
 	import com.ace.loader.child.SwfLoader;
+	import com.ace.manager.GuideArrowDirectManager;
 	import com.ace.manager.LibManager;
 	import com.ace.manager.MouseManagerII;
 	import com.ace.manager.SoundManager;
@@ -19,7 +20,7 @@ package com.leyou.ui.wing {
 	import com.ace.manager.child.MouseEventInfo;
 	import com.ace.tools.ScaleBitmap;
 	import com.ace.ui.auto.AutoWindow;
-	import com.ace.ui.button.children.ImgLabelButton;
+	import com.ace.ui.button.children.NormalButton;
 	import com.ace.ui.img.child.Image;
 	import com.ace.ui.lable.Label;
 	import com.ace.ui.notice.NoticeManager;
@@ -31,7 +32,7 @@ package com.leyou.ui.wing {
 	import com.leyou.ui.quickBuy.QuickBuyWnd;
 	import com.leyou.utils.EffectUtil;
 	import com.leyou.utils.PropUtils;
-
+	
 	import flash.display.DisplayObject;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
@@ -40,8 +41,8 @@ package com.leyou.ui.wing {
 
 	public class WingLvUpWnd extends AutoWindow {
 
-		private var autoUpBtn:ImgLabelButton;
-		private var upBtn:ImgLabelButton;
+		private var autoUpBtn:NormalButton;
+		private var upBtn:NormalButton;
 		private var itemNumLbl:Label;
 		private var moneyNumLbl:Label;
 		private var itemNameLbl:Label;
@@ -82,8 +83,8 @@ package com.leyou.ui.wing {
 
 		private function init():void {
 
-			this.autoUpBtn=this.getUIbyID("autoUpBtn") as ImgLabelButton;
-			this.upBtn=this.getUIbyID("upBtn") as ImgLabelButton;
+			this.autoUpBtn=this.getUIbyID("autoUpBtn") as NormalButton;
+			this.upBtn=this.getUIbyID("upBtn") as NormalButton;
 
 			this.itemNumLbl=this.getUIbyID("itemNumLbl") as Label;
 			this.itemNameLbl=this.getUIbyID("itemNameLbl") as Label;
@@ -93,7 +94,7 @@ package com.leyou.ui.wing {
 			this.jieImg=this.getUIbyID("jieImg") as Image;
 			this.wingNameImg=this.getUIbyID("wingNameImg") as Image;
 			this.goldImg=this.getUIbyID("goldImg") as Image;
-			this.tipImg=this.getUIbyID("tip2Img") as Image;
+			this.tipImg=this.getUIbyID("tipImg") as Image;
 
 			this.modeSwf=this.getUIbyID("modeSwf") as SwfLoader;
 
@@ -105,7 +106,7 @@ package com.leyou.ui.wing {
 			this.itemNameLbl.addEventListener(MouseEvent.CLICK, onClick);
 			this.itemNameLbl.mouseEnabled=true;
 
-			this.clsBtn.y=40;
+//			this.clsBtn.y=15;
 
 			this.tipsinfo=new TipsInfo();
 			this.tipsinfo.itemid=ConfigEnum.WingItem;
@@ -126,7 +127,7 @@ package com.leyou.ui.wing {
 
 			this.starEffect=new StarChangeEffect(10, true);
 			this.addChild(this.starEffect);
-			this.starEffect.x=52;
+			this.starEffect.x=44;
 			this.starEffect.y=363.25;
 
 //			this.effectBg=new SwfLoader();
@@ -135,8 +136,8 @@ package com.leyou.ui.wing {
 
 //			this.effectBg.mouseChildren=this.effectBg.mouseEnabled=false;
 
-			this.modeSwf.x=146;
-			this.modeSwf.y=390;
+			this.modeSwf.x=130;
+			this.modeSwf.y=410;
 
 //			this.modeSwf.opaqueBackground=0xff0000;
 			this.modeSwf.mouseChildren=this.modeSwf.mouseEnabled=false;
@@ -197,12 +198,15 @@ package com.leyou.ui.wing {
 		}
 
 		private function onbtnClick(evt:MouseEvent):void {
+ 
 
 			if (evt.target.name == "autoUpBtn") {
-
+				GuideArrowDirectManager.getInstance().delArrow(WindowEnum.ROLE + "," + WindowEnum.WINGLVUP);
+				
 				if (this.autoUpBtn.text.indexOf(PropUtils.getStringById(1986)) > -1) {
-					win=PopupManager.showConfirm(PropUtils.getStringById(1987), startEvo, function():void {
-					}, false, "wingLv");
+					startEvo();
+//					win=PopupManager.showConfirm(PropUtils.getStringById(1987), startEvo, function():void {
+//					}, false, "wingLv");
 				} else {
 
 					clearInterval(this.autoTimeID);
@@ -224,7 +228,7 @@ package com.leyou.ui.wing {
 			upBtn.setActive(false, .6, true);
 			autoTimeID=setInterval(updateAutoLv, 1000);
 			updateAutoLv();
-			autoLv=info.wlv;
+			autoLv=info.lv;
 
 		}
 
@@ -238,10 +242,11 @@ package com.leyou.ui.wing {
 					NoticeManager.getInstance().broadcast(TableManager.getInstance().getSystemNotice(1204));
 				} else if (Core.me.info.level < int(infoxml.@Wing_OL)) {
 					NoticeManager.getInstance().broadcast(TableManager.getInstance().getSystemNotice(1206));
+				} else {
+					NoticeManager.getInstance().broadcast(TableManager.getInstance().getSystemNotice(1205));
 				}
 
 				if (autoTimeID != 0) {
-					NoticeManager.getInstance().broadcast(TableManager.getInstance().getSystemNotice(1205));
 					clearInterval(this.autoTimeID);
 					autoUpBtn.text=PropUtils.getStringById(1986);
 					this.autoTimeID=0;
@@ -302,17 +307,17 @@ package com.leyou.ui.wing {
 
 				if (int(o.exp) / int(xml.@Wish_Exp) <= 1) {
 					this.wishProScaleBitMap.visible=(int(o.exp) != 0);
-					this.wishProScaleBitMap.setSize(int(o.exp) / int(xml.@Wish_Exp) * 220, 12);
+					this.wishProScaleBitMap.setSize(int(o.exp) / int(xml.@Wish_Exp) * 220, 22);
 				} else
-					this.wishProScaleBitMap.setSize(220, 12);
+					this.wishProScaleBitMap.setSize(220, 22);
 
 				this.wishLbl.text=o.exp; // + "/" + xml.@Wish_Exp;
 				var diff:int=int(o.exp - this.currentExp);
 
-				if (o.hasOwnProperty("wlv") && int(o.wlv) != this.autoLv && this.autoLv != 0) {
+				if (o.hasOwnProperty("wlv") && int(o.lv) != this.autoLv && this.autoLv != 0) {
 					if (this.autoTimeID != 0)
 						this.autoUpBtn.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
-					diff=int(xml.@Wish_Exp) - int(this.currentExp);
+//					diff=int(xml.@Wish_Exp) - int(this.currentExp);
 
 					this.successEffect.visible=true;
 
@@ -321,17 +326,18 @@ package com.leyou.ui.wing {
 						successEffect.visible=false;
 					});
 
-
 					SoundManager.getInstance().play(23);
+				} else {
+					if (this.visible) {
+						var p:Point=this.localToGlobal(new Point(130, 380));
+						EffectUtil.flyWordEffect("+ " + diff + " " + PropUtils.getStringById(1989), p);
+					}
 				}
 
 				if (this.autoTimeID == 0)
 					upBtn.setActive(true, 1, true);
 
-				if (this.visible) {
-					var p:Point=this.localToGlobal(new Point(130, 380));
-					EffectUtil.flyWordEffect("+ " + diff + " " + PropUtils.getStringById(1989), p);
-				}
+
 
 				this.currentExp=o.exp;
 			}
@@ -347,8 +353,8 @@ package com.leyou.ui.wing {
 			if (o.hasOwnProperty("lv")) {
 
 				var wlv:int=o.lv;
-				if (o.wlv % 10 == 9)
-					wlv=wlv + 1;
+//				if (o.wlv % 10 == 9)
+				wlv=wlv + 1;
 
 				if (o.lv == 10)
 					wlv=10;
@@ -358,14 +364,24 @@ package com.leyou.ui.wing {
 
 				var pnid:int=38000 + (wlv - 1);
 
-				this.modeSwf.update(pnid);
+				var wxml:XML=LibManager.getInstance().getXML("config/table/Wing_Base.xml");
+				var wwxml:XML;
+				for each (wwxml in wxml.data) {
+					if (wwxml.@Wing_Lv == wlv) {
+						break;
+					}
+				}
+
+				this.modeSwf.update(wwxml.@UiModel);
 				this.modeSwf.mouseChildren=this.modeSwf.mouseEnabled=false;
-				this.autoLv=o.wlv;
+				this.autoLv=o.lv;
 			}
 		}
 
 		override public function hide():void {
 
+			GuideArrowDirectManager.getInstance().delArrow(WindowEnum.ROLE + "," + WindowEnum.WINGLVUP);
+			
 			if (this.visible) {
 				super.hide();
 				UILayoutManager.getInstance().composingWnd(WindowEnum.ROLE);
@@ -399,11 +415,11 @@ package com.leyou.ui.wing {
 		}
 
 		override public function get width():Number {
-			return 306
+			return 288
 		}
 
 		override public function get height():Number {
-			return 524;
+			return 544;
 		}
 
 	}

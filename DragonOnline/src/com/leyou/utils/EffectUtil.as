@@ -25,6 +25,14 @@ package com.leyou.utils {
 				effectNameDic[1]="";
 				effectNameDic[2]=EffectEnum.BAO_JI;
 				effectNameDic[3]=EffectEnum.SHAN_BI;
+				effectNameDic[100]=EffectEnum.YONG_BING;
+				effectNameDic[101]=EffectEnum.KE_ZHI;
+				effectNameDic[102]=EffectEnum.BEI_KE;
+				effectNameDic[103]=EffectEnum.AN_SHANG;
+				effectNameDic[104]=EffectEnum.GUANG_SHANG;
+				effectNameDic[105]=EffectEnum.MU_SHANG;
+				effectNameDic[106]=EffectEnum.HUO_SHANG;
+				effectNameDic[107]=EffectEnum.SUI_SHANG;
 			}
 
 			if (!propNameDic) {

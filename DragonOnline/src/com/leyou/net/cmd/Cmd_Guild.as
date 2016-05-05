@@ -263,12 +263,14 @@ uset     --是否设置了自动同意入帮(1自动同意,0不自动)
 
 		public static function sm_Guild_I(o:Object):void {
 
+			if (!UIManager.getInstance().isCreate(WindowEnum.GUILD))
+				UIManager.getInstance().creatWindow(WindowEnum.GUILD);
+			
+			UIManager.getInstance().guildWnd.setGuildListInviteState(o.yset);
+			
 			if (!o.hasOwnProperty("unionid")) {
 				return;
 			}
-
-			if (!UIManager.getInstance().isCreate(WindowEnum.GUILD))
-				UIManager.getInstance().creatWindow(WindowEnum.GUILD);
 
 //			if (!UIManager.getInstance().guildWnd.visible)
 //				UIManager.getInstance().guildWnd.show();
@@ -379,9 +381,9 @@ av         -- 是否设置自动同意邀请入帮(1自动同意入帮,0不自�
 			if (!o.hasOwnProperty("notice") || !o.hasOwnProperty("unionid"))
 				return;
 
-			if (UIManager.getInstance().guildWnd.getTabIndex() == 0)
+			if (UIManager.getInstance().guildWnd.getTabName()=="mainBtn")
 				UIManager.getInstance().guildWnd.updateMain(o);
-			else if (UIManager.getInstance().guildWnd.getTabIndex() == 7) {
+			else if (UIManager.getInstance().guildWnd.getTabName() == "listBtn") {
 				if (o.ntype == 2)
 					UIManager.getInstance().guildWnd.updateGuildListNotice(o.notice);
 			}
@@ -455,6 +457,16 @@ uset (1自动同意,0不自动)
 */
 		public static function cm_GuildApplySet(set:int):void {
 			NetGate.getInstance().send("un|B" + set);
+		}
+		
+		/**
+		 * -- 会长弹劾
+-- 上行:un|G
+		 * @param set
+		 * 
+		 */		
+		public static function cm_GuildImpeachBoss():void {
+			NetGate.getInstance().send("un|G");
 		}
 
 
@@ -620,6 +632,10 @@ yn (1同意,0拒绝)
 		}
 
 		public static function sm_Guild_Q(o:Object):void {
+			
+			if(!UIManager.getInstance().isCreate(WindowEnum.GUILD))
+				return ;
+			
 			UIManager.getInstance().guildWnd.guildName="";
 			UIManager.getInstance().guildWnd.guildId="";
 			UIManager.getInstance().guildWnd.guildLv=0;
@@ -741,6 +757,17 @@ mval    --消息提示变量
 //				return;
 
 			UIManager.getInstance().guildWnd.updateGuildZc(o);
+		}
+		
+		/**
+		 *--------------------------------------------------------------------------------
+-- 行会招集
+-- 上行:un|Oetype (0钻石 1道具) 
+		 * @param type
+		 * 
+		 */		
+		public static function cm_GuildCall(type:int):void{
+			NetGate.getInstance().send("un|O"+type);
 		}
 
 	}

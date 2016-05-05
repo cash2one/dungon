@@ -24,6 +24,7 @@ package com.leyou.ui.arena.childs {
 		private var iconImg:Image;
 		private var integralLbl:Label;
 		private var numTopLbl:Label;
+		private var nameLbl:Label;
 
 		private var gridVec:Vector.<ArenaGrid>
 
@@ -31,6 +32,7 @@ package com.leyou.ui.arena.childs {
 
 		private var itemIcon:Image;
 		private var mName:String;
+		private var mtitleid:int;
 
 		private var effSwf:SwfLoader;
 
@@ -44,6 +46,7 @@ package com.leyou.ui.arena.childs {
 			this.bgHightImg=this.getUIbyID("bgHightImg") as Image;
 			this.integralLbl=this.getUIbyID("integralLbl") as Label;
 			this.numTopLbl=this.getUIbyID("numTopLbl") as Label;
+			this.nameLbl=this.getUIbyID("nameLbl") as Label;
 
 			this.gridVec=new Vector.<ArenaGrid>();
 
@@ -60,8 +63,6 @@ package com.leyou.ui.arena.childs {
 
 			this.mouseChildren=true;
 
-
-
 			var einfo:MouseEventInfo=new MouseEventInfo();
 			einfo.onMouseMove=onTipsMouseOver;
 			einfo.onMouseOut=onTipsMouseOut;
@@ -70,8 +71,11 @@ package com.leyou.ui.arena.childs {
 		}
 
 		private function onTipsMouseOver(e:DisplayObject):void {
-			var tinfo:TTitle=TableManager.getInstance().getTitleByName(this.mName);
-			ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, StringUtil.substitute(TableManager.getInstance().getSystemNotice(4718).content, [tinfo.name,  tinfo.value1,tinfo.value2]), new Point(this.stage.mouseX, this.stage.mouseY));
+			var tinfo:TTitle=TableManager.getInstance().getTitleByID(this.mtitleid);
+			if (tinfo == null)
+				return;
+
+			ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, StringUtil.substitute(TableManager.getInstance().getSystemNotice(4718).content, [tinfo.name, tinfo.value1, tinfo.value2]), new Point(this.stage.mouseX, this.stage.mouseY));
 		}
 
 		private function onTipsMouseOut(e:DisplayObject):void {
@@ -81,76 +85,87 @@ package com.leyou.ui.arena.childs {
 
 		public function updateInfo(xml:XML):void {
 
-			if (xml.@MR_Level == "10") {
-				this.iconImg.updateBmp("ui/arena/icon_arena_10.png");
-				this.itemIcon.updateBmp("ui/arena/arena_10.png");
-			} else {
-				this.iconImg.updateBmp("ui/arena/icon_arena_0" + xml.@MR_Level + ".png");
+//			if (xml.@MR_Level == "10") {
+//				this.iconImg.updateBmp("ui/arena/icon_arena_10.png");
+//				this.itemIcon.updateBmp("ui/arena/arena_10.png");
+//			} else {
+//				this.iconImg.updateBmp("ui/arena/icon_arena_0" + xml.@MR_Level + ".png");
 
-				if (xml.@MR_Level == "1")
-					this.itemIcon.bitmapData=null;
-				else
-					this.itemIcon.updateBmp("ui/arena/arena_0" + xml.@MR_Level + ".png");
-			}
+//				if (xml.@MR_Level == "1")
+//					this.iconImg.bitmapData=null;
+//				else
+			this.iconImg.updateBmp("ui/arena/arena_0" + xml.@MR_Level + ".png");
+//			}
 
 			this.mName=xml.@MR_Name;
+			this.mtitleid=xml.@MR_Title;
 
-			this.integralLbl.text="" + xml.@MR_Integral;
+			this.nameLbl.text="" + xml.@MR_Name;
+
+			if (xml.@MR_Level == "1")
+				this.integralLbl.text="" + PropUtils.getStringEasyById(2383) + String(xml.@MR_PNum).split("|")[0];
+			else if (xml.@MR_Level == "7")
+				this.integralLbl.text="" + StringUtil.substitute(PropUtils.getStringEasyById(1641), [1]);
+			else
+				this.integralLbl.text="" + StringUtil.substitute(PropUtils.getStringEasyById(1641), [String(xml.@MR_PNum).replace("|", "-")]);
+
 //			this.numTopLbl.text="" + xml.@MR_PNum;
 
-			var _x:Number=208;
-			var _w:Number=43;
+			var _x:Number=238;
+			var _w:Number=49;
 
 			if (xml.@MR_Level == "1") {
 
 				var lb:Label=new Label(PropUtils.getStringById(1593));
-				this.addChild(lb);
+//				this.addChild(lb);
 
 				lb.x=_x;
-				lb.y=10;
+				lb.y=20;
 
 //				this.numTopLbl.text=PropUtils.getStringById(1594);
 				this.effSwf.visible=false;
 			} else {
+				this.effSwf.visible=false;
+				var grid:ArenaGrid;
+				/**
+								var grid:ArenaGrid=new ArenaGrid();
 
-				var grid:ArenaGrid=new ArenaGrid();
+								grid.x=_x + this.gridVec.length * _w;
+								grid.y=8;
 
-				grid.x=_x + this.gridVec.length * _w;
-				grid.y=8;
+								grid.updateMoney()
+								grid.setNum(xml.@MR_Money);
 
-				grid.updateMoney()
-				grid.setNum(xml.@MR_Money);
+								this.addChild(grid);
+								this.gridVec.push(grid);
 
-				this.addChild(grid);
-				this.gridVec.push(grid);
+								grid=new ArenaGrid();
+								grid.x=_x + this.gridVec.length * _w;
+								grid.y=8;
 
-				grid=new ArenaGrid();
-				grid.x=_x + this.gridVec.length * _w;
-				grid.y=8;
+								grid.updateHun();
+								grid.setNum(xml.@MR_Energy);
 
-				grid.updateHun();
-				grid.setNum(xml.@MR_Energy);
+								this.addChild(grid);
+								this.gridVec.push(grid);
 
-				this.addChild(grid);
-				this.gridVec.push(grid);
+								grid=new ArenaGrid();
+								grid.x=_x + this.gridVec.length * _w;
+								grid.y=8;
 
-				grid=new ArenaGrid();
-				grid.x=_x + this.gridVec.length * _w;
-				grid.y=8;
+								grid.updateHounur();
+								grid.setNum(xml.@MR_Honor);
+								grid.dataId=65526
 
-				grid.updateHounur();
-				grid.setNum(xml.@MR_Honor);
-				grid.dataId=65526
-
-				this.addChild(grid);
-				this.gridVec.push(grid);
-
+								this.addChild(grid);
+								this.gridVec.push(grid);
+				*/
 				var item:Object=TableManager.getInstance().getItemInfo(xml.@MR_Item1);
 				if (item == null)
 					item=TableManager.getInstance().getEquipInfo(xml.@MR_Item1);
 
-				if (item == null)
-					return;
+//				if (item == null)
+//					return;
 
 				grid=new ArenaGrid();
 				grid.x=_x + this.gridVec.length * _w;
@@ -162,8 +177,8 @@ package com.leyou.ui.arena.childs {
 				this.addChild(grid);
 				this.gridVec.push(grid);
 
-				if (!xml.hasOwnProperty("MR_Item2") || xml.@MR_Item2 == "")
-					return;
+//				if (!xml.hasOwnProperty("MR_Item2") || xml.@MR_Item2 == "")
+//					return;
 
 				item=TableManager.getInstance().getItemInfo(xml.@MR_Item2);
 				if (item == null)
@@ -175,6 +190,24 @@ package com.leyou.ui.arena.childs {
 
 				grid.updataInfo(item);
 				grid.setNum(xml.@MR_INum2);
+
+				this.addChild(grid);
+				this.gridVec.push(grid);
+
+
+//				if (!xml.hasOwnProperty("MR_Item3") || xml.@MR_Item3 == "")
+//					return;
+
+				item=TableManager.getInstance().getItemInfo(xml.@MR_Item3);
+				if (item == null)
+					item=TableManager.getInstance().getEquipInfo(xml.@MR_Item3);
+
+				grid=new ArenaGrid();
+				grid.x=_x + this.gridVec.length * _w;
+				grid.y=8;
+
+				grid.updataInfo(item);
+				grid.setNum(xml.@MR_INum3);
 
 				this.addChild(grid);
 				this.gridVec.push(grid);

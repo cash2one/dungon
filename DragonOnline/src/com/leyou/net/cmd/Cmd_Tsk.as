@@ -78,7 +78,7 @@ mk(“A” --接受任务 , "D" --交付任务 , "T" --任务追踪面板 )
 				//完成处理
 				if (int(info.type) == TaskEnum.taskLevel_mainLine) {
 					UIManager.getInstance().taskNpcTalkWnd.rewardFlyBag();
-					UIManager.getInstance().taskTrack.completeHallow();
+//					UIManager.getInstance().taskTrack.completeHallow();
 				}
 
 			} else {
@@ -91,7 +91,7 @@ mk(“A” --接受任务 , "D" --交付任务 , "T" --任务追踪面板 )
 		/**
 		 *下行：tsk|{mk:T,tr:{[{tid:taskid, st:num, var:num},{...}]} （任务追踪面板信息）
 	  tr -- 任务信息
-									   tid -- 任务id
+										 tid -- 任务id
 			 st  -- 任务状态(0：未完成 1：已完成 -1：可领取)
 			 var -- 任务当前完成进度变量num
 		 * @param o
@@ -99,12 +99,14 @@ mk(“A” --接受任务 , "D" --交付任务 , "T" --任务追踪面板 )
 		 */
 		public static function sm_tsk_T(o:Object):void {
 
-			if (!o.hasOwnProperty("tr") || o.tr.length == 0 || Core.me==null)
+			if (!o.hasOwnProperty("tr") || o.tr.length == 0 || Core.me == null)
 				return;
 
-			UIManager.getInstance().taskWnd.updateData(o);
-			UIManager.getInstance().taskTrack.updateList(o);
 
+//			UIManager.getInstance().taskWnd.updateData(o);
+			UIManager.getInstance().taskTrack2.updateInfo(o);
+			UIManager.getInstance().taskTrack.updateList(o);
+//			UIManager.getInstance().taskTrack3.updateList(o);
 //			UIManager.getInstance().taskNpcTalkWnd.updateData(o.tr[0]);
 
 		}
@@ -130,10 +132,10 @@ mk(“A” --接受任务 , "D" --交付任务 , "T" --任务追踪面板 )
 		 * 完成日常任务
 		 * tsk|Ktype
    type (1 快速完成一次,2 完成全部)
-   * 快速完成日常任务  tsk|Ktype,btype (0钻石 1绑定钻石)
-	*/
-		public static function cmTaskDailySuccess(type:int=1,btype:int=0):void {
-			NetGate.getInstance().send("tsk|K" + type+","+btype);
+  * 快速完成日常任务  tsk|Ktype,btype (0钻石 1绑定钻石)
+  */
+		public static function cmTaskDailySuccess(type:int=1, btype:int=0):void {
+			NetGate.getInstance().send("tsk|K" + type + "," + btype);
 		}
 
 
@@ -147,8 +149,8 @@ tid -- 任务id
 st  -- 任务状态(0：未完成 1：已完成 -1：可领取)
 var -- 任务当前完成进度变量num
 * @param id
-	   *
-			*/
+   *
+		   */
 		public static function cmTaskKAccept(id:int):void {
 			NetGate.getInstance().send("tsk|A" + id);
 		}

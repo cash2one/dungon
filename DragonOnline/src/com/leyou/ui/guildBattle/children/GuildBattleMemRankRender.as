@@ -35,6 +35,10 @@ package com.leyou.ui.guildBattle.children
 			detailPanl = new ScrollPane(1,1);
 			addChild(detailPanl);
 			initTableInfo();
+			
+			scrollPanel.x = 4;
+			scrollPanel.y = 4;
+			detailPanl.x = 4;
 		}
 		
 		private function initTableInfo():void{

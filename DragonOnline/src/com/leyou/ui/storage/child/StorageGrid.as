@@ -24,7 +24,7 @@ package com.leyou.ui.storage.child {
 	import com.leyou.net.cmd.Cmd_Store;
 	import com.leyou.ui.backpack.child.BackpackGrid;
 	import com.leyou.utils.TimeUtil;
-
+	
 	import flash.geom.Point;
 
 	public class StorageGrid extends BackpackGrid {
@@ -45,8 +45,8 @@ package com.leyou.ui.storage.child {
 			this.iconBmp.bitmapData=LibManager.getInstance().getImg("ui/backpack/lock.png");
 			this.selectBmp.bitmapData=LibManager.getInstance().getImg("ui/backpack/select.png");
 
-			this.iconBmp.x=1;
-			this.iconBmp.y=3;
+			this.iconBmp.x=0;
+			this.iconBmp.y=0;
 
 			this.selectBmp.x=-2; //-1.9;
 			this.selectBmp.y=-2; //-1.8;
@@ -94,12 +94,15 @@ package com.leyou.ui.storage.child {
 
 			this.updateTopIconState();
 			this.iconBmp.setWH(36, 36);
+			
+			this.iconBmp.x=5;
+			this.iconBmp.y=3;
 
 			if ((Core.me.info.profession != info.info.limit && info.info.limit != 0) || (Core.me.info.level < int(info.info.level)))
 				this.reMask=true;
 
 			if (info.info.effect != null && info.info.effect != "0")
-				this.playeMc(int(info.info.effect));
+				this.playeMc(int(info.info.effect),new Point(1,1));
 
 			this.addChild(this.bindingBmp);
 			this.addChild(this.numLbl);
@@ -149,6 +152,11 @@ package com.leyou.ui.storage.child {
 			super.reset();
 
 
+		}
+		
+		override public function setLockState():void{
+			super.setLockState();
+			 
 		}
 
 		override public function dropHandler():void {

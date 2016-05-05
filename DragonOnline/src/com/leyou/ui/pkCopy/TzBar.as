@@ -15,7 +15,7 @@ package com.leyou.ui.pkCopy {
 	import com.leyou.manager.TimerManager;
 	import com.leyou.utils.PropUtils;
 	import com.leyou.utils.TimeUtil;
-
+	
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
@@ -28,7 +28,7 @@ package com.leyou.ui.pkCopy {
 		private var upDownBtn:ImgButton;
 
 		private var progressLbl:Label;
-
+ 
 		private var currId:int=-1;
 
 		private var twnCore:TweenMax;
@@ -76,6 +76,34 @@ package com.leyou.ui.pkCopy {
 			var i:int=w - 30;
 
 			if (this.uiContiner.visible) {
+
+				TweenLite.to(this.uiContiner, 1, {x:202-25, onComplete: function():void {
+					uiContiner.visible=false;
+					upDownBtn.updataBmd("ui/funForcast/btn_left.png");
+					bgImg.visible=false;
+				}});
+
+//				TweenLite.to(this.upDownBtn, 1, {x: 2});
+
+			} else {
+
+				bgImg.visible=true;
+				uiContiner.visible=true;
+				TweenLite.to(this.uiContiner, 1, {x: 0, onComplete: function():void {
+					upDownBtn.updataBmd("ui/funForcast/btn_right.png");
+				}});
+
+//				TweenLite.to(this.upDownBtn, 1, {x: this.width - this.upDownBtn.width - 15});
+			}
+
+		}
+		
+		public function setScalePanel(v:Boolean):void {
+
+			var w:int=202;
+			var i:int=w - 30;
+
+			if (!v) {
 
 				TweenLite.to(this.uiContiner, 1, {x:202-25, onComplete: function():void {
 					uiContiner.visible=false;

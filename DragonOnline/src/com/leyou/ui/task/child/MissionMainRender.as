@@ -8,20 +8,16 @@ package com.leyou.ui.task.child {
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.table.THallows;
 	import com.ace.gameData.table.TMissionDate;
-	import com.ace.gameData.table.TSceneInfo;
 	import com.ace.loader.child.SwfLoader;
 	import com.ace.manager.CursorManager;
 	import com.ace.manager.LibManager;
-	import com.ace.manager.MouseManagerII;
 	import com.ace.manager.ToolTipManager;
 	import com.ace.manager.UIManager;
-	import com.ace.manager.child.MouseEventInfo;
 	import com.ace.ui.auto.AutoSprite;
 	import com.ace.ui.button.children.ImgLabelButton;
 	import com.ace.ui.img.child.Image;
 	import com.ace.ui.lable.Label;
 	import com.ace.ui.scrollPane.children.ScrollPane;
-	import com.ace.utils.PnfUtil;
 	import com.greensock.TweenMax;
 	import com.leyou.enum.TaskEnum;
 	import com.leyou.net.cmd.Cmd_Go;
@@ -29,13 +25,11 @@ package com.leyou.ui.task.child {
 	import com.leyou.utils.PropUtils;
 	import com.leyou.utils.StringUtil_II;
 	import com.leyou.utils.TaskUtil;
-
-	import flash.display.DisplayObject;
+	
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 	import flash.events.TextEvent;
 	import flash.geom.Point;
-	import flash.globalization.NumberFormatter;
 
 	public class MissionMainRender extends AutoSprite {
 
@@ -205,6 +199,7 @@ package com.leyou.ui.task.child {
 					this.hallowsVec.push(info.Hallows_TeamID);
 			}
 
+
 			this.hallowCurrentTopIndex=this.hallowCurrentIndex=this.hallowsVec.indexOf(TableManager.getInstance().getMissionDataByID(o.tid).Hallows_TeamID);
 
 //			if (this.hallowCurrentIndex == 0 && this.hallowCurrentTopIndex == -1) {
@@ -229,7 +224,7 @@ package com.leyou.ui.task.child {
 			var mrender:MissionRender;
 			for each (mrender in this.otherTaskList) {
 				if (mrender.parent != null)
-					this.taskItemList.delFromPane(mrender);
+					this.taskItemList.delFromPane(mrender, false);
 			}
 
 //			this.otherTaskList.length=0;
@@ -253,6 +248,7 @@ package com.leyou.ui.task.child {
 				if (this.otherTaskList[int(minfo.id)] == null) {
 					mrender=new MissionRender();
 					mrender.tid=int(minfo.id);
+					mrender.x=5;
 				} else {
 					mrender=this.otherTaskList[int(minfo.id)];
 				}
@@ -312,7 +308,7 @@ package com.leyou.ui.task.child {
 				else
 					this.leftBtn.visible=true;
 
-				UIManager.getInstance().taskTrack.updateHallows(this.hallowsVec[this.hallowCurrentIndex], progress / mvec.length, (progress == mvec.length - 1));
+//				UIManager.getInstance().taskTrack.updateHallows(this.hallowsVec[this.hallowCurrentIndex], progress / mvec.length, (progress == mvec.length - 1));
 
 			} else {
 
@@ -363,7 +359,9 @@ package com.leyou.ui.task.child {
 
 			while (tartxt.indexOf("##") > -1) {
 
-				if (tarval[i].indexOf("num") > -1 || tarval[i].indexOf("Num") > -1 || tarval[i].indexOf("number") > -1) {
+				if (int(minfo.dtype) == TaskEnum.taskType_Mercenary) {
+					tartxt=tartxt.replace("##", "<font color='#00ff00'><u><a href='event:mercenary'>" + TableManager.getInstance().getPetInfo(minfo[tarval[i]]).name + "</a></u></font>");
+				} else if (tarval[i].indexOf("num") > -1 || tarval[i].indexOf("Num") > -1 || tarval[i].indexOf("number") > -1) {
 					if (this.o.st == 0)
 						tartxt=tartxt.replace("##", "<font color='#ff0000'>(" + o["var"] + "/" + minfo[tarval[i]] + ")</font>");
 					else
@@ -385,22 +383,27 @@ package com.leyou.ui.task.child {
 
 						bname=String(tarval[i]).split("_")[0] + "_id";
 
-						if (bname.indexOf("npc") > -1) { // || bname.indexOf("box") > -1) {
-							tartxt=tartxt.replace("##", "<font color='#00ff00'><u><a href='event:" + bname + "--" + minfo[bname] + "'>" +TaskUtil.getTaskTargetName(tarval[i],minfo[tarval[i]]) + "</a></u></font>");
+						if (tarval[i].indexOf("Y_Currency") > -1) { // || bname.indexOf("box") > -1) {
+							tartxt=tartxt.replace("##", "<font color='#ff0000'>" + minfo[tarval[i]] + "</font>");
+						} else if (int(minfo.dtype) == TaskEnum.taskType_Delivery) {
+//							this.linkArr[int(minfo.type)].push(tarval[0]);
+							tartxt=tartxt.replace("##", "<font color='#00ff00'><u><a href='event:" + tarval[0] + "'>" + TaskUtil.getTaskTargetName("npc_id", 47) + "</a></u></font>");
+						} else if (bname.indexOf("npc") > -1) { // || bname.indexOf("box") > -1) {
+							tartxt=tartxt.replace("##", "<font color='#00ff00'><u><a href='event:" + bname + "--" + minfo[bname] + "'>" + TaskUtil.getTaskTargetName(tarval[i], minfo[tarval[i]]) + "</a></u></font>");
 						} else {
 
 							if (int(minfo.dtype) == TaskEnum.taskType_killBossDrop)
-								tartxt=tartxt.replace("##", "<font color='#00ff00'><u><a href='event:" + String(tarval[0]).split("_")[0] + "_id" + "--" + minfo.target_point + "'>" + TaskUtil.getTaskTargetName(tarval[i],minfo[tarval[i]]) + "</a></u></font>");
+								tartxt=tartxt.replace("##", "<font color='#00ff00'><u><a href='event:" + String(tarval[0]).split("_")[0] + "_id" + "--" + minfo.target_point + "'>" + TaskUtil.getTaskTargetName(tarval[i], minfo[tarval[i]]) + "</a></u></font>");
 							else if (int(minfo.dtype) == TaskEnum.taskType_collect)
-								tartxt=tartxt.replace("##", "<font color='#00ff00'><u><a href='event:" + String(tarval[0]).split("_")[0] + "_id" + "--" + minfo.target_point + "'>" + TaskUtil.getTaskTargetName(tarval[i],minfo[tarval[i]]) + "</a></u></font>");
+								tartxt=tartxt.replace("##", "<font color='#00ff00'><u><a href='event:" + String(tarval[0]).split("_")[0] + "_id" + "--" + minfo.target_point + "'>" + TaskUtil.getTaskTargetName(tarval[i], minfo[tarval[i]]) + "</a></u></font>");
 							else if (int(minfo.dtype) == TaskEnum.taskType_Exchange)
-								tartxt=tartxt.replace("##", "<font color='#00ff00'><u><a href='event:" + bname + "--" + minfo.item_id + "'>" + TaskUtil.getTaskTargetName(tarval[i],minfo[tarval[i]]) + "</a></u></font>");
+								tartxt=tartxt.replace("##", "<font color='#00ff00'><u><a href='event:" + bname + "--" + minfo.item_id + "'>" + TaskUtil.getTaskTargetName(tarval[i], minfo[tarval[i]]) + "</a></u></font>");
 							else if (int(minfo.dtype) == TaskEnum.taskType_CopySuccess) {
 								tartxt=tartxt.replace("##", "<font color='#00ff00'><u><a href='event:#'>" + TableManager.getInstance().getCopyInfo(minfo[tarval[i]]).name + "</a></u></font>");
 							} else if (int(minfo.dtype) == TaskEnum.taskType_ElementFlagNum) {
 								tartxt=tartxt.replace("##", "<font color='#00ff00'><u><a href='event:#'>" + minfo[tarval[i]] + "</a></u></font>");
 							} else
-								tartxt=tartxt.replace("##", "<font color='#00ff00'><u><a href='event:" + bname + "--" + minfo.target_point + "'>" + TaskUtil.getTaskTargetName(tarval[i],minfo[tarval[i]]) + "</a></u></font>");
+								tartxt=tartxt.replace("##", "<font color='#00ff00'><u><a href='event:" + bname + "--" + minfo.target_point + "'>" + TaskUtil.getTaskTargetName(tarval[i], minfo[tarval[i]]) + "</a></u></font>");
 						}
 					}
 
@@ -410,7 +413,7 @@ package com.leyou.ui.task.child {
 			}
 
 			this.taskTargetLbl.htmlText="" + tartxt;
-			this.taskReplyLbl.htmlText="<font color='#00ff00'><a href='event:npc_id--" + minfo.dnpc + "'>" + TaskUtil.getTaskTargetName("npc_id",minfo.dnpc) + "</a></font>";
+			this.taskReplyLbl.htmlText="<font color='#00ff00'><a href='event:npc_id--" + minfo.dnpc + "'>" + TaskUtil.getTaskTargetName("npc_id", minfo.dnpc) + "</a></font>";
 
 			this.taskDescLbl.text="" + StringUtil_II.getBreakLineStringByCharIndex(minfo.describ, 20);
 			this.targetMapLbl.text="" + minfo.tag;
@@ -463,6 +466,9 @@ package com.leyou.ui.task.child {
 			} else if (str[0].indexOf("npc") > -1) {
 				Cmd_Go.cmGo(str[1]);
 			}
+//			} else if (str[0].indexOf("npc") > -1) {
+//				UIOpenBufferManager.getInstance().open(WindowEnum.PET);
+//			}
 
 		}
 
@@ -504,7 +510,7 @@ package com.leyou.ui.task.child {
 //				else
 				mgrid.setNum((this.currentMissionData.exp) + "");
 
-				mgrid.x=220 + (this.rewardVec.length % 5) * (mgrid.width + 3);
+				mgrid.x=228 + (this.rewardVec.length % 5) * (mgrid.width + 3);
 				mgrid.y=150 + Math.floor(this.rewardVec.length / 5) * (mgrid.height + 3);
 
 				this.addChild(mgrid);
@@ -524,7 +530,7 @@ package com.leyou.ui.task.child {
 //				else
 				mgrid.setNum((this.currentMissionData.money) + "");
 
-				mgrid.x=220 + (this.rewardVec.length % 5) * (mgrid.width + 3);
+				mgrid.x=228 + (this.rewardVec.length % 5) * (mgrid.width + 3);
 				mgrid.y=150 + Math.floor(this.rewardVec.length / 5) * (mgrid.height + 3);
 
 				this.addChild(mgrid);
@@ -544,7 +550,7 @@ package com.leyou.ui.task.child {
 //				else
 				mgrid.setNum((this.currentMissionData.energy) + "");
 
-				mgrid.x=220 + (this.rewardVec.length % 5) * (mgrid.width + 3);
+				mgrid.x=228 + (this.rewardVec.length % 5) * (mgrid.width + 3);
 				mgrid.y=150 + Math.floor(this.rewardVec.length / 5) * (mgrid.height + 3);
 
 				this.addChild(mgrid);
@@ -573,7 +579,7 @@ package com.leyou.ui.task.child {
 				if (int(this.currentMissionData["num" + (i + 1)]) > 1)
 					mgrid.setNum(this.currentMissionData["num" + (i + 1)]);
 
-				mgrid.x=220 + (this.rewardVec.length % 5) * (mgrid.width + 3);
+				mgrid.x=228 + (this.rewardVec.length % 5) * (mgrid.width + 3);
 				mgrid.y=150 + Math.floor(this.rewardVec.length / 5) * (mgrid.height + 3);
 
 				this.addChild(mgrid);

@@ -43,7 +43,7 @@ package com.leyou.ui.pkCopy.child {
 			super(LibManager.getInstance().getXML("config/ui/pkCopy/dungeonTZPanel.xml"));
 			this.init();
 			this.hideBg();
-			this.clsBtn.y-=10;
+//			this.clsBtn.y-=10;
 		}
 
 		private function init():void {

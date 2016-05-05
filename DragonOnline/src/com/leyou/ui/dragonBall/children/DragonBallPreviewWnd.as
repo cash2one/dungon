@@ -48,8 +48,8 @@ package com.leyou.ui.dragonBall.children
 			nextBtn = getUIbyID("nextBtn") as ImgButton;
 			preBtn.addEventListener(MouseEvent.CLICK, onBtnClick);
 			nextBtn.addEventListener(MouseEvent.CLICK, onBtnClick);
-			clsBtn.x -= 6;
-			clsBtn.y -= 14;
+//			clsBtn.x -= 6;
+//			clsBtn.y -= 14;
 			
 			pannel = new Sprite();
 			addChild(pannel);

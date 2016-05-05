@@ -58,6 +58,12 @@ package com.leyou.data.market
 		
 		public var buyType:int;
 		
+		public var stime:String;
+		
+		public var etime:String;
+		
+		public var poff:int;
+		
 		/**
 		 * <T>构造</T>
 		 * 
@@ -88,6 +94,9 @@ package com.leyou.data.market
 			if(null != render){
 				render.updataRender();
 			}
+			stime = arr[6];
+			etime = arr[7];
+			poff = arr[8];
 		}
 	}
 }

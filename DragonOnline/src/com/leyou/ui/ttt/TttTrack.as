@@ -14,7 +14,7 @@ package com.leyou.ui.ttt {
 	import com.leyou.net.cmd.Cmd_Ttt;
 	import com.leyou.utils.PropUtils;
 	import com.leyou.utils.TimeUtil;
-	
+
 	import flash.events.MouseEvent;
 
 	public class TttTrack extends AutoSprite {
@@ -24,6 +24,12 @@ package com.leyou.ui.ttt {
 		private var count1Lbl:Label;
 		private var count2Lbl:Label;
 		private var monster2Lbl:Label;
+
+		private var pkTimeTxt:Label;
+		private var pkTimeLbl:Label;
+
+		private var fullpkTimeTxt:Label;
+		private var fullpkTimeLbl:Label;
 
 		private var pkNextBtn:NormalButton;
 
@@ -57,6 +63,12 @@ package com.leyou.ui.ttt {
 			this.count2Lbl=this.getUIbyID("count2Lbl") as Label;
 			this.monster2Lbl=this.getUIbyID("monster2Lbl") as Label;
 			this.pkNextBtn=this.getUIbyID("pkNextBtn") as NormalButton;
+
+			this.pkTimeTxt=this.getUIbyID("pkTimeTxt") as Label;
+			this.pkTimeLbl=this.getUIbyID("pkTimeLbl") as Label;
+
+			this.fullpkTimeTxt=this.getUIbyID("fullpkTimeTxt") as Label;
+			this.fullpkTimeLbl=this.getUIbyID("fullpkTimeLbl") as Label;
 
 			this.pkNextBtn.addEventListener(MouseEvent.CLICK, onNextClick);
 		}
@@ -103,26 +115,48 @@ package com.leyou.ui.ttt {
 				this.monster2Lbl.text="";
 			}
 
+			if (this.currentLv != o.cfloor) {
+				TimerManager.getInstance().remove(exePkTime);
+			}
+
 			this.timeLbl.text="" + com.leyou.utils.TimeUtil.getIntToTime(o.rt);
 
 			this.currentLv=o.cfloor;
+
+			if (o.hasOwnProperty("lt")) {
+				this.fullpkTimeTxt.visible=true;
+				this.fullpkTimeLbl.visible=true;
+
+//				var lt:String=TimeUtil.getIntToTime(int(o.lt));
+//				if (lt == "")
+//					this.fullpkTimeLbl.text="00:00";
+//				else
+//					this.fullpkTimeLbl.text="" + lt
+				this.fullpkTimeLbl.text="" + o.lt + "" + PropUtils.getStringById(2146);
+			} else {
+				this.fullpkTimeTxt.visible=false;
+				this.fullpkTimeLbl.visible=false;
+			}
 
 			this.reSize();
 
 			if (this.time <= o.rt - 1 || this.time >= o.rt + 1)
 				this.time=o.rt;
 
-			//			trace(this.time,"7777777777",getTimer(),getTimer()/1000);
+//			trace(this.time,"7777777777",getTimer(),getTimer()/1000);
 
 			TimerManager.getInstance().remove(exeTime);
 			TimerManager.getInstance().add(exeTime);
+
+			this.pkTimeLbl.text="00:00";
+			TimerManager.getInstance().add(exePkTime);
 
 
 			this.pkNextBtn.visible=false;
 
 			TimerManager.getInstance().remove(exeBtnTime);
 
-			if (this.currentLv<ConfigEnum.Babel2 && ((o.m.length == 1 && o.m[0].cc == o.m[0].mc) || (o.m.length > 1 && o.m[1].cc == o.m[1].mc))) {
+			if (this.currentLv < ConfigEnum.Babel2 && ((o.m.length == 1 && o.m[0].cc == o.m[0].mc) || (o.m.length > 1 && o.m[1].cc == o.m[1].mc))) {
 				TimerManager.getInstance().add(exeBtnTime);
 				this.pkNextBtn.visible=true;
 			}
@@ -154,18 +188,20 @@ package com.leyou.ui.ttt {
 		}
 
 
-
+		private function exePkTime(i:int):void {
+			this.pkTimeLbl.text="" + TimeUtil.getIntToTime(i);
+		}
 
 		public function reSize():void {
 			this.x=UIEnum.WIDTH - 270;
 			this.y=UIEnum.HEIGHT - 267 >> 1;
 
-			//			this.leaveBtn.x=UIEnum.WIDTH - this.leaveBtn.width;
+//			this.leaveBtn.x=UIEnum.WIDTH - this.leaveBtn.width;
 		}
-		
-		override public function hide():void{
+
+		override public function hide():void {
 			super.hide();
-			
+
 			TimerManager.getInstance().remove(exeBtnTime);
 		}
 

@@ -35,16 +35,17 @@ package com.leyou.net.cmd {
 					cc1=PropUtils.getStringById(1552);
 				} else {
 					var tData:TCollectionPreciousInfo=TableManager.getInstance().getPreciousByGroup(groupId);
-					cc1="<font color='#ff00'><u><a href='event:other_col--col'>{1}</a></u></font>"+PropUtils.getStringById(1553);
+					cc1="<font color='#ff00'><u><a href='event:other_col--col'>{1}</a></u></font>" + PropUtils.getStringById(1553);
 					cc1=StringUtil.substitute(cc1, tData.mapName, remianTask);
 				}
 				var cc2:String=StringUtil.substitute(PropUtils.getStringById(1554), ["<font color='#ff00'><u><a href='event:other_col--col'>{1}</a></u></font>"]);
 				cc2=StringUtil.substitute(cc2, count);
+				cc2=StringUtil.substitute(PropUtils.getStringById(2457), count);
 				if (count <= 0) {
 					cc2="";
 				}
-				var arr:Array=[PropUtils.getStringById(1555), cc1, cc2, "", callback];
-				UIManager.getInstance().taskTrack.updateOhterTrack(TaskEnum.taskLevel_collectLine, arr);
+				var arr:Array=[PropUtils.getStringById(2428), "<a href='event:other_col--col'>" + PropUtils.getStringById(2445) + "</a>", cc2, "", callback];
+				UIManager.getInstance().taskTrack.updateOtherTrack(TaskEnum.taskLevel_collectLine, arr);
 			}
 		}
 

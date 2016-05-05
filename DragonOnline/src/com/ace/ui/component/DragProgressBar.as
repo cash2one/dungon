@@ -27,7 +27,7 @@ package com.ace.ui.component
 		
 		private var dragStatus:int;
 		
-		private var bgWidth:int = 155;
+		private var bgWidth:int = 118;
 		
 		private var bgHeight:int = 18;
 		
@@ -70,6 +70,10 @@ package com.ace.ui.component
 			buoyText.width = 100;
 			buoyText.defaultTextFormat = new TextFormat(null, 12, 0xff00, null, null, null, null, null, TextFormatAlign.CENTER);
 //			addChild(bgImg);
+//			degreeImg.scaleX = 155/118;
+//			degreeImg.scaleY = 22/18;
+//			addDegreeImg.scaleX = 155/118;
+//			addDegreeImg.scaleY = 22/18;
 			addChild(degreeImg);
 			addChild(addDegreeImg);
 			addChild(numText);

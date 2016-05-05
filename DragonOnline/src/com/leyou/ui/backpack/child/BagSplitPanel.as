@@ -35,7 +35,7 @@ package com.leyou.ui.backpack.child {
 			super(LibManager.getInstance().getXML("config/ui/backPack/MessageWnd02.xml"));
 			this.init();
 			this.hideBg();
-			this.clsBtn.y-=10;
+//			this.clsBtn.y-=10;
 		}
 
 		private function init():void {
@@ -58,19 +58,17 @@ package com.leyou.ui.backpack.child {
 			this.currentGrid.isLock=false;
 			this.addChild(this.currentGrid);
 			this.currentGrid.x=25;
-			this.currentGrid.y=53;
+			this.currentGrid.y=69;
 
 			this.oldGrid=new BackpackGrid(-1);
 			this.addChild(this.oldGrid);
 			this.oldGrid.x=140;
-			this.oldGrid.y=53;
+			this.oldGrid.y=69;
 
 			this.newGrid=new BackpackGrid(-1);
 			this.addChild(this.newGrid);
 			this.newGrid.x=213;
-			this.newGrid.y=53;
-			
-			
+			this.newGrid.y=69;
 
 //			this.currentGrid.mouseChildren=false;
 //			this.currentGrid.mouseEnabled=false;

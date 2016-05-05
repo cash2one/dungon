@@ -3,6 +3,7 @@ package com.leyou.ui.invest.children {
 	import com.ace.enum.FilterEnum;
 	import com.ace.gameData.manager.DataManager;
 	import com.ace.gameData.manager.TableManager;
+	import com.ace.gameData.table.TItemInfo;
 	import com.ace.manager.LibManager;
 	import com.ace.manager.MenuManager;
 	import com.ace.manager.UIManager;
@@ -17,6 +18,7 @@ package com.leyou.ui.invest.children {
 	import com.ace.utils.StringUtil;
 	import com.leyou.data.invest.InvestData;
 	import com.leyou.data.invest.InvestRewardInfo;
+	import com.leyou.data.sinfo.ServerData;
 	import com.leyou.enum.ChatEnum;
 	import com.leyou.enum.ConfigEnum;
 	import com.leyou.manager.PopupManager;
@@ -25,8 +27,9 @@ package com.leyou.ui.invest.children {
 	import com.leyou.net.cmd.Cmd_Invest;
 	import com.leyou.net.cmd.Cmd_Tm;
 	import com.leyou.ui.market.child.MarketGrid;
+	import com.leyou.util.DateUtil;
 	import com.leyou.utils.PropUtils;
-
+	
 	import flash.events.MouseEvent;
 	import flash.events.TextEvent;
 	import flash.geom.Point;
@@ -100,6 +103,12 @@ package com.leyou.ui.invest.children {
 		private var menuArr:Vector.<MenuInfo>;
 
 		private var playerName:String;
+		
+//		private var cftLbl:Label;
+//		
+//		private var yebLbl:Label;
+//		
+//		private var lqbLbl:Label;
 
 		public function InvestTZRender() {
 			super(LibManager.getInstance().getXML("config/ui/invest/lcjhRender.xml"));
@@ -130,6 +139,9 @@ package com.leyou.ui.invest.children {
 			yflagBtn=getUIbyID("yflagBtn") as ImgButton;
 			lflagBtn=getUIbyID("lflagBtn") as ImgButton;
 			des1Lbl=getUIbyID("des1Lbl") as Label;
+//			cftLbl = getUIbyID("cftLbl") as Label;
+//			yebLbl = getUIbyID("yebLbl") as Label;
+//			lqbLbl = getUIbyID("lqbLbl") as Label;
 //			des2Lbl = getUIbyID("des2Lbl") as Label;
 
 			cflagBtn.addEventListener(MouseEvent.CLICK, onBtnClick);
@@ -174,11 +186,11 @@ package com.leyou.ui.invest.children {
 			ynum=new RollNumWidget();
 			lnum=new RollNumWidget();
 			cnum.x=125;
-			cnum.y=199;
+			cnum.y=221;
 			ynum.x=356;
-			ynum.y=199;
+			ynum.y=221;
 			lnum.x=586;
-			lnum.y=199;
+			lnum.y=221;
 			addChild(cnum);
 			addChild(ynum);
 			addChild(lnum);
@@ -196,10 +208,37 @@ package com.leyou.ui.invest.children {
 			lnum.setNum(ConfigEnum.invest18);
 
 			logPanel=new ScrollPane(332, 82);
-			logPanel.x=345;
-			logPanel.y=317;
+			logPanel.x=354;
+			logPanel.y=354;
 			addChild(logPanel);
 			logTexts=new Vector.<TextField>(4);
+			
+//			var timeSpan:Array = ConfigEnum.invest19.split("|");
+//			var beginDate:Date = DateUtil.dateStr2Date(timeSpan[0]);
+//			var endDate:Date = DateUtil.dateStr2Date(timeSpan[1]);
+//			var cDate:Date = new Date(DataManager.getInstance().serverData.ctime*1000);
+//			var isOn:Boolean = ((cDate.time >= beginDate.time) && (cDate.time <= endDate.time));
+//			if(isOn){
+//				cftLbl.visible = true;
+//				yebLbl.visible = true;
+//				lqbLbl.visible = true;
+//				var item1:Array = ConfigEnum.invest20.split(",");
+//				var item2:Array = ConfigEnum.invest21.split(",");
+//				var item3:Array = ConfigEnum.invest22.split(",");
+//				var content:String = TableManager.getInstance().getSystemNotice(10099).content;
+//				var itemInfo:TItemInfo = TableManager.getInstance().getItemInfo(item1[0]);
+//				cftLbl.text = StringUtil.substitute(content, itemInfo.name, item1[1]);
+//				itemInfo = TableManager.getInstance().getItemInfo(item2[0]);
+//				yebLbl.text = StringUtil.substitute(content, itemInfo.name, item2[1]);
+//				itemInfo = TableManager.getInstance().getItemInfo(item3[0]);
+//				lqbLbl.text = StringUtil.substitute(content, itemInfo.name, item3[1]);
+//			}else{
+//				cftLbl.visible = false;
+//				yebLbl.visible = false;
+//				lqbLbl.visible = false;
+//			}
+			x = 11;
+			y = 4;
 		}
 
 		protected function resetText():void {
@@ -324,6 +363,7 @@ package com.leyou.ui.invest.children {
 					tf.y=n * 20;
 					logPanel.addToPane(tf);
 					tf.addEventListener(TextEvent.LINK, onTextClick);
+					logPanel.updateUI();
 				}
 				var rewardInfo:InvestRewardInfo=data.getReward(n);
 				var content:String="<font face='SimSun' color='#ffea00' size='12'><u><a href='event:{1}'>{2}</a></u></font><font face='SimSun' color='#CDB97C' size='12'>" + PropUtils.getStringById(1775) + "</Font>";

@@ -86,7 +86,7 @@ package com.leyou.ui.dungeonTeam.childs {
 				this.itemsList.push(playBar);
 
 				playBar.x=14;
-				playBar.y=48 + 78 * i;
+				playBar.y=48 + 89 * i;
 
 				playBar.visible=false;
 			}

@@ -15,6 +15,7 @@ package com.leyou.ui.guild.child {
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	import flash.text.TextFieldType;
+	import flash.text.TextFormat;
 
 	public class MainManifesto extends AutoSprite {
 
@@ -50,6 +51,7 @@ package com.leyou.ui.guild.child {
 
 			this.contentLbl.width=590;
 
+			this.contentLbl.tf.defaultTextFormat=new TextFormat("微软雅黑",18,null,null,null,null,null,null,null,null,null,null,2);
 			this.contentLbl.tf.maxChars=700;
 			this.contentLbl.setText("");
 			this.contentLbl.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
@@ -70,8 +72,8 @@ package com.leyou.ui.guild.child {
 //				this.contentLbl.tf.text=this.contentLbl.tf.text.substring(0, this.contentLbl.tf.getLineOffset(7) + this.contentLbl.tf.getLineLength(7));
 
 			var str:String;
-			if (this.contentLbl.tf.numLines >= 8) {
-				str=this.contentLbl.tf.text.substring(0, this.contentLbl.tf.getLineOffset(7) + this.contentLbl.tf.getLineLength(7));
+			if (this.contentLbl.tf.numLines >= 7) {
+				str=this.contentLbl.tf.text.substring(0, this.contentLbl.tf.getLineOffset(6) + this.contentLbl.tf.getLineLength(6));
 			} else {
 				str=this.contentLbl.tf.text;
 			}

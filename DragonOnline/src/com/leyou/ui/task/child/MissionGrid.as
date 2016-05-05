@@ -11,7 +11,7 @@ package com.leyou.ui.task.child {
 	import com.leyou.data.tips.TipsInfo;
 	import com.leyou.utils.FilterUtil;
 	import com.leyou.utils.PropUtils;
-	
+
 	import flash.geom.Point;
 
 	public class MissionGrid extends GridBase {
@@ -134,7 +134,7 @@ package com.leyou.ui.task.child {
 
 			this.stopMc();
 			if (info != null && info.effect != null && info.effect != "0")
-				this.playeMc(int(info.effect));
+				this.playeMc(int(info.effect), new Point(0, 1));
 
 			this.addChild(this.numLbl);
 		}
@@ -159,7 +159,7 @@ package com.leyou.ui.task.child {
 			this.numLbl.textColor=0xffffff;
 			FilterUtil.showBlackStroke(this.numLbl);
 
-//			this.num=Number(num);
+			this.num=Number(num);
 
 			this.addChild(this.numLbl);
 			this.canMove=false;
@@ -205,23 +205,27 @@ package com.leyou.ui.task.child {
 			} else if (this.dataId == 65532) {
 				ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, PropUtils.getStringById(33) + (this.tipsInfo.moneyNum == 0 ? "" : ":" + this.tipsInfo.moneyNum), this.parent.localToGlobal(new Point(this.x + this.width, this.y + this.height)));
 			} else {
-				
+
 				var info:Object;
-				if(TableManager.getInstance().getItemInfo(this.dataId)==null)
+				if (TableManager.getInstance().getItemInfo(this.dataId) == null)
 					info=TableManager.getInstance().getEquipInfo(this.dataId);
 				else
 					info=TableManager.getInstance().getItemInfo(this.dataId);
-				
+
 				var type:int=TipEnum.TYPE_EMPTY_ITEM;
-				if(info.classid==10){
+				if (info.classid == 10) {
 					type=TipEnum.TYPE_GEM_OTHER;
 				}
-				
+
 				this.tipsInfo.itemid=this.dataId;
 				this.tipsInfo.isShowPrice=false;
 				ToolTipManager.getInstance().show(type, tipsInfo, this.parent.localToGlobal(new Point(this.x + this.width, this.y + this.height)));
 			}
 
+		}
+
+		public function getNum():int {
+			return int(this.num);
 		}
 
 	}

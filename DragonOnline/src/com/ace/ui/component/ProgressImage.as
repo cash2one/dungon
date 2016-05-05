@@ -32,13 +32,6 @@ package com.ace.ui.component
 		}
 		
 		/**
-		 * <T>加载配置</T>
-		 * 
-		 */		
-		public function loadCofing(config:XML):void{
-		}
-		
-		/**
 		 * <T>设置资源</T>
 		 * 
 		 * @param url 图片URL地址

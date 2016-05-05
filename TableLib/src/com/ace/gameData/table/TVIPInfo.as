@@ -4,6 +4,7 @@ package com.ace.gameData.table
 	{
 		public var des:String;
 		
+		public var modId:int;
 //		0 不可见
 //		1 数字
 //		2 数字+级
@@ -17,6 +18,7 @@ package com.ace.gameData.table
 		public function TVIPInfo(xml:XML){
 			des = xml.@des;
 			type = xml.@visible;
+			modId = xml.@modid;
 			vipLv = new Vector.<int>();
 			vipLv.push(xml.@VIP0);
 			vipLv.push(xml.@VIP1);

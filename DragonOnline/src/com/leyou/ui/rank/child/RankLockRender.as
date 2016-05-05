@@ -11,6 +11,7 @@ package com.leyou.ui.rank.child
 	import com.leyou.ui.achievement.child.AchievementEraItem;
 	import com.leyou.utils.PropUtils;
 	
+	//榜未开启
 	public class RankLockRender extends AutoSprite
 	{
 		private var titleImg:Image;

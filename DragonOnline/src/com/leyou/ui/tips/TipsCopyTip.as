@@ -1,8 +1,10 @@
 package com.leyou.ui.tips
 {
 	import com.ace.ICommon.ITip;
+	import com.ace.config.Core;
 	import com.ace.manager.LibManager;
 	import com.ace.ui.auto.AutoSprite;
+	import com.ace.ui.img.child.Image;
 	import com.ace.ui.lable.Label;
 	import com.ace.ui.lable.children.TextArea;
 	import com.leyou.data.copy.CopyData;
@@ -19,6 +21,10 @@ package com.leyou.ui.tips
 		
 		private var gulidLbl:Label;
 		
+		private var guildELbl:Label;
+		
+		private var guildImg:Image;
+		
 		public function TipsCopyTip(){
 			super(LibManager.getInstance().getXML("config/ui/tips/dungeonStoryTips.xml"));
 			inti();
@@ -30,6 +36,11 @@ package com.leyou.ui.tips
 			moneyLbl = getUIbyID("moneyLbl") as Label;
 			energyLbl = getUIbyID("energyLbl") as Label;
 			gulidLbl = getUIbyID("gulidLbl") as Label;
+			guildELbl = getUIbyID("guildELbl") as Label;
+			guildImg = getUIbyID("guildImg") as Image;
+			guildELbl.visible = Core.isTaiwan;
+			guildImg.visible = Core.isTaiwan;
+			gulidLbl.visible = Core.isTaiwan;
 		}
 		
 		/**

@@ -44,8 +44,8 @@ package com.leyou.ui.die
 //			rightBtn = getUIbyID("rightBtn") as ImgButton;
 			texts = new Vector.<String>();
 			textRenders = new Vector.<DieTobeStrongMeg>(TEXT_MAX_COUNT);
-			clsBtn.x -= 6;
-			clsBtn.y -= 14;
+//			clsBtn.x -= 6;
+//			clsBtn.y -= 14;
 //			scrollPanel = new Sprite();
 //			scrollPanel.mouseEnabled = false;
 //			scrollPanel.x = 50;
@@ -124,7 +124,7 @@ package com.leyou.ui.die
 				var text:DieTobeStrongMeg = getTextRender(n);
 				if(null != text){
 					text.updateinfo(texts[n]);
-					text.y = 68*n;
+					text.y = 2+68*n;
 				}
 			}
 		}

@@ -8,6 +8,7 @@ package com.leyou.ui.skill {
 	import com.ace.gameData.manager.MyInfoManager;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.table.TSkillInfo;
+	import com.ace.manager.GuideArrowDirectManager;
 	import com.ace.manager.GuideManager;
 	import com.ace.manager.LayerManager;
 	import com.ace.manager.LibManager;
@@ -17,7 +18,7 @@ package com.leyou.ui.skill {
 	import com.ace.manager.UILayoutManager;
 	import com.ace.manager.UIManager;
 	import com.ace.ui.auto.AutoWindow;
-	import com.ace.ui.tabbar.TabbarModel;
+	import com.ace.ui.button.children.ImgButton;
 	import com.ace.ui.tabbar.children.TabBar;
 	import com.ace.utils.StringUtil;
 	import com.leyou.data.playerSkill.SkillInfo;
@@ -28,14 +29,12 @@ package com.leyou.ui.skill {
 	import com.leyou.net.cmd.Cmd_Skill;
 	import com.leyou.ui.skill.childs.PassiveSkill;
 	import com.leyou.ui.skill.childs.SkillBar;
-	import com.leyou.ui.tips.TipsAchievementTip;
 	import com.leyou.utils.PropUtils;
-
+	
+	import flash.display.DisplayObject;
 	import flash.display.Sprite;
-	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
-	import flash.geom.Rectangle;
 
 	public class SkillWnd extends AutoWindow {
 
@@ -52,50 +51,104 @@ package com.leyou.ui.skill {
 		private var skillContiner:Sprite;
 		private var passSkill:PassiveSkill;
 
+		private var mainSkillBtn:ImgButton;
+		private var passivitySkillBtn:ImgButton;
+
 		public function SkillWnd() {
 			super(LibManager.getInstance().getXML("config/ui/SkillWnd.xml"));
 			this.init();
+			this.hideBg();
 			this.mouseChildren=true;
 			this.mouseEnabled=true;
 		}
 
 		private function init():void {
 
-			this.skllTabbar=this.getUIbyID("skllTabbar") as TabBar;
-			this.skllTabbar.addEventListener(TabbarModel.changeTurnOnIndex, onChange);
+			this.mainSkillBtn=this.getUIbyID("mainSkillBtn") as ImgButton;
+			this.passivitySkillBtn=this.getUIbyID("passivitySkillBtn") as ImgButton;
 
 			this.skillContiner=new Sprite();
-			this.skllTabbar.addToTab(this.skillContiner, 0);
-
-			this.skillContiner.x=-20;
-			this.skillContiner.y=3;
+			this.addChild(this.skillContiner);
+			this.skillContiner.x=100;
+			this.skillContiner.y=100;
 
 			this.passSkill=new PassiveSkill();
-			this.skllTabbar.addToTab(this.passSkill, 1);
+			this.addChild(this.passSkill);
+			this.passSkill.x=65;
+			this.passSkill.y=5;
+
+//			this.passSkill.opaqueBackground=0xff0000;
+
+			this.mainSkillBtn.addEventListener(MouseEvent.CLICK, onChange);
+			this.passivitySkillBtn.addEventListener(MouseEvent.CLICK, onChange);
 
 //			this.skillContiner.addEventListener(MouseEvent.CLICK, onGridListClick);
 //			this.skillContiner.addEventListener(MouseEvent.MOUSE_OVER, onGridListOver);
 //			this.skillContiner.addEventListener(MouseEvent.MOUSE_MOVE, onGridListOver);
 //			this.skillContiner.addEventListener(MouseEvent.MOUSE_OUT, onGridListOut);
 
-			this.scrollRect=new Rectangle(0, 0, 574, 496);
+//			this.scrollRect=new Rectangle(0, 0, 574, 496);
 
+			this.skillContiner.visible=true;
+			this.passSkill.visible=false;
 
-			this.skllTabbar.getTabButton(1).setToolTip(StringUtil.substitute(PropUtils.getStringById(2170), [ConfigEnum.skill4]));
+			this.mainSkillBtn.turnOn();
+			this.passivitySkillBtn.turnOff();
+
+			this.passivitySkillBtn.setToolTip(StringUtil.substitute(PropUtils.getStringById(2170), [ConfigEnum.skill4]));
 
 //			this.skillFun=new SkillFuWnd();
 //			LayerManager.getInstance().windowLayer.addChild(this.skillFun);
 		}
 
-		private function onChange(e:Event):void {
+		private function onChange(e:MouseEvent):void {
 
-			if (this.skllTabbar.turnOnIndex == 0) {
-
-			} else {
-				if (Core.me.info.level < ConfigEnum.skill4)
-					this.skllTabbar.turnToTab(0);
+			switch (e.target.name) {
+				case "mainSkillBtn":
+					this.skillContiner.visible=true;
+					this.passSkill.visible=false;
+					this.mainSkillBtn.turnOn();
+					this.passivitySkillBtn.turnOff();
+					break;
+				case "passivitySkillBtn":
+					if (Core.me.info.level < ConfigEnum.skill4) {
+						this.skillContiner.visible=true;
+						this.passSkill.visible=false;
+						this.mainSkillBtn.turnOn();
+						this.passivitySkillBtn.turnOff();
+					} else {
+						this.skillContiner.visible=false;
+						this.passSkill.visible=true;
+						this.mainSkillBtn.turnOff();
+						this.passivitySkillBtn.turnOn();
+					}
+					break;
 			}
 
+		}
+
+		public function setTabIndex(i:int):void {
+			switch (i) {
+				case 0:
+					this.skillContiner.visible=true;
+					this.passSkill.visible=false;
+					this.mainSkillBtn.turnOn();
+					this.passivitySkillBtn.turnOff();
+					break;
+				case 1:
+					if (Core.me.info.level < ConfigEnum.skill4) {
+						this.skillContiner.visible=true;
+						this.passSkill.visible=false;
+						this.mainSkillBtn.turnOn();
+						this.passivitySkillBtn.turnOff();
+					} else {
+						this.skillContiner.visible=false;
+						this.passSkill.visible=true;
+						this.mainSkillBtn.turnOff();
+						this.passivitySkillBtn.turnOn();
+					}
+					break;
+			}
 
 		}
 
@@ -106,7 +159,7 @@ package com.leyou.ui.skill {
 			GuideManager.getInstance().removeGuide(35);
 
 			super.show(toTop, $layer, toCenter);
-			
+
 			if (15 == MyInfoManager.getInstance().skilldata.skillItems[1][2])
 				GuideManager.getInstance().showGuide(37, this.renderArr[1].fuwenImg2);
 
@@ -118,6 +171,8 @@ package com.leyou.ui.skill {
 //			this.selectIndex=1;
 //			this.renderArr[this.selectIndex].hight=true;
 //			UIManager.getInstance().skillFuWnd.updateInfo(MyInfoManager.getInstance().skilldata.skillItems[this.selectIndex]);
+
+
 		}
 
 		override public function sendOpenPanelProtocol(... parameters):void {
@@ -148,11 +203,14 @@ package com.leyou.ui.skill {
 
 				var i:int=0;
 				for (key in skill.skillItems) {
-					render=new SkillBar();
+
+					render=new SkillBar((i != 0));
+
 					render.updateInfo(skill.skillItems[key]);
 
-					render.y=i * 67;
-//					render.x=19;
+					render.y=i * 80 - 40;
+//					render.x=75;
+//					render.visible=false;
 
 					this.renderArr[int(key)]=render;
 					this.skillContiner.addChild(render);
@@ -161,6 +219,7 @@ package com.leyou.ui.skill {
 						render.enable=true;
 					else
 						render.enable=false;
+
 					i++;
 				}
 
@@ -193,9 +252,13 @@ package com.leyou.ui.skill {
 				UIManager.getInstance().toolsWnd.setAutoMagicList();
 			}
 
-			if (Core.me.info.level >= ConfigEnum.skill4)
-				this.skllTabbar.getTabButton(1).setToolTip("");
-			
+			if (Core.me.info.level >= ConfigEnum.skill4) {
+				this.passivitySkillBtn.setToolTip("");
+				this.passivitySkillBtn.setActive(true, 1, true);
+			} else {
+				this.passivitySkillBtn.setActive(false, 0.6, true);
+			}
+
 			if (this.visible && 15 == MyInfoManager.getInstance().skilldata.skillItems[1][2])
 				GuideManager.getInstance().showGuide(37, this.renderArr[1].fuwenImg2);
 		}
@@ -250,7 +313,7 @@ package com.leyou.ui.skill {
 
 		private function onGridListOver(evt:MouseEvent):void {
 
-			trace("111", evt.target, evt.currentTarget.name);
+//			trace("111", evt.target, evt.currentTarget.name);
 
 			if (evt.target is SkillBar) {
 				SkillBar(evt.target).hight=true;
@@ -395,6 +458,8 @@ package com.leyou.ui.skill {
 				this.renderArr[this.selectIndex].hight=false;
 
 			this.selectIndex=-1;
+
+			GuideArrowDirectManager.getInstance().delArrow(WindowEnum.SKILL + "");
 		}
 
 		override public function onWndMouseMove($x:Number, $y:Number):void {
@@ -428,8 +493,36 @@ package com.leyou.ui.skill {
 			}
 		}
 
+		override public function getUIbyID(id:String):DisplayObject {
+			var ds:DisplayObject=super.getUIbyID(id);
+
+			if (ds == null) {
+
+				if (this.skillContiner.visible) {
+					var skl:Array=MyInfoManager.getInstance().skilldata.skillItems;
+
+					var k:int;
+					var key:String;
+					for (key in skl) {
+						if (skl[key][2] < Core.me.info.level) {
+							ds=this.renderArr[int(key)].getUIbyID(id);
+							break;
+						}
+					}
+				} else {
+					return this.passSkill.upgradeBtn;
+				}
+			}
+
+			return ds;
+		}
+
 		override public function get height():Number {
-			return 496;
+			return 584;
+		}
+
+		override public function get width():Number {
+			return 888;
 		}
 
 	}

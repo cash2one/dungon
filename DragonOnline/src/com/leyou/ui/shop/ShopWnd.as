@@ -137,8 +137,8 @@ package com.leyou.ui.shop {
 					continue;
 
 				render=new GridShop();
-				render.x=(this.renderArr.length % 2) * (render.width) + 5;
-				render.y=Math.floor(this.renderArr.length / 2) * (render.height + 1) + 5;
+				render.x=(this.renderArr.length % 2) * (render.width + 6);
+				render.y=Math.floor(this.renderArr.length / 2) * (render.height + 4) + 5;
 				render.id=i;
 
 				render.updataInfo(new TShop(xml));
@@ -298,11 +298,11 @@ package com.leyou.ui.shop {
 		}
 
 		override public function get width():Number {
-			return 408;
+			return 396;
 		}
 
 		override public function get height():Number {
-			return 527;
+			return 544;
 		}
 
 		override public function hide():void {

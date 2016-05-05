@@ -1,13 +1,17 @@
 package com.leyou.ui.pet.children
 {
 	import com.ace.enum.TipEnum;
+	import com.ace.enum.WindowEnum;
 	import com.ace.gameData.manager.DataManager;
 	import com.ace.gameData.manager.MyInfoManager;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.table.TPetInfo;
 	import com.ace.gameData.table.TPetStarInfo;
+	import com.ace.manager.GuideManager;
 	import com.ace.manager.LibManager;
 	import com.ace.manager.ToolTipManager;
+	import com.ace.manager.UILayoutManager;
+	import com.ace.manager.UIManager;
 	import com.ace.ui.auto.AutoSprite;
 	import com.ace.ui.button.children.NormalButton;
 	import com.ace.ui.component.RollNumWidget;
@@ -43,13 +47,15 @@ package com.leyou.ui.pet.children
 		
 		private var costLbl:Label;
 		
-		private var buyBtn:NormalButton;
+		public var buyBtn:NormalButton;
 		
 		private var grid:MarketGrid;
 		
 		private var numV:RollNumWidget;
 		
 		private var petTId:int;
+
+		private var petStarInfo:TPetStarInfo;
 		
 		public function PetCallInPage(){
 			super(LibManager.getInstance().getXML("config/ui/pet/serventZM.xml"));
@@ -131,7 +137,14 @@ package com.leyou.ui.pet.children
 		protected function onBtnClick(event:MouseEvent):void{
 			switch(event.target.name){
 				case "buyBtn":
-					Cmd_Pet.cm_PET_E(petTId)
+//					GuideManager.getInstance().removeGuide(123);
+					Cmd_Pet.cm_PET_E(petTId);
+					var rnum:int = MyInfoManager.getInstance().getBagItemNumById(petStarInfo.item);
+					var petInfo:TPetInfo = TableManager.getInstance().getPetInfo(petTId);
+					if(rnum < petInfo.itemCount){
+						UILayoutManager.getInstance().open(WindowEnum.QUICK_BUY);
+						UIManager.getInstance().quickBuyWnd.pushItem(petStarInfo.item, petStarInfo.item);
+					}
 					break;
 			}
 		}
@@ -161,7 +174,7 @@ package com.leyou.ui.pet.children
 			var zdlNum:int = int(ZDLUtil.computation(petInfo.hp, 0, petInfo.phyAtt, petInfo.phyDef, petInfo.magicAtt, petInfo.magicDef, petInfo.crit, petInfo.tenacity, petInfo.hit, petInfo.dodge, petInfo.slay, petInfo.guard, petInfo.fixedAtt, petInfo.fixedDef)*Math.pow((10000 + ConfigEnum.servent20)/10000, (qmdLv-1)));
 			numV.setNum(zdlNum);
 			
-			var petStarInfo:TPetStarInfo = TableManager.getInstance().getPetStarLvInfo(petTId, starLv);
+			petStarInfo = TableManager.getInstance().getPetStarLvInfo(petTId, starLv);
 			var rnum:int = MyInfoManager.getInstance().getBagItemNumById(petStarInfo.item);
 			grid.updateInfoII(petInfo.activeItem, /*petInfo.itemCount*/0);
 			costLbl.text = rnum+"/"+petInfo.itemCount;

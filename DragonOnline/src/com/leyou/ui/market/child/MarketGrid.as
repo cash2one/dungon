@@ -195,19 +195,26 @@ package com.leyou.ui.market.child {
 			rebateImg.visible=info.discount;
 			tips.itemid=info.itemId;
 			// 找到物品信息
+			var iconUrl:String;
 			var itemInfo:Object=TableManager.getInstance().getItemInfo(dataId);
 			if (null == itemInfo) {
 				itemInfo=TableManager.getInstance().getEquipInfo(dataId);
+				if (null == itemInfo) {
+					itemInfo = TableManager.getInstance().getBuffInfo(dataId);
+					iconUrl = GameFileEnum.URL_SKILL_ICO + itemInfo.icon+".png";
+				}else{
+					iconUrl=GameFileEnum.URL_ITEM_ICO + itemInfo.icon + ".png";
+				}
 			} else {
+				iconUrl=GameFileEnum.URL_ITEM_ICO + itemInfo.icon + ".png";
 				limitTimeLbl.visible=(itemInfo.limitTime > 0);
 			}
-			if (itemInfo.effect1 != null && itemInfo.effect1 != "0") {
+			if (itemInfo.hasOwnProperty("effect1") && itemInfo.effect1 != "0") {
 				stopMc();
 				playeMc(int(itemInfo.effect1));
 			} else {
 				stopMc();
 			}
-			var iconUrl:String=GameFileEnum.URL_ITEM_ICO + itemInfo.icon + ".png";
 			iconBmp.updateBmp(iconUrl);
 			if (info is MarketItemInfo) {
 				numLbl.visible=false;
@@ -240,6 +247,14 @@ package com.leyou.ui.market.child {
 			numLbl.visible=false;
 			filters=null;
 			stopMc();
+		}
+		
+		public override function die():void{
+			clear();
+			numLbl = null;
+			limitTimeLbl = null;
+			iconBmp = null;
+			tips = null;
 		}
 	}
 }

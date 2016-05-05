@@ -26,6 +26,8 @@ package com.leyou.ui.task {
 		private var mainRender:MissionMainRender;
 		private var dailyRender:MissionDailyRender;
 
+		private var oinfo:Object;
+
 		public function TaskWnd() {
 			super(LibManager.getInstance().getXML("config/ui/TaskWnd.xml"));
 			this.init();
@@ -41,11 +43,11 @@ package com.leyou.ui.task {
 			this.addToPane(this.mainRender);
 			this.addToPane(this.dailyRender);
 
-			this.mainRender.x=18;
-			this.mainRender.y=68;
+			this.mainRender.x=9;
+			this.mainRender.y=90;
 
-			this.dailyRender.x=18;
-			this.dailyRender.y=68;
+			this.dailyRender.x=9;
+			this.dailyRender.y=90;
 
 			this.dailyRender.visible=false;
 			this.taskTabBar.addEventListener(TabbarModel.changeTurnOnIndex, onChangeIndex);
@@ -80,7 +82,29 @@ package com.leyou.ui.task {
 		 */
 		public function updateData(o:Object):void {
 
-			var tr:Array=o.tr;
+			if (this.visible || this.oinfo == null) {
+				this.oinfo=o;
+				this.updateDataInfo();
+			} else
+				this.oinfo=o;
+
+//			var tr:Array=o.tr;
+//
+//			tr.sortOn("type", Array.CASEINSENSITIVE | Array.NUMERIC);
+//			this.mainRender.updateOtherTaskList(tr[0]);
+//
+//			if (tr.length > 1) {
+//				this.taskTabBar.setTabVisible(1, true);
+//				this.dailyRender.updateInfo(tr[1]);
+//			}
+
+//			广告
+//			UIManager.getInstance().adWnd.showPanel();
+		}
+
+		private function updateDataInfo():void {
+
+			var tr:Array=this.oinfo.tr;
 
 			tr.sortOn("type", Array.CASEINSENSITIVE | Array.NUMERIC);
 			this.mainRender.updateOtherTaskList(tr[0]);
@@ -90,8 +114,6 @@ package com.leyou.ui.task {
 				this.dailyRender.updateInfo(tr[1]);
 			}
 
-			//广告
-//			UIManager.getInstance().adWnd.showPanel();
 		}
 
 		/**
@@ -115,6 +137,7 @@ package com.leyou.ui.task {
 				GuideManager.getInstance().showGuide(121, this.taskTabBar.getTabButton(1));
 			}
 
+			this.updateDataInfo();
 		}
 
 		override public function sendOpenPanelProtocol(... parameters):void {
@@ -132,6 +155,8 @@ package com.leyou.ui.task {
 		override public function hide():void {
 			super.hide();
 
+			GuideManager.getInstance().removeGuide(104);
+
 			PopupManager.closeConfirm("onKeySuccToday");
 			PopupManager.closeConfirm("loopSuccToday");
 
@@ -140,6 +165,14 @@ package com.leyou.ui.task {
 			TweenManager.getInstance().lightingCompnent(UIManager.getInstance().toolsWnd.missionBtn);
 
 			UIManager.getInstance().taskTrack.setGuideView(TaskEnum.taskType_TodayTaskSuccessNum);
+		}
+
+		override public function get height():Number {
+			return 544;
+		}
+
+		override public function get width():Number {
+			return 520;
 		}
 
 	}

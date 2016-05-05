@@ -5,10 +5,13 @@
  * 2013-10-21 下午3:17:57
  */
 package com.ace.ui.notice {
+	import com.ace.config.Core;
 	import com.ace.enum.NoticeEnum;
+	import com.ace.enum.PlayerEnum;
 	import com.ace.game.tools.TimeCounter;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.table.TNoticeInfo;
+	import com.ace.manager.SoundManager;
 	import com.ace.manager.UIManager;
 	import com.ace.reuse.ReuseDic;
 	import com.ace.ui.notice.child.NoticeIcon;
@@ -23,7 +26,7 @@ package com.ace.ui.notice {
 	import com.ace.ui.notice.message.Message6;
 	import com.ace.ui.notice.message.Message7;
 	import com.ace.ui.notice.message.Message8;
-	
+
 	import flash.display.Sprite;
 
 	/**
@@ -55,7 +58,7 @@ package com.ace.ui.notice {
 //		private var message9:Message9;
 		private var message10:Message10;
 		private var message11:Message11;
-		
+
 //		private var tick:uint;
 		private var msgId:uint;
 //		private var remainT:uint;
@@ -82,7 +85,7 @@ package com.ace.ui.notice {
 //			this.message9=new Message9()
 			this.message10=new Message10();
 			this.message11=new Message11();
-			this.timer = new TimeCounter();
+			this.timer=new TimeCounter();
 		}
 
 		/**
@@ -96,15 +99,15 @@ package com.ace.ui.notice {
 			this.callBackFun=fun;
 			this.init();
 		}
-		
+
 		/**
 		 * 直接提示
 		 * @param id 提示ID
 		 * @param values 附加数据
-		 * 
-		 */		
-		public function broadcastById(id:int, values:Array=null):void{
-			var notice:TNoticeInfo = TableManager.getInstance().getSystemNotice(id);
+		 *
+		 */
+		public function broadcastById(id:int, values:Array=null):void {
+			var notice:TNoticeInfo=TableManager.getInstance().getSystemNotice(id);
 			broadcast(notice, values);
 		}
 
@@ -122,31 +125,34 @@ package com.ace.ui.notice {
 				this.ass(info.screenId2, info, values);
 			if (info.screenId3 > 0)
 				this.ass(info.screenId3, info, values);
+
+			if (Core.me)
+				SoundManager.getInstance().play(Core.me.info.sex == PlayerEnum.SEX_BOY ? info.soundM : info.soundF);
 		}
-		
-		public function broadcastMap(sceneId:String):void{
+
+		public function broadcastMap(sceneId:String):void {
 			message10.broadcast(sceneId);
 		}
-		
+
 		/**
 		 * 战斗力改变(滚动效果)
 		 * @param value 战斗力数值
-		 * 
-		 */		
-		public function rollToPower(value:int):void{
+		 *
+		 */
+		public function rollToPower(value:int):void {
 			UIManager.getInstance().roleHeadWnd.updateZDL(value);
 //			message9.rollToNum(value);
 		}
-		
+
 		/**
 		 * 设置战斗力(直接显示)
 		 * @param value 战斗力数值
-		 * 
-		 */		
+		 *
+		 */
 //		public function setPower(value:int):void{
 //			message9.setNum(value);
 //		}
-		
+
 		public function ass(type:int, info:TNoticeInfo, values:Array=null):void {
 			switch (type) {
 				case NoticeEnum.TYPE_MESSAGER1:
@@ -180,8 +186,8 @@ package com.ace.ui.notice {
 					break;
 			}
 		}
-		
-		public function ass_II(type:int, content:String, values:Array=null):void{
+
+		public function ass_II(type:int, content:String, values:Array=null):void {
 			switch (type) {
 				case NoticeEnum.TYPE_MESSAGER1:
 					this.message1.broadcast(content, values);
@@ -214,8 +220,8 @@ package com.ace.ui.notice {
 					break;
 			}
 		}
-		
-		public function setMsgVisible(type:int, v:Boolean):void{
+
+		public function setMsgVisible(type:int, v:Boolean):void {
 			switch (type) {
 				case NoticeEnum.TYPE_MESSAGER1:
 					break;
@@ -233,31 +239,35 @@ package com.ace.ui.notice {
 				case NoticeEnum.TYPE_MESSAGER7:
 					break;
 				case NoticeEnum.TYPE_MESSAGER8:
-					message8.visible = v;
+					message8.visible=v;
 					break;
 				default:
 					break;
 			}
 		}
-		
-		public function countdown($msgId:int, $remainT:int, $onCountDown:Function=null):void{
-			msgId = $msgId;
-			timer.startCounter($remainT*1000, 800, countTimer, onCountDown);
-			countTimer($remainT*1000);
+
+		public function removeType(type:int):void {
+			message8.removeType(type);
 		}
-		
-		public function stopCount():void{
+
+		public function countdown($msgId:int, $remainT:int, $onCountDown:Function=null):void {
+			msgId=$msgId;
+			timer.startCounter($remainT * 1000, 800, countTimer, onCountDown);
+			countTimer($remainT * 1000);
+		}
+
+		public function stopCount():void {
 			timer.stopCounter();
 		}
-		
-		private function countTimer(remain:int):void{
-			broadcastById(msgId, [int(remain/1000)]);
+
+		private function countTimer(remain:int):void {
+			broadcastById(msgId, [int(remain / 1000)]);
 		}
-		
+
 		/**
 		 * <T>界面尺寸重置</T>
-		 * 
-		 */		
+		 *
+		 */
 		public function resize():void {
 			this.message2.resize();
 			this.message4.resize();

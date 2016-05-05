@@ -16,12 +16,15 @@ package com.leyou.data.luckDraw
 		
 		public var itemNum:int;
 		
+		public var costType:int;
+		
 		public function assign(info:LuckDrawLogInfo):void{
 			type = info.type;
 			dtime = info.dtime;
 			name = info.name;
 			itemid = info.itemid;
 			itemNum = info.itemNum;
+			costType = info.costType;
 		}
 		
 	}

@@ -80,6 +80,7 @@ package com.leyou.data.pet
 		
 		public function unserialize_I(petInfo:Array, petSl:Array=null):void{
 			if(petInfo.length <= 0){
+				id = 0;
 				return;
 			}
 			_tick = getTimer();

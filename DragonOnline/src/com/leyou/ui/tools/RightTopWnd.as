@@ -1,18 +1,23 @@
 package com.leyou.ui.tools {
 
 	import com.ace.config.Core;
+	import com.ace.enum.SceneEnum;
 	import com.ace.enum.UIEnum;
 	import com.ace.enum.WindowEnum;
 	import com.ace.gameData.manager.DataManager;
+	import com.ace.gameData.manager.MapInfoManager;
+	import com.ace.gameData.manager.MyInfoManager;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.table.TCollectionPreciousInfo;
 	import com.ace.gameData.table.TFunForcastInfo;
+	import com.ace.manager.GuideDirectManager;
 	import com.ace.manager.GuideManager;
 	import com.ace.manager.LibManager;
 	import com.ace.manager.UILayoutManager;
 	import com.ace.manager.UIManager;
 	import com.ace.manager.UIOpenBufferManager;
 	import com.ace.ui.auto.AutoSprite;
+	import com.ace.ui.auto.AutoWindow;
 	import com.ace.ui.button.children.ImgButton;
 	import com.ace.utils.StringUtil;
 	import com.greensock.TweenLite;
@@ -20,14 +25,18 @@ package com.leyou.ui.tools {
 	import com.leyou.enum.MoldEnum;
 	import com.leyou.enum.PkCopyEnum;
 	import com.leyou.enum.TaskEnum;
+	import com.leyou.net.cmd.Cmd_Bld;
+	import com.leyou.net.cmd.Cmd_Tsk;
+	import com.leyou.net.cmd.Cmd_YBS;
 	import com.leyou.ui.tools.child.RightTopWidget;
 	import com.leyou.utils.PropUtils;
-	
+
 	import flash.display.DisplayObject;
 	import flash.display.Graphics;
 	import flash.display.Shape;
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
+	import flash.geom.Point;
 	import flash.utils.Dictionary;
 
 	public class RightTopWnd extends AutoSprite {
@@ -105,55 +114,68 @@ package com.leyou.ui.tools {
 
 			var btnIdx:int=0;
 			btnIdx=1;
-			packButton("achievementBtn", btnIdx++, 1);
-			packButton("rankBtn", btnIdx++, 1);
-			packButton("copyRBtn", btnIdx++, 1);
-			packButton("bossCopyBtn", btnIdx++, 1);
-			packButton("teamCopyBtn", btnIdx++, 1);
+			packButton("collectBtn", btnIdx++, 1);
+//			packButton("achievementBtn", btnIdx++, 1);
+//			packButton("rankBtn", btnIdx++, 1);
+			packButton("towerBtn", btnIdx++, 1);
 			packButton("arenaBtn", btnIdx++, 1);
 			packButton("guildBattleBtn", btnIdx++, 1);
-			packButton("taskMarketBtn", btnIdx++, 1);
+			packButton("copyRBtn", btnIdx++, 1);
+			packButton("teamCopyBtn", btnIdx++, 1);
+			packButton("bossCopyBtn", btnIdx++, 1);
+
 			packButton("fieldBossBtn", btnIdx++, 1);
 			packButton("questBtn", btnIdx++, 1);
-			packButton("towerBtn", btnIdx++, 1);
+
+			packButton("crossServerBtn", btnIdx++, 1);
 			//			packButton("guildBattleBtn", btnIdx++, 1);
 			//			packButton("questBtn", btnIdx++, 1);
 			//			packButton("activityBtn", btnIdx++, 1);
 			//			packButton("petBtn", btnIdx++, 1);
 
 			btnIdx=1;
-			packButton("keyBtn", btnIdx++, 2);
+			packButton("taskMarketBtn", btnIdx++, 2);
+//			packButton("tobeStrong", btnIdx++, 2);
 			packButton("shopBtn", btnIdx++, 2);
-			packButton("worshipBtn", btnIdx++, 2);
+			packButton("keyBtn", btnIdx++, 2);
+//			packButton("worshipBtn", btnIdx++, 2);
 			packButton("welfareBtn", btnIdx++, 2);
 			packButton("activityBtn", btnIdx++, 2);
-			packButton("tobeStrong", btnIdx++, 2);
+			packButton("sevenDayBtn", btnIdx++, 2);
+			packButton("promotionBtn", btnIdx++, 2);
+			packButton("v0", btnIdx++, 2);
+			packButton("onlineBtn", btnIdx++, 2);
+			packButton("v3expBtn", btnIdx++, 2);
+
 			packButton("sevenDBtn", btnIdx++, 2);
 			packButton("guildBtn", btnIdx++, 2);
 			packButton("areaCelebrate", btnIdx++, 2);
 			packButton("tecentVipBtn", btnIdx++, 2);
-			packButton("sevenDayBtn", btnIdx++, 2);
-			packButton("promotionBtn", btnIdx++, 2);
-			packButton("onlineBtn", btnIdx++, 2);
-			//			packButton("tobeStrong", btnIdx++, 2);
+
 
 			btnIdx=1;
-			packButton("areaFirstPayBtn", btnIdx++, 3);
+			packButton("investBtn", btnIdx++, 3);
+			packButton("lotteryBtn", btnIdx++, 3);
+			packButton("blackStoreBtn", btnIdx++, 3);
+			packButton("kfjjBtn", btnIdx++, 3);
+			packButton("kfhdBtn", btnIdx++, 3);
 			packButton("firstPayBtn", btnIdx++, 3);
+			packButton("areaFirstPayBtn", btnIdx++, 3);
 			packButton("abidePayBtn", btnIdx++, 3);
+			packButton("saleBtn", btnIdx++, 3);
+
+
 			packButton("superReturnBtn", btnIdx++, 3);
 			packButton("firstReturnBtn", btnIdx++, 3);
 			packButton("groupBuyBtn", btnIdx++, 3);
-			packButton("saleBtn", btnIdx++, 3);
-			packButton("investBtn", btnIdx++, 3);
-			packButton("blackStoreBtn", btnIdx++, 3);
-			packButton("lotteryBtn", btnIdx++, 3);
 			packButton("payRankBtn", btnIdx++, 3);
 			packButton("qqYellowBtn", btnIdx++, 3);
+			packButton("taiwanBtn", btnIdx++, 3);
 			packButton("costBtn", btnIdx++, 3);
 			packButton("combineBtn", btnIdx++, 3);
 			packButton("gambleBtn", btnIdx++, 3);
-			
+
+
 			//			packButton("saleBtn", btnIdx++, 3);
 			//			packButton("abidePayBtn", btnIdx++, 3);
 			//			packButton("costBtn", btnIdx++, 3);
@@ -182,6 +204,8 @@ package com.leyou.ui.tools {
 			g3.beginFill(0);
 			g3.drawRect(-657, 0, 715, _hspacing * 3);
 			g3.endFill();
+
+
 		}
 
 		public override function set visible(value:Boolean):void {
@@ -202,16 +226,40 @@ package com.leyou.ui.tools {
 			return widget;
 		}
 
+		/**
+		 * 反转显示状态
+		 *
+		 * row - 指定要反转的行数
+		 *
+		 **/
+		public function reverseBarVisible(row:int, v:Boolean):void {
+			switch (row) {
+				case 1:
+					switchPanel1(v);
+					break;
+				case 2:
+					switchPanel2(v);
+					break;
+				case 3:
+					switchPanel3(v);
+					break;
+			}
+		}
+
 		public function hideBar(type:int):void {
 			if (1 == type) {
 				panel1.visible=false;
 				switchBtn1.visible=false;
-				this.y=-50;
+				this.y=-65;
 				exit=true;
 			} else {
 				panel2.visible=false;
 				switchBtn2.visible=false;
 			}
+
+			var abtn:ImgButton=getUIbyID("achievementBtn") as ImgButton;
+			if (abtn != null)
+				abtn.y=70;
 		}
 
 		public function showBar(type:int):void {
@@ -226,10 +274,14 @@ package com.leyou.ui.tools {
 				panel2.visible=true;
 				switchBtn2.visible=true;
 			}
+
+			var abtn:ImgButton=getUIbyID("achievementBtn") as ImgButton;
+			if (abtn != null)
+				abtn.y=5;
 		}
 
 		/**
-		 * <T>将按钮包入容器</T>
+		 * 将按钮包入容器
 		 *
 		 * @param btnName 按钮名称
 		 * @param index   按钮索引,从右往左数从1开始
@@ -327,6 +379,11 @@ package com.leyou.ui.tools {
 			var c:int=GuideManager.getInstance().rc;
 			var fuliW:RightTopWidget=getWidget("welfareBtn");
 			fuliW.setNum(c + welfareSelfCount);
+
+			if (c > 0) {
+				GuideDirectManager.getInstance().updateWelfareOther();
+			}
+
 			if (1 == sp) {
 				fuliW.setText(PropUtils.getStringById(1963));
 			} else {
@@ -358,14 +415,16 @@ package com.leyou.ui.tools {
 					TweenLite.delayedCall(0.5, UIManager.getInstance().teamCopyWnd.setTabIndex, [0]);
 					UIManager.getInstance().creatWindow(WindowEnum.COPYTRACK);
 					break;
+				case "scpcj":
+					UILayoutManager.getInstance().open_II(WindowEnum.DUNGEON_TEAM);
+					TweenLite.delayedCall(0.5, UIManager.getInstance().teamCopyWnd.setTabIndex, [0]);
+					UIManager.getInstance().creatWindow(WindowEnum.COPYTRACK);
+					break;
 				case "bcp":
 					UILayoutManager.getInstance().open_II(WindowEnum.DUNGEON_TEAM);
 					TweenLite.delayedCall(0.5, UIManager.getInstance().teamCopyWnd.setTabIndex, [1]);
 //					UIOpenBufferManager.getInstance().open(WindowEnum.BOSS, 2);
 					break;
-				//				case "farm":
-				//					UILayoutManager.getInstance().open(WindowEnum.FARM);
-				//					break;
 				case "exp":
 
 					UILayoutManager.getInstance().open_II(WindowEnum.DUNGEON_TEAM);
@@ -379,6 +438,27 @@ package com.leyou.ui.tools {
 					break;
 				case "col":
 					UIOpenBufferManager.getInstance().open(WindowEnum.COLLECTION);
+					break;
+				case "offline":
+					UIOpenBufferManager.getInstance().open(WindowEnum.WELFARE);
+					UIManager.getInstance().creatWindow(WindowEnum.WELFARE);
+					UIManager.getInstance().welfareWnd.changeTable(3);
+					break;
+				case "bbt":
+					UILayoutManager.getInstance().open_II(WindowEnum.TTT);
+					break;
+				case "cptm":
+					UILayoutManager.getInstance().open_II(WindowEnum.DUNGEON_TEAM);
+					TweenLite.delayedCall(0.5, UIManager.getInstance().teamCopyWnd.setTabIndex, [2]);
+					break;
+				case "farm":
+					UIOpenBufferManager.getInstance().open(WindowEnum.FARM);
+					break;
+				case "warter":
+					UIOpenBufferManager.getInstance().open(WindowEnum.FARM);
+					break;
+				case "wybq":
+					UIOpenBufferManager.getInstance().open(WindowEnum.TASK_MARKET);
 					break;
 			}
 		}
@@ -411,8 +491,8 @@ package com.leyou.ui.tools {
 					if (count > 0) {
 						var ec:String=StringUtil.substitute(PropUtils.getStringById(1965), ["<font color='#ff0000'>({1}/10)</font><font color='#ff00'><u><a href='event:other_exp--exp'>"]);
 						ec=StringUtil.substitute(ec, 10 - count);
-						arr=[PropUtils.getStringById(1966), ec, "", "", callback];
-						UIManager.getInstance().taskTrack.updateOhterTrack(TaskEnum.taskLevel_levelingLine, arr);
+						arr=[PropUtils.getStringById(2429), "<a href='event:other_exp--exp'>" + PropUtils.getStringById(2446) + "</a>", PropUtils.getStringById(2458), "", callback];
+						UIManager.getInstance().taskTrack.updateOtherTrack(TaskEnum.taskLevel_levelingLine, arr);
 					} else {
 						UIManager.getInstance().taskTrack.delOtherTrack(TaskEnum.taskLevel_levelingLine)
 					}
@@ -439,14 +519,16 @@ package com.leyou.ui.tools {
 //						return;
 //					}
 					var bc:String;
-					if (count > 0) {
-						bc="  " + StringUtil.substitute(PropUtils.getStringById(1967), ["<font color='#ff00'><u><a href='event:other_bcp--bcp'>"]) + "</a></u></font>";
-						bc=StringUtil.substitute(bc, count);
-					} else {
-						bc="  " + StringUtil.substitute(PropUtils.getStringById(1968), ["<font color='#ff00'><u><a href='event:other_bcp--bcp'>"]) + "</a></u></font>";
-					}
-					arr=["[BOSS]", bc, "", "", callback]
-					UIManager.getInstance().taskTrack.updateOhterTrack(TaskEnum.taskLevel_bossCopyLine, arr);
+//					if (count > 0) {
+					bc=StringUtil.substitute(PropUtils.getStringById(2448), [count]);
+//						bc=StringUtil.substitute(bc, count);
+//						bc=StringUtil.substitute(PropUtils.getStringById(2437), count);
+//					} else {
+//						bc="  " + StringUtil.substitute(PropUtils.getStringById(2437), ["<font color='#ff00'><u><a href='event:other_bcp--bcp'>"]) + "</a></u></font>";
+
+//					}
+					arr=[PropUtils.getStringById(2423), "<a href='event:other_bcp--bcp'>" + PropUtils.getStringById(2437) + "</a>", bc, "", callback]
+					UIManager.getInstance().taskTrack.updateOtherTrack(TaskEnum.taskLevel_bossCopyLine, arr);
 					break;
 				case "scp":
 					DataManager.getInstance().popupNumData.storyCyNum=count;
@@ -466,16 +548,31 @@ package com.leyou.ui.tools {
 //							return;
 //						}
 //					}
+
+					var sc2:String;
 					if (count > 0 || values[0] > 0) {
-						var sc1:String=StringUtil.substitute(PropUtils.getStringById(1969), ["<font color='#ff00'><u><a href='event:other_scp--scp'>"]) + "</a></u></font>";
-						sc1=StringUtil.substitute(sc1, values[0]);
-						var sc2:String=StringUtil.substitute(PropUtils.getStringById(1970), ["<font color='#ff00'><u><a href='event:other_scp--scp'>"]) + "</a></u></font>";
-						sc2=StringUtil.substitute(sc2, count);
-						arr=[PropUtils.getStringById(1971), sc1, sc2, "", callback];
-						UIManager.getInstance().taskTrack.updateOhterTrack(TaskEnum.taskLevel_storeCopyLine, arr);
+//						var sc1:String=StringUtil.substitute(PropUtils.getStringById(1969), ["<font color='#ff00'><u><a href='event:other_scp--scp'>"]) + "</a></u></font>";
+//						sc1=StringUtil.substitute(sc1, values[0]);
+						sc2=StringUtil.substitute(PropUtils.getStringById(2448), [count]);
+//						sc2=StringUtil.substitute(sc2, count);
+						arr=[PropUtils.getStringById(2421), "<a href='event:other_scp--scp'>" + PropUtils.getStringById(2430) + "</a>", sc2, "", callback];
+						UIManager.getInstance().taskTrack.updateOtherTrack(TaskEnum.taskLevel_storeCopyLine, arr);
 					} else {
 						UIManager.getInstance().taskTrack.delOtherTrack(TaskEnum.taskLevel_storeCopyLine)
 					}
+
+
+					if (values[0] > 0) {
+//						var sc1:String=StringUtil.substitute(PropUtils.getStringById(1969), ["<font color='#ff00'><u><a href='event:other_scp--scp'>"]) + "</a></u></font>";
+//						sc1=StringUtil.substitute(sc1, values[0]);
+						sc2=StringUtil.substitute(PropUtils.getStringById(2448), [values[0]]);
+//						sc2=StringUtil.substitute(sc2, count);
+						arr=[PropUtils.getStringById(2422), "<a href='event:other_scpcj--scpcj'>" + PropUtils.getStringById(2431) + "</a>", sc2, "", callback];
+						UIManager.getInstance().taskTrack.updateOtherTrack(TaskEnum.taskLevel_storeCopylotteryLine, arr);
+					} else {
+						UIManager.getInstance().taskTrack.delOtherTrack(TaskEnum.taskLevel_storeCopylotteryLine)
+					}
+
 					break;
 				case "farm":
 					var farmW:RightTopWidget=getWidget("farmBtn");
@@ -483,6 +580,40 @@ package com.leyou.ui.tools {
 						farmW.setEffect(playEffect);
 						farmW.setNum(count);
 					}
+
+					var fa2:String="";
+					if (count > 0) {
+
+						if (count > 0)
+							fa2=StringUtil.substitute(PropUtils.getStringById(2456), count);
+
+						arr=[PropUtils.getStringById(2427), "<a href='event:other_farm--farm'>" + PropUtils.getStringById(2444) + "</a>", fa2, "", callback];
+						UIManager.getInstance().taskTrack.updateOtherTrack(TaskEnum.taskLevel_farmGetLine, arr);
+					} else
+						UIManager.getInstance().taskTrack.delOtherTrack(TaskEnum.taskLevel_farmGetLine);
+
+
+					if (values[1][1] > 0) {
+
+						if (values[1][1] > 0)
+							fa2=StringUtil.substitute(PropUtils.getStringById(2455), values[1][1]);
+
+						arr=[PropUtils.getStringById(2427), "<a href='event:other_farm--farm'>" + PropUtils.getStringById(2459) + "</a>", fa2, "", callback];
+						UIManager.getInstance().taskTrack.updateOtherTrack(TaskEnum.taskLevel_farmPlantLine, arr);
+					} else
+						UIManager.getInstance().taskTrack.delOtherTrack(TaskEnum.taskLevel_farmPlantLine);
+
+
+					if (values[1][0] > 0) {
+
+						if (values[1][0] > 0)
+							fa2=StringUtil.substitute(PropUtils.getStringById(2448), values[1][0]);
+
+						arr=[PropUtils.getStringById(2426), "<a href='event:other_warter--warter'>" + PropUtils.getStringById(2443) + "</a>", fa2, "", callback];
+						UIManager.getInstance().taskTrack.updateOtherTrack(TaskEnum.taskLevel_waterTreeLine, arr);
+					} else
+						UIManager.getInstance().taskTrack.delOtherTrack(TaskEnum.taskLevel_waterTreeLine);
+
 					break;
 				case "act":
 					var actW:RightTopWidget=getWidget("deliveryBtn");
@@ -495,15 +626,30 @@ package com.leyou.ui.tools {
 						return;
 					}
 					fuliW.setEffect(playEffect);
+
 					welfareSelfCount=count;
 					sp=$sp;
 					if (1 == $sp) {
-						var wc1:String=StringUtil.substitute(PropUtils.getStringById(1972), ["<font color='#ff00'><u><a href='event:other_sign--sign'>"]) + "</a></u></font>"
-						arr=["[" + PropUtils.getStringById(1978) + "]", wc1, "", "", callback];
-						UIManager.getInstance().taskTrack.updateOhterTrack(TaskEnum.taskLevel_signInLine, arr);
+//						var wc1:String=StringUtil.substitute(PropUtils.getStringById(2432), ["<u><a href='event:other_sign--sign'>"]) + "</a></u>";
+						arr=[PropUtils.getStringById(2422), "<a href='event:other_sign--sign'>" + PropUtils.getStringById(2432) + "</a></u>", PropUtils.getStringById(2450), "", callback];
+						UIManager.getInstance().taskTrack.updateOtherTrack(TaskEnum.taskLevel_signInLine, arr);
 					} else {
 						UIManager.getInstance().taskTrack.delOtherTrack(TaskEnum.taskLevel_signInLine);
 					}
+
+					var wc2:String;
+					if (int(values[0]) == 1) {
+						wc2=PropUtils.getStringById(1898);
+//					} else {
+//						wc2=PropUtils.getStringById(1574);
+//					}
+
+//					wc1=StringUtil.substitute(PropUtils.getStringById(2447), ["<u><a href='event:other_offline--offline'>"]) + "</a></u>";
+						arr=[PropUtils.getStringById(2421), "<a href='event:other_offline--offline'>" + PropUtils.getStringById(2447) + "</a></u>", wc2, "", callback];
+						UIManager.getInstance().taskTrack.updateOtherTrack(TaskEnum.taskLevel_offlineExpLine, arr);
+					} else
+						UIManager.getInstance().taskTrack.delOtherTrack(TaskEnum.taskLevel_offlineExpLine);
+
 					updateWelfare();
 					break;
 				case "hyd":
@@ -512,9 +658,9 @@ package com.leyou.ui.tools {
 					hydW.setNum(count);
 					break;
 				case "rak":
-					var rakW:RightTopWidget=getWidget("rankBtn");
-					rakW.setEffect(playEffect);
-					rakW.setNum(count);
+//					var rakW:RightTopWidget=getWidget("rankBtn");
+//					rakW.setEffect(playEffect);
+//					rakW.setNum(count);
 					break;
 				case "sevd":
 					var sevenDW:RightTopWidget=getWidget("sevenDBtn");
@@ -553,11 +699,14 @@ package com.leyou.ui.tools {
 						}
 						var cc2:String=StringUtil.substitute(PropUtils.getStringById(1554), ["<font color='#ff00'><u><a href='event:other_col--col'>{1}</a></u></font>"]);
 						cc2=StringUtil.substitute(cc2, count);
+						cc2=StringUtil.substitute(PropUtils.getStringById(2457), count);
 						if (count <= 0) {
 							cc2="";
 						}
-						arr=[PropUtils.getStringById(1555), cc1, cc2, "", callback];
-						UIManager.getInstance().taskTrack.updateOhterTrack(TaskEnum.taskLevel_collectLine, arr);
+//						arr=[PropUtils.getStringById(1555), cc1, cc2, "", callback];
+
+						arr=[PropUtils.getStringById(2428), "<a href='event:other_col--col'>" + PropUtils.getStringById(2445) + "</a>", cc2, "", callback];
+						UIManager.getInstance().taskTrack.updateOtherTrack(TaskEnum.taskLevel_collectLine, arr);
 					}
 					break;
 				case "ccz":
@@ -570,6 +719,13 @@ package com.leyou.ui.tools {
 					var cptm:RightTopWidget=getWidget("teamCopyBtn");
 					cptm.setEffect(playEffect);
 					cptm.setNum(DataManager.getInstance().popupNumData.cyNum);
+
+					if (count > 0) {
+						var cp2:String=StringUtil.substitute(PropUtils.getStringById(2452), count);
+						arr=[PropUtils.getStringById(2422), "<a href='event:other_cptm--cptm'>" + PropUtils.getStringById(2436) + "</a>", cp2, "", callback];
+						UIManager.getInstance().taskTrack.updateOtherTrack(TaskEnum.taskLevel_teamCopyLine, arr);
+					} else
+						UIManager.getInstance().taskTrack.delOtherTrack(TaskEnum.taskLevel_teamCopyLine);
 //					var cptm:RightTopWidget=getWidget("teamCopyBtn");
 //					cptm.setEffect(playEffect);
 //					cptm.setNum(count);
@@ -580,6 +736,14 @@ package com.leyou.ui.tools {
 						tmw.setEffect(playEffect);
 						tmw.setNum(count);
 					}
+
+					if (count > 0) {
+						var yd2:String=StringUtil.substitute(PropUtils.getStringById(2452), count);
+						arr=[PropUtils.getStringById(2422), "<a href='event:other_wybq--wybq'>" + PropUtils.getStringById(2434) + "</a>", yd2, "", callback];
+						UIManager.getInstance().taskTrack.updateOtherTrack(TaskEnum.taskLevel_powerfulRewardLine, arr);
+					} else
+						UIManager.getInstance().taskTrack.delOtherTrack(TaskEnum.taskLevel_powerfulRewardLine);
+
 					break;
 				case "lday":
 					var lday:RightTopWidget=getWidget("sevenDayBtn");
@@ -589,6 +753,7 @@ package com.leyou.ui.tools {
 
 						if (count > 0 && Core.me.info.level >= 15 && (!UIManager.getInstance().isCreate(WindowEnum.KEEP_7) || !UIManager.getInstance().sdayWnd.visible))
 							UIManager.getInstance().sdayWnd.show();
+
 					}
 					break;
 				case "hccz":
@@ -598,7 +763,68 @@ package com.leyou.ui.tools {
 						hday.setNum(count);
 					}
 					break;
+				case "lxtw":
+					var lxtw:RightTopWidget=getWidget("taiwanBtn");
+					if (null != lxtw) {
+						lxtw.setEffect(playEffect);
+						lxtw.setNum(count);
+					}
+				case "bbt":
+					if (count > 0) {
+						var bbt2:String=StringUtil.substitute(PropUtils.getStringById(2453), count);
+						arr=[PropUtils.getStringById(2422), "<a href='event:other_bbt--bbt'>" + PropUtils.getStringById(2435) + "</a>", bbt2, "", callback];
+						UIManager.getInstance().taskTrack.updateOtherTrack(TaskEnum.taskLevel_tttLine, arr);
+					} else
+						UIManager.getInstance().taskTrack.delOtherTrack(TaskEnum.taskLevel_tttLine);
+					break;
+				case "pet":
+
+					MyInfoManager.getInstance().mercenaryClose=values[1][1];
+					MyInfoManager.getInstance().mercenaryExp=values[1][0];
+					MyInfoManager.getInstance().mercenaryCount=count;
+
+					Cmd_Tsk.cmTaskQuest();
+					break;
 			}
+		}
+
+		private function switchPanel1(v:Boolean):void {
+			TweenLite.killTweensOf(panel1);
+			if (!v) {
+				switchBtn1.updataBmd("ui/funForcast/btn_left.png");
+				TweenLite.to(panel1, viewCount1 * BUTTON_WIDTH / speed, {x: viewCount1 * BUTTON_WIDTH + 10, onComplete: moveOver, onCompleteParams: [panel1]});
+			} else {
+				panel1.visible=true;
+				TweenLite.to(panel1, viewCount1 * BUTTON_WIDTH / speed, {x: 0});
+				switchBtn1.updataBmd("ui/funForcast/btn_right.png")
+			}
+			viewPanel1=v;
+		}
+
+		private function switchPanel2(v:Boolean):void {
+			TweenLite.killTweensOf(panel2);
+			if (!v) {
+				switchBtn2.updataBmd("ui/funForcast/btn_left.png");
+				TweenLite.to(panel2, viewCount2 * BUTTON_WIDTH / speed, {x: viewCount2 * BUTTON_WIDTH + 10, onComplete: moveOver, onCompleteParams: [panel2]});
+			} else {
+				panel2.visible=true;
+				TweenLite.to(panel2, viewCount2 * BUTTON_WIDTH / speed, {x: 0});
+				switchBtn2.updataBmd("ui/funForcast/btn_right.png");
+			}
+			viewPanel2=v;
+		}
+
+		private function switchPanel3(v:Boolean):void {
+			TweenLite.killTweensOf(panel3);
+			if (!v) {
+				switchBtn3.updataBmd("ui/funForcast/btn_left.png");
+				TweenLite.to(panel3, viewCount3 * BUTTON_WIDTH / speed, {x: viewCount3 * BUTTON_WIDTH + 10, onComplete: moveOver, onCompleteParams: [panel3]});
+			} else {
+				panel3.visible=true;
+				TweenLite.to(panel3, viewCount3 * BUTTON_WIDTH / speed, {x: 0});
+				switchBtn3.updataBmd("ui/funForcast/btn_right.png");
+			}
+			viewPanel3=v;
 		}
 
 		/**
@@ -611,40 +837,43 @@ package com.leyou.ui.tools {
 			var n:String=e.target.name;
 			switch (n) {
 				case "switch1":
-					TweenLite.killTweensOf(panel1);
-					if (viewPanel1) {
-						switchBtn1.updataBmd("ui/funForcast/btn_left.png");
-						TweenLite.to(panel1, viewCount1 * BUTTON_WIDTH / speed, {x: viewCount1 * BUTTON_WIDTH + 10, onComplete: moveOver, onCompleteParams: [panel1]});
-					} else {
-						panel1.visible=true;
-						TweenLite.to(panel1, viewCount1 * BUTTON_WIDTH / speed, {x: 0});
-						switchBtn1.updataBmd("ui/funForcast/btn_right.png")
-					}
-					viewPanel1=!viewPanel1;
+					switchPanel1(!viewPanel1);
+//					TweenLite.killTweensOf(panel1);
+//					if (viewPanel1) {
+//						switchBtn1.updataBmd("ui/funForcast/btn_left.png");
+//						TweenLite.to(panel1, viewCount1 * BUTTON_WIDTH / speed, {x: viewCount1 * BUTTON_WIDTH + 10, onComplete: moveOver, onCompleteParams: [panel1]});
+//					} else {
+//						panel1.visible=true;
+//						TweenLite.to(panel1, viewCount1 * BUTTON_WIDTH / speed, {x: 0});
+//						switchBtn1.updataBmd("ui/funForcast/btn_right.png")
+//					}
+//					viewPanel1=!viewPanel1;
 					break;
 				case "switch2":
-					TweenLite.killTweensOf(panel2);
-					if (viewPanel2) {
-						switchBtn2.updataBmd("ui/funForcast/btn_left.png");
-						TweenLite.to(panel2, viewCount2 * BUTTON_WIDTH / speed, {x: viewCount2 * BUTTON_WIDTH + 10, onComplete: moveOver, onCompleteParams: [panel2]});
-					} else {
-						panel2.visible=true;
-						TweenLite.to(panel2, viewCount2 * BUTTON_WIDTH / speed, {x: 0});
-						switchBtn2.updataBmd("ui/funForcast/btn_right.png");
-					}
-					viewPanel2=!viewPanel2;
+					switchPanel2(!viewPanel2);
+//					TweenLite.killTweensOf(panel2);
+//					if (viewPanel2) {
+//						switchBtn2.updataBmd("ui/funForcast/btn_left.png");
+//						TweenLite.to(panel2, viewCount2 * BUTTON_WIDTH / speed, {x: viewCount2 * BUTTON_WIDTH + 10, onComplete: moveOver, onCompleteParams: [panel2]});
+//					} else {
+//						panel2.visible=true;
+//						TweenLite.to(panel2, viewCount2 * BUTTON_WIDTH / speed, {x: 0});
+//						switchBtn2.updataBmd("ui/funForcast/btn_right.png");
+//					}
+//					viewPanel2=!viewPanel2;
 					break;
 				case "switch3":
-					TweenLite.killTweensOf(panel3);
-					if (viewPanel3) {
-						switchBtn3.updataBmd("ui/funForcast/btn_left.png");
-						TweenLite.to(panel3, viewCount3 * BUTTON_WIDTH / speed, {x: viewCount3 * BUTTON_WIDTH + 10, onComplete: moveOver, onCompleteParams: [panel3]});
-					} else {
-						panel3.visible=true;
-						TweenLite.to(panel3, viewCount3 * BUTTON_WIDTH / speed, {x: 0});
-						switchBtn3.updataBmd("ui/funForcast/btn_right.png");
-					}
-					viewPanel3=!viewPanel3;
+					switchPanel3(!viewPanel3);
+//					TweenLite.killTweensOf(panel3);
+//					if (viewPanel3) {
+//						switchBtn3.updataBmd("ui/funForcast/btn_left.png");
+//						TweenLite.to(panel3, viewCount3 * BUTTON_WIDTH / speed, {x: viewCount3 * BUTTON_WIDTH + 10, onComplete: moveOver, onCompleteParams: [panel3]});
+//					} else {
+//						panel3.visible=true;
+//						TweenLite.to(panel3, viewCount3 * BUTTON_WIDTH / speed, {x: 0});
+//						switchBtn3.updataBmd("ui/funForcast/btn_right.png");
+//					}
+//					viewPanel3=!viewPanel3;
 					break;
 				case "arenaBtn":
 					UILayoutManager.getInstance().open_II(WindowEnum.ARENA);
@@ -700,7 +929,15 @@ package com.leyou.ui.tools {
 					UILayoutManager.getInstance().open(WindowEnum.CDKEY);
 					break;
 				case "achievementBtn":
-					UIOpenBufferManager.getInstance().open(WindowEnum.ACHIEVEMENT);
+
+					if (!UIManager.getInstance().isCreate(WindowEnum.ACHIEVEMENT))
+						UIManager.getInstance().creatWindow(WindowEnum.ACHIEVEMENT);
+
+					var wd:AutoWindow=UIManager.getInstance().getWindow(WindowEnum.ACHIEVEMENT) as AutoWindow;
+
+					var mod:int=wd.visible ? 2 : 1;
+					UILayoutManager.getInstance().singleMove(wd, "ACHIEVEMENT", mod, e.target.localToGlobal(new Point(50, 100)));
+//					UIOpenBufferManager.getInstance().open(WindowEnum.ACHIEVEMENT);
 					//					UILayoutManager.getInstance().open(WindowEnum.ACHIEVEMENT);
 					break;
 				//				case "vipBtn":
@@ -833,6 +1070,24 @@ package com.leyou.ui.tools {
 				case "copyRBtn":
 					UIOpenBufferManager.getInstance().open(WindowEnum.COPY_RANK);
 					break;
+				case "crossServerBtn":
+					UIOpenBufferManager.getInstance().open(WindowEnum.CROSS_SERVER);
+					break;
+				case "taiwanBtn":
+					UIOpenBufferManager.getInstance().open(WindowEnum.TAIWAN_LC);
+					break;
+				case "kfjjBtn":
+					UILayoutManager.getInstance().open(WindowEnum.KFCB);
+					break;
+				case "kfhdBtn":
+					UILayoutManager.getInstance().open(WindowEnum.KFHD);
+					break;
+				case "v3expBtn":
+					UILayoutManager.getInstance().open(WindowEnum.VIP3EXP);
+					break;
+				case "v0":
+					UILayoutManager.getInstance().open(WindowEnum.CLIENT_WND);
+					break;
 			}
 		}
 
@@ -933,7 +1188,7 @@ package com.leyou.ui.tools {
 			} else {
 				this.y=10;
 			}
-			this.x=UIEnum.WIDTH - 330;
+			this.x=UIEnum.WIDTH - 452;
 		}
 
 		/**
@@ -942,15 +1197,17 @@ package com.leyou.ui.tools {
 		 */
 		public function checkActiveIcon():void {
 			active("achievementBtn");
-			active("keyBtn");
+//			active("keyBtn");
 			active("lotteryBtn");
 			active("shopBtn");
 			active("investBtn");
 			active("guildBattleBtn");
-			active("groupBuyBtn");
+//			active("groupBuyBtn");
 			active("sevenDayBtn");
 //			active("costBtn");
-			active("saleBtn");
+//			active("saleBtn");
+//			active("kfhdBtn");
+			active("v0");
 
 			// 腾讯平台
 			if (Core.isTencent) {
@@ -962,8 +1219,8 @@ package com.leyou.ui.tools {
 			var level:int=Core.me.info.level;
 			// 收集
 			if (level >= ConfigEnum.setin1) {
-//				active("collectBtn");
-				UIManager.getInstance().toolsWnd.unlockButton(MoldEnum.COLLECTION);
+				active("collectBtn");
+//				UIManager.getInstance().toolsWnd.unlockButton(MoldEnum.COLLECTION);
 
 				var count:int=DataManager.getInstance().collectionData.rewardCount;
 				var groupId:int=DataManager.getInstance().collectionData.cgroupId;
@@ -981,11 +1238,13 @@ package com.leyou.ui.tools {
 					}
 					var cc2:String=StringUtil.substitute(PropUtils.getStringById(1554), ["<font color='#ff00'><u><a href='event:other_col--col'>{1}</a></u></font>"]);
 					cc2=StringUtil.substitute(cc2, count);
+					cc2=StringUtil.substitute(PropUtils.getStringById(2457), count);
 					if (count <= 0) {
 						cc2="";
 					}
-					var arr:Array=[PropUtils.getStringById(1555), cc1, cc2, "", callback];
-					UIManager.getInstance().taskTrack.updateOhterTrack(TaskEnum.taskLevel_collectLine, arr);
+//					var arr:Array=[PropUtils.getStringById(1555), cc1, cc2, "", callback];
+					var arr:Array=[PropUtils.getStringById(2428), "<a href='event:other_col--col'>" + PropUtils.getStringById(2445) + "</a>", cc2, "", callback];
+					UIManager.getInstance().taskTrack.updateOtherTrack(TaskEnum.taskLevel_collectLine, arr);
 				}
 			}
 			// 佣兵
@@ -995,7 +1254,9 @@ package com.leyou.ui.tools {
 			}
 			// 排行榜
 			if (level >= ConfigEnum.RankOpenLevel) {
-				active("rankBtn");
+//				active("rankBtn");
+
+//				UIManager.getInstance().toolsWnd.guildBtn.setActive(true, 1, true);
 			}
 			// 神器
 			if (level >= ConfigEnum.Artifact1) {
@@ -1003,9 +1264,9 @@ package com.leyou.ui.tools {
 					//				active("legendaryBtn");
 			}
 			// 我要变强
-//			if (level >= ConfigEnum.tobeStr1) {
-//				active("tobeStrong");
-//			}
+			if (level >= ConfigEnum.tobeStr1) {
+				active("tobeStrong");
+			}
 			// 农场
 			if (level >= ConfigEnum.FarmOpenLevel) {
 //				active("farmBtn");
@@ -1036,7 +1297,7 @@ package com.leyou.ui.tools {
 
 			// 龙珠
 			if (level >= ConfigEnum.DragonBall10) {
-				active("fieldBossBtn");
+//				active("fieldBossBtn");
 			}
 
 			// 练级副本
@@ -1071,9 +1332,11 @@ package com.leyou.ui.tools {
 			//			}
 
 			// 城主膜拜
-			var funInfo:TFunForcastInfo=TableManager.getInstance().getFunForcstInfoById(19);
+			var funInfo:TFunForcastInfo=TableManager.getInstance().getFunForcstInfoById(10);
 			if (level >= funInfo.openLevel) {
-				active("worshipBtn");
+//				active("worshipBtn");
+
+				UIManager.getInstance().toolsWnd.worshipBtn.setActive(true, 1, true);
 			}
 
 			//通天塔
@@ -1090,20 +1353,25 @@ package com.leyou.ui.tools {
 			//行会
 			if (level >= ConfigEnum.UnionOpenLv) {
 				//				active("guildBtn");
+				UIManager.getInstance().toolsWnd.guildBtn.setActive(true, 1, true);
 			}
 
 			// 商城
 			if (level >= ConfigEnum.MarketOpenLevel) {
-				//				UIManager.getInstance().openWindow(WindowEnum.MARKET);
+				UIManager.getInstance().toolsWnd.shopBtn.setActive(true, 1, true);
 			}
 
 			//寄售
 			if (level >= ConfigEnum.AutionOpenLevel) {
-				//				UIManager.getInstance().openWindow(WindowEnum.AUTION);
+//				UIManager.getInstance().openWindow(WindowEnum.AUTION);
 			}
 
 			if (level >= ConfigEnum.MountTradeOpenLv) {
 				UIManager.getInstance().roleWnd.openMountTrade();
+			}
+
+			if (level >= ConfigEnum.EquipIntensifyOpenLv) {
+				UIManager.getInstance().toolsWnd.duanZBtn.setActive(true, 1, true);
 			}
 
 			if (level >= ConfigEnum.MountOpenLv) {
@@ -1113,8 +1381,8 @@ package com.leyou.ui.tools {
 			if (level >= ConfigEnum.StoryCopyOpenLevel) {
 				active("teamCopyBtn");
 			}
-			
-			if(level >= ConfigEnum.FastTop1){
+
+			if (level >= ConfigEnum.FastTop1) {
 				active("copyRBtn");
 			}
 
@@ -1122,6 +1390,43 @@ package com.leyou.ui.tools {
 			if (level >= ConfigEnum.TaskMarket1) {
 				active("taskMarketBtn");
 			}
+
+			// 跨服
+			if ((level >= ConfigEnum.multiple4) && !Core.isTaiwan) {
+				active("crossServerBtn");
+			}
+			// 元素
+			if (level >= ConfigEnum.ElementOpenLv) {
+				UIManager.getInstance().toolsWnd.unlockButton(MoldEnum.ELEMENT);
+			}
+
+			if (ConfigEnum.BadgeOpenLv <= level) {
+				Cmd_Bld.cm_bldOpen();
+				UIManager.getInstance().toolsWnd.wenZBtn.setActive(true, 1, true);
+			}
+
+			if (ConfigEnum.V3exp34Open == level) {
+				if (Core.me.info.vipLv == 0)
+					UILayoutManager.getInstance().open(WindowEnum.FIRST_PAY);
+			}
+
+			if (ConfigEnum.V3exp37Open == level) {
+				UILayoutManager.getInstance().show(WindowEnum.VIP3EXP);
+				active("v3expBtn");
+//				if (Core.me.info.vipLv < 3)
+//					UIManager.getInstance().vip3exp.setNoGet();
+			}
+
+			if (Core.me != null && Core.me.info.level >= 30 && MapInfoManager.getInstance().type == SceneEnum.SCENE_TYPE_PTCJ) {
+				UIManager.getInstance().taskTrack2.hide();
+				UIManager.getInstance().taskTrack.show();
+				Cmd_Tsk.cmTaskQuest();
+			}
+
+			if (Core.me != null && Core.me.info.level >= 39) {
+				Cmd_YBS.cm_YBS_Y();
+			}
+
 		}
 
 	}

@@ -56,9 +56,9 @@ package com.ace.gameData.table
 			item1 = xml.@item1;
 			item1Num = xml.@num1;
 			item2 = xml.@item2;
-			item2Num = xml.@num1;
-			item3 = xml.@item2;
-			item3Num = xml.@num1;
+			item2Num = xml.@num2;
+			item3 = xml.@item3;
+			item3Num = xml.@num3;
 			honor = xml.@Honor;
 			byb = xml.@Byb;
 		}

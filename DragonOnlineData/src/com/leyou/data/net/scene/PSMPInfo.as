@@ -86,7 +86,9 @@ package com.leyou.data.net.scene {
 //			}
 			info.equipLv=tmpArr[5];
 			info.equipColor=tmpArr[6];
-
+			info.skillEffectId=tmpArr[7];
+			info.footEffectId=tmpArr[8];
+			info.equipEffectId=tmpArr[9];
 
 			//T
 			tmpStr=arr[6];
@@ -158,10 +160,10 @@ package com.leyou.data.net.scene {
 			info.camp=tmpArr[0];
 
 //			//A
-//			tmpStr=arr[13];
-//			tmpStr=tmpStr.substr(1);
-//			tmpArr=tmpStr.split(",");
-//			info.equipLv=tmpArr[0];
+			tmpStr=arr[13];
+			tmpStr=tmpStr.substr(1);
+			tmpArr=tmpStr.split(",");
+			info.junXLv=tmpArr[0];
 //			info.equipColor=tmpArr[1];
 			
 			//B

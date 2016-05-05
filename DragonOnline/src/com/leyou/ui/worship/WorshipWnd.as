@@ -7,6 +7,8 @@ package com.leyou.ui.worship {
 	import com.ace.manager.LibManager;
 	import com.ace.manager.MouseManagerII;
 	import com.ace.manager.ToolTipManager;
+	import com.ace.manager.TweenManager;
+	import com.ace.manager.UIManager;
 	import com.ace.manager.child.MouseEventInfo;
 	import com.ace.ui.auto.AutoWindow;
 	import com.ace.ui.button.children.NormalButton;
@@ -16,7 +18,7 @@ package com.leyou.ui.worship {
 	import com.leyou.enum.ConfigEnum;
 	import com.leyou.net.cmd.Cmd_Worship;
 	import com.leyou.utils.PropUtils;
-
+	
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 
@@ -113,10 +115,14 @@ package com.leyou.ui.worship {
 			awardEnergy1Lbl.text=ConfigEnum.worship9 + "";
 			ybCostLbl.text=ConfigEnum.worship7 + "";
 
-			big.x=195;
+			big.x=183;
 			big.y=370;
 
 			pane.swapChildren(nameLbl, big);
+		}
+
+		public override function get width():Number {
+			return 544;
 		}
 
 		private function onMouseMove(target:Image):void {
@@ -152,6 +158,11 @@ package com.leyou.ui.worship {
 		public override function show(toTop:Boolean=true, $layer:int=1, toCenter:Boolean=true):void {
 			super.show(toTop, $layer, toCenter);
 //			Cmd_Worship.cm_WSP_I();
+		}
+		
+		override public function hide():void{
+			super.hide();
+			TweenManager.getInstance().lightingCompnent(UIManager.getInstance().toolsWnd.getUIbyID("worshipBtn"));
 		}
 
 		//		wsp

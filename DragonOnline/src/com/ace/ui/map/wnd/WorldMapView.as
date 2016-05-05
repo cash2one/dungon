@@ -72,7 +72,7 @@ package com.ace.ui.map.wnd {
 		}
 
 		/**
-		 * <T>点击句柄函数</T>
+		 * <T>点击函数</T>
 		 *
 		 * @param event 鼠标事件
 		 *

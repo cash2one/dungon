@@ -15,7 +15,7 @@ package com.leyou.ui.abidePay.children
 	
 	public class AbidePayRewardBox extends AutoSprite
 	{
-		// 1--开服连冲 2--合服连冲
+		// 1--开服连冲 2--合服连冲 3--台湾连冲
 		private var _belongType:int;
 		
 		private var _type:int;
@@ -89,8 +89,10 @@ package com.leyou.ui.abidePay.children
 			_belongType = belongType;
 			if(1 == _belongType){
 				grid.updataById(tdata.getRewardByDay($day));
-			}else{
+			}else if(2 == _belongType){
 				grid.updataById(tdata.getCombineReward($day));
+			}else if(3 == _belongType){
+				grid.updataById(tdata.getLCTWReward($day));
 			}
 			grid.stopMc();
 		}

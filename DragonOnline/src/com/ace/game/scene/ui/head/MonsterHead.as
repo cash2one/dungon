@@ -32,6 +32,8 @@ package com.ace.game.scene.ui.head {
 
 		public function MonsterHead() {
 			super("config/ui/scene/MonsterHeadWnd.xml");
+			
+			this.cacheAsBitmap=true;
 		}
 
 		override protected function init():void {

@@ -1,8 +1,10 @@
-package com.leyou.ui.dragonBall.children
-{
+package com.leyou.ui.dragonBall.children {
+
+	import com.ace.enum.WindowEnum;
 	import com.ace.gameData.manager.DataManager;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.table.TDragonBallPropertyInfo;
+	import com.ace.manager.GuideArrowDirectManager;
 	import com.ace.manager.LibManager;
 	import com.ace.manager.UIManager;
 	import com.ace.ui.auto.AutoSprite;
@@ -15,163 +17,209 @@ package com.leyou.ui.dragonBall.children
 	import com.leyou.util.ZDLUtil;
 	
 	import flash.events.MouseEvent;
-	
-	public class DragonBallPropertyRender extends AutoSprite
-	{
+
+	public class DragonBallPropertyRender extends AutoSprite {
+
 		public var attackProperitys:Vector.<DragonBallPropertyItem>;
-		
+
 		public var defentProperitys:Vector.<DragonBallPropertyItem>;
-		
+
 		private var plusImg:Image;
-		
+
 		private var zdlNum:RollNumWidget;
-		
+
 		private var addZdlNum:RollNumWidget;
-		
+
 		private var saveBtn:NormalButton;
-		
-		private var shortcutBtn:NormalButton;
-		
+
+//		private var shortcutBtn:NormalButton;
+
 		private var costLbl:Label;
-		
-		public function DragonBallPropertyRender(){
+
+		private var lhLbl:Label;
+
+		private var otherPlay:Boolean=false;
+
+		public function DragonBallPropertyRender(other:Boolean=false) {
 			super(LibManager.getInstance().getXML("config/ui/dragonBall/dragonBall3Render.xml"));
+			this.otherPlay=other;
 			init();
 		}
-		
-		private function init():void{
-			mouseChildren = true;
-			costLbl = getUIbyID("costLbl") as Label;
-			plusImg = getUIbyID("plusImg") as Image;
-			saveBtn = getUIbyID("saveBtn") as NormalButton;
-			shortcutBtn = getUIbyID("shortcutBtn") as NormalButton;
-			plusImg.visible = false;
-			zdlNum = new RollNumWidget();
-			addZdlNum = new RollNumWidget();
+
+		private function init():void {
+			mouseChildren=true;
+			costLbl=getUIbyID("costLbl") as Label;
+			plusImg=getUIbyID("plusImg") as Image;
+			lhLbl=getUIbyID("lhLbl") as Label;
+			saveBtn=getUIbyID("saveBtn") as NormalButton;
+//			shortcutBtn = getUIbyID("shortcutBtn") as NormalButton;
+			plusImg.visible=false;
+			zdlNum=new RollNumWidget();
+			addZdlNum=new RollNumWidget();
 			zdlNum.loadSource("ui/num/{num}_zdl.png");
 			addZdlNum.loadSource("ui/num/{num}_zdl.png");
-			zdlNum.alignLeft();
+			zdlNum.alignRound();
 			addZdlNum.alignLeft();
-			
+
 			addChild(zdlNum);
 			addChild(addZdlNum);
-			zdlNum.x = 108;
-			zdlNum.y = 6;
-			addZdlNum.y = 6;
-			addZdlNum.visible = false;
-			
+
+			zdlNum.x=152;
+			zdlNum.y=409;
+			addZdlNum.y=409;
+			addZdlNum.visible=false;
+
 			var aIndex:int;
 			var dIndex:int;
-			attackProperitys = new Vector.<DragonBallPropertyItem>();
-			defentProperitys = new Vector.<DragonBallPropertyItem>();
-			var properityDic:Object = TableManager.getInstance().getDragonBallPropertyDic();
-			for(var key:String in properityDic){
-				var info:TDragonBallPropertyInfo = properityDic[key];
-				var properityItem:DragonBallPropertyItem = new DragonBallPropertyItem();
+			attackProperitys=new Vector.<DragonBallPropertyItem>();
+			defentProperitys=new Vector.<DragonBallPropertyItem>();
+
+			var properityDic:Object=TableManager.getInstance().getDragonBallPropertyDic();
+
+			for (var key:String in properityDic) {
+
+				var info:TDragonBallPropertyInfo=properityDic[key];
+				var properityItem:DragonBallPropertyItem=new DragonBallPropertyItem();
+
 				properityItem.registerListener(onAddDegree);
 				properityItem.updateInfo(info);
 				addChild(properityItem);
-				if(1 == info.propertyType){
+
+				if (1 == info.propertyType) {
 					// 攻击属性
 					attackProperitys.push(properityItem);
-					properityItem.x = 23;
-					properityItem.y = 76 + aIndex * 53;
+					properityItem.x=263;
+					properityItem.y=36 + aIndex * 65;
 					aIndex++;
-				}else if(2 == info.propertyType){
+
+				} else if (2 == info.propertyType) {
+
 					// 防御属性
 					defentProperitys.push(properityItem);
-					properityItem.x = 320;
-					properityItem.y = 76 + dIndex * 53;
+					properityItem.x=12;
+					properityItem.y=36 + dIndex * 65;
 					dIndex++;
 				}
+
 			}
-			
+
+			lhLbl.x=385;
 			saveBtn.addEventListener(MouseEvent.CLICK, onMouseClick);
-			shortcutBtn.addEventListener(MouseEvent.CLICK, onMouseClick);
-			shortcutBtn.visible = false;
+//			shortcutBtn.addEventListener(MouseEvent.CLICK, onMouseClick);
+//			shortcutBtn.visible = false;
+
+			this.x=3;
 		}
-		
-		protected function onMouseClick(event:MouseEvent):void{
-			switch(event.target.name){
+
+		protected function onMouseClick(event:MouseEvent):void {
+			switch (event.target.name) {
 				case "saveBtn":
+					GuideArrowDirectManager.getInstance().delArrow(WindowEnum.ROLE+"");
 					addProperty();
 					break;
-				case "shortcutBtn":
-					Cmd_Longz.cm_Longz_Z();
-					break;
+//				case "shortcutBtn":
+//					Cmd_Longz.cm_Longz_Z();
+//					break;
 			}
 		}
-		
-		private function addProperty():void{
+
+		private function addProperty():void {
 			var lastItem:DragonBallPropertyItem;
-			for each(var saitem:DragonBallPropertyItem in attackProperitys){
-				if(0 < saitem.getPropertyValue()){
-					if(null == lastItem){
-						lastItem = saitem;
+			for each (var saitem:DragonBallPropertyItem in attackProperitys) {
+				if (0 < saitem.getPropertyValue()) {
+					if (null == lastItem) {
+						lastItem=saitem;
 						continue;
 					}
 					Cmd_Longz.cm_Longz_P(saitem.id, saitem.getPropertyValue());
 				}
 			}
-			for each(var sditem:DragonBallPropertyItem in defentProperitys){
-				if(0 < sditem.getPropertyValue()){
-					if(null == lastItem){
-						lastItem = sditem;
+			for each (var sditem:DragonBallPropertyItem in defentProperitys) {
+				if (0 < sditem.getPropertyValue()) {
+					if (null == lastItem) {
+						lastItem=sditem;
 						continue;
 					}
 					Cmd_Longz.cm_Longz_P(sditem.id, sditem.getPropertyValue());
 				}
 			}
-			if(null != lastItem){
+			if (null != lastItem) {
 				Cmd_Longz.cm_Longz_P(lastItem.id, lastItem.getPropertyValue(), 1);
 			}
 		}
-		
-		protected function onAddDegree(item:DragonBallPropertyItem):void{
+
+		protected function onAddDegree(item:DragonBallPropertyItem):void {
 			regreshRemainProperty();
-			plusImg.x = zdlNum.x + zdlNum.width;
-			addZdlNum.x = plusImg.x + plusImg.width;
-			var zdl:int = ZDLUtil.computation(defentProperitys[0].getPropertyValue(), 0, attackProperitys[0].getPropertyValue(), defentProperitys[1].getPropertyValue(), 0, 0, attackProperitys[1].getPropertyValue(), defentProperitys[2].getPropertyValue(), attackProperitys[2].getPropertyValue(), defentProperitys[3].getPropertyValue(), attackProperitys[3].getPropertyValue(), defentProperitys[4].getPropertyValue(), 0, 0);
+			plusImg.x=zdlNum.x + zdlNum.width / 2;
+			addZdlNum.x=plusImg.x + plusImg.width;
+			var zdl:int=ZDLUtil.computation(defentProperitys[0].getPropertyValue(), 0, attackProperitys[0].getPropertyValue(), defentProperitys[1].getPropertyValue(), 0, 0, attackProperitys[1].getPropertyValue(), defentProperitys[2].getPropertyValue(), attackProperitys[2].getPropertyValue(), defentProperitys[3].getPropertyValue(), attackProperitys[3].getPropertyValue(), defentProperitys[4].getPropertyValue(), 0, 0);
 			addZdlNum.setNum(zdl);
-			addZdlNum.visible = (zdl > 0);
-			plusImg.visible = (zdl > 0);
+			addZdlNum.visible=(zdl > 0);
+			plusImg.visible=(zdl > 0);
 		}
-		
-		private function regreshRemainProperty():void{
-			var value:int = UIManager.getInstance().backpackWnd.lh;
-			for each(var aitem:DragonBallPropertyItem in attackProperitys){
-				value -= aitem.getUsedVlaue();
+
+		private function regreshRemainProperty():void {
+			var value:int=UIManager.getInstance().backpackWnd.lh;
+			for each (var aitem:DragonBallPropertyItem in attackProperitys) {
+				value-=aitem.getUsedVlaue();
 			}
-			for each(var ditem:DragonBallPropertyItem in defentProperitys){
-				value -= ditem.getUsedVlaue();
+			for each (var ditem:DragonBallPropertyItem in defentProperitys) {
+				value-=ditem.getUsedVlaue();
 			}
 //			trace("================================")
-			for each(var saitem:DragonBallPropertyItem in attackProperitys){
+			for each (var saitem:DragonBallPropertyItem in attackProperitys) {
 				saitem.setLimit(value + saitem.getUsedVlaue());
 			}
-			for each(var sditem:DragonBallPropertyItem in defentProperitys){
+			for each (var sditem:DragonBallPropertyItem in defentProperitys) {
 				sditem.setLimit(value + sditem.getUsedVlaue());
 			}
 //			trace("================================")
-			costLbl.text = (UIManager.getInstance().backpackWnd.lh - value)+"";
+
+			if (otherPlay)
+				costLbl.text="???";
+			else
+				costLbl.text=(UIManager.getInstance().backpackWnd.lh - value) + "";
 		}
-		
-		public function updateInfo():void{
-			var data:DragonBallData = DataManager.getInstance().dragonBallData;
-			var properityDic:Object = TableManager.getInstance().getDragonBallPropertyDic();
-			var attributes:Object = data.attributes;
-			for each(var aitem:DragonBallPropertyItem in attackProperitys){
+
+		public function updateInfo():void {
+
+			var data:DragonBallData=DataManager.getInstance().dragonBallData;
+
+			if (otherPlay)
+				data=DataManager.getInstance().dragonBallDataII;
+
+			var properityDic:Object=TableManager.getInstance().getDragonBallPropertyDic();
+			var attributes:Object=data.attributes;
+
+			for each (var aitem:DragonBallPropertyItem in attackProperitys) {
 				aitem.updateCurrentValue(attributes[aitem.id]);
 			}
-			for each(var ditem:DragonBallPropertyItem in defentProperitys){
+
+			for each (var ditem:DragonBallPropertyItem in defentProperitys) {
 				ditem.updateCurrentValue(attributes[ditem.id]);
 			}
-			var zdl:int = ZDLUtil.computation(attributes[1], 0, attributes[4], attributes[5], 0, 0, attributes[8], attributes[9], attributes[10], attributes[11], attributes[12], attributes[13], 0, 0);
+
+			var zdl:int=ZDLUtil.computation(attributes[1], 0, attributes[4], attributes[5], 0, 0, attributes[8], attributes[9], attributes[10], attributes[11], attributes[12], attributes[13], 0, 0);
 			zdlNum.setNum(zdl);
 			regreshRemainProperty();
 			costLbl.text="0";
-			addZdlNum.visible = false;
-			plusImg.visible = false;
+			addZdlNum.visible=false;
+			plusImg.visible=false;
+
+			if (otherPlay) {
+				lhLbl.text="???";
+				costLbl.text="???";
+			} else {
+				lhLbl.text=UIManager.getInstance().backpackWnd.lh + "";
+				costLbl.text="0";
+			}
+		}
+
+		public function updateLh():void {
+			if (otherPlay)
+				lhLbl.text="???";
+			else
+				lhLbl.text=UIManager.getInstance().backpackWnd.lh + "";
 		}
 	}
 }

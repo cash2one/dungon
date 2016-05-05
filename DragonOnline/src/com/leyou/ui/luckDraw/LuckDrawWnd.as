@@ -1,14 +1,13 @@
 package com.leyou.ui.luckDraw {
 	import com.ace.ICommon.IMenu;
 	import com.ace.config.Core;
-	import com.ace.enum.GameFileEnum;
 	import com.ace.enum.TipEnum;
 	import com.ace.enum.WindowEnum;
 	import com.ace.gameData.manager.DataManager;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.table.TEquipInfo;
 	import com.ace.gameData.table.TItemInfo;
-	import com.ace.loader.child.SwfLoader;
+	import com.ace.manager.GuideArrowDirectManager;
 	import com.ace.manager.GuideManager;
 	import com.ace.manager.LibManager;
 	import com.ace.manager.MenuManager;
@@ -24,8 +23,9 @@ package com.leyou.ui.luckDraw {
 	import com.ace.ui.lable.Label;
 	import com.ace.ui.menu.data.MenuInfo;
 	import com.ace.ui.scrollPane.children.ScrollPane;
+	import com.ace.ui.tabbar.TabbarModel;
+	import com.ace.ui.tabbar.children.TabBar;
 	import com.ace.utils.StringUtil;
-	import com.greensock.TweenLite;
 	import com.greensock.TweenMax;
 	import com.greensock.easing.Expo;
 	import com.leyou.data.luckDraw.LuckDrawData;
@@ -40,12 +40,12 @@ package com.leyou.ui.luckDraw {
 	import com.leyou.net.cmd.Cmd_LDW;
 	import com.leyou.net.cmd.Cmd_Tm;
 	import com.leyou.ui.market.child.MarketGrid;
-	import com.leyou.util.DateUtil;
 	import com.leyou.utils.ItemUtil;
+	import com.leyou.utils.PayUtil;
 	import com.leyou.utils.PropUtils;
 	import com.leyou.utils.StringUtil_II;
 	
-	import flash.display.DisplayObject;
+	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.events.TextEvent;
 	import flash.geom.Point;
@@ -53,39 +53,44 @@ package com.leyou.ui.luckDraw {
 	import flash.utils.getTimer;
 
 	public class LuckDrawWnd extends AutoWindow implements IMenu {
+		
 		private static const MAX_REWARD_COUNT:int=10;
 
-		private var pRemainLbl:Label;
+		private var costLbl:Label;
 
-		private var pCountLbl:Label;
+		private var item1Lbl:Label;
 
-//		private var yb1ProLbl:Label;
-
-		private var yb2Pro1Lbl:Label;
+		private var cost10Lbl:Label;
 		
-		private var yb2Pro2Lbl:Label;
+		private var item2Lbl:Label;
 
-		private var yb1Lbl:Label;
+		private var cost50Lbl:Label;
 
-		private var yb2Lbl:Label;
+		private var item3Lbl:Label;
 
-		private var timeLbl:Label;
+		private var lotteryBtn:ImgButton;
 
-		//		private var proNameLbl:Label;
+		private var lottery10Btn:ImgButton;
 
-		private var pLotteryBtn:ImgButton;
-
-		private var ybLotteryBtn:ImgButton;
-
-		private var ybLottery10Btn:ImgButton;
+		private var lottery50Btn:ImgButton;
 
 		private var storeBtn:ImgButton;
-
-		//		private var lLogTab:TabBar;
+		
+		private var chargeBtn:ImgButton;
 
 		private var logPanel:ScrollPane;
 
 		private var selfPanel:ScrollPane;
+		
+		private var luckDrawBar:TabBar;
+		
+		private var iconImg:Image;
+		
+		private var yb1Img:Image;
+		
+		private var yb2Img:Image;
+		
+		private var yb3Img:Image;
 
 		private var currentIdx:int;
 
@@ -101,7 +106,7 @@ package com.leyou.ui.luckDraw {
 		private var tick:uint;
 		private var totalCount:int;
 
-		private var span:int=0;
+		private var span:int = 0;
 
 		private var logText:Vector.<Label>;
 
@@ -125,26 +130,31 @@ package com.leyou.ui.luckDraw {
 
 		private var evtInfo:MouseEventInfo;
 
-		private var ybImg:Image;
-
-		private var yb2Img:Image;
+//		private var ybImg:Image;
+//
+//		private var yb2Img:Image;
 
 		private var tipInfo:TipsInfo;
 
-		private var propImg:Image;
+//		private var propImg:Image;
 
-		private var btnEffect:SwfLoader;
+//		private var btnEffect:SwfLoader;
+//		
+//		private var pRemainCLbl:Label;
+//		
+//		private var desLbl:Label;
+//		
+//		private var gotoLbl:Label;
+//		
+//		private var valueLbl:Label;
+//		
+//		private var moneyImg:Image;
 		
-		private var pRemainCLbl:Label;
+		private var ybLbl:Label;
 		
-		private var desLbl:Label;
-		
-		private var gotoLbl:Label;
-		
-		private var valueLbl:Label;
-		
-		private var moneyImg:Image;
 		private var jlInfo:MouseEventInfo;
+		
+		private var costItems:Vector.<int>;
 
 		public function LuckDrawWnd() {
 			super(LibManager.getInstance().getXML("config/ui/luckDraw/luckDrawWnd.xml"));
@@ -153,166 +163,182 @@ package com.leyou.ui.luckDraw {
 
 		private function init():void {
 			// 1--个人 2--全服
-			hideBg();
-			clsBtn.y+=22;
-			style=new StyleSheet();
+			costItems = new Vector.<int>(6);
+			style = new StyleSheet();
 			style.setStyle("a:hover", {color: "#ff0000"});
-			tips=new TipsInfo();
-			tips.isShowPrice=false;
-			logText=new Vector.<Label>();
-			selfLogText=new Vector.<Label>();
-			grids=new Vector.<MarketGrid>();
-			flyQueue=new Vector.<Image>();
-			freeImgPool=new Vector.<Image>();
-			loopOrder=new Vector.<int>();
-			loopOrder.push(0, 1, 2, 3, 4, 5, 7, 13, 12, 11, 10, 9, 8, 6);
-			pRemainLbl=getUIbyID("pRemainLbl") as Label;
-			pCountLbl=getUIbyID("pCountLbl") as Label;
-			pRemainCLbl = getUIbyID("pRemainCLbl") as Label;
-			//			proNameLbl = getUIbyID("proNameLbl") as Label;
-//			yb1ProLbl = getUIbyID("yb1ProLbl") as Label;
-			yb2Pro1Lbl=getUIbyID("yb2Pro1Lbl") as Label;
-			yb1Lbl=getUIbyID("yb1Lbl") as Label;
-			yb2Pro2Lbl=getUIbyID("yb2Pro2Lbl") as Label;
-			yb2Lbl=getUIbyID("yb2Lbl") as Label;
-			timeLbl=getUIbyID("timeLbl") as Label;
-			pLotteryBtn=getUIbyID("pLotteryBtn") as ImgButton;
-			ybLotteryBtn=getUIbyID("ybLotteryBtn") as ImgButton;
-			ybLottery10Btn=getUIbyID("ybLottery10Btn") as ImgButton;
-			storeBtn=getUIbyID("storeBtn") as ImgButton;
-			//			lLogTab = getUIbyID("lLogTab") as TabBar;
-			logPanel=getUIbyID("logPanel") as ScrollPane;
-			selfPanel=getUIbyID("selfLogPanel") as ScrollPane;
-			propImg=getUIbyID("propImg") as Image;
-			desLbl=getUIbyID("desLbl") as Label;
-			gotoLbl=getUIbyID("gotoLbl") as Label;
-			valueLbl=getUIbyID("valueLbl") as Label;
-			moneyImg=getUIbyID("moneyImg") as Image;
-			desLbl.htmlText = TableManager.getInstance().getSystemNotice(6110).content;
-			gotoLbl.mouseEnabled = true;
-			gotoLbl.addEventListener(MouseEvent.CLICK, onBtnClick);
-			pLotteryBtn.addEventListener(MouseEvent.CLICK, onBtnClick);
-			ybLotteryBtn.addEventListener(MouseEvent.CLICK, onBtnClick);
-			ybLottery10Btn.addEventListener(MouseEvent.CLICK, onBtnClick);
+			tips = new TipsInfo();
+			tips.isShowPrice = false;
+			logText = new Vector.<Label>();
+			selfLogText = new Vector.<Label>();
+			grids = new Vector.<MarketGrid>();
+			flyQueue = new Vector.<Image>();
+			freeImgPool = new Vector.<Image>();
+			loopOrder = new Vector.<int>();
+			loopOrder.push(0, 1, 2, 3, 4, 6, 8, 13, 12, 11, 10, 9, 7, 5);
+			tipInfo = new TipsInfo();
+			tipInfo.isShowPrice = false;
+			selectImg = new Image("ui/luckDraw/icon_fz1.png");
+			selectImg.visible = false;
+			pane.addChild(selectImg);
+			
+			costLbl = getUIbyID("costLbl") as Label;
+			cost10Lbl = getUIbyID("cost10Lbl") as Label;
+			cost50Lbl = getUIbyID("cost50Lbl") as Label;
+			item1Lbl = getUIbyID("item1Lbl") as Label;
+			item2Lbl = getUIbyID("item2Lbl") as Label;
+			item3Lbl = getUIbyID("item3Lbl") as Label;
+			iconImg = getUIbyID("iconImg") as Image;
+			yb1Img = getUIbyID("yb1Img") as Image;
+			yb2Img = getUIbyID("yb2Img") as Image;
+			yb3Img = getUIbyID("yb3Img") as Image;
+			ybLbl = getUIbyID("ybLbl") as Label;
+			lotteryBtn = getUIbyID("lotteryBtn") as ImgButton;
+			lottery10Btn = getUIbyID("lottery10Btn") as ImgButton;
+			lottery50Btn = getUIbyID("lottery50Btn") as ImgButton;
+			storeBtn = getUIbyID("storeBtn") as ImgButton;
+			chargeBtn = getUIbyID("chargeBtn") as ImgButton;
+			logPanel = getUIbyID("logPanel") as ScrollPane;
+			selfPanel = getUIbyID("selfLogPanel") as ScrollPane;
+			luckDrawBar = getUIbyID("luckDrawBar") as TabBar;
+			lotteryBtn.addEventListener(MouseEvent.CLICK, onBtnClick);
+			lottery10Btn.addEventListener(MouseEvent.CLICK, onBtnClick);
+			lottery50Btn.addEventListener(MouseEvent.CLICK, onBtnClick);
 			storeBtn.addEventListener(MouseEvent.CLICK, onBtnClick);
-			//			lLogTab.addEventListener(TabbarModel.changeTurnOnIndex, onTabChange);
-			//			lLogTab.turnToTab(0);
-			selectImg=new Image("ui/luckDraw/icon_fz1.png");
-			selectImg.visible=false;
-			addChild(selectImg);
-			var row:int=3;
-			var col:int=6;
-			var count:int=0;
-			for (var i:int=0; i < row; i++) {
-				for (var j:int=0; j < col; j++) {
+			chargeBtn.addEventListener(MouseEvent.CLICK, onBtnClick);
+			luckDrawBar.addEventListener(TabbarModel.changeTurnOnIndex, onTabIndex);
+			
+			// 奖池
+			var row:int = 4;
+			var col:int = 5;
+			var count:int = 0;
+			for (var i:int = 0; i < row; i++) {
+				for (var j:int = 0; j < col; j++) {
 					if ((0 == j) || ((col - 1) == j) || (0 == i) || ((row - 1) == i)) {
-						var grid:MarketGrid=new MarketGrid();
-						grids[count++]=grid;
-						grid.x=121 + j * 113;
-						grid.y=93 + i * 98;
-						grid.isShowPrice=false;
-						addChild(grid);
+						var grid:MarketGrid = new MarketGrid();
+						grids[count++] = grid;
+						grid.x = 28 + j * 104;
+						grid.y = 120 + i * 87;
+						grid.isShowPrice = false;
+						pane.addChild(grid);
 					}
 				}
 			}
-			selectImg.x=grids[0].x;
-			selectImg.y=grids[0].y;
-			var info:TItemInfo=TableManager.getInstance().getItemInfo(ConfigEnum.Luck_draw1);
-			//			proNameLbl.text = info.name;
-			var info1:TItemInfo=TableManager.getInstance().getItemInfo(ConfigEnum.Luck_draw3);
-//			yb1ProLbl.text = info1.name;
-			yb2Pro1Lbl.text=info1.name + "x10";
-//			yb2Pro2Lbl.text=info1.name + "x1";
-			yb1Lbl.text=ConfigEnum.Luck_draw4 + "";
-			yb2Lbl.text=ConfigEnum.Luck_draw13 + "";
-			updateTick=ConfigEnum.Luck_draw10.split("|");
-			ybImg=getUIbyID("ybImg") as Image;
-			yb2Img=getUIbyID("yb2Img") as Image;
-			propImg=getUIbyID("propImg") as Image;
-			evtInfo=new MouseEventInfo();
-			evtInfo.onMouseMove=onMouseMove;
-			MouseManagerII.getInstance().addEvents(ybImg, evtInfo);
+			selectImg.x = grids[0].x;
+			selectImg.y = grids[0].y;
+			
+			// 道具TIPS
+			evtInfo = new MouseEventInfo();
+			evtInfo.onMouseMove = onMouseMove;
+			MouseManagerII.getInstance().addEvents(iconImg, evtInfo);
+			MouseManagerII.getInstance().addEvents(yb1Img, evtInfo);
 			MouseManagerII.getInstance().addEvents(yb2Img, evtInfo);
-			MouseManagerII.getInstance().addEvents(propImg, evtInfo);
-			jlInfo=new MouseEventInfo();
-			jlInfo.onMouseMove=onTipsMouseOver;
-			jlInfo.onMouseOut=onTipsMouseOut;
+			MouseManagerII.getInstance().addEvents(yb3Img, evtInfo);
 			
-			MouseManagerII.getInstance().addEvents(moneyImg, jlInfo);
-			tipInfo=new TipsInfo();
-			tipInfo.isShowPrice=false;
-			//			proNameLbl.mouseEnabled = true;
-//			yb1ProLbl.mouseEnabled = true;
-			yb2Pro1Lbl.mouseEnabled=true;
-			//			proNameLbl.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
-//			yb1ProLbl.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
-			yb2Pro1Lbl.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
-
-			var itemInfo:TItemInfo=TableManager.getInstance().getItemInfo(ConfigEnum.Luck_draw1);
-			var iconUrl:String=GameFileEnum.URL_ITEM_ICO + itemInfo.icon + ".png";
-			propImg.updateBmp(iconUrl);
-
-			btnEffect=new SwfLoader();
-			btnEffect.update(99900);
-			btnEffect.x=697;
-			btnEffect.y=535;
-			addChild(btnEffect);
-			removeEffect();
-
-			if (Core.isSF) {
-				ybImg.updateBmp("ui/backpack/yuanbaoIco_bound.png");
+			// 文本TIPS
+			item1Lbl.mouseEnabled = true;
+			item2Lbl.mouseEnabled = true;
+			item3Lbl.mouseEnabled = true;
+			item1Lbl.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
+			item2Lbl.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
+			item3Lbl.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
+			
+			luckDrawBar.turnToTab(0);
+			storeBtn.width = 118;
+			storeBtn.scaleY = 40/45;
+			chargeBtn.width = 118;
+			chargeBtn.scaleY = 40/45;
+		}
+		
+		protected function onTabIndex(event:Event):void{
+			switch(luckDrawBar.turnOnIndex){
+				case 0:
+					Cmd_LDW.cm_LDW_I(1);
+					switchToOrdinary();
+					DataManager.getInstance().luckdrawData.currentPage = 1;
+					break;
+				case 1:
+					Cmd_LDW.cm_LDW_I(2);
+					switchToVip();
+					DataManager.getInstance().luckdrawData.currentPage = 2;
+					break;
 			}
-			
-			var style:StyleSheet=new StyleSheet();
-			style.setStyle("body", {leading: 0.5});
-			style.setStyle("a:hover", {color: "#ff0000"});
-			gotoLbl.styleSheet=style;
-			gotoLbl.htmlText=StringUtil_II.addEventString(gotoLbl.text, gotoLbl.text, true);
 		}
 		
-		private function onTipsMouseOver(e:DisplayObject):void {
-			ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, TableManager.getInstance().getSystemNotice(9609).content, new Point(this.stage.mouseX, this.stage.mouseY));
+		protected function switchToOrdinary():void{
+			var xml:XML = LibManager.getInstance().getXML("config/table/Luck_Poll.xml");
+			var xmlList:XMLList = xml.children();
+			var xml1:XML = xmlList[0];
+			var xml2:XML = xmlList[1];
+			var xml3:XML = xmlList[2];
+			costLbl.text = xml1.@IB;
+			item1Lbl.styleSheet = style;
+			var itemInfo:TItemInfo = TableManager.getInstance().getItemInfo(xml1.@itemId);
+			costItems[0] = itemInfo.id;
+			item1Lbl.htmlText = StringUtil_II.addEventString(itemInfo.id+"", itemInfo.name+"x"+xml1.@itemNum, true);
+			cost10Lbl.text = xml2.@IB;
+			item2Lbl.styleSheet = style;
+			itemInfo = TableManager.getInstance().getItemInfo(xml2.@itemPId);
+			costItems[1] = itemInfo.id;
+			item2Lbl.htmlText = StringUtil_II.addEventString(itemInfo.id+"", itemInfo.name+"x"+xml2.@itemPNum, true);
+			cost50Lbl.text = xml3.@IB;
+			item3Lbl.styleSheet = style;
+			itemInfo = TableManager.getInstance().getItemInfo(xml3.@itemPId);
+			costItems[2] = itemInfo.id;
+			item3Lbl.htmlText = StringUtil_II.addEventString(itemInfo.id+"", itemInfo.name+"x"+xml3.@itemPNum, true);
 		}
 		
-		private function onTipsMouseOut(e:DisplayObject):void {
-			ToolTipManager.getInstance().hide();
+		protected function switchToVip():void{
+			var xml:XML = LibManager.getInstance().getXML("config/table/Luck_Poll.xml");
+			var xmlList:XMLList = xml.children();
+			var xml1:XML = xmlList[3];
+			var xml2:XML = xmlList[4];
+			var xml3:XML = xmlList[5];
+			costLbl.text = xml1.@IB;
+			item1Lbl.styleSheet = style;
+			var itemInfo:TItemInfo = TableManager.getInstance().getItemInfo(xml1.@itemId);
+			costItems[3] = itemInfo.id;
+			item1Lbl.htmlText = StringUtil_II.addEventString(itemInfo.id+"", itemInfo.name+"x"+xml1.@itemNum, true);
+			cost10Lbl.text = xml2.@IB;
+			item2Lbl.styleSheet = style;
+			itemInfo = TableManager.getInstance().getItemInfo(xml2.@itemPId);
+			costItems[4] = itemInfo.id;
+			item2Lbl.htmlText = StringUtil_II.addEventString(itemInfo.id+"", itemInfo.name+"x"+xml2.@itemPNum, true);
+			cost50Lbl.text = xml3.@IB;
+			item3Lbl.styleSheet = style;
+			itemInfo = TableManager.getInstance().getItemInfo(xml3.@itemPId);
+			costItems[5] = itemInfo.id;
+			item3Lbl.htmlText = StringUtil_II.addEventString(itemInfo.id+"", itemInfo.name+"x"+xml3.@itemPNum, true);
 		}
 		
-		public function updateItemNum():void {
-			valueLbl.text = "" + UIManager.getInstance().backpackWnd.jl;
-		}
-		
-		public override function get height():Number {
-			return 562;
-		}
-
 		private function addEffect():void {
-			btnEffect.visible=true;
+//			btnEffect.visible=true;
 		}
 
 		private function removeEffect():void {
-			btnEffect.visible=false;
+//			btnEffect.visible=false;
 		}
-
+		
 		protected function onMouseOver(event:MouseEvent):void {
 			switch (event.target.name) {
-				case "proNameLbl":
-					tipInfo.itemid=ConfigEnum.Luck_draw1;
+				case "item1Lbl":
+					tipInfo.itemid = (0 == luckDrawBar.turnOnIndex) ? costItems[0] : costItems[3];
 					break;
-				case "yb1ProLbl":
-				case "yb2Pro1Lbl":
-					tipInfo.itemid=ConfigEnum.Luck_draw3;
+				case "item2Lbl":
+					tipInfo.itemid = (0 == luckDrawBar.turnOnIndex) ? costItems[1] : costItems[4];
 					break;
-					//					tipInfo.itemid = ConfigEnum.Luck_draw3;
-					//					break;
+				case "item3Lbl":
+					tipInfo.itemid = (0 == luckDrawBar.turnOnIndex) ? costItems[2] : costItems[5];
+					break;
 			}
 			ToolTipManager.getInstance().show(TipEnum.TYPE_EMPTY_ITEM, tipInfo, new Point(stage.mouseX, stage.mouseY));
 		}
 
 		private function onMouseMove(target:Image):void {
 			switch (target.name) {
-				case "ybImg":
+				case "iconImg":
+				case "yb1Img":
 				case "yb2Img":
+				case "yb3Img":
 					var content:String=TableManager.getInstance().getSystemNotice(9559).content;
 					ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, content, new Point(stage.mouseX, stage.mouseY));
 					break;
@@ -323,22 +349,13 @@ package com.leyou.ui.luckDraw {
 			}
 		}
 
-		//		protected function onTabChange(event:Event):void{
-		//			if (currentIdx == lLogTab.turnOnIndex){
-		//				return;
-		//			}
-		//			currentIdx = lLogTab.turnOnIndex;
-		//			var type:int = (0 == currentIdx) ? 2 : 1;
-		//			Cmd_LDW.cm_LDW_H(type);
-		//		}
-
 		protected function loop(count:int=1, index:int=0):void {
 			if (!TimeManager.getInstance().hasITick(onLoopChange)) {
 				speed=40;
 				isLoop=true;
 				cloopCount=0;
 				tick=getTimer();
-				totalCount=count * 14 + index + 1;
+				totalCount=count * 14 + loopOrder.indexOf(index)+1;
 				TimeManager.getInstance().addITick(30, onLoopChange);
 			}
 		}
@@ -347,19 +364,19 @@ package com.leyou.ui.luckDraw {
 			var interval:int=getTimer() - tick;
 			if (interval >= speed) {
 				tick=getTimer();
-				var cindex:int=cloopCount % grids.length;
-				var gi:int=loopOrder[cindex];
+				var cindex:int = cloopCount % grids.length;
+				var gi:int = loopOrder[cindex];
 				cloopCount++;
 				if (totalCount <= cloopCount + 10) {
-					speed+=30;
+					speed += 30;
 				}
 				if ((totalCount <= cloopCount) && TimeManager.getInstance().hasITick(onLoopChange)) {
-					isLoop=false;
+					isLoop = false;
 					receiveReward();
 					TimeManager.getInstance().removeITick(onLoopChange);
 				}
-				selectImg.x=grids[gi].x;
-				selectImg.y=grids[gi].y;
+				selectImg.x = grids[gi].x;
+				selectImg.y = grids[gi].y;
 			}
 		}
 
@@ -370,89 +387,115 @@ package com.leyou.ui.luckDraw {
 //			Cmd_LDW.cm_LDW_H(2);
 			Cmd_LDW.cm_LDW_B();
 			GuideManager.getInstance().removeGuide(97);
-			if (!TimeManager.getInstance().hasITick(updateTime)) {
-				TimeManager.getInstance().addITick(1000, updateTime);
-			}
-			updateItemNum();
+//			if (!TimeManager.getInstance().hasITick(updateTime)) {
+//				TimeManager.getInstance().addITick(1000, updateTime);
+//			}
+//			updateItemNum();
+			UILayoutManager.getInstance().open(WindowEnum.LUCKDRAW, WindowEnum.LUCKDRAW_STORE);
 		}
 
-		private function updateTime():void {
-			var date:Date=new Date();
-			var utick1:int=updateTick[0];
-			var utick2:int=updateTick[1];
-			if (utick1 > utick2) {
-				var tmp:int=utick1;
-				utick1=utick2;
-				utick2=tmp;
-			}
-			var hours:int;
-			var minutes:int;
-			var seconds:int;
-			if (date.hours > utick1) {
-				hours=utick2 - date.hours;
-				minutes=59 - date.minutes;
-				seconds=59 - date.seconds;
-			}
-			if (date.hours > utick2) {
-				hours=23 - date.hours + utick1;
-				minutes=59 - date.minutes;
-				seconds=59 - date.seconds;
-			}
-			var time:uint=hours * (1000 * 60 * 60) + minutes * (1000 * 60) + seconds * 1000;
-			timeLbl.text=DateUtil.formatTime(time, 2);
-		}
+//		private function updateTime():void {
+//			var date:Date=new Date();
+//			var utick1:int=updateTick[0];
+//			var utick2:int=updateTick[1];
+//			if (utick1 > utick2) {
+//				var tmp:int=utick1;
+//				utick1=utick2;
+//				utick2=tmp;
+//			}
+//			var hours:int;
+//			var minutes:int;
+//			var seconds:int;
+//			if (date.hours > utick1) {
+//				hours=utick2 - date.hours;
+//				minutes=59 - date.minutes;
+//				seconds=59 - date.seconds;
+//			}
+//			if (date.hours > utick2) {
+//				hours=23 - date.hours + utick1;
+//				minutes=59 - date.minutes;
+//				seconds=59 - date.seconds;
+//			}
+//			var time:uint=hours * (1000 * 60 * 60) + minutes * (1000 * 60) + seconds * 1000;
+//			timeLbl.text=DateUtil.formatTime(time, 2);
+//		}
 
-		public override function hide():void {
-			super.hide();
-			GuideManager.getInstance().removeGuide(98);
-			if (TimeManager.getInstance().hasITick(updateTime)) {
-				TimeManager.getInstance().removeITick(updateTime);
-			}
-		}
+//		public override function hide():void {
+//			super.hide();
+//			GuideManager.getInstance().removeGuide(98);
+//			if (TimeManager.getInstance().hasITick(updateTime)) {
+//				TimeManager.getInstance().removeITick(updateTime);
+//			}
+//		}
 
 		protected function onBtnClick(event:MouseEvent):void {
+			var xml:XML = LibManager.getInstance().getXML("config/table/Luck_Poll.xml");
+			var xmlList:XMLList = xml.children();
 			var content:String;
 			switch (event.target.name) {
-				case "pLotteryBtn":
+//				case "gotoLbl":
+//					UILayoutManager.getInstance().show_II(WindowEnum.MYSTORE);
+//					
+//					TweenLite.delayedCall(0.3, function():void {
+//						UIManager.getInstance().myStore.setTabIndex(2);
+//					});
+//					break;
+				case "lotteryBtn":
 					if (!isLoop) {
-						Cmd_LDW.cm_LDW_D(1);
+						if(0 == luckDrawBar.turnOnIndex){
+							Cmd_LDW.cm_LDW_D(1);
+						}else{
+							Cmd_LDW.cm_LDW_D(4);
+						}
 						GuideManager.getInstance().removeGuide(98);
 					}
-					break;
-				case "gotoLbl":
-					UILayoutManager.getInstance().show_II(WindowEnum.MYSTORE);
 					
-					TweenLite.delayedCall(0.3, function():void {
-						UIManager.getInstance().myStore.setTabIndex(2);
-					});
+					GuideArrowDirectManager.getInstance().delArrow(WindowEnum.LUCKDRAW+"");
 					break;
-				case "ybLotteryBtn":
+				case "lottery10Btn":
 					if (!isLoop) {
-						var cid:int=(Core.isSF ? 6108 : 6104);
-						content=TableManager.getInstance().getSystemNotice(cid).content;
-						content=StringUtil.substitute(content, ConfigEnum.Luck_draw4);
-						PopupManager.showConfirm(content, lottery1, null, false, "luckDraw.lottery1");
+						lottery10();
+//						var cid:int = (Core.isSF ? 6108 : 6104);
+//						content = TableManager.getInstance().getSystemNotice(cid).content;
+//						content = StringUtil.substitute(content, ConfigEnum.Luck_draw4);
+//						PopupManager.showConfirm(content, lottery10, null, false, "luckDraw.lottery1");
 					}
 					break;
-				case "ybLottery10Btn":
+				case "lottery50Btn":
 					if (!isLoop) {
-						content=TableManager.getInstance().getSystemNotice(6105).content;
-						content=StringUtil.substitute(content, ConfigEnum.Luck_draw13);
-						PopupManager.showConfirm(content, lottery10, null, false, "luckDraw.lottery1");
+						lottery50();
+//						content = TableManager.getInstance().getSystemNotice(6105).content;
+//						content = StringUtil.substitute(content, ConfigEnum.Luck_draw13);
+//						PopupManager.showConfirm(content, lottery50, null, false, "luckDraw.lottery1");
 					}
 					break;
 				case "storeBtn":
 					UILayoutManager.getInstance().open(WindowEnum.LUCKDRAW, WindowEnum.LUCKDRAW_STORE);
 					break;
+				case "chargeBtn":
+					PayUtil.openPayUrl();
+					break;
 			}
 		}
 
-		private function lottery1():void {
-			Cmd_LDW.cm_LDW_D(2);
+		private function lottery10():void {
+			if(0 == luckDrawBar.turnOnIndex){
+				Cmd_LDW.cm_LDW_D(2);
+			}else{
+				Cmd_LDW.cm_LDW_D(5);
+			}
 		}
 
-		private function lottery10():void {
-			Cmd_LDW.cm_LDW_D(3);
+		private function lottery50():void {
+			if(0 == luckDrawBar.turnOnIndex){
+				Cmd_LDW.cm_LDW_D(3);
+			}else{
+				Cmd_LDW.cm_LDW_D(6);
+			}
+		}
+		
+		public function setTabIndex(i:int):void{
+			luckDrawBar.turnToTab(i);
 		}
 
 		private function getTextItem(type:int, index:int):Label {
@@ -489,6 +532,10 @@ package com.leyou.ui.luckDraw {
 				}
 			}
 		}
+		
+		public override function get height():Number{
+			return 544;
+		}
 
 		public function receiveReward():void {
 			startFly();
@@ -500,7 +547,7 @@ package com.leyou.ui.luckDraw {
 		public function startLuckDraw():void {
 			var list:Array=DataManager.getInstance().luckdrawData.ownList;
 			var pos:int=list[0] - 1;
-			var gi:int=loopOrder[pos];
+			var gi:int=pos/*loopOrder[pos]*/;
 			pushFly(grids[gi]);
 			if (list.length > 1) {
 				selectImg.visible=false;
@@ -509,7 +556,7 @@ package com.leyou.ui.luckDraw {
 				var l:int=list.length;
 				for (var n:int=1; n < l; n++) {
 					pos=list[n] - 1;
-					gi=loopOrder[pos];
+					gi=pos/*loopOrder[pos]*/;
 					pushFly(grids[gi]);
 				}
 				receiveReward();
@@ -520,13 +567,13 @@ package com.leyou.ui.luckDraw {
 		}
 
 		private function pushFly(grid:MarketGrid):void {
-			var icon:Image=freeImgPool.pop();
+			var icon:Image = freeImgPool.pop();
 			if (null == icon) {
 				icon=new Image();
 			}
-			icon.bitmapData=grid.itemBmp;
-			icon.x=grid.x;
-			icon.y=grid.y;
+			icon.bitmapData = grid.itemBmp;
+			icon.x = grid.x;
+			icon.y = grid.y;
 			flyQueue.push(icon);
 		}
 
@@ -565,7 +612,7 @@ package com.leyou.ui.luckDraw {
 			var data:LuckDrawData=DataManager.getInstance().luckdrawData;
 			var l:int=data.logLength(1);
 			for (var n:int=0; n < l; n++) {
-				var logText:Label=getTextItem(1, n);
+				var logText:Label = getTextItem(1, n);
 				var info:LuckDrawLogInfo=data.getLog(1, n);
 				logText.htmlText=generateLog(info);
 				logText.addEventListener(TextEvent.LINK, onLinkClick);
@@ -629,31 +676,34 @@ package com.leyou.ui.luckDraw {
 		}
 
 		public function updateInfo_I():void {
-			var data:LuckDrawData=DataManager.getInstance().luckdrawData;
-//			pRemainLbl.text=PropUtils.getStringById(1779) + data.remainCount + "/" + data.maxCount;
-			pRemainCLbl.text = data.remainCount+"";
-			if(data.remainCount > 0){
-				pRemainCLbl.textColor = 0xff00;
-			}else{
-				pRemainCLbl.textColor = 0xff0000;
+			var data:LuckDrawData = DataManager.getInstance().luckdrawData;
+			// 圆周循序
+//			var l:int = loopOrder.length;
+//			for (var n:int = 0; n < l; n++) {
+//				var index:int = loopOrder[n];
+//				var rInfo:LuckDrawRewardInfo = data.getReward(n);
+//				grids[index].updataInfo({count: rInfo.count, itemId: rInfo.itemid});
+//			}
+			ybLbl.text = data.lyb+"";
+			// 阵列循序
+			var l:int = grids.length;
+			for (var n:int = 0; n < l; n++) {
+				var rInfo:LuckDrawRewardInfo = data.getReward(n);
+				grids[n].updataInfo({count: rInfo.count, itemId: rInfo.itemid});
 			}
-			pCountLbl.text=data.costCount + "";
-			var l:int=loopOrder.length;
-			for (var n:int=0; n < l; n++) {
-				var index:int=loopOrder[n];
-				var rInfo:LuckDrawRewardInfo=data.getReward(n);
-				grids[index].updataInfo({count: rInfo.count, itemId: rInfo.itemid});
-			}
-			updateTime();
 		}
 
 		public function updateInfoEffect():void {
-			var data:LuckDrawData=DataManager.getInstance().luckdrawData;
+			var data:LuckDrawData = DataManager.getInstance().luckdrawData;
 			if (data.storeLength() > 0) {
 				addEffect();
 			} else {
 				removeEffect();
 			}
+		}
+		
+		public function updateYb():void{
+			ybLbl.text = DataManager.getInstance().luckdrawData.lyb+"";
 		}
 
 		public function generateLog(info:LuckDrawLogInfo):String {
@@ -665,14 +715,21 @@ package com.leyou.ui.luckDraw {
 			var itemName:String=itemInfo.name + "x" + info.itemNum;
 			var color:String="#" + ItemUtil.getColorByQuality(qulity).toString(16).replace("0x");
 			var str:String="";
+			var place:String = (1 == info.costType) ? PropUtils.getStringById(2340) : PropUtils.getStringById(2339);
 			if (1 == info.type) {
-				str="<font color='#FFC000'>{1}</font>" + PropUtils.getStringById(1780) + "<font color='{2}'><u><a href='event:{3}|{4}'>{5}</a></u></font>";
+				str="<font color='#FFC000'>{1}</font>" +  place + PropUtils.getStringById(1780) + "<font color='{2}'><u><a href='event:{3}|{4}'>{5}</a></u></font>";
 				str=StringUtil.substitute(str, info.dtime, color, "item", info.itemid, itemName);
 			} else if (2 == info.type) {
-				str="<font color='#00ff00'><u><a href='event:{1}|{2}'>{3}</a></u></font>"+PropUtils.getStringById(1781)+"<font color='{4}'><u><a href='event:{5}|{6}'>{7}</a></u></font>";
+				str="<font color='#00ff00'><u><a href='event:{1}|{2}'>{3}</a></u></font>" + place + PropUtils.getStringById(1781)+"<font color='{4}'><u><a href='event:{5}|{6}'>{7}</a></u></font>";
 				str=StringUtil.substitute(str, "player", info.name, info.name, color, "item", info.itemid, itemName);
 			}
 			return str;
 		}
+		
+		override public function hide():void{
+			super.hide();
+			GuideManager.getInstance().removeGuide(98);
+		}
+		
 	}
 }

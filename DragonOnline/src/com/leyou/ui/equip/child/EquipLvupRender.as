@@ -1,6 +1,5 @@
 package com.leyou.ui.equip.child {
 
-
 	import com.ace.enum.PlayerEnum;
 	import com.ace.enum.WindowEnum;
 	import com.ace.game.backpack.GridBase;
@@ -9,12 +8,15 @@ package com.leyou.ui.equip.child {
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.table.TEquipInfo;
 	import com.ace.loader.child.SwfLoader;
+	import com.ace.manager.GuideManager;
 	import com.ace.manager.LibManager;
 	import com.ace.manager.UILayoutManager;
 	import com.ace.manager.UIManager;
 	import com.ace.ui.FlyManager;
 	import com.ace.ui.auto.AutoSprite;
 	import com.ace.ui.button.children.ImgButton;
+	import com.ace.ui.img.child.Image;
+	import com.ace.ui.lable.Label;
 	import com.ace.ui.notice.NoticeManager;
 	import com.leyou.data.bag.Baginfo;
 	import com.leyou.data.tips.TipsInfo;
@@ -28,6 +30,8 @@ package com.leyou.ui.equip.child {
 	public class EquipLvupRender extends AutoSprite {
 
 		private var confirmBtn:ImgButton;
+		private var ruleLbl:Label;
+		private var bgImg:Image;
 
 		private var lvupBar1:EquipLvupBar1;
 		private var lvupBar2:EquipLvupBar2;
@@ -52,19 +56,21 @@ package com.leyou.ui.equip.child {
 
 		private function init():void {
 			this.confirmBtn=this.getUIbyID("confirmBtn") as ImgButton;
+			this.ruleLbl=this.getUIbyID("ruleLbl") as Label;
+			this.bgImg=this.getUIbyID("bgImg") as Image;
 
 			this.lvupBar1=new EquipLvupBar1();
 			this.addChild(lvupBar1);
 			this.lvupBar1.x=36;
-			this.lvupBar1.y=275;
+			this.lvupBar1.y=270;
 
 			this.lvupBar2=new EquipLvupBar2();
 			this.addChild(lvupBar2);
 			this.lvupBar2.x=36;
 			this.lvupBar2.y=275;
 
-			this.lvupBar1.visible=false;
-			this.lvupBar2.visible=true;
+			this.lvupBar1.visible=true;
+			this.lvupBar2.visible=false;
 
 
 			this.targetGrid=new EquipStrengGrid();
@@ -76,20 +82,26 @@ package com.leyou.ui.equip.child {
 			this.succGrid=new EquipStrengGrid();
 			this.addChild(this.succGrid);
 
-			this.targetGrid.x=85;
-			this.targetGrid.y=53;
+			this.targetGrid.x=65;
+			this.targetGrid.y=45;
 
-			this.CostGrid.x=210;
-			this.CostGrid.y=53;
+			this.CostGrid.x=189;
+			this.CostGrid.y=45;
+
+			this.targetGrid.setSize(40, 40);
+			this.CostGrid.setSize(40, 40);
+//			this.targetGrid.setSize(38,38);
+//			this.CostGrid.setSize(38,38);
 
 			this.succGrid.setSize(60, 60);
-			this.succGrid.x=138;
-			this.succGrid.y=180;
+			this.succGrid.x=122;
+			this.succGrid.y=175;
 
 			this.succGrid.canMove=false;
 
 			this.targetGrid.selectState();
 			this.CostGrid.selectState();
+			this.succGrid.selectState();
 
 			this.targetGrid.dataId=3;
 			this.CostGrid.dataId=2;
@@ -116,7 +128,9 @@ package com.leyou.ui.equip.child {
 
 			this.succEffect.visible=false;
 
-			this.x=-12;
+			this.ruleLbl.setToolTip(TableManager.getInstance().getSystemNotice(2628).content);
+
+			this.x=60;
 			this.y=1;
 
 			this.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
@@ -194,9 +208,11 @@ package com.leyou.ui.equip.child {
 				this.targetGrid.resetGrid();
 				this.CostGrid.resetGrid();
 
-				EquipStrengGrid.selectState.setSelectState(false);
-				EquipStrengGrid.selectState.resetGrid();
-				EquipStrengGrid.selectState=null;
+				if (EquipStrengGrid.selectState != null) {
+					EquipStrengGrid.selectState.setSelectState(false);
+					EquipStrengGrid.selectState.resetGrid();
+					EquipStrengGrid.selectState=null;
+				}
 
 				if (EquipStrengGrid.selectStateII != null) {
 					EquipStrengGrid.selectStateII.setSelectState(false);
@@ -219,6 +235,8 @@ package com.leyou.ui.equip.child {
 
 				this.confirmBtn.setActive(false, .6, true);
 				UIManager.getInstance().equipWnd.BagRender.update();
+
+				GuideManager.getInstance().removeGuide(132);
 			}
 
 
@@ -227,6 +245,132 @@ package com.leyou.ui.equip.child {
 		public function setDownItem(g:GridBase):void {
 
 			var data:Object=g.data;
+			var info:TipsInfo=data.tips;
+
+			var pos:int;
+			var pos1:int;
+
+			if (!this.targetGrid.isEmpty) {
+				if (this.targetGrid.data.hasOwnProperty("pos") && data.hasOwnProperty("pos")) {
+
+					if (int(this.targetGrid.data.pos) == data.pos && int(this.targetGrid.data.num) == data.num && int(this.targetGrid.data.info.subclassid) == data.info.subclassid) {
+						return;
+					}
+
+				} else if (!this.targetGrid.data.hasOwnProperty("pos") && !data.hasOwnProperty("pos")) {
+
+					pos=data.position;
+					pos1=this.targetGrid.data.position;
+
+					if (pos == pos1) {
+						return;
+					}
+
+				}
+
+			} else if (!this.CostGrid.isEmpty) {
+
+				if (this.CostGrid.data.hasOwnProperty("pos") && data.hasOwnProperty("pos")) {
+
+					if (int(this.CostGrid.data.pos) == data.pos) {
+						return;
+					}
+
+				} else {
+
+					pos=data.position;
+					pos1=this.targetGrid.data.position;
+
+					if (pos == pos1) {
+						return;
+					}
+
+				}
+			}
+
+			if (this.targetGrid.isEmpty) {
+				this.targetGrid.updataInfo(data);
+				this.clearData();
+				this.updateViewState(data);
+
+				var bvec:Vector.<EquipStrengGrid>=UIManager.getInstance().equipWnd.BagRender.getBagGridAll();
+				var i:int=0;
+				var idx:int=0;
+				var zdl:int=int.MAX_VALUE;
+				for (i=0; i < bvec.length; i++) {
+
+					if (bvec[i] != null && bvec[i].data != null) {
+						if (bvec[i].data.tips.zdl < zdl) {
+
+							if (bvec[i].dataId == 51)
+								continue;
+
+							if (bvec[i].data.info.quality < 2 || bvec[i].data.info.lvup_id == 0) {
+								continue;
+							}
+
+							if (bvec[i].data.info.Suit_Group > 0) {
+								continue;
+							}
+
+							zdl=bvec[i].data.tips.zdl;
+							idx=i;
+						}
+					}
+
+				}
+
+				if (zdl != int.MAX_VALUE)
+					bvec[idx].setTargetGrid(bvec[idx]);
+
+				if (EquipStrengGrid.selectStateII == null) {
+					bvec=UIManager.getInstance().equipWnd.BagRender.getBodyGridAll();
+					zdl=int.MAX_VALUE;
+					idx=0;
+					for (i=0; i < bvec.length; i++) {
+
+						if (bvec[i] != null && bvec[i].data != null) {
+							if (bvec[i].data.tips.zdl < zdl) {
+
+								if (bvec[i].dataId == 51)
+									continue;
+
+								if (bvec[i].data.info.quality < 2 || bvec[i].data.info.lvup_id == 0) {
+									continue;
+								}
+
+								if (bvec[i].data.info.Suit_Group > 0) {
+									continue;
+								}
+
+								zdl=bvec[i].data.tips.zdl;
+								idx=i;
+							}
+						}
+
+					}
+
+					if (zdl != int.MAX_VALUE)
+						bvec[idx].setTargetGrid(bvec[idx]);
+				}
+
+			} else if (this.CostGrid.isEmpty) {
+
+				if (data.info.id == this.targetGrid.data.info.id)
+					this.CostGrid.updataInfo(data);
+			}
+
+			this.update(this.targetGrid.data);
+
+			if (!this.targetGrid.isEmpty && !this.CostGrid.isEmpty) {
+				this.confirmBtn.setActive(true, 1, true);
+				this.confirmBtn.setToolTip("");
+			}
+		}
+
+		public function setDownItemII(tinfo:Baginfo):void {
+
+			var data:Object=tinfo;
 			var info:TipsInfo=data.tips;
 
 			var pos:int;
@@ -412,6 +556,7 @@ package com.leyou.ui.equip.child {
 
 		private function update(info:Object):void {
 
+			this.bgImg.visible=true;
 			this.lvupBar1.visible=true;
 			this.lvupBar2.visible=false;
 
@@ -420,7 +565,7 @@ package com.leyou.ui.equip.child {
 			var binfo:Baginfo=new Baginfo();
 			binfo.info=TableManager.getInstance().getEquipInfo(info.info.lvup_id);
 			binfo.tips=new TipsInfo();
-			
+
 			if (info.tips.qh > 0) {
 				binfo.tips.qh=info.tips.qh;
 				binfo.tips.p=info.tips.p;
@@ -454,10 +599,9 @@ package com.leyou.ui.equip.child {
 		}
 
 		private function clearData():void {
+			this.bgImg.visible=false;
 			this.lvupBar1.visible=false;
-			this.lvupBar2.visible=true;
-
-
+			this.lvupBar2.visible=false;
 		}
 
 

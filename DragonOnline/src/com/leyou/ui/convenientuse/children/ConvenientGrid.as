@@ -66,7 +66,7 @@ package com.leyou.ui.convenientuse.children
 		 * 
 		 */		
 		public override function mouseOverHandler($x:Number, $y:Number):void{
-			if(dataId <= 0){
+			if(dataId <= 0 || bitem.bagInfo==null){
 				return;
 			}
 			bitem.bagInfo.tips.isdiff = false;

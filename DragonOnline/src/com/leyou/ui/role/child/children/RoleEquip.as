@@ -40,7 +40,7 @@ package com.leyou.ui.role.child.children {
 			this.fightKeyLbl=this.getUIbyID("fightKeyLbl") as Label;
 			this.playerImg=this.getUIbyID("playerImg") as Image;
 			
-			this.scrollRect=new Rectangle(0,0,270,440);
+			this.scrollRect=new Rectangle(0,0,332,446);
 			
 //			this.fightkey=new Bitmap();
 //			this.addChild(this.fightkey);
@@ -51,13 +51,13 @@ package com.leyou.ui.role.child.children {
 			this.rollPower.loadSource("ui/num/{num}_zdl.png");
 			this.addChild(this.rollPower);
 			this.rollPower.x=this.fightKeyLbl.x;
-			this.rollPower.y=this.fightKeyLbl.y + 10;
+			this.rollPower.y=this.fightKeyLbl.y + 12;
 
 //			this.rollPower.visibleOfBg=false;
 			this.rollPower.alignCenter();
 
-//			this.y=5;
-//			this.x=-2;
+//			this.y=3;
+//			this.x=300;
 		}
 
 		public function updateInfo(info:RoleInfo, otherPlayer:Boolean=false):void {
@@ -76,7 +76,7 @@ package com.leyou.ui.role.child.children {
 					NoticeManager.getInstance().rollToPower(info.fight);
 				}
 
-				this.rollPower.x=270 - info.fight.toString().length*15 >> 1;
+				this.rollPower.x=317 - info.fight.toString().length*15 >> 1;
 			}
 			
 		}

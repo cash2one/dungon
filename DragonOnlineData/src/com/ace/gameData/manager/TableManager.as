@@ -11,12 +11,18 @@ package com.ace.gameData.manager {
 	import com.ace.gameData.table.TBackpackAdd;
 	import com.ace.gameData.table.TBlackStoreInfo;
 	import com.ace.gameData.table.TBuffAward;
+	import com.ace.gameData.table.TCSLvInfo;
+	import com.ace.gameData.table.TCSMissionInfo;
+	import com.ace.gameData.table.TCSPlayerRankInfo;
+	import com.ace.gameData.table.TCSServerRankInfo;
 	import com.ace.gameData.table.TCityBattleRewardInfo;
 	import com.ace.gameData.table.TCollectionPreciousInfo;
 	import com.ace.gameData.table.TCopyInfo;
 	import com.ace.gameData.table.TDragonBallPropertyInfo;
 	import com.ace.gameData.table.TDragonBallRewardInfo;
 	import com.ace.gameData.table.TDungeon_Base;
+	import com.ace.gameData.table.TElementInfo;
+	import com.ace.gameData.table.TElementTrans;
 	import com.ace.gameData.table.TEquipBlessInfo;
 	import com.ace.gameData.table.TEquipInfo;
 	import com.ace.gameData.table.TExpCopyInfo;
@@ -24,6 +30,7 @@ package com.ace.gameData.manager {
 	import com.ace.gameData.table.TFarmLvInfo;
 	import com.ace.gameData.table.TFarmPlantInfo;
 	import com.ace.gameData.table.TFieldBossInfo;
+	import com.ace.gameData.table.TFindBackInfo;
 	import com.ace.gameData.table.TFunForcastInfo;
 	import com.ace.gameData.table.TGroupBuyItemInfo;
 	import com.ace.gameData.table.TGuideInfo;
@@ -61,6 +68,8 @@ package com.ace.gameData.manager {
 	import com.ace.gameData.table.TQuestion;
 	import com.ace.gameData.table.TRankRewardInfo;
 	import com.ace.gameData.table.TRing_intensify;
+	import com.ace.gameData.table.TSeGuild;
+	import com.ace.gameData.table.TServerListInfo;
 	import com.ace.gameData.table.TSevenDayInfo;
 	import com.ace.gameData.table.TSevenDayRewardInfo;
 	import com.ace.gameData.table.TShop;
@@ -115,7 +124,7 @@ package com.ace.gameData.manager {
 		private var funForcast:Object;
 		private var activeDic:Object;
 		private var activeReward:Object;
-		private var guideDic:Object;
+		public var guideDic:Object;
 		private var promptDic:Object;
 		private var zdlEDic:Object;
 		private var achievementDic:Object;
@@ -148,6 +157,7 @@ package com.ace.gameData.manager {
 		private var collectionGroupDic:Object;
 		private var abidePayDic:Object;
 		private var combineDic:Object;
+		private var twlcDic:Object;
 		private var _rankRewardHeDic:Object;
 		private var groupBuyDic:Object;
 		private var vendueDic:Object;
@@ -173,13 +183,37 @@ package com.ace.gameData.manager {
 		private var dragonBallPropertyDic:Object;
 		private var alchemyDic:Object;
 		private var labaDic:Object;
+		private var _cserverLvDic:Object;
+		private var cserverMissionDic:Object;
+		private var _cserverPlayerRankDic:Object;
+		private var _cserverServerRankDic:Object;
+		private var elementDic:Object;
+		private var findBackDick:Object;
 		
 		private var marryLvDic:Object;
 		private var marryRingDic:Object;
 		private var Ring_intensifyDic:Object;
+		private var elementTransDic:Object;
+		private var seGuideDic:Object;
+		private var dropPackDic:Object;
 
 		public function TableManager() {
 			super();
+		}
+
+		public function get cserverLvDic():Object
+		{
+			return _cserverLvDic;
+		}
+
+		public function get cserverServerRankDic():Object
+		{
+			return _cserverServerRankDic;
+		}
+
+		public function get cserverPlayerRankDic():Object
+		{
+			return _cserverPlayerRankDic;
 		}
 
 		public static function getInstance():TableManager {
@@ -260,6 +294,7 @@ package com.ace.gameData.manager {
 			this.collectionGroupDic={};
 			this.abidePayDic={};
 			this.combineDic={};
+			this.twlcDic={};
 			this._rankRewardHeDic={};
 			this.groupBuyDic={};
 			this.vendueDic={};
@@ -288,6 +323,15 @@ package com.ace.gameData.manager {
 			this.marryLvDic={};
 			this.marryRingDic={};
 			this.Ring_intensifyDic={};
+			this._cserverLvDic={};
+			this.cserverMissionDic={};
+			this._cserverPlayerRankDic={};
+			this._cserverServerRankDic={};
+			this.elementDic={};
+			this.findBackDick={};
+			this.elementTransDic={};
+			this.seGuideDic={};
+			this.dropPackDic={};
 			
 			var info:XML;
 			var render:XML;
@@ -343,7 +387,7 @@ package com.ace.gameData.manager {
 			//称号
 			info=LibManager.getInstance().getXML("config/table/title.xml");
 			for each (render in info.children()) {
-				this.titleDic[render.@titleId]=new TTitle(render);
+				this.titleDic[render.@typeId]=new TTitle(render);
 			}
 
 			//称号
@@ -475,9 +519,10 @@ package com.ace.gameData.manager {
 			}
 
 			// VIP信息
+			var vindex:int;
 			info=LibManager.getInstance().getXML("config/table/VIP.xml");
 			for each (render in info.children()) {
-				this.vipDic[render.@modid]=new TVIPInfo(render);
+				this.vipDic[vindex++]=new TVIPInfo(render);
 			}
 
 			// VIP详细信息
@@ -645,6 +690,12 @@ package com.ace.gameData.manager {
 			for each (render in info.children()) {
 				this.combineDic[render.@id]=new TAbidePayInfo(render);
 			}
+			
+			// 台湾连冲
+			info=LibManager.getInstance().getXML("config/table/lxtw.xml");
+			for each (render in info.children()) {
+				this.twlcDic[render.@id]=new TAbidePayInfo(render);
+			}
 
 			// 主城争霸--奖励
 			info=LibManager.getInstance().getXML("config/table/City_Fight.xml");
@@ -664,7 +715,7 @@ package com.ace.gameData.manager {
 				this.attributeDic[render.@id]=new TAttributeInfo(render);
 			}
 			// 神器
-			info=LibManager.getInstance().getXML("config/table/Artifact_suit.xml");
+			info=LibManager.getInstance().getXML("config/table/Artifact_Suit.xml");
 			for each (render in info.children()) {
 				this.legendaryDic[render.@Formula_ID]=new TLegendaryWeaponInfo(render);
 			}
@@ -693,6 +744,30 @@ package com.ace.gameData.manager {
 			info=LibManager.getInstance().getXML("config/table/market.xml");
 			for each (render in info.children()) {
 				this.marketDic[render.@id]=new TMarketInfo(render);
+			}
+			
+			// 跨服等级表
+			info=LibManager.getInstance().getXML("config/table/mulServerLv.xml");
+			for each (render in info.children()) {
+				this.cserverLvDic[render.@lv]=new TCSLvInfo(render);
+			}
+			
+			// 跨服玩家排名
+			info=LibManager.getInstance().getXML("config/table/mulPlayerRankAward.xml");
+			for each (render in info.children()) {
+				this._cserverPlayerRankDic[render.@rankId]=new TCSPlayerRankInfo(render);
+			}
+			
+			// 跨服服务器排名
+			info=LibManager.getInstance().getXML("config/table/mulServerRankAward.xml");
+			for each (render in info.children()) {
+				this._cserverServerRankDic[render.@rankId]=new TCSServerRankInfo(render);
+			}
+			
+			// 跨服任务
+			info=LibManager.getInstance().getXML("config/table/mulMission.xml");
+			for each (render in info.children()) {
+				this.cserverMissionDic[render.@id]=new TCSMissionInfo(render);
 			}
 			
 			// 宠物表
@@ -724,6 +799,18 @@ package com.ace.gameData.manager {
 			info=LibManager.getInstance().getXML("config/table/servent_star.xml");
 			for each (render in info.children()) {
 				this.petStarDic[render.@serId+"|"+render.@starLv]=new TPetStarInfo(render);
+			}
+			
+			// 福利找回
+			info=LibManager.getInstance().getXML("config/table/findBack.xml");
+			for each (render in info.children()) {
+				this.findBackDick[render.@id]=new TFindBackInfo(render);
+			}
+			
+			// 元素
+			info=LibManager.getInstance().getXML("config/table/elementPlus.xml");
+			for each(render in info.children()){
+				this.elementDic[render.@type+"|"+render.@lv]=new TElementInfo(render);
 			}
 			
 			// 黑市
@@ -803,6 +890,26 @@ package com.ace.gameData.manager {
 			for each(render in info.children()){
 				this.Ring_intensifyDic[render.@RI_Lv]=new TRing_intensify(render); 
 			}
+			
+			//元素转换
+			info=LibManager.getInstance().getXML("config/table/elementTrans.xml");
+			i=0;
+			for each(render in info.children()){
+				this.elementTransDic[i]=new TElementTrans(render); 
+				i++;
+			}
+			
+			//指向引导
+			info=LibManager.getInstance().getXML("config/table/seGuild.xml");
+			for each(render in info.children()){
+				this.seGuideDic[render.@id]=new TSeGuild(render); 
+			}
+			
+			//指向引导
+			info=LibManager.getInstance().getXML("config/table/seGuild.xml");
+			for each(render in info.children()){
+				this.seGuideDic[render.@id]=new TSeGuild(render); 
+			}
 		}
 
 		//=====================================获取===================================================================
@@ -811,6 +918,30 @@ package com.ace.gameData.manager {
 				return　"";
 			
 			return this.getAttributeInfo(id).attibuteDes;
+		}
+		
+		public function getFinkBackInfo(id:int):TFindBackInfo{
+			return this.findBackDick[id];
+		}
+		
+		public function getElementInfo(type:int, lv:int):TElementInfo{
+			return this.elementDic[type+"|"+lv];
+		}
+		
+		public function getCrossServerInfo(id:int):TCSLvInfo{
+			return this.cserverLvDic[id];
+		}
+		
+		public function getCrossPlayerRankInfo(id:int):TCSPlayerRankInfo{
+			return this.cserverPlayerRankDic[id];
+		}
+		
+		public function getCrossServerRankInfo(id:int):TCSServerRankInfo{
+			return this.cserverServerRankDic[id];
+		}
+		
+		public function getCrossServerMissionInfo(id:int):TCSMissionInfo{
+			return this.cserverMissionDic[id];
 		}
 		
 		public function getMissionMarketRewardInfo(type:int):TMissionMarketRewardInfo{
@@ -915,6 +1046,10 @@ package com.ace.gameData.manager {
 		
 		public function getCombinePayInfo(id:int):TAbidePayInfo{
 			return this.combineDic[id];
+		}
+		
+		public function getLCTW(id:int):TAbidePayInfo{
+			return this.twlcDic[id];
 		}
 
 		public function getPreciousById(id:int):TCollectionPreciousInfo {
@@ -1056,6 +1191,34 @@ package com.ace.gameData.manager {
 			return arr;
 		}
 		
+		public function getPayPromotionByType2(type:int):Array{
+			var arr:Array = [];
+			var arr2:Array = [];
+			for(var key:String in payPromotionDic){
+				var info:TPayPromotion = payPromotionDic[key];
+				if(info.type2 == type && arr2.indexOf(info.groupId)==-1){
+					arr.push(info);
+					arr2.push(info.groupId);
+				}
+			}
+			return arr;
+		}
+		
+		
+		public function getPayPromotionByGroupId(type:int):Array{
+			var arr:Array = [];
+			var arr2:Array = [];
+			for(var key:String in payPromotionDic){
+				var info:TPayPromotion = payPromotionDic[key];
+				if(info.groupId==type){
+					arr.push(info);
+				}
+			}
+			
+			
+			return arr;
+		}
+		
 		public function getPromotionDic():Object{
 			return this.payPromotionDic;
 		}
@@ -1065,7 +1228,13 @@ package com.ace.gameData.manager {
 		}
 
 		public function getVipInfo(modeId:int):TVIPInfo {
-			return this.vipDic[modeId];
+			for(var key:String in vipDic){
+				var vipInfo:TVIPInfo = vipDic[key];
+				if(vipInfo.modId == modeId){
+					return vipInfo;
+				}
+			}
+			return null;
 		}
 
 		public function getVipDic():Object {
@@ -1580,14 +1749,29 @@ package com.ace.gameData.manager {
 			return this.titleDic;
 		}
 
+		public function getTitleArrByType(type:int):Array {
+
+			var arr:Array=[];
+			var render:TTitle;
+			var num:int=0;
+			for each (render in this.titleDic) {
+				if (render != null && render.Sz_type==type) {
+					 arr.push(render);
+				}
+			}
+
+			return arr;
+		}
+		
+		
 		public function getTitleAllDataLen():int {
 
 			var render:TTitle;
 			var num:int=0;
 			for each (render in this.titleDic) {
 				if (render != null) {
-					if (num < render.titleId)
-						num=render.titleId;
+					if (num < render.typeId)
+						num=render.typeId;
 				}
 			}
 
@@ -1843,7 +2027,52 @@ package com.ace.gameData.manager {
 			return lv;
 		}
 		
-		
+		/**
+		 * 
+		 * @param lv
+		 * @param quality
+		 * @return 
+		 * 
+		 */		
+		public function getElementTransByLvOrQu(lv:int,quality:int):TElementTrans{
+			
+			var etinfo:TElementTrans;
+			for each(etinfo in this.elementTransDic){
+				if(etinfo.lv==lv && etinfo.quality==quality){
+					return etinfo;
+				}
+			}
+			
+			return null;
+		}
 
+		public function getseGuideById(id:int):TSeGuild{
+			return this.seGuideDic[id];
+		}
+		
+		public function getseGuideAll():Object{
+			return this.seGuideDic;
+		}
+		
+//		public function getseGuideByType(type:int):TSeGuild{
+//			
+//			var tinfo:TSeGuild;
+//			for each(tinfo in this.seGuideDic){
+//				
+//				if(tinfo.type==type){
+//					
+//					switch(type){
+//						case 1:
+//							break;
+//						case 2:
+//							break;
+//					}
+//					
+//				}
+//				
+//			}
+//			
+//		}
+		
 	}
 }

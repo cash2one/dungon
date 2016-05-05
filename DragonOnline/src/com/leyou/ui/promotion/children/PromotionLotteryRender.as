@@ -360,5 +360,22 @@ package com.leyou.ui.promotion.children
 			title3Img.filters = (0 == data.title2Status) ? [FilterEnum.enable] : null;
 			title4Img.filters = (0 == data.title4Status) ? [FilterEnum.enable] : null;
 		}
+		
+		public function updateInfoII():void{
+			var data:PayPromotionDataII = DataManager.getInstance().payPromotionData_III;
+			var list1:Array = data.lotteryData1;
+			var list2:Array = data.lotteryData2;
+			var length:int = list1.length;
+			for(var n:int = 0; n < length; n++){
+				grid1Array[n].updataInfo({itemId:list1[n][0], count:list1[n][1]});
+				grid2Array[n].updataInfo({itemId:list2[n][0], count:list2[n][1]});
+			}
+			grid1Array[0].filters = (1 == data.title1Status) ? [FilterEnum.enable] : null;
+			title1Img.filters = (0 == data.title1Status) ? [FilterEnum.enable] : null;
+			grid2Array[0].filters = (1 == data.title2Status) ? [FilterEnum.enable] : null;
+			title2Img.filters = (0 == data.title3Status) ? [FilterEnum.enable] : null;
+			title3Img.filters = (0 == data.title2Status) ? [FilterEnum.enable] : null;
+			title4Img.filters = (0 == data.title4Status) ? [FilterEnum.enable] : null;
+		}
 	}
 }

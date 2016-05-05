@@ -4,6 +4,7 @@ package com.leyou.utils {
 
 	public class BadgeUtil {
 
+		public static var BadgeCurrentPoint:int=0;
 
 		public function BadgeUtil() {
 
@@ -37,6 +38,35 @@ package com.leyou.utils {
 			}
 
 			return 0xffffff;
+		}
+		
+		/**
+		 * 
+		 * @param item
+		 * @param pindex
+		 * @param value
+		 * @return 
+		 * 
+		 */		
+		public static function getItemUrlByconfig(item:int, pindex:int, value:int):uint {
+			var bldNode:XML=LibManager.getInstance().getXML("config/table/bloodNote.xml");
+
+			var xml:XML;
+			for each (xml in bldNode.bloodNote) {
+
+				if (xml.@bloodId == item && xml.@attribute == pindex) {
+					if (value >= xml.@lowMin && value <= xml.@lowMax)
+						return 1;
+					else if (value >= xml.@midMin && value <= xml.@midMax)
+						return 2;
+					else if (value >= xml.@highMin && value <= xml.@highMax)
+						return 3;
+					else if (value == xml.@full)
+						return 4;
+				}
+			}
+
+			return 0;
 		}
 
 

@@ -516,5 +516,69 @@ package com.ace.enum {
 		public static const MARRY3:int = 140;
 		public static const MARRY1:int = 141;
 		
+		// 跨服
+		public static const CROSS_SERVER:int = 142;
+		
+		// 捐献
+		public static const CROSS_SERVER_DONATE:int = 143;
+		
+		// 台湾sb活动
+		public static const TAIWAN_LC:int = 144;
+		
+		// 跨服排名奖励
+		public static const CROSS_SERVER_RANK_AWARD:int = 145;
+		
+		// 任务排名
+		public static const CROSS_SERVER_RANK:int = 146;
+		
+		// 元素
+		public static const ELEMENT:int = 147;
+		
+		// 元素升级
+		public static const ELEMENT_UPGRADE:int = 148;
+		
+		// 元素切换
+		public static const ELEMENT_SWITCH:int = 149;
+		
+		// 福利找回
+		public static const WELFARE_FINDBACK:int = 150;
+		
+		/**
+		 * 试衣间 
+		 */		
+		public static const SHIYI:int = 151;
+		
+		/**
+		 * 开服充值 
+		 */		
+		public static const KFCB:int = 152;
+		
+		/**
+		 * 开服活动
+		 */		
+		public static const KFHD:int = 153;
+		
+		/**
+		 * 指向引导
+		 */		
+		public static const GUIDEMESSAGE:int = 154;
+		
+		/**
+		 * v3exp 
+		 */		
+		public static const VIP3EXP:int = 155;
+		
+		/**
+		 * 背包广告
+		 */		
+		public static const SELLEXPEFFECT:int = 156;
+		
+		/**
+		 * 
+		 */		
+		public static const TASKTRACE2:int = 157;
+		
+		
+		public static const CLIENT_WND:int = 158;
 	}
 }

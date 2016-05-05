@@ -56,7 +56,7 @@ package com.leyou.ui.farm {
 			if (farmLand.hasRipe()) {
 				GuideManager.getInstance().showGuide(27, this);
 			}
-			GuideManager.getInstance().showGuide(26, this);
+//			GuideManager.getInstance().showGuide(26, this);
 		}
 
 		/**
@@ -217,7 +217,7 @@ package com.leyou.ui.farm {
 			if (farmLand.hasRipe()) {
 				GuideManager.getInstance().showGuide(27, this);
 			}
-			GuideManager.getInstance().showGuide(26, this);
+//			GuideManager.getInstance().showGuide(26, this);
 		}
 
 		/**
@@ -303,6 +303,10 @@ package com.leyou.ui.farm {
 			removeGuide();
 			TweenManager.getInstance().lightingCompnent(UIManager.getInstance().toolsWnd.getUIbyID("framBtn"));
 		}
+		
+		public override function get height():Number{
+			return 544;
+		}
 
 		/**
 		 * <T>是否为自己的农场</T>
@@ -321,7 +325,7 @@ package com.leyou.ui.farm {
 
 		public function removeGuide():void {
 			GuideManager.getInstance().removeGuide(25);
-			GuideManager.getInstance().removeGuide(26);
+//			GuideManager.getInstance().removeGuide(26);
 			GuideManager.getInstance().removeGuide(27);
 		}
 

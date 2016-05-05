@@ -21,7 +21,24 @@ package com.leyou.net.cmd {
 				value = obj.vargs;
 			}
 			
-			UIManager.getInstance().rightTopWnd.updateNotify(type, count, act, sp, value);
+			if(obj.hasOwnProperty("ofl")){
+				value = obj.ofl;
+			}
+			
+			var sv:Array=[];
+			if(obj.hasOwnProperty("wmc")){
+				sv.push(obj.wmc,obj.crop);
+			}
+			
+			/**
+			 * tcs pet count -- 佣兵总数 , exp_c 经验任务完成个数， qmd_c 亲密度任务完成个数
+			 */ 
+			if(obj.hasOwnProperty("exp_c")){
+				sv.push(obj.exp_c,obj.qmd_c);
+			}
+			 
+			
+			UIManager.getInstance().rightTopWnd.updateNotify(type, count, act, sp, value,sv);
 			
 			switch (obj.tid) {
 				case "ecp":

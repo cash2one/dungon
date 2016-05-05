@@ -24,6 +24,7 @@ package com.leyou.ui.mysteryStore {
 	import com.ace.ui.tabbar.TabbarModel;
 	import com.ace.ui.tabbar.children.TabBar;
 	import com.leyou.data.tips.TipsInfo;
+	import com.leyou.net.cmd.Cmd_Shp;
 	import com.leyou.ui.mysteryStore.child.MyStoreRender;
 	import com.leyou.utils.PropUtils;
 
@@ -44,7 +45,9 @@ package com.leyou.ui.mysteryStore {
 		private var ryCountLbl:Label;
 		private var ryImg:Image;
 		private var jlCountLbl:Label;
+		private var gxCountLbl:Label;
 		private var jlImg:Image;
+		private var gxImg:Image;
 
 		private var renderArr:Vector.<MyStoreRender>;
 
@@ -52,6 +55,8 @@ package com.leyou.ui.mysteryStore {
 
 		private var shopID:int=2;
 		private var tagID:int=1;
+		private var glv:int=0;
+		private var glist:Array=[];
 
 		private var tips:TipsInfo;
 
@@ -76,13 +81,18 @@ package com.leyou.ui.mysteryStore {
 			this.ryCountLbl=this.getUIbyID("ryCountLbl") as Label;
 			this.ryImg=this.getUIbyID("ryImg") as Image;
 
+			this.gxCountLbl=this.getUIbyID("gxCountLbl") as Label;
 			this.jlCountLbl=this.getUIbyID("jlCountLbl") as Label;
 			this.jlImg=this.getUIbyID("jlImg") as Image;
+			this.gxImg=this.getUIbyID("gxImg") as Image;
 
 			this.addChild(this.icoImg);
 			this.addChild(this.ryImg);
 			this.addChild(this.jlImg);
 
+//			this.gxCountLbl.visible=false;
+//			this.gxImg.visible=false;
+			
 //			var infoXml:XML=LibManager.getInstance().getXML("config/table/shop.xml");
 //			var xmllist:XMLList=infoXml.shop;
 
@@ -123,26 +133,40 @@ package com.leyou.ui.mysteryStore {
 			einfo.onMouseOut=onTipsMouseOut;
 
 			MouseManagerII.getInstance().addEvents(this.jlImg, einfo);
+			
+			einfo=new MouseEventInfo();
+			einfo.onMouseMove=onTipsMouseOver;
+			einfo.onMouseOut=onTipsMouseOut;
+
+			MouseManagerII.getInstance().addEvents(this.gxImg, einfo);
 
 			this.tips=new TipsInfo();
 			this.tips.itemid=30401;
 
 			this.renderArr=new Vector.<MyStoreRender>();
-			this.clsBtn.y=30;
+			this.clsBtn.y=27;
 
 			this.mystorTabar.addEventListener(TabbarModel.changeTurnOnIndex, onChangeIndex);
 
 			var infor:TItemInfo=TableManager.getInstance().getItemInfo(30401);
 			this.icoImg.updateBmp("ico/items/" + infor.icon + ".png");
+			
+			
+			this.mystorTabar.setTabVisible(2,false);
+			this.jlCountLbl.visible=false;
+			this.jlImg.visible=false;
+			
 		}
 
 		private function onChangeIndex(e:Event):void {
 
-			if (this.tagID != this.mystorTabar.turnOnIndex + 1) {
-				this.selectLv=0;
-			}
+//			if (this.tagID != this.mystorTabar.turnOnIndex + 1) {
+//				this.selectLv=0;
+//			}
 
-			this.tagID=this.mystorTabar.turnOnIndex + 1;
+			Cmd_Shp.cm_shpTagInfo(this.mystorTabar.turnOnIndex + 1);
+
+//			this.tagID=this.mystorTabar.turnOnIndex + 1;
 
 //			var infoXml:XML=LibManager.getInstance().getXML("config/table/shop.xml");
 //			var xmllist:XMLList=infoXml.shop;
@@ -172,7 +196,9 @@ package com.leyou.ui.mysteryStore {
 //			this.lvCb.list.addRends(larr);
 //			this.lvCb.list.selectByUid("0");
 
-			this.updateInfo();
+
+
+//			this.updateInfo();
 		}
 
 		private function onTipsMouseOver(e:DisplayObject):void {
@@ -183,6 +209,8 @@ package com.leyou.ui.mysteryStore {
 				ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, TableManager.getInstance().getSystemNotice(10001).content, new Point(this.stage.mouseX, this.stage.mouseY));
 			else if (e == this.jlImg)
 				ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, TableManager.getInstance().getSystemNotice(9609).content, new Point(this.stage.mouseX, this.stage.mouseY));
+			else if (e == this.gxImg)
+				ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, TableManager.getInstance().getSystemNotice(9612).content, new Point(this.stage.mouseX, this.stage.mouseY));
 		}
 
 		private function onTipsMouseOut(e:DisplayObject):void {
@@ -204,9 +232,20 @@ package com.leyou.ui.mysteryStore {
 			this.itemCountLbl.text="" + MyInfoManager.getInstance().getBagItemNumById(30401);
 			this.ryCountLbl.text="" + UIManager.getInstance().backpackWnd.honour;
 			this.jlCountLbl.text="" + UIManager.getInstance().backpackWnd.jl;
-			
+			this.gxCountLbl.text="" + UIManager.getInstance().backpackWnd.gx;
+
 			if (this.visible)
 				this.updateInfo();
+		}
+
+		public function updateList(o:Object):void {
+
+			this.tagID=o.tagid;
+			this.glv=o.glv;
+			this.glist=o.ulist;
+
+			this.updateInfo();
+
 		}
 
 		private function updateInfo():void {
@@ -227,6 +266,7 @@ package com.leyou.ui.mysteryStore {
 			this.itemCountLbl.text="" + MyInfoManager.getInstance().getBagItemNumById(30401);
 			this.ryCountLbl.text="" + UIManager.getInstance().backpackWnd.honour;
 			this.jlCountLbl.text="" + UIManager.getInstance().backpackWnd.jl;
+			this.gxCountLbl.text="" + UIManager.getInstance().backpackWnd.gx;
 
 			var i:int=-1;
 			var xml:XML;
@@ -240,16 +280,18 @@ package com.leyou.ui.mysteryStore {
 					continue;
 
 				infoItem=TableManager.getInstance().getEquipInfo(xml.@itemId);
-				if (infoItem == null) 
+				if (infoItem == null)
 					infoItem=TableManager.getInstance().getItemInfo(xml.@itemId);
-				
+
 				if (infoItem == null) {
 					throw Error("没有物品id:" + xml.@itemId)
 					return;
 				}
 
-
-				if ((((Core.me.info.profession != xml.@Class && xml.@Class != 0) || Core.me.info.level < int(infoItem.level)) && useCb.isOn))
+				if (Core.me.info.profession != xml.@Class && xml.@Class != 0)
+					continue;
+				
+				if (Core.me.info.level < int(infoItem.level) && useCb.isOn)
 					continue;
 
 				render=new MyStoreRender();
@@ -258,13 +300,15 @@ package com.leyou.ui.mysteryStore {
 				render.index=i;
 
 				if (xml.@tagId == "2") {
-					render.updataInfo(new TShop(xml), int(this.ryCountLbl.text));
+					render.updataInfo(new TShop(xml), int(this.ryCountLbl.text),0,this.getCount(xml.@itemId));
 				} else if (xml.@tagId == "1") {
-					render.updataInfo(new TShop(xml), int(this.itemCountLbl.text));
+					render.updataInfo(new TShop(xml), int(this.itemCountLbl.text),0,this.getCount(xml.@itemId));
 				} else if (xml.@tagId == "3") {
 					render.updataInfo(new TShop(xml), int(this.jlCountLbl.text));
+				} else if (xml.@tagId == "4") {
+					render.updataInfo(new TShop(xml), int(this.gxCountLbl.text), this.glv, this.getCount(xml.@itemId));
 				}
-				
+
 				this.itemList.addToPane(render);
 				this.renderArr.push(render);
 			}
@@ -273,9 +317,21 @@ package com.leyou.ui.mysteryStore {
 			DelayCallManager.getInstance().add(this, this.itemList.updateUI, "updateUI", 4);
 		}
 
+		private function getCount(id:int):int {
+			var arr:Array;
+			for each (arr in this.glist) {
+				if (arr.indexOf(""+id) > -1)
+					return arr[1];
+			}
+
+			return 0;
+		}
+
 		override public function show(toTop:Boolean=true, $layer:int=1, toCenter:Boolean=true):void {
 			super.show(toTop, $layer, toCenter);
-			this.updateInfo();
+//			this.updateInfo();
+
+			this.mystorTabar.turnToTab(0);
 		}
 
 		override public function sendOpenPanelProtocol(... parameters):void {

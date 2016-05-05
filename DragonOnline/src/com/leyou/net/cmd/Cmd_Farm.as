@@ -230,7 +230,7 @@ package com.leyou.net.cmd {
 			}
 
 			var arr:Array=[PropUtils.getStringById(1564), fc1, fc3, "", callBack];
-			UIManager.getInstance().taskTrack.updateOhterTrack(TaskEnum.taskLevel_farmLine, arr);
+//			UIManager.getInstance().taskTrack.updateOtherTrack(TaskEnum.taskLevel_farmLine, arr);
 		}
 	}
 }

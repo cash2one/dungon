@@ -110,8 +110,8 @@ package com.leyou.ui.payrank {
 				payBtn.addEventListener(MouseEvent.CLICK, onBtnClick);
 			}
 			hideBg();
-			clsBtn.x-=117;
-			clsBtn.y+=40;
+//			clsBtn.x-=117;
+//			clsBtn.y+=40;
 			for (var n:int=0; n < 5; n++) {
 				var reward:PayRankReward=new PayRankReward();
 				addChild(reward);

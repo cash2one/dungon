@@ -47,7 +47,7 @@ package com.leyou.ui.guild.child {
 		 */
 		public function updateInfo(o:Array):void {
 
-			this.NumLbl.text="" + (o[1] == "" ? PropUtils.getStringById(1594) : o[1]);
+			this.NumLbl.text="" + (o[1] == "" ? PropUtils.getStringById(1594) : PropUtils.getStringById(2329));
 			this.proLbl.text="" + PlayerUtil.getPlayerRaceByIdx(o[2]);
 			this.lvLbl.text="" + o[3];
 			this.attLbl.text="" + o[4];

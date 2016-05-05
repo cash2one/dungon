@@ -58,7 +58,15 @@ package com.ace.gameData.table {
 		*/
 		public var itemNum:int;
 
-
+		/**
+		 *每日限購數量 
+		 */		
+		public var limitNum:int;
+		
+		/**
+		 *限購國家等級 
+		 */		
+		public var limitNation:int;
 
 		public function TShop(data:XML=null) {
 			if (data == null)
@@ -73,6 +81,8 @@ package com.ace.gameData.table {
 			this.moneyNum=data.@moneyNum;
 			this.consumeItem=data.@consumeItem;
 			this.itemNum=data.@itemNum;
+			this.limitNum=data.@limitNum;
+			this.limitNation=data.@limitNation;
 
 		}
 

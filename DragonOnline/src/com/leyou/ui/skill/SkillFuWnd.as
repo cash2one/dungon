@@ -45,7 +45,7 @@ package com.leyou.ui.skill {
 			this.mouseEnabled=true;
 			this.mouseChildren=true;
 			this.hideBg();
-			this.clsBtn.y=20;
+//			this.clsBtn.y=20;
 		}
 
 		private function init():void {

@@ -4,21 +4,23 @@ package com.leyou.ui.guild.child {
 	import com.ace.manager.UIManager;
 	import com.ace.ui.auto.AutoSprite;
 	import com.ace.ui.button.children.ImgLabelButton;
+	import com.ace.ui.button.children.NormalButton;
 	import com.ace.ui.lable.Label;
 	import com.ace.ui.lable.children.TextArea;
 	import com.leyou.net.cmd.Cmd_Guild;
 	import com.leyou.utils.PropUtils;
 	import com.leyou.utils.StringUtil_II;
-
+	
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	import flash.text.TextFieldType;
+	import flash.text.TextFormat;
 
 	public class MainNotic extends AutoSprite {
 
 		private var contentLbl:TextArea;
-		private var editBtn:ImgLabelButton;
+		private var editBtn:NormalButton;
 		private var lastTimeLbl:Label;
 
 		private var editState:Boolean=false;
@@ -33,7 +35,7 @@ package com.leyou.ui.guild.child {
 		private function init():void {
 
 			this.contentLbl=this.getUIbyID("contentLbl") as TextArea;
-			this.editBtn=this.getUIbyID("editBtn") as ImgLabelButton;
+			this.editBtn=this.getUIbyID("editBtn") as NormalButton;
 			this.lastTimeLbl=this.getUIbyID("lastTimeLbl") as Label;
 
 			this.contentLbl.visibleOfBg=false;
@@ -44,7 +46,10 @@ package com.leyou.ui.guild.child {
 
 			this.contentLbl.width=590;
 
+//			this.contentLbl.tf.defaultTextFormat.size=18;
+			this.contentLbl.tf.defaultTextFormat=new TextFormat("微软雅黑",18,null,null,null,null,null,null,null,null,null,null,2);
 			this.contentLbl.tf.maxChars=700;
+			 
 			this.contentLbl.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
 			this.contentLbl.addEventListener(Event.CHANGE, onKeyDown);
 
@@ -72,8 +77,8 @@ package com.leyou.ui.guild.child {
 //				trace(this.contentLbl.tf.getLineLength(9),this.contentLbl.tf.getLineOffset(9),this.contentLbl.tf.getLineText(9));
 
 			var str:String;
-			if (this.contentLbl.tf.numLines >= 8) {
-				str=this.contentLbl.tf.text.substring(0, this.contentLbl.tf.getLineOffset(7) + this.contentLbl.tf.getLineLength(7));
+			if (this.contentLbl.tf.numLines >= 7) {
+				str=this.contentLbl.tf.text.substring(0, this.contentLbl.tf.getLineOffset(6) + this.contentLbl.tf.getLineLength(6));
 			} else {
 				str=this.contentLbl.tf.text;
 			}

@@ -40,8 +40,8 @@ package com.leyou.ui.missionMarket
 			marketRender.registerSwitch(onSwitchRrender);
 			marketSingleRender.registerSwitch(onSwitchRrender);
 			
-			clsBtn.x += 5;
-			clsBtn.y += 14;
+//			clsBtn.x += 5;
+			clsBtn.y += 30;
 		}
 		
 		public override function show(toTop:Boolean=true, $layer:int=1, toCenter:Boolean=true):void{

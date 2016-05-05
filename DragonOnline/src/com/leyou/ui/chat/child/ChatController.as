@@ -607,6 +607,7 @@ package com.leyou.ui.chat.child {
 					tips.unserialize(linkData);
 					var info:TEquipInfo=TableManager.getInstance().getEquipInfo(tips.itemid);
 					if (null != info) {
+						tips.istype = 0;
 						if (10 == info.classid) {
 							ToolTipManager.getInstance().show(TipEnum.TYPE_GEM_OTHER, tips, new Point(stage.mouseX, stage.mouseY));
 							return;
@@ -621,6 +622,7 @@ package com.leyou.ui.chat.child {
 							}
 						}
 					} else {
+						tips.istype = 9;
 						ToolTipManager.getInstance().show(TipEnum.TYPE_EQUIP_ITEM, tips, new Point(stage.mouseX, stage.mouseY));
 					}
 					break;
@@ -629,6 +631,10 @@ package com.leyou.ui.chat.child {
 					Core.me.gotoMap(new Point(linkData.x, linkData.y), linkData.id, true);
 					break;
 				case ChatEnum.LINK_TYPE_PLAYER:
+					if(SceneEnum.SCENE_TYPE_ACROSS == MapInfoManager.getInstance().type){
+						NoticeManager.getInstance().broadcastById(11006);
+						return;
+					}
 					currPlayer=linkValue.substring(1, linkValue.length - 1);
 					MenuManager.getInstance().show(menuArr, this);
 					break;
@@ -858,6 +864,31 @@ package com.leyou.ui.chat.child {
 			input.input.text=str;
 			stage.focus=input.input;
 			input.input.setSelection(input.input.text.length, input.input.text.length);
+		}
+		
+		public function switchToNormal():void{
+			if(channelCd.list.dataProvider.length < 5){
+				var tmpArr:Array = [{label: PropUtils.getStringById(100185), uid: 6, color:0xfa9611},
+					{label:PropUtils.getStringById(100186), uid: 2, color:0xda70d6},
+					{label: PropUtils.getStringById(100187), uid: 3, color:0x009ef8}, 
+					{label: PropUtils.getStringById(100188), uid: 4, color:0x6abd18},
+					{label: PropUtils.getStringById(100189), uid: 7, color:0xffea00}];
+				channelCd.list.addRends(tmpArr);
+			}
+			channelBar.setTabVisible(4, true);
+			channelBar.getTabButton(1).label.text = PropUtils.getStringById(100185);
+		}
+		
+		public function switchToAcross():void{
+			if(channelCd.list.dataProvider.length >= 5){
+				var tmpArr:Array = [{label: PropUtils.getStringById(2275), uid: 6, color:0xfa9611},
+					{label:PropUtils.getStringById(100186), uid: 2, color:0xda70d6},
+					{label: PropUtils.getStringById(100187), uid: 3, color:0x009ef8}, 
+					{label: PropUtils.getStringById(100189), uid: 7, color:0xffea00}];
+				channelCd.list.addRends(tmpArr);
+			}
+			channelBar.setTabVisible(4, false);
+			channelBar.getTabButton(1).label.text = PropUtils.getStringById(2275);
 		}
 	}
 }

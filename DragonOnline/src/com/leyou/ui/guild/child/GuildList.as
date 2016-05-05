@@ -5,15 +5,18 @@ package com.leyou.ui.guild.child {
 	import com.ace.manager.UIManager;
 	import com.ace.ui.auto.AutoSprite;
 	import com.ace.ui.button.children.CheckBox;
+	import com.ace.ui.button.children.ImgButton;
 	import com.ace.ui.button.children.ImgLabelButton;
 	import com.ace.ui.button.children.NormalButton;
 	import com.ace.ui.img.child.Image;
 	import com.ace.ui.lable.Label;
 	import com.ace.ui.lable.children.TextArea;
 	import com.ace.ui.scrollPane.children.ScrollPane;
+	import com.leyou.enum.GuildEnum;
 	import com.leyou.net.cmd.Cmd_Guild;
 
 	import flash.events.MouseEvent;
+	import flash.text.TextFormat;
 
 	public class GuildList extends AutoSprite {
 
@@ -22,15 +25,20 @@ package com.leyou.ui.guild.child {
 		private var sumfightBtn:ImgLabelButton;
 
 		private var itemlist:ScrollPane;
-		private var applyBtn:NormalButton;
+		private var applyBtn:ImgButton;
 		private var onBossCb:CheckBox;
 
+		private var autoInviteCb:CheckBox;
 		private var autoAccCb:CheckBox;
 		private var descLbl:TextArea;
+		private var createBtn:ImgButton;
 
 		private var arrawlv:Image;
 		private var arrawNum:Image;
 		private var arrawfight:Image;
+
+		private var addGuildImg:Image;
+		private var createGuildImg:Image;
 
 		private var listBarVec:Vector.<GuildListBar>;
 		private var data:Array=[];
@@ -58,43 +66,70 @@ package com.leyou.ui.guild.child {
 			this.sumfightBtn=this.getUIbyID("sumfightBtn") as ImgLabelButton;
 
 			this.itemlist=this.getUIbyID("itemlist") as ScrollPane;
+			this.applyBtn=this.getUIbyID("applyBtn") as ImgButton;
 
-			this.applyBtn=this.getUIbyID("applyBtn") as NormalButton;
+			this.createBtn=this.getUIbyID("createBtn") as ImgButton;
 
-//			this.onBossCb=this.getUIbyID("onBossCb") as CheckBox;
+			this.onBossCb=this.getUIbyID("onBossCb") as CheckBox;
 			this.autoAccCb=this.getUIbyID("autoAccCb") as CheckBox;
+			this.autoInviteCb=this.getUIbyID("autoInviteCb") as CheckBox;
 
 			this.descLbl=this.getUIbyID("descLbl") as TextArea;
 			this.descLbl.visibleOfBg=false;
+			this.descLbl.tf.defaultTextFormat=new TextFormat("微软雅黑", 18);
 
 			this.arrawlv=this.getUIbyID("arrawlv") as Image;
 			this.arrawNum=this.getUIbyID("arrawNum") as Image;
 			this.arrawfight=this.getUIbyID("arrawfight") as Image;
 
-			this.numSortBtn.addEventListener(MouseEvent.CLICK, onClick);
-			this.lvSortBtn.addEventListener(MouseEvent.CLICK, onClick);
-			this.sumfightBtn.addEventListener(MouseEvent.CLICK, onClick);
+			this.addGuildImg=this.getUIbyID("addGuildImg") as Image;
+			this.createGuildImg=this.getUIbyID("createGuildImg") as Image;
+
+//			this.numSortBtn.addEventListener(MouseEvent.CLICK, onClick);
+//			this.lvSortBtn.addEventListener(MouseEvent.CLICK, onClick);
+//			this.sumfightBtn.addEventListener(MouseEvent.CLICK, onClick);
 			this.applyBtn.addEventListener(MouseEvent.CLICK, onClick);
-//			this.onBossCb.addEventListener(MouseEvent.CLICK, onClick);
+			this.onBossCb.addEventListener(MouseEvent.CLICK, onClick);
 			this.autoAccCb.addEventListener(MouseEvent.CLICK, onClick);
 
+			this.createBtn.addEventListener(MouseEvent.CLICK, onCreateClick);
 			this.itemlist.addEventListener(MouseEvent.CLICK, onItemClick);
 			this.itemlist.addEventListener(MouseEvent.MOUSE_WHEEL, onWheel);
 			this.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
 			this.addEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
 
+			this.autoInviteCb.addEventListener(MouseEvent.CLICK, onAutoClick);
 			this.listBarVec=new Vector.<GuildListBar>();
 
 			this.y+=5;
 			this.x=-13;
 		}
 
+		private function onAutoClick(e:MouseEvent):void {
+//			if (UIManager.getInstance().guildWnd.memberJob == GuildEnum.ADMINI_1)
+//				Cmd_Guild.cm_GuildApplySet(this.autoAccCb.isOn ? 1 : 0);
+//			else
+			Cmd_Guild.cm_GuildInviteSet(this.autoInviteCb.isOn ? 1 : 0);
+		}
+
+		public function setBtnVisible(v:Boolean):void {
+			this.applyBtn.visible=v;
+			this.createBtn.visible=v;
+
+			this.addGuildImg.visible=v;
+			this.createGuildImg.visible=v;
+		}
+
+		public function getAutoAccCb():CheckBox {
+			return this.autoInviteCb;
+		}
+
 		private function onClick(e:MouseEvent):void {
 
 			if (e.target.name != "applyBtn" && !(e.target is CheckBox)) {
-				this.numSortBtn.turnOff();
-				this.lvSortBtn.turnOff();
-				this.sumfightBtn.turnOff();
+//				this.numSortBtn.turnOff();
+//				this.lvSortBtn.turnOff();
+//				this.sumfightBtn.turnOff();
 
 				ImgLabelButton(e.target).turnOn(false);
 			}
@@ -140,7 +175,7 @@ package com.leyou.ui.guild.child {
 					}
 					break;
 				case "onBossCb":
-
+					this.onLineGuild();
 					break;
 				case "autoAccCb":
 					this.onLineGuild();
@@ -171,19 +206,33 @@ package com.leyou.ui.guild.child {
 		}
 
 		private function onLineGuild():void {
-			var tmp:Array=this.data.filter(function(item:Object, i:int, arr:Array):Boolean {
+			var tmp:Array;
 
-				if (item[6])
-					return true;
-
-				return false;
-			});
-
-			if (this.autoAccCb.isOn)
+			if (this.onBossCb.isOn || this.autoAccCb.isOn) {
+				if (this.onBossCb.isOn && this.autoAccCb.isOn) {
+					tmp=this.data.filter(function(item:Object, i:int, arr:Array):Boolean {
+						if (item[7] && item[6])
+							return true;
+						return false;
+					});
+				} else if (this.onBossCb.isOn) {
+					tmp=this.data.filter(function(item:Object, i:int, arr:Array):Boolean {
+						if (item[7])
+							return true;
+						return false;
+					});
+				} else if (this.autoAccCb.isOn) {
+					tmp=this.data.filter(function(item:Object, i:int, arr:Array):Boolean {
+						if (item[6])
+							return true;
+						return false;
+					});
+				}
 				this.updateInfo(tmp.sortOn("" + (sortIndex), (sortState[sortIndex] ? Array.DESCENDING | Array.NUMERIC : Array.NUMERIC)));
-			else
+			} else
 				this.updateInfo(this.data.sortOn("" + (sortIndex), (sortState[sortIndex] ? Array.DESCENDING | Array.NUMERIC : Array.NUMERIC)));
 		}
+
 
 		public function descTxt(s:String):void {
 			this.descLbl.editable=true;
@@ -209,6 +258,7 @@ package com.leyou.ui.guild.child {
 				sortIndex=2;
 				sortState[sortIndex]=true;
 			}
+
 			this.onLineGuild();
 			this.itemlist.scrollTo(this.itemlist.scrollBar_Y.progress);
 		}
@@ -261,11 +311,11 @@ package com.leyou.ui.guild.child {
 			}
 
 			var p:Number=this.itemlist.scrollBar_Y.progress;
-			
+
 			this.itemlist.scrollTo(0);
 			this.itemlist.updateUI();
 //			DelayCallManager.getInstance().add(this, this.itemlist.updateUI, "updateUI", 4);
-			DelayCallManager.getInstance().add(this, this.itemlist.scrollTo, "updateUI", 4,p);
+			DelayCallManager.getInstance().add(this, this.itemlist.scrollTo, "updateUI", 4, p);
 //			this.itemlist.scrollTo(p);
 		}
 
@@ -297,8 +347,15 @@ package com.leyou.ui.guild.child {
 				GuildListBar(e.target).sethight(2);
 
 				Cmd_Guild.cm_GuildNotice(this.data[this.selectIndex][0], 2);
-				this.applyBtn.visible=(this.listBarVec[this.selectIndex].getName() != UIManager.getInstance().guildWnd.guildName);
+//				this.applyBtn.visible=(this.listBarVec[this.selectIndex].getName() != UIManager.getInstance().guildWnd.guildName);
 			}
+
+		}
+
+
+		private function onCreateClick(e:MouseEvent):void {
+
+			UIManager.getInstance().guildWnd.showCreate();
 
 		}
 

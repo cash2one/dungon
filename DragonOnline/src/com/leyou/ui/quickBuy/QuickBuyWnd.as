@@ -108,8 +108,8 @@ package com.leyou.ui.quickBuy
 //			format.align = TextFormatAlign.CENTER;
 //			numInput.input.defaultTextFormat = format
 			grid = new MarketGrid();
-			grid.x = 42;
-			grid.y = 64;
+			grid.x = 23 + 11;
+			grid.y = 70 + 11;
 			addChild(grid);
 			items = new Vector.<QuickBuyInfo>();
 			numStep.input.addEventListener(Event.CHANGE, onInputChange);
@@ -128,9 +128,6 @@ package com.leyou.ui.quickBuy
 			}else{
 				payBtn.addEventListener(MouseEvent.CLICK, onMouseClick);
 			}
-			clsBtn.x -= 6;
-			clsBtn.y -= 14;
-//			opaqueBackground = 0xff;
 		}
 		
 		protected function onSliderScroll(event:Event):void {
@@ -445,12 +442,12 @@ package com.leyou.ui.quickBuy
 			}
 		}
 		
-		public override function get width():Number{
-			return 308;
-		}
-		
+//		public override function get width():Number{
+//			return 308;
+//		}
+//		
 		public override function get height():Number{
-			return 482/*512*/;
+			return 544;
 		}
 		
 		public function loadItem(o:Object):void{

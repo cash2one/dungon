@@ -64,7 +64,7 @@ package com.leyou.ui.active
 		}
 		
 		public override function get height():Number{
-			return 511;
+			return 544;
 		}
 		
 		public function flyItem():void{

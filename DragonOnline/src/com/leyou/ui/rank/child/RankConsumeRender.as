@@ -11,6 +11,7 @@ package com.leyou.ui.rank.child
 	
 	import flash.events.MouseEvent;
 	
+	//消费榜列表
 	public class RankConsumeRender extends AutoSprite
 	{
 		private static const ITEM_COUNT:int = 3;

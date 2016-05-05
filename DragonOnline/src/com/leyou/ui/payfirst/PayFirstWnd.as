@@ -68,8 +68,8 @@ package com.leyou.ui.payfirst {
 //			}else{
 //				flagBtn.addEventListener(MouseEvent.CLICK, onBtnClick);
 //			}
-			clsBtn.x+=4;
-			clsBtn.y+=15;
+//			clsBtn.x+=4;
+//			clsBtn.y+=15;
 			df=payLbl.getTextFormat();
 			df.leading=10;
 			payLbl.defaultTextFormat=df;

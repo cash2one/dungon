@@ -15,9 +15,11 @@ package com.ace.game.scene.player {
 	import com.ace.game.utils.TableUtil;
 	import com.ace.gameData.buff.child.BuffInfo;
 	import com.ace.gameData.item.LivingItemInfo;
+	import com.ace.gameData.manager.DataManager;
 	import com.ace.gameData.manager.MapInfoManager;
 	import com.ace.gameData.manager.SettingManager;
 	import com.ace.gameData.manager.TableManager;
+	import com.ace.gameData.table.TBuffInfo;
 	import com.ace.manager.EventManager;
 	import com.ace.manager.KeysManager;
 	import com.ace.manager.UIManager;
@@ -134,6 +136,7 @@ package com.ace.game.scene.player {
 				pt=SceneUtil.tileToScreen(this.info.recordTargetTile.x, this.info.recordTargetTile.y);
 			}
 
+			this.info.recordMagicId=this.selectSkillId(this.info.recordMagicId);
 			Cmd_Attack.cm_3010(this.info.recordMagicId, this.info.recordAttackTargetId, pt.x, pt.y, this.x, this.y);
 			super.autoMagic();
 			return true;
@@ -150,7 +153,8 @@ package com.ace.game.scene.player {
 
 		/**检测传送*/
 		private function checkTrans():void {
-			if (AreaUtil.checkTrans(SceneUtil.screenXToTileX(this.x), SceneUtil.screenYToTileY(this.y))) {
+			if (AreaUtil.checkTrans(SceneUtil.screenXToTileX(this.x), SceneUtil.screenYToTileY(this.y), //
+				Core.isTaiwan ? true : DataManager.getInstance().crossServerData.isOpen())) {
 				this.onSceneTrans();
 				this.pInfo.isTransing=true;
 				Cmd_Scene.cm_tag(AreaUtil.getTransId(SceneUtil.screenXToTileX(this.x), SceneUtil.screenYToTileY(this.y)));
@@ -188,6 +192,9 @@ package com.ace.game.scene.player {
 		override public function sm_addBuff(info:BuffInfo):Boolean {
 			if (super.sm_addBuff(info)) {
 				UIManager.getInstance().roleHeadWnd.buffWnd.addBuff(info);
+				var tInfo:TBuffInfo=TableManager.getInstance().getBuffInfo(info.id);
+				if (tInfo.effType == "e")
+					UIManager.getInstance().toolsWnd.setStopState(true);
 				return true;
 			}
 			return false
@@ -196,6 +203,9 @@ package com.ace.game.scene.player {
 		override public function sm_removeBuff(id:int):void {
 			super.sm_removeBuff(id);
 			UIManager.getInstance().roleHeadWnd.buffWnd.removeBuff(id);
+			var tInfo:TBuffInfo=TableManager.getInstance().getBuffInfo(id);
+			if (tInfo.effType == "e")
+				UIManager.getInstance().toolsWnd.setStopState(false);
 		}
 
 		/**自动拾取*/
@@ -215,25 +225,32 @@ package com.ace.game.scene.player {
 					item=UIManager.getInstance().gameScene.findItem(new Point(i, j));
 					if (!item || !item.bInfo.isDead || (!this.pInfo.isManualPickUp && LivingItemInfo(item.bInfo).throwOwnerId == this.info.id))
 						continue;
-					if (item.bInfo.tId == 65535 || this.pInfo.isManualPickUp || //
-						LivingItemInfo(item.bInfo).quality >= SettingManager.getInstance().assitInfo.autoPickQuality) {
+//					if (item.bInfo.tId == 65535 || this.pInfo.isManualPickUp) {
 
+					if (item.bInfo.tId == 65535) {
 						this.pInfo.isManualPickUp=false;
-						if (SettingManager.getInstance().assitInfo.isAutoPickupEquip && //
-							LivingItemInfo(item.bInfo).type == ItemEnum.ITEM_TYPE_EQUIP) {
-							Cmd_Scene.cm_drop(item);
-							continue;
-						}
-						if (SettingManager.getInstance().assitInfo.isAutopickupItem //
-							&& LivingItemInfo(item.bInfo).type != ItemEnum.ITEM_TYPE_EQUIP) {
-							Cmd_Scene.cm_drop(item);
-							continue;
-						}
-						if (item.bInfo.tId == 65535) {
-							Cmd_Scene.cm_drop(item);
-							continue;
-						}
+						Cmd_Scene.cm_drop(item);
+						continue;
 					}
+
+					if (SettingManager.getInstance().assitInfo.isAutoPickupEquip && //
+						LivingItemInfo(item.bInfo).type == ItemEnum.ITEM_TYPE_EQUIP && //
+						LivingItemInfo(item.bInfo).quality >= SettingManager.getInstance().assitInfo.autoPickEquipQuality) {
+						this.pInfo.isManualPickUp=false;
+						Cmd_Scene.cm_drop(item);
+						continue;
+					}
+
+					if (SettingManager.getInstance().assitInfo.isAutopickupItem //
+						&& LivingItemInfo(item.bInfo).type != ItemEnum.ITEM_TYPE_EQUIP && //
+						LivingItemInfo(item.bInfo).quality >= SettingManager.getInstance().assitInfo.autoPickItemQuality) {
+						this.pInfo.isManualPickUp=false;
+						Cmd_Scene.cm_drop(item);
+						continue;
+					}
+
+
+//					}
 				}
 			}
 //			this.pInfo.isManualPickUp=false;

@@ -137,6 +137,32 @@ package com.leyou.utils {
 			}
 			return url;
 		}
+		
+		public static function getPlayerFullBigHeadImg(race:int, sex:int):String {
+			var url:String;
+			if (race == PlayerEnum.PRO_SOLDIER) { //战士
+				if (sex == PlayerEnum.SEX_BOY)
+					url="ui/wybq/zs_m.png";
+				else
+					url="ui/wybq/zs_f.png";
+			} else if (race == PlayerEnum.PRO_MASTER) { //法师
+				if (sex == PlayerEnum.SEX_BOY)
+					url="ui/wybq/fs_m.png";
+				else
+					url="ui/wybq/fs_f.png";
+			} else if (race == PlayerEnum.PRO_WARLOCK) { //道士
+				if (sex == PlayerEnum.SEX_BOY)
+					url="ui/wybq/ss_m.png";
+				else
+					url="ui/wybq/ss_f.png";
+			} else if (race == PlayerEnum.PRO_RANGER) {
+				if (sex == PlayerEnum.SEX_BOY)
+					url="ui/wybq/yx_m.png";
+				else
+					url="ui/wybq/yx_f.png";
+			}
+			return url;
+		}
 
 		/**
 		 *通过职业编号 返回职业名字
@@ -204,6 +230,52 @@ package com.leyou.utils {
 							return true;
 						}
 					}
+				}
+			} else {
+				return (MyInfoManager.getInstance().mountEquipArr[info.subclassid - 13] != null);
+			}
+
+			return false;
+		}
+
+		/**
+		 * 第二件套装判断
+		 * @param info
+		 * @param self
+		 * @return
+		 *
+		 */
+		public static function getEquipToBody2(info:Object, self:Boolean=false):Boolean {
+
+			if (info.classid != 1)
+				return false;
+
+			if (info.subclassid < 13) {
+
+				var olist:Array=ItemEnum.ItemToRolePos[info.subclassid];
+
+				var st:Boolean=false;
+				var roleIndex:int;
+				var einfo:EquipInfo;
+
+				var i:int=0;
+
+				for each (roleIndex in olist) {
+					einfo=MyInfoManager.getInstance().equips[roleIndex];
+
+					if (einfo != null) {
+						if (self) {
+							if (einfo.id == info.id) {
+								if (i == 1)
+									return true;
+								i++;
+							}
+						} else {
+							return true;
+						}
+					}
+
+
 				}
 			} else {
 				return (MyInfoManager.getInstance().mountEquipArr[info.subclassid - 13] != null);

@@ -16,6 +16,7 @@ package com.ace.enum {
 		static public const COLOR_RED:String="red";
 		static public const COLOR_GREEN:String="green";
 		static public const COLOR_YELLOW:String="yellow";
+		static public const COLOR_PURPLE:String="purple";
 
 		static public const FILE_SUB_NUM:String="cut";
 		static public const FILE_ADD_NUM:String="plus";
@@ -53,5 +54,13 @@ package com.ace.enum {
 		static public const XING_YUN:String="xy";//幸运
 		static public const ZHAN_DOU_LI:String="zdl";//战斗力
 		static public const ZHU_FU:String="zf";//祝福
+		static public const YONG_BING:String="yb";//佣兵
+		static public const KE_ZHI:String="element_kz";//克制
+		static public const BEI_KE:String="element_bk";//被克
+		static public const AN_SHANG:String="element_as";//暗伤
+		static public const GUANG_SHANG:String="element_gs";//光伤
+		static public const HUO_SHANG:String="element_hs";//火伤
+		static public const MU_SHANG:String="element_ms";//木伤
+		static public const SUI_SHANG:String="element_ss";//水伤
 	}
 }

@@ -1,16 +1,16 @@
 package com.leyou.net {
 
+	import com.ace.config.Core;
 	import com.ace.enum.UIEnum;
 	import com.ace.game.manager.LogManager;
 	import com.ace.game.net.NetGateModel;
 	import com.ace.game.scene.ui.ReConnectionWnd;
-	import com.ace.manager.UIManager;
 	import com.ace.ui.window.children.PopWindow;
 	import com.ace.ui.window.children.WindInfo;
 	import com.ace.utils.HexUtil;
 	import com.adobe.serialization.json.JSON;
 	import com.leyou.enum.CmdEnum;
-	import com.leyou.net.cmd.Cmd_Login;
+	import com.leyou.net.cmd.Cmd_Scene;
 	
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
@@ -35,6 +35,8 @@ package com.leyou.net {
 		}
 
 		override protected function conned(e:Event):void {
+			super.conned(e);
+			this.pid=0;
 			this.heartTimer.start();
 			this.onSend(NetEncode.password());
 			this.countPid();
@@ -60,15 +62,21 @@ package com.leyou.net {
 		}
 
 		override protected function disConn(e:Event):void {
+			if (this.isManualClose) {
+				this.isManualClose=false;
+				NetGate.getInstance().changeConnect(Core.serverIp, Core.loginPort); //自己主动断开
+				if (Cmd_Scene.PRE_PS) {
+					Cmd_Scene.PRE_PS.x=Cmd_Scene.PRE_PS.y=0;
+				}
+				return;
+			}
 			ReConnectionWnd.getInstance().show();
-			return;
-			super.disConn(e);
 		}
-		
-		public function sendIII(code:String, ...params):void{
-			var cmd:String = code;
-			for each(var p:String in params){
-				cmd += ("," + p);
+
+		public function sendIII(code:String, ... params):void {
+			var cmd:String=code;
+			for each (var p:String in params) {
+				cmd+=("," + p);
 			}
 			send(cmd);
 		}

@@ -59,7 +59,7 @@ package com.leyou.ui.medic {
 			this.init();
 			this.hideBg();
 			this.allowDrag=false;
-			this.clsBtn.y+=25;
+//			this.clsBtn.y+=25;
 		}
 
 		private function init():void {

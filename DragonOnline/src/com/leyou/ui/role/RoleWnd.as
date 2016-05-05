@@ -6,15 +6,21 @@ package com.leyou.ui.role {
 	import com.ace.enum.UIEnum;
 	import com.ace.enum.WindowEnum;
 	import com.ace.game.scene.player.big.BigAvatar;
+	import com.ace.gameData.manager.MyInfoManager;
 	import com.ace.gameData.manager.TableManager;
+	import com.ace.gameData.table.TElementInfo;
 	import com.ace.gameData.table.TMarry_ring;
+	import com.ace.gameData.table.TPnfInfo;
 	import com.ace.loader.child.SwfLoader;
+	import com.ace.manager.GuideArrowDirectManager;
 	import com.ace.manager.GuideManager;
 	import com.ace.manager.LibManager;
+	import com.ace.manager.MouseManagerII;
 	import com.ace.manager.ToolTipManager;
 	import com.ace.manager.TweenManager;
 	import com.ace.manager.UILayoutManager;
 	import com.ace.manager.UIManager;
+	import com.ace.manager.child.MouseEventInfo;
 	import com.ace.ui.auto.AutoWindow;
 	import com.ace.ui.button.children.NormalButton;
 	import com.ace.ui.button.children.TabButton;
@@ -22,6 +28,7 @@ package com.leyou.ui.role {
 	import com.ace.ui.notice.NoticeManager;
 	import com.ace.ui.tabbar.TabbarModel;
 	import com.ace.ui.tabbar.children.TabBar;
+	import com.ace.utils.PnfUtil;
 	import com.greensock.TweenLite;
 	import com.greensock.core.TweenCore;
 	import com.leyou.data.element.ElementInfo;
@@ -32,11 +39,13 @@ package com.leyou.ui.role {
 	import com.leyou.manager.PopupManager;
 	import com.leyou.net.cmd.Cmd_Element;
 	import com.leyou.net.cmd.Cmd_Gem;
+	import com.leyou.net.cmd.Cmd_Longz;
 	import com.leyou.net.cmd.Cmd_Marry;
 	import com.leyou.net.cmd.Cmd_Mount;
 	import com.leyou.net.cmd.Cmd_Nck;
 	import com.leyou.net.cmd.Cmd_Role;
 	import com.leyou.net.cmd.Cmd_Wig;
+	import com.leyou.ui.dragonBall.children.DragonBallPropertyRender;
 	import com.leyou.ui.gem.GemWnd;
 	import com.leyou.ui.mount.MountWnd;
 	import com.leyou.ui.role.child.ElementWnd;
@@ -48,7 +57,9 @@ package com.leyou.ui.role {
 	import com.leyou.ui.vip.VipEquipPage;
 	import com.leyou.ui.wing.WingUnWnd;
 	import com.leyou.ui.wing.WingWnd;
+	import com.leyou.utils.PropUtils;
 	
+	import flash.display.DisplayObject;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
@@ -70,6 +81,7 @@ package com.leyou.ui.role {
 		private var wingWnd:WingWnd; //翅膀面板
 		private var wingUnWnd:WingUnWnd; //翅膀面板
 		private var titleWnd:TitleWnd; //称号面板
+		public var dragonBall:DragonBallPropertyRender;
 
 		private var gemWnd:GemWnd; //称号面板
 
@@ -104,13 +116,19 @@ package com.leyou.ui.role {
 		// 神器
 		private var equipPage:VipEquipPage;
 
+		private var wardrobeBtn:NormalButton;
 		private var marryBtn:NormalButton;
 		private var marryiconImg:Image;
 		private var marryiconImgbg:Image;
 		private var marryiconImgSwf:SwfLoader;
 
+		public var lvImg:Image;
+		public var qulityImg:Image;
+
 		private var marryName:String;
 		private var img1SSwf:Sprite;
+
+		private var eleSwfLoader:SwfLoader;
 
 		private var tipinfo:TipsInfo;
 
@@ -120,11 +138,16 @@ package com.leyou.ui.role {
 		}
 
 		private function init():void {
+			this.wardrobeBtn=this.getUIbyID("wardrobeBtn") as NormalButton;
 			this.marryBtn=this.getUIbyID("marryBtn") as NormalButton;
 			this.marryiconImg=this.getUIbyID("marryiconImg") as Image;
 			this.marryiconImgbg=this.getUIbyID("marryiconImgbg") as Image;
 
 			this.marryBtn.addEventListener(MouseEvent.CLICK, onClick);
+			this.wardrobeBtn.addEventListener(MouseEvent.CLICK, onAvatarClick);
+
+			this.qulityImg=this.getUIbyID("qulityImg") as Image;
+			this.lvImg=this.getUIbyID("lvImg") as Image;
 
 			this.roleTabBar=this.getUIbyID("RoleTabBar") as TabBar;
 			this.roleTabBar.addEventListener(TabbarModel.changeTurnOnIndex, onTabBarChangeIndex);
@@ -152,27 +175,42 @@ package com.leyou.ui.role {
 
 			this.equipPage=new VipEquipPage();
 			this.roleTabBar.addToTab(this.equipPage, 5);
+			
+			dragonBall=new DragonBallPropertyRender();
+			this.roleTabBar.addToTab(this.dragonBall, 7);
 
 			this.propertyNum=new PropertyNum();
 
-			this.propertyNum.x=287;
-			this.propertyNum.y=68;
+			this.propertyNum.x=330;
+			this.propertyNum.y=90;
 			this.addChild(this.propertyNum);
 
 			this.equipBackEffect=new SwfLoader();
 			this.addChild(this.equipBackEffect);
 
 			this.equipBackEffect.x=160;
-			this.equipBackEffect.y=408;
+			this.equipBackEffect.y=428;
 
 			this.roleEquipUp=new RoleEquipUpWnd();
 			this.addChild(this.roleEquipUp);
-			this.roleEquipUp.y=70;
-			this.roleEquipUp.x=15;
+			this.roleEquipUp.y=90;
+			this.roleEquipUp.x=10;
+
+			this.roleEquipUp.setLVImg(this.lvImg);
+			this.roleEquipUp.setQualityImg(this.qulityImg);
+
+//			this.lvImg.x+=13;
+//			this.lvImg.y+=67;
+//
+//			this.qulityImg.x+=13;
+//			this.qulityImg.y+=67;
+
+//			this.addChild(this.lvImg);
+//			this.addChild(this.qulityImg);
 
 			this.bigAvatar=new BigAvatar();
-			this.bigAvatar.x=156;
-			this.bigAvatar.y=411;
+			this.bigAvatar.x=165;
+			this.bigAvatar.y=436;
 			this.addChild(this.bigAvatar);
 
 			this.propertyNum.addEventListener(MouseEvent.CLICK, onMouseOver);
@@ -180,8 +218,8 @@ package com.leyou.ui.role {
 			this.wingAvatar=new SwfLoader();
 			this.addChild(this.wingAvatar);
 
-			this.wingAvatar.x=150;
-			this.wingAvatar.y=408;
+			this.wingAvatar.x=145;
+			this.wingAvatar.y=468;
 
 			this.roleEquipUp.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
 			this.roleEquipUp.addEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
@@ -189,8 +227,8 @@ package com.leyou.ui.role {
 			this.equipEffect=new SwfLoader();
 			this.addChild(this.equipEffect);
 
-			this.equipEffect.x=155;
-			this.equipEffect.y=248;
+			this.equipEffect.x=165;
+			this.equipEffect.y=258;
 
 			this.equipEffect.mouseChildren=false;
 			this.equipEffect.mouseEnabled=false;
@@ -208,6 +246,7 @@ package com.leyou.ui.role {
 
 			bgsp.addEventListener(MouseEvent.CLICK, onEffClick);
 
+			this.addChild(this.wardrobeBtn);
 			this.addChild(this.marryBtn);
 			this.addChild(this.marryiconImgbg);
 			this.addChild(this.marryiconImg);
@@ -216,7 +255,7 @@ package com.leyou.ui.role {
 			this.addChild(this.marryiconImgSwf);
 
 			this.marryiconImgSwf.x=this.marryiconImg.x;
-			this.marryiconImgSwf.y=this.marryiconImg.y;
+			this.marryiconImgSwf.y=this.marryiconImg.y + 2;
 
 			this.marryiconImgSwf.visible=false;
 			this.marryBtn.visible=true;
@@ -236,8 +275,40 @@ package com.leyou.ui.role {
 			this.img1SSwf.addEventListener(MouseEvent.MOUSE_OVER, onTipsMouseOver);
 			this.img1SSwf.addEventListener(MouseEvent.MOUSE_OUT, onTipsMouseOut);
 
+			this.eleSwfLoader=new SwfLoader();
+			this.addChild(this.eleSwfLoader);
+
+			this.eleSwfLoader.x=230;
+			this.eleSwfLoader.y=320;
+
+			this.setChildIndex(this.marryiconImgbg, 3);
+			this.setChildIndex(this.marryiconImg, 4);
+			this.setChildIndex(this.marryiconImgSwf, 5);
+
+			var einfo:MouseEventInfo;
+
+			einfo=new MouseEventInfo();
+			einfo.onMouseMove=this.roleEquipUp.onTips1MouseOver;
+			einfo.onLeftClick=onLeftClick;
+			einfo.onMouseOut=onTipsMouseOut2;
+
+			MouseManagerII.getInstance().addEvents(this.lvImg, einfo);
+
+			einfo=new MouseEventInfo();
+			einfo.onMouseMove=this.roleEquipUp.onTips2MouseOver;
+			einfo.onLeftClick=onLeftClick;
+			einfo.onMouseOut=onTipsMouseOut2;
+
+			MouseManagerII.getInstance().addEvents(this.qulityImg, einfo);
+
 			this.tipinfo=new TipsInfo();
 //			this.scrollRect=new Rectangle(-256, 0, 745, 524);
+		}
+
+		private function onLeftClick(e:Image):void {
+
+			UILayoutManager.getInstance().show(WindowEnum.SHIYI);
+			TweenLite.delayedCall(0.6, UIManager.getInstance().shiyeWnd.setTabIndex, [1]);
 		}
 
 		private function onTipsMouseOver(e:MouseEvent):void {
@@ -249,13 +320,17 @@ package com.leyou.ui.role {
 			ToolTipManager.getInstance().hide();
 		}
 
+		private function onTipsMouseOut2(e:Image):void {
+			ToolTipManager.getInstance().hide();
+		}
+
 		private function onEffClick(e:MouseEvent):void {
 			this.bigAvatar.showII(Core.me.info.featureInfo, true, Core.me.info.profession);
 		}
 
 		private function onMouseOut(e:MouseEvent):void {
 
-			if (e.target is EquipGrid) {
+			if (e.target is EquipGrid || e.target is RoleEquipUpWnd) {
 				if (this.tweenCore != null)
 					this.tweenCore.kill();
 
@@ -277,19 +352,39 @@ package com.leyou.ui.role {
 
 				this.tweenCore=TweenLite.delayedCall(3, exeTime);
 
-			} else if (e.target is EquipGrid) {
+			} else if (e.target is EquipGrid || e.target is RoleEquipUpWnd) {
+
+//				this.addChild(this.lvImg);
+//				this.addChild(this.qulityImg);
+
+				this.addChild(this.marryiconImgbg);
+				this.addChild(this.marryiconImg);
+				this.addChild(this.marryiconImgSwf);
 
 				this.setChildIndex(this.propertyNum, 6);
 				this.setChildIndex(this.roleEquipUp, 10);
 				this.setChildIndex(this.bigAvatar, 7);
+
 			}
 
 		}
+
 
 		private function exeTime():void {
 			this.setChildIndex(this.propertyNum, 6);
 			this.setChildIndex(this.roleEquipUp, 7);
 			this.setChildIndex(this.bigAvatar, 8);
+
+			this.setChildIndex(this.marryiconImgbg, 3);
+			this.setChildIndex(this.marryiconImg, 4);
+			this.setChildIndex(this.marryiconImgSwf, 5);
+
+//			this.addChild(this.lvImg);
+//			this.addChild(this.qulityImg);
+
+//			this.addChild(this.marryiconImgbg);
+//			this.addChild(this.marryiconImg);
+//			this.addChild(this.marryiconImgSwf);
 		}
 
 		private function onClick(e:MouseEvent):void {
@@ -301,6 +396,9 @@ package com.leyou.ui.role {
 			}
 		}
 
+		private function onAvatarClick(e:MouseEvent):void {
+			UILayoutManager.getInstance().show(WindowEnum.SHIYI);
+		}
 
 		public function startMarry(name:String=null):void {
 			if (this.marryName != null) {
@@ -367,6 +465,17 @@ package com.leyou.ui.role {
 			UIManager.getInstance().backpackWnd.setPlayGuideMountItem(1);
 
 			UIManager.getInstance().taskTrack.setGuideViewhide(TaskEnum.taskType_ElementFlagNum);
+			
+			var pid:int=Core.me.info.equipEffectId+5;
+			
+			var pinfo:TPnfInfo=TableManager.getInstance().getPnfInfo(pid);
+			
+			if (pinfo.type == 10) {
+				UIManager.getInstance().roleWnd.setBackEffect(pid);
+			} else if (pinfo.type == 3) {
+				UIManager.getInstance().roleWnd.setEffect(pid);
+			}
+			
 		}
 
 		public function getTabIndex():int {
@@ -402,14 +511,21 @@ package com.leyou.ui.role {
 
 				this.img1SSwf.visible=true;
 
+				this.propertyNum.setMarryValue(this.marryName);
+
+//				this.marryBtn.setActive(true, 1, true);
 
 			} else {
+				this.propertyNum.setMarryValue("" + PropUtils.getStringById(1594));
 				this.marryiconImg.fillEmptyBmd();
 				this.marryiconImgSwf.visible=false;
 				this.marryName=null;
 
 				this.img1SSwf.visible=false;
 			}
+
+			if (Core.isDvt)
+				this.marryBtn.setActive(false, 0.6, true);
 
 			this.roleEquipUp.setCpName(this.marryName);
 		}
@@ -484,15 +600,12 @@ package com.leyou.ui.role {
 				GuideManager.getInstance().removeGuide(120);
 				GuideManager.getInstance().removeGuide(10);
 
-				if (ConfigEnum.ElementOpenLv <= Core.me.info.level && this.elementWnd.guildElement == -1)
-					GuideManager.getInstance().showGuide(11, this);
-
 				GuideManager.getInstance().showGuide(80, this.elementWnd.begainBtn);
 
 			} else {
 
 				UIManager.getInstance().hideWindow(WindowEnum.MESSAGE);
-				GuideManager.getInstance().removeGuide(11);
+//				GuideManager.getInstance().removeGuide(11);
 				GuideManager.getInstance().removeGuide(80);
 
 			}
@@ -521,7 +634,7 @@ package com.leyou.ui.role {
 				this.marryBtn.visible=true;
 				this.marryiconImgbg.visible=true;
 
-				if (Core.me != null && Core.me.info != null && Core.me.info.level < 20) {
+				if ((Core.me != null && Core.me.info != null && Core.me.info.level < 20) || Core.isDvt) {
 					this.marryBtn.setActive(false, 0.6, true);
 				} else {
 					this.marryBtn.setActive(true, 1, true);
@@ -531,11 +644,28 @@ package com.leyou.ui.role {
 					this.marryiconImg.visible=true;
 					this.marryiconImgSwf.visible=true;
 					this.img1SSwf.visible=true;
-
 				}
+
+				this.wardrobeBtn.visible=true;
+				this.lvImg.visible=true;
+				this.qulityImg.visible=true;
+				this.eleSwfLoader.visible=true;
+
+				this.roleEquipUp.nameLbl.visible=true;
+				this.roleEquipUp.raceImg.visible=true;
+				this.roleEquipUp.bgNameImg.updateBmp("ui/character/bg_name.png");
 
 			} else {
 
+				this.roleEquipUp.nameLbl.visible=false;
+				this.roleEquipUp.raceImg.visible=false;
+				this.roleEquipUp.bgNameImg.fillEmptyBmd();
+
+				this.eleSwfLoader.visible=false;
+				this.lvImg.visible=false;
+				this.qulityImg.visible=false;
+
+				this.wardrobeBtn.visible=false;
 				this.marryBtn.visible=false;
 				this.marryiconImg.visible=false;
 				this.marryiconImgbg.visible=false;
@@ -558,6 +688,10 @@ package com.leyou.ui.role {
 
 			if (this.roleTabBar.turnOnIndex == 5) {
 				this.equipPage.updateInfo();
+			}
+
+			if (this.roleTabBar.turnOnIndex == 7) {
+				Cmd_Longz.cm_Longz_H(MyInfoManager.getInstance().name)
 			}
 
 			UILayoutManager.getInstance().hide(WindowEnum.QUICK_BUY);
@@ -607,12 +741,17 @@ package com.leyou.ui.role {
 			this.roleEquipUp.updateInfo(info);
 			this.propertyNum.updateInfo(info);
 
-			if (Core.me != null && Core.me.info != null && Core.me.info.level < 20) {
+			if ((Core.me != null && Core.me.info != null && Core.me.info.level < 20) || Core.isDvt) {
 				this.marryBtn.setActive(false, 0.6, true);
 			} else {
 				this.marryBtn.setActive(true, 1, true);
 			}
 
+			if (info.currentElement > 0) {
+				var elinfo:TElementInfo=TableManager.getInstance().getElementInfo(info.currentElement, info.elementArr[info.currentElement - 1][1]);
+				this.eleSwfLoader.update(elinfo.pnfId);
+				this.eleSwfLoader.playAct(PlayerEnum.ACT_STAND, PlayerEnum.DIR_S);
+			}
 		}
 
 		override public function sendOpenPanelProtocol(... parameters):void {
@@ -664,6 +803,12 @@ package com.leyou.ui.role {
 			}
 
 			GuideManager.getInstance().removeGuide(109);
+
+
+			this.roleTabBar.setTabVisible(3, false);
+			this.roleTabBar.setTabVisible(4, false);
+			this.roleTabBar.setTabVisible(5, false);
+
 		}
 
 		override public function set visible(value:Boolean):void {
@@ -725,6 +870,8 @@ package com.leyou.ui.role {
 
 		public function updateGemInfo(o:Object):void {
 			this.gemWnd.updateInfo(o);
+//			this.roleEquipUp.nameLbl.visible=false;
+			this.roleEquipUp.raceImg.visible=false;
 		}
 
 		public function setGemSlot(p:int):void {
@@ -809,30 +956,64 @@ package com.leyou.ui.role {
 
 		}
 
-		public function updateWingEffect(pid:Array):void {
-			this.equipBackEffect.visible=false;
+		/**
+		 * 脚下特效 
+		 * @param pid
+		 * 
+		 */		
+		public function setBackEffect(pid:int):void {
 			this.equipEffect.visible=false;
 
-			if (pid[0] != -1) {
+			this.equipBackEffect.visible=true;
+			this.equipBackEffect.update(pid, play1);
 
-				this.equipBackEffect.visible=true;
-				this.equipBackEffect.update(pid[0], play1);
-
-				function play1():void {
-					equipBackEffect.playAct(PlayerEnum.ACT_STAND, -1, true);
-				}
-
+			function play1():void {
+				equipBackEffect.playAct(PlayerEnum.ACT_STAND, -1, true);
 			}
 
-			if (pid[1] != -1) {
+		}
 
-				this.equipEffect.visible=true;
-				this.equipEffect.update(pid[1], play2);
+		/**
+		 * 身上特效 
+		 * @param pid
+		 * 
+		 */		
+		public function setEffect(pid:int):void {
+			this.equipBackEffect.visible=false;
 
-				function play2():void {
-					equipEffect.playAct(PlayerEnum.ACT_STAND, -1, true);
-				}
+			this.equipEffect.visible=true;
+			this.equipEffect.update(pid, play2);
+
+			function play2():void {
+				equipEffect.playAct(PlayerEnum.ACT_STAND, -1, true);
 			}
+
+		}
+
+		public function updateWingEffect(pid:Array):void {
+//			this.equipBackEffect.visible=false;
+//			this.equipEffect.visible=false;
+//
+//			if (pid[0] != -1) {
+//
+//				this.equipBackEffect.visible=true;
+//				this.equipBackEffect.update(pid[0], play1);
+//
+//				function play1():void {
+//					equipBackEffect.playAct(PlayerEnum.ACT_STAND, -1, true);
+//				}
+//
+//			}
+//
+//			if (pid[1] != -1) {
+//
+//				this.equipEffect.visible=true;
+//				this.equipEffect.update(pid[1], play2);
+//
+//				function play2():void {
+//					equipEffect.playAct(PlayerEnum.ACT_STAND, -1, true);
+//				}
+//			}
 
 		}
 
@@ -858,8 +1039,18 @@ package com.leyou.ui.role {
 		}
 
 		public function updateWingAvatar(pnfid:int):void {
-			var pnid:int=38000 + (pnfid - 1);
-			this.wingAvatar.update(pnid);
+//			var pnid:int=38000 + (pnfid - 1);
+//
+//			var wxml:XML=LibManager.getInstance().getXML("config/table/Wing_Base.xml");
+//			var wwxml:XML;
+//			for each (wwxml in wxml.data) {
+//				if (wwxml.@Wing_Lv == pnfid) {
+//					break;
+//				}
+//			}
+
+//			this.wingAvatar.update(wwxml.@UiModel);
+			this.wingAvatar.update(pnfid);
 		}
 
 		/**
@@ -921,9 +1112,10 @@ package com.leyou.ui.role {
 		 * @param o
 		 */
 		public function updateTitleList(o:Object):void {
+			return;
 			if (Core.me != null && Core.me.info != null && ConfigEnum.NckOpenLv <= Core.me.info.level) {
 				this.roleTabBar.setTabVisible(4, true);
-				this.titleWnd.updateInfo(o);
+//				this.titleWnd.updateInfo(o);
 
 //				if (this.visible)
 //					GuideManager.getInstance().showGuide(59, this.roleTabBar.getTabButton(4));
@@ -990,7 +1182,7 @@ package com.leyou.ui.role {
 			UILayoutManager.getInstance().composingWnd(WindowEnum.ROLE);
 
 			GuideManager.getInstance().removeGuide(2);
-			GuideManager.getInstance().removeGuide(11);
+//			GuideManager.getInstance().removeGuide(11);
 			GuideManager.getInstance().removeGuide(58);
 			GuideManager.getInstance().removeGuide(59);
 			GuideManager.getInstance().removeGuide(80);
@@ -1002,14 +1194,15 @@ package com.leyou.ui.role {
 
 			this.roleTabBar.turnToTab(0);
 
-			this.equipBackEffect.visible=false;
-			this.equipEffect.visible=false;
+//			this.equipBackEffect.visible=false;
+//			this.equipEffect.visible=false;
 			this.gemWnd.clearGrid();
 
 			TweenManager.getInstance().lightingCompnent(UIManager.getInstance().toolsWnd.playerBtn);
 
 			UIManager.getInstance().taskTrack.setGuideView(TaskEnum.taskType_ElementFlagNum);
 
+			GuideArrowDirectManager.getInstance().delArrow(WindowEnum.ROLE+"");
 
 			UIManager.getInstance().selectWnd.closePanel([0, 1, 2]);
 		}
@@ -1050,7 +1243,7 @@ package com.leyou.ui.role {
 		override public function onWndMouseMove($x:Number, $y:Number):void {
 			super.onWndMouseMove($x, $y);
 
-			var _w:Number=489;
+			var _w:Number=539;
 
 			if (UIManager.getInstance().mountLvUpwnd.visible) {
 
@@ -1058,7 +1251,7 @@ package com.leyou.ui.role {
 					this.x=UIEnum.WIDTH - UIManager.getInstance().mountLvUpwnd.width - 3 - _w;
 
 				UIManager.getInstance().mountLvUpwnd.x=this.x + _w + UILayoutManager.SPACE_X;
-				UIManager.getInstance().mountLvUpwnd.y=this.y + UILayoutManager.SPACE_Y;
+				UIManager.getInstance().mountLvUpwnd.y=this.y; // + UILayoutManager.SPACE_Y;
 
 			} else if (UIManager.getInstance().mountTradeWnd.visible) {
 
@@ -1066,7 +1259,7 @@ package com.leyou.ui.role {
 					this.x=UIEnum.WIDTH - UIManager.getInstance().mountTradeWnd.width - 3 - _w;
 
 				UIManager.getInstance().mountTradeWnd.x=this.x + _w + UILayoutManager.SPACE_X;
-				UIManager.getInstance().mountTradeWnd.y=this.y + UILayoutManager.SPACE_Y;
+				UIManager.getInstance().mountTradeWnd.y=this.y; // + UILayoutManager.SPACE_Y;
 
 			} else if (UIManager.getInstance().wingLvUpWnd.visible) {
 
@@ -1074,14 +1267,14 @@ package com.leyou.ui.role {
 					this.x=UIEnum.WIDTH - UIManager.getInstance().wingLvUpWnd.width - 3 - _w;
 
 				UIManager.getInstance().wingLvUpWnd.x=this.x + _w + UILayoutManager.SPACE_X;
-				UIManager.getInstance().wingLvUpWnd.y=this.y + UILayoutManager.SPACE_Y;
+				UIManager.getInstance().wingLvUpWnd.y=this.y; // + UILayoutManager.SPACE_Y;
 			} else if (UIManager.getInstance().wingTradeWnd.visible) {
 
 				if (this.x + _w + 3 + UIManager.getInstance().wingTradeWnd.width > UIEnum.WIDTH)
 					this.x=UIEnum.WIDTH - UIManager.getInstance().wingTradeWnd.width - 3 - _w;
 
 				UIManager.getInstance().wingTradeWnd.x=this.x + _w + UILayoutManager.SPACE_X;
-				UIManager.getInstance().wingTradeWnd.y=this.y + UILayoutManager.SPACE_Y;
+				UIManager.getInstance().wingTradeWnd.y=this.y; // + UILayoutManager.SPACE_Y;
 //			} else if (UIManager.getInstance().isCreate(WindowEnum.GEM_LV) && UIManager.getInstance().gemLvWnd.visible) {
 //
 //				if (this.x + _w + 3 + UIManager.getInstance().gemLvWnd.width > UIEnum.WIDTH)
@@ -1102,7 +1295,7 @@ package com.leyou.ui.role {
 					this.x=UIEnum.WIDTH - UIManager.getInstance().marryWnd4.width - 3 - _w;
 
 				UIManager.getInstance().marryWnd4.x=this.x + _w + UILayoutManager.SPACE_X;
-				UIManager.getInstance().marryWnd4.y=this.y + UILayoutManager.SPACE_Y + 3;
+				UIManager.getInstance().marryWnd4.y=this.y; // + UILayoutManager.SPACE_Y + 3;
 			}
 
 		}
@@ -1129,11 +1322,11 @@ package com.leyou.ui.role {
 
 
 		override public function get width():Number {
-			return 489;
+			return 521;
 		}
 
 		override public function get height():Number {
-			return 528;
+			return 544;
 		}
 
 		public function playVipSkillCd(skillId:int):void {
@@ -1144,5 +1337,26 @@ package com.leyou.ui.role {
 			return this.mountWnd.getMouseLvBtn();
 		}
 
+		public function getCurrentEle():int {
+			return this.info.currentElement;
+		}
+
+		public function getCurrentEleValue():int {
+			if (this.info.currentElement > 0)
+				return this.info.elementArr[this.info.currentElement - 1];
+
+			return 0;
+		}
+
+		
+		override public function getUIbyID(id:String):DisplayObject {
+			var ds:DisplayObject=super.getUIbyID(id);
+			
+			if (ds == null)
+				ds=dragonBall.getUIbyID(id);
+			
+			return ds;
+		}
+		
 	}
 }

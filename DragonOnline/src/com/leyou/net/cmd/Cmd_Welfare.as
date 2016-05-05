@@ -1,10 +1,12 @@
 package com.leyou.net.cmd
 {
 	import com.ace.enum.WindowEnum;
+	import com.ace.manager.GuideManager;
 	import com.ace.manager.UILayoutManager;
 	import com.ace.manager.UIManager;
 	import com.ace.manager.UIOpenBufferManager;
 	import com.leyou.enum.CmdEnum;
+	import com.leyou.enum.ConfigEnum;
 	import com.leyou.net.NetGate;
 
 	public class Cmd_Welfare
@@ -26,18 +28,15 @@ package com.leyou.net.cmd
 		}
 		
 		public static function cm_SIGN_J(sc:int):void{
-			if(sc <= 0){
-				throw new Error("领取奖励 sc = " + sc);
-			}
 			NetGate.getInstance().send(CmdEnum.CM_SIGN_J + sc);
 		}
 		
-		public static function cm_SIGN_V(vc:int):void{
-			NetGate.getInstance().send(CmdEnum.CM_SIGN_V + vc);
+		public static function cm_SIGN_V():void{
+			NetGate.getInstance().send(CmdEnum.CM_SIGN_V);
 		}
 		
 		public static function sm_SIGN_Z(obj:Object):void{
-			UIManager.getInstance().welfareWnd.flyItem(1);
+			UIManager.getInstance().welfareWnd.flyItem(1, obj.rst);
 		}
 		
 		public static function sm_OL_I(obj:Object):void{
@@ -53,6 +52,7 @@ package com.leyou.net.cmd
 		
 		public static function sm_OL_J(obj:Object):void{
 			UIManager.getInstance().welfareWnd.receiveOLReward(obj);
+			GuideManager.getInstance().rewardReducing();
 		}
 		
 		public static function cm_OL_J(otype:int):void{
@@ -83,7 +83,7 @@ package com.leyou.net.cmd
 		}
 		
 		public static function sm_OFL_I(obj:Object):void{
-			if(obj.baseexp > 0){
+			if(obj.ofltime >= ConfigEnum.OutLine1){
 				if(!UIManager.getInstance().welfareWnd){
 					UIManager.getInstance().creatWindow(WindowEnum.WELFARE);
 				}
@@ -103,6 +103,22 @@ package com.leyou.net.cmd
 		
 		public static function cm_OFL_L(type:int):void{
 			NetGate.getInstance().send(CmdEnum.CM_OFL_L+type);
+		}
+		
+		public static function sm_FBK_I(obj:Object):void{
+			UIManager.getInstance().welfareWnd.updateFBK(obj);
+		}
+		
+		public static function cm_FBK_I():void{
+			NetGate.getInstance().send(CmdEnum.CM_FBK_I);
+		}
+		
+		public static function cm_FBK_F(id:int, type:int):void{
+			NetGate.getInstance().send(CmdEnum.CM_FBK_J+id+","+type);
+		}
+		
+		public static function cm_FBK_A(type:int):void{
+			NetGate.getInstance().send(CmdEnum.CM_FBK_A+type);
 		}
 	}
 }

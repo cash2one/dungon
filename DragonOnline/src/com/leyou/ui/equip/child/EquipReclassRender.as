@@ -19,7 +19,7 @@ package com.leyou.ui.equip.child {
 	import com.leyou.manager.PopupManager;
 	import com.leyou.net.cmd.Cmd_Equip;
 	import com.leyou.utils.PlayerUtil;
-
+	
 	import flash.events.MouseEvent;
 
 	public class EquipReclassRender extends AutoSprite {
@@ -91,7 +91,7 @@ package com.leyou.ui.equip.child {
 			this.descLbl.htmlText="" + TableManager.getInstance().getSystemNotice(2615).content;
 
 			this.y=1;
-			this.x=-10;
+			this.x=-7;
 		}
 
 		private function onMouseUp(e:MouseEvent):void {

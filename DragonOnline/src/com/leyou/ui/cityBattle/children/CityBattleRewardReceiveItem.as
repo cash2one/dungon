@@ -1,26 +1,24 @@
 package com.leyou.ui.cityBattle.children
 {
-	import com.ace.config.Core;
 	import com.ace.enum.ItemEnum;
 	import com.ace.gameData.manager.DataManager;
 	import com.ace.gameData.table.TCityBattleRewardInfo;
 	import com.ace.manager.LibManager;
 	import com.ace.ui.FlyManager;
-	import com.ace.ui.button.children.NormalButton;
 	import com.ace.ui.lable.Label;
-	import com.ace.utils.StringUtil;
 	import com.leyou.data.cityBattle.CityBattleCityData;
-	import com.leyou.net.cmd.Cmd_WARC;
 	import com.leyou.ui.market.child.MarketGrid;
+	import com.leyou.utils.PropUtils;
 	
-	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	
 	public class CityBattleRewardReceiveItem extends CityBattleRewardItem
 	{
 		private var zdlLbl:Label;
 		
-		private var receiveBtn:NormalButton;
+		private var playerNameLbl:Label;
+		
+//		private var receiveBtn:NormalButton;
 		
 		public function CityBattleRewardReceiveItem(){
 			super(LibManager.getInstance().getXML("config/ui/cityBattle/warCityAwardRender1.xml"));
@@ -31,33 +29,33 @@ package com.leyou.ui.cityBattle.children
 			mouseEnabled = true;
 			mouseChildren = true;
 			zdlLbl = getUIbyID("zdlLbl") as Label;
-			receiveBtn = getUIbyID("receiveBtn") as NormalButton;
-			grids = new Vector.<MarketGrid>(3);
-			for(var n:int = 0; n < 3; n++){
+			playerNameLbl = getUIbyID("playerNameLbl") as Label;
+//			receiveBtn = getUIbyID("receiveBtn") as NormalButton;
+			grids = new Vector.<MarketGrid>(4);
+			for(var n:int = 0; n < 4; n++){
 				var grid:MarketGrid = grids[n];
 				if(null == grid){
 					grid = new MarketGrid();
 					grids[n] = grid;
 					grid.isShowPrice = true; 
-					
 				}
 				grid.x = 118 + 73*n;
 				grid.y = 13;
 				addChild(grid);
 			}
 			
-			receiveBtn.addEventListener(MouseEvent.CLICK, onBtnClick);
+//			receiveBtn.addEventListener(MouseEvent.CLICK, onBtnClick);
 		}
 		
-		protected function onBtnClick(event:MouseEvent):void{
-			Cmd_WARC.cm_WARC_M(id);
-		}
+//		protected function onBtnClick(event:MouseEvent):void{
+//			Cmd_WARC.cm_WARC_M(id);
+//		}
 		
 		public override function updateTable(info:TCityBattleRewardInfo):void{
 			var data:CityBattleCityData = DataManager.getInstance().cityBattleData.cityData;
-			receiveBtn.visible = data.hasOwner && (data.guildName == Core.me.info.guildName); 
-			id = info.id;
-			zdlLbl.text = StringUtil.substitute("{1}~{2}", info.zdlLow, info.zdlHigh);
+//			receiveBtn.visible = data.hasOwner && (data.guildName == Core.me.info.guildName); 
+//			id = info.id;
+//			zdlLbl.text = StringUtil.substitute("{1}~{2}", info.zdlLow, info.zdlHigh);
 			var index:int = 0;
 			var grid:MarketGrid = grids[index];
 			if(info.exp > 0){
@@ -120,7 +118,28 @@ package com.leyou.ui.cityBattle.children
 					points.push(grid.localToGlobal(new Point(0,0)));
 				}
 			}
-			FlyManager.getInstance().flyBags(ids, points);
+			FlyManager.getInstance().flyBags_II(ids, points);
+		}
+		
+		public function updateTitle(index:int):void{
+			switch(index){
+				case 0:
+					zdlLbl.text = PropUtils.getStringById(2341);
+					playerNameLbl.text = PropUtils.getStringById(36);
+					break;
+				case 1:
+					zdlLbl.text = PropUtils.getStringById(2342);
+					playerNameLbl.text = PropUtils.getStringById(37);
+					break;
+				case 2:
+					zdlLbl.text = PropUtils.getStringById(2343);
+					playerNameLbl.text = PropUtils.getStringById(38);
+					break;
+				case 3:
+					zdlLbl.text = PropUtils.getStringById(2344);
+					playerNameLbl.text = PropUtils.getStringById(39);
+					break;
+			}
 		}
 	}
 }

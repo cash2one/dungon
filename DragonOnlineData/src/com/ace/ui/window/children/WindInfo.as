@@ -21,6 +21,8 @@ package com.ace.ui.window.children {
 		public var radioTex1:String="";
 		public var radioTex2:String="";
 		
+		public var itemId:int;
+		
 		public function WindInfo() {
 		}
 		 
@@ -52,6 +54,15 @@ package com.ace.ui.window.children {
 		}
 		
 		static public function getRadioInfo($content:String, okFun:Function=null, cancelFun:Function=null):WindInfo{
+			var info:WindInfo=new WindInfo();
+			info.title=PropUtils.getStringById(2073);
+			info.content=$content;
+			info.okFun=okFun;
+			info.cancelFun=cancelFun;
+			return info;
+		}
+		
+		static public function getRadioIIInfo($content:String, okFun:Function=null, cancelFun:Function=null):WindInfo{
 			var info:WindInfo=new WindInfo();
 			info.title=PropUtils.getStringById(2073);
 			info.content=$content;

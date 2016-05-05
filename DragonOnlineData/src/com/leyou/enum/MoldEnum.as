@@ -1,7 +1,6 @@
-package com.leyou.enum
-{
-	public class MoldEnum
-	{
+package com.leyou.enum {
+
+	public class MoldEnum {
 //		mod id number:
 //		id	level(config)		description
 //		1	1		商店开启所需等级
@@ -18,33 +17,33 @@ package com.leyou.enum
 //		12	30		加入帮会最低等级
 
 //		public static const SHOP:int = 1;
-		
-		public static const WING:int = 14;
-		
-		public static const RIDE:int = 3;
-		
-		public static const RIDE_EVOLUTION:int = 18;
-		
-		public static const TITLE:int = 2;
-		
-		public static const MEDAL:int = 5;
-		
-		public static const AUTION:int = 16;
-		
-		public static const MARKET:int = 4;
-		
-		public static const STRENGTHEN:int = 8;
-		
-		public static const RECASTING:int = 15;
-		
-		public static const ELEMENT:int = 17;
-		
-		public static const GUlID:int = 10;
-		
-		public static const SERVENT:int = 50;
-		
-		public static const FARM:int = 51;
-		
-		public static const COLLECTION:int = 52;
+
+		public static const WING:int=14;
+
+		public static const RIDE:int=3;
+
+//		public static const RIDE_EVOLUTION:int = 18;
+
+		public static const TITLE:int=2;
+
+		public static const MEDAL:int=2;
+
+		public static const AUTION:int=18;
+
+		public static const MARKET:int=4;
+
+		public static const STRENGTHEN:int=7;
+
+		public static const RECASTING:int=15;
+
+		public static const ELEMENT:int=20;
+
+		public static const GUlID:int=8;
+
+		public static const SERVENT:int=50;
+
+		public static const FARM:int=51;
+
+		public static const COLLECTION:int=52;
 	}
 }

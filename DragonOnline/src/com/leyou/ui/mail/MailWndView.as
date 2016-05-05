@@ -46,7 +46,7 @@ package com.leyou.ui.mail {
 			if($x < 0){
 				x = 0;
 			}
-			maillRead.x = x + width + UILayoutManager.SPACE_X;
+			maillRead.x = x + width;
 			maillRead.y = y + (height - maillRead.height);
 		}
 		
@@ -86,6 +86,7 @@ package com.leyou.ui.mail {
 		 */	
 		public override function show(toTop:Boolean=true, $layer:int=1, toCenter:Boolean=true):void{
 			super.show(toTop, $layer, toCenter);
+			selectAll.turnOff(false);
 			Cmd_Mail.cm_MailMsg_I();
 		}
 		
@@ -109,8 +110,8 @@ package com.leyou.ui.mail {
 			switch (e.target.name) {
 				case "deleteBtn":
 					var unread:Boolean = hasUnread();
-					var accessory:Boolean = hasAccessory();
-					if(unread || accessory){
+					var attachment:Boolean = hasAttachment();
+					if(unread || attachment){
 						var warnStr:String = unread ? PropUtils.getStringById(1785) : PropUtils.getStringById(1784);
 						PopupManager.showConfirm(warnStr, deleteMailRequest, null, false, "wnd.mail.delete");
 //						var pWnd:WindInfo = WindInfo.getConfirmInfo(warnStr, deleteMailRequest);
@@ -163,7 +164,7 @@ package com.leyou.ui.mail {
 		 *  
 		 * @return Boolean
 		 */
-		private function hasAccessory():Boolean{
+		private function hasAttachment():Boolean{
 			var length:int = selectRenders.length;
 			for(var n:int = 0; n < length; n++){
 				var mLable:MailLableRender = selectRenders[n];
@@ -286,7 +287,7 @@ package com.leyou.ui.mail {
 				currentMail = mailLabel;
 				var readWnd:MaillReadWnd = UIManager.getInstance().maillReadWnd;
 				if(!readWnd.visible){
-					UILayoutManager.getInstance().show(WindowEnum.MAILL, WindowEnum.MAILL_READ, -18);
+					UILayoutManager.getInstance().show(WindowEnum.MAILL, WindowEnum.MAILL_READ);
 				}
 				readWnd.loadMail(mailLabel);
 				if(!mailLabel.mailInfo.isRead){

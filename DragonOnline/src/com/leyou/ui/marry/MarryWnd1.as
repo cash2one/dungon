@@ -19,7 +19,7 @@ package com.leyou.ui.marry {
 	import com.leyou.data.tips.TipsInfo;
 	import com.leyou.net.cmd.Cmd_Marry;
 	import com.leyou.utils.PropUtils;
-
+	
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;

@@ -1,6 +1,7 @@
 package com.leyou.ui.dragonBall
 {
 	import com.ace.enum.UIEnum;
+	import com.ace.gameData.manager.MyInfoManager;
 	import com.ace.manager.LibManager;
 	import com.ace.manager.UIManager;
 	import com.ace.ui.auto.AutoWindow;
@@ -81,7 +82,7 @@ package com.leyou.ui.dragonBall
 					Cmd_Longz.cm_Longz_C();
 					break;
 				case 3:
-					Cmd_Longz.cm_Longz_H()
+					Cmd_Longz.cm_Longz_H(MyInfoManager.getInstance().name)
 					break;
 			}
 		}
@@ -99,7 +100,7 @@ package com.leyou.ui.dragonBall
 					Cmd_Longz.cm_Longz_C();
 					break;
 				case 3:
-					Cmd_Longz.cm_Longz_H()
+					Cmd_Longz.cm_Longz_H(MyInfoManager.getInstance().name)
 					break;
 			}
 		}

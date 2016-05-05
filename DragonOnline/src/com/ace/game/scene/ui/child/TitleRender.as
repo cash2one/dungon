@@ -62,7 +62,7 @@ package com.ace.game.scene.ui.child
 		}
 		
 		public function updateInfo(tInfo:TTitle):void{
-			tipsInfo.itemid = tInfo.titleId;
+			tipsInfo.itemid = tInfo.typeId;
 			if("" != tInfo.Bottom_Pic){
 				if(null == bgImg){
 					bgImg = new Image();
@@ -71,12 +71,12 @@ package com.ace.game.scene.ui.child
 				var url:String = GameFileEnum.URL_TITLE+tInfo.Bottom_Pic+".png";
 				bgImg.updateBmp(url);
 			}
-			if(pnfId != tInfo.model){
+			if(pnfId != int(tInfo.model)){
 				if(null != movie){
 					removeChild(movie);
 					ReuseUtil.recyclePnf(movie);
 				}
-				movie = ReuseUtil.getPnf(tInfo.model);
+				movie = ReuseUtil.getPnf(int(tInfo.model));
 				addChild(movie);
 			}
 		}

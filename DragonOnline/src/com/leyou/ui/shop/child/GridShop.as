@@ -22,7 +22,7 @@ package com.leyou.ui.shop.child {
 	import com.leyou.ui.backpack.child.GridModel;
 	import com.leyou.utils.ItemUtil;
 	import com.leyou.utils.PropUtils;
-	
+
 	import flash.display.Shape;
 	import flash.geom.Point;
 
@@ -65,8 +65,8 @@ package com.leyou.ui.shop.child {
 			this.numLbl.x=30;
 			this.numLbl.y=30;
 
-			this.iconBmp.x=8.5;
-			this.iconBmp.y=9;
+			this.iconBmp.x=10.5;
+			this.iconBmp.y=11;
 
 			this.nameLbl=new Label();
 			this.nameLbl.x=55;
@@ -143,7 +143,7 @@ package com.leyou.ui.shop.child {
 
 			var infoItem:Object;
 
-			if (info.tagId == "3") {
+			if (info.itemId > 10000) {
 				infoItem=TableManager.getInstance().getItemInfo(info.itemId);
 			} else {
 				infoItem=TableManager.getInstance().getEquipInfo(info.itemId);
@@ -225,7 +225,7 @@ package com.leyou.ui.shop.child {
 //				this.reMask=true;
 
 			if (info.effect != null && info.effect != "0") {
-				this.playeMc(int(info.effect), new Point(5, 5));
+				this.playeMc(int(info.effect), new Point(8, 9));
 				this.setChildIndex(this.effectMc, 2);
 			} else
 				this.stopMc();
@@ -286,7 +286,7 @@ package com.leyou.ui.shop.child {
 				binfo=TableManager.getInstance().getEquipInfo(tipsInfo.itemid);
 
 			var einfo:EquipInfo;
-			if (binfo != null && binfo.classid == 1 && binfo.subclassid<13) {
+			if (binfo != null && binfo.classid == 1 && binfo.subclassid < 13) {
 
 				var olist:Array=ItemEnum.ItemToRolePos[binfo.subclassid];
 
@@ -319,11 +319,11 @@ package com.leyou.ui.shop.child {
 				ToolTipManager.getInstance().showII([TipEnum.TYPE_EMPTY_ITEM, TipEnum.TYPE_EQUIP_ITEM_DIFF], [this.tipsInfo, einfo.tips], PlayerEnum.DIR_E, new Point(2, 0), this.parent.localToGlobal(new Point(this.x + this.width, this.y + this.height)));
 			} else {
 				var type:int=TipEnum.TYPE_EMPTY_ITEM;
-				
-				if (!(info is TShop) &&  info.classid == 10) {
+
+				if (!(info is TShop) && info.classid == 10) {
 					type=TipEnum.TYPE_GEM_OTHER;
 				}
-				
+
 				ToolTipManager.getInstance().show(type, tipsInfo, this.parent.localToGlobal(new Point(this.x + this.width, this.y + this.height)));
 			}
 
@@ -340,7 +340,7 @@ package com.leyou.ui.shop.child {
 				binfo=TableManager.getInstance().getEquipInfo(tipsInfo.itemid);
 
 			var einfo:EquipInfo;
-			if (binfo != null && binfo.classid == 1 && binfo.subclassid<13) {
+			if (binfo != null && binfo.classid == 1 && binfo.subclassid < 13) {
 
 				var olist:Array=ItemEnum.ItemToRolePos[binfo.subclassid];
 
@@ -371,11 +371,11 @@ package com.leyou.ui.shop.child {
 				einfo.tips.isdiff=false;
 				ToolTipManager.getInstance().showII([_type, TipEnum.TYPE_EQUIP_ITEM_DIFF], [this.tipsInfo, einfo.tips], PlayerEnum.DIR_E, new Point(2, 0), this.parent.localToGlobal(new Point(this.x + this.width, this.y + this.height)));
 			} else {
-				
-				if (!(info is TShop) &&  info.classid == 10) {
+
+				if (!(info is TShop) && info.classid == 10) {
 					_type=TipEnum.TYPE_GEM_OTHER;
 				}
-				
+
 //				this.tipsInfo.isdiff=false;
 				ToolTipManager.getInstance().show(_type, tipsInfo, this.parent.localToGlobal(new Point(this.x + this.width, this.y + this.height)));
 			}
@@ -452,11 +452,11 @@ package com.leyou.ui.shop.child {
 		}
 
 		override public function get width():Number {
-			return 168;
+			return 174;
 		}
 
 		override public function get height():Number {
-			return 54;
+			return 59;
 		}
 
 	}

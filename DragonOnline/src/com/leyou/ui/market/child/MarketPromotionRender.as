@@ -22,9 +22,9 @@ package com.leyou.ui.market.child
 	
 	public class MarketPromotionRender extends AutoSprite
 	{
-		private var timeTitleLbl:Label;
+//		private var timeTitleLbl:Label;
 		
-		private var timeLbl:Label;
+//		private var timeLbl:Label;
 		
 		private var proNameLbl:Label;
 		
@@ -63,8 +63,8 @@ package com.leyou.ui.market.child
 		
 		private function init():void{
 			mouseChildren = true;
-			timeTitleLbl = getUIbyID("timeTitleLbl") as Label;
-			timeLbl = getUIbyID("timeLbl") as Label;
+//			timeTitleLbl = getUIbyID("timeTitleLbl") as Label;
+//			timeLbl = getUIbyID("timeLbl") as Label;
 			npriceLbl = getUIbyID("npriceLbl") as Label;
 			proNameLbl = getUIbyID("proNameLbl") as Label;
 			priceLbl = getUIbyID("priceLbl") as Label;
@@ -75,8 +75,8 @@ package com.leyou.ui.market.child
 			
 			grid=new MarketGrid();
 			grid.isShowPrice = false;
-			grid.x=5;
-			grid.y=26;
+			grid.x=10;
+			grid.y=18;
 			addChild(grid);
 			swapChildren(grid, buiedImg);
 		}
@@ -98,27 +98,27 @@ package com.leyou.ui.market.child
 			Cmd_Market.cm_Mak_G(pid, 1);
 		}
 		
-		public function addTimer():void{
-			if(!TimeManager.getInstance().hasITick(updateTime)){
-				TimeManager.getInstance().addITick(1000, updateTime)
-			}
-		}
+//		public function addTimer():void{
+//			if(!TimeManager.getInstance().hasITick(updateTime)){
+//				TimeManager.getInstance().addITick(1000, updateTime)
+//			}
+//		}
+//		
+//		public function removeTimer():void{
+//			if(TimeManager.getInstance().hasITick(updateTime)){
+//				TimeManager.getInstance().removeITick(updateTime)
+//			}
+//		}
 		
-		public function removeTimer():void{
-			if(TimeManager.getInstance().hasITick(updateTime)){
-				TimeManager.getInstance().removeITick(updateTime)
-			}
-		}
-		
-		private function updateTime():void{
-			var rt:int = remainT*1000 - (getTimer() - tick);
-			if(rt < 0){
-				rt = 0;
-				removeTimer();
-				Cmd_Market.cm_Mak_I(1);
-			}
-			timeLbl.text = DateUtil.formatTime(rt, 2)
-		}
+//		private function updateTime():void{
+//			var rt:int = remainT*1000 - (getTimer() - tick);
+//			if(rt < 0){
+//				rt = 0;
+//				removeTimer();
+//				Cmd_Market.cm_Mak_I(1);
+//			}
+//			timeLbl.text = DateUtil.formatTime(rt, 2)
+//		}
 		
 		public function updateInfo(obj:Object):void{
 			tick = getTimer();
@@ -132,9 +132,9 @@ package com.leyou.ui.market.child
 			var bnum:int = lbuy[6]; //-- 已购买次数
 			var nprice:int = lbuy[7];
 			
-			if(remainT > 0){
-				addTimer();
-			}
+//			if(remainT > 0){
+//				addTimer();
+//			}
 			if(null == dataLink){
 				dataLink = new MarketItemInfo();
 			}
@@ -150,20 +150,20 @@ package com.leyou.ui.market.child
 			
 			var cid:int = (0 == status) ? 2012 : 2013;
 			buyBtn.visible = (1 == status);
-			timeTitleLbl.text = TableManager.getInstance().getSystemNotice(cid).content;
-			timeLbl.text = DateUtil.formatTime(remainT*1000, 2);
+//			timeTitleLbl.text = TableManager.getInstance().getSystemNotice(cid).content;
+//			timeLbl.text = DateUtil.formatTime(remainT*1000, 2);
 			proNameLbl.text = TableManager.getInstance().getItemInfo(itemId).name;
 			priceLbl.text = price+"";
 			npriceLbl.text = nprice+"";
 			grid.updataById(itemId);
 			buyBtn.setActive((lnum != bnum), 1, true);
 			buiedImg.visible = (lnum == bnum);
-			if((1 == status) && (lnum != bnum)){
-				TweenMax.to(buyBtn, 2, {glowFilter: {color: 0xFFD700, alpha: 1, blurX: 18, blurY: 18, strength: 4}, yoyo: true, repeat: -1});
-			}else{
-				TweenMax.killTweensOf(buyBtn);
-				buyBtn.filters = null;
-			}
+//			if((1 == status) && (lnum != bnum)){
+//				TweenMax.to(buyBtn, 2, {glowFilter: {color: 0xFFD700, alpha: 1, blurX: 18, blurY: 18, strength: 4}, yoyo: true, repeat: -1});
+//			}else{
+//				TweenMax.killTweensOf(buyBtn);
+//				buyBtn.filters = null;
+//			}
 			
 			if((-1 != _bnum) && (_bnum != bnum)){
 				FlyManager.getInstance().flyBags([grid.dataId], [grid.localToGlobal(new Point())]);

@@ -38,7 +38,7 @@ package com.leyou.net.cmd
 //					GuideManager.getInstance().showGuide(39, UIManager.getInstance().rightTopWnd.getWidget("activityBtn", 1), true);
 					break;
 				case 50:
-//					GuideManager.getInstance().showGuide(50, UIManager.getInstance().rightTopWnd.getWidget("welfareBtn", 2), true);
+					GuideManager.getInstance().showGuide(50);
 //					UIManager.getInstance().creatWindow(WindowEnum.WELFARE).changeTable(0);
 					break;
 				case 52:
@@ -46,11 +46,11 @@ package com.leyou.net.cmd
 //					UIManager.getInstance().creatWindow(WindowEnum.WELFARE).changeTable(2);
 					break;
 				case 54:
-//					GuideManager.getInstance().showGuide(54, UIManager.getInstance().rightTopWnd.getWidget("welfareBtn", 2), true);
+					GuideManager.getInstance().showGuide(54);
 //					UIManager.getInstance().creatWindow(WindowEnum.WELFARE).changeTable(0);
 					break;
 				case 81:
-					GuideManager.getInstance().showGuide(81, UIManager.getInstance().roleHeadWnd.getUIbyID("vipBtn"));
+					GuideManager.getInstance().showGuide(82, UIManager.getInstance().roleHeadWnd.getUIbyID("vipBtn"));
 					break;
 				
 			}

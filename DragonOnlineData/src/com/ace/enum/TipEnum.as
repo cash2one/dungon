@@ -37,5 +37,7 @@ package com.ace.enum {
 		static public const TYPE_TITLE:int=28;//科技
 		static public const TYPE_PET:int=29;//宠物
 		static public const TYPE_MARRY:int=30;//宠物
+		static public const TYPE_ROLE_EQUIP_LV:int=31;//宠物
+		static public const TYPE_ROLE_QULITY:int=32;//宠物
 	}
 }

@@ -7,6 +7,7 @@ package com.leyou.ui.role.child.children {
 	import com.ace.gameData.manager.MyInfoManager;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.table.TEquipInfo;
+	import com.ace.manager.GuideManager;
 	import com.ace.manager.LibManager;
 	import com.ace.manager.ToolTipManager;
 	import com.ace.manager.UIManager;
@@ -237,6 +238,8 @@ package com.leyou.ui.role.child.children {
 				}else {
 					var type:int=(UIManager.getInstance().selectWnd.type == 0 ? 3 : 40);
 					Cmd_Bag.cm_bagMoveTo(this.info.pos, type, UIManager.getInstance().selectWnd.position);
+					
+					GuideManager.getInstance().removeGuide(146);
 				}
 			}
 

@@ -18,7 +18,9 @@ package com.ace.gameData.manager {
 	import com.leyou.data.combineData.CombineData;
 	import com.leyou.data.convenient.ConvenientData;
 	import com.leyou.data.copyRank.CopyRankData;
+	import com.leyou.data.crossServer.CrossServerData;
 	import com.leyou.data.dargonball.DragonBallData;
+	import com.leyou.data.elementAdditional.ElementData;
 	import com.leyou.data.fieldboss.FieldBossData;
 	import com.leyou.data.friend.FriendData;
 	import com.leyou.data.groupBuy.GroupBuyData;
@@ -79,6 +81,8 @@ package com.ace.gameData.manager {
 		
 		public var payPromotionData_II:PayPromotionDataII; // 充值返利数据新版
 		
+		public var payPromotionData_III:PayPromotionDataII; // 开服活动
+		
 		public var tobeStrongData:TobeStrongData; // 我要变强
 		
 		public var sevenDayData:SevenDayData; // 七日任务
@@ -103,6 +107,8 @@ package com.ace.gameData.manager {
 		
 		public var combineData:CombineData; // 合服连冲
 		
+		public var twlcData:CombineData; // 台湾连冲
+		
 		public var serverData:ServerData; // 服务器信息
 		
 		public var groupBuyData:GroupBuyData; // 团购信息
@@ -112,6 +118,8 @@ package com.ace.gameData.manager {
 		public var cityBattleData:CityBattleData; // 主城争霸
 		
 		public var dragonBallData:DragonBallData; // 龙珠
+		
+		public var dragonBallDataII:DragonBallData; // 龙珠
 		
 		public var iceBattleData:IceBattleData; // 霜炎战场
 		
@@ -126,6 +134,10 @@ package com.ace.gameData.manager {
 		public var missionMarketData:MissionMarketData; // 任务集市
 		
 		public var copyRankData:CopyRankData; // 副本通关排行
+		
+		public var crossServerData:CrossServerData; // 跨服
+		
+		public var elementData:ElementData; // 元素
 		
 		public function DataManager() {
 		}
@@ -192,6 +204,7 @@ package com.ace.gameData.manager {
 			this.bossCopyData=new BossCopyData();
 //			this.payPromotionData=new PayPromotionData();
 			this.payPromotionData_II=new PayPromotionDataII();
+			this.payPromotionData_III=new PayPromotionDataII();
 			this.tobeStrongData=new TobeStrongData();
 			this.sevenDayData=new SevenDayData();
 			this.investData=new InvestData();
@@ -208,6 +221,7 @@ package com.ace.gameData.manager {
 			this.vendueData=new VendueData();
 			this.cityBattleData=new CityBattleData();
 			this.dragonBallData=new DragonBallData();
+			this.dragonBallDataII=new DragonBallData();
 			this.iceBattleData=new IceBattleData();
 			this.convenientData=new ConvenientData();
 			this.petData=new PetData();
@@ -216,6 +230,9 @@ package com.ace.gameData.manager {
 			this.missionMarketData=new MissionMarketData();
 			this.combineData=new CombineData();
 			this.copyRankData=new CopyRankData();
+			this.twlcData=new CombineData();
+			this.crossServerData=new CrossServerData();
+			this.elementData=new ElementData();
 		}
 	}
 }

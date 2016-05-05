@@ -1,4 +1,5 @@
 package com.ace.gameData.table {
+	import com.ace.utils.DebugUtil;
 	import com.ace.utils.StringUtil;
 
 	/**
@@ -10,14 +11,25 @@ package com.ace.gameData.table {
 
 //		public var id:int; //技能id
 //		public var name:String; //技能名称
+		public var realId:int;
 		public var profession:int; //技能职业
 		public var cdTime:int; //技能CD时间
 		public var needTarget:Boolean; //是否需要目标
 		public var targetType:int; //目标的类型。0:不需要目标 1：自己 2：友方 3：敌方
-		public var skillEffectId:int; //技能特效id
+//		public var skillEffectId:int; //技能特效id
 		public var des:String; //技能描述
 		public var lastTime:int; //持续次数
 
+
+		public var effectId_fire:int; //技能特效id
+		public var effectId_wood:int; //技能特效id
+		public var effectId_water:int; //技能特效id
+		public var effectId_light:int; //技能特效id
+		public var effectId_dark:int; //技能特效id
+		public var effectId_city:int; //技能特效id
+		
+		public var sound:int;
+		
 		/**
 		 *	Index
 		 *	0~99通用技能
@@ -323,13 +335,14 @@ package com.ace.gameData.table {
 		 *	1 自动
 		 */
 		public var auto:int;
-		
+
 
 		public function TSkillInfo(data:XML=null) {
 			if (data == null)
 				return;
 
 			this.id=data.@id;
+			this.realId=this.id;
 			this.name=data.@name;
 			this.limit=data.@limit;
 			this.autoLv=data.@autoLv;
@@ -380,18 +393,35 @@ package com.ace.gameData.table {
 			this.auto=data.@auto;
 
 			/****************************************************************************************/
+			this.effectId_fire=data.@effectId_fire;
+			this.effectId_wood=data.@effectId_wood;
+			this.effectId_water=data.@effectId_water;
+			this.effectId_light=data.@effectId_light;
+			this.effectId_dark=data.@effectId_dark;
+			this.effectId_city=data.@effectId_city;
+			this.sound=data.@sound;
+
 //			this.id=data.@id;
 //			this.name=data.@name;
 			this.profession=data.@limit;
 			this.cdTime=data.@CD;
 			this.needTarget=StringUtil.intToBoolean(data.@objective);
 			this.targetType=data.@target;
-			this.skillEffectId=data.@effectId;
+//			this.skillEffectId=String(data.@effectId).indexOf("|") == -1 ? data.@effectId : String(data.@effectId).split("|")[0];
 			this.des=data.@skillDes;
 			this.lastTime=data.@keepNum;
 
 		/****************************************************************************************/
 
+		}
+
+		//根据元素获取
+		public function getEffectId(ys:String):int {
+			if (!this.hasOwnProperty(ys)) {
+				DebugUtil.throwError("没有该属性");
+//				ys="effectId";
+			}
+			return this[ys];
 		}
 
 		/**技能是否需要查找合适的位置*/

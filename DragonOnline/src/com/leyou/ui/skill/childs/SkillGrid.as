@@ -68,7 +68,8 @@ package com.leyou.ui.skill.childs {
 			this.lvLbl.text="";
 			this.addChild(this.lvLbl);
 
-			this.autoEffect=new SwfLoader(99969);
+//			this.autoEffect=new SwfLoader(99969);
+			this.autoEffect=new SwfLoader(99913);
 			this.autoEffect.x=-1;
 			this.autoEffect.y=-1;
 

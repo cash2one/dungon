@@ -2,11 +2,14 @@ package com.leyou.data.sinfo
 {
 	public class ServerData
 	{
+		// 服务器状态 （1新服状态 2合服状态）
 		public var status:int = 1;
 		
+		// 开服时间
 		public var stime:int;
 		
-		public var etime:int;
+		// 当前时间
+		public var ctime:int;
 		
 		public function ServerData(){
 		}
@@ -14,7 +17,7 @@ package com.leyou.data.sinfo
 		public function loadData_I(obj:Object):void{
 			status = obj.st;
 			stime = obj.stime;
-			etime = obj.etime;
+			ctime = obj.ctime;
 		}
 		
 		public function isOpening():Boolean{

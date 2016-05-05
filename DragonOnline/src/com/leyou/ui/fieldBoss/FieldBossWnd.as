@@ -225,13 +225,15 @@ package com.leyou.ui.fieldBoss {
 				var monsterInfo:TLivingInfo=TableManager.getInstance().getLivingInfo(bossInfo.monsterId);
 				var fbInfo:FieldBossInfo=DataManager.getInstance().fieldBossData.getBossInfo(bossRender.bossId);
 				var content:String="        {1}<font color='#ff00'><u><a href='event:other_ycp--{2}'>" + PropUtils.getStringById(1570) + "</a></u></font>";
+				content=StringUtil.substitute(PropUtils.getStringById(2452),DataManager.getInstance().fieldBossData.lastCount);
 				if (0 == fbInfo.status) {
 					content="        {1}<font color='#ff0000'><u><a href='event:other_ycp--{2}'>"+PropUtils.getStringById(1572)+"</a></u></font>";
+					content=PropUtils.getStringById(2454);
 				}
 
-				content=StringUtil.substitute(content, monsterInfo.name, bossRender.bossId);
-				var arr:Array=[PropUtils.getStringById(1571), content, "", "", Cmd_YBS.callBack, "", onBtnClick];
-				UIManager.getInstance().taskTrack.updateOhterTrack(TaskEnum.taskLevel_fieldbossCopyLine, arr);
+//				content=StringUtil.substitute(content, monsterInfo.name, bossRender.bossId);
+				var arr:Array=[PropUtils.getStringById(2423),"<a href='event:other_ycp--"+monsterInfo.name+"'>" + PropUtils.getStringById(2439) + "</a>", content, "", Cmd_YBS.callBack, "", onBtnClick];
+				UIManager.getInstance().taskTrack.updateOtherTrack(TaskEnum.taskLevel_fieldbossCopyLine, arr);
 			} else {
 				reBossItem=null;
 				data.setRemind(0);

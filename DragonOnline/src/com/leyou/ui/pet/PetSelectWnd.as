@@ -37,7 +37,7 @@ package com.leyou.ui.pet
 		private var petList:Vector.<int>;
 		
 		public function PetSelectWnd(){
-			super(LibManager.getInstance().getXML("config/ui/pet/serSelectWnd.xml"));
+			super(LibManager.getInstance().getXML("config/ui/pet/serSelectWnd.xml"),true);
 			init();
 		}
 		
@@ -57,13 +57,13 @@ package com.leyou.ui.pet
 				var grid:PetHeadGrid = new PetHeadGrid();
 				grids[n] = grid;
 				pane.addChild(grid);
-				grid.x = 27.35 + 48 * int(n%5);
-				grid.y = 48.35 + 48 * int(n/5);
+				grid.x = 27 + 52 * int(n%5);
+				grid.y = 62 + 50 * int(n/5);
 				grid.setSelectAble(false);
 				grid.addEventListener(MouseEvent.CLICK, onSelectClick);
 			}
-			clsBtn.x -= 6;
-			clsBtn.y -= 14;
+//			clsBtn.x -= 6;
+//			clsBtn.y -= 14;
 			hideBg();
 		}
 		

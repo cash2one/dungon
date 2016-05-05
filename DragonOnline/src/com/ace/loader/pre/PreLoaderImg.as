@@ -10,7 +10,7 @@ package com.ace.loader.pre {
 	import com.ace.ui.img.child.Image;
 	import com.ace.utils.ImageUtil;
 	import com.ace.utils.LoadUtil;
-
+	
 	import flash.display.Bitmap;
 	import flash.display.Sprite;
 	import flash.geom.Rectangle;
@@ -85,11 +85,16 @@ package com.ace.loader.pre {
 				text.text="遊戲純屬娛樂，切勿過度沉迷，建議您，每小時都要起來動一動，讓身體休息一下喔。";
 			}
 
+			var v:String;//V1.05.9.9
 			if (this.gameRoot.stage.loaderInfo.parameters.hasOwnProperty("version")) {
-				this.text.appendText(this.gameRoot.stage.loaderInfo.parameters.version);
+				v=this.gameRoot.stage.loaderInfo.parameters.version;
 			} else {
-				this.text.appendText( /*"（" + UIEnum.PLAT_FORM_ID + "）" + */UIEnum.VERSIONCM);
+				v=UIEnum.VERSIONCM;
 			}
+			var arr:Array=v.split(".");
+			arr[2]-=10;
+			arr[3]-=10;
+			this.text.appendText(arr.join("."));
 
 			text.x=progressCoverImg.x + (progressCoverImg.width - text.width) * 0.5;
 			text.y=proressBgImg.y + proressBgImg.height + 20;

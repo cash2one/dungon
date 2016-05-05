@@ -12,7 +12,7 @@ package com.ace.game.scene.ui.effect {
 	import com.ace.game.manager.ReuseManager;
 	import com.ace.reuse.ReUseModel;
 	import com.ace.ui.img.child.Image;
-
+	
 	import flash.display.DisplayObject;
 
 	//负责处理拼接为需要的图片
@@ -43,13 +43,13 @@ package com.ace.game.scene.ui.effect {
 		 * @param ico ico图片
 		 *
 		 */
-		public function show(effectType:int, num:int, color:String, str:String="", ico:String="", ptArr:Array=null, showZero:Boolean=false):void {
+		public function show(effectType:int, num:int, color:String, str:String="", ico:String="", ptArr:Array=null, showZero:Boolean=false, strFront:Boolean=true):void {
 //			ico="20";
 			if (null != ico && "" != ico) {
 				this.addImg(PlayerEnum.URL_ICO_SKILL + ico + ".png", 36, 36);
 			}
 
-			if (null != str && "" != str) {
+			if (null != str && "" != str && strFront) {
 				this.addImg(PlayerEnum.URL_EFFECT_NUM + str + "_" + color + ".png");
 			}
 
@@ -61,6 +61,10 @@ package com.ace.game.scene.ui.effect {
 			tmpNumArr=String(Math.abs(num)).split("");
 			for (var i:int=0; i < tmpNumArr.length; i++) {
 				this.addImg(PlayerEnum.URL_EFFECT_NUM + tmpNumArr[i].toString() + "_" + color + ".png");
+			}
+			if (null != str && "" != str && !strFront) {
+				this.addImg(PlayerEnum.URL_EFFECT_NUM + str + "_" + color + ".png");
+				this.addImg(PlayerEnum.URL_EFFECT_NUM + str + ".png");
 			}
 		}
 

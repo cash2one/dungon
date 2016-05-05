@@ -17,7 +17,7 @@ package com.leyou.ui.equip.child {
 	import com.leyou.data.tips.TipsInfo;
 	import com.leyou.manager.PopupManager;
 	import com.leyou.net.cmd.Cmd_Equip;
-
+	
 	import flash.events.MouseEvent;
 
 	public class EquipRecastRender extends AutoSprite {
@@ -26,6 +26,7 @@ package com.leyou.ui.equip.child {
 		private var CostGrid:EquipStrengGrid;
 
 		private var descLbl:Label;
+		private var ruleLbl:Label;
 
 		private var confirmBtn:ImgButton;
 
@@ -34,6 +35,8 @@ package com.leyou.ui.equip.child {
 		private var recastBar1:EquipRecastBar1;
 		private var recastBar2:EquipRecastBar2;
 
+		private var succeffSwf:SwfLoader;
+		
 		private var targetEffect:SwfLoader;
 		private var costEffect:SwfLoader;
 
@@ -45,6 +48,9 @@ package com.leyou.ui.equip.child {
 
 		private function init():void {
 			this.descLbl=this.getUIbyID("descLbl") as Label;
+			this.ruleLbl=this.getUIbyID("ruleLbl") as Label;
+			this.succeffSwf=this.getUIbyID("succeffSwf") as SwfLoader;
+			this.succeffSwf.visible=false;
 
 			this.recastBar1=new EquipRecastBar1();
 			this.addChild(this.recastBar1);
@@ -65,17 +71,19 @@ package com.leyou.ui.equip.child {
 			this.CostGrid=new EquipStrengGrid();
 			this.addChild(this.CostGrid);
 
-			this.EquipGrid.x=54;
-			this.EquipGrid.y=52;
+			this.EquipGrid.x=118;
+			this.EquipGrid.y=114;
 
-			this.CostGrid.x=206;
-			this.CostGrid.y=60;
+			this.CostGrid.x=127;
+			this.CostGrid.y=25;
 
 			this.EquipGrid.setSize(60, 60);
-//			this.CostGrid.setSize(60, 60);
+			this.CostGrid.setSize(38, 38);
 
 			this.EquipGrid.selectState();
+			this.CostGrid.setBgVisible(false);
 			this.CostGrid.selectState();
+			
 			this.EquipGrid.dataId=1;
 			this.CostGrid.dataId=2;
 
@@ -87,10 +95,12 @@ package com.leyou.ui.equip.child {
 			this.confirmBtn.setToolTip(TableManager.getInstance().getSystemNotice(2609).content);
 			this.confirmBtn.setActive(false, .6, true);
 
-			this.descLbl.htmlText="" + TableManager.getInstance().getSystemNotice(2610).content;
-			this.descLbl.height=306;
-			this.descLbl.width=279;
-			this.descLbl.wordWrap=true;
+			this.ruleLbl.setToolTip(TableManager.getInstance().getSystemNotice(2610).content);
+
+//			this.descLbl.htmlText="" + TableManager.getInstance().getSystemNotice(2610).content;
+//			this.descLbl.height=306;
+//			this.descLbl.width=279;
+//			this.descLbl.wordWrap=true;
 
 			this.targetEffect=new SwfLoader(99908);
 			this.addChild(this.targetEffect);
@@ -106,8 +116,10 @@ package com.leyou.ui.equip.child {
 
 			this.costEffect.visible=false;
 
+			this.addChild(this.succeffSwf);
+			
 			this.y=1;
-			this.x=-10;
+			this.x=60;
 		}
 
 		private function onClick(e:MouseEvent):void {
@@ -354,11 +366,10 @@ package com.leyou.ui.equip.child {
 				UIManager.getInstance().equipWnd.BagRender.updateBag([bagpos], 0, 0, [int(info.info.quality), "<"], int(info.info.level));
 				UIManager.getInstance().equipWnd.BagRender.updateMount([mountypos], 0, 0, [int(info.info.quality), "<"], int(info.info.level));
 
-				if (!this.EquipGrid.isEmpty){
+				if (!this.EquipGrid.isEmpty) {
 					UIManager.getInstance().equipWnd.BagRender.updatebody([bodypos], true);
-				}else
+				} else
 					UIManager.getInstance().equipWnd.BagRender.updatebody([bodypos], false, 0, 0, [int(info.info.quality), "<"], int(info.info.level));
-
 
 			}
 
@@ -366,6 +377,12 @@ package com.leyou.ui.equip.child {
 
 		public function updateSuccess(o:Object):void {
 
+			this.succeffSwf.visible=true;
+			
+			this.succeffSwf.playAct(PlayerEnum.ACT_STAND, -1, false, function():void {
+				succeffSwf.visible=false;
+			});
+			
 //			this.succData=o;
 			this.update(this.EquipGrid.data.tips, o);
 
@@ -428,7 +445,7 @@ package com.leyou.ui.equip.child {
 
 				this.confirmBtn.setActive(true, 1, true);
 				this.confirmBtn.setToolTip("");
-				this.descLbl.visible=false;
+//				this.descLbl.visible=false;
 
 			} else if (!this.EquipGrid.isEmpty) {
 
@@ -442,13 +459,13 @@ package com.leyou.ui.equip.child {
 				this.recastBar2.update(info);
 				this.recastBar2.visible=false;
 				this.recastBar1.visible=false;
-				this.descLbl.visible=true;
+//				this.descLbl.visible=true;
 
 			} else {
 
 				this.recastBar2.visible=false;
 				this.recastBar1.visible=false;
-				this.descLbl.visible=true;
+//				this.descLbl.visible=true;
 			}
 		}
 
@@ -460,7 +477,7 @@ package com.leyou.ui.equip.child {
 
 			this.confirmBtn.setActive(false, .6, true);
 			this.confirmBtn.setToolTip(TableManager.getInstance().getSystemNotice(2609).content);
-			this.descLbl.visible=true;
+//			this.descLbl.visible=true;
 
 //			if (!this.CostGrid.isEmpty) {
 //				if (this.CostGrid.gridType == ItemEnum.TYPE_GRID_EQUIP_BODY) {

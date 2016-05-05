@@ -32,8 +32,8 @@ package com.leyou.ui.cityBattle
 		}
 		
 		private function init():void{
-			clsBtn.x -= 6;
-			clsBtn.y -= 14;
+//			clsBtn.x -= 6;
+//			clsBtn.y -= 14;
 			cityRewardBar = getUIbyID("cityRewardBar") as TabBar;
 			dayRewardItems = new Vector.<CityBattleRewardItem>(REWARD_MAX);
 			vectoryItems = new Vector.<CityBattleRewardItem>(REWARD_MAX);
@@ -61,13 +61,14 @@ package com.leyou.ui.cityBattle
 			
 			var info:TCityBattleRewardInfo;
 			for(var n:int = 0; n < REWARD_MAX; n++){
+				info = TableManager.getInstance().getCityBattleRewardInfo(REWARD_MAX*2+n+1);
 				var dayItem:CityBattleRewardReceiveItem = dayRewardItems[n] as CityBattleRewardReceiveItem;
 				if(null == dayItem){
 					dayItem = new CityBattleRewardReceiveItem();
 					dayRewardItems[n] = dayItem;
 				}
-				info = TableManager.getInstance().getCityBattleRewardInfo(REWARD_MAX*2+(REWARD_MAX-n));
 				dayItem.updateTable(info);
+				dayItem.updateTitle(n);
 			}
 			
 			cityRewardBar.addEventListener(TabbarModel.changeTurnOnIndex, onTabChange);
@@ -127,8 +128,8 @@ package com.leyou.ui.cityBattle
 				}else{
 					if(!remove){
 						addChild(item);
-						item.x = 18;
-						item.y = 66 + 10 + 93*n;
+						item.x = 12;
+						item.y = 90 + 93*n;
 					}
 				}
 			}

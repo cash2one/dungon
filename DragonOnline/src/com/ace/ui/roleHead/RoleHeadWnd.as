@@ -188,7 +188,7 @@ package com.ace.ui.roleHead {
 //			evtInfo.onMouseOut = onMouseOut;
 			vipImg=getUIbyID("vipImg") as Image;
 			teamImg=getUIbyID("teamImg") as Image;
-			ifunImg=getUIbyID("ifunImg") as Image;
+//			ifunImg=getUIbyID("ifunImg") as Image;
 //			guildImg=getUIbyID("guildImg") as Image;
 			doubleImg=getUIbyID("doubleImg") as Image;
 			bloodImg=getUIbyID("bloodImg") as Image;
@@ -198,8 +198,8 @@ package com.ace.ui.roleHead {
 			icons = new Vector.<Image>();
 			packContainer(vipImg);
 			icons.push(vipImg);
-			packContainer(ifunImg);
-			icons.push(ifunImg);
+//			packContainer(ifunImg);
+//			icons.push(ifunImg);
 //			packContainer(guildImg);
 			packContainer(worldExpImg);
 			icons.push(worldExpImg);
@@ -222,7 +222,7 @@ package com.ace.ui.roleHead {
 //			MouseManagerII.getInstance().addEvents(safeImg, evtInfo);
 			activeIcon("vipImg", false);
 			activeIcon("teamImg", false);
-			activeIcon("ifunImg", false);
+//			activeIcon("ifunImg", false);
 			activeIcon("guildImg", false);
 			activeIcon("doubleImg", false);
 			activeIcon("bloodImg", false);
@@ -464,11 +464,11 @@ package com.ace.ui.roleHead {
 			// 平台VIPbuff
 			bInfo=null;
 			bInfo=Core.me.info.buffsInfo.getBuff(ConfigEnum.buff1);
-			if (null != bInfo) {
-				activeIcon("ifunImg", true);
-			} else {
-				activeIcon("ifunImg", false);
-			}
+//			if (null != bInfo) {
+//				activeIcon("ifunImg", true);
+//			} else {
+//				activeIcon("ifunImg", false);
+//			}
 		}
 
 		private function onPkAttack():void {
@@ -909,6 +909,9 @@ package com.ace.ui.roleHead {
 					break;
 				case PkMode.PK_MODE_CAMP:
 					modeLbl.text=PropUtils.getStringById(1539);
+					break;
+				case PkMode.PK_MODE_ACROSS:
+					modeLbl.text=PropUtils.getStringById(2275);
 					break;
 			}
 		}

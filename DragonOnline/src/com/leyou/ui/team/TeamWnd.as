@@ -5,6 +5,7 @@ package com.leyou.ui.team {
 	import com.ace.enum.TipEnum;
 	import com.ace.enum.UIEnum;
 	import com.ace.enum.WindowEnum;
+	import com.ace.game.scene.player.part.LivingModel;
 	import com.ace.gameData.manager.MyInfoManager;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.manager.LibManager;
@@ -18,6 +19,7 @@ package com.leyou.ui.team {
 	import com.ace.ui.auto.AutoWindow;
 	import com.ace.ui.button.children.CheckBox;
 	import com.ace.ui.button.children.ImgLabelButton;
+	import com.ace.ui.button.children.NormalButton;
 	import com.ace.ui.img.child.Image;
 	import com.ace.ui.lable.Label;
 	import com.ace.ui.menu.data.MenuInfo;
@@ -29,7 +31,7 @@ package com.leyou.ui.team {
 	import com.leyou.ui.team.child.TeamPlayerRender;
 	import com.leyou.utils.FilterUtil;
 	import com.leyou.utils.PropUtils;
-	
+
 	import flash.display.DisplayObject;
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
@@ -42,12 +44,12 @@ package com.leyou.ui.team {
 
 		private var viewDataBtn:ImgLabelButton;
 		private var addFirBtn:ImgLabelButton;
-		private var exitTeamBtn:ImgLabelButton;
+		private var exitTeamBtn:NormalButton;
 		private var topBossBtn:ImgLabelButton;
 		private var expelPlayBtn:ImgLabelButton;
-		private var addTeamBtn:ImgLabelButton;
-		private var createTeamBtn:ImgLabelButton;
-		private var searchTeamBtn:ImgLabelButton;
+		private var addTeamBtn:NormalButton;
+		private var createTeamBtn:NormalButton;
+		private var searchTeamBtn:NormalButton;
 		private var teamBgImg:Image;
 
 		private var hpImg:Image;
@@ -93,12 +95,12 @@ package com.leyou.ui.team {
 
 			this.viewDataBtn=this.getUIbyID("viewDataBtn") as ImgLabelButton;
 			this.addFirBtn=this.getUIbyID("addFirBtn") as ImgLabelButton;
-			this.exitTeamBtn=this.getUIbyID("exitTeamBtn") as ImgLabelButton;
+			this.exitTeamBtn=this.getUIbyID("exitTeamBtn") as NormalButton;
 			this.topBossBtn=this.getUIbyID("topBossBtn") as ImgLabelButton;
 			this.expelPlayBtn=this.getUIbyID("expelPlayBtn") as ImgLabelButton;
-			this.addTeamBtn=this.getUIbyID("addTeamBtn") as ImgLabelButton;
-			this.createTeamBtn=this.getUIbyID("createTeamBtn") as ImgLabelButton;
-			this.searchTeamBtn=this.getUIbyID("searchTeamBtn") as ImgLabelButton;
+			this.addTeamBtn=this.getUIbyID("addTeamBtn") as NormalButton;
+			this.createTeamBtn=this.getUIbyID("createTeamBtn") as NormalButton;
+			this.searchTeamBtn=this.getUIbyID("searchTeamBtn") as NormalButton;
 
 			this.teamBgImg=this.getUIbyID("teamBgImg") as Image;
 			this.hpImg=this.getUIbyID("hpImg") as Image;
@@ -115,11 +117,11 @@ package com.leyou.ui.team {
 
 			this.noTeamCb.addEventListener(MouseEvent.CLICK, onClick);
 			this.bossAccCb.addEventListener(MouseEvent.CLICK, onClick);
-			this.viewDataBtn.addEventListener(MouseEvent.CLICK, onClick);
-			this.addFirBtn.addEventListener(MouseEvent.CLICK, onClick);
+//			this.viewDataBtn.addEventListener(MouseEvent.CLICK, onClick);
+//			this.addFirBtn.addEventListener(MouseEvent.CLICK, onClick);
 			this.exitTeamBtn.addEventListener(MouseEvent.CLICK, onClick);
-			this.topBossBtn.addEventListener(MouseEvent.CLICK, onClick);
-			this.expelPlayBtn.addEventListener(MouseEvent.CLICK, onClick);
+//			this.topBossBtn.addEventListener(MouseEvent.CLICK, onClick);
+//			this.expelPlayBtn.addEventListener(MouseEvent.CLICK, onClick);
 			this.addTeamBtn.addEventListener(MouseEvent.CLICK, onClick);
 			this.createTeamBtn.addEventListener(MouseEvent.CLICK, onClick);
 			this.searchTeamBtn.addEventListener(MouseEvent.CLICK, onClick);
@@ -167,10 +169,10 @@ package com.leyou.ui.team {
 
 			MouseManagerII.getInstance().addEvents(this.dropImg, einfo);
 
-			einfo=new MouseEventInfo();
-			einfo.onLeftClick=onLeftClick;
-
-			MouseManagerII.getInstance().addEvents(this.teamBgImg, einfo);
+//			einfo=new MouseEventInfo();
+//			einfo.onLeftClick=onLeftClick;
+//
+//			MouseManagerII.getInstance().addEvents(this.teamBgImg, einfo);
 
 			var spr:Sprite;
 			for (var i:int=0; i < 4; i++) {
@@ -335,6 +337,15 @@ package com.leyou.ui.team {
 			}
 		}
 
+		private function updateLiving($info:Object):void {
+			if (!$info)
+				return;
+			for (var j:int=0; j < $info.u.length; j++) {
+				var living:LivingModel=UIManager.getInstance().gameScene.getLivingBy($info.u[j][0]);
+				living && living.ui && living.ui.showName(living.info);
+			}
+		}
+
 		/**
 		 * @param o
 		 */
@@ -342,15 +353,18 @@ package com.leyou.ui.team {
 
 			if (o == null)
 				return;
-			
+
 			UIManager.getInstance().showPanelCallback(WindowEnum.TEAM);
-			
+
 
 			if (this.info == null) {
 				SoundManager.getInstance().play(20);
 			}
 
+			var preInfo:Object=this.info;
 			this.info=o;
+			this.updateLiving(info);
+			this.updateLiving(preInfo);
 
 			var prender:TeamPlayerRender;
 			for each (prender in this.teamPlayItems) {
@@ -390,7 +404,7 @@ package com.leyou.ui.team {
 				for (i=0; i < u.length; i++) {
 					prender=new TeamPlayerRender();
 
-					prender.x=17 + i * 185;
+					prender.x=17 + i * 202;
 					prender.y=50;
 
 					prender.updateInfo(u[i], i);
@@ -466,13 +480,13 @@ package com.leyou.ui.team {
 
 			if (o.u.length > 0) {
 
-				if (o.u[cross][0] == MyInfoManager.getInstance().name) {
-					this.topBossBtn.setActive(true, 1, true);
-					this.expelPlayBtn.setActive(true, 1, true);
-				} else {
-					this.topBossBtn.setActive(false, .6, true);
-					this.expelPlayBtn.setActive(false, .6, true);
-				}
+//				if (o.u[cross][0] == MyInfoManager.getInstance().name) {
+//					this.topBossBtn.setActive(true, 1, true);
+//					this.expelPlayBtn.setActive(true, 1, true);
+//				} else {
+//					this.topBossBtn.setActive(false, .6, true);
+//					this.expelPlayBtn.setActive(false, .6, true);
+//				}
 
 				MyInfoManager.getInstance().isTeam=true;
 				this.teamAddTeamWnd.hide();
@@ -507,8 +521,8 @@ package com.leyou.ui.team {
 		override public function show(toTop:Boolean=true, $layer:int=1, toCenter:Boolean=true):void {
 			super.show(toTop, $layer, toCenter);
 		}
-		
-		override public function sendOpenPanelProtocol(...parameters):void{
+
+		override public function sendOpenPanelProtocol(... parameters):void {
 			this.dataModel=parameters;
 			Cmd_Tm.cm_teamInit();
 		}
@@ -528,10 +542,10 @@ package com.leyou.ui.team {
 
 			if (this.teamPlayItems.length > 0) {
 
-				this.viewDataBtn.visible=true;
-				this.addFirBtn.visible=true;
-				this.topBossBtn.visible=true;
-				this.expelPlayBtn.visible=true;
+//				this.viewDataBtn.visible=true;
+//				this.addFirBtn.visible=true;
+//				this.topBossBtn.visible=true;
+//				this.expelPlayBtn.visible=true;
 				this.addTeamBtn.visible=true;
 				this.exitTeamBtn.visible=true;
 
@@ -540,10 +554,10 @@ package com.leyou.ui.team {
 
 			} else {
 
-				this.viewDataBtn.visible=false;
-				this.addFirBtn.visible=false;
-				this.topBossBtn.visible=false;
-				this.expelPlayBtn.visible=false;
+//				this.viewDataBtn.visible=false;
+//				this.addFirBtn.visible=false;
+//				this.topBossBtn.visible=false;
+//				this.expelPlayBtn.visible=false;
 				this.exitTeamBtn.visible=false;
 
 				this.searchTeamBtn.visible=true;
@@ -603,6 +617,15 @@ package com.leyou.ui.team {
 				wnd=null;
 			}
 
+		}
+
+		override public function get height():Number {
+			return 544;
+		}
+
+		override public function get width():Number {
+			return 830;
+			//			return 715;
 		}
 
 	}

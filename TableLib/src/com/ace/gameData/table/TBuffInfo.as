@@ -14,6 +14,8 @@ package com.ace.gameData.table {
 		public var icon:String;
 		public var tipId:int;
 		public var pnfId:int; //中buff时播放特效
+		public var effType:String;//效果
+		public var modelSize:Number;//模型效果
 		public var color:uint;
 		public var time:uint;
 		public var model:int;//隐身/换身用的
@@ -27,11 +29,14 @@ package com.ace.gameData.table {
 			this.icon=info.@icon;
 			this.tipId=info.@icon2;
 			this.pnfId=info.@effectId;
+			this.effType=info.@effType;
+			this.modelSize=info.@modelSize;
 			this.color=StringUtil.strToHex(info.@rgb);
 			this.time=info.@buffTime;
 			this.model=info.@buffModel;
 			this.isRemoveOnDie=StringUtil.intToBoolean(info.@buffDis);
 			this.des=info.@buffDes;
+			
 		}
 	}
 }

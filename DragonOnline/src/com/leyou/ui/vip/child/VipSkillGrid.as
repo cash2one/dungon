@@ -36,23 +36,22 @@ package com.leyou.ui.vip.child
 			isLock = true;
 			mouseEnabled = true;
 			mouseChildren = true;
-			bgBmp.updateBmp("ui/common/common_icon_bg.png");
 			tipInfo = new TipVipSkillInfo();
 			cdMc.x=2;
 			cdMc.y=2;
-			cdMc.updateUI(36, 36);
+			cdMc.updateUI(60, 60);
 			
-			var select:ScaleBitmap = new ScaleBitmap(LibManager.getInstance().getImg("ui/backpack/select.png"));
-			select.scale9Grid = new Rectangle(2, 2, 20, 20);
-			select.setSize(41, 41);
-			selectBmp.bitmapData=select.bitmapData;
+//			var select:ScaleBitmap = new ScaleBitmap(LibManager.getInstance().getImg("ui/backpack/select.png"));
+//			select.scale9Grid = new Rectangle(2, 2, 60, 20);
+//			select.setSize(41, 41);
+//			selectBmp.bitmapData=select.bitmapData;
 		}
 		
 		public override function updataInfo(info:Object):void {
 			if (info == null) return;
-			this.dataId=int(info.id);
-			var icon:String = TableManager.getInstance().getPassiveSkill(info.id).ico;
-			this.iconBmp.updateBmp("ico/skills/" + icon, null, false, 36, 36);
+			this.dataId=int(info);
+			var icon:String = TableManager.getInstance().getPassiveSkill(dataId).ico;
+			this.iconBmp.updateBmp("ico/skills/" + icon, null, false, 60, 60);
 		}
 		
 		/**

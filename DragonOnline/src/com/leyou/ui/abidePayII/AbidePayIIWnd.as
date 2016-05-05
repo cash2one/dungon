@@ -11,10 +11,8 @@ package com.leyou.ui.abidePayII {
 	import com.ace.ui.img.child.Image;
 	import com.ace.ui.lable.Label;
 	import com.ace.utils.StringUtil;
-	import com.leyou.data.abidePay.AbidePayData;
 	import com.leyou.data.combineData.CombineData;
 	import com.leyou.enum.ConfigEnum;
-	import com.leyou.net.cmd.Cmd_CCZ;
 	import com.leyou.ui.abidePay.children.AbidePayRewardBox;
 	import com.leyou.util.DateUtil;
 	import com.leyou.utils.PayUtil;
@@ -54,7 +52,11 @@ package com.leyou.ui.abidePayII {
 		
 		private var lineImg:Image;
 		
+		private var bgImg:Image;
+		
 		private var boxes:Vector.<AbidePayRewardBox>;
+		
+		private var type:int;
 		
 		public function AbidePayIIWnd() {
 			super(LibManager.getInstance().getXML("config/ui/abidePay/hflcWnd.xml"));
@@ -63,6 +65,7 @@ package com.leyou.ui.abidePayII {
 		
 		private function init():void {
 			hideBg();
+			bgImg = getUIbyID("bgImg") as Image;
 			ordinationLbl=getUIbyID("timeLbl0") as Label;
 			lineImg=getUIbyID("lineImg") as Image;
 			desLbl=getUIbyID("desLbl") as Label;
@@ -110,10 +113,36 @@ package com.leyou.ui.abidePayII {
 			var tData3:TAbidePayInfo=TableManager.getInstance().getCombinePayInfo(3);
 			value3Lbl.text=tData3.ib + "";
 			
-			clsBtn.x+=5;
-			clsBtn.y+=15;
+//			clsBtn.x+=5;
+//			clsBtn.y+=15;
 			
 			desLbl.text = TableManager.getInstance().getSystemNotice(10052).content;
+			type = 1;
+		}
+		
+		public function chanageToTaiwanEdition():void{
+			type = 2;
+			bgImg.updateBmp("ui/lxcz/"+ConfigEnum.lxtw13);
+			var arr:Array=ConfigEnum.lxtw2.split(",");
+			for (var m:int=0; m < 9; m++) {
+				var box:AbidePayRewardBox=boxes[m];
+				var tData:TAbidePayInfo=TableManager.getInstance().getLCTW((m % 3) + 1);
+				box.updateContent(tData, arr[int(m / 3)], 3);
+				box.x=203 + int(m / 3) * 162;
+				box.y=270 + int(m % 3) * 90;
+				boxes.push(box);
+			}
+			day1Img.updateBmp("ui/num/" + arr[0] + "_green.png");
+			day2Img.updateBmp("ui/num/" + arr[1] + "_green.png");
+			day3Img.updateBmp("ui/num/" + arr[2] + "_green.png");
+			var tData1:TAbidePayInfo=TableManager.getInstance().getLCTW(1);
+			value1Lbl.text=tData1.ib + "";
+			
+			var tData2:TAbidePayInfo=TableManager.getInstance().getLCTW(2);
+			value2Lbl.text=tData2.ib + "";
+			
+			var tData3:TAbidePayInfo=TableManager.getInstance().getLCTW(3);
+			value3Lbl.text=tData3.ib + "";
 		}
 		
 		protected function onMouseOver(event:MouseEvent):void {
@@ -132,6 +161,33 @@ package com.leyou.ui.abidePayII {
 		public function resize():void {
 			x=(UIEnum.WIDTH - width) * 0.5;
 			y=(UIEnum.HEIGHT - height) * 0.5;
+		}
+		
+		public function updateInfoTW():void{
+			var data:CombineData=DataManager.getInstance().twlcData;
+			var begin:String=DateUtil.formatDate(new Date((data.stime) * 1000), "YYYY" + PropUtils.getStringById(2143) + "MM" + PropUtils.getStringById(1782) + "DD" + PropUtils.getStringById(1783));
+			var end:String=DateUtil.formatDate(new Date((data.etime - 1) * 1000), "YYYY" + PropUtils.getStringById(2143) + "MM" + PropUtils.getStringById(1782) + "DD" + PropUtils.getStringById(1783));
+			timeLbl.text=StringUtil.substitute(PropUtils.getStringById(1579), begin, end);
+			var tData1:TAbidePayInfo=TableManager.getInstance().getLCTW(1);
+			var tData2:TAbidePayInfo=TableManager.getInstance().getLCTW(2);
+			var tData3:TAbidePayInfo=TableManager.getInstance().getLCTW(3);
+			var day:String=StringUtil_II.getColorStr("" + data.getAbideDay(tData1.ib), "#ff00", 13);
+			var content:String=StringUtil.substitute(PropUtils.getStringById(1580), day);
+			cpl1Lbl.htmlText=StringUtil_II.getColorStr(content, "#ffd200", 13);
+			
+			day=StringUtil_II.getColorStr("" + data.getAbideDay(tData2.ib), "#ff00", 13);
+			content=StringUtil.substitute(PropUtils.getStringById(1580), day);
+			cpl2Lbl.htmlText=StringUtil_II.getColorStr(content, "#ffd200", 13);
+			
+			day=StringUtil_II.getColorStr("" + data.getAbideDay(tData3.ib), "#ff00", 13);
+			content=StringUtil.substitute(PropUtils.getStringById(1580), day);
+			cpl3Lbl.htmlText=StringUtil_II.getColorStr(content, "#ffd200", 13);
+			
+			for (var n:int=0; n < 9; n++) {
+				var box:AbidePayRewardBox=boxes[n];
+				box.reset();
+				box.updateCombineInfo(data);
+			}
 		}
 		
 		public function updateInfo():void {

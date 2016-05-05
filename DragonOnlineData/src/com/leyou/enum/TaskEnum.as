@@ -52,66 +52,120 @@ package com.leyou.enum {
 		 *剧情副本 ------------附加
 		 */
 		public static var taskLevel_storeCopyLine:int=9;
+		
+		/**
+		 *  剧情抽奖-----------
+		 */		
+		public static var taskLevel_storeCopylotteryLine:int=10;
+		
+		/**
+		 *签到 ------------附加
+		 */
+		public static var taskLevel_signInLine:int=11;
 
+		/**
+		 *在线奖励 ------------附加
+		 */
+		public static var taskLevel_lineRewardLine:int=12;
+		
+		/**
+		 *变强奖励 ------------附加
+		 */
+		public static var taskLevel_powerfulRewardLine:int=13;
+		
+		/**
+		 *通天挑战 ------------附加
+		 */
+		public static var taskLevel_tttLine:int=14;
+		
+		/**
+		 *组队副本 ------------附加
+		 */
+		public static var taskLevel_teamCopyLine:int=15;
+		
 		/**
 		 *boss ------------附加
 		 */
-		public static var taskLevel_bossCopyLine:int=10;
+		public static var taskLevel_bossCopyLine:int=16;
+		
+		/**
+		 *普通boss ------------附加
+		 */
+		public static var taskLevel_bosStandLine:int=17;
 
 		/**
 		 *野外boss ------------附加
 		 */
-		public static var taskLevel_fieldbossCopyLine:int=11;
-
-		/**
-		 *押运 ------------附加
-		 */
-		public static var taskLevel_deliveryLine:int=12;
-
-		/**
-		 *农场 ------------附加
-		 */
-		public static var taskLevel_farmLine:int=13;
+		public static var taskLevel_fieldbossCopyLine:int=18;
 
 		/**
 		 *竞技场 ------------附加
 		 */
-		public static var taskLevel_arenaLine:int=14;
+		public static var taskLevel_arenaLine:int=19;
+		
+		/**
+		 *军衔奖励 ------------附加
+		 */
+		public static var taskLevel_militaryLine:int=20;
+		
+		/**
+		 *押运 ------------附加
+		 */
+		public static var taskLevel_deliveryLine:int=21;
+		
+		/**
+		 *灌溉神树 ------------附加
+		 */
+		public static var taskLevel_waterTreeLine:int=22;
+
+		/**
+		 *农场 ------------附加
+		 */
+		public static var taskLevel_farmGetLine:int=23;
+		
+		/**
+		 * 收集----------------附加
+		 */
+		public static var taskLevel_collectLine:int=24;
+		
+		/**
+		 *练级 ------------附加
+		 */
+		public static var taskLevel_levelingLine:int=25;
+		
+		/**
+		 *离线经验 ------------附加
+		 */
+		public static var taskLevel_offlineExpLine:int=26;
+		
+		/**
+		 *农场 种植------------附加
+		 */
+		public static var taskLevel_farmPlantLine:int=27;
+		
+		
+		/**==========================================下面是过期的===================================================================*/
 
 		/**
 		 *答题 ------------附加
 		 */
-		public static var taskLevel_questLine:int=15;
+		public static var taskLevel_questLine:int=105;
 
 		/**
 		 *龙穴 ------------附加
 		 */
-		public static var taskLevel_dragonLine:int=16;
+		public static var taskLevel_dragonLine:int=106;
 
 		/**
 		 *恶魔 ------------附加
 		 */
-		public static var taskLevel_monsterLine:int=17;
-
-		/**
-		 *练级 ------------附加
-		 */
-		public static var taskLevel_levelingLine:int=18;
+		public static var taskLevel_monsterLine:int=107;
 
 		/**
 		 *双倍 ------------附加
 		 */
-		public static var taskLevel_doubleLine:int=19;
+		public static var taskLevel_doubleLine:int=109;
 
-		/**
-		 *签到 ------------附加
-		 */
-		public static var taskLevel_signInLine:int=20;
-
-		/**
-		 * 收集----------------附加
-		 */
-		public static var taskLevel_collectLine:int=21;
 
 
 		/**=============================================================================================================*/
@@ -197,6 +251,56 @@ package com.leyou.enum {
 		 *进行指定次数的元素经验抽取
 		 */
 		public static var taskType_ElementFlagNum:int=15;
+
+		/**
+		 * 16.获得指定ID的佣兵
+		 */
+		public static var taskType_Mercenary:int=16;
+
+		/**
+		 *升级技能
+		 */
+		public static var taskType_UpgradeMainSkill:int=17;
+
+		/**
+		 *升级被动技能
+		 */
+		public static var taskType_UpgradePassivitySkill:int=18;
+
+		/**
+		 *镖车引导
+		 */
+		public static var taskType_Delivery:int=19;
+
+		/**
+		 *宝石引导
+		 */
+		public static var taskType_Gem:int=20;
+
+		/**
+		 *升级宝石引导
+		 */
+		public static var taskType_UpgradeGem:int=21;
+
+		/**
+		 *行会引导
+		 */
+		public static var taskType_Guild:int=22;
+
+		/**
+		 *农场种植
+		 */
+		public static var taskType_Fram:int=23;
+
+		/**
+		 *装备升级引导
+		 */
+		public static var taskType_EquipUpgrade:int=24;
+
+		/**
+		 * 元素守护引导
+		 */
+		public static var taskType_SaveElement:int=25;
 		//======================================================================================================
 
 
@@ -213,7 +317,7 @@ package com.leyou.enum {
 </pre>
 */
 		public static var taskTypeDesc:Array=["和##对话", "击败####", "击败##获得####", "采集##取得####", "将##送给##", "收集####", "等级达到##", "", "完成##个<font color='#00ff00'><u><a href='event:todayTask'>日常任务</a></u></font>", "参与##次<font color='#00ff00'><u><a href='event:arena'>竞技场</a></u></font>", "开启##个<font color='#00ff00'><u><a href='event:badge'>纹章</a></u></font>节点", "<font color='#00ff00'><u><a href='event:mount'>坐骑</a></u></font>等阶达到或超过##", "进入剧情副本##", "将任意<font color='#00ff00'><u><a href='event:equip'>装备</a></u></font>的强化至##级", "进行##次<font color='#00ff00'><u><a href='event:elements'>元素</a></u></font>经验抽取"];
-		
+
 		taskTypeDesc[0]=PropUtils.getStringById(2089);
 		taskTypeDesc[1]=PropUtils.getStringById(2090);
 		taskTypeDesc[2]=PropUtils.getStringById(2091);
@@ -229,8 +333,19 @@ package com.leyou.enum {
 		taskTypeDesc[12]=PropUtils.getStringById(2100);
 		taskTypeDesc[13]=PropUtils.getStringById(2101);
 		taskTypeDesc[14]=PropUtils.getStringById(2102);
+		taskTypeDesc[15]=PropUtils.getStringById(2402);
 
-		
+		taskTypeDesc[16]=PropUtils.getStringById(2411);
+		taskTypeDesc[17]=PropUtils.getStringById(2412);
+		taskTypeDesc[18]=PropUtils.getStringById(2413);
+		taskTypeDesc[19]=PropUtils.getStringById(2414);
+		taskTypeDesc[20]=PropUtils.getStringById(2415);
+		taskTypeDesc[21]=PropUtils.getStringById(2416);
+		taskTypeDesc[22]=PropUtils.getStringById(2417);
+		taskTypeDesc[23]=PropUtils.getStringById(2418);
+		taskTypeDesc[24]=PropUtils.getStringById(2419);
+
+
 		/**
 		 * <pre>
 A读取npc_id
@@ -243,7 +358,35 @@ A读取minlevel
 </pre>
 */
 //		public static var taskTypeNpcField:Array=[["npc_name"], ["monster_name", "monster_num"], ["monster_name", "item_name", "item_number"], ["box_name", "item_name", "item_number"], ["item_name", "npc_name"], ["item_name", "item_number"], ["minlevel"], ["npc_name"], ["N_OBJ_Num"], ["NJJC_Num"], ["Y_Blood_Num"], ["Y_Mount_lv"], ["Y_Dungeon_ID"], ["Y_ST_lv"], ["Y_Ele_Time"]];
-		public static var taskTypeNpcField:Array=[["npc_id"], ["monster_id", "monster_num"], ["monster_id", "item_id", "item_number"], ["box_id", "item_id", "item_number"], ["item_id", "npc_id"], ["item_id", "item_number"], ["minlevel"], ["npc_id"], ["N_OBJ_Num"], ["NJJC_Num"], ["Y_Blood_Num"], ["Y_Mount_lv"], ["Y_Dungeon_ID"], ["Y_ST_lv"], ["Y_Ele_Time"]];
+		public static var taskTypeNpcField:Array=[];
+
+		taskTypeNpcField[0]=["npc_id"];
+		taskTypeNpcField[1]=["monster_id", "monster_num"];
+		taskTypeNpcField[2]=["monster_id", "item_id", "item_number"];
+		taskTypeNpcField[3]=["box_id", "item_id", "item_number"];
+		taskTypeNpcField[4]=["item_id", "npc_id"];
+		taskTypeNpcField[5]=["item_id", "item_number"];
+		taskTypeNpcField[6]=["minlevel"];
+		taskTypeNpcField[7]=["npc_id"];
+		taskTypeNpcField[8]=["N_OBJ_Num"];
+		taskTypeNpcField[9]=["NJJC_Num"];
+		taskTypeNpcField[10]=["Y_Blood_Num"];
+		taskTypeNpcField[11]=["Y_Mount_lv"];
+		taskTypeNpcField[12]=["Y_Dungeon_ID"];
+		taskTypeNpcField[13]=["Y_ST_lv"];
+		taskTypeNpcField[14]=["Y_Ele_Time"];
+		taskTypeNpcField[15]=["Y_Servent_Num"];
+
+		taskTypeNpcField[16]=["Y_Currency"];
+		taskTypeNpcField[17]=["Y_Currency"];
+		taskTypeNpcField[18]=["npc_id--47", "Y_Currency"];
+		taskTypeNpcField[19]=["Y_Currency"];
+		taskTypeNpcField[20]=["Y_Currency"];
+		taskTypeNpcField[21]=["Y_Currency"];
+		taskTypeNpcField[22]=["Y_Currency"];
+		taskTypeNpcField[23]=["Y_Currency"];
+		taskTypeNpcField[24]=["Y_Currency"];
+
 
 
 		/**

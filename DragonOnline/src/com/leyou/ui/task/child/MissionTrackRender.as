@@ -34,7 +34,7 @@ package com.leyou.ui.task.child {
 	import com.leyou.net.cmd.Cmd_Tsk;
 	import com.leyou.utils.FilterUtil;
 	import com.leyou.utils.PropUtils;
-
+	
 	import flash.events.MouseEvent;
 	import flash.events.TextEvent;
 	import flash.geom.Point;
@@ -139,6 +139,7 @@ package com.leyou.ui.task.child {
 					this.yboneKeyBtn.setToolTip(StringUtil.substitute(TableManager.getInstance().getSystemNotice(2302).content, [(ConfigEnum.taskDailySum - int(cloop) + 1) * int(ConfigEnum.taskDailyCost1.split("|")[0]), DataManager.getInstance().vipData.taskPrivilegeVipLv()]));
 
 			} else {
+
 				var count:int=MyInfoManager.getInstance().VipLastTransterCount;
 				if (count < 0)
 					this.trbtn.setToolTip(StringUtil.substitute(TableManager.getInstance().getSystemNotice(9937).content, [PropUtils.getStringById(1890)]));
@@ -318,8 +319,9 @@ package com.leyou.ui.task.child {
 			}
 
 
-			if (str[0].indexOf("mercenary") > -1 && (int(this.taskType) == TaskEnum.taskLevel_mercenaryCloseLine || int(this.taskType) == TaskEnum.taskLevel_mercenaryExpLine)) {
-				UIOpenBufferManager.getInstance().open(WindowEnum.PET);
+			if (str[0].indexOf("mercenary") > -1) {
+				if (int(this.taskType) == TaskEnum.taskLevel_mercenaryCloseLine || int(this.taskType) == TaskEnum.taskLevel_mercenaryExpLine || this.taskDtype == TaskEnum.taskType_Mercenary)
+					UIOpenBufferManager.getInstance().open(WindowEnum.PET);
 			} else if (this.taskType == TaskEnum.taskLevel_switchLine && this.taskDtype == TaskEnum.taskType_Exchange) {
 				UILayoutManager.getInstance().show(WindowEnum.SHOP);
 				UIManager.getInstance().buyWnd.updateTask(int(str[1]), int(taskTargetLbl.text.split("/")[1].replace(")", "")));
@@ -385,12 +387,13 @@ package com.leyou.ui.task.child {
 					return;
 				}
 
-				if (UIManager.getInstance().isCreate(WindowEnum.ROLE) && UIManager.getInstance().roleWnd.visible) {
-					return;
-				}
-
-				UILayoutManager.getInstance().open_II(WindowEnum.ROLE);
-				TweenLite.delayedCall(.3, UIManager.getInstance().roleWnd.setTabIndex, [3]);
+				UIOpenBufferManager.getInstance().open(WindowEnum.ELEMENT);
+//				if (UIManager.getInstance().isCreate(WindowEnum.ROLE) && UIManager.getInstance().roleWnd.visible) {
+//					return;
+//				}
+//
+//				UILayoutManager.getInstance().open_II(WindowEnum.ROLE);
+//				TweenLite.delayedCall(.3, UIManager.getInstance().roleWnd.setTabIndex, [3]);
 //				GuideManager.getInstance().removeGuide(10);
 
 			} else if (str[0].indexOf("mount") > -1) {

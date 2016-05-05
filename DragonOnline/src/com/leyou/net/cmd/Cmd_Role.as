@@ -1,16 +1,21 @@
 package com.leyou.net.cmd {
 
 
+	import com.ace.config.Core;
 	import com.ace.enum.WindowEnum;
 	import com.ace.gameData.manager.MyInfoManager;
 	import com.ace.gameData.manager.TableManager;
+	import com.ace.manager.GuideDirectManager;
 	import com.ace.manager.UIManager;
 	import com.leyou.data.role.EquipInfo;
 	import com.leyou.data.role.RoleInfo;
 	import com.leyou.data.tips.TipsInfo;
 	import com.leyou.net.NetGate;
+	import com.leyou.utils.ItemUtil;
 
 	public class Cmd_Role {
+
+		
 
 		public function Cmd_Role() {
 		}
@@ -93,7 +98,7 @@ el  -- 元素 (0当前守护元素 1金 2木 3水 4火 5土) {"0":1,"1":1,"2":1,
 			info.avt=o.avt;
 			info.absAttLbl=o.f_a;
 			info.absDefLbl=o.f_d;
-			
+
 			var obj:Object=o.el; //  -- 元素 (0当前守护元素 1金 2木 3水 4火 5土) {"0":1,"1":1,"2":1,"3":1,"4":1,"5":1}  "element":num
 			info.currentElement=obj["0"];
 			info.elementArr=new Array();
@@ -109,7 +114,6 @@ el  -- 元素 (0当前守护元素 1金 2木 3水 4火 5土) {"0":1,"1":1,"2":1,
 				UIManager.getInstance().otherPlayerWnd.show();
 				UIManager.getInstance().otherPlayerWnd.updateInfo(info);
 			}
-
 		}
 
 		/**
@@ -166,7 +170,7 @@ zdl      --战斗力
 
 				if (obj.bd != null)
 					info.bind=obj.bd; //    --绑定
-				
+
 				if (obj.wg != null)
 					info.phAtt=obj.wg; //   --物攻
 
@@ -203,8 +207,14 @@ zdl      --战斗力
 				if (obj.ch != null)
 					info.guaid=obj.ch; //      --守护
 
-				if (obj.adl != null)
+				if (obj.adl != null) {
 					info.fight=obj.zdl; //    --战斗力
+				}
+
+				if (info.id < 10000) {
+					info.tips.zdl=ItemUtil.getZdl(info.tips);
+					info.tips.mzdl=ItemUtil.getMZdl(info.tips);
+				}
 
 				info.position=i;
 				info.info=TableManager.getInstance().getEquipInfo(info.id);
@@ -214,7 +224,7 @@ zdl      --战斗力
 			if (o.mk == "M") {
 				MyInfoManager.getInstance().equips=equip;
 				UIManager.getInstance().roleWnd.updateEquip(); //自己的装备信息
-				
+
 			} else {
 				MyInfoManager.getInstance().otherEquips=equip;
 				//他人的装备信息
@@ -268,10 +278,10 @@ D   ：卸下装备时，删除某位置的装备信息
 				delete MyInfoManager.getInstance().equips[o.D];
 
 				UIManager.getInstance().roleWnd.deleteEquip(int(o.D));
-				
+
 				if (UIManager.getInstance().isCreate(WindowEnum.EQUIP))
 					UIManager.getInstance().equipWnd.clearItem()
-				
+
 			}
 
 		}

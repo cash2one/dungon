@@ -14,7 +14,7 @@ package com.leyou.ui.equip.child {
 	import com.leyou.data.tips.TipsInfo;
 	import com.leyou.ui.backpack.child.GridModel;
 	import com.leyou.utils.FilterUtil;
-	
+
 	import flash.display.Shape;
 	import flash.geom.Point;
 
@@ -76,19 +76,29 @@ package com.leyou.ui.equip.child {
 //			}
 
 			this.iconBmp.updateBmp("ico/items/" + info.info.icon + ".png");
-			this.iconBmp.setWH(this.bgBmp.width, this.bgBmp.height);
-			this.iconBmp.x=this.iconBmp.y=(this.bgBmp.width - this.iconBmp.width) / 2;
+//			this.iconBmp.setWH(this.bgBmp.width, this.bgBmp.height);
+//			this.iconBmp.setWH(40, 40);
+//			this.iconBmp.x=this.iconBmp.y=(this.bgBmp.width - this.iconBmp.width) / 2;
 
 			//if (!(info is EquipInfo))
 			//	this.dataId=info.pos;
 
 			if (info.info.effect != null && info.info.effect != "0" && info.info.effect1 != null && info.info.effect1 != "0") {
 				if (this.dataId == -1 || this.dataId == 2 || this.dataId == 5 || this.dataId == 3) {
-					this.playeMc(int(info.info.effect));
+					this.playeMc(int(info.info.effect), new Point(1, 2));
+					this.iconBmp.setWH(38, 38);
 				} else {
-					this.playeMc(int(info.info.effect1), new Point(-4, -4));
+					this.playeMc(int(info.info.effect1), new Point(-3, -2.5));
+					this.iconBmp.setWH(60, 60);
 				}
+			} else {
+				if (this.dataId == -1 || this.dataId == 2 || this.dataId == 5 || this.dataId == 3)
+					this.iconBmp.setWH(38, 38);
+				else
+					this.iconBmp.setWH(60, 60);
 			}
+
+			this.iconBmp.x=this.iconBmp.y=(this.bgBmp.width - this.iconBmp.width) / 2;
 
 			if (int(info.tips.qh) > 0) {
 				this.setIntensify("" + info.tips.qh);
@@ -125,13 +135,15 @@ package com.leyou.ui.equip.child {
 
 		public function selectState():void {
 			this.selectBmp.bitmapData=null; //LibManager.getInstance().getImg("ui/backpack/select.png");
+			this.bgBmp.visible=false;
 
 			this.bg=new Shape();
 			this.bg.graphics.beginFill(0x000000);
+//			this.bg.graphics.drawRect(0, 0, this.bgBmp.width - 4, this.bgBmp.height - 4);
 			this.bg.graphics.drawRect(0, 0, this.bgBmp.width, this.bgBmp.height);
 			this.bg.graphics.endFill();
-			this.bg.x=0;
-			this.bg.y=0;
+			this.bg.x=2;
+			this.bg.y=2;
 
 			this.addChild(this.bg);
 			this.swapChildren(this.bg, this.iconBmp);
@@ -149,6 +161,10 @@ package com.leyou.ui.equip.child {
 
 			if (DragManager.getInstance().grid == null)
 				return;
+		}
+
+		public function setBgVisible(v:Boolean):void {
+			this.bgBmp.visible=v;
 		}
 
 		override public function doubleClickHandler():void {
@@ -344,15 +360,16 @@ package com.leyou.ui.equip.child {
 						NoticeManager.getInstance().broadcastById(2627);
 						return;
 					}
-					
+
 					if (g.data.info.Suit_Group > 0) {
 						NoticeManager.getInstance().broadcastById(2626);
 						return;
 					}
 
-					if (EquipStrengGrid.selectState == null)
+					if (EquipStrengGrid.selectState == null) {
 						EquipStrengGrid.selectState=g;
-					else if (EquipStrengGrid.selectStateII == null) {
+						
+					} else if (EquipStrengGrid.selectStateII == null) {
 						if (g.data.info.id != EquipStrengGrid.selectState.data.info.id)
 							return;
 
@@ -362,6 +379,31 @@ package com.leyou.ui.equip.child {
 					UIManager.getInstance().equipWnd.LvupRender.setDownItem(g);
 					g.setSelectState(true);
 				}
+
+			} else if (_i == 6) {
+
+				if (EquipStrengGrid.selectState != null && g.dataId == 1) {
+
+					EquipStrengGrid.selectState.setSelectState(false);
+					EquipStrengGrid.selectState=null;
+
+					g.resetGrid();
+					g.delItemHandler()
+
+				} else {
+
+					UIManager.getInstance().equipWnd.ElementRender.setDownItem(g);
+					EquipStrengGrid.selectStateII=null;
+
+					g.setSelectState(true);
+
+					if (EquipStrengGrid.selectState != null)
+						EquipStrengGrid.selectState.setSelectState(false);
+
+					EquipStrengGrid.selectState=g;
+				}
+
+
 			}
 
 		}
@@ -548,6 +590,10 @@ package com.leyou.ui.equip.child {
 //			this.enable=!v;
 			this.canMove=!v;
 		}
+		
+		public function setTargetGrid(g:EquipStrengGrid):void {
+			this.setChangeState(g);
+		}
 
 		override public function canMDHandler():Boolean {
 			return this.canMove;
@@ -564,8 +610,8 @@ package com.leyou.ui.equip.child {
 			if (EquipStrengGrid.selectStateII == this)
 				this.setSelectState(true);
 		}
-		
-		public function setEnable(v:Boolean):void{
+
+		public function setEnable(v:Boolean):void {
 			this.mouseChildren=v;
 			this.mouseEnabled=v;
 		}

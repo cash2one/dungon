@@ -14,6 +14,7 @@ package com.leyou.ui.task.child {
 	import com.ace.gameData.table.TPointInfo;
 	import com.ace.loader.child.SwfLoader;
 	import com.ace.manager.CursorManager;
+	import com.ace.manager.GuideManager;
 	import com.ace.manager.LibManager;
 	import com.ace.manager.ToolTipManager;
 	import com.ace.manager.UILayoutManager;
@@ -25,7 +26,6 @@ package com.leyou.ui.task.child {
 	import com.ace.ui.button.children.NormalButton;
 	import com.ace.ui.img.child.Image;
 	import com.ace.ui.lable.Label;
-	import com.ace.utils.LoadUtil;
 	import com.ace.utils.StringUtil;
 	import com.greensock.TweenLite;
 	import com.leyou.enum.ConfigEnum;
@@ -35,7 +35,7 @@ package com.leyou.ui.task.child {
 	import com.leyou.net.cmd.Cmd_Tsk;
 	import com.leyou.utils.FilterUtil;
 	import com.leyou.utils.TaskUtil;
-
+	
 	import flash.events.MouseEvent;
 	import flash.events.TextEvent;
 	import flash.geom.Point;
@@ -217,6 +217,7 @@ package com.leyou.ui.task.child {
 				Cmd_Go.cmGo(str[1]);
 			}
 
+			GuideManager.getInstance().removeGuide(104);
 //			var str:String=String(e.text).split("--")[1];
 //			Cmd_Go.cmGo(int(str));
 		}
@@ -250,7 +251,7 @@ package com.leyou.ui.task.child {
 			if (o.hasOwnProperty("cloop")) {
 				this.updateLoopNum(o.cloop);
 //				this.taskLoopProgress.scaleX=Number(int(o.cloop) / ConfigEnum.taskDailySum);
-				this.taskLoopProgress.setSize(Number(int(o.cloop) / ConfigEnum.taskDailySum) * 173, 10);
+				this.taskLoopProgress.setSize(Number(int(o.cloop) / ConfigEnum.taskDailySum) * 182, 23);
 				this.currentLoop=o.cloop;
 
 				if (ConfigEnum.taskDailySum == this.currentLoop) {
@@ -284,6 +285,7 @@ package com.leyou.ui.task.child {
 			}
 
 			this.updateList(o);
+			UIManager.getInstance().taskWnd.setVipLvState(Core.me.info.vipLv);
 		}
 
 		private function onMouseMove(e:MouseEvent):void {
@@ -374,15 +376,31 @@ package com.leyou.ui.task.child {
 
 					if (this.visible && !this.isComplete) {
 
+						var exphun:Array=[0, 0];
 						var flyArr:Array=[[], []];
 						for each (mgrid in this.loopRewardVec) {
 							if (mgrid != null) {
-								flyArr[0].push(mgrid.dataId);
-								flyArr[1].push(mgrid.parent.localToGlobal(new Point(mgrid.x, mgrid.y)));
+								if (mgrid.dataId == 65534) {
+									exphun[0]=mgrid.parent.localToGlobal(new Point(mgrid.x, mgrid.y));
+									exphun[1]=mgrid.getNum();
+								} else if (mgrid.dataId == 65533) {
+									exphun[2]=mgrid.parent.localToGlobal(new Point(mgrid.x, mgrid.y));
+									exphun[3]=mgrid.getNum();
+								} else {
+									flyArr[0].push(mgrid.dataId);
+									flyArr[1].push(mgrid.parent.localToGlobal(new Point(mgrid.x, mgrid.y)));
+								}
 							}
 						}
 
 						FlyManager.getInstance().flyBags(flyArr[0], flyArr[1]);
+						
+						if (exphun[0] != 0)
+							FlyManager.getInstance().flyExpOrHonour(1, exphun[1], 1, exphun[0]);
+						
+						if (exphun[2] != 0)
+							FlyManager.getInstance().flyExpOrHonour(1, exphun[3], 2, exphun[2]);
+						
 					}
 
 					this.isComplete=true;
@@ -455,6 +473,7 @@ package com.leyou.ui.task.child {
 					break;
 			}
 
+			var mx:int=228;
 			var dinfo:TDailytask=new TDailytask(xml);
 			var item:Object;
 			if (dinfo.exp != "" && dinfo.exp != null) {
@@ -470,7 +489,7 @@ package com.leyou.ui.task.child {
 //				else
 				mgrid.setNum((dinfo.exp));
 
-				mgrid.x=210 + (this.loopRewardVec.length % 5) * (mgrid.width + 3);
+				mgrid.x=mx + (this.loopRewardVec.length % 5) * (mgrid.width + 3);
 				mgrid.y=318 + Math.floor(this.loopRewardVec.length / 5) * (mgrid.height + 3);
 
 				this.addChild(mgrid);
@@ -490,7 +509,7 @@ package com.leyou.ui.task.child {
 //				else
 				mgrid.setNum((dinfo.money));
 
-				mgrid.x=210 + (this.loopRewardVec.length % 5) * (mgrid.width + 3);
+				mgrid.x=mx + (this.loopRewardVec.length % 5) * (mgrid.width + 3);
 				mgrid.y=318 + Math.floor(this.loopRewardVec.length / 5) * (mgrid.height + 3);
 
 				this.addChild(mgrid);
@@ -511,7 +530,7 @@ package com.leyou.ui.task.child {
 //				else
 				mgrid.setNum((dinfo.energy));
 
-				mgrid.x=210 + (this.loopRewardVec.length % 5) * (mgrid.width + 3);
+				mgrid.x=mx + (this.loopRewardVec.length % 5) * (mgrid.width + 3);
 				mgrid.y=318 + Math.floor(this.loopRewardVec.length / 5) * (mgrid.height + 3);
 
 				this.addChild(mgrid);
@@ -531,7 +550,7 @@ package com.leyou.ui.task.child {
 //				else
 				mgrid.setNum((dinfo.bg));
 
-				mgrid.x=210 + (this.loopRewardVec.length % 5) * (mgrid.width + 3);
+				mgrid.x=mx + (this.loopRewardVec.length % 5) * (mgrid.width + 3);
 				mgrid.y=318 + Math.floor(this.loopRewardVec.length / 5) * (mgrid.height + 3);
 
 				this.addChild(mgrid);
@@ -551,7 +570,7 @@ package com.leyou.ui.task.child {
 //				else
 				mgrid.setNum((dinfo.Bd_Yb));
 
-				mgrid.x=210 + (this.loopRewardVec.length % 5) * (mgrid.width + 3);
+				mgrid.x=mx + (this.loopRewardVec.length % 5) * (mgrid.width + 3);
 				mgrid.y=318 + Math.floor(this.loopRewardVec.length / 5) * (mgrid.height + 3);
 
 				this.addChild(mgrid);
@@ -571,7 +590,7 @@ package com.leyou.ui.task.child {
 //				else
 				mgrid.setNum((dinfo.liveness));
 
-				mgrid.x=210 + (this.loopRewardVec.length % 5) * (mgrid.width + 3);
+				mgrid.x=mx + (this.loopRewardVec.length % 5) * (mgrid.width + 3);
 				mgrid.y=318 + Math.floor(this.loopRewardVec.length / 5) * (mgrid.height + 3);
 
 				this.addChild(mgrid);
@@ -605,7 +624,7 @@ package com.leyou.ui.task.child {
 
 				mgrid.canMove=false;
 
-				mgrid.x=210 + (this.loopRewardVec.length % 5) * (45);
+				mgrid.x=mx + (this.loopRewardVec.length % 5) * (45);
 				mgrid.y=318 + Math.floor(this.loopRewardVec.length / 5) * (mgrid.height + 3);
 
 				this.loopRewardVec.push(mgrid);
@@ -627,7 +646,7 @@ package com.leyou.ui.task.child {
 
 			this.rewardVec.length=0;
 
-			var _x:int=210;
+			var _x:int=228;
 			var _y:int=166;
 
 			var rate:Number=Number(ConfigEnum["taskDailyStar" + o.star]);

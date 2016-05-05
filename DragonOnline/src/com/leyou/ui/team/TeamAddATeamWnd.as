@@ -32,7 +32,7 @@ package com.leyou.ui.team {
 		public function TeamAddATeamWnd() {
 			super(LibManager.getInstance().getXML("config/ui/team/TeamAddATeamWnd.xml"));
 			this.init();
-			this.clsBtn.y-=10;
+//			this.clsBtn.y-=10;
 			this.mouseEnabled=true;
 		}
 

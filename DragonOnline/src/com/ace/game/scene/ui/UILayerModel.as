@@ -158,31 +158,46 @@ package com.ace.game.scene.ui {
 		 * @param ico ico图片
 		 *
 		 */
-		public function addEffect(livingBase:LivingBase, effectType:int, num:int, color:String, str:String="", ico:String="", ptArr:Array=null, showZero:Boolean=false):void {
-//			trace("显示人物伤害等特效：" + effectType, num, color, str, ico);
+		public function addEffect(livingBase:LivingBase, effectType:int, num:int, color:String, str:String="", ico:String="", ptArr:Array=null, showZero:Boolean=false, strFront:Boolean=true, times:int=1):void {
+			//trace("显示人物伤害等特效：" + effectType, num, color, str, ico);
 			if (SettingManager.getInstance().assitInfo.isHideSkill)
 				return;
-			if (effectType != EffectEnum.BUBBLE_LINE) {
-				this._addEffect(livingBase, effectType, num, color, str, ico, ptArr, showZero); //修改为同时播放 2014/5/7 9:56:54
-				return;
+//			if (effectType != EffectEnum.BUBBLE_LINE && times == 1) {
+//				this._addEffect(livingBase, effectType, num, color, str, ico, ptArr, showZero, strFront); //修改为同时播放 2014/5/7 9:56:54
+//				return;
+//			}
+//			
+			for (var i:int=0; i < times; i++) {
+				this.effectArr.push([livingBase, effectType, int(num / times), color, str, ico, ptArr, showZero, strFront]);
 			}
 
-			this.effectArr.push([livingBase, effectType, num, color, str, ico, ptArr, showZero]);
+//			this.effectArr.push([livingBase, effectType, num, color, str, ico, ptArr, showZero, strFront]);
 			if (!DelayCallManager.getInstance().has(this, this.play)) {
 				this.play();
 			}
 		}
 
+		public function removeEffect(livingBase:LivingBase):void {
+			for (var i:int=0; i < this.effectArr.length; i++) {
+				if (this.effectArr[i][0] == livingBase) {
+					this.effectArr.splice(i, 1);
+					i--;
+				}
+			}
+
+		}
+
 		private function play():void {
+//			trace("---------------paly")
 			if (this.effectArr.length <= 0)
 				return;
 			this._addEffect.apply(this, this.effectArr.shift());
 			if (!DelayCallManager.getInstance().has(this, this.play)) {
-				DelayCallManager.getInstance().add(this, play, "", 15);
+				DelayCallManager.getInstance().add(this, play, "", 3);
 			}
 		}
 
-		private function _addEffect(livingBase:LivingBase, effectType:int, num:int, color:String, str:String="", ico:String="", ptArr:Array=null, showZero:Boolean=false):void {
+		private function _addEffect(livingBase:LivingBase, effectType:int, num:int, color:String, str:String="", ico:String="", ptArr:Array=null, showZero:Boolean=false, strFront:Boolean=true):void {
 			/*
 			1：不唯一
 			2：同步位置||不同步位置
@@ -197,12 +212,12 @@ package com.ace.game.scene.ui {
 				DebugUtil.throwError("特效不够用了");
 
 			this.effctLayer.addChild(this.tmpBubbleEffect);
-			this.tmpBubbleEffect.show(effectType, num, color, str, ico, ptArr, showZero);
+			this.tmpBubbleEffect.show(effectType, num, color, str, ico, ptArr, showZero, strFront);
 			this.tmpBubbleEffect.x=livingBase.x - this.tmpBubbleEffect.width * 0.5;
 			var offsetY:Number=(null == ptArr) ? livingBase.bInfo.radius : livingBase.bInfo.radius * 2;
-			this.tmpBubbleEffect.y=livingBase.y - livingBase.bInfo.radius - this.tmpBubbleEffect.width *0.5;
+			this.tmpBubbleEffect.y=livingBase.y - livingBase.bInfo.radius - this.tmpBubbleEffect.width * 0.5;
 			if (null == ptArr) {
-				this.tmpBubbleEffect.y=livingBase.y - livingBase.bInfo.radius * 2 - this.tmpBubbleEffect.width *0.5;
+				this.tmpBubbleEffect.y=livingBase.y - livingBase.bInfo.radius * 2 - this.tmpBubbleEffect.width * 0.5;
 			}
 			this.tmpBubbleEffect.play(effectType);
 

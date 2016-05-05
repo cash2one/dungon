@@ -46,8 +46,8 @@ package com.leyou.ui.sfirstPay
 			payBtn = getUIbyID("payBtn") as ImgButton;
 			hideBg();
 			
-			clsBtn.x += 4;
-			clsBtn.y += 15;
+//			clsBtn.x += 4;
+//			clsBtn.y += 15;
 			df = payLbl.getTextFormat();
 			df.leading = 6;
 			payLbl.defaultTextFormat = df;

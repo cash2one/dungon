@@ -4,6 +4,7 @@ package com.leyou.net.cmd {
 	import com.ace.config.Core;
 	import com.ace.enum.EventEnum;
 	import com.ace.enum.SceneEnum;
+	import com.ace.game.proxy.ModuleProxy;
 	import com.ace.game.utils.SceneUtil;
 	import com.ace.gameData.manager.MapInfoManager;
 	import com.ace.gameData.manager.MyInfoManager;
@@ -12,7 +13,7 @@ package com.leyou.net.cmd {
 	import com.ace.utils.StringUtil;
 	import com.leyou.manager.PopupManager;
 	import com.leyou.net.NetGate;
-
+	
 	import flash.geom.Point;
 
 	public class Cmd_Go {
@@ -27,6 +28,9 @@ package com.leyou.net.cmd {
 		public static function sm_go_G(o:Object):void {
 			if (!o.hasOwnProperty("where"))
 				return;
+			
+//			ModuleProxy.showChatMsg("模拟触发下一个任务--返回"+o.where);
+//			trace("模拟触发下一个任务--返回"+o.where);
 			Core.me.walkToAndTalkWith(o.where[3], SceneUtil.screenToTile(o.where[1], o.where[2]), o.where[0]);
 		}
 

@@ -15,7 +15,7 @@ package com.leyou.ui.team.child {
 		private var NumLbl:Label;
 
 		private var lightBg:Image;
-		
+
 		public function TeamAddTeamRender() {
 			super(LibManager.getInstance().getXML("config/ui/team/TeamAddTeamRender.xml"));
 			this.init();
@@ -30,24 +30,24 @@ package com.leyou.ui.team.child {
 			this.attLbl=this.getUIbyID("attLbl") as Label;
 			this.NumLbl=this.getUIbyID("NumLbl") as Label;
 			this.lightBg=this.getUIbyID("lightBg") as Image;
-			 
+
 		}
 
 		public function updateInfo(o:Array):void {
 			this.playNameLbl.text="" + o[0];
-			this.NumLbl.text="" + o[1];
+			this.NumLbl.text="" + o[1] + "/4";
 			this.proLbl.text="" + PlayerUtil.getPlayerRaceByIdx(o[2]);
 			this.lvLbl.text="" + o[3];
 			this.attLbl.text="" + o[4];
 		}
 
-		public function setlight(v:Boolean):void{
+		public function setlight(v:Boolean):void {
 			if (v)
 				this.lightBg.updateBmp("ui/team/team_list_bg_3.png");
 			else
 				this.lightBg.updateBmp("ui/team/team_list_bg_1.png");
 		}
-		
+
 		public function playeNameValue():String {
 			return this.playNameLbl.text;
 		}

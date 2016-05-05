@@ -1,25 +1,32 @@
 package com.leyou.ui.gem {
 
+	import com.ace.config.Core;
 	import com.ace.enum.WindowEnum;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.table.TAlchemy;
+	import com.ace.manager.GuideArrowDirectManager;
 	import com.ace.manager.LibManager;
+	import com.ace.manager.TweenManager;
 	import com.ace.manager.UILayoutManager;
+	import com.ace.manager.UIManager;
 	import com.ace.ui.accordion.Accordion;
 	import com.ace.ui.accordion.LabelButton;
 	import com.ace.ui.auto.AutoWindow;
 	import com.ace.ui.img.child.Image;
+	import com.ace.ui.lable.Label;
 	import com.ace.ui.scrollPane.children.ScrollPane;
 	import com.leyou.ui.gem.child.AlchemyRender;
 	import com.leyou.ui.gem.child.FoldMenu;
 	import com.leyou.ui.gem.child.GembtnWnd;
-	
+
+	import flash.display.DisplayObject;
 	import flash.events.MouseEvent;
 	import flash.geom.Rectangle;
 
 	public class GemLvUpWnd extends AutoWindow {
 
 		private var itemList:ScrollPane;
+		private var ruleLbl:Label;
 		private var accordMenu:Accordion;
 		private var foldMenu:FoldMenu;
 		private var render:AlchemyRender;
@@ -51,13 +58,17 @@ package com.leyou.ui.gem {
 			this.itemList=this.getUIbyID("itemList") as ScrollPane;
 			this.itemList.visible=false;
 
+			this.ruleLbl=this.getUIbyID("ruleLbl") as Label;
+
+			this.ruleLbl.setToolTip(TableManager.getInstance().getSystemNotice(10100).content);
+
 //			this.accordMenu=new Accordion(200, 480);
 //			this.itemList.addToPane(this.accordMenu);
 
 			this.foldMenu=new FoldMenu(220, 455);
 			this.addChild(this.foldMenu);
-			this.foldMenu.x=20;
-			this.foldMenu.y=55;
+			this.foldMenu.x=8;
+			this.foldMenu.y=70;
 //			this.itemList.addToPane(this.foldMenu);
 
 			var items:Array=TableManager.getInstance().getGemListNameByType();
@@ -96,8 +107,8 @@ package com.leyou.ui.gem {
 
 				item2.sortOn("Al_ID", Array.CASEINSENSITIVE | Array.NUMERIC);
 
-				res="ui/other/button_type1.png";
-				rect=new Rectangle(12, 26, 233, 22);
+				res="ui/other/button_type1.jpg";
+				rect=new Rectangle(12, 26, 233, 18);
 				gname="accordion_ttt";
 
 				lb=new LabelButton(LibManager.getInstance().getImg(res), rect, 200, 30, gname, true);
@@ -124,6 +135,9 @@ package com.leyou.ui.gem {
 
 					for (var i:int=0; i < item3.length; i++) {
 
+						if (TAlchemy(item3[i]).limit != 0 && TAlchemy(item3[i]).limit != Core.me.info.profession)
+							continue;
+
 						render=new GembtnWnd();
 						render.updateInfo(item3[i]);
 
@@ -142,8 +156,10 @@ package com.leyou.ui.gem {
 			this.render=new AlchemyRender();
 			this.addChild(this.render);
 
-			this.render.x=243;
-			this.render.y=50;
+			this.render.x=231;
+			this.render.y=65;
+
+			this.addChild(this.ruleLbl);
 
 //			this.clsBtn.y+=18;
 //			this.allowDrag=false;
@@ -204,18 +220,29 @@ package com.leyou.ui.gem {
 			this.currentCount=1;
 		}
 
+		override public function getUIbyID(id:String):DisplayObject {
+			var ds:DisplayObject=super.getUIbyID(id);
+
+			if (ds == null)
+				ds=render.getUIbyID(id);
+
+			return ds;
+		}
+
+
 		override public function get width():Number {
-			return 644;
+			return 617;
 		}
 
 		override public function get height():Number {
-			return 524;
+			return 544;
 		}
 
 		override public function hide():void {
 			super.hide();
-
+			GuideArrowDirectManager.getInstance().delArrow(WindowEnum.GEM_LV + "");
 			UILayoutManager.getInstance().composingWnd(WindowEnum.ROLE);
+			TweenManager.getInstance().lightingCompnent(UIManager.getInstance().toolsWnd.getUIbyID("alchmyBtn"));
 		}
 
 	}

@@ -1,5 +1,6 @@
 package com.leyou.ui.backpack.child {
 
+	import com.ace.enum.PlatformEnum;
 	import com.ace.enum.UIEnum;
 	import com.ace.game.backpack.GridBase;
 	import com.ace.manager.LibManager;
@@ -10,7 +11,7 @@ package com.leyou.ui.backpack.child {
 	import com.leyou.net.cmd.Cmd_Bag;
 	import com.leyou.utils.ItemUtil;
 	import com.leyou.utils.PropUtils;
-	
+
 	import flash.events.MouseEvent;
 
 	public class BagDropPanel extends AutoWindow {
@@ -29,7 +30,7 @@ package com.leyou.ui.backpack.child {
 			super(LibManager.getInstance().getXML("config/ui/backPack/MessageWnd04.xml"));
 			this.init();
 			this.hideBg();
-			this.clsBtn.y-=10;
+//			this.clsBtn.y-=10;
 		}
 
 		private function init():void {
@@ -51,7 +52,7 @@ package com.leyou.ui.backpack.child {
 //			this.itemGrid.mouseEnabled=false;
 
 			this.itemGrid.x=118;
-			this.itemGrid.y=55;
+			this.itemGrid.y=70;
 		}
 
 		private function update(info:Baginfo):void {
@@ -61,12 +62,15 @@ package com.leyou.ui.backpack.child {
 			this.itemName.text=info.info.name + "";
 			this.itemName.textColor=ItemUtil.getColorByQuality(int(info.info.quality));
 
-			this.itemName.x=this.width - this.itemName.width >> 1;
+			this.itemName.x=(this.width-2 - this.itemName.width) >> 1;
 
 			if (info.info.bind == 1) {
 				this.stateLbl.text=PropUtils.getStringById(1631);
 			} else {
-				this.stateLbl.text=PropUtils.getStringById(1630);
+				if (UIEnum.MULTI_LAN == PlatformEnum.LAN_TW)
+					this.stateLbl.text=PropUtils.getStringById(1630);
+				else
+					this.stateLbl.text=PropUtils.getStringById(1631);
 			}
 		}
 
@@ -98,6 +102,10 @@ package com.leyou.ui.backpack.child {
 			}
 
 			this.hide();
+		}
+		
+		override public function get width():Number{
+			return 308;
 		}
 
 		override public function hide():void {

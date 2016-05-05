@@ -88,10 +88,37 @@ index --道具在商店列表的位置 从0开始一直累加
 			*/
 		public static function sm_shp_N(o:Object):void {
 
-			if (!UIManager.getInstance().isCreate(WindowEnum.SHOP))
-				UIManager.getInstance().creatWindow(WindowEnum.SHOP);
+			if (!UIManager.getInstance().isCreate(WindowEnum.MYSTORE))
+				UIManager.getInstance().creatWindow(WindowEnum.MYSTORE);
 
 			UIManager.getInstance().myStore.updateItemNum();
+		}
+		
+		public static function sm_shp_G(o:Object):void{
+			if(!o.hasOwnProperty("tagid"))
+				return ;
+			
+			if (!UIManager.getInstance().isCreate(WindowEnum.MYSTORE))
+				UIManager.getInstance().creatWindow(WindowEnum.MYSTORE);
+			
+			UIManager.getInstance().myStore.updateList(o);
+			
+		}
+		
+		/**
+		 *神秘商店购买信息
+上行：shp|Gtagid
+下行: shp|{"mk":G, "glv":num, "tagid":num, "ulist":[[itemid,bnum],...]}
+          tagid  -- 标签id
+          glv    -- 国家等级
+          ulist  -- 已购买此标签商城内道具信息
+             itemid -- 已购买道具id
+             bnum  -- 已购买此道具数量 
+		 * @param tid
+		 * 
+		 */		
+		public static function cm_shpTagInfo(tid:int):void{
+			NetGate.getInstance().send("shp|G" + tid);
 		}
 
 	}

@@ -33,8 +33,8 @@ package com.leyou.ui.backpack.child {
 			super(LibManager.getInstance().getXML("config/ui/messagebox/messageInputWnd.xml"));
 			this.init();
 			this.hideBg();
-			this.clsBtn.x-=6;
-			this.clsBtn.y-=14;
+//			this.clsBtn.x-=6;
+//			this.clsBtn.y-=14;
 		}
 
 		private function init():void {

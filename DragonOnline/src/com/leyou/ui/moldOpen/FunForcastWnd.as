@@ -114,7 +114,7 @@ package com.leyou.ui.moldOpen {
 					container.x=10;
 					container.y=12;
 					addChild(container);
-					iconImg.x=45;
+					iconImg.x=38;
 					iconImg.y=12;
 					movie.x=32;
 					movie.y=2;

@@ -17,6 +17,7 @@ package com.leyou.ui.backpack.child {
 	import com.leyou.enum.ConfigEnum;
 	import com.leyou.net.cmd.Cmd_Bag;
 	import com.leyou.net.cmd.Cmd_Longz;
+	import com.leyou.utils.ItemUtil;
 	
 	import flash.events.MouseEvent;
 
@@ -55,7 +56,7 @@ package com.leyou.ui.backpack.child {
 
 			this.grid=new BackpackGrid(-1);
 			this.grid.x=42;
-			this.grid.y=63;
+			this.grid.y=73;
 
 			this.addChild(this.grid);
 		}
@@ -115,7 +116,8 @@ package com.leyou.ui.backpack.child {
 //			this.grid.mouseEnabled=false;
 
 			this.nameLbl.text=data.info.name + "";
-
+			this.nameLbl.textColor=ItemUtil.getColorByQuality(int(data.info.quality));
+			
 			this.numinput.text="" + data.num;
 			this.maxInt=data.num;
 

@@ -15,9 +15,10 @@ package com.leyou.ui.rank.child {
 	import com.leyou.net.cmd.Cmd_Guild;
 	import com.leyou.net.cmd.Cmd_Tm;
 	import com.leyou.utils.PropUtils;
-	
+
 	import flash.events.MouseEvent;
 
+	//各个榜的单条render
 	public class RankRender extends AutoSprite implements IMenu {
 		private var bgImg:Image;
 
@@ -137,6 +138,21 @@ package com.leyou.ui.rank.child {
 
 		// (1总战斗力 2坐骑 3翅膀 4装备 5军衔 6等级 7财富)
 		private function getVocationLabel(vocation:int, var1:int):String {
+			switch (vocation) {
+				case 1:
+					return PropUtils.getStringById(1528);
+				case 2:
+					return PropUtils.getStringById(1526);
+				case 3:
+					return PropUtils.getStringById(1529);
+				case 4:
+					return PropUtils.getStringById(1527);
+			}
+			return "";
+		}
+
+		// (1总战斗力 2坐骑 3翅膀 4装备 5军衔 6等级 7财富)
+		private function getVocationLabelXX(vocation:int, var1:int):String {
 			if ((1 == type) || (4 == type) || (6 == type) || (7 == type)) {
 				switch (vocation) {
 					case 1:
@@ -149,16 +165,16 @@ package com.leyou.ui.rank.child {
 						return PropUtils.getStringById(1527);
 				}
 			} else if (2 == type || 3 == type) {
-				var level:int = Math.floor(var1/10)+1;
-				var starLv:int = var1%10;
-				var lvStr:String = StringUtil.substitute(PropUtils.getStringById(2187), PropUtils.getCNum(level));
-				var starStr:String = (starLv > 0) ? starStr = StringUtil.substitute(PropUtils.getStringById(2188), PropUtils.getCNum(starLv)) : "";
+				var level:int=Math.floor(var1 / 10) + 1;
+				var starLv:int=var1 % 10;
+				var lvStr:String=StringUtil.substitute(PropUtils.getStringById(2187), PropUtils.getCNum(level));
+				var starStr:String=(starLv > 0) ? starStr=StringUtil.substitute(PropUtils.getStringById(2188), PropUtils.getCNum(starLv)) : "";
 				// 100级特殊处理
-				if(100 <= var1){
-					lvStr = StringUtil.substitute(PropUtils.getStringById(2187), PropUtils.getCNum(10));
-					starStr = StringUtil.substitute(PropUtils.getStringById(2188), PropUtils.getCNum(10));
+				if (100 <= var1) {
+					lvStr=StringUtil.substitute(PropUtils.getStringById(2187), PropUtils.getCNum(10));
+					starStr=StringUtil.substitute(PropUtils.getStringById(2188), PropUtils.getCNum(10));
 				}
-				return lvStr+starStr;
+				return lvStr + starStr;
 //				switch (var1) {
 //					case 1:
 //						return PropUtils.getStringById(1862);

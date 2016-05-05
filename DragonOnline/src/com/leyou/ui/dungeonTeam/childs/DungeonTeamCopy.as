@@ -4,12 +4,16 @@ package com.leyou.ui.dungeonTeam.childs {
 	import com.ace.enum.WindowEnum;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.table.TCopyInfo;
+	import com.ace.gameData.table.TTzActiive;
 	import com.ace.manager.LibManager;
 	import com.ace.manager.UIManager;
 	import com.ace.ui.auto.AutoSprite;
 	import com.ace.ui.lable.Label;
 	import com.ace.ui.scrollPane.children.ScrollPane;
+	import com.ace.utils.StringUtil;
 	import com.leyou.net.cmd.Cmd_CpTm;
+	import com.leyou.utils.FilterUtil;
+	import com.leyou.utils.PropUtils;
 	
 	import flash.events.MouseEvent;
 	import flash.utils.setInterval;
@@ -18,6 +22,7 @@ package com.leyou.ui.dungeonTeam.childs {
 
 		private var itemList:ScrollPane;
 		private var ruleLbl:Label;
+		private var descLbl:Label;
 
 		private var teamItem:DungeonTeam1Render;
 
@@ -26,6 +31,9 @@ package com.leyou.ui.dungeonTeam.childs {
 		private var selectIndex:int=-1;
 
 		private var setTime:int=0;
+
+		private var st:int=0;
+
 
 		public function DungeonTeamCopy() {
 			super(LibManager.getInstance().getXML("config/ui/dungeonTeam/dungeonTeamRender.xml"));
@@ -39,6 +47,7 @@ package com.leyou.ui.dungeonTeam.childs {
 		private function init():void {
 			this.itemList=this.getUIbyID("itemList") as ScrollPane;
 			this.ruleLbl=this.getUIbyID("ruleLbl") as Label;
+			this.descLbl=this.getUIbyID("descLbl") as Label;
 
 			this.itemList.addEventListener(MouseEvent.CLICK, onClick);
 
@@ -62,14 +71,23 @@ package com.leyou.ui.dungeonTeam.childs {
 //				item.x=0;
 //				item.y=i * 77;
 //			}
-			
-			this.ruleLbl.setToolTip(TableManager.getInstance().getSystemNotice(6612).content);
 
-			this.x=-29;
+			this.ruleLbl.setToolTip(TableManager.getInstance().getSystemNotice(6612).content);
+			
+			var tinfo:TTzActiive=TableManager.getInstance().getTzActiveByID(25);
+			 
+			this.descLbl.text="" + StringUtil.substitute(PropUtils.getStringById(2406),tinfo.time.split("|"));
+
+			this.x=3;
 			this.y=3;
 		}
 
 		private function onClick(e:MouseEvent):void {
+
+			if (this.st == 0) {
+				return;
+			}
+
 
 			if (!(e.target is DungeonTeam2Bar))
 				return;
@@ -119,6 +137,10 @@ package com.leyou.ui.dungeonTeam.childs {
 
 		public function updateInfo(o:Object):void {
 
+			this.st=o.st;
+
+			this.teamItem.setBtnState(this.st == 1);
+
 			var item:DungeonTeam2Bar;
 
 			for each (item in this.itemsList) {
@@ -136,6 +158,10 @@ package com.leyou.ui.dungeonTeam.childs {
 
 				this.itemList.addToPane(item);
 				this.itemsList.push(item);
+
+				if (this.st == 0) {
+					item.filters=[FilterUtil.enablefilter];
+				}
 
 				item.x=0;
 				item.y=i * 77;

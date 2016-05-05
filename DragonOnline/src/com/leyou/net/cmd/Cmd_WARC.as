@@ -85,7 +85,9 @@ package com.leyou.net.cmd
 		// 领取占领奖励
 		public static function sm_WARC_M(obj:Object):void{
 			var id:int = obj.wjlid;
-			UIManager.getInstance().cityBattleReward.flyItem(id);
+			if(UIManager.getInstance().cityBattleReward){
+				UIManager.getInstance().cityBattleReward.flyItem(id);
+			}
 		}
 	}
 }

@@ -17,7 +17,6 @@ package com.leyou.ui.copy
 	public class StoryCopyWnd extends StoryCopyView
 	{
 		public function StoryCopyWnd(){
-			super();
 		}
 		
 		protected override function onButtonClick(event:MouseEvent):void{
@@ -66,11 +65,20 @@ package com.leyou.ui.copy
 				}
 				copy.loadData(copyData);
 			}
+			var index:int;
 			var zjl:Object = obj.zjl;
-			grids[0].updataInfo({itemId:65531, count:zjl.bg});
-			grids[1].updataInfo({itemId:65533, count:zjl.energy});
-			grids[2].updataInfo({itemId:65534, count:zjl.exp});
-			grids[3].updataInfo({itemId:65535, count:zjl.money});
+			if(zjl.bg > 0){
+				grids[index++].updataInfo({itemId:65531, count:zjl.bg});
+			}
+			if(zjl.energy > 0){
+				grids[index++].updataInfo({itemId:65533, count:zjl.energy});
+			}
+			if(zjl.exp > 0){
+				grids[index++].updataInfo({itemId:65534, count:zjl.exp});
+			}
+			if(zjl.money > 0){
+				grids[index++].updataInfo({itemId:65535, count:zjl.money});
+			}
 			updateVipLv();
 			prevBtn.visible = (threshold > 0);
 			nextBtn.visible = (threshold < (Math.ceil(items.length/4)-1)*600);

@@ -13,6 +13,10 @@ package com.ace.gameData.player {
 		public var vipEquipId:int;
 		public var equipColor:int; //装备颜色
 		public var equipLv:int;
+		public var junXLv:int;//军衔等级
+		
+		public var equipEffectId:int;
+		
 		// 平台VIP等级
 		public var pfVipLv:int;
 		public var pfVipType:int; // 0 -- 不是黄钻 1 -- 普通黄钻 2 -- 年费黄钻

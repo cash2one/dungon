@@ -39,8 +39,8 @@ package com.leyou.ui.cityBattle
 			cancelBtn.addEventListener(MouseEvent.CLICK, onBtnClick);
 			
 			proRBtn.text = TableManager.getInstance().getItemInfo(ConfigEnum.warCity27).name;;
-			clsBtn.x -= 6;
-			clsBtn.y -= 14;
+//			clsBtn.x -= 6;
+//			clsBtn.y -= 14;
 			proRBtn.turnOn(false);
 			type = 1;
 			

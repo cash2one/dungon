@@ -1,10 +1,12 @@
 package com.ace.manager
 {
+	import com.ace.config.Core;
 	import com.ace.enum.WindowEnum;
 	import com.ace.gameData.manager.DataManager;
 	import com.leyou.data.payrank.PayRankData;
 	import com.leyou.enum.CmdEnum;
 	import com.leyou.net.cmd.Cmd_Achievement;
+	import com.leyou.net.cmd.Cmd_Across;
 	import com.leyou.net.cmd.Cmd_Active;
 	import com.leyou.net.cmd.Cmd_Aution;
 	import com.leyou.net.cmd.Cmd_BlackStore;
@@ -12,6 +14,7 @@ package com.ace.manager
 	import com.leyou.net.cmd.Cmd_CLI;
 	import com.leyou.net.cmd.Cmd_CPRAK;
 	import com.leyou.net.cmd.Cmd_Collection;
+	import com.leyou.net.cmd.Cmd_ELEP;
 	import com.leyou.net.cmd.Cmd_FCZ;
 	import com.leyou.net.cmd.Cmd_Fanl;
 	import com.leyou.net.cmd.Cmd_Farm;
@@ -32,6 +35,7 @@ package com.ace.manager
 	import com.leyou.net.cmd.Cmd_Seven;
 	import com.leyou.net.cmd.Cmd_TaskMarket;
 	import com.leyou.net.cmd.Cmd_TobeStrong;
+	import com.leyou.net.cmd.Cmd_Twlc;
 	import com.leyou.net.cmd.Cmd_Vip;
 	import com.leyou.net.cmd.Cmd_Welfare;
 	import com.leyou.net.cmd.Cmd_Worship;
@@ -153,7 +157,7 @@ package com.ace.manager
 					break;
 				case WindowEnum.LUCKDRAW:
 					if(!contains(wndKey, CmdEnum.SM_LBOX_I)){
-						Cmd_LDW.cm_LDW_I();
+						Cmd_LDW.cm_LDW_I(DataManager.getInstance().luckdrawData.currentPage);
 						Cmd_LDW.cm_LDW_H(1);
 						Cmd_LDW.cm_LDW_H(2);
 						addCmd(wndKey, CmdEnum.SM_LBOX_I);
@@ -305,6 +309,38 @@ package com.ace.manager
 						addCmd(wndKey, CmdEnum.SM_CPRAK_I);
 					}
 					break;
+				case WindowEnum.TAIWAN_LC:
+					if(!contains(WindowEnum.TAIWAN_LC, CmdEnum.SM_LXTW_I)){
+						Cmd_Twlc.cm_LXTW_I();
+						addCmd(wndKey, CmdEnum.SM_LXTW_I);
+					}
+					break;
+				case WindowEnum.CROSS_SERVER:
+					if(Core.isTaiwan){
+						if(!contains(WindowEnum.CROSS_SERVER, CmdEnum.SM_ACROSS_I)){
+							Cmd_Across.cm_ACROSS_I();
+							addCmd(wndKey, CmdEnum.SM_ACROSS_I);
+						}
+					}else{
+						if(DataManager.getInstance().crossServerData.isOpen()){
+							if(!contains(WindowEnum.CROSS_SERVER, CmdEnum.SM_ACROSS_I)){
+								Cmd_Across.cm_ACROSS_I();
+								addCmd(wndKey, CmdEnum.SM_ACROSS_I);
+							}
+						}else {
+							if(!contains(WindowEnum.CROSS_SERVER, CmdEnum.SM_ACROSS_K)){
+								Cmd_Across.cm_ACROSS_K();
+								addCmd(wndKey, CmdEnum.SM_ACROSS_K);
+							}
+						}
+					}
+					break;
+				case WindowEnum.ELEMENT:
+					if(!contains(WindowEnum.ELEMENT, CmdEnum.SM_ELEP_I)){
+						Cmd_ELEP.cm_ELEP_I();
+						addCmd(wndKey, CmdEnum.SM_ELEP_I);
+					}
+					break;
 			}
 		}
 		
@@ -331,7 +367,7 @@ package com.ace.manager
 			return (-1 != cmdArr.indexOf(cmd));
 		}
 		
-		public function removeCmd(wndKey:int, cmd:String):void{
+		public function removeCmd(wndKey:int, cmd:String, visible:Boolean=true):void{
 			var cmdArr:Array = protocolDic[wndKey];
 			if(null == cmdArr){
 				return; // 未添加请求
@@ -343,7 +379,11 @@ package com.ace.manager
 			cmdArr.splice(index, 1);
 			checkLoadingWnd();
 			if(cmdArr.length <= 0){
-				UILayoutManager.getInstance().show(wndKey);
+				if(visible){
+					UILayoutManager.getInstance().show(wndKey);
+				}else{
+					// do sth
+				}
 				if(waitWndPageIndex.hasOwnProperty(wndKey)){
 					var pidx:int = waitWndPageIndex[wndKey];
 					delete waitWndPageIndex[wndKey];

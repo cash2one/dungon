@@ -192,6 +192,8 @@ package com.ace.enum {
 		 */
 		public static const CURRENCY_TYPE_GUILD_MONEY:int=3;
 		//=========================================================================/
+		// 国家繁荣度
+		public static const FANRONG_VIR_ITEM_ID:int = 65524;
 		
 		// 经验虚道具ID
 		public static const EXP_VIR_ITEM_ID:int = 65534;

@@ -2,8 +2,9 @@ package com.leyou.enum
 {
 	public class QualityEnum
 	{
+		// 0-白 1-绿 2-蓝 3-紫 4-金 5-红
 		/**
-		 * 普通
+		 * 普通 
 		 */		
 		public static const QUA_COMMON:int = 0;
 		

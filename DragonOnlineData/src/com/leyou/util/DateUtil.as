@@ -241,6 +241,14 @@ package com.leyou.util {
 			return format;
 		}
 		
+		public static function dateStr2Date(dateStr:String):Date{
+			return new Date(Date.parse(DateUtil.convertDateStr(dateStr)));
+		}
+		
+		public static function dateStr2Tick(dateStr:String):Number{
+			return Date.parse(DateUtil.convertDateStr(dateStr));
+		}
+		
 		public static function convertDateStr(dateStr:String):String{  
 			var strArr:Array = dateStr.split(" ");  
 			var fStr:String = "{0} {1} {2}";

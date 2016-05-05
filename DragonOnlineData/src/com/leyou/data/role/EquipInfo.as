@@ -33,5 +33,9 @@ package com.leyou.data.role {
 		public function strengthZdl(lv:int):uint{
 			return tips.strengthZdl(lv);
 		}
+		
+		
+		
+		
 	}
 }

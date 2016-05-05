@@ -1,5 +1,6 @@
 package com.leyou.ui.guild.child {
 
+	import com.ace.enum.FontEnum;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.table.TItemInfo;
 	import com.ace.manager.LibManager;
@@ -9,12 +10,14 @@ package com.leyou.ui.guild.child {
 	import com.ace.ui.lable.Label;
 	import com.leyou.data.tips.TipsInfo;
 	import com.leyou.utils.ItemUtil;
+	import com.leyou.utils.PropUtils;
 
 	public class GuildShopBar extends AutoSprite {
 
 		private var nameLbl:Label;
 		private var priceLbl:Label;
 		private var moneyLbl:Label;
+		private var lvLbl:Label;
 
 		private var moneyImg:Image;
 		private var priceImg:Image;
@@ -25,7 +28,7 @@ package com.leyou.ui.guild.child {
 
 		public var itemid:int=-1;
 		public var infoXml:XML;
-		
+
 		public var tipsInfo:TipsInfo;
 
 		public function GuildShopBar() {
@@ -40,18 +43,21 @@ package com.leyou.ui.guild.child {
 			this.nameLbl=this.getUIbyID("nameLbl") as Label;
 			this.priceLbl=this.getUIbyID("priceLbl") as Label;
 			this.moneyLbl=this.getUIbyID("moneyLbl") as Label;
+			this.lvLbl=this.getUIbyID("lvLbl") as Label;
 
 			this.moneyImg=this.getUIbyID("moneyImg") as Image;
 			this.priceImg=this.getUIbyID("priceImg") as Image;
 			this.itemBg=this.getUIbyID("itemBg") as Image;
-			
+
 			this.tipsInfo=new TipsInfo();
-			
+
 			this.grid=new GuildShopGrid();
 			this.addChild(this.grid);
 
-			this.grid.x=15;
-			this.grid.y=19;
+			this.grid.mouseChildren=this.grid.mouseEnabled=false;
+
+			this.grid.x=10;
+			this.grid.y=10;
 		}
 
 		/**
@@ -67,22 +73,34 @@ package com.leyou.ui.guild.child {
 			this.itemid=xml.@U_ItemID;
 
 			this.tipsInfo.itemid=this.itemid;
-			
+
 			var info:Object;
 //			if (xml.@U_TagID == 3)
 //				info=TableManager.getInstance().getEquipInfo(this.itemid);
-//			else
+//			else {
+			if (this.itemid < 10000)
+				info=TableManager.getInstance().getEquipInfo(this.itemid);
+			else
 				info=TableManager.getInstance().getItemInfo(this.itemid);
+//			}
 
-			if(info==null)
-				return ;
-			
+			if (info == null)
+				return;
+
 			this.grid.updataInfo(info);
 			this.grid.canMove=false;
-			
+
+			this.lvLbl.text="" + xml.@Shop_Level + PropUtils.getStringById(1812);
+
+			if (UIManager.getInstance().guildWnd.guildLv < int(xml.@Shop_Level)) {
+				this.lvLbl.setTextFormat(FontEnum.getTextFormat("Red12"));
+			} else {
+				this.lvLbl.setTextFormat(FontEnum.getTextFormat("White12"));
+			}
+
 			this.nameLbl.text="" + info.name;
 			this.nameLbl.textColor=ItemUtil.getColorByQuality(info.quality);
-			
+
 			this.priceLbl.text="" + xml.@U_LPrice;
 
 			if (UIManager.getInstance().guildWnd != null && int(xml.@Shop_Level) > UIManager.getInstance().guildWnd.guildLv)

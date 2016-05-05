@@ -183,6 +183,16 @@ zdl      --战斗力
 		 *祝福 
 		 */		
 		public var zf:int;
+		
+		/**
+		 * ele当前元素类型
+		 */		
+		public var ele:int;
+		
+		/**
+		 * elea元素攻击值
+		 */		
+		public var elea:int;
 		 
 		/**
 		 *0 游戏币
@@ -192,13 +202,14 @@ zdl      --战斗力
 4 碎片
 5 荣誉
 6 巨龙点数
+7 功勋
 		 */		
 		public var moneyType:int=0;
 		public var moneyNum:int=0;
 		public var moneyItemid:int=0;
 		
 		/**
-		 *0普通; 1,商店; 2,对比; 3,背包;
+		 *0普通; 1,商店; 2,对比; 3,背包;9,其他;
 		 */		
 		public var istype:int=0;
 		
@@ -224,6 +235,8 @@ zdl      --战斗力
 				this[key]=data[key];
 			}
 
+			
+			
 		}
 
 		/**

@@ -21,8 +21,8 @@ package com.leyou.ui.battlefield
 		private function init():void{
 			itemList = new Vector.<WarLogLable>();
 			_free = new Vector.<WarLogLable>();
-			clsBtn.x -= 6;
-			clsBtn.y -= 14;
+//			clsBtn.x -= 6;
+//			clsBtn.y -= 14;
 		}
 		
 		public function updateInfo():void{
@@ -72,8 +72,8 @@ package com.leyou.ui.battlefield
 				itemList[index] = item;
 			}
 			addChild(item);
-			item.x = 19;
-			item.y = 36+index*43;
+			item.x = 10;
+			item.y = 53+index*43;
 			return item;
 		}
 	}

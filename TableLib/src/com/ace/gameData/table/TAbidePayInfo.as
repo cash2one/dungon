@@ -45,6 +45,20 @@ package com.ace.gameData.table
 			return day1;
 		}
 		
+		public function getLCTWReward($day:int):int{
+			switch($day){
+				case 1:
+					return day1;
+				case 4:
+					return day2;
+				case 7:
+					return day3;
+				default:
+					return day1;
+			}
+			return day1;
+		}
+		
 		public function getRewardByDay($day:int):int{
 			switch($day){
 				case 3:

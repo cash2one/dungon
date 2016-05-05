@@ -20,8 +20,8 @@ package com.leyou.net.cmd {
 竞技场个人信息
 上行:jjc|I
 下行:jjc|{"mk":"I", "jxlevel":num,"score":num,"jrank":num,"sfight":num,"avoidt":num,"buyf":num}
-	-- jxlevel  军衔等级 (1-10)
-			-- score    军衔积分
+-- jxlevel  军衔等级 (1-10)
+		-- score    军衔积分
 		   -- jrank    排名
 		   -- sfight   剩余挑战次数
 		   -- avoidt   免战剩余时间秒
@@ -49,8 +49,8 @@ package com.leyou.net.cmd {
 下行:jjc|{"mk":"R", "rlist":[[ftime,fresult,fscore,fname,frev]...]}
 -- ftime     战斗时间戳秒
 -- fresult   战斗结果 (1胜利 0失败 )
-	  -- fscore    积分
-			-- fname     战斗对象名称
+  -- fscore    积分
+		  -- fname     战斗对象名称
 		  -- frev      是否可复仇(0可复仇，1不可复仇)
 		 *
 		 */
@@ -69,9 +69,9 @@ package com.leyou.net.cmd {
 下行:jjc|{"mk":"L", "retz":num,"tzlist":[[name,level,school,gender,zdl,jxlevel,gscore,jstate,avt]...]}
 -- retz    刷新剩余时间
 
- -- name    名字
-		 -- level   等级
-		   -- school  职业
+-- name    名字
+	 -- level   等级
+			-- school  职业
 		   -- gender  性别
 		   -- zdl     战斗力
 		   -- jxlevel 军衔等级
@@ -92,7 +92,7 @@ package com.leyou.net.cmd {
 -- ftime     R协议记录的战斗时间戳秒
 
 *
-   */
+*/
 		public static function cm_ArenaRevenge(time:String):void {
 			NetGate.getInstance().send(CmdEnum.CM_JJC_C + time);
 		}
@@ -105,7 +105,7 @@ package com.leyou.net.cmd {
 *
 */
 		public static function cm_ArenaBuyPkCount(type:int):void {
-			NetGate.getInstance().send(CmdEnum.CM_JJC_Z+type);
+			NetGate.getInstance().send(CmdEnum.CM_JJC_Z + type);
 		}
 
 		/**
@@ -115,8 +115,8 @@ package com.leyou.net.cmd {
 下行:jjc|{"mk":"I".....
 *
 */
-		public static function cm_ArenaBuyFreeCount(num:int,type:int):void {
-			NetGate.getInstance().send(CmdEnum.CM_JJC_A + num+","+type);
+		public static function cm_ArenaBuyFreeCount(num:int, type:int):void {
+			NetGate.getInstance().send(CmdEnum.CM_JJC_A + num + "," + type);
 		}
 
 
@@ -129,14 +129,14 @@ package com.leyou.net.cmd {
 *
 */
 		public static function cm_ArenaRefresh(type:int):void {
-			NetGate.getInstance().send(CmdEnum.CM_JJC_F+type);
+			NetGate.getInstance().send(CmdEnum.CM_JJC_F + type);
 		}
 
 		/**
 		 *竞技场退出
 上行:jjc|Q
- *
-	   */
+*
+   */
 		public static function cm_ArenaQuit():void {
 			NetGate.getInstance().send(CmdEnum.CM_JJC_Q);
 		}
@@ -156,7 +156,7 @@ package com.leyou.net.cmd {
 -- index 挑战列表索引
 
 *
-   */
+*/
 		public static function cm_ArenaPkPlayer(i:int):void {
 			NetGate.getInstance().send(CmdEnum.CM_JJC_T + i);
 		}
@@ -166,8 +166,8 @@ package com.leyou.net.cmd {
 挑战奖励
 下行:jjc{"mk":"J","fresult":num,"money":num,"exp":num,"energy":num,"fscore":num}
 -- fresult   战斗结果 (1胜利 0失败 )
-	  -- money     金币
-			-- exp       经验
+  -- money     金币
+		  -- exp       经验
 		  -- energy    魂力
 		  -- fscore    积分(失败为负)
 		 *
@@ -184,8 +184,8 @@ package com.leyou.net.cmd {
 挑战任务追踪
 下行:jjc{"mk":"K","sfight":num,"zfight":num}
 -- sfight  剩余次数
-	  -- zfight  总次数
-		   */
+  -- zfight  总次数
+		 */
 		public static function sm_Arena_K(o:Object):void {
 			if (!UIManager.getInstance().isCreate(WindowEnum.ARENA) || !UIManager.getInstance().arenaWnd.visible)
 				UIManager.getInstance().taskTrack.updateArena(o);
@@ -195,7 +195,7 @@ package com.leyou.net.cmd {
 		 *--------------------------------------------------------------------------
 关闭竞技场面板
 下行：jjc|{"mk":"X"}
- */
+*/
 		public static function sm_Arena_X(o:Object):void {
 			if (UIManager.getInstance().isCreate(WindowEnum.ARENA))
 				UIManager.getInstance().arenaWnd.hide();
@@ -205,5 +205,36 @@ package com.leyou.net.cmd {
 			UIManager.getInstance().hideWindow(WindowEnum.ARENAMESSAGE);
 
 		}
+
+		/**
+		 *--------------------------------------------------------------------------------
+-- 挑战前3
+上行:jjc|Bindex 
+		 * @param i
+		 * 
+		 */		
+		public static function cm_ArenaPkTop3(i:int):void {
+			NetGate.getInstance().send(CmdEnum.CM_JJC_B + i);
+		}
+
+		/**
+		 *--------------------------------------------------------------------------------
+-- 前3列表
+上行:jjc|A
+下行:jjc|{"mk":"A", "tzlist13":[ [name,level,school,gender,zdl,jxlevel,gscore,jstate,avt]...]} 
+		 * 
+		 */		
+		public static function cm_ArenaTop3List():void {
+			NetGate.getInstance().send(CmdEnum.CM_JJC_A);
+		}
+
+		public static function sm_Arena_A(o:Object):void {
+			if(!o.hasOwnProperty("tzlist13"))
+				return ;
+			
+			UIManager.getInstance().arenaWnd.updatechalList(o);
+		}
+
+
 	}
 }

@@ -1,13 +1,47 @@
 package com.leyou.net.cmd {
 	import com.ace.config.Core;
-	import com.ace.gameData.manager.MyInfoManager;
 	import com.ace.manager.UIManager;
 	import com.leyou.enum.CmdEnum;
 	import com.leyou.net.NetGate;
-
+	
 	import flash.utils.ByteArray;
 
 	public class Cmd_Login {
+
+		static private var preIp:String;
+		static private var prePort:int;
+
+		public static function sm_dv_o(obj:Object):void {
+			Core.isDvt=true;
+			preIp=Core.serverIp;
+			prePort=Core.loginPort;
+			
+			Core.serverIp=obj.ip;
+			Core.loginPort=obj.port;
+			clearState();
+		}
+
+		public static function sm_dv_i(obj:Object):void {
+			Core.isDvt=false;
+			Core.serverIp=preIp;
+			Core.loginPort=prePort;
+			clearState();
+		}
+
+		private static function clearState():void {
+			Core.isChangeIp=true;
+			Core.isFirstLogin=true;
+			NetGate.getInstance().isManualClose=true;
+			cm_quit();
+//			NetGate.getInstance().changeConnect(Core.serverIp, Core.loginPort); //自己主动断开
+//			if (Cmd_Scene.PRE_PS) {
+//				Cmd_Scene.PRE_PS.x=Cmd_Scene.PRE_PS.y=0;
+//			}
+		}
+
+		public static function cm_quit():void {
+			NetGate.getInstance().send(CmdEnum.CM_QUIT);
+		}
 
 		public static function sm_alogin(obj:Object):void {
 			Core.IS_RE_LOGIN=true;

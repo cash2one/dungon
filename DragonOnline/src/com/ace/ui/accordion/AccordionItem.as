@@ -75,11 +75,11 @@ package com.ace.ui.accordion {
 			var res:String;
 			var gname:String;
 			if (this.isSecond) {
-				res="ui/alchemy/btn_2.png";
+				res="ui/alchemy/btn_2.jpg";
 				rect=new Rectangle(0, 0, 190, 75);
 				gname="accordion_tttt";
 			} else {
-				res="ui/other/button_type1.png";
+				res="ui/other/button_type1.jpg";
 				rect=new Rectangle(12, 26, 233, 22);
 				gname="accordion_ttt";
 			}

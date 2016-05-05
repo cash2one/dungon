@@ -13,15 +13,23 @@ package com.ace.config {
 	public class Core {
 		public static var stg:DragonOnline;
 		public static var serverIp:String="192.168.10.88";
-//				public static var serverIp:String="202.55.225.225";
-		public static var loginPort:int=9932;
+//		public static var serverIp:String="120.26.13.239";
+//		public static var serverIp:String="202.55.225.226";
+//				public static var serverIp:String="202.55.225.235";
+		public static var loginPort:int=9932;//简体
+//		public static var loginPort:int=9992;//繁体
+		public static var isFirstLogin:Boolean=true;
+		public static var isDvt:Boolean=false;
+		public static var isChangeIp:Boolean=false;	
+		
 
 		//		public static var serverName:String="S3";
 		public static var serverName:String="dev1";
 
 		public static var gameName:String="sog";
 		public static var userId:String;
-		static public var webId:String; //登陆字符串
+		public static var webId:String; //登陆字符串
+		public static var isWeiduan:Boolean=false;
 
 		public static var me:MyPlayer;
 		public static var pet:LivingModel;
@@ -39,6 +47,7 @@ package com.ace.config {
 		public static var URL_HELP:String; //帮助
 		public static var URL_BUG:String="http://bbs.360safe.com/forum.php?mod=post&action=newthread&fid=2457"; //问题提交
 		public static var URL_BBS:String="http://bbs.no2.cn/forumdisplay.php?fid=66"; //论坛
+		public static var URL_WEIDUAN:String="http://bbs.no2.cn/forumdisplay.php?fid=66"; //论坛
 		public static var IS_RE_LOGIN:Boolean=false; //重复登录
 
 		//		上行：tx|Iopenid,openkey,appid,sig,pf,pfkey,zoneid
@@ -52,14 +61,25 @@ package com.ace.config {
 		public static var TX_SANDBOX:Boolean;
 		public static var TX_VIPTIP:Boolean;
 
-		public static var KEYWORD_OPEN:Boolean=true;
+		public static var KEYWORD_OPEN:Boolean=false;
+		
 
 		private static var sf_arr:Array=["jl588", "987q", "10yi", "yiyimm", "cb007", "66lou"];
+		
+//		var flashvars = {};
+//		flashvars.url = location.href;
+//		flashvars.version="V1.5.45.51";
+//		flashvars.platform = "eNext";
+//		flashvars.ip = "202.55.225.226";
+//		flashvars.port = "9932";
+//		flashvars.strlgn = "lgn|Puserid=U381389023427,svrid=S6,fcm=1,timestamp=1441967736,sign=652a5344d379d2dd1b067ec7d770ae3e";
+//		flashvars.autoCreatTime = "0";
 
 		public static function setup(obj:Object):void {
 			if (obj.hasOwnProperty("version")) {
 				(!UIEnum.IS_USE_CDN) && (UIEnum.DATAROOT=obj.dataRoot);
 				UIEnum.VERSIONCM=obj.version;
+				UIEnum.MULTI_LAN=obj.language;
 				UIEnum.PLAT_FORM_ID=obj.platform;
 				if (!obj.hasOwnProperty("strlgn"))
 					return;
@@ -75,6 +95,7 @@ package com.ace.config {
 				Core.userId=Core.userId.split("Puserid=")[1];
 				Core.serverName=Core.webId.split(",")[1];
 				Core.serverName=Core.serverName.split("svrid=")[1];
+				Core.isWeiduan=StringUtil.intToBoolean(obj.weiduan);
 
 				Core.TX_OPENID=obj.openid;
 				Core.TX_OPENKEY=obj.openkey;
@@ -93,7 +114,9 @@ package com.ace.config {
 				//调试要登陆的服务器和ip
 				//				(!UIEnum.IS_USE_CDN) && UIEnum.DATAROOT="http://sogres.oss-cn-hangzhou.aliyuncs.com/webData/dragonResII/";
 				//				(!UIEnum.IS_USE_CDN) && (UIEnum.DATAROOT="http://192.168.10.106/webData/dragonResEn/");
-				(!UIEnum.IS_USE_CDN) && (UIEnum.DATAROOT="http://192.168.10.16/webData/dragonRes/");
+				(!UIEnum.IS_USE_CDN) && (UIEnum.DATAROOT="http://192.168.10.16/webData/dragonResCN/");
+//				(!UIEnum.IS_USE_CDN) && (UIEnum.DATAROOT="http://sogres3.leyou365.com/webData/dragonResCN/");
+//				(!UIEnum.IS_USE_CDN) && (UIEnum.DATAROOT="http://192.168.10.16/webData/dragonResTW/");
 					//				(!UIEnum.IS_USE_CDN) && (UIEnum.DATAROOT="http://sogres2.leyou365.com/webData/dragonResEn/");
 					//				(!UIEnum.IS_USE_CDN) && (UIEnum.DATAROOT="http://1251243446.cdn.myqcloud.com/1251243446/sogres/webData/dragonResEn/");
 					//				(!UIEnum.IS_USE_CDN) && (UIEnum.DATAROOT="http://192.168.10.106/webData/dragonResEn/");
@@ -103,10 +126,10 @@ package com.ace.config {
 			}
 
 			//
-			//			var key:String;
-			//			for (key in obj) {
-			//				trace(((("属性值：" + key) + "=") + obj[key]));
-			//			}
+						var key:String;
+						for (key in obj) {
+							trace(((("属性值：" + key) + "=") + obj[key]));
+						}
 		}
 
 		static public function initRes(obj:Object):void {
@@ -129,6 +152,7 @@ package com.ace.config {
 				Core.URL_REGISTER=obj.resUrl;
 				Core.URL_BBS=obj.bbsUrl;
 				Core.URL_PAY=obj.payUrl;
+				Core.URL_WEIDUAN=obj.weiDuanUrl;
 				return;
 			}
 
@@ -177,6 +201,10 @@ package com.ace.config {
 
 		static public function get isSF2():Boolean {
 			return (UIEnum.PLAT_FORM_ID == PlatformEnum.ID_SF2);
+		}
+		
+		static public function get isTaiwan():Boolean{
+			return (UIEnum.MULTI_LAN == PlatformEnum.LAN_TW);
 		}
 
 		static public function resetLogin():void {

@@ -25,25 +25,29 @@ package com.leyou.ui.guild.child {
 	import com.leyou.net.cmd.Cmd_Guild;
 	import com.leyou.net.cmd.Cmd_Tm;
 	import com.leyou.utils.PropUtils;
-	
+
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	import flash.system.System;
 
 	public class GuildMember extends AutoSprite implements IMenu {
 
+		private var namesortBtn:ImgLabelButton;
 		private var lvsortBtn:ImgLabelButton;
 		private var prosortBtn:ImgLabelButton;
 		private var contribut1sortBtn:ImgLabelButton;
 		private var contribut2sortBtn:ImgLabelButton;
 		private var officesortBtn:ImgLabelButton;
+		private var lastTimesortBtn:ImgLabelButton;
 
 		private var itemList:ScrollPane;
 
+		private var impeachBtn:NormalButton;
 		private var addMemBtn:NormalButton;
 		private var exitBtn:NormalButton;
 		private var priceBtn:NormalButton;
 		private var onlineCb:CheckBox;
+		private var autoAccCb:CheckBox;
 
 		private var arrowImg:Vector.<Image>;
 		private var memberVec:Vector.<GuildMemberBar>;
@@ -53,7 +57,7 @@ package com.leyou.ui.guild.child {
 
 		private var datalist:Array=[];
 
-		private var BtnState:Array=[false, false, false, false, false];
+		private var BtnState:Array=[false, false, false, false, false, false, false];
 		private var BtnIndex:int=-1;
 
 		private var wnd:SimpleWindow;
@@ -69,18 +73,22 @@ package com.leyou.ui.guild.child {
 
 		private function init():void {
 
+			this.namesortBtn=this.getUIbyID("namesortBtn") as ImgLabelButton;
 			this.lvsortBtn=this.getUIbyID("lvsortBtn") as ImgLabelButton;
 			this.prosortBtn=this.getUIbyID("prosortBtn") as ImgLabelButton;
 			this.contribut1sortBtn=this.getUIbyID("contribut1sortBtn") as ImgLabelButton;
 			this.contribut2sortBtn=this.getUIbyID("contribut2sortBtn") as ImgLabelButton;
 			this.officesortBtn=this.getUIbyID("officesortBtn") as ImgLabelButton;
+			this.lastTimesortBtn=this.getUIbyID("lastTimesortBtn") as ImgLabelButton;
 
 			this.itemList=this.getUIbyID("itemList") as ScrollPane;
 
+			this.impeachBtn=this.getUIbyID("impeachBtn") as NormalButton;
 			this.addMemBtn=this.getUIbyID("addMemBtn") as NormalButton;
 			this.exitBtn=this.getUIbyID("exitBtn") as NormalButton;
 			this.priceBtn=this.getUIbyID("priceBtn") as NormalButton;
 			this.onlineCb=this.getUIbyID("onlineCb") as CheckBox;
+			this.autoAccCb=this.getUIbyID("autoAccCb") as CheckBox;
 			this.onlineCb.turnOn();
 
 			this.itemList.addEventListener(MouseEvent.CLICK, onItemClick);
@@ -88,25 +96,31 @@ package com.leyou.ui.guild.child {
 			this.itemList.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
 			this.itemList.addEventListener(MouseEvent.MOUSE_WHEEL, onWheel);
 
+			this.impeachBtn.addEventListener(MouseEvent.CLICK, onClick);
 			this.addMemBtn.addEventListener(MouseEvent.CLICK, onClick);
 			this.exitBtn.addEventListener(MouseEvent.CLICK, onClick);
 			this.onlineCb.addEventListener(MouseEvent.CLICK, onClick);
 			this.priceBtn.addEventListener(MouseEvent.CLICK, onClick);
+			this.autoAccCb.addEventListener(MouseEvent.CLICK, onClick);
 
+			this.namesortBtn.addEventListener(MouseEvent.CLICK, onSortClick);
 			this.lvsortBtn.addEventListener(MouseEvent.CLICK, onSortClick);
 			this.prosortBtn.addEventListener(MouseEvent.CLICK, onSortClick);
 			this.contribut1sortBtn.addEventListener(MouseEvent.CLICK, onSortClick);
 			this.contribut2sortBtn.addEventListener(MouseEvent.CLICK, onSortClick);
 			this.officesortBtn.addEventListener(MouseEvent.CLICK, onSortClick);
+			this.lastTimesortBtn.addEventListener(MouseEvent.CLICK, onSortClick);
 
 			this.memberVec=new Vector.<GuildMemberBar>();
 			this.arrowImg=new Vector.<Image>();
 
+			this.arrowImg.push(this.getUIbyID("arrowName") as Image);
 			this.arrowImg.push(this.getUIbyID("arrowLv") as Image);
 			this.arrowImg.push(this.getUIbyID("arrowPro") as Image);
 			this.arrowImg.push(this.getUIbyID("arrowDon") as Image);
 			this.arrowImg.push(this.getUIbyID("arrowCon") as Image);
 			this.arrowImg.push(this.getUIbyID("arrowJob") as Image);
+			this.arrowImg.push(this.getUIbyID("arrowLastTime") as Image);
 
 			this.y+=5;
 			this.x=-14;
@@ -153,6 +167,12 @@ package com.leyou.ui.guild.child {
 					break;
 				case "priceBtn":
 					UIManager.getInstance().guildWnd.guildPowManager.show();
+					break;
+				case "autoAccCb":
+					Cmd_Guild.cm_GuildApplySet(this.autoAccCb.isOn ? 1 : 0);
+					break;
+				case "impeachBtn":
+					Cmd_Guild.cm_GuildImpeachBoss();
 					break;
 			}
 
@@ -205,9 +225,9 @@ package com.leyou.ui.guild.child {
 			});
 
 			if (!this.onlineCb.isOn)
-				this.updateList(tmp.sortOn("" + (BtnIndex + 1), (BtnState[BtnIndex] ? (Array.DESCENDING | Array.NUMERIC) : (Array.CASEINSENSITIVE | Array.NUMERIC))));
+				this.updateList(tmp.sortOn("" + (BtnIndex), (BtnState[BtnIndex] ? (Array.DESCENDING | Array.NUMERIC) : (Array.CASEINSENSITIVE | Array.NUMERIC))));
 			else {
-				this.updateList(this.datalist.sortOn("" + (BtnIndex + 1), (BtnState[BtnIndex] ? (Array.DESCENDING | Array.NUMERIC) : (Array.CASEINSENSITIVE | Array.NUMERIC))));
+				this.updateList(this.datalist.sortOn("" + (BtnIndex), (BtnState[BtnIndex] ? (Array.DESCENDING | Array.NUMERIC) : (Array.CASEINSENSITIVE | Array.NUMERIC))));
 			}
 
 		}
@@ -220,31 +240,39 @@ package com.leyou.ui.guild.child {
 		private function onSortClick(e:MouseEvent):void {
 
 			switch (e.target.name) {
-				case "lvsortBtn":
+				case "namesortBtn":
 					BtnIndex=0;
 					break;
-				case "prosortBtn":
+				case "lvsortBtn":
 					BtnIndex=1;
 					break;
-				case "contribut1sortBtn":
+				case "prosortBtn":
 					BtnIndex=2;
 					break;
-				case "contribut2sortBtn":
+				case "contribut1sortBtn":
 					BtnIndex=3;
 					break;
-				case "officesortBtn":
+				case "contribut2sortBtn":
 					BtnIndex=4;
+					break;
+				case "officesortBtn":
+					BtnIndex=5;
+					break;
+				case "lastTimesortBtn":
+					BtnIndex=6;
 					break;
 			}
 
 			BtnState[BtnIndex]=!BtnState[BtnIndex];
 			this.onLineMem();
 
+			this.namesortBtn.turnOff();
 			this.lvsortBtn.turnOff();
 			this.prosortBtn.turnOff();
 			this.contribut1sortBtn.turnOff();
 			this.contribut2sortBtn.turnOff();
 			this.officesortBtn.turnOff();
+			this.lastTimesortBtn.turnOff();
 
 			ImgLabelButton(e.target).turnOn(false);
 
@@ -339,7 +367,7 @@ package com.leyou.ui.guild.child {
 
 				if (UIManager.getInstance().guildWnd.memberPrice[GuildEnum.ADMINI_PRICE_KILL_PEOPLE] == 1)
 					menuVec.push(new MenuInfo(PropUtils.getStringById(1736), 8));
-				
+
 				menuVec.push(new MenuInfo(PropUtils.getStringById(2242), 12));
 
 				var p:Point=new Point(e.stageX - 30, e.stageY);
@@ -469,9 +497,13 @@ package com.leyou.ui.guild.child {
 			if (UIManager.getInstance().guildWnd.memberJob == GuildEnum.ADMINI_1) {
 //				this.exitBtn.visible=false;
 				this.priceBtn.visible=true;
+				this.autoAccCb.visible=true;
+				this.impeachBtn.visible=false;
 			} else {
 //				this.exitBtn.visible=true;
 				this.priceBtn.visible=false;
+				this.autoAccCb.visible=false;
+				this.impeachBtn.visible=true;
 			}
 
 //			var mo:Object=UIManager.getInstance().guildWnd.memberPrice;
@@ -483,6 +515,12 @@ package com.leyou.ui.guild.child {
 				this.addMemBtn.visible=false;
 		}
 
+		public function setAutoAccCb(u:int):void {
+			if (u == 1)
+				this.autoAccCb.turnOn();
+			else
+				this.autoAccCb.turnOff();
+		}
 
 		private function getDataByName(n:String):int {
 

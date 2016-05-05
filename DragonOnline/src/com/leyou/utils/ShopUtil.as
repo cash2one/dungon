@@ -53,6 +53,12 @@ package com.leyou.utils {
 					case 7:
 						return UIManager.getInstance().backpackWnd.jl;
 						break;
+					case 8:
+						return UIManager.getInstance().backpackWnd.gx;
+						break;
+					case 9:
+						return UIManager.getInstance().backpackWnd.lh;
+						break;
 				}
 			}
 

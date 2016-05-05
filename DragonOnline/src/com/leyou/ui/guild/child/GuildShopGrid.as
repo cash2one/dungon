@@ -6,7 +6,7 @@ package com.leyou.ui.guild.child {
 	import com.ace.manager.LibManager;
 	import com.ace.manager.ToolTipManager;
 	import com.leyou.data.tips.TipsInfo;
-	
+
 	import flash.display.Shape;
 	import flash.geom.Point;
 
@@ -29,6 +29,7 @@ package com.leyou.ui.guild.child {
 			this.bgBmp.bitmapData=LibManager.getInstance().getImg("ui/backpack/bg.png");
 //			this.iconBmp.bitmapData=LibManager.getInstance().getImg("ui/backpack/lock.png");
 			this.selectBmp.bitmapData=LibManager.getInstance().getImg("ui/backpack/select.png");
+			this.setSize(38, 38);
 
 			this.selectBmp.x=this.bgBmp.width - this.selectBmp.width >> 1;
 			this.selectBmp.y=this.bgBmp.height - this.selectBmp.height >> 1;
@@ -44,21 +45,21 @@ package com.leyou.ui.guild.child {
 			this.remask.alpha=.6;
 
 //			this.dataId=-1;
-			
+
 			this.tipsinfo=new TipsInfo();
 
-			this.setSize(38, 38);
+
 		}
 
 		override public function updataInfo(info:Object):void {
 			super.reset();
 			super.unlocking();
- 
+
 			if (info == null)
 				return;
-			
+
 			this.tipsinfo.itemid=info.id;
-			
+
 			super.updataInfo(info);
 
 			this.iconBmp.updateBmp("ico/items/" + info.icon + ".png");
@@ -66,7 +67,7 @@ package com.leyou.ui.guild.child {
 			this.iconBmp.x=this.iconBmp.y=(this.bgBmp.width - this.iconBmp.width) / 2;
 
 			if (info.effect != null && info.effect != "0")
-				this.playeMc(int(info.effect),new Point(-2,-1));
+				this.playeMc(int(info.effect), new Point(-2, -1));
 		}
 
 		public function setSize(w:Number, h:Number):void {
@@ -89,13 +90,13 @@ package com.leyou.ui.guild.child {
 			super.mouseOutHandler();
 
 		}
-		
-		override public function mouseOverHandler($x:Number, $y:Number):void{
-			super.mouseOverHandler($x,$y);
-			
-			if(this.isEmpty)
-				return ;
-			
+
+		override public function mouseOverHandler($x:Number, $y:Number):void {
+			super.mouseOverHandler($x, $y);
+
+			if (this.isEmpty)
+				return;
+
 		}
 
 		public function set hight(v:Boolean):void {

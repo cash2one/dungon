@@ -71,7 +71,7 @@ package com.leyou.ui.friend.child {
 		private function init():void {
 			
 			var rect:Rectangle=new Rectangle(12, 26, 233, 22);
-			_lb=new LabelButton(LibManager.getInstance().getImg("ui/other/button_type1.png"), rect, _w, _titleH, "accordion_ttt", true);
+			_lb=new LabelButton(LibManager.getInstance().getImg("ui/other/button_type1.jpg"), rect, _w, _titleH, "accordion_ttt", true);
 			this.addChild(_lb);
 			
 			_continer=new Sprite();

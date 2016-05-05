@@ -16,6 +16,7 @@ package com.leyou.ui.backpack {
 	import com.ace.manager.UILayoutManager;
 	import com.ace.manager.UIManager;
 	import com.ace.ui.map.MapWnd;
+	import com.greensock.TweenLite;
 	import com.leyou.enum.ConfigEnum;
 	import com.leyou.manager.PopupManager;
 	import com.leyou.net.cmd.Cmd_Bag;
@@ -52,7 +53,7 @@ package com.leyou.ui.backpack {
 
 				UIManager.getInstance().arenaWnd.setQuitBtnVisible(true);
 //				Core.me.info.isActLocked=true;
-				Cmd_Mount.cmMouUpOrDown();
+				TweenLite.delayedCall(0.6, Cmd_Mount.cmMouUpOrDown);
 				SceneKeyManager.getInstance().sceneInput(false);
 				if (Core.me != null)
 					Core.me.onAutoMonster();
@@ -69,12 +70,12 @@ package com.leyou.ui.backpack {
 				UIManager.getInstance().smallMapWnd.switchToType(2);
 				UIManager.getInstance().rightTopWnd.hideBar(1);
 				MapWnd.getInstance().hideSwitch();
-				
+
 				UIManager.getInstance().taskTrack.hide();
 				UIManager.getInstance().hideWindow(WindowEnum.PKCOPY);
 				UIManager.getInstance().hideWindow(WindowEnum.PKCOPYPANEL);
-				
-				Cmd_Mount.cmMouUpOrDown();
+
+				TweenLite.delayedCall(0.6, Cmd_Mount.cmMouUpOrDown);
 				if (Core.me != null)
 					Core.me.onAutoMonster();
 			}
@@ -97,6 +98,10 @@ package com.leyou.ui.backpack {
 
 			this.updateItemCount();
 
+			if (!UIManager.getInstance().sellExpEffect.visible) {
+				UIManager.getInstance().showWindow(WindowEnum.SELLEXPEFFECT);
+				UILayoutManager.getInstance().composingWnd(WindowEnum.BACKPACK);
+			}
 		}
 
 		override public function refresh():void {
@@ -108,11 +113,28 @@ package com.leyou.ui.backpack {
 			this.dataModel=parameters;
 			Cmd_Bag.cm_bagData();
 			Cmd_Bag.cm_bagOpenGrid();
-			 
+
+		}
+
+		override public function onWndMouseMove($x:Number, $y:Number):void {
+			super.onWndMouseMove($x, $y);
+
+			var _w:Number=396;
+
+			if (UIManager.getInstance().sellExpEffect.visible) {
+
+				if (this.x + _w + 3 + UIManager.getInstance().sellExpEffect.width > UIEnum.WIDTH)
+					this.x=UIEnum.WIDTH - UIManager.getInstance().sellExpEffect.width - 3 - _w;
+
+				UIManager.getInstance().sellExpEffect.x=this.x + _w; // + UILayoutManager.SPACE_X;
+				UIManager.getInstance().sellExpEffect.y=this.y; // + UILayoutManager.SPACE_Y;
+			}
 		}
 
 		override public function hide():void {
 			super.hide();
+
+			UIManager.getInstance().hideWindow(WindowEnum.SELLEXPEFFECT);
 
 			if (!UIManager.getInstance().isCreate(WindowEnum.STOREGE))
 				UIManager.getInstance().creatWindow(WindowEnum.STOREGE);
@@ -161,7 +183,7 @@ package com.leyou.ui.backpack {
 						GuideManager.getInstance().showGuide(89, UIManager.getInstance().mountLvUpwnd.autoUpBtn);
 						break;
 				}
- 
+
 			}
 
 		}
@@ -194,7 +216,7 @@ package com.leyou.ui.backpack {
 				UIManager.getInstance().creatWindow(WindowEnum.LUCKDRAW);
 
 			if (num >= TableManager.getInstance().getGuideInfo(97).act_con) {
-				GuideManager.getInstance().showGuides([97, 98], [UIManager.getInstance().rightTopWnd.getWidget("lotteryBtn"), UIManager.getInstance().luckDrawWnd.getUIbyID("pLotteryBtn")]);
+				GuideManager.getInstance().showGuides([97, 98], [UIManager.getInstance().rightTopWnd.getWidget("lotteryBtn"), UIManager.getInstance().luckDrawWnd.getUIbyID("lotteryBtn")]);
 			}
 		}
 
@@ -210,6 +232,15 @@ package com.leyou.ui.backpack {
 			else
 				UILayoutManager.getInstance().composingWnd(WindowEnum.BACKPACK);
 
+		}
+
+
+		override public function get height():Number {
+			return 544;
+		}
+
+		override public function get width():Number {
+			return 396;
 		}
 
 	}

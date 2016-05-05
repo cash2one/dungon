@@ -1,9 +1,12 @@
 package com.leyou.ui.badge.child {
 
 	import com.ace.enum.PlayerEnum;
+	import com.ace.enum.WindowEnum;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.table.TBloodBase;
 	import com.ace.loader.child.SwfLoader;
+	import com.ace.manager.GuideArrowDirectManager;
+	import com.ace.manager.GuideDirectManager;
 	import com.ace.manager.GuideManager;
 	import com.ace.manager.LayerManager;
 	import com.ace.manager.LibManager;
@@ -11,6 +14,7 @@ package com.leyou.ui.badge.child {
 	import com.ace.ui.auto.AutoSprite;
 	import com.ace.ui.auto.AutoWindow;
 	import com.ace.ui.button.SwitchButton;
+	import com.ace.ui.button.children.ImgButton;
 	import com.ace.ui.button.children.ImgLabelButton;
 	import com.ace.ui.img.child.Image;
 	import com.ace.ui.lable.Label;
@@ -30,7 +34,8 @@ package com.leyou.ui.badge.child {
 	import com.leyou.ui.tips.TipsBadgeWnd2;
 	import com.leyou.ui.tips.TipsBadgeWnd3;
 	import com.leyou.utils.FilterUtil;
-
+	import com.leyou.utils.PropUtils;
+	
 	import flash.display.DisplayObject;
 	import flash.display.MovieClip;
 	import flash.display.SimpleButton;
@@ -72,6 +77,9 @@ package com.leyou.ui.badge.child {
 		 */
 		private var effectSucc:SwfLoader;
 
+		private var propArr:Array=[];
+		private var effArr:Array=[];
+
 		public function BadgeBg01() {
 			super(LibManager.getInstance().getXML("config/ui/badge/badgeBg01.xml"));
 			this.init();
@@ -93,6 +101,36 @@ package com.leyou.ui.badge.child {
 			this.smLbl=this.getUIbyID("smLbl") as Label;
 //			this.flLbl=this.getUIbyID("flLbl") as Label;
 
+			/**
+			 * 1	生命上限
+			2	法力上限
+			3	精力上限
+			4	物理攻击
+			5	物理防御
+			6	法术攻击
+			7	法术防御
+			8	暴击
+			9	韧性
+			10	命中
+			11	闪避
+			12	必杀
+			13	守护
+			14	技能附加额外最小伤害
+			15	技能附加额外最大伤害
+			16	pk值
+			17	祝福
+			18	幸运
+			19	财运
+			20	经验
+			21	移动速度
+			22	生命
+			23	法力
+			24	精力
+			25	职业
+			26	元素
+			 */
+			this.propArr=["", smLbl, "", "", wgLbl, wfLbl, "", "", bjLbl, sxLbl, mzLbl, spLbl, bsLbl, shLbl];
+
 			this.imgBg=this.getUIbyID("imgBg") as Image;
 
 			this.pointBtnArr=new Vector.<MovieClip>();
@@ -104,6 +142,7 @@ package com.leyou.ui.badge.child {
 			for (var i:int=0; i < 10; i++) {
 
 				ibtn=ClassUtil.getCls("ui.effect.btn_badge") as MovieClip;
+//				ibtn=new ImgButton("ui/badge/badge_point.png");
 				ibtn.gotoAndStop(4);
 				ibtn.mouseChildren=false;
 
@@ -122,7 +161,7 @@ package com.leyou.ui.badge.child {
 			this.tipsb=new TipsBadge();
 			lvinfoXml=<data/>;
 
-			this.effectSucc=new SwfLoader(99966,null, false);
+			this.effectSucc=new SwfLoader(99966, null, false);
 			this.addChild(this.effectSucc);
 
 			this.effectSucc.visible=false;
@@ -131,7 +170,7 @@ package com.leyou.ui.badge.child {
 		/**
 		 * @param o
 		 */
-		public function updateData(index:int):void {
+		public function updateData(index:int, wt:Object=null):void {
 
 			//10个点
 			if (this.index != index) {
@@ -140,7 +179,7 @@ package com.leyou.ui.badge.child {
 //				for (var k:int=0; k < 10; k++)
 //					TweenMax.killChildTweensOf(this.pointBtnArr[k]);
 
-				this.updatePoint(index);
+				this.updatePoint(index, false);
 			}
 
 			lvinfoXml=<data/>;
@@ -207,6 +246,13 @@ package com.leyou.ui.badge.child {
 				this.smLbl.text=int(info.extraHP) + "";
 //				this.flLbl.text=int(info.extraMP) + "";
 
+
+				var str:String;
+				for (str in wt) {
+					this.propArr[int(str)].text="" + int(int(this.propArr[int(str)].text) + int(wt[str][0]));
+				}
+
+
 			} else {
 
 				this.wgLbl.text="0";
@@ -232,31 +278,46 @@ package com.leyou.ui.badge.child {
 
 		}
 
-		private function updatePoint(index:int, effect:Boolean=false):void {
+		private function updatePoint(index:int, effect:Boolean=true, onlayDraw:Boolean=false):void {
+			var i:int=0;
+			if (!onlayDraw && !effect) {
+//				TweenMax.killAll(true, true);
+				
+				for (i=0; i < 10; i++) {
+//					effArr[i]=
+//					trace(TweenMax.isTweening(this.pointBtnArr[i]));
+					TweenMax.killChildTweensOf(this.pointBtnArr[i].parent);
+				}
+				
+				effArr.length=0;
+			}
+			
 			var xml:XML=pointXML.bloodPoint[index - 1];
 
 			this.drawLine.graphics.clear();
 			this.drawLine.graphics.lineStyle(1, 0xf6d654);
 
 			var lv:int=UIManager.getInstance().badgeWnd.currentOpenPoint;
-			if (!effect) {
-//				TweenMax.killAll(true, true);
-			}
 
-			for (var i:int=0; i < 10; i++) {
+			for (i=0; i < 10; i++) {
 
-				if (!effect) {
-					var rx:Number=Number(xml.attribute("x" + (i + 1)));
-					var ry:Number=Number(xml.attribute("y" + (i + 1)));
+				var rx:Number=Number(xml.attribute("x" + (i + 1)));
+				var ry:Number=Number(xml.attribute("y" + (i + 1)));
 
-					TweenMax.to(this.pointBtnArr[i], 2, {overwrite: OverwriteManager.PREEXISTING, x: rx, y: ry, onUpdate: updatePoint, onUpdateParams: [this.index, true]});
+				if (!onlayDraw) {
+					if (effect) {
+						TweenMax.to(this.pointBtnArr[i], 2, {overwrite: OverwriteManager.ALL_IMMEDIATE, x: rx, y: ry, onUpdate: updatePoint, onUpdateParams: [this.index, false]});
+					} else {
+						this.pointBtnArr[i].x=rx;
+						this.pointBtnArr[i].y=ry;
+					}
 				}
 
 				if (i == 0)
-					this.drawLine.graphics.moveTo(this.pointBtnArr[i].x, this.pointBtnArr[i].y);
+					this.drawLine.graphics.moveTo(this.pointBtnArr[i].x + 26, this.pointBtnArr[i].y + 26);
 
 				if (i > 0)
-					this.drawLine.graphics.lineTo(this.pointBtnArr[i].x, this.pointBtnArr[i].y);
+					this.drawLine.graphics.lineTo(this.pointBtnArr[i].x + 26, this.pointBtnArr[i].y + 26);
 
 				if (this.index == int(lv / 100) && i > lv % 100 - 1) {
 
@@ -265,9 +326,13 @@ package com.leyou.ui.badge.child {
 					else
 						this.pointBtnArr[i].gotoAndStop(4);
 
+//					this.pointBtnArr[i].turnOff();
+//					this.pointBtnArr[i].filters=[FilterUtil.enablefilter];
 					this.drawLine.graphics.lineStyle(1, 0xcccccc);
 				} else {
 					this.pointBtnArr[i].gotoAndStop(3);
+//					this.pointBtnArr[i].turnOn();
+//					this.pointBtnArr[i].filters=[];
 				}
 
 			}
@@ -278,9 +343,9 @@ package com.leyou.ui.badge.child {
 		public function openNodeEffect():void {
 
 			this.effectSucc.visible=true;
-			
+
 //			if (this.effectSucc.isLoaded)
-				this.effectSucc.playAct(PlayerEnum.ACT_STAND, -1, false, onPlayerComplete);
+			this.effectSucc.playAct(PlayerEnum.ACT_STAND, -1, false, onPlayerComplete);
 
 			this.effectSucc.x=this.mouseX;
 			this.effectSucc.y=this.mouseY;
@@ -326,7 +391,7 @@ package com.leyou.ui.badge.child {
 						var ry:Number=int(xml.attribute("y" + (i + 1))) + Math.random() * 5 + Math.random() * -5 + dx;
 
 //						TweenMax.killChildTweensOf(this.pointBtnArr[i]);
-						TweenMax.to(this.pointBtnArr[i], 2, {overwrite: OverwriteManager.PREEXISTING, x: rx, y: ry, ease: Elastic.easeOut, onUpdate: updatePoint, onUpdateParams: [this.index, true]});
+						effArr.push(TweenMax.to(this.pointBtnArr[i], 2, {x: rx, y: ry, ease: Elastic.easeOut, onUpdate: updatePoint, onUpdateParams: [this.index, true,true]}));
 					}
 				}
 			}
@@ -337,6 +402,8 @@ package com.leyou.ui.badge.child {
 				state=1;
 
 				MovieClip(e.target).gotoAndStop(1);
+//				ImgButton(e.target).turnOff();
+//				ImgButton(e.target).filters=[];
 
 			} else if (index * 100 + p <= UIManager.getInstance().badgeWnd.currentOpenPoint) {
 				state=2;
@@ -358,9 +425,14 @@ package com.leyou.ui.badge.child {
 					MovieClip(e.target).gotoAndStop(1);
 				else
 					MovieClip(e.target).gotoAndStop(4);
-			} else
-				MovieClip(e.target).gotoAndStop(3);
 
+//				ImgButton(e.target).turnOff();
+//				ImgButton(e.target).filters=[FilterUtil.enablefilter];
+			} else {
+				MovieClip(e.target).gotoAndStop(3);
+//				ImgButton(e.target).turnOn();
+//				ImgButton(e.target).filters=[];
+			}
 		}
 
 		private function onBtnClick(e:MouseEvent):void {
@@ -371,6 +443,9 @@ package com.leyou.ui.badge.child {
 			if (targetP == UIManager.getInstance().badgeWnd.currentOpenPoint + 1) {
 				Cmd_Bld.cm_bldOpenToPoint(UIManager.getInstance().badgeWnd.currentOpenPoint + 1);
 				GuideManager.getInstance().removeGuide(14);
+
+				GuideArrowDirectManager.getInstance().delArrow(WindowEnum.BADAGE + "");
+
 			} else if (targetP > UIManager.getInstance().badgeWnd.currentOpenPoint + 1) {
 				//notice
 				NoticeManager.getInstance().broadcast(TableManager.getInstance().getSystemNotice(1510));
@@ -379,6 +454,9 @@ package com.leyou.ui.badge.child {
 			}
 		}
 
+		public function getPoint(i:int):DisplayObject {
+			return this.pointBtnArr[i];
+		}
 
 	}
 }

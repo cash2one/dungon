@@ -10,7 +10,7 @@ package com.leyou.ui.dungeonTeam.childs {
 	import com.ace.ui.button.children.NormalButton;
 	import com.ace.ui.scrollPane.children.ScrollPane;
 	import com.leyou.net.cmd.Cmd_CpTm;
-	
+
 	import flash.events.MouseEvent;
 
 	public class DungeonTeam1Team extends AutoSprite {
@@ -88,13 +88,13 @@ package com.leyou.ui.dungeonTeam.childs {
 			this.updateList(data1);
 		}
 
-		public function updateInfo(o:Object, my:Boolean, count:int,level:int):void {
+		public function updateInfo(o:Object, my:Boolean, count:int, level:int):void {
 
 			this.myTeam=my;
 			this.count=count;
 			this.level=level;
 
-			if (my || count <= 0 || Core.me.info.level<level) {
+			if (my || count <= 0 || Core.me.info.level < level) {
 				this.createBtn.visible=false;
 				this.enterBtn.visible=false;
 			} else {
@@ -122,10 +122,10 @@ package com.leyou.ui.dungeonTeam.childs {
 				this.itemList.addToPane(bar);
 				this.itemsList.push(bar);
 
-				bar.updateInfo(o[i], this.level,this.count);
+				bar.updateInfo(o[i], this.level, this.count);
 
-				bar.x=0;
-				bar.y=78 * i;
+				bar.x=14;
+				bar.y=89 * i;
 			}
 		}
 
@@ -139,7 +139,15 @@ package com.leyou.ui.dungeonTeam.childs {
 			return "";
 		}
 
-
+		public function setBtnState(v:Boolean):void {
+			if (v) {
+				this.createBtn.setActive(true, 1, true);
+				this.enterBtn.setActive(true, 1, true);
+			} else {
+				this.createBtn.setActive(false, 0.6, true);
+				this.enterBtn.setActive(false, 0.6, true);
+			}
+		}
 
 	}
 }

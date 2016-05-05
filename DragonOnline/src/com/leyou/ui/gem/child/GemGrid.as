@@ -5,21 +5,26 @@ package com.leyou.ui.gem.child {
 	import com.ace.enum.ItemEnum;
 	import com.ace.enum.TipEnum;
 	import com.ace.game.backpack.GridBase;
+	import com.ace.gameData.manager.MyInfoManager;
+	import com.ace.gameData.table.TAlchemy;
 	import com.ace.manager.LayerManager;
 	import com.ace.manager.LibManager;
 	import com.ace.manager.ToolTipManager;
 	import com.ace.manager.UIManager;
+	import com.ace.ui.img.child.Image;
 	import com.ace.ui.lable.Label;
 	import com.leyou.data.tips.TipsInfo;
 	import com.leyou.net.cmd.Cmd_Gem;
+	import com.leyou.utils.ColorUtil;
 	import com.leyou.utils.FilterUtil;
-
+	
 	import flash.geom.Point;
 
 	public class GemGrid extends GridBase {
 
 		private var tips:TipsInfo;
-
+		protected var intensifyLbl:Image
+		
 		public var selectIndex:int=-1;
 
 		public var gemGridList:Vector.<GemGrid>;
@@ -27,6 +32,8 @@ package com.leyou.ui.gem.child {
 		public var effectGlow:Function;
 
 		protected var numLbl:Label;
+
+		public var tinfo:TAlchemy;
 
 		public function GemGrid() {
 			super();
@@ -57,6 +64,11 @@ package com.leyou.ui.gem.child {
 			this.numLbl.defaultTextFormat=FontEnum.getTextFormat("White10right");
 			this.numLbl.filters=[FilterUtil.showBorder(0x000000)];
 
+			this.intensifyLbl=new Image();
+			this.addChild(this.intensifyLbl);
+			this.intensifyLbl.x=21;
+			this.intensifyLbl.y=1;
+			
 			this.doubleClickEnabled=true;
 //						this.opaqueBackground=0xff0000;
 		}
@@ -94,6 +106,8 @@ package com.leyou.ui.gem.child {
 		override protected function reset():void {
 			super.reset();
 			this.tips.itemid=0;
+			this.tips.qh=0;
+			this.intensifyLbl.fillEmptyBmd();
 		}
 
 		public function reseGrid():void {
@@ -136,8 +150,8 @@ package com.leyou.ui.gem.child {
 
 		public function setDaNum(num:String):void {
 			this.numLbl.text="" + num;
-			this.numLbl.x=60 - this.numLbl.textWidth-2;
-			this.numLbl.y=60 - this.numLbl.textHeight+2;
+			this.numLbl.x=60 - this.numLbl.textWidth - 2;
+			this.numLbl.y=60 - this.numLbl.textHeight + 2;
 		}
 
 		public function getItemID():int {
@@ -150,15 +164,55 @@ package com.leyou.ui.gem.child {
 			if (this.isEmpty)
 				return;
 
+ 
 
-			tips.isdiff=false;
+			var type:int=0;
+			if (this.tips.itemid >= 7000 && this.tips.itemid < 7100) {
+				type=TipEnum.TYPE_GEM_OTHER;
+			} else {
 
-			var type:int=TipEnum.TYPE_GEM_OTHER;
-			if (this.tips.itemid > 10000) {
-				type=TipEnum.TYPE_EQUIP_ITEM;
+				if (this.iconBmp.width == 60) {
+					type=TipEnum.TYPE_EMPTY_ITEM;
+					this.tips.qh=this.getBagItemStrengLv();
+				} else {
+
+					if (MyInfoManager.getInstance().getBagItemNumById(this.tips.itemid) > 0) {
+						type=TipEnum.TYPE_EQUIP_ITEM;
+						if (this.tips.itemid < 10000) {
+							var ttips:TipsInfo=MyInfoManager.getInstance().bagItems[MyInfoManager.getInstance().getBagItemStrengLvIdById(this.tips.itemid)].tips;
+							ttips.isdiff=false;
+							ttips.isShowPrice=true;
+							
+							ToolTipManager.getInstance().show(type, ttips, new Point(this.stage.mouseX + this.width, this.stage.mouseY + this.height));
+							return ;
+						}
+					} else {
+						type=TipEnum.TYPE_EMPTY_ITEM;
+					}
+
+				}
+
 			}
 
+			tips.isdiff=false;
+			tips.isShowPrice=true;
+
 			ToolTipManager.getInstance().show(type, tips, new Point(this.stage.mouseX + this.width, this.stage.mouseY + this.height));
+		}
+
+		private function getBagItemStrengLv():int {
+
+			var lv:int=0;
+			var tlv:int=0;
+			for (var i:int=0; i < 3; i++) {
+				if (tinfo["Datum" + (i + 1)] < 10000) {
+					tlv=MyInfoManager.getInstance().getBagItemStrengLvById(tinfo["Datum" + (i + 1)]);
+					if (lv < tlv)
+						lv=tlv;
+				}
+			}
+
+			return lv;
 		}
 
 		override public function mouseOutHandler():void {
@@ -213,6 +267,12 @@ package com.leyou.ui.gem.child {
 
 		}
 
+		public function setIntensify(s:String):void {
+			this.intensifyLbl.bitmapData=ColorUtil.getEquipBitmapDataByInt(s);
+			this.intensifyLbl.x=this.iconBmp.width - this.intensifyLbl.width - 3;
+			this.addChild(this.intensifyLbl)
+		}
+		
 		override public function mouseUpHandler($x:Number, $y:Number):void {
 
 			if (!this.doubleClickEnabled)

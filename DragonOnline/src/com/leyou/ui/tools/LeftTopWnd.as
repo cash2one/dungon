@@ -1,5 +1,6 @@
 package com.leyou.ui.tools
 {
+	import com.ace.enum.FilterEnum;
 	import com.ace.enum.WindowEnum;
 	import com.ace.gameData.manager.DataManager;
 	import com.ace.loader.child.SwfLoader;
@@ -107,6 +108,16 @@ package com.leyou.ui.tools
 		
 		public function activeLegendaryBtn():void{
 //			_legendaryBtn.visible = true;
+		}
+		
+		public function toAcrossServer():void{
+			_giftBtn.setActive(false, 1, true);
+			_giftSwf.filters = [FilterEnum.enable];
+		}
+		
+		public function toNormalServer():void{
+			_giftBtn.setActive(true, 1, true);
+			_giftSwf.filters = null;
 		}
 		
 		public function resize():void{

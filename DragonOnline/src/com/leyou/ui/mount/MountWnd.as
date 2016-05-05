@@ -1,6 +1,7 @@
 package com.leyou.ui.mount {
 
 	import com.ace.config.Core;
+	import com.ace.enum.PlayerEnum;
 	import com.ace.enum.TipEnum;
 	import com.ace.enum.WindowEnum;
 	import com.ace.game.scene.ui.effect.StarChangeEffect;
@@ -20,18 +21,18 @@ package com.leyou.ui.mount {
 	import com.ace.tools.ScaleBitmap;
 	import com.ace.ui.auto.AutoSprite;
 	import com.ace.ui.button.children.ImgButton;
-	import com.ace.ui.button.children.ImgLabelButton;
 	import com.ace.ui.button.children.NormalButton;
 	import com.ace.ui.component.RollNumWidget;
 	import com.ace.ui.img.child.Image;
 	import com.ace.ui.lable.Label;
 	import com.ace.utils.StringUtil;
+	import com.greensock.TweenLite;
 	import com.leyou.data.bag.Baginfo;
 	import com.leyou.data.tips.TipsInfo;
 	import com.leyou.enum.ConfigEnum;
 	import com.leyou.net.cmd.Cmd_Mount;
 	import com.leyou.ui.loading.LoadingRen;
-	import com.leyou.utils.PropUtils;
+	import com.leyou.utils.ItemUtil;
 
 	import flash.display.DisplayObject;
 	import flash.display.Sprite;
@@ -47,7 +48,7 @@ package com.leyou.ui.mount {
 		private var rightImgBtn:ImgButton;
 		private var leftImgBtn:ImgButton;
 
-		private var getOnMountBtn:ImgLabelButton;
+		private var getOnMountBtn:ImgButton;
 
 		private var fightKeyLbl:Label;
 		private var fightAddkeyLbl:Label;
@@ -80,6 +81,7 @@ package com.leyou.ui.mount {
 		private var arrow1Img:Image;
 		private var arrow2Img:Image;
 		private var tipImg:Image;
+		private var UpOrDownImg:Image;
 
 		private var effbg:SwfLoader;
 
@@ -108,6 +110,8 @@ package com.leyou.ui.mount {
 		 * 上一次的id
 		 */
 		private var pid:int;
+
+		private var upOrDown:int;
 
 		private var viewAddList:Array=[];
 		private var viewList:Array=[];
@@ -161,7 +165,7 @@ package com.leyou.ui.mount {
 			this.rightImgBtn=this.getUIbyID("rightImgBtn") as ImgButton;
 			this.leftImgBtn=this.getUIbyID("leftImgBtn") as ImgButton;
 
-			this.getOnMountBtn=this.getUIbyID("getOnMountBtn") as ImgLabelButton;
+			this.getOnMountBtn=this.getUIbyID("getOnMountBtn") as ImgButton;
 
 			this.fightKeyLbl=this.getUIbyID("fightKeyLbl") as Label;
 			this.fightAddkeyLbl=this.getUIbyID("fightAddkeyLbl") as Label;
@@ -195,20 +199,21 @@ package com.leyou.ui.mount {
 			this.arrow1Img=this.getUIbyID("arrow1Img") as Image;
 			this.arrow2Img=this.getUIbyID("arrow2Img") as Image;
 			this.tipImg=this.getUIbyID("tipImg") as Image;
+			this.UpOrDownImg=this.getUIbyID("UpOrDownImg") as Image;
 			this.effbg=this.getUIbyID("effbg") as SwfLoader;
 
 			this.lvprogress=this.getUIbyID("lvprogress") as ScaleBitmap;
 			this.lvLbl=this.getUIbyID("lvLbl") as Label;
 
-			this.effbg.scrollRect=new Rectangle(20, 145, 454, 446);
+//			this.effbg.scrollRect=new Rectangle(20, 145, 454, 446);
 
 			this.effectBg=new SwfLoader();
 			this.addChild(this.effectBg);
 			this.effectBg.mouseChildren=false;
 			this.effectBg.mouseEnabled=false;
 
-			this.effectBg.x=140;
-			this.effectBg.y=290;
+			this.effectBg.x=160;
+			this.effectBg.y=310;
 
 			this.mountNameImg=this.getUIbyID("mountNameImg") as Image;
 			this.jieImg=this.getUIbyID("jieImg") as Image;
@@ -247,26 +252,26 @@ package com.leyou.ui.mount {
 			this.equipItemArr[0]=new MountEquipGrid();
 			this.equipItemArr[0].dataId=13;
 			this.addChild(this.equipItemArr[0]);
-			this.equipItemArr[0].x=10;
-			this.equipItemArr[0].y=57;
+			this.equipItemArr[0].x=11;
+			this.equipItemArr[0].y=75;
 
 			this.equipItemArr[1]=new MountEquipGrid();
 			this.equipItemArr[1].dataId=14;
 			this.addChild(this.equipItemArr[1]);
-			this.equipItemArr[1].x=211;
-			this.equipItemArr[1].y=57;
+			this.equipItemArr[1].x=269;
+			this.equipItemArr[1].y=75;
 
 			this.equipItemArr[2]=new MountEquipGrid();
 			this.equipItemArr[2].dataId=15;
 			this.addChild(this.equipItemArr[2]);
-			this.equipItemArr[2].x=10;
-			this.equipItemArr[2].y=279;
+			this.equipItemArr[2].x=11;
+			this.equipItemArr[2].y=239;
 
 			this.equipItemArr[3]=new MountEquipGrid();
 			this.equipItemArr[3].dataId=16;
 			this.addChild(this.equipItemArr[3]);
-			this.equipItemArr[3].x=211;
-			this.equipItemArr[3].y=279;
+			this.equipItemArr[3].x=269;
+			this.equipItemArr[3].y=239;
 
 			this.equipItemArr[0].doubleClickEnabled=!otherPlaye;
 			this.equipItemArr[1].doubleClickEnabled=!otherPlaye;
@@ -293,6 +298,7 @@ package com.leyou.ui.mount {
 				this.domesticate.visible=false;
 				this.arrow1Img.visible=false;
 				this.arrow2Img.visible=false;
+				this.UpOrDownImg.visible=false;
 			}
 
 			this.setPropAddVisible(false);
@@ -322,10 +328,10 @@ package com.leyou.ui.mount {
 				}
 			}
 
-			this.starEffect=new StarChangeEffect(10, true);
+			this.starEffect=new StarChangeEffect(10, true, 200);
 			this.addChild(this.starEffect);
-			this.starEffect.x=35;
-			this.starEffect.y=3;
+			this.starEffect.x=-50;
+			this.starEffect.y=10;
 
 			this.swfTips=new Sprite();
 			this.swfTips.graphics.beginFill(0x000000);
@@ -343,8 +349,12 @@ package com.leyou.ui.mount {
 
 			this.figthEquipInfo=new TEquipInfo();
 
-			this.y=1;
-			this.x=-12;
+//			this.opaqueBackground=0xff0000;
+
+			this.scrollRect=new Rectangle(0, 0, 501, 444);
+
+			this.y=3;
+			this.x=3;
 		}
 
 		private function onTipsMouseOver(e:DisplayObject):void {
@@ -376,7 +386,7 @@ package com.leyou.ui.mount {
 					if (UIManager.getInstance().mountTradeWnd.isShow) {
 						UIManager.getInstance().mountTradeWnd.hide();
 					} else
-						UILayoutManager.getInstance().show(WindowEnum.ROLE, WindowEnum.MOUTTRADEUP, UILayoutManager.SPACE_X, UILayoutManager.SPACE_Y);
+						UILayoutManager.getInstance().show(WindowEnum.ROLE, WindowEnum.MOUTTRADEUP); //, UILayoutManager.SPACE_X, UILayoutManager.SPACE_Y);
 
 					break;
 				case "evolutionBtn":
@@ -387,8 +397,7 @@ package com.leyou.ui.mount {
 					if (UIManager.getInstance().mountLvUpwnd.isShow) {
 						UIManager.getInstance().mountLvUpwnd.hide();
 					} else
-						UILayoutManager.getInstance().show(WindowEnum.ROLE, WindowEnum.MOUTLVUP, UILayoutManager.SPACE_X, UILayoutManager.SPACE_Y);
-
+						UILayoutManager.getInstance().show(WindowEnum.ROLE, WindowEnum.MOUTLVUP); //, UILayoutManager.SPACE_X, UILayoutManager.SPACE_Y);
 
 					UIManager.getInstance().backpackWnd.setPlayGuideMountItem(3);
 					break;
@@ -422,8 +431,9 @@ package com.leyou.ui.mount {
 					this.setMountImg(jieNum);
 					break;
 				case "getOnMountBtn":
+					/*
 					Core.me.onMount(); //必须调用
-					if (this.getOnMountBtn.text.indexOf(PropUtils.getStringById(1808)) > -1)
+					if (this.nid == this.pid && this.pid != 0)
 						Cmd_Mount.cmMouUpOrDown();
 					else {
 
@@ -455,6 +465,11 @@ package com.leyou.ui.mount {
 //						}, 1);
 
 					}
+
+					*/
+
+					UILayoutManager.getInstance().show(WindowEnum.SHIYI);
+					TweenLite.delayedCall(0.6, UIManager.getInstance().shiyeWnd.setTabIndex, [2]);
 					break;
 			}
 
@@ -479,6 +494,12 @@ package com.leyou.ui.mount {
 					binfo.aid=o[i].id;
 
 					binfo.tips=new TipsInfo(o[i].tips);
+
+					if (binfo.aid < 10000) {
+						binfo.tips.zdl=ItemUtil.getZdl(binfo.tips);
+						binfo.tips.mzdl=ItemUtil.getMZdl(binfo.tips);
+					}
+
 					binfo.info=TableManager.getInstance().getEquipInfo(binfo.tips.itemid);
 
 					this.equipItemArr[i].updataInfo(binfo);
@@ -499,6 +520,12 @@ package com.leyou.ui.mount {
 					binfo.aid=o[i].id;
 
 					binfo.tips=new TipsInfo(o[i].tips);
+
+					if (binfo.aid < 10000) {
+						binfo.tips.zdl=ItemUtil.getZdl(binfo.tips);
+						binfo.tips.mzdl=ItemUtil.getMZdl(binfo.tips);
+					}
+
 					binfo.info=TableManager.getInstance().getEquipInfo(binfo.tips.itemid);
 					this.equipItemArr[i].updataInfo(binfo);
 
@@ -512,10 +539,13 @@ package com.leyou.ui.mount {
 		public function UpAndDownMount():void {
 			Core.me.onMount(); //必须调用
 			if (ConfigEnum.MountOpenLv <= Core.me.info.level) {
-				if (this.nid == this.pid && this.pid != 0)
-					Cmd_Mount.cmMouUpOrDown();
-				else {
+//				if (this.nid == this.pid && this.pid != 0) {
 
+				if (Core.me.info.isOnMount) {
+					Cmd_Mount.cmMouUpOrDown();
+//					UIManager.getInstance().toolsWnd.changeMountState(false);
+				} else {
+//					UIManager.getInstance().toolsWnd.changeMountState(true);
 //					var st:int=getTimer();
 //					if ((st - upToDownTime) < 5000) {
 //						return;
@@ -558,14 +588,14 @@ package com.leyou.ui.mount {
 			this.mountNameImg.bitmapData=this.mountNameImgArr[jie].bitmapData;
 			this.jieImg.bitmapData=this.jieImgArr[jie].bitmapData;
 
-			var pid:int=20500 + (jie + 1);
-
-			if ((jie + 1) == 10)
-				this.effectBg.update(pid);
-			else
-				this.effectBg.update(pid);
-
-			this.effectBg.mouseChildren=this.effectBg.mouseEnabled=false;
+//			var pid:int=20500 + (jie + 1);
+//
+//			if ((jie + 1) == 10)
+//				this.effectBg.update(pid);
+//			else
+//				this.effectBg.update(pid);
+//
+//			this.effectBg.mouseChildren=this.effectBg.mouseEnabled=false;
 
 			if ((jie + 1) == this.nid) {
 				this.changeMountBtnState(1)
@@ -597,8 +627,9 @@ package com.leyou.ui.mount {
 			if (o.hasOwnProperty("pid"))
 				this.pid=o.pid;
 
-			if (o.hasOwnProperty("rd"))
+			if (o.hasOwnProperty("rd")) {
 				this.changeMountBtnState(o.rd);
+			}
 
 			if (this.nid > this.lv) {
 				this.getOnMountBtn.setActive(false, .6, true);
@@ -632,10 +663,14 @@ package com.leyou.ui.mount {
 		public function changeMountBtnState(rd:int):void {
 
 			if (rd == 0) {
-				this.getOnMountBtn.text=PropUtils.getStringById(1810);
+//				this.getOnMountBtn.text=PropUtils.getStringById(1810);
+//				this.UpOrDownImg.updateBmp("ui/character/font_qc.png");
+				this.UpOrDownImg.updateBmp("ui/character/font_sy.png");
 				this.getOnMountBtn.setToolTip(TableManager.getInstance().getSystemNotice(1114).content);
 			} else {
-				this.getOnMountBtn.text=PropUtils.getStringById(1811);
+//				this.getOnMountBtn.text=PropUtils.getStringById(1811);
+//				this.UpOrDownImg.updateBmp("ui/character/font_xm.png");
+				this.UpOrDownImg.updateBmp("ui/character/font_sy.png");
 				this.getOnMountBtn.setToolTip(TableManager.getInstance().getSystemNotice(1115).content);
 			}
 
@@ -643,6 +678,8 @@ package com.leyou.ui.mount {
 		}
 
 		public function updateData(o:Object):void {
+
+			UIManager.getInstance().toolsWnd.changeMountState((o.rd == 1));
 
 			var upgrade:Boolean=false;
 
@@ -652,18 +689,26 @@ package com.leyou.ui.mount {
 
 				this.lv=o.el;
 				this.pageCount=this.lv;
+
+				this.jieNum=(o.el == 0 ? 0 : o.el - 1);
+				this.setMountImg(this.jieNum);
 			}
 
 			if (o.hasOwnProperty("nid")) {
 				this.nid=o.nid;
 
-				if (this.nid != 0) {
-					this.jieNum=(o.nid == 0 ? 0 : o.nid - 1);
-					this.setMountImg(this.jieNum);
-				} else {
-					this.jieNum=(o.el == 0 ? 0 : o.el - 1);
-					this.setMountImg(this.jieNum);
-				}
+//				if (this.nid != 0) {
+//					this.jieNum=(o.nid == 0 ? 0 : o.nid - 1);
+//					this.setMountImg(this.jieNum);
+//				} else {
+//					this.jieNum=(o.el == 0 ? 0 : o.el - 1);
+//					this.setMountImg(this.jieNum);
+//				}
+
+
+				this.effectBg.update(nid);
+				this.effectBg.playAct(PlayerEnum.ACT_STAND, PlayerEnum.DIR_S);
+				this.effectBg.mouseChildren=this.effectBg.mouseEnabled=false;
 
 			}
 
@@ -685,15 +730,15 @@ package com.leyou.ui.mount {
 //				}
 //			}
 
-			if (this.jieNum == 0) {
-				this.leftImgBtn.visible=false;
-			} else
-				this.leftImgBtn.visible=true;
+//			if (this.jieNum == 0) {
+			this.leftImgBtn.visible=false;
+//			} else
+//				this.leftImgBtn.visible=true;
 
-			if (this.jieNum == this.pageCount - 1) {
-				this.rightImgBtn.visible=false;
-			} else
-				this.rightImgBtn.visible=true;
+//			if (this.jieNum == this.pageCount - 1) {
+			this.rightImgBtn.visible=false;
+//			} else
+//				this.rightImgBtn.visible=true;
 
 //			var jt:int=this.jieNum;
 //			jt++;
@@ -725,7 +770,7 @@ package com.leyou.ui.mount {
 					else
 						this.rollPower.rollToNum(o.zdl);
 
-					this.rollPower.x=270 - this.rollPower.width >> 1;
+					this.rollPower.x=317 - this.rollPower.width >> 1;
 				}
 			}
 
@@ -767,7 +812,8 @@ package com.leyou.ui.mount {
 
 			if (o.dc.hasOwnProperty("4")) {
 //				this.phAttLbl.text="" + (this.getPropTradeValue(this.getPropValue(mountlv.p_attack, m1rate), o.dc[4].r) + this.getMountPropValue(4));
-				this.phAttLbl.text="" + (mountlv.p_attack + this.getMountPropValue(4));
+				this.phAttLbl.text="" + (this.getPropTradeValue(mountlv.p_attack, o.dc[4].r) + this.getMountPropValue(4));
+//				this.phAttLbl.text="" + (mountlv.p_attack + this.getMountPropValue(4)+o.dc[4].r);
 			}
 
 			if (o.dc.hasOwnProperty("6")) {
@@ -777,7 +823,8 @@ package com.leyou.ui.mount {
 
 			if (o.dc.hasOwnProperty("5")) {
 //				this.phDefLbl.text="" + (this.getPropTradeValue(this.getPropValue(mountlv.p_defense, m1rate), o.dc[5].r) + this.getMountPropValue(5));
-				this.phDefLbl.text="" + (mountlv.p_defense + this.getMountPropValue(5));
+				this.phDefLbl.text="" + (this.getPropTradeValue(mountlv.p_defense, o.dc[5].r) + this.getMountPropValue(5));
+//				this.phDefLbl.text="" + (mountlv.p_defense + this.getMountPropValue(5)+o.dc[5].r);
 			}
 
 			if (o.dc.hasOwnProperty("7")) {
@@ -785,7 +832,8 @@ package com.leyou.ui.mount {
 			}
 
 			if (o.dc.hasOwnProperty("1")) {
-				this.hpLbl.text="" + (mountlv.extraHp + this.getMountPropValue(1));
+				this.hpLbl.text="" + (this.getPropTradeValue(mountlv.extraHp, o.dc[1].r) + this.getMountPropValue(1));
+//				this.hpLbl.text="" + (mountlv.extraHp + this.getMountPropValue(1)+o.dc[1].r);
 			}
 
 			if (o.dc.hasOwnProperty("2")) {

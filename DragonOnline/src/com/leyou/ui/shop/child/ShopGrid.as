@@ -21,7 +21,7 @@ package com.leyou.ui.shop.child {
 //		private var numLbl:Label;
 		public var id:int;
 
-		private var tips:TipsInfo;
+		protected var tips:TipsInfo;
 		private var tipsInfo:TipsInfo;
 
 		/**
@@ -98,6 +98,10 @@ package com.leyou.ui.shop.child {
 			super.reset();
 			super.updataInfo(null);
 		}
+		
+		public function clearData():void{
+			this.reset();
+		}
 
 		public function setSize(w:Number, h:Number):void {
 
@@ -117,6 +121,11 @@ package com.leyou.ui.shop.child {
 
 		public function set numLblTxt(s:String):void {
 			this.numLbl.text=s + "";
+			this.numLbl.x=this.width-this.numLbl.textWidth;
+		}
+		
+		public function getNum():int{
+			return int(this.numLbl.text); 
 		}
 
 		public override function mouseOutHandler():void {
@@ -196,6 +205,9 @@ package com.leyou.ui.shop.child {
 			}
 		}
 
+		override public function get width():Number{
+			return 60;
+		}
 
 		public override function doubleClickHandler():void {
 

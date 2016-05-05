@@ -22,6 +22,7 @@ package com.leyou.ui.invest.children {
 	import flash.geom.Rectangle;
 
 	public class InvestJJRender extends AutoSprite {
+		
 		private var desLbl:Label;
 
 		private var investLbl:Label;
@@ -79,7 +80,7 @@ package com.leyou.ui.invest.children {
 				var img:Image=new Image("ui/tzlc/licai_arrow.png");
 				addChild(img);
 				img.x=lbl.x + 2;
-				img.y=50 + 329 * (1 - byb / ConfigEnum.invest14);
+				img.y=90 + 329 * (1 - byb / ConfigEnum.invest14);
 				img.scrollRect=new Rectangle(0, 0, 16, 329 * byb / ConfigEnum.invest14);
 				spanImgDic[lv]=img;
 
@@ -105,6 +106,9 @@ package com.leyou.ui.invest.children {
 			num.loadSource("ui/num/{num}_lz.png");
 			addChild(num);
 			num.setNum(ConfigEnum.invest13 * 100);
+			
+			x = 3;
+			y = 3;
 		}
 
 		protected function onBtnClick(event:MouseEvent):void {

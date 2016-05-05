@@ -24,7 +24,7 @@ package com.leyou.ui.tools.child {
 	import com.leyou.data.playerSkill.TipSkillInfo;
 	import com.leyou.data.tips.TipsInfo;
 	import com.leyou.net.cmd.Cmd_Link;
-	
+
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 
@@ -32,6 +32,7 @@ package com.leyou.ui.tools.child {
 
 		private var numLbl:Label;
 		private var shortcutKeyLbl:Label;
+		private var iconStopImg:Image;
 
 		private var num:int=0;
 
@@ -85,6 +86,14 @@ package com.leyou.ui.tools.child {
 			this.bgBmp.bitmapData=LibManager.getInstance().getImg("ui/mainUI/icon_skill.jpg");
 			this.iconBmp.bitmapData=LibManager.getInstance().getImg("ui/backpack/lock.png");
 
+			this.iconStopImg=new Image("ui/common/ico_stop.png");
+			this.addChild(this.iconStopImg);
+
+			this.iconStopImg.x=0;
+			this.iconStopImg.y=0;
+
+			this.iconStopImg.visible=false;
+			
 //			this.bgBmp.setWH(35, 35);
 			this.iconBmp.setWH(36, 36);
 //			this.bgBmp.alpha=0;
@@ -95,7 +104,7 @@ package com.leyou.ui.tools.child {
 
 			this.autoEffect=new SwfLoader();
 			this.autoEffect.update(99969);
-			
+
 			this.autoEffect.mouseChildren=this.autoEffect.mouseEnabled=false;
 //			this.autoEffect.x=-3;
 //			this.autoEffect.y=-2;
@@ -107,9 +116,9 @@ package com.leyou.ui.tools.child {
 			this.addChild(this.cdLbl);
 
 //			this.opaqueBackground=0xff0000;
-			
-			this.scrollRect=new Rectangle(0,0,43,43);
-			
+
+			this.scrollRect=new Rectangle(0, 0, 43, 43);
+
 			DebugUtil.cacheLabel(this);
 		}
 
@@ -192,6 +201,10 @@ package com.leyou.ui.tools.child {
 
 		public function get icon():Image {
 			return this.iconBmp;
+		}
+
+		public function setStopIcon(v:Boolean):void {
+			this.iconStopImg.visible=v;
 		}
 
 		public function setSelectBmpEnable(v:Boolean):void {

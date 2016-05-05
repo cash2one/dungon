@@ -41,7 +41,7 @@ package com.leyou.ui.aution {
 		private var _currentIdx:int = -1;
 		
 		private var ybImg:Image;
-		private var jbImg:Image;
+//		private var jbImg:Image;
 		
 		public function AutionWnd() {
 			super(LibManager.getInstance().getXML("config/ui/AutionWnd.xml"));
@@ -66,24 +66,24 @@ package com.leyou.ui.aution {
 			container.addChild(ybImg);
 //			container.x = ybImg.x;
 //			container.y = ybImg.y;
-			jbImg = getUIbyID("jbImg") as Image;
+//			jbImg = getUIbyID("jbImg") as Image;
 			container = new Sprite();
-			container.name = jbImg.name;
+//			container.name = jbImg.name;
 			container.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
 			container.addEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
-			jbImg.parent.addChild(container);
-			container.addChild(jbImg);
+//			jbImg.parent.addChild(container);
+//			container.addChild(jbImg);
 //			goldBindLbl = getUIbyID("goldBindLbl") as Label;
 			
 			autionBuyPanel = new AutionBuyRender();
-			autionBuyPanel.x = -9;
-			autionBuyPanel.y =  5;
+			autionBuyPanel.x = 5;
+			autionBuyPanel.y = 0;
 			autionSellPanel = new AutionSellRender();
-			autionSellPanel.x = -9;
-			autionSellPanel.y =  5;
+			autionSellPanel.x = 5;
+			autionSellPanel.y = 0;
 			autionMessagePanel = new AutionMessageRender();
-			autionMessagePanel.x = -9;
-			autionMessagePanel.y =  1;
+			autionMessagePanel.x = 5;
+			autionMessagePanel.y = 0;
 			
 			tabBar.addToTab(autionBuyPanel, 0);
 			tabBar.addToTab(autionSellPanel, 1);
@@ -91,6 +91,10 @@ package com.leyou.ui.aution {
 			tabBar.addEventListener(TabbarModel.changeTurnOnIndex, onTabBarChangeIndex);
 			_currentIdx = 0;
 //			tabBar.turnToTab(0);
+		}
+		
+		public override function get height():Number{
+			return 544;
 		}
 		
 		protected function onMouseOut(event:Event):void{
@@ -171,10 +175,10 @@ package com.leyou.ui.aution {
 		 */		
 		public function loadAll(o:Object):void{
 			var tb:Array = o.tb;
-			var ct:uint = Math.ceil(o.ct/7);
+			var ct:uint = Math.ceil(o.ct/8);
 			autionBuyPanel.loadInfo(tb, ct);
 			var gname:String = o.gname;
-			var hasOwer:Boolean = (null != gname) && ("" != gname)
+			var hasOwer:Boolean = (null != gname) && ("" != gname);
 			cessLbl.visible = hasOwer;
 			if(hasOwer){
 				var content:String = TableManager.getInstance().getSystemNotice(6720).content;
@@ -189,7 +193,7 @@ package com.leyou.ui.aution {
 		 */		
 		public function loadSortList(o:Object):void{
 			var cb:Array = o.cb;
-			var ct:uint = Math.ceil(o.ct/7);
+			var ct:uint = Math.ceil(o.ct/8);
 			autionBuyPanel.loadInfo(cb, ct);
 		}
 		
@@ -249,6 +253,7 @@ package com.leyou.ui.aution {
 			
 			moneyLbl.text = StringUtil_II.sertSign(UIManager.getInstance().backpackWnd.jb);;
 			goldLbl.text = StringUtil_II.sertSign(UIManager.getInstance().backpackWnd.yb);
+//			goldBindLbl.text = StringUtil_II.sertSign(UIManager.getInstance().backpackWnd.byb);
 		}
 		
 		/**

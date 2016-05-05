@@ -3,6 +3,7 @@ package com.leyou.ui.role.child {
 
 	import com.ace.config.Core;
 	import com.ace.gameData.manager.MyInfoManager;
+	import com.ace.manager.GuideManager;
 	import com.ace.manager.LibManager;
 	import com.ace.ui.auto.AutoWindow;
 	import com.ace.ui.button.children.ImgButton;
@@ -66,12 +67,14 @@ package com.leyou.ui.role.child {
 				this.addChild(grid);
 
 				grid.x=23 + i % 6 * 42;
-				grid.y=69 + Math.floor(i / 6) * 42;
+				grid.y=89 + Math.floor(i / 6) * 42;
 
 				this.gridVec.push(grid);
 			}
+			
+//			this.uiDic["selectGrid1"]=this.gridVec[0];
 
-			this.clsBtn.y=0;
+//			this.clsBtn.y=0;
 		}
 
 		private function onClick(e:MouseEvent):void {
@@ -158,6 +161,8 @@ package com.leyou.ui.role.child {
 			this.titleNameLbl.text=PropUtils.getStringById(1874);
 			this.currentPage=0;
 			this.updateList();
+			
+			GuideManager.getInstance().removeGuide(145);
 		}
 
 		/**

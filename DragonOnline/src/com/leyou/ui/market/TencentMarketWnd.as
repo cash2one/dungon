@@ -65,8 +65,8 @@ package com.leyou.ui.market {
 			ib3Lbl.text=tarr[2] + PropUtils.getStringById(40);
 			ib4Lbl.text=tarr[3] + PropUtils.getStringById(40);
 			ib5Lbl.text=tarr[4] + PropUtils.getStringById(40);
-			clsBtn.x-=6;
-			clsBtn.y-=14;
+//			clsBtn.x-=6;
+//			clsBtn.y-=14;
 		}
 
 		protected function onBtnClick(event:MouseEvent):void {

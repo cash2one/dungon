@@ -17,7 +17,7 @@ package com.ace.ui.map {
 	import com.ace.ui.lable.Label;
 	import com.ace.ui.map.wnd.BigMap;
 	import com.ace.ui.map.wnd.WorldMapView;
-	
+
 	import flash.events.MouseEvent;
 	import flash.ui.Keyboard;
 
@@ -89,26 +89,26 @@ package com.ace.ui.map {
 			}
 
 		}
-		
-		public function hideSwitch():void{
-			if(!bigMap.visible){
-				if(bigMap.visible){
+
+		public function hideSwitch():void {
+			if (!bigMap.visible) {
+				if (bigMap.visible) {
 					bigMap.hide();
 					worldMap.show();
-				}else{
+				} else {
 					bigMap.show();
 					worldMap.hide();
 				}
 				resize(width, width);
 			}
-			btnImg.visible = false;
-			switchBtn.visible = false;
+			btnImg.visible=false;
+			switchBtn.visible=false;
 		}
-		
-		public function resetSwitch():void{
-			if(!btnImg.visible){
-				btnImg.visible = true;
-				switchBtn.visible = true;
+
+		public function resetSwitch():void {
+			if (!btnImg.visible) {
+				btnImg.visible=true;
+				switchBtn.visible=true;
 			}
 		}
 
@@ -117,10 +117,10 @@ package com.ace.ui.map {
 		 *
 		 */
 		public function switchMapView():void {
-			if(bigMap.visible){
+			if (bigMap.visible) {
 				bigMap.hide();
 				worldMap.show();
-			}else{
+			} else {
 				bigMap.show();
 				worldMap.hide();
 			}
@@ -151,7 +151,7 @@ package com.ace.ui.map {
 			switchBtn.x=$w - 100 - 5;
 			btnImg.x=switchBtn.x + 8;
 			clsBtn.x=$w - 18;
-			clsBtn.y=-clsBtn.height * 0.5+3;
+			clsBtn.y=-clsBtn.height * 0.5 + 3;
 		}
 
 		public override function get width():Number {

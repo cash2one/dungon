@@ -137,9 +137,9 @@ package com.leyou.ui.title.child {
 			this.bgeffImg.bitmapData=null;
 			this.titleNameLbl.text="";
 
-			if (tinfo.model > 0) {
+			if (int(tinfo.model) > 0) {
 
-				this.bgswf.update(tinfo.model);
+				this.bgswf.update(int(tinfo.model));
 				this.bgswf.visible=true;
 
 				if (tinfo.Bottom_Pic != "")

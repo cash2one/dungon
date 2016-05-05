@@ -65,7 +65,7 @@ package com.leyou.ui.storage {
 		}
 
 		override public function get height():Number{
-			return 525;
+			return 544;
 		}
 
 	}

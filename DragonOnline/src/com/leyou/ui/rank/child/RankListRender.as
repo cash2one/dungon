@@ -16,15 +16,16 @@ package com.leyou.ui.rank.child
 	import flash.events.MouseEvent;
 	import flash.geom.Rectangle;
 	
+	//各个榜的列表
 	public class RankListRender extends AutoSprite
 	{
-		private static const PAGE_COUNT:int = 12;
+		private static const PAGE_COUNT:int = 15;
 		
 		private var labels:Vector.<RankRender>;
 		
 		private var beginX:int = 3;
 		
-		private var beginY:int = 53;
+		private var beginY:int = 53-27;
 		
 		//		private var labels_II:Vector.<RankLabel>;
 		
@@ -75,21 +76,25 @@ package com.leyou.ui.rank.child
 			pageLbl = getUIbyID("pageLbl") as Label;
 			prevBtn = getUIbyID("prevBtn") as ImgButton;
 			nextBtn = getUIbyID("nextBtn") as ImgButton;
-			scrollRect = new Rectangle(0, 0, 380, 440);
+			scrollRect = new Rectangle(0, 0, 380, 472);
 			initByType(type);
 			nameLbl.visible = false;
-			nameScroll = new AutoScrollText();
-			nameScroll.setScrollRect(150, 28);
-			nameScroll.defaultTextFormat = nameLbl.defaultTextFormat;
-			nameScroll.x = nameLbl.x;
-			nameScroll.y = nameLbl.y;
-			addChild(nameScroll);
+//			nameScroll = new AutoScrollText();
+//			nameScroll.setScrollRect(150, 28);
+//			nameScroll.defaultTextFormat = nameLbl.defaultTextFormat;
+//			nameScroll.x = nameLbl.x;
+//			nameScroll.y = nameLbl.y;
+//			addChild(nameScroll);
 			
 			addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
 			prevBtn.addEventListener(MouseEvent.CLICK, onBtnClick);
 			nextBtn.addEventListener(MouseEvent.CLICK, onBtnClick);
 			typeCbx.addEventListener(DropMenuEvent.Item_Selected, onSortType);
-			
+			prevBtn.visible = true;
+		}
+		
+		public function resetPage():void{
+			currentPage= 1;
 		}
 		
 		protected function onBtnClick(event:MouseEvent):void{
@@ -138,78 +143,91 @@ package com.leyou.ui.rank.child
 		
 		protected function onSortType(event:Event):void{
 			value = typeCbx.value.uid;
-			Cmd_Rank.cm_RAK_I(type, value, 1, 13)
+			Cmd_Rank.cm_RAK_I(type, value, 1, 13);
+			resetPage();
 		}
 		
 		public function initByType($type:int):void{
 			type = $type;
+			typeCbx.list.addRends([{label: PropUtils.getStringById(2148), uid: 0},
+				{label: PropUtils.getStringById(1528), uid: PlayerEnum.PRO_SOLDIER},
+				{label: PropUtils.getStringById(1526), uid: PlayerEnum.PRO_MASTER},
+				{label: PropUtils.getStringById(1529), uid: PlayerEnum.PRO_WARLOCK},
+				{label: PropUtils.getStringById(1527), uid: PlayerEnum.PRO_RANGER} ]);
 			switch(type){
 				case 1:// 战斗力
 				case 4:// 装备
-					typeCbx.list.addRends([{label: PropUtils.getStringById(2148), uid: 0},
-						{label: PropUtils.getStringById(1528), uid: PlayerEnum.PRO_SOLDIER},
-						{label: PropUtils.getStringById(1526), uid: PlayerEnum.PRO_MASTER},
-						{label: PropUtils.getStringById(1529), uid: PlayerEnum.PRO_WARLOCK},
-						{label: PropUtils.getStringById(1527), uid: PlayerEnum.PRO_RANGER} ]);
+//					typeCbx.list.addRends([{label: PropUtils.getStringById(2148), uid: 0},
+//						{label: PropUtils.getStringById(1528), uid: PlayerEnum.PRO_SOLDIER},
+//						{label: PropUtils.getStringById(1526), uid: PlayerEnum.PRO_MASTER},
+//						{label: PropUtils.getStringById(1529), uid: PlayerEnum.PRO_WARLOCK},
+//						{label: PropUtils.getStringById(1527), uid: PlayerEnum.PRO_RANGER} ]);
 					desLbl.text = (1 == type) ? PropUtils.getStringById(1837) : PropUtils.getStringById(1838);
 					break;
 				case 2:// 坐骑
 				case 3:// 翅膀
-					typeCbx.list.addRends([{label: PropUtils.getStringById(2148), uid: 0},
-						{label: PropUtils.getStringById(1839), uid: 3},
-						{label: PropUtils.getStringById(1840), uid: 4},
-						{label: PropUtils.getStringById(1841), uid: 5},
-						{label: PropUtils.getStringById(1842), uid: 6},
-						{label: PropUtils.getStringById(1843), uid: 7},
-						{label: PropUtils.getStringById(1844), uid: 8},
-						{label: PropUtils.getStringById(1845), uid: 9},
-						{label: PropUtils.getStringById(1846), uid: 10} ]);
+//					typeCbx.list.addRends([{label: PropUtils.getStringById(2148), uid: 0},
+//						{label: PropUtils.getStringById(1839), uid: 3},
+//						{label: PropUtils.getStringById(1840), uid: 4},
+//						{label: PropUtils.getStringById(1841), uid: 5},
+//						{label: PropUtils.getStringById(1842), uid: 6},
+//						{label: PropUtils.getStringById(1843), uid: 7},
+//						{label: PropUtils.getStringById(1844), uid: 8},
+//						{label: PropUtils.getStringById(1845), uid: 9},
+//						{label: PropUtils.getStringById(1846), uid: 10} ]);
 					desLbl.text = (2 == type) ? PropUtils.getStringById(1847) : PropUtils.getStringById(1848);
 					break;
 				case 5:// 军衔
-					typeCbx.list.addRends([{label: PropUtils.getStringById(2148), uid: 0},
-						{label: PropUtils.getStringById(1849), uid: 2},
-						{label: PropUtils.getStringById(1850), uid: 3},
-						{label: PropUtils.getStringById(1851), uid: 4},
-						{label: PropUtils.getStringById(1852), uid: 5},
-						{label: PropUtils.getStringById(1853), uid: 6},
-						{label: PropUtils.getStringById(1854), uid: 7},
-						{label: PropUtils.getStringById(1855), uid: 8},
-						{label: PropUtils.getStringById(1856), uid: 9},
-						{label: PropUtils.getStringById(1857), uid: 10}]);
+//					typeCbx.list.addRends([{label: PropUtils.getStringById(2148), uid: 0},
+//						{label: PropUtils.getStringById(1849), uid: 2},
+//						{label: PropUtils.getStringById(1850), uid: 3},
+//						{label: PropUtils.getStringById(1851), uid: 4},
+//						{label: PropUtils.getStringById(1852), uid: 5},
+//						{label: PropUtils.getStringById(1853), uid: 6},
+//						{label: PropUtils.getStringById(1854), uid: 7},
+//						{label: PropUtils.getStringById(1855), uid: 8},
+//						{label: PropUtils.getStringById(1856), uid: 9},
+//						{label: PropUtils.getStringById(1857), uid: 10}]);
 					desLbl.text = PropUtils.getStringById(1858);
 					break;
 				case 6:
-					typeCbx.list.addRends([{label: PropUtils.getStringById(2148), uid: 0},
-						{label: PropUtils.getStringById(1528), uid: PlayerEnum.PRO_SOLDIER},
-						{label: PropUtils.getStringById(1526), uid: PlayerEnum.PRO_MASTER},
-						{label: PropUtils.getStringById(1529), uid: PlayerEnum.PRO_WARLOCK},
-						{label: PropUtils.getStringById(1527), uid: PlayerEnum.PRO_RANGER} ]);
+//					typeCbx.list.addRends([{label: PropUtils.getStringById(2148), uid: 0},
+//						{label: PropUtils.getStringById(1528), uid: PlayerEnum.PRO_SOLDIER},
+//						{label: PropUtils.getStringById(1526), uid: PlayerEnum.PRO_MASTER},
+//						{label: PropUtils.getStringById(1529), uid: PlayerEnum.PRO_WARLOCK},
+//						{label: PropUtils.getStringById(1527), uid: PlayerEnum.PRO_RANGER} ]);
 					desLbl.text = PropUtils.getStringById(28);
 					break;
 				case 7:
-					typeCbx.list.addRends([{label: PropUtils.getStringById(2148), uid: 0},
-						{label: PropUtils.getStringById(1528), uid: PlayerEnum.PRO_SOLDIER},
-						{label: PropUtils.getStringById(1526), uid: PlayerEnum.PRO_MASTER},
-						{label: PropUtils.getStringById(1529), uid: PlayerEnum.PRO_WARLOCK},
-						{label: PropUtils.getStringById(1527), uid: PlayerEnum.PRO_RANGER} ]);
+//					typeCbx.list.addRends([{label: PropUtils.getStringById(2148), uid: 0},
+//						{label: PropUtils.getStringById(1528), uid: PlayerEnum.PRO_SOLDIER},
+//						{label: PropUtils.getStringById(1526), uid: PlayerEnum.PRO_MASTER},
+//						{label: PropUtils.getStringById(1529), uid: PlayerEnum.PRO_WARLOCK},
+//						{label: PropUtils.getStringById(1527), uid: PlayerEnum.PRO_RANGER} ]);
 					desLbl.text =  PropUtils.getStringById(32);
+					break;
+				
+				case 9:
+					desLbl.text =  PropUtils.getStringById(2407);
+					break;
+				case 10:
+					desLbl.text =  PropUtils.getStringById(2408);
 					break;
 			}
 		}
 		
 		public function addSwitchTimer():void{
-			nameScroll.startScroll();
+//			nameScroll.startScroll();
 		}
 		
 		public function removeSwitchTimer():void{
-			nameScroll.stopScroll();
+//			nameScroll.stopScroll();
 		}
 		
 		public function loadRankList(obj:Object):void{
 			totalPage = Math.ceil(obj.znum/PAGE_COUNT);
 			pageLbl.text = currentPage+"/"+totalPage;
-			nameScroll.setTextArray(obj.openname);
+//			nameScroll.setTextArray(obj.openname);
 			
 			var rankList:Array = obj.rankl;
 			getFreeLabel(PAGE_COUNT).updateInfo(rankList.shift(), true);

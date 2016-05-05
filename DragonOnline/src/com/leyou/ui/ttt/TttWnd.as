@@ -1,8 +1,11 @@
 package com.leyou.ui.ttt {
+	import com.ace.enum.UIEnum;
 	import com.ace.enum.WindowEnum;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.table.TDungeon_Base;
+	import com.ace.manager.LayerManager;
 	import com.ace.manager.LibManager;
+	import com.ace.manager.UILayoutManager;
 	import com.ace.manager.UIManager;
 	import com.ace.ui.auto.AutoWindow;
 	import com.ace.ui.button.children.ImgButton;
@@ -10,8 +13,10 @@ package com.leyou.ui.ttt {
 	import com.ace.ui.img.child.Image;
 	import com.ace.ui.lable.Label;
 	import com.ace.ui.scrollPane.children.ScrollPane;
+	import com.ace.utils.StringUtil;
 	import com.greensock.TweenLite;
 	import com.leyou.enum.ConfigEnum;
+	import com.leyou.enum.TaskEnum;
 	import com.leyou.manager.PopupManager;
 	import com.leyou.net.cmd.Cmd_Ttt;
 	import com.leyou.ui.ttt.childs.TttBigBtn;
@@ -19,11 +24,9 @@ package com.leyou.ui.ttt {
 	import com.leyou.ui.ttt.childs.TttSmallBtn;
 	import com.leyou.ui.ttt.childs.TttTitleBtn;
 	import com.leyou.utils.PropUtils;
-	import com.leyou.utils.TimeUtil;
 
 	import flash.display.DisplayObject;
 	import flash.display.Sprite;
-	import flash.display3D.IndexBuffer3D;
 	import flash.events.MouseEvent;
 	import flash.geom.Rectangle;
 
@@ -65,6 +68,9 @@ package com.leyou.ui.ttt {
 
 		private var sBtn:TttSmallBtn;
 		private var bBtn:TttBigBtn;
+
+		private var msgBox:MessageCnSeWnd;
+		private var tttlog:TttLog;
 
 		public function TttWnd() {
 			super(LibManager.getInstance().getXML("config/ui/ttt/tttWnd.xml"));
@@ -149,7 +155,6 @@ package com.leyou.ui.ttt {
 					this.lvArr.push(tbtn);
 
 					tbtn.addEventListener(MouseEvent.CLICK, onBtnClick);
-
 					tbtn.y=j * 31;
 
 					j++;
@@ -161,11 +166,27 @@ package com.leyou.ui.ttt {
 			this.succImg.visible=false;
 			this.ruleLbl.setToolTip(TableManager.getInstance().getSystemNotice(10056).content);
 
-			this.scrollRect=new Rectangle(0, 0, 799, 539);
+			this.scrollRect=new Rectangle(0, 0, 799, 544);
 
 			this.bBtn=new TttBigBtn();
 			this.sBtn=new TttSmallBtn();
 
+			this.msgBox=new MessageCnSeWnd();
+			LayerManager.getInstance().windowLayer.addChild(this.msgBox);
+
+			this.msgBox.x=(UIEnum.WIDTH - this.msgBox.width) >> 1;
+			this.msgBox.y=(UIEnum.HEIGHT - this.msgBox.height) >> 1;
+
+			this.tttlog=new TttLog();
+			LayerManager.getInstance().windowLayer.addChild(this.tttlog);
+
+			this.tttlog.x=(UIEnum.WIDTH - this.tttlog.width) >> 1;
+			this.tttlog.y=(UIEnum.HEIGHT - this.tttlog.height) >> 1;
+
+		}
+
+		public function showLog(o:Object):void {
+			this.tttlog.showPanel(o);
 		}
 
 		private function onBtnClick(e:MouseEvent):void {
@@ -262,22 +283,30 @@ package com.leyou.ui.ttt {
 					Cmd_Ttt.cmEnterCopy(currentLv);
 					break;
 				case "resetBtn":
-					PopupManager.showConfirm(TableManager.getInstance().getSystemNotice(10057).content, function():void {
-						Cmd_Ttt.cmCopyReset();
-					}, null, false, "tttResetBtn");
+//					PopupManager.showConfirm(TableManager.getInstance().getSystemNotice(10057).content, function():void {
+//						Cmd_Ttt.cmCopyReset();
+//					}, null, false, "tttResetBtn");
+
+					this.msgBox.showPanel(1, int(this.countLbl.text));
+
 					break;
 				case "totalCurBtn":
-					PopupManager.showRadioConfirm(TableManager.getInstance().getSystemNotice(10055).content, "" + ConfigEnum.Babel4, "" + ConfigEnum.Babel5, function(i:int):void {
-						Cmd_Ttt.cmfastComplete(currentLv, (i == 0 ? 1 : 0));
-					}, null, false, "ttttotalCurBtn");
+//					PopupManager.showRadioConfirm(TableManager.getInstance().getSystemNotice(10055).content, "" + ConfigEnum.Babel4, "" + ConfigEnum.Babel5, function(i:int):void {
+//						Cmd_Ttt.cmfastComplete(currentLv, (i == 0 ? 1 : 0));
+//					}, null, false, "ttttotalCurBtn");
+
+					this.msgBox.showPanel(0, 1, currentLv);
+
 					break;
 				case "totalBtn":
 					var r:int=(maxLv - this.currentLv) + 1;
 					r=r < 1 ? 1 : r;
 
-					PopupManager.showRadioConfirm(TableManager.getInstance().getSystemNotice(10055).content, "" + ConfigEnum.Babel4 * r, "" + ConfigEnum.Babel5 * r, function(i:int):void {
-						Cmd_Ttt.cmfastComplete(0, (i == 0 ? 1 : 0));
-					}, null, false, "ttttotalBtn");
+					this.msgBox.showPanel(0, r);
+
+//					PopupManager.showRadioConfirm(TableManager.getInstance().getSystemNotice(10055).content, "" + ConfigEnum.Babel4 * r, "" + ConfigEnum.Babel5 * r, function(i:int):void {
+//						Cmd_Ttt.cmfastComplete(0, (i == 0 ? 1 : 0));
+//					}, null, false, "ttttotalBtn");
 					break;
 			}
 

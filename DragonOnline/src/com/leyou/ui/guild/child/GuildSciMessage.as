@@ -41,7 +41,7 @@ package com.leyou.ui.guild.child {
 			this.hideBg();
 			this.mouseChildren=true;
 			this.mouseEnabled=true;
-			this.clsBtn.y-=10;
+//			this.clsBtn.y-=10;
 		}
 
 		private function init():void {

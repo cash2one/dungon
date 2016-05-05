@@ -31,7 +31,7 @@ package com.ace.gameData.table {
 		/**
 		 *	道具使用次数
 		 */
-		public var number:int;
+		public var number:String;
 
 		/**
 		 *	是否能够批量使用
@@ -43,7 +43,7 @@ package com.ace.gameData.table {
 		/**
 		 *	道具开启等级
 		 */
-		public var level:int;
+		public var level:String;
 
 		/**
 		 *	道具
@@ -56,14 +56,9 @@ package com.ace.gameData.table {
 		public var quality:int;
 
 		/**
-		 *	道具图标
+		 *	道具图示
 		 */
 		public var icon:String;
-
-		/**
-		 *	掉落装备图标
-		 */
-		public var dropIcon:String;
 
 		/**
 		 *	道具动画
@@ -78,7 +73,7 @@ package com.ace.gameData.table {
 		 *	3道士
 		 *	4游侠
 		 */
-		public var limit:int;
+		public var limit:String;
 
 		/**
 		 *	性别限制
@@ -86,12 +81,17 @@ package com.ace.gameData.table {
 		 *	1男
 		 *	2女
 		 */
-		public var sex:int;
+		public var sex:String;
 
 		/**
 		 *	vip等级限制
 		 */
-		public var viplevel:int;
+		public var viplevel:String;
+
+		/**
+		 *	使用花费钻石
+		 */
+		public var pay:String;
 
 		/**
 		 *	道具描述
@@ -108,35 +108,35 @@ package com.ace.gameData.table {
 		 *	0不绑定
 		 *	1拾取绑定
 		 */
-		public var bind:int;
+		public var bind:String;
 
 		/**
 		 *	是否唯一
 		 *	0不唯一
 		 *	1唯一
 		 */
-		public var canunique:int;
+		public var canunique:String;
 
 		/**
-		 *	最大叠加数量
+		 *	最大迭加数量
 		 */
 		public var maxgroup:int;
 
 		/**
 		 *	使用引导时间(s)
 		 */
-		public var usetime:int;
+		public var usetime:String;
 
 		/**
 		 *	使用道具公共CD
 		 */
-		public var cooltime:int;
+		public var cooltime:String;
 
 		/**
 		 *	物品存在时间（s）
 		 *	0为永久道具
 		 */
-		public var duration:int;
+		public var duration:String;
 
 		/**
 		 *	物品到期时间
@@ -149,19 +149,19 @@ package com.ace.gameData.table {
 		 *	0不消失
 		 *	1消失
 		 */
-		public var disappear:int;
+		public var disappear:String;
 
 		/**
 		 *	对应Buff id
 		 */
-		public var buffId:int;
+		public var buffId:String;
 
 		/**
 		 *	物品是否广播
 		 *	0不需要
 		 *	1需要
 		 */
-		public var transmit:int;
+		public var transmit:String;
 
 		/**
 		 *	广播内容
@@ -172,14 +172,14 @@ package com.ace.gameData.table {
 		 *	限制地图id
 		 *	0为不限制
 		 */
-		public var map:int;
+		public var map:String;
 
 		/**
 		 *	限制对npc或者怪物使用
 		 *	-1 友方
 		 *	-2 敌方
 		 */
-		public var npc:int;
+		public var npc:String;
 
 		/**
 		 *	使用道具类型
@@ -193,8 +193,22 @@ package com.ace.gameData.table {
 		 *	8.等级
 		 *	9.传送
 		 *	10.宝箱
+		 *	11.钻石
+		 *	12.当前级别百分比经验
+		 *	13 PK值减少
+		 *	14 龙魂
+		 *	15 贡献
+		 *	20 替身道具
+		 *	21 定位道具
+		 *	22 召集道具
+		 *	23 永久增加属性道具
+		 *	24 增加荣誉
+		 *	25 送VIP
+		 *	26 获得翅膀
+		 *	27 抽奖
+		 *	28 美满都
 		 */
-		public var useType:int;
+		public var useType:String;
 
 		/**
 		 *	使用道具获得数量
@@ -209,10 +223,23 @@ package com.ace.gameData.table {
 		/**
 		 *	出售价格
 		 */
-		public var price:int;
+		public var price:String;
 
 		/**
 		 *	独立功能数值
+		 *	属性ID
+		 *	1 生命上限
+		 *	2 法力上限
+		 *	4 物理攻击
+		 *	5 物理防御
+		 *	6 法术攻击
+		 *	7 法术防御
+		 *	8 暴击
+		 *	9 韧性
+		 *	10 命中
+		 *	11 闪避
+		 *	12 必杀
+		 *	13 守护
 		 */
 		public var value:int;
 
@@ -221,19 +248,41 @@ package com.ace.gameData.table {
 		 */
 		public var effect1:String;
 
-		public var pay:int=0;
-		
 		/**
+		 *	掉落道具图示
+		 */
+		public var dropIcon:String;
+
+		/**
+		 *
 		 */
 		public var limitTime:int;
 
 		/**
 		 *	道具限定使用次数
-		 *	
+		 *
 		 *	不填则表示可以无限次使用
 		 */
 		public var Item_degree:int;
-		
+
+		/**
+		 *	自动使用
+		 */
+		public var autoUse:String;
+
+		/**
+		 *	索引模型表
+		 */
+		public var pnfId:String;
+
+		/**
+		 *	快捷使用
+		 *	1 快捷使用
+		 */
+		public var quickUse:String;
+
+
+
 		public function TItemInfo(data:XML=null) {
 			if (data == null)
 				return;
@@ -247,11 +296,11 @@ package com.ace.gameData.table {
 			this.level=data.@level;
 			this.quality=data.@quality;
 			this.icon=data.@icon;
-			this.dropIcon=data.@dropIcon;
 			this.effect=data.@effect;
 			this.limit=data.@limit;
 			this.sex=data.@sex;
 			this.viplevel=data.@viplevel;
+			this.pay=data.@pay;
 			this.des=data.@des;
 			this.desSource=data.@desSource;
 			this.bind=data.@bind;
@@ -273,9 +322,14 @@ package com.ace.gameData.table {
 			this.price=data.@price;
 			this.value=data.@value;
 			this.effect1=data.@effect1;
-			this.pay=data.@pay;
+			this.dropIcon=data.@dropIcon;
 			this.limitTime=data.@limitTime;
 			this.Item_degree=data.@Item_degree;
+			this.autoUse=data.@autoUse;
+			this.pnfId=data.@pnfId;
+			this.quickUse=data.@quickUse;
+
+
 		}
 
 

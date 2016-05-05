@@ -14,6 +14,8 @@ package com.leyou.ui.blackStore.children {
 	import com.leyou.manager.PopupManager;
 	import com.leyou.net.cmd.Cmd_BlackStore;
 	import com.leyou.ui.mail.child.MaillGrid;
+	import com.leyou.ui.shop.child.ShopGrid;
+	import com.leyou.utils.ItemUtil;
 	import com.leyou.utils.PropUtils;
 
 	import flash.events.MouseEvent;
@@ -42,11 +44,15 @@ package com.leyou.ui.blackStore.children {
 
 		private var buyBtn:NormalButton;
 
-		private var grid:MaillGrid;
+		private var grid:ShopGrid;
 
 		private var type:int;
 
 		private var pos:int;
+		
+		private var cid:int;
+		
+		
 
 		public function BlackStoreRender() {
 			super(LibManager.getInstance().getXML("config/ui/blackStore/blackStoreRender.xml"));
@@ -67,9 +73,9 @@ package com.leyou.ui.blackStore.children {
 			nPriceLbl=getUIbyID("nPriceLbl") as Label;
 			buyBtn=getUIbyID("buyBtn") as NormalButton;
 
-			grid=new MaillGrid();
+			grid=new ShopGrid();
 			grid.x=7;
-			grid.y=10;
+			grid.y=7;
 			addChild(grid);
 			swapChildren(grid, buyImg);
 
@@ -83,9 +89,13 @@ package com.leyou.ui.blackStore.children {
 		protected function onMouseClick(event:MouseEvent):void {
 			switch (event.target.name) {
 				case "buyBtn":
-					var id:int=((0 == type) ? 23008 : 23011)
-					var content:String=TableManager.getInstance().getSystemNotice(id).content;
-					content=StringUtil.substitute(content, cPriceLbl.text);
+					//					var id:int=((0 == type) ? 23008 : 23011)
+					//					var content:String=TableManager.getInstance().getSystemNotice(id).content;
+					//					content=StringUtil.substitute(content, cPriceLbl.text);
+					//					PopupManager.showConfirm(content, onBuy, null, false, "black.store.buy");
+
+					var content:String=TableManager.getInstance().getSystemNotice(23006).content;
+					content=StringUtil.substitute(content, cPriceLbl.text, ItemUtil.getColorName(cid, 12), grid.getNum());
 					PopupManager.showConfirm(content, onBuy, null, false, "black.store.buy");
 					break;
 			}
@@ -96,7 +106,7 @@ package com.leyou.ui.blackStore.children {
 		}
 
 		public function flyItem():void {
-			FlyManager.getInstance().flyBags([grid.dataId], [grid.localToGlobal(new Point(0, 0))]);
+			FlyManager.getInstance().flyBags([this.cid], [grid.localToGlobal(new Point(0, 0))]);
 		}
 
 		public function updateInfo(bd:BlackStoreItem):void {
@@ -119,8 +129,14 @@ package com.leyou.ui.blackStore.children {
 			nPriceLbl.text=info.nprice + "";
 			cPriceLbl.text=info.price + "";
 			discountImg.updateBmp(StringUtil.substitute("ui/blackstore/{1}", info.tip));
-			grid.updateInfo(info.itemId, info.num);
+//			grid.updateInfo(info.itemId, info.num);
 
+			grid.updataInfo(itemInfo);
+			if (info.num > 1)
+				grid.numLblTxt=info.num + "";
+
+			cid=info.itemId;
+			
 			if (0 == info.moneyType) {
 				nMoneyImg.updateBmp("ui/backpack/yuanbaoIco.png");
 				cMoneyImg.updateBmp("ui/backpack/yuanbaoIco.png");

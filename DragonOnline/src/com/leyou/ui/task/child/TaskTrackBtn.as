@@ -1,20 +1,21 @@
 package com.leyou.ui.task.child {
 
+	import com.ace.ICommon.IGuide;
 	import com.ace.manager.LibManager;
 	import com.ace.ui.button.children.ImgButton;
 	import com.ace.ui.img.child.Image;
 	import com.ace.ui.lable.Label;
-
+	
 	import flash.display.BitmapData;
 	import flash.events.Event;
 
-	public class TaskTrackBtn extends ImgButton {
+	public class TaskTrackBtn extends ImgButton{
 
 		private var imgII:Image;
 		private var numLbl:Label;
 
 		public function TaskTrackBtn() {
-			super("ui/common/button_big.png");
+			super("ui/character/btn_ccc.jpg");
 			this.init();
 			this.mouseEnabled=this.mouseChildren=true;
 		}
@@ -28,7 +29,7 @@ package com.leyou.ui.task.child {
 			this.numLbl=new Label();
 			this.addChild(this.numLbl);
 
-			this.numLbl.x=imgII.x + 67;
+			this.numLbl.x=imgII.x + 85;
 			this.numLbl.y=imgII.y;
 		}
 
@@ -74,6 +75,15 @@ package com.leyou.ui.task.child {
 			this.numLbl.text="" + s;
 		}
 
+//		public function removeGuide($gid:int,fun:Function):void {
+//			
+//			
+//		}
+//		
+//		public function removeGuideEvent():void {
+//			
+//			
+//		}
 
 	}
 }

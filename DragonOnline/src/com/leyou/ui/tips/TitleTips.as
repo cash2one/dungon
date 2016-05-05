@@ -14,6 +14,8 @@ package com.leyou.ui.tips {
 	import com.leyou.utils.FilterUtil;
 	import com.leyou.utils.PropUtils;
 	import com.leyou.utils.TimeUtil;
+	
+	import flash.geom.Rectangle;
 
 	public class TitleTips extends AutoSprite implements ITip {
 
@@ -71,8 +73,8 @@ package com.leyou.ui.tips {
 			this.descLbl.width=169;
 			this.descLbl.wordWrap=true;
 //			this.descLbl.multiline=true;
-			
-			
+
+
 		}
 
 		public function updateInfo(o:Object):void {
@@ -86,10 +88,10 @@ package com.leyou.ui.tips {
 			this.picImg.fillEmptyBmd();
 			this.nameLbl.text="";
 			this.effSwf.visible=false;
-			
-			if (info.model > 0) {
+
+			if (int(info.model) > 0) {
 				this.effSwf.visible=true;
-				this.effSwf.update(info.model);
+				this.effSwf.update(int(info.model));
 
 				if (info.Bottom_Pic != "")
 					this.picImg.updateBmp("scene/title/" + info.Bottom_Pic + ".png");
@@ -103,7 +105,7 @@ package com.leyou.ui.tips {
 			}
 
 			this.getLbl.visible=this.tipsInfo.isUse;
-			
+
 			this.nameLbl1.visible=false;
 			this.nameLbl2.visible=false;
 
@@ -112,7 +114,7 @@ package com.leyou.ui.tips {
 			for (var i:int=0; i < 3; i++) {
 				if (int(info["attribute" + (i + 1)]) > 0) {
 
-					this.propNameArr[i].text="" + PropUtils.propArr[int(info["attribute" + (i + 1)])-1] + ":";
+					this.propNameArr[i].text="" + PropUtils.propArr[int(info["attribute" + (i + 1)]) - 1] + ":";
 					this.propKeyArr[i].text="" + info["value" + (i + 1)];
 
 					p++;
@@ -150,21 +152,23 @@ package com.leyou.ui.tips {
 			if (this.tipsInfo.t == 0 || !this.tipsInfo.isUse) {
 				this.nameLbl2.visible=false;
 				this.timeLbl.text="";
-				this.bgsc.height=this.nameLbl2.y+10;
+				this.bgsc.height=this.nameLbl2.y + 10;
 			} else {
 				this.nameLbl2.visible=true;
-				this.bgsc.height=this.nameLbl2.y+this.nameLbl2.height+10;
+				this.bgsc.height=this.nameLbl2.y + this.nameLbl2.height + 10;
 			}
-			 
+
+			this.bgsc.height=this.nameLbl1.y;
+			this.scrollRect=new Rectangle(0,0,this.width,this.height);
 		}
 
 		public function get isFirst():Boolean {
 			return false;
 		}
 
-		override public function get height():Number{
+		override public function get height():Number {
 			return this.bgsc.height;
 		}
-		
+
 	}
 }

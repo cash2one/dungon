@@ -29,7 +29,7 @@ package com.leyou.ui.pkCopy {
 	import com.leyou.ui.pkCopy.child.DungeonTzGrid;
 	import com.leyou.utils.TaskUtil;
 	import com.leyou.utils.TimeUtil;
-
+	
 	import flash.events.MouseEvent;
 
 	public class DungeonTZWnd extends AutoSprite {
@@ -125,19 +125,20 @@ package com.leyou.ui.pkCopy {
 			this.timerLbl.x=(UIEnum.WIDTH - 150) - 80;
 			this.timerLbl.y=6;
 
-			this.timerLbl.visible=true;
+			this.timerLbl.visible=false;
 
 			Cmd_Stime.cmRequestTime();
 			TimerManager.getInstance().add(exePkCopyTime);
 
 			this.tzBar=new TzBar();
-			LayerManager.getInstance().windowLayer.addChild(this.tzBar);
+			LayerManager.getInstance().mainLayer.addChildAt(this.tzBar,0);
 
+			this.tzBar.hide();
 			this.tzBar.x=(UIEnum.WIDTH - 150) - 80;
 			this.tzBar.y=80;
 
-			this.x=-13;
-			this.y=3;
+			this.x=0;
+			this.y=1;
 		}
 
 		private function onStartClick(e:MouseEvent):void {
@@ -186,6 +187,7 @@ package com.leyou.ui.pkCopy {
 
 			this.timerLbl.x=(UIEnum.WIDTH - this.timerLbl.width) - 120;
 			this.timerLbl.y=6;
+
 
 			this.updateList();
 
@@ -267,6 +269,7 @@ package com.leyou.ui.pkCopy {
 			if (Core.me == null || Core.me.info == null)
 				return;
 
+			this.timerLbl.visible=true;
 			this.o=data;
 
 			var render:DungeonTZRender;
@@ -446,8 +449,7 @@ package com.leyou.ui.pkCopy {
 			if (okopen || date > date2 || this.tzId == -1) {
 				this.tzBar.hide();
 			} else {
-
-//				trace(this.tzId, this.itemsList[this.tzId].id, TableManager.getInstance().getTzActiveByID(this.itemsList[this.tzId].id).lv)
+ 
 				var infot:TTzActiive=TableManager.getInstance().getTzActiveByID(this.itemsList[this.tzId].id);
 				if (Core.me == null || infot.lv > Core.me.info.level) {
 					this.tzBar.hide();
@@ -533,6 +535,10 @@ package com.leyou.ui.pkCopy {
 
 		override public function get height():Number {
 			return 482;
+		}
+		
+		public function setTzBarState(v:Boolean):void{
+			this.tzBar.setScalePanel(v);
 		}
 
 //		override public function hide():void {

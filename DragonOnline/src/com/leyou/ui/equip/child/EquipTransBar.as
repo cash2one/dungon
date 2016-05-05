@@ -13,7 +13,7 @@ package com.leyou.ui.equip.child {
 	import com.leyou.data.tips.TipsInfo;
 	import com.leyou.enum.ConfigEnum;
 	import com.leyou.utils.PropUtils;
-	
+
 	import flash.display.DisplayObject;
 	import flash.geom.Point;
 
@@ -48,7 +48,7 @@ package com.leyou.ui.equip.child {
 		private var goldImg:Image;
 
 		private var dc:int=0;
-		
+
 		public function EquipTransBar() {
 			super(LibManager.getInstance().getXML("config/ui/equip/equipTransBar.xml"));
 			this.init();
@@ -125,20 +125,31 @@ package com.leyou.ui.equip.child {
 
 				rate=tmpXml.@addRate;
 				this.info2=info as TipsInfo;
-
+				
+				var egold:String=ConfigEnum["equip" + info.qh];
+				
+				if (egold.split("|")[0] == 1)
+					this.goldImg.updateBmp("ui/backpack/moneyIco.png");
+				else if (egold.split("|")[0] == 2)
+					this.goldImg.updateBmp("ui/backpack/yuanbaoIco.png");
+				
+				this.goldLbl.text="" + egold.split("|")[1];
+				
 			} else {
 				this.dc=int(einfo.dc);
-				this.goldLbl.text="" + einfo.dc;
+//				this.goldLbl.text="" + einfo.dc;
 				this.info=info as TipsInfo;
 			}
 
-			
+
 			if (this.rate != -1 && this.info != null) {
 				this.updataGridData();
-				
-				if (this.info2 != null)
-					this.goldLbl.text="" + int(this.dc * int(ConfigEnum["equip" + this.info2.qh]));
+
+				if (this.info2 != null) {
+//					this.goldLbl.text="" + int(this.dc * int(ConfigEnum["equip" + this.info2.qh]));
+				}
 			}
+
 		}
 
 		public function getGold():int {
@@ -191,7 +202,7 @@ package com.leyou.ui.equip.child {
 			this.lv1Lbl.text="";
 
 			this.goldLbl.text="";
-			
+
 			for (var i:int=0; i < 2; i++) {
 				this.viewTxtArr[i].text="";
 				this.view1Arr[i].text="";

@@ -2,7 +2,7 @@ package com.leyou.data.cityBattle
 {
 	public class CityBattleCityData
 	{
-//		public var hostData:Array;
+		public var hostData:Array;
 		
 		public var hasOwner:Boolean;
 		
@@ -38,14 +38,14 @@ package com.leyou.data.cityBattle
 		}
 		
 		public function unserialize(obj:Object):void{
-			var hostData:Array = obj.cz;
+			hostData = obj.mlist;
 			hasOwner = ((null != hostData) && (hostData.length > 0));
 			if(hasOwner){
-				guildName = hostData[0];
-				palyerName = hostData[1];
-				school = hostData[2];
-				gender = hostData[3];
-				avt = hostData[4];
+				guildName = hostData[0][0];
+				palyerName = hostData[0][1];
+				school = hostData[0][2];
+				gender = hostData[0][3];
+				avt = hostData[0][4];
 			}
 //			hostData = obj.cz.concat();
 			holdDay = obj.zday;

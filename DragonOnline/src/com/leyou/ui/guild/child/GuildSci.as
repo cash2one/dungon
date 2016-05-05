@@ -42,7 +42,7 @@ package com.leyou.ui.guild.child {
 			var einfo1:MouseEventInfo=new MouseEventInfo();
 
 			var bgimg:Image;
-			for (var i:int=0; i < 6; i++) {
+			for (var i:int=0; i < 5; i++) {
 				bgimg=this.getUIbyID("bgImg" + (i + 1)) as Image;
 				this.ImgList.push(bgimg);
 

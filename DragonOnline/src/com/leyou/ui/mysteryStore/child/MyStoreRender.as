@@ -12,9 +12,11 @@ package com.leyou.ui.mysteryStore.child {
 	import com.ace.ui.auto.AutoSprite;
 	import com.ace.ui.img.child.Image;
 	import com.ace.ui.lable.Label;
+	import com.ace.ui.notice.NoticeManager;
 	import com.leyou.data.tips.TipsInfo;
 	import com.leyou.ui.shop.child.ShopGrid;
 	import com.leyou.utils.ItemUtil;
+	import com.leyou.utils.PropUtils;
 
 	import flash.display.DisplayObject;
 	import flash.events.MouseEvent;
@@ -25,9 +27,14 @@ package com.leyou.ui.mysteryStore.child {
 		private var nameLbl:Label;
 		private var lvLbl:Label;
 		private var numLbl:Label;
+		private var buynumLbl:Label;
+		private var needTxt:Label;
+		private var lv1Lbl:Label;
 		private var bgimg:Image;
 		private var icoImg:Image;
 
+		private var glv:int=-1;
+		private var buycount:int=-1;
 		public var index:int=-1;
 		private var grid:ShopGrid;
 		private var isselected:Boolean=false;
@@ -49,6 +56,9 @@ package com.leyou.ui.mysteryStore.child {
 			this.nameLbl=this.getUIbyID("nameLbl") as Label;
 			this.lvLbl=this.getUIbyID("lvLbl") as Label;
 			this.numLbl=this.getUIbyID("numLbl") as Label;
+			this.buynumLbl=this.getUIbyID("buynumLbl") as Label;
+			this.needTxt=this.getUIbyID("needTxt") as Label;
+			this.lv1Lbl=this.getUIbyID("lv1Lbl") as Label;
 			this.bgimg=this.getUIbyID("bgimg") as Image;
 			this.icoImg=this.getUIbyID("icoImg") as Image;
 
@@ -100,6 +110,8 @@ package com.leyou.ui.mysteryStore.child {
 				ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, TableManager.getInstance().getSystemNotice(10001).content, new Point(this.stage.mouseX, this.stage.mouseY));
 			} else if (this.tipsInfo.moneyType == 6) {
 				ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, TableManager.getInstance().getSystemNotice(9609).content, new Point(this.stage.mouseX, this.stage.mouseY));
+			} else if (this.tipsInfo.moneyType == 7) {
+				ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, TableManager.getInstance().getSystemNotice(9612).content, new Point(this.stage.mouseX, this.stage.mouseY));
 			}
 
 		}
@@ -109,8 +121,19 @@ package com.leyou.ui.mysteryStore.child {
 		}
 
 		private function onMouseClick(e:MouseEvent):void {
+
+			if (this.glv < this.info.limitNation) {
+				NoticeManager.getInstance().broadcastById(11003);
+				return;
+			}
+
+			if (this.buycount >= this.info.limitNum && this.info.limitNum > 0) {
+				NoticeManager.getInstance().broadcastById(11004);
+				return;
+			}
+
 			UIManager.getInstance().buyWnd.show();
-			UIManager.getInstance().buyWnd.updateMystery(info, index);
+			UIManager.getInstance().buyWnd.updateMystery(info, index, this.info.limitNum - this.buycount);
 		}
 
 		private function onMouseOver(e:MouseEvent):void {
@@ -121,15 +144,16 @@ package com.leyou.ui.mysteryStore.child {
 			this.bgimg.updateBmp("ui/mysteryStoe/smsd_wp1.jpg");
 		}
 
-		public function updataInfo(o:Object, num:int):void {
+		public function updataInfo(o:Object, num:int, glv:int=0, buyCount:int=0):void {
 			this.info=o;
+			this.glv=glv;
+			this.buycount=(buyCount);
 
 			var infoItem:Object;
 
 			infoItem=TableManager.getInstance().getItemInfo(o.itemId);
 			if (infoItem == null)
 				infoItem=TableManager.getInstance().getEquipInfo(o.itemId);
-//			}
 
 			this.grid.updataInfo(infoItem);
 
@@ -137,6 +161,7 @@ package com.leyou.ui.mysteryStore.child {
 			this.nameLbl.textColor=ItemUtil.getColorByQuality(infoItem.quality);
 
 			this.lvLbl.text=infoItem.level + "";
+			this.lv1Lbl.text=o.limitNation + "";
 
 			if (Core.me.info.level < int(infoItem.level)) {
 				this.lvLbl.textColor=0xff0000;
@@ -144,7 +169,20 @@ package com.leyou.ui.mysteryStore.child {
 				this.lvLbl.textColor=0xffffff;
 			}
 
-			if (o.moneyId == 4 || o.moneyId == 6) {
+			this.needTxt.visible=this.lv1Lbl.visible=(o.limitNation != 0);
+
+			if (glv < o.limitNation) {
+				this.lv1Lbl.textColor=0xff0000;
+			} else {
+				this.lv1Lbl.textColor=0xffffff;
+			}
+
+			if (o.limitNum == 0)
+				this.buynumLbl.text="" + PropUtils.getStringById(2044);
+			else
+				this.buynumLbl.text="" + (o.limitNum - buyCount);
+
+			if (o.moneyId == 4 || o.moneyId == 6 || o.moneyId == 7) {
 
 				this.numLbl.text=o.moneyNum + "";
 
@@ -160,6 +198,8 @@ package com.leyou.ui.mysteryStore.child {
 					this.tipsInfo.moneyType=5;
 				else if (o.moneyId == 6)
 					this.tipsInfo.moneyType=6;
+				else if (o.moneyId == 7)
+					this.tipsInfo.moneyType=7;
 
 				this.tipsInfo.moneyNum=int(o.moneyNum);
 //				this.tipsInfo.moneyItemid=10001;

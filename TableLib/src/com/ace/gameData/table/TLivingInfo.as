@@ -23,6 +23,9 @@ package com.ace.gameData.table {
 		public var isHitOff:Boolean;
 		public var collectTime:int;
 
+		public var soundSelect:int;
+		public var soundAttack:int;
+		public var soundDead:int;
 
 		public function TLivingInfo(info:XML) {
 			//			<data id="1" eb_name="丽娜" title="厨师" modelId="11001" radius="80" type="1" paoStand="晚餐做点什么呢" 
@@ -47,6 +50,11 @@ package com.ace.gameData.table {
 			this.collectTime=info.@Open_Time;
 
 			this.isHitOff=StringUtil.intToBoolean(info.@blowup);
+			
+			
+			this.soundSelect=info.@sound1;
+			this.soundAttack=info.@sound2;
+			this.soundDead=info.@sound3;
 		}
 
 		public function get isAggressive():Boolean {

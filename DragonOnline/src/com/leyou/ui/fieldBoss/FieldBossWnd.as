@@ -26,6 +26,11 @@ package com.leyou.ui.fieldBoss {
 	import flash.geom.Rectangle;
 	import flash.text.TextFormat;
 
+	/**
+	 * 貌似没用了 
+	 * @author Administrator
+	 * 
+	 */	
 	public class FieldBossWnd extends AutoWindow {
 		private var prevBtn:ImgButton;
 

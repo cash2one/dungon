@@ -160,8 +160,8 @@ package com.ace.ui.component
 			}
 		}
 		
-		public function trimmingPlus():void{
-			_addValue++;
+		public function trimmingPlus(value:int=1):void{
+			_addValue+=value;
 			if((-1 != limit) && (_addValue > limit)){
 				_addValue = limit;
 			}
@@ -171,8 +171,8 @@ package com.ace.ui.component
 			setNDegree(degree + _addValue/maxNum);
 		}
 		
-		public function trimmingMinus():void{
-			_addValue--;
+		public function trimmingMinus(value:int=1):void{
+			_addValue-=value;
 			if(_addValue < 0){
 				_addValue = 0;
 			}
@@ -204,7 +204,9 @@ package com.ace.ui.component
 			dragBtn.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 		}
 		
+		public var recordNum:int;
 		public function setNum(num:int):void{
+			this.recordNum=num;
 			setDegree(num/maxNum);
 		}
 	}

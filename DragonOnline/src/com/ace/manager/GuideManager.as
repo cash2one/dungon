@@ -57,7 +57,6 @@ package com.ace.manager {
 		private var tmpTip:GuidePointTipII;
 
 		public function show(id:int):Boolean {
-			 
 			if (id == 49) {
 				trace("为什么不显示？");
 			}

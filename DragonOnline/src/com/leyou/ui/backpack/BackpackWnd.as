@@ -234,6 +234,14 @@ package com.leyou.ui.backpack {
 
 		}
 
+		override public function onWndMouseDown():void {
+			super.onWndMouseDown();
+			
+			if (UIManager.getInstance().isCreate(WindowEnum.SELLEXPEFFECT) && UIManager.getInstance().sellExpEffect.visible) {
+				UIManager.getInstance().sellExpEffect.setToTop();
+			}
+			
+		}
 
 		override public function get height():Number {
 			return 544;

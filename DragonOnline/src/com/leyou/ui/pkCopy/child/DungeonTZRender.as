@@ -59,14 +59,17 @@ package com.leyou.ui.pkCopy.child {
 				case 0:
 					this.filters=[]
 					this.stateImg.updateBmp("ui/tz/icon_wkq.png");
+					this.state=0;
 					break;
 				case 1:
 					this.filters=[]
 					this.stateImg.updateBmp("ui/tz/icon_jxz.png");
+					this.state=-1;
 					break;
 				case 2:
 					this.filters=[FilterUtil.enablefilter]
 					this.stateImg.updateBmp("ui/tz/icon_yjs.png");
+					this.state=1;
 					break;
 			}
 		}

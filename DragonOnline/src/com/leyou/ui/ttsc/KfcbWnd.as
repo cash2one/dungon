@@ -64,7 +64,7 @@ package com.leyou.ui.ttsc {
 
 			this.payBtn.addEventListener(MouseEvent.CLICK, onPay);
 
-			this.updateInit();
+//			this.updateInit();
 
 			this.kfcbrender=new KfcbRender();
 			this.addChild(this.kfcbrender);
@@ -74,9 +74,9 @@ package com.leyou.ui.ttsc {
 
 		}
 
-		private function updateInit():void {
+		private function updateInit(type:int):void {
 
-			var arr:Array=TableManager.getInstance().getPayPromotionByType2(4);
+			var arr:Array=TableManager.getInstance().getPayPromotionByType2(type);
 			var listBtn:ImgLabelButton;
 			var pay:TPayPromotion;
 			var i:int=0;
@@ -85,7 +85,7 @@ package com.leyou.ui.ttsc {
 				if (this.getChildByName("s_" + pay.type) != null)
 					continue;
 
-				listBtn=new ImgLabelButton("ui/common/" + pay.btnUrl, pay.btn_des,0,0,FontEnum.getTextFormat("message2"));
+				listBtn=new ImgLabelButton("ui/common/" + pay.btnUrl, pay.btn_des, 0, 0, FontEnum.getTextFormat("message2"));
 				this.addChild(listBtn);
 
 				listBtn.visible=false;
@@ -103,16 +103,24 @@ package com.leyou.ui.ttsc {
 		}
 
 		private function onClick(e:MouseEvent):void {
-
+ 
+			
+			var st:int=0;
+			if (this.minfo.st == 1) {
+				st=4;
+			} else if (this.minfo.st == 2) {
+				st=5;
+			}
+			
 			this.setState(false);
 			e.target.turnOn();
 
 			var str:String=e.target.name;
 			var type:int=int(str.split("_")[1]);
 
-			this.kfcbrender.updateInfo(this.getCurrentArr(this.minfo.raklist, type));
+			this.kfcbrender.updateInfo(this.getCurrentArr(this.minfo.raklist, type),st);
 
-			var payarr:Array=TableManager.getInstance().getPayPromotionByType(type);
+			var payarr:Array=TableManager.getInstance().getPayPromotionByType(type,st);
 			payarr.sortOn("id", Array.CASEINSENSITIVE | Array.NUMERIC);
 
 			var pay:TPayPromotion=payarr[0];
@@ -146,7 +154,7 @@ package com.leyou.ui.ttsc {
 				this.monLbl.text="0";
 				this.secLbl.text="0";
 			}
-
+ 
 		}
 
 		override public function show(toTop:Boolean=true, $layer:int=1, toCenter:Boolean=true):void {
@@ -164,17 +172,26 @@ package com.leyou.ui.ttsc {
 			}
 
 		}
-		
-		public function updateKFhdInfo(o:Object):void{
-			
-			
-			
+
+		public function updateKFhdInfo(o:Object):void {
+
+
+
 		}
 
 		public function updateInfo(o:Object):void {
 
 			this.minfo=o;
 
+			var st:int=0;
+			if (this.minfo.st == 1) {
+				st=4;
+			} else if (this.minfo.st == 2) {
+				st=5;
+			}
+
+			this.updateInit(st);
+			
 			var list:Array=o.raklist;
 
 			var payarr:Array
@@ -198,7 +215,7 @@ package com.leyou.ui.ttsc {
 					continue;
 				}
 
-				payarr=TableManager.getInstance().getPayPromotionByType(pid);
+				payarr=TableManager.getInstance().getPayPromotionByType(pid,st);
 				pay=payarr[0];
 
 				d.time=this.minfo.opentime * 1000;
@@ -234,7 +251,9 @@ package com.leyou.ui.ttsc {
 
 			if (isExitsBtn) {
 				UIManager.getInstance().rightTopWnd.active("kfjjBtn");
+				UIManager.getInstance().rightTopWnd.setEffect("kfjjBtn", true);
 			} else {
+				UIManager.getInstance().rightTopWnd.setEffect("kfjjBtn", false);
 				UIManager.getInstance().rightTopWnd.deactive("kfjjBtn");
 			}
 
@@ -261,7 +280,7 @@ package com.leyou.ui.ttsc {
 
 			return null;
 		}
- 
+
 
 	}
 }

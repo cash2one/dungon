@@ -159,11 +159,14 @@ package com.leyou.ui.vip {
 			var vipInfo:TVIPDetailInfo=TableManager.getInstance().getVipDetailInfo(vipLv);
 			var nVipInfo:TVIPDetailInfo=TableManager.getInstance().getVipDetailInfo(vipLv + 1);
 			var content:String=TableManager.getInstance().getSystemNotice(6002).content;
-			//			if(Core.isTencent && (vipLv <= 0)){
-			//				desLbl.visible = false;
-			//				setVipProgress(0);
-			//			}else{
-			//				desLbl.visible = true;
+
+//			if (Core.isTencent && (vipLv <= 0)) {
+//				desLbl.visible=false;
+//				setVipProgress(0);
+//			} else {
+//				desLbl.visible=true;
+//			}
+
 			var rate:Number=0;
 			if ((null != vipInfo) && (null != nVipInfo)) {
 				content=StringUtil.substitute(content, nVipInfo.cost - data.cnum, vipLv + 1);
@@ -186,5 +189,14 @@ package com.leyou.ui.vip {
 			//			}
 			rightsRender.switchToObtainable();
 		}
+		
+		override public function get width():Number{
+			return 782;
+		}
+		
+		override public function get height():Number{
+			return 559;
+		}
+		
 	}
 }

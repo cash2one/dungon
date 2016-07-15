@@ -21,8 +21,8 @@ package com.ace.loader.pre {
 	import flash.utils.setTimeout;
 
 	public class PreLoaderImg extends PreLoaderModel {
-		private static const PROGRESS_OFFSET:int=45;
-		private static const PROGRESS_VALID_WIDTH:int=675;
+		private static const PROGRESS_OFFSET:int=36;
+		private static const PROGRESS_VALID_WIDTH:int=688;
 
 		private var bgImg:Bitmap;
 		private var proressBgImg:Bitmap;

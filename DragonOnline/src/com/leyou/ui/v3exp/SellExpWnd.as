@@ -16,6 +16,7 @@ package com.leyou.ui.v3exp {
 	import com.leyou.net.cmd.Cmd_Vip;
 	import com.leyou.net.cmd.Cmd_ddsc;
 	import com.leyou.ui.task.child.MissionGrid;
+	import com.leyou.utils.PayUtil;
 
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
@@ -44,6 +45,7 @@ package com.leyou.ui.v3exp {
 			super(LibManager.getInstance().getXML("config/ui/v3exp/sellExpWnd.xml"));
 			this.init();
 			this.mouseChildren=true;
+			this.mouseEnabled=false;
 		}
 
 		private function init():void {
@@ -115,6 +117,8 @@ package com.leyou.ui.v3exp {
 			}
 
 			this.swfeff.scaleX=this.swfeff.scaleY=0.7;
+			this.swfeff.mouseChildren=this.swfeff.mouseEnabled=false;
+//			this.swfeff.opaqueBackground=0xff0000;
 		}
 
 		private function onClick(e:MouseEvent):void {
@@ -151,13 +155,17 @@ package com.leyou.ui.v3exp {
 					starts.length=0;
 				}
 
-				if (Core.me.info.vipLv > 0 && flyIds1.length > 0) {
+				if (flyIds1.length > 0) {
 
-					Cmd_Vip.cm_VIP_J(1);
+					if (Core.me.info.vipLv == 0) {
+						PayUtil.openPayUrl()
+					} else {
+						Cmd_Vip.cm_VIP_J(1);
 
-					FlyManager.getInstance().flyBags(flyIds1, starts1);
-					flyIds1.length=0;
-					starts1.length=0;
+						FlyManager.getInstance().flyBags(flyIds1, starts1);
+						flyIds1.length=0;
+						starts1.length=0;
+					}
 				}
 			} else
 				UILayoutManager.getInstance().open(WindowEnum.FIRST_PAY);

@@ -3,6 +3,7 @@ package com.ace.enum {
 	public class PlatformEnum {
 		static public const ID_1360:String="1360";
 		static public const ID_360:String="360";
+		static public const ID_360_OPEN:String="open360";
 		static public const ID_119WAN:String="119wan";
 		static public const ID_14339:String="14339";
 		static public const ID_E7E7PK:String="e7e7pk";
@@ -19,6 +20,7 @@ package com.ace.enum {
 		static public const ID_HUWAN:String="huwan";
 		static public const ID_QU247:String="qu247";
 		static public const ID_YA247:String="ya247";
+		static public const ID_KWAN:String="kuaiwan";
 
 		static public const ID_DEV:String="dev";
 		static public const ID_TEST:String="ceshi";

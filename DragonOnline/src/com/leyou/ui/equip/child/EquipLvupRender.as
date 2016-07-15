@@ -299,14 +299,14 @@ package com.leyou.ui.equip.child {
 				var zdl:int=int.MAX_VALUE;
 				for (i=0; i < bvec.length; i++) {
 
-					if (bvec[i] != null && bvec[i].data != null) {
-						if (bvec[i].data.tips.zdl < zdl) {
+					if (bvec[i] != null && bvec[i].data != null && bvec[i].data.info.id == data.info.id) {
+						if (bvec[i].data != data && bvec[i].data.tips.zdl < zdl) {
 
 							if (bvec[i].dataId == 51)
 								continue;
 
 							if (bvec[i].data.info.quality < 2 || bvec[i].data.info.lvup_id == 0) {
-								continue;
+					 			continue;
 							}
 
 							if (bvec[i].data.info.Suit_Group > 0) {
@@ -329,8 +329,8 @@ package com.leyou.ui.equip.child {
 					idx=0;
 					for (i=0; i < bvec.length; i++) {
 
-						if (bvec[i] != null && bvec[i].data != null) {
-							if (bvec[i].data.tips.zdl < zdl) {
+						if (bvec[i] != null && bvec[i].data != null && bvec[i].data.info.id == data.info.id) {
+							if (bvec[i].data != data && bvec[i].data.tips.zdl < zdl) {
 
 								if (bvec[i].dataId == 51)
 									continue;

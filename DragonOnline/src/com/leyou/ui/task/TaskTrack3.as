@@ -2,17 +2,23 @@ package com.leyou.ui.task {
 
 
 	import com.ace.config.Core;
+	import com.ace.enum.FontEnum;
 	import com.ace.enum.SceneEnum;
 	import com.ace.enum.UIEnum;
+	import com.ace.enum.WindowEnum;
 	import com.ace.gameData.manager.DataManager;
 	import com.ace.gameData.manager.MapInfoManager;
+	import com.ace.gameData.manager.MyInfoManager;
 	import com.ace.manager.LayerManager;
 	import com.ace.manager.LibManager;
+	import com.ace.manager.UILayoutManager;
 	import com.ace.manager.UIManager;
 	import com.ace.ui.auto.AutoSprite;
 	import com.ace.ui.button.children.ImgButton;
 	import com.ace.ui.img.child.Image;
+	import com.ace.ui.lable.Label;
 	import com.greensock.TweenLite;
+	import com.leyou.enum.ConfigEnum;
 	import com.leyou.ui.task.child.MissionTrackRender2;
 	import com.leyou.ui.task.child.missionTrackRender3;
 	
@@ -27,6 +33,7 @@ package com.leyou.ui.task {
 		private var arrowBtn:ImgButton;
 		private var taskBtn:ImgButton;
 		private var scheduleBtn:ImgButton;
+		private var txLbl:Label;
 
 		private var taskMainAndDaily:missionTrackRender3;
 		private var taskOther:MissionTrackRender2;
@@ -50,6 +57,7 @@ package com.leyou.ui.task {
 //			this.arrowBtn=this.getUIbyID("arrowBtn") as ImgButton;
 			this.taskBtn=this.getUIbyID("taskBtn") as ImgButton;
 			this.scheduleBtn=this.getUIbyID("scheduleBtn") as ImgButton;
+			this.txLbl=this.getUIbyID("txLbl") as Label;
 
 //			this.arrowBtn.addEventListener(MouseEvent.CLICK, onClick);
 			this.taskBtn.addEventListener(MouseEvent.CLICK, onClick);
@@ -74,6 +82,13 @@ package com.leyou.ui.task {
 			this.addChild(this.arrowIcon);
 			this.arrowIcon.visible=false;
 
+			this.txLbl.styleSheet=FontEnum.DEFAULT_LINK_STYLE;
+			this.txLbl.htmlText="<a href='event:#'>" + this.txLbl.text + "</a>";
+			this.txLbl.addEventListener(MouseEvent.CLICK, ontaskClick);
+			this.txLbl.mouseEnabled=true;
+
+//			this.txLbl.visible=false;
+
 			LayerManager.getInstance().mainLayer.addChild(this.arrowIcon);
 
 			this.arrowBtn=new ImgButton("ui/funForcast/btn_right.png");
@@ -93,6 +108,12 @@ package com.leyou.ui.task {
 			this.resize();
 
 			this.taskBtn.turnOn();
+		}
+
+		private function ontaskClick(e:MouseEvent):void {
+			if (e.target == this.txLbl) {
+				UILayoutManager.getInstance().open(WindowEnum.INTROWND);
+			}
 		}
 
 		private function onClick(e:MouseEvent):void {
@@ -130,7 +151,7 @@ package com.leyou.ui.task {
 
 				visible=true;
 				arrowIcon.visible=false;
-				TweenLite.to(this, 1, {x: UIEnum.WIDTH - 265 + 20, onComplete: function():void {
+				TweenLite.to(this, 1, {x: UIEnum.WIDTH - 267, onComplete: function():void {
 					arrowBtn.updataBmd("ui/funForcast/btn_right.png");
 					viewState=true;
 				}});
@@ -144,7 +165,7 @@ package com.leyou.ui.task {
 			if (Core.me == null)
 				return;
 
-			if (Core.me != null && Core.me.info.level < 30)
+			if (Core.me != null && Core.me.info.level < 30 || !this.arrowBtn.visible)
 				return;
 
 
@@ -164,7 +185,7 @@ package com.leyou.ui.task {
 			} else {
 				visible=true;
 				arrowIcon.visible=false;
-				TweenLite.to(this, 1, {x: UIEnum.WIDTH - this.width + 20, onComplete: function():void {
+				TweenLite.to(this, 1, {x: UIEnum.WIDTH - 267, onComplete: function():void {
 					arrowBtn.updataBmd("ui/funForcast/btn_right.png");
 				}});
 
@@ -205,9 +226,9 @@ package com.leyou.ui.task {
 
 			if (Core.me == null)
 				return;
-			
 
-			if (Core.me != null && Core.me.info.level < 30) {
+
+			if (Core.me != null && Core.me.info.level < ConfigEnum.common9) {
 				this.arrowBtn.visible=false;
 				this.arrowIcon.visible=false;
 				this.viewState=false;
@@ -306,9 +327,18 @@ package com.leyou.ui.task {
 				}
 			}
 
-
+			this.taskMainAndDaily.ref_yb=o.ref_yb;
 			this.taskMainAndDaily.updateDailyInfo(tr[1]);
 //			this.firstAutoAstar=false;
+
+			if (!MyInfoManager.getInstance().isTaskOk && MyInfoManager.getInstance().currentTaskId == 89)
+				TweenLite.delayedCall(ConfigEnum.autoTask3, this.autoTaskComplete);
+		}
+
+		private function autoTaskComplete():void {
+			if (this.visible) {
+				this.autoCompleteLoop();
+			}
 		}
 
 		public function get taskID():int {
@@ -359,15 +389,15 @@ package com.leyou.ui.task {
 
 		public function resize():void {
 			if (!viewState) {
-				this.x=(UIEnum.WIDTH); //933=真实宽度
-				this.y=((UIEnum.HEIGHT - 246) >> 1); //107=真实高度
+				this.x=(UIEnum.WIDTH - 4); //933=真实宽度
+				this.y=((UIEnum.HEIGHT - 316) >> 1); //107=真实高度
 			} else {
-				this.x=(UIEnum.WIDTH - 265); //933=真实宽度
-				this.y=((UIEnum.HEIGHT - 246) >> 1); //107=真实高度
+				this.x=(UIEnum.WIDTH - 267); //933=真实宽度
+				this.y=((UIEnum.HEIGHT - 316) >> 1); //107=真实高度
 			}
 
 			this.arrowBtn.x=UIEnum.WIDTH - this.arrowBtn.width;
-			this.arrowBtn.y=this.y; // + 20;
+			this.arrowBtn.y=this.y + 5;
 
 			this.arrowIcon.x=UIEnum.WIDTH - this.arrowIcon.width;
 			this.arrowIcon.y=this.arrowBtn.y + arrowBtn.height;
@@ -448,6 +478,12 @@ package com.leyou.ui.task {
 			else
 				this.taskMainAndDaily.autoComplete()
 		}
+
+		public function autoCompleteLoop():void {
+			if (this.taskMainAndDaily.taskID != 0)
+				this.taskMainAndDaily.autoCompleteLoop();
+		}
+
 
 		public function setDailyTaskVip(vip:int):void {
 			this.taskMainAndDaily.setYbOnKeyVisible(vip >= DataManager.getInstance().vipData.taskPrivilegeVipLv());

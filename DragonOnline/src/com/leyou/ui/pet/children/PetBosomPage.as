@@ -167,7 +167,8 @@ package com.leyou.ui.pet.children {
 					Cmd_Pet.cm_PET_U(2, petTId, int(numInput.text));
 					var itemId:int=ConfigEnum.servent18.split(",")[0];
 					var rnum:int=MyInfoManager.getInstance().getBagItemNumById(itemId);
-					if (rnum < int(numInput.text)) {
+					var rnum1:int=MyInfoManager.getInstance().getBagItemNumById(ConfigEnum.servent18.split(",")[1]);
+					if (rnum < int(numInput.text) && rnum1 < int(numInput.text)) {
 						UILayoutManager.getInstance().open(WindowEnum.QUICK_BUY);
 						UIManager.getInstance().quickBuyWnd.pushItem(itemId, itemId);
 					}

@@ -235,7 +235,7 @@ package com.leyou.ui.moldOpen {
 
 			if (null == icon) {
 				icon=new Image();
-				icon.x=16;
+				icon.x=20;
 				icon.y=-50;
 			}
 			var mc:MovieClip=bgMc.getChildAt(0) as MovieClip;

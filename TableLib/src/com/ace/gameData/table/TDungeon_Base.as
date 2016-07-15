@@ -372,6 +372,17 @@ package com.ace.gameData.table
 		
 		public var D_Floor:int;
 
+		/**
+		 *	限定通关时间
+		 *	
+		 *	(s)
+		 */
+		public var D_Lasttime:int;
+		
+		/**
+		 *	是否计算急速通关榜
+		 */
+		public var D_FastTop:int;
 		
 		public function TDungeon_Base(data:XML=null)
 		{
@@ -434,7 +445,8 @@ package com.ace.gameData.table
 			this.Base_Drop=data.@Base_Drop;
 			this.Boss_Drop=data.@Boss_Drop;
 			this.D_Floor=data.@D_Floor;
-
+			this.D_Lasttime=data.@D_Lasttime;
+			this.D_FastTop=data.@D_FastTop;
 			
 		}
 		

@@ -23,7 +23,7 @@ package com.leyou.ui.message {
 	import com.ace.ui.lable.Label;
 	import com.greensock.TweenMax;
 	import com.leyou.data.tips.TipsInfo;
-	
+
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 
@@ -74,7 +74,7 @@ package com.leyou.ui.message {
 
 			var arrid:int;
 			var showArrow:Boolean=true;
-			
+
 			var daley:Number=0.3;
 
 			if (info.uiId.indexOf(",") > -1) {
@@ -122,7 +122,8 @@ package com.leyou.ui.message {
 				});
 
 				arrid=uid2;
- 				daley=0.7;
+				daley=0.7;
+
 			} else {
 
 
@@ -150,7 +151,7 @@ package com.leyou.ui.message {
 				}
 
 				if (info.tagId != "") {
-					TweenMax.delayedCall(0.3, function():void {
+					TweenMax.delayedCall(0.6, function():void {
 						switch (int(info.uiId)) {
 							case WindowEnum.ROLE:
 								UIManager.getInstance().roleWnd.setTabIndex(int(info.tagId));
@@ -197,7 +198,21 @@ package com.leyou.ui.message {
 
 			this.showEff=TweenMax.to(this.nowBtn, 1, {glowFilter: {color: 0xfa9611, alpha: 1, blurX: 20, blurY: 20, strength: 2}, yoyo: true, repeat: -1});
 
-			this.reSize();
+
+		}
+
+		public function showPanel(o:TSeGuild):void {
+
+			this.updateInfo(o);
+			var arrid:int;
+			if (info.uiId.indexOf(",") > -1) {
+				arrid=info.uiId.split(",")[1];
+			} else {
+				arrid=int(info.uiId);
+			}
+
+			if (!UIManager.getInstance().isCreate(arrid) || !UIManager.getInstance().getWindow(arrid).visible)
+				this.show();
 		}
 
 		override public function hide():void {
@@ -215,6 +230,12 @@ package com.leyou.ui.message {
 			LayerManager.getInstance().windowLayer.removeChild(this);
 		}
 
+		override public function show(toTop:Boolean=true, $layer:int=1, toCenter:Boolean=true):void {
+			super.show(toTop, $layer, toCenter);
+
+			this.reSize();
+		}
+
 		public function reSize():void {
 			this.x=(UIEnum.WIDTH - 308);
 			this.y=(UIEnum.HEIGHT - 249);
@@ -223,7 +244,7 @@ package com.leyou.ui.message {
 		override public function get width():Number {
 			return 308;
 		}
-		
+
 		override public function get height():Number {
 			return 249;
 		}

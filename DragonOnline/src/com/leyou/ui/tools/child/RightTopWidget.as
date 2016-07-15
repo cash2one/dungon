@@ -107,6 +107,16 @@ package com.leyou.ui.tools.child {
 			strText.visible=false;
 			numBg2.visible=false;
 		}
+		
+		public function setpushContent():void {
+//			display=$display;
+//			name=display.name;
+//			addChildAt(display, 0);
+			numText.visible=false;
+			numBg1.visible=false;
+			strText.visible=false;
+			numBg2.visible=false;
+		}
 
 		public function updateBmp($url:String):void {
 			var imgBtn:ImgButton=display as ImgButton;

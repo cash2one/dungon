@@ -150,7 +150,7 @@ package com.leyou.ui.equip.child {
 
 				var num:int=MyInfoManager.getInstance().getBagItemNumByName(this.itemLbl.text.split(" x ")[0]);
 				if (num < needNum && UIManager.getInstance().quickBuyWnd.isAutoBuy(30800, 30801))
-					Cmd_Element.cm_ele_trans_c(btype, pos, ctype, (UIManager.getInstance().quickBuyWnd.getCost(30801, 30800) == 0 ? 2 : 1));
+					Cmd_Element.cm_ele_trans_c(btype, pos, ctype, (UIManager.getInstance().quickBuyWnd.getCost(30800, 30801) == 0 ? 2 : 1));
 				else
 					Cmd_Element.cm_ele_trans_c(btype, pos, ctype);
 			} else

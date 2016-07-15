@@ -19,9 +19,10 @@ package com.leyou.ui.boss.children {
 	import com.leyou.data.fieldboss.FieldBossInfo;
 	import com.leyou.data.fieldboss.FieldBossTipInfo;
 	import com.leyou.enum.TaskEnum;
+	import com.leyou.manager.TimerManager;
 	import com.leyou.net.cmd.Cmd_YBS;
 	import com.leyou.utils.PropUtils;
-	
+
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 
@@ -141,11 +142,13 @@ package com.leyou.ui.boss.children {
 			var timeArr:Array=bossInfo.refreshTimes;
 			var tl:int=timeArr.length;
 			var date:Date=new Date();
+			date.time=(TimerManager.CurrentServerTime + TimerManager.currentTime) * 1000;
 			var ct:int=date.hours * 60 * 60 + date.minutes * 60 + date.seconds;
 			for (var n:int=0; n < tl; n++) {
 				var tArr:Array=timeArr[n].split(",");
 				var rt:int=int(tArr[0]) * 60 * 60 + int(tArr[1]) * 60 + int(tArr[2]);
 				if (ct < rt) {
+					tArr.pop();
 					return tArr.join(":");
 				}
 			}
@@ -201,13 +204,13 @@ package com.leyou.ui.boss.children {
 				var monsterInfo:TLivingInfo=TableManager.getInstance().getLivingInfo(bossInfo.monsterId);
 				var fbInfo:FieldBossInfo=DataManager.getInstance().fieldBossData.getBossInfo(bossRender.bossId);
 				var content:String="        {1}<font color='#ff00'><u><a href='event:other_ycp--{2}'>" + PropUtils.getStringById(1570) + "</a></u></font>";
-				content=StringUtil.substitute(PropUtils.getStringById(2452),DataManager.getInstance().fieldBossData.lastCount);
+				content=StringUtil.substitute(PropUtils.getStringById(2452), DataManager.getInstance().fieldBossData.lastCount);
 				if (0 == fbInfo.status) {
 					content="        {1}<font color='#ff0000'><u><a href='event:other_ycp--{2}'>" + PropUtils.getStringById(1572) + "</a></u></font>";
 					content=PropUtils.getStringById(2454);
 				}
 //				content=StringUtil.substitute(content, monsterInfo.name, bossRender.bossId);
-				var arr:Array=[PropUtils.getStringById(2423),"<a href='event:other_ycp--"+monsterInfo.name+"'>" + PropUtils.getStringById(2439) + "</a>", content, "", Cmd_YBS.callBack, "", onBtnClick];
+				var arr:Array=[PropUtils.getStringById(2423), "<a href='event:other_ycp--" + monsterInfo.name + "'>" + PropUtils.getStringById(2439) + "</a>", content, "", Cmd_YBS.callBack2, "", bossRender.onFlyBtn];
 				UIManager.getInstance().taskTrack.updateOtherTrack(TaskEnum.taskLevel_fieldbossCopyLine, arr);
 			} else {
 				reBossItem=null;
@@ -264,7 +267,7 @@ package com.leyou.ui.boss.children {
 			showPage(1);
 			showBoss(items[0]);
 
-			// 设置提醒boss
+			/** 设置提醒boss**/
 			var rbid:int=data.getRemindId();
 			for each (var fitem:BossWorldLableRender in items) {
 				if (null != fitem) {

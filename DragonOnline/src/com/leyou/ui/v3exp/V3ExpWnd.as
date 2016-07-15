@@ -37,7 +37,7 @@ package com.leyou.ui.v3exp {
 			this.confirmBtn=this.getUIbyID("confirmBtn") as ImgButton;
 
 			this.confirmBtn.addEventListener(MouseEvent.CLICK, onClick);
-			
+
 			this.clsBtn.x-=50;
 			this.clsBtn.y+=30;
 		}
@@ -47,7 +47,7 @@ package com.leyou.ui.v3exp {
 				Cmd_V3Exp.cmV3expGet();
 			else
 				PayUtil.openPayUrl();
-			
+
 			this.hide()
 		}
 
@@ -57,12 +57,25 @@ package com.leyou.ui.v3exp {
 
 		}
 
+		override public function hide():void {
+			super.hide();
+
+		}
+
 		public function setNoGet():void {
 
 			this.vtitleImg.updateBmp("ui/v3/font_v3zfgq.png");
 			this.vsubjectImg.updateBmp("ui/v3/font_njsq.png");
 			this.iconBtnImg.updateBmp("ui/v3/font_ljxf.png");
 			isok=true;
+		}
+
+		override public function get height():Number {
+			return 458;
+		}
+
+		override public function get width():Number {
+			return 790;
 		}
 
 	}

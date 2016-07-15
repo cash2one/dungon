@@ -1,13 +1,16 @@
 package com.leyou.ui.tips {
 
 	import com.ace.ICommon.ITip;
+	import com.ace.config.Core;
 	import com.ace.enum.FontEnum;
 	import com.ace.enum.ItemEnum;
+	import com.ace.enum.PlayerEnum;
 	import com.ace.gameData.manager.MyInfoManager;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.table.TEquipInfo;
 	import com.ace.gameData.table.TItemInfo;
 	import com.ace.gameData.table.TSuit;
+	import com.ace.loader.child.SwfLoader;
 	import com.ace.manager.LibManager;
 	import com.ace.manager.UIManager;
 	import com.ace.tools.ScaleBitmap;
@@ -108,6 +111,7 @@ package com.leyou.ui.tips {
 		private var gemlineImg:Image;
 		private var standlineImg:Image;
 		private var eleBg:Image;
+		private var modeSwf:SwfLoader;
 
 		/**
 		 * 基础模型
@@ -137,6 +141,8 @@ package com.leyou.ui.tips {
 
 		private var labelHeight:Number=16;
 		private var lineHeight:Number=5;
+
+		private var priceY:Number=5;
 
 		public function TipsEquipWnd() {
 			super(LibManager.getInstance().getXML("config/ui/tips/TipsEquipWnd.xml"));
@@ -390,6 +396,12 @@ package com.leyou.ui.tips {
 			this.grid.y=29;
 
 			this.addChild(this.bindImg);
+
+			this.modeSwf=new SwfLoader();
+			this.addChild(this.modeSwf);
+
+//			this.modeSwf.y
+
 		}
 
 		private function setArrawDown(v:Boolean):void {
@@ -614,6 +626,7 @@ package com.leyou.ui.tips {
 			this.getFunLbl.width=245;
 			this.desc1Lbl.wordWrap=true;
 			this.getFunLbl.wordWrap=true;
+			this.modeSwf.visible=false;
 
 			this.updateEquipProps(tinfo);
 
@@ -630,6 +643,8 @@ package com.leyou.ui.tips {
 				this.dtimeLbl.visible=false;
 				this.dtimeLbl.y=this.getFunLbl.y + this.getFunLbl.height - this.dtimeLbl.height;
 			}
+
+			this.priceY=this.dtimeLbl.y + this.dtimeLbl.height + 10;
 
 			var num:int=int(this.tipsInfo.moneyNum);
 			if (num == 0) {
@@ -830,7 +845,7 @@ package com.leyou.ui.tips {
 				this.suitpropKeyArr[0].text="" + this.tipsInfo.elea;
 
 				if (UIManager.getInstance().roleWnd.getCurrentEle() == this.tipsInfo.ele) {
-					this.suitpropNameArr[1].setTextFormat(FontEnum.getTextFormat("Green12"));
+					this.suitpropNameArr[1].defaultTextFormat=FontEnum.getTextFormat("Green12");
 					this.suitpropNameArr[1].text="" + PropUtils.getStringById(1948);
 
 					if (this.tipsInfo.isdiff) {
@@ -842,7 +857,7 @@ package com.leyou.ui.tips {
 
 				} else {
 
-					this.suitpropNameArr[1].setTextFormat(FontEnum.getTextFormat("DefaultFont"));
+					this.suitpropNameArr[1].defaultTextFormat=FontEnum.getTextFormat("Red12");
 					this.suitpropNameArr[1].text="" + PropUtils.getStringById(2291);
 
 					this.ArrawDownOrUp[12].visible=false;
@@ -1124,6 +1139,49 @@ package com.leyou.ui.tips {
 				this.dtimeLbl.y=this.getFunLbl.y + this.getFunLbl.height - this.dtimeLbl.height;
 			}
 
+			this.priceY=this.dtimeLbl.y + this.dtimeLbl.height + 10;
+
+			this.modeSwf.visible=false;
+			if (tinfo.pnfId != "") {
+				this.modeSwf.visible=true;
+
+				var pstr:String;
+				var pid:int;
+				var h:int;
+				if (tinfo.pnfId.indexOf("|") > -1) {
+
+//					this.priceY+=150;
+
+
+					pstr=tinfo.pnfId.split(",")[1];
+					pid=pstr.split("|")[Core.me.info.profession - 1];
+					h=tinfo.pnfId.split(",")[0];
+
+					this.priceY+=h;
+
+					this.modeSwf.y=this.priceY; // + h;
+
+				} else {
+
+//					this.priceY+=100;
+
+					pid=tinfo.pnfId.split(",")[1];
+					h=tinfo.pnfId.split(",")[0];
+//					this.modeSwf.y=this.priceY - 50;
+
+					this.priceY+=h;
+
+					this.modeSwf.y=this.priceY; // + h;
+				}
+
+				this.modeSwf.update(pid);
+				this.modeSwf.playAct(PlayerEnum.ACT_STAND, 4);
+
+				this.modeSwf.x=120;
+				
+				priceY+=20;
+			}
+
 			var num:int;
 			if (this.tipsInfo == null || int(this.tipsInfo.moneyNum) == 0) {
 				num=int(tinfo.price);
@@ -1132,6 +1190,9 @@ package com.leyou.ui.tips {
 				num=int(this.tipsInfo.moneyNum);
 				this.updatePrice(num, this.tipsInfo.moneyType);
 			}
+
+
+			this.bgSc.height=priceY;
 
 			this.setStarState(false);
 			this.clearData();
@@ -1143,6 +1204,9 @@ package com.leyou.ui.tips {
 			this.nameLbl4.visible=false;
 			this.nameLbl5.visible=false;
 			this.nameLbl6.visible=false;
+			this.nameLbl7.visible=false;
+			this.nameLbl8.visible=false;
+			this.nameLbl9.visible=false;
 			this.gemlineImg.visible=false;
 			this.standlineImg.visible=false;
 			this.currentfightLbl.visible=false;
@@ -1152,8 +1216,6 @@ package com.leyou.ui.tips {
 			this.desclineImg.visible=false;
 
 			this.priceSc.visible=this.tipsInfo.isShowPrice;
-
-			this.bgSc.height=this.priceSc.y;
 
 		}
 
@@ -1212,7 +1274,7 @@ package com.leyou.ui.tips {
 				this.moneyNameLbl.text=PropUtils.getStringById(1937) + ":";
 			}
 
-			this.priceSc.y=this.dtimeLbl.y + this.dtimeLbl.height + 10;
+			this.priceSc.y=this.priceY;
 			this.moneyNameLbl.y=this.priceSc.y + 4;
 			this.priceLbl.y=this.priceSc.y + 7;
 			this.moneyIco.y=this.priceSc.y + 7;

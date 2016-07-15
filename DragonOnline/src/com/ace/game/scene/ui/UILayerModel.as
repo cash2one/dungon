@@ -26,7 +26,8 @@ package com.ace.game.scene.ui {
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.tools.SpriteNoEvt;
 	import com.ace.utils.DebugUtil;
-
+	import com.leyou.enum.ConfigEnum;
+	
 	import flash.display.DisplayObject;
 
 	/**
@@ -159,7 +160,7 @@ package com.ace.game.scene.ui {
 		 *
 		 */
 		public function addEffect(livingBase:LivingBase, effectType:int, num:int, color:String, str:String="", ico:String="", ptArr:Array=null, showZero:Boolean=false, strFront:Boolean=true, times:int=1):void {
-			//trace("显示人物伤害等特效：" + effectType, num, color, str, ico);
+			trace("显示人物伤害等特效：" + effectType, num, color, str, ico);
 			if (SettingManager.getInstance().assitInfo.isHideSkill)
 				return;
 //			if (effectType != EffectEnum.BUBBLE_LINE && times == 1) {
@@ -168,6 +169,8 @@ package com.ace.game.scene.ui {
 //			}
 //			
 			for (var i:int=0; i < times; i++) {
+				if(this.effectArr.length>=ConfigEnum.common10)
+					this.effectArr.shift();
 				this.effectArr.push([livingBase, effectType, int(num / times), color, str, ico, ptArr, showZero, strFront]);
 			}
 

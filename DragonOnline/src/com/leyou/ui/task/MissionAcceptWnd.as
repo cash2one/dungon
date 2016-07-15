@@ -89,8 +89,11 @@ package com.leyou.ui.task {
 			this.accTaskBtn=new TaskTrackBtn();
 			this.addChild(this.accTaskBtn);
 
-			this.accTaskBtn.x=this.width - this.accTaskBtn.width >> 1;
-			this.accTaskBtn.y=this.height - 50;
+//			this.accTaskBtn.x=this.width - this.accTaskBtn.width >> 1;
+//			this.accTaskBtn.y=this.height - 50;
+			
+			this.accTaskBtn.x=56;
+			this.accTaskBtn.y=480;
 
 			this.accTaskBtn.addEventListener(MouseEvent.CLICK, onClick);
 			this.clsBtn.addEventListener(MouseEvent.CLICK, onClick);

@@ -13,6 +13,7 @@ package com.leyou.ui.equip {
 	import com.ace.ui.auto.AutoWindow;
 	import com.ace.ui.tabbar.TabbarModel;
 	import com.ace.ui.tabbar.children.TabBar;
+	import com.greensock.TweenLite;
 	import com.leyou.data.bag.Baginfo;
 	import com.leyou.data.role.EquipInfo;
 	import com.leyou.enum.ConfigEnum;
@@ -78,7 +79,7 @@ package com.leyou.ui.equip {
 			//右侧数据
 			this.equipBagRender=new EquipBagRender();
 			this.addChild(this.equipBagRender);
-			
+
 			this.equipBagRender.x=467;
 			this.equipBagRender.y=97;
 
@@ -351,6 +352,14 @@ package com.leyou.ui.equip {
 			UIManager.getInstance().taskTrack.setGuideViewhide(TaskEnum.taskType_EquitTopLv);
 
 			this.updateEquipIntensify();
+
+			if (!MyInfoManager.getInstance().isTaskOk && MyInfoManager.getInstance().currentTaskId == 39)
+				TweenLite.delayedCall(ConfigEnum.autoTask3, this.autoTaskComplete);
+		}
+
+		private function autoTaskComplete():void {
+			if (this.bagTabBar.turnOnIndex == 0 && this.visible)
+				this.equipIntensifyRender.dispatAutoTaskEvent();
 		}
 
 		public function updateBagRender():void {

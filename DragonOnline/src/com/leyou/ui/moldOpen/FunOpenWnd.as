@@ -391,13 +391,11 @@ package com.leyou.ui.moldOpen {
 							this.movie.update(int(tinfo.model2));
 
 							if (pinfo.type == 10) {
-//								this.movie.x=150;
-//								this.movie.y=335;
+								 
 								this.addChild(this.bigAvater);
 
 							} else if (pinfo.type == 3) {
-//								this.movie.x=150;
-//								this.movie.y=190;
+								movie.y=10;
 								this.addChild(this.movie);
 							}
 

@@ -22,7 +22,7 @@ package com.ace.game.proxy {
 	import com.leyou.enum.TaskEnum;
 	import com.leyou.net.cmd.Cmd_Bag;
 	import com.leyou.net.cmd.Cmd_Shp;
-
+	
 	import flash.utils.getTimer;
 
 	/**

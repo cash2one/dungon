@@ -7,7 +7,6 @@ package com.ace.manager {
 	import com.ace.enum.UIEnum;
 	import com.ace.enum.WindowEnum;
 	import com.ace.game.manager.SceneKeyManager;
-	import com.ace.game.scene.map.child.MapModel;
 	import com.ace.game.scene.ui.ReviveWnd;
 	import com.ace.gameData.manager.MapInfoManager;
 	import com.ace.gameData.manager.TableManager;
@@ -88,6 +87,7 @@ package com.ace.manager {
 	import com.leyou.ui.copyTrack.ExpCopyTrackBar;
 	import com.leyou.ui.copyTrack.StoryCopyTrackBar;
 	import com.leyou.ui.creatUser.CreatUserWnd;
+	import com.leyou.ui.creatUser.CreatUserWndII;
 	import com.leyou.ui.crossServer.CrossServerDonateWnd;
 	import com.leyou.ui.crossServer.CrossServerMissionAwardWnd;
 	import com.leyou.ui.crossServer.CrossServerMissionRankWnd;
@@ -101,6 +101,7 @@ package com.ace.manager {
 	import com.leyou.ui.die.DieWnd;
 	import com.leyou.ui.dragonBall.DragonBallWnd;
 	import com.leyou.ui.dragonBall.children.DragonBallPreviewWnd;
+	import com.leyou.ui.dragonBall.children.DragonMessage;
 	import com.leyou.ui.duel.DuelResultWnd;
 	import com.leyou.ui.dungeonTeam.DungeonTeamFWnd;
 	import com.leyou.ui.dungeonTeam.DungeonTeamWnd;
@@ -134,6 +135,7 @@ package com.ace.manager {
 	import com.leyou.ui.guildBattle.GuildBattleRankWnd;
 	import com.leyou.ui.guildBattle.GuildBattleWnd;
 	import com.leyou.ui.integral.IntegralWnd;
+	import com.leyou.ui.intro.IntroWnd;
 	import com.leyou.ui.invest.InvestWnd;
 	import com.leyou.ui.laba.LabaOpWnd;
 	import com.leyou.ui.laba.LabaWnd;
@@ -183,6 +185,9 @@ package com.ace.manager {
 	import com.leyou.ui.question.QuestionWnd;
 	import com.leyou.ui.quickBuy.QuickBuyWnd;
 	import com.leyou.ui.rank.RankWnd;
+	import com.leyou.ui.redpackage.PackabeObWnd;
+	import com.leyou.ui.redpackage.PackabeOpenWnd;
+	import com.leyou.ui.redpackage.PackageWnd;
 	import com.leyou.ui.role.RoleWnd;
 	import com.leyou.ui.role.child.SelectWnd;
 	import com.leyou.ui.role.child.children.MessageWnd;
@@ -196,7 +201,6 @@ package com.ace.manager {
 	import com.leyou.ui.skill.SkillWnd;
 	import com.leyou.ui.storage.StorageWnd;
 	import com.leyou.ui.task.MissionAcceptWnd;
-	import com.leyou.ui.task.TaskTrack;
 	import com.leyou.ui.task.TaskTrack2;
 	import com.leyou.ui.task.TaskTrack3;
 	import com.leyou.ui.task.TaskWnd;
@@ -208,6 +212,7 @@ package com.ace.manager {
 	import com.leyou.ui.tools.ToolsWnd;
 	import com.leyou.ui.tools.child.CDKeyReceiveWnd;
 	import com.leyou.ui.trade.TradeWnd;
+	import com.leyou.ui.ttsc.KfAndHfAwardWnd;
 	import com.leyou.ui.ttsc.KfcbWnd;
 	import com.leyou.ui.ttsc.KfhdWnd;
 	import com.leyou.ui.ttsc.TtscWnd;
@@ -222,7 +227,7 @@ package com.ace.manager {
 	import com.leyou.ui.wing.WingTradeWnd;
 	import com.leyou.ui.worship.WorshipWnd;
 	import com.leyou.utils.PropUtils;
-
+	
 	import flash.display.DisplayObject;
 	import flash.events.KeyboardEvent;
 	import flash.geom.Point;
@@ -235,7 +240,7 @@ package com.ace.manager {
 
 		public var loginWnd:LoginWnd;
 		public var selectUserWnd:SelectUserWnd;
-		public var creatUserWnd:CreatUserWnd;
+		public var creatUserWnd:CreatUserWndII;
 		public var toolsWnd:ToolsWnd;
 		public var smallMapWnd:SmallMapWnd;
 		public var roleHeadWnd:RoleHeadWnd;
@@ -270,6 +275,7 @@ package com.ace.manager {
 		public var shopWnd:ShopWnd;
 		public var myStore:MyStoreWnd;
 		public var buyWnd:BuyWnd;
+		public var dragonMsg:DragonMessage;
 		public var quickBuyWnd:QuickBuyWnd;
 		public var mountLvUpwnd:MountLvUpWnd;
 		public var mountTradeWnd:MountTradeWnd;
@@ -347,11 +353,16 @@ package com.ace.manager {
 		public var shiyeWnd:ShizWnd;
 		public var kfcbWnd:KfcbWnd;
 		public var kfhdWnd:KfhdWnd;
+		public var kfhfAwardWnd:KfAndHfAwardWnd;
 		public var guideMessageWnd:GuildMessage;
 		public var vip3exp:V3ExpWnd;
 		public var sellExpEffect:SellExpEffect;
 		public var taskTrack2:TaskTrack2;
 		public var taskTrack3:TaskTrack3;
+		public var redPackWnd:PackageWnd;
+		public var redPackOpenWnd:PackabeOpenWnd;
+		public var redPackObWnd:PackabeObWnd;
+		public var introWnd:IntroWnd;
 
 		public var funForcastWnd:FunForcastWnd;
 		//		public var onlineReward:OnlineReward;
@@ -572,9 +583,14 @@ package com.ace.manager {
 			_claDic[WindowEnum.SHIYI]=[ShizWnd, "shiyeWnd"];
 			_claDic[WindowEnum.KFCB]=[KfcbWnd, "kfcbWnd"];
 			_claDic[WindowEnum.KFHD]=[KfhdWnd, "kfhdWnd"];
+			_claDic[WindowEnum.KF_HF_AWARD]=[KfAndHfAwardWnd, "kfhfAwardWnd"];
 			_claDic[WindowEnum.VIP3EXP]=[V3ExpWnd, "vip3exp"];
 			_claDic[WindowEnum.SELLEXPEFFECT]=[SellExpEffect, "sellExpEffect"];
 //			_claDic[WindowEnum.TASKTRACE2]=[TaskTrack2, "taskTrack2"];
+			_claDic[WindowEnum.REDPACKAGE]=[PackageWnd,  "redPackWnd"];
+			_claDic[WindowEnum.REDPACKAGE_OPEN]=[PackabeOpenWnd,  "redPackOpenWnd"];
+			_claDic[WindowEnum.REDPACKAGE_OPENLIST]=[PackabeObWnd, "redPackObWnd"];
+			_claDic[WindowEnum.INTROWND]=[IntroWnd, "introWnd"];
 
 			_claDic[WindowEnum.ARENA_NOTICE]=[ArenaMsgWnd, "arenaMegWnd"];
 			_claDic[WindowEnum.CDKEY]=[CDKeyReceiveWnd, "receiveWnd"];
@@ -670,7 +686,7 @@ package com.ace.manager {
 			_keyDic[Keyboard.D]=[ConfigEnum.MarketOpenLevel, WindowEnum.MARKET];
 			_keyDic[Keyboard.F]=[0, WindowEnum.FRIEND];
 
-			_keyDic[Keyboard.L]=[0, WindowEnum.TASK];
+//			_keyDic[Keyboard.L]=[0, WindowEnum.TASK];
 			_keyDic[Keyboard.B]=[0, WindowEnum.BACKPACK];
 			_keyDic[Keyboard.C]=[0, WindowEnum.ROLE];
 			_keyDic[Keyboard.T]=[0, WindowEnum.TEAM];
@@ -764,7 +780,7 @@ package com.ace.manager {
 					if (isCreate(WindowEnum.TTT_TRACK)) {
 						ttttackWnd.hide();
 					}
-					
+
 					if (isCreate(WindowEnum.ARENA)) {
 						arenaWnd.hide();
 					}
@@ -772,7 +788,7 @@ package com.ace.manager {
 					crossServerMissionTrack.show();
 
 					if (Core.me != null) {
-						if (Core.me.info.level >= 30) {
+						if (Core.me.info.level >= ConfigEnum.common9) {
 							taskTrack.show();
 							taskTrack2.hide();
 						} else {
@@ -791,6 +807,14 @@ package com.ace.manager {
 //						trace(type, psid, MapInfoManager.getInstance().preSceneId, MapInfoManager.getInstance().sceneId)
 						if ([29, 59].indexOf(taskTrack.taskID) > -1 && (psid == SceneEnum.SCENE_TYPE_JSC || psid == SceneEnum.SCENE_TYPE_JQFB))
 							taskTrack.autoComplete();
+
+						if (59 != taskTrack.taskID && psid == SceneEnum.SCENE_TYPE_JSC) {
+							UILayoutManager.getInstance().show_II(WindowEnum.ARENA);
+						}
+						
+						if (29 != taskTrack.taskID && psid == SceneEnum.SCENE_TYPE_JQFB) {
+							UILayoutManager.getInstance().open_II(WindowEnum.DUNGEON_TEAM);
+						}
 					}
 					break;
 				case SceneEnum.SCENE_TYPE_BSFB: // boss副本
@@ -958,7 +982,7 @@ package com.ace.manager {
 
 		//创建角色
 		public function addCreatUserWnd():void {
-			this.creatUserWnd=new CreatUserWnd();
+			this.creatUserWnd=new CreatUserWndII();
 			LayerManager.getInstance().mainLayer.addChild(this.creatUserWnd);
 		}
 
@@ -1180,6 +1204,7 @@ package com.ace.manager {
 			this.skillWnd=new SkillWnd();
 
 			this.buyWnd=new BuyWnd();
+			this.dragonMsg=new DragonMessage();
 			this.quickBuyWnd=new QuickBuyWnd(); //===============
 			this.mountLvUpwnd=new MountLvUpWnd();
 			this.mountTradeWnd=new MountTradeWnd();
@@ -1203,6 +1228,7 @@ package com.ace.manager {
 			LayerManager.getInstance().windowLayer.addChild(this.backPackSplitWnd);
 			LayerManager.getInstance().windowLayer.addChild(this.backPackDropWnd);
 			LayerManager.getInstance().windowLayer.addChild(this.buyWnd);
+			LayerManager.getInstance().windowLayer.addChild(this.dragonMsg);
 			LayerManager.getInstance().windowLayer.addChild(this.quickBuyWnd);
 			LayerManager.getInstance().windowLayer.addChild(this.backLotUseWnd);
 			LayerManager.getInstance().windowLayer.addChild(this.backAddWnd);
@@ -1287,7 +1313,7 @@ package com.ace.manager {
 		private function onKeyDown(event:KeyboardEvent):void {
 			var code:int=event.keyCode;
 //			if (code == Keyboard.Y) {
-//				UILayoutManager.getInstance().open(WindowEnum.TASKTRACE2);
+//				UILayoutManager.getInstance().open(WindowEnum.INTROWND);
 //				return;
 //			}
 //			showWindow(WindowEnum.ICE_BATTLE_PAUSE);

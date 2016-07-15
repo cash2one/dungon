@@ -76,7 +76,13 @@ package com.leyou.ui.arena.childs {
 			}
 		}
 
-
+		override public function get height():Number {
+			return 219;
+		}
+		
+		override public function get width():Number {
+			return 542;
+		}
 
 	}
 }

@@ -655,6 +655,16 @@ package com.leyou.ui.role {
 				this.roleEquipUp.raceImg.visible=true;
 				this.roleEquipUp.bgNameImg.updateBmp("ui/character/bg_name.png");
 
+				var pid:int=Core.me.info.equipEffectId+5;
+				
+				var pinfo:TPnfInfo=TableManager.getInstance().getPnfInfo(pid);
+				
+				if (pinfo.type == 10) {
+					UIManager.getInstance().roleWnd.setBackEffect(pid);
+				} else if (pinfo.type == 3) {
+					UIManager.getInstance().roleWnd.setEffect(pid);
+				}
+				
 			} else {
 
 				this.roleEquipUp.nameLbl.visible=false;
@@ -789,12 +799,12 @@ package com.leyou.ui.role {
 			Cmd_Role.cm_role();
 			Cmd_Role.cm_equip();
 
-			Cmd_Element.cm_ele_s();
-			Cmd_Element.cm_ele_c();
+//			Cmd_Element.cm_ele_s();
+//			Cmd_Element.cm_ele_c();
 
 			Cmd_Mount.cmMouInit();
 			Cmd_Wig.cm_WigInit();
-			Cmd_Nck.cm_NckInit();
+//			Cmd_Nck.cm_NckInit();
 			Cmd_Marry.cmMarryInit();
 
 			//宝石引导
@@ -962,6 +972,9 @@ package com.leyou.ui.role {
 		 * 
 		 */		
 		public function setBackEffect(pid:int):void {
+			if(this.roleTabBar.turnOnIndex!=0)
+				return ;
+			
 			this.equipEffect.visible=false;
 
 			this.equipBackEffect.visible=true;
@@ -1122,6 +1135,7 @@ package com.leyou.ui.role {
 			} else
 				this.roleTabBar.setTabVisible(4, false);
 
+			 
 		}
 
 		public function get titlePanel():TitleWnd {

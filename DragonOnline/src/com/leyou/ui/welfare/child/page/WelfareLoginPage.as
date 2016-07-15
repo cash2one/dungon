@@ -5,6 +5,7 @@ package com.leyou.ui.welfare.child.page {
 	import com.ace.gameData.table.TVIPInfo;
 	import com.ace.manager.GuideManager;
 	import com.ace.manager.LibManager;
+	import com.ace.manager.UIManager;
 	import com.ace.ui.FlyManager;
 	import com.ace.ui.auto.AutoSprite;
 	import com.ace.ui.button.children.ImgButton;
@@ -18,7 +19,7 @@ package com.leyou.ui.welfare.child.page {
 	import com.leyou.ui.welfare.child.component.WelfareLoginRender;
 	import com.leyou.utils.PropUtils;
 	import com.leyou.utils.StringUtil_II;
-	
+
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
@@ -140,7 +141,7 @@ package com.leyou.ui.welfare.child.page {
 			rewardReders[_currentIndex].checkGuide();
 		}
 
-		
+
 		public function updateInfo(obj:Object):void {
 			// 日历显示
 			_bprice=obj.bprice;
@@ -196,7 +197,7 @@ package com.leyou.ui.welfare.child.page {
 				rewardRender.updateGift(giftStatus[l][0], giftStatus[l][1], obj.zsc);
 				welfareLogin.getTabButton(l).label.text=PropUtils.getStringById(1978) + giftStatusList[l][0] + PropUtils.getStringById(1977);
 			}
-			
+
 			rewardReders[_currentIndex].checkGuide();
 			// VIP奖励处理
 			var vipInfo:TVIPInfo=TableManager.getInstance().getVipInfo(24);
@@ -206,6 +207,10 @@ package com.leyou.ui.welfare.child.page {
 			var reached:Boolean=(Core.me.info.vipLv >= 2);
 			vipReceiveBtn.setActive((vrStatus && reached && signedImg.visible), 1, true);
 			vipReceiveBtn.isActive ? GuideManager.getInstance().show(154) : GuideManager.getInstance().remove(154)
+
+			var vb:Boolean=(vrStatus && reached && signedImg.visible) || rewardReders[_currentIndex].receiveBtnActive();
+			UIManager.getInstance().welfareWnd.updateAwardIcon(0,vb);
+
 			if (!reached) {
 				receiveImg.visible=false;
 				receivedImg.updateBmp("ui/welfare/btn_lqjl3.png");

@@ -48,7 +48,7 @@ package com.ace.ui.loading.child {
 		
 		private var linkLbl:Label;
 		
-		private var bgImg:Image;
+		private var bgImg:Image; 
 
 		public function MapLoading() {
 			super(LibManager.getInstance().getXML("config/ui/loading/MapLoading.xml"));
@@ -68,8 +68,8 @@ package com.ace.ui.loading.child {
 			noticeLbl = getUIbyID("noticeLbl") as Label;
 			linkLbl = getUIbyID("linkLbl") as Label;
 			progressLbl.text = "0%";
-			logoEffect.x = progressCoverImg.x - 75;
-			logoEffect.y = progressCoverImg.y - 78;
+			logoEffect.x = progressCoverImg.x - 100;
+			logoEffect.y = progressCoverImg.y - 92;
 			progressCoverImg.scrollRect = new Rectangle(0, 0, PROGRESS_OFFSET, progressCoverImg.bitmapData.height);
 			linkLbl.mouseEnabled = true;
 			linkLbl.addEventListener(MouseEvent.CLICK, onMouseClick);
@@ -136,7 +136,7 @@ package com.ace.ui.loading.child {
 			var changeWidth:Number = PROGRESS_OFFSET + PROGRESS_VALID_WIDTH * preProgress;
 			viewRect.width = changeWidth;
 			progressCoverImg.scrollRect = viewRect;
-			logoEffect.x = progressCoverImg.x - 75 + PROGRESS_VALID_WIDTH * preProgress;
+			logoEffect.x = progressCoverImg.x - 100 + PROGRESS_VALID_WIDTH * preProgress;
 		}
 		
 		public override function get width():Number{

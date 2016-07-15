@@ -23,6 +23,7 @@ package com.leyou.ui.task.child {
 	import com.ace.loader.child.SwfLoader;
 	import com.ace.manager.CursorManager;
 	import com.ace.manager.GuideManager;
+	import com.ace.manager.LayerManager;
 	import com.ace.manager.LibManager;
 	import com.ace.manager.ToolTipManager;
 	import com.ace.manager.UILayoutManager;
@@ -44,6 +45,7 @@ package com.leyou.ui.task.child {
 	import com.leyou.net.cmd.Cmd_Qa;
 	import com.leyou.net.cmd.Cmd_Tsk;
 	import com.leyou.net.cmd.Cmd_Yct;
+	import com.leyou.ui.task.MessageMissionWnd;
 	import com.leyou.utils.PropUtils;
 	import com.leyou.utils.TaskUtil;
 	
@@ -74,6 +76,10 @@ package com.leyou.ui.task.child {
 		private var taskTargetLbl2:Label;
 
 		private var TaskStateLbl3:Label;
+		private var TaskStateLbl4:Label;
+		private var TaskStateLbl5:Label;
+		private var TaskStateLbl6:Label;
+		private var TaskStateLbl7:Label;
 
 		private var rewardStarArr:Array=[];
 
@@ -128,6 +134,15 @@ package com.leyou.ui.task.child {
 		public var mercenaryExp:int=0;
 		public var mercenaryCount:int=0;
 
+		public var loginCount:int=0;
+
+		private var dailyAwardWnd:MessageMissionWnd;
+
+		/**
+		 * 日常任务充值元宝
+		 */
+		public var ref_yb:int=0;
+
 		public function missionTrackRender3() {
 			super(LibManager.getInstance().getXML("config/ui/task/missionTrackRender3.xml"));
 			this.init();
@@ -157,6 +172,10 @@ package com.leyou.ui.task.child {
 			this.taskTargetLbl2=this.getUIbyID("taskTargetLbl2") as Label;
 
 			this.TaskStateLbl3=this.getUIbyID("TaskStateLbl3") as Label;
+			this.TaskStateLbl4=this.getUIbyID("TaskStateLbl4") as Label;
+			this.TaskStateLbl5=this.getUIbyID("TaskStateLbl5") as Label;
+			this.TaskStateLbl6=this.getUIbyID("TaskStateLbl6") as Label;
+			this.TaskStateLbl7=this.getUIbyID("TaskStateLbl7") as Label;
 
 			this.rewardStarArr.push(this.getUIbyID("rewardStar0") as Image);
 			this.rewardStarArr.push(this.getUIbyID("rewardStar1") as Image);
@@ -174,6 +193,11 @@ package com.leyou.ui.task.child {
 			this.rewardStarEffect.x=this.rewardStarArr[0].x - 30;
 			this.rewardStarEffect.y=this.rewardStarArr[0].y - 30;
 
+			this.TaskStateLbl7.styleSheet=FontEnum.DEFAULT_LINK_STYLE;
+			this.TaskStateLbl6.styleSheet=FontEnum.DEFAULT_LINK_STYLE;
+			this.TaskStateLbl5.styleSheet=FontEnum.DEFAULT_LINK_STYLE;
+			this.TaskStateLbl4.styleSheet=FontEnum.DEFAULT_LINK_STYLE;
+			this.TaskStateLbl3.styleSheet=FontEnum.DEFAULT_LINK_STYLE;
 			this.taskTargetLbl.styleSheet=FontEnum.DEFAULT_LINK_STYLE;
 			this.taskTargetLbl0.styleSheet=FontEnum.DEFAULT_LINK_STYLE;
 			this.taskTargetLbl1.styleSheet=FontEnum.DEFAULT_LINK_STYLE;
@@ -201,6 +225,27 @@ package com.leyou.ui.task.child {
 //			this.dailyrenderStateBtn.addEventListener(MouseEvent.CLICK, onClick);
 **/
 
+			this.TaskStateLbl6.htmlText="<a href='event:#'>" + this.TaskStateLbl6.text + "</a>";
+			this.TaskStateLbl6.addEventListener(MouseEvent.CLICK, ontaskClick);
+			this.TaskStateLbl6.mouseEnabled=true;
+
+			this.TaskStateLbl6.visible=false;
+
+			this.TaskStateLbl7.htmlText="<a href='event:#'>" + this.TaskStateLbl7.text + "</a>";
+			this.TaskStateLbl7.addEventListener(MouseEvent.CLICK, ontaskClick);
+			this.TaskStateLbl7.mouseEnabled=true;
+
+			this.TaskStateLbl7.visible=false;
+
+			this.TaskStateLbl4.htmlText="<a href='event:#'>" + this.TaskStateLbl4.text + "</a>";
+			this.TaskStateLbl5.htmlText="<a href='event:#'>" + this.TaskStateLbl5.text + "</a>";
+
+			this.TaskStateLbl5.addEventListener(MouseEvent.CLICK, ontaskClick);
+			this.TaskStateLbl5.mouseEnabled=true;
+
+			this.TaskStateLbl5.visible=false;
+
+			this.TaskStateLbl3.htmlText="<a href='event:#'>" + this.TaskStateLbl3.text + "</a>";
 			this.TaskStateLbl3.addEventListener(MouseEvent.CLICK, ontaskClick);
 			this.TaskStateLbl3.mouseEnabled=true;
 
@@ -220,9 +265,11 @@ package com.leyou.ui.task.child {
 
 			this.taskTargetLbl2.addEventListener(TextEvent.LINK, onLink);
 			this.taskTargetLbl2.mouseEnabled=true;
+
+
 //			this.taskTargetLbl0.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 
-			this.rewardBtn.addEventListener(MouseEvent.CLICK, onClick);
+//			this.rewardBtn.addEventListener(MouseEvent.CLICK, onClick);
 			this.rewardBtn.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
 
 			this.trbtn=new ImgButton("ui/mission/mission_quick.png", PriorityEnum.FIVE);
@@ -270,6 +317,13 @@ package com.leyou.ui.task.child {
 
 			this.trbtn2.visible=false;
 			this.trbtn3.visible=false;
+
+			this.dailyAwardWnd=new MessageMissionWnd();
+			LayerManager.getInstance().windowLayer.addChild(this.dailyAwardWnd);
+
+
+			this.TaskStateLbl4.visible=false;
+
 		}
 
 		private function onyboneKeyBtn(e:MouseEvent):void {
@@ -345,23 +399,27 @@ package com.leyou.ui.task.child {
 
 //			ModuleProxy.showChatMsg("30后+++++模拟触发下一个任务---text>>>" + ctx);
 //			trace("30后+++++模拟触发下一个任务---text>>>" + ctx);
-			
+
 			if (this.taskTargetLbl0 == e.target) {
 				GuideManager.getInstance().removeGuide(159);
+				GuideManager.getInstance().removeGuide(161);
 			}
 
 			if (str[0].indexOf("mercenary") > -1) {
 
-				if (this.taskDtype == TaskEnum.taskType_Mercenary)
+//				if (this.taskDtype == TaskEnum.taskType_Mercenary)
+				if (UIManager.getInstance().petWnd == null || !UIManager.getInstance().petWnd.visible)
 					UIOpenBufferManager.getInstance().open(WindowEnum.PET);
-				else if (str[1].indexOf("close") > -1) {
-					UIOpenBufferManager.getInstance().open(WindowEnum.PET);
+//				else
+
+				if (str[1].indexOf("close") > -1) {
+//					UIOpenBufferManager.getInstance().open(WindowEnum.PET);
 
 					TweenLite.delayedCall(.3, function():void {
 						UIManager.getInstance().petWnd.updateQmd(DataManager.getInstance().petData.qmdPetId);
 					});
 				} else if (str[1].indexOf("exp") > -1) {
-					UIOpenBufferManager.getInstance().open(WindowEnum.PET);
+//					UIOpenBufferManager.getInstance().open(WindowEnum.PET);
 
 					TweenLite.delayedCall(.3, function():void {
 						UIManager.getInstance().petWnd.updateLv(DataManager.getInstance().petData.lvPetId);
@@ -409,7 +467,7 @@ package com.leyou.ui.task.child {
 					return;
 				}
 
-				UILayoutManager.getInstance().open_II(WindowEnum.DUNGEON_TEAM);
+				UILayoutManager.getInstance().show_II(WindowEnum.DUNGEON_TEAM);
 //				GuideManager.getInstance().removeGuide(29);
 
 			} else if (str[0].indexOf("equip") > -1) {
@@ -418,7 +476,7 @@ package com.leyou.ui.task.child {
 					return;
 				}
 
-				UILayoutManager.getInstance().open_II(WindowEnum.EQUIP)
+				UILayoutManager.getInstance().show(WindowEnum.EQUIP)
 //				GuideManager.getInstance().removeGuide(62);
 
 			} else if (str[0].indexOf("badge") > -1) {
@@ -428,7 +486,7 @@ package com.leyou.ui.task.child {
 					return;
 				}
 
-				UILayoutManager.getInstance().open_II(WindowEnum.BADAGE);
+				UILayoutManager.getInstance().show_II(WindowEnum.BADAGE);
 //				GuideManager.getInstance().removeGuide(13);
 
 			} else if (str[0].indexOf("elements") > -1) {
@@ -487,7 +545,7 @@ package com.leyou.ui.task.child {
 					return;
 				}
 
-				UILayoutManager.getInstance().open_II(WindowEnum.ARENA);
+				UILayoutManager.getInstance().show_II(WindowEnum.ARENA);
 //				GuideManager.getInstance().removeGuide(32);
 			} else if (str[0].indexOf("link") > -1) {
 				this.autoComplete();
@@ -536,9 +594,7 @@ package com.leyou.ui.task.child {
 		}
 
 		/**
-		 *
 		 * @param v
-		 *
 		 */
 		private function setStarVisible(v:Boolean):void {
 			for (var i:int=0; i < this.rewardStarArr.length; i++) {
@@ -548,8 +604,13 @@ package com.leyou.ui.task.child {
 
 		public function updateInfo(o:Object):void {
 			this.updateTaskItem(o);
+			this.loginCount++;
 
-			this.firstAutoAstar=false;
+//			if (this.firstAutoAstar) {
+//				TweenLite.delayedCall(5, function():void {
+			firstAutoAstar=false;
+//				});
+//			}
 		}
 
 		private function updateTaskItem(o:Object):void {
@@ -576,12 +637,16 @@ package com.leyou.ui.task.child {
 				minfo=TableManager.getInstance().getMissionDataByID(o.tid);
 
 
-//				if (o.tid == 23)
-//					GuideManager.getInstance().showGuide(67, item.flyBtn);
+//				if (o.tid == 130)
+//					GuideManager.getInstance().showGuide(83);
 
-//				if (o.tid == 1) {
-//					UIManager.getInstance().showWindow(WindowEnum.FIRST_LOGIN);
-//				} else {
+				if (o.tid == 130) {
+					UILayoutManager.getInstance().show_II(WindowEnum.DUNGEON_TEAM);
+					TweenLite.delayedCall(.3, function():void {
+						UIManager.getInstance().teamCopyWnd.setTabIndex(4);
+					});
+				}
+//			else {
 //					if (this.taskOneInfo == null)
 //						UIManager.getInstance().postWnd.updateLoade();
 //				}
@@ -589,7 +654,6 @@ package com.leyou.ui.task.child {
 				var tartxt:String;
 				this.linkArr[int(minfo.type)].length=0;
 				this.taskType=minfo.type;
-				this.taskDtype=minfo.dtype;
 
 				//如果没完成
 				if (o.st != 1) {
@@ -670,7 +734,7 @@ package com.leyou.ui.task.child {
 
 
 				}
-				
+
 
 				var stateTxt:String;
 				if (int(o.st) == 0 && o["var"] == 0) {
@@ -778,9 +842,9 @@ package com.leyou.ui.task.child {
 //
 //							TweenLite.delayedCall(0.3, UIManager.getInstance().taskWnd.changeTab, [1]);
 //							TweenLite.delayedCall(0.3, GuideManager.getInstance().showGuide, [104, UIManager.getInstance().taskWnd]);
-							
+
 //							GuideManager.getInstance().showGuide(159);
-							
+
 						} else if (this.mainTaskType == TaskEnum.taskType_ElementFlagNum) {
 							if (lv < ConfigEnum.ElementOpenLv) {
 								NoticeManager.getInstance().broadcastById(9963, [ConfigEnum.ElementOpenLv]);
@@ -928,6 +992,15 @@ package com.leyou.ui.task.child {
 					else
 						this.trbtn.visible=true;
 
+					if (o.st == 0 && this.mainTaskType == TaskEnum.taskType_upgrade) {
+						if (minfo.Cutout_Price > 0)
+							this.TaskStateLbl6.visible=true;
+						this.TaskStateLbl7.visible=true;
+					} else {
+						this.TaskStateLbl6.visible=false;
+						this.TaskStateLbl7.visible=false;
+					}
+
 					this.taskTargetLbl.htmlText="" + tartxt;
 					this.TaskStateLbl.htmlText="<font color='#" + stateTxt + "'>" + TaskUtil.getStringByState(int(o.st)) + "</font>";
 					this.taskTypeLbl.htmlText="[" + TaskUtil.getStringByType(int(minfo.type)) + "]";
@@ -940,9 +1013,11 @@ package com.leyou.ui.task.child {
 					}
 
 				} else if (int(minfo.type) == TaskEnum.taskLevel_switchLine) {
+
+					this.taskDtype=minfo.dtype;
 					this.cloop=int(o.cloop);
 					this.taskNameLbl0.htmlText=PropUtils.getStringById(2470) + "";
-					this.TaskStateLbl0.htmlText="<font color='#ff0000'>(" + o.cloop + "/20)</font>";
+					this.TaskStateLbl0.htmlText="<font color='#ff0000'>(" + o.cloop + "/" + ConfigEnum.taskDailySum + ")</font>";
 					this.taskTargetLbl0.htmlText="" + tartxt;
 
 					if (o.st == 1)
@@ -953,10 +1028,16 @@ package com.leyou.ui.task.child {
 					else
 						this.trbtn1.visible=(true);
 
+					this.TaskStateLbl3.visible=false;
+
+					this.TaskStateLbl4.visible=false;
+					this.TaskStateLbl5.visible=false;
+
 					this.setYbOnKeyVisible(Core.me.info.vipLv >= DataManager.getInstance().vipData.taskPrivilegeVipLv());
 //					UIManager.getInstance().taskWnd.setVipLvState(Core.me.info.vipLv);
-//					this.setStarVisible(true);
-//					this.rewardBtn.visible=true;
+					this.setStarVisible(true);
+					this.rewardBtn.visible=true;
+
 				} else if (int(minfo.type) == TaskEnum.taskLevel_mercenaryCloseLine) {
 					this.taskTypeLbl1.text=PropUtils.getStringById(2460) + "";
 					this.taskNameLbl1.htmlText=PropUtils.getStringById(2461) + "";
@@ -1031,9 +1112,9 @@ package com.leyou.ui.task.child {
 
 			} else if (o.hasOwnProperty("award")) {
 
-				this.cloop=20;
+				this.cloop=ConfigEnum.taskDailySum;
 				this.taskNameLbl0.htmlText=PropUtils.getStringById(2470); // + " <font color='#00ff00'>(20/20)</font>";
-				this.taskTargetLbl0.htmlText="" + StringUtil.substitute(PropUtils.getStringById(2471), [20]);
+				this.taskTargetLbl0.htmlText="" + StringUtil.substitute(PropUtils.getStringById(2471), [ConfigEnum.taskDailySum]);
 				this.taskTypeLbl0.htmlText="[" + TaskUtil.getStringByType(2) + "]";
 
 				this.TaskStateLbl0.htmlText="<font color='#00ff9c'>" + TaskUtil.getStringByState(1) + "</font>";
@@ -1045,6 +1126,11 @@ package com.leyou.ui.task.child {
 
 //				this.setStarVisible(false);
 //				this.rewardBtn.visible=false;
+
+//				this.taskTargetLbl0.opaqueBackground=0xff0000;
+//				this.TaskStateLbl3.opaqueBackground=0x00ff00;
+//				
+//				this.TaskStateLbl3.x+=2;
 
 				if (o.award == 0) {
 					this.TaskStateLbl3.visible=true;
@@ -1058,6 +1144,14 @@ package com.leyou.ui.task.child {
 //					this.taskCount+=this.dailyrenderStateBtn.height + 5;
 				} else {
 					this.TaskStateLbl3.visible=false;
+					this.TaskStateLbl4.visible=true;
+					this.TaskStateLbl5.visible=true;
+
+					this.setStarVisible(false);
+					this.rewardBtn.visible=false;
+
+					this.TaskStateLbl4.x=this.taskTargetLbl0.x + this.taskTargetLbl0.textWidth + 5;
+
 //					this.dailyrenderStateBtn.visible=false;
 //					this.taskCount-=10;
 				}
@@ -1122,10 +1216,27 @@ package com.leyou.ui.task.child {
 
 		private function ontaskClick(e:MouseEvent):void {
 
-			if (e.target == this.TaskStateLbl3)
-				Cmd_Tsk.cmTaskDailyReward();
-//			else if (e.target == this.renderStateBtn)
-//				this.autoComplete();
+			var str:String;
+			if (e.target == this.TaskStateLbl3) {
+				this.dailyAwardWnd.show();
+//				Cmd_Tsk.cmTaskDailyReward();
+			} else if (e.target == this.TaskStateLbl5) {
+				str=StringUtil.substitute(TableManager.getInstance().getSystemNotice(10179).content, [this.ref_yb]);
+				PopupManager.showConfirm(str, function():void {
+					Cmd_Tsk.cmTaskReset();
+				}, null, false, "daliytaskconfirm");
+			} else if (e.target == this.TaskStateLbl6) {
+				var tinfo:TMissionDate=TableManager.getInstance().getMissionDataByID(this.taskID);
+				str=StringUtil.substitute(TableManager.getInstance().getSystemNotice(10182).content, [tinfo.Cutout_Price, tinfo.minlevel]);
+				PopupManager.showConfirm(str, function():void {
+					Cmd_Tsk.cmTaskLevel(taskID);
+				}, null, false, "miantaskonkeysuccess");
+			} else if (e.target == this.TaskStateLbl7) {
+				UILayoutManager.getInstance().show_II(WindowEnum.DUNGEON_TEAM);
+				TweenLite.delayedCall(.3, function():void {
+					UIManager.getInstance().teamCopyWnd.setTabIndex(4);
+				});
+			}
 		}
 
 		public function setYbOnKeyVisible(v:Boolean):void {
@@ -1228,7 +1339,7 @@ package com.leyou.ui.task.child {
 //						return;
 //					}
 
-					UILayoutManager.getInstance().open_II(WindowEnum.DUNGEON_TEAM);
+					UILayoutManager.getInstance().show_II(WindowEnum.DUNGEON_TEAM);
 				} else if (this.mainTaskType == TaskEnum.taskType_TodayTaskSuccessNum) {
 
 //					if (lv < ConfigEnum.taskDailyOpenLv) {
@@ -1349,6 +1460,7 @@ package com.leyou.ui.task.child {
 					TweenLite.delayedCall(0.3, function():void {
 						UIManager.getInstance().equipWnd.changeTable(5);
 					});
+
 				} else if (this.mainTaskType == TaskEnum.taskType_SaveElement) {
 
 					if (UIManager.getInstance().isCreate(WindowEnum.ELEMENT) && UIManager.getInstance().elementWnd.visible) {
@@ -1381,9 +1493,230 @@ package com.leyou.ui.task.child {
 //			GuideManager.getInstance().removeGuide(19);
 //			this.autoAstar=true;
 		}
+		
+		public function autoCompleteLoop(autoLv30:int=0):void {
+
+			var stateTxt:String;
+			if (int(this.taskLoopInfo.st) == 0) {
+
+				var lv:int=Core.me.info.level;
+
+				if (this.taskDtype == TaskEnum.taskType_EquitTopLv) {
+
+					if (lv < ConfigEnum.EquipIntensifyOpenLv) {
+						NoticeManager.getInstance().broadcastById(9963, [ConfigEnum.EquipIntensifyOpenLv]);
+						return;
+					}
+
+					if (UIManager.getInstance().isCreate(WindowEnum.EQUIP) && UIManager.getInstance().equipWnd.visible) {
+						return;
+					}
+
+					UILayoutManager.getInstance().show_II(WindowEnum.EQUIP)
+				} else if (this.taskDtype == TaskEnum.taskType_BadgeNodeNum) {
+
+					if (lv < ConfigEnum.BadgeOpenLv) {
+						NoticeManager.getInstance().broadcastById(9963, [ConfigEnum.BadgeOpenLv]);
+						return;
+					}
+
+					if (UIManager.getInstance().isCreate(WindowEnum.BADAGE) && UIManager.getInstance().badgeWnd.visible) {
+						return;
+					}
+
+					UILayoutManager.getInstance().show_II(WindowEnum.BADAGE);
+				} else if (this.taskDtype == TaskEnum.taskType_MountLv) {
+
+					if (lv < ConfigEnum.MountOpenLv) {
+						NoticeManager.getInstance().broadcastById(9963, [ConfigEnum.MountOpenLv]);
+						return;
+					}
+
+					if (UIManager.getInstance().isCreate(WindowEnum.ROLE) && UIManager.getInstance().roleWnd.visible) {
+						return;
+					}
+
+					UILayoutManager.getInstance().show_II(WindowEnum.ROLE);
+
+					TweenLite.delayedCall(0.3, function():void {
+						UILayoutManager.getInstance().show(WindowEnum.ROLE, WindowEnum.MOUTLVUP, UILayoutManager.SPACE_X, UILayoutManager.SPACE_Y);
+						UIManager.getInstance().roleWnd.setTabIndex(1);
+					});
+
+				} else if (this.taskDtype == TaskEnum.taskType_CopySuccess) {
+
+					if (lv < ConfigEnum.StoryCopyOpenLevel) {
+						NoticeManager.getInstance().broadcastById(9963, [ConfigEnum.StoryCopyOpenLevel]);
+						return;
+					}
+
+//					if (UIManager.getInstance().isCreate(WindowEnum.DUNGEON_TEAM) && UIManager.getInstance().storyCopyWnd.visible) {
+//						return;
+//					}
+
+					UILayoutManager.getInstance().show_II(WindowEnum.DUNGEON_TEAM);
+				} else if (this.taskDtype == TaskEnum.taskType_TodayTaskSuccessNum) {
+
+//					if (lv < ConfigEnum.taskDailyOpenLv) {
+//						NoticeManager.getInstance().broadcastById(9963, [ConfigEnum.taskDailyOpenLv]);
+//						return;
+//					}
+//
+//					if (UIManager.getInstance().isCreate(WindowEnum.TASK) && UIManager.getInstance().taskWnd.visible) {
+//						return;
+//					}
+//
+//					UILayoutManager.getInstance().show_II(WindowEnum.TASK);
+//					TweenLite.delayedCall(0.3, UIManager.getInstance().taskWnd.changeTab, [1]);
+//					TweenLite.delayedCall(0.3, GuideManager.getInstance().showGuide, [104, UIManager.getInstance().taskWnd]);
+				} else if (this.taskDtype == TaskEnum.taskType_ElementFlagNum) {
+					if (lv < ConfigEnum.ElementOpenLv) {
+						NoticeManager.getInstance().broadcastById(9963, [ConfigEnum.ElementOpenLv]);
+						return;
+					}
+
+					if (!UIManager.getInstance().isCreate(WindowEnum.ELEMENT) || !UIManager.getInstance().getWindow(WindowEnum.ELEMENT).visible)
+						UIOpenBufferManager.getInstance().open(WindowEnum.ELEMENT);
+
+					if (DataManager.getInstance().elementData.ctype != 0)
+						TweenLite.delayedCall(0.3, UILayoutManager.getInstance().show, [WindowEnum.ELEMENT, WindowEnum.ELEMENT_UPGRADE]);
+//					if (UIManager.getInstance().isCreate(WindowEnum.ROLE) && UIManager.getInstance().roleWnd.visible) {
+//						return;
+//					}
+//
+//					UILayoutManager.getInstance().show_II(WindowEnum.ROLE);
+//					TweenLite.delayedCall(0.3, UIManager.getInstance().roleWnd.setTabIndex, [3]);
+				} else if (this.taskDtype == TaskEnum.taskType_ArenaPkNum) {
+					if (lv < ConfigEnum.ArenaOpenLv) {
+						NoticeManager.getInstance().broadcastById(9963, [ConfigEnum.ArenaOpenLv]);
+						return;
+					}
+
+					if (UIManager.getInstance().isCreate(WindowEnum.ARENA) && UIManager.getInstance().arenaWnd.visible) {
+						return;
+					}
+
+					UILayoutManager.getInstance().show_II(WindowEnum.ARENA);
+				} else if (this.taskDtype == TaskEnum.taskType_Mercenary) {
+					//					if (lv < ConfigEnum.) {
+					//						NoticeManager.getInstance().broadcastById(9963, [ConfigEnum.ArenaOpenLv]);
+					//						return;
+					//					}
+
+					if (UIManager.getInstance().isCreate(WindowEnum.PET) && UIManager.getInstance().petWnd.visible) {
+						return;
+					}
+
+					UIOpenBufferManager.getInstance().open(WindowEnum.PET);
+//					TweenLite.delayedCall(0.6, GuideManager.getInstance().showGuide, [123, UIManager.getInstance().petWnd.getBuyBtn()]);
+//					TweenLite.delayedCall(0.6, GuideManager.getInstance().showGuide, [123, UIManager.getInstance().petWnd]);
+				} else if (this.taskDtype == TaskEnum.taskType_UpgradeMainSkill) {
+
+					if (UIManager.getInstance().isCreate(WindowEnum.SKILL) && UIManager.getInstance().skillWnd.visible) {
+						return;
+					}
+
+					UILayoutManager.getInstance().show_II(WindowEnum.SKILL);
+					TweenLite.delayedCall(0.3, UIManager.getInstance().skillWnd.setTabIndex, [0]);
+				} else if (this.taskDtype == TaskEnum.taskType_UpgradePassivitySkill) {
+
+					if (UIManager.getInstance().isCreate(WindowEnum.SKILL) && UIManager.getInstance().skillWnd.visible) {
+						return;
+					}
+
+					UILayoutManager.getInstance().show_II(WindowEnum.SKILL);
+					TweenLite.delayedCall(0.3, UIManager.getInstance().skillWnd.setTabIndex, [1]);
+						//				} else if (this.taskDtype == TaskEnum.taskType_Delivery) {
+
+						//					if (UIManager.getInstance().isCreate(WindowEnum.DELIVERY) && UIManager.getInstance().deliveryWnd.visible) {
+						//						return;
+						//					}
+						//
+						//					UILayoutManager.getInstance().show_II(WindowEnum.DELIVERY);
+				} else if (this.taskDtype == TaskEnum.taskType_Gem) {
+
+					if (UIManager.getInstance().isCreate(WindowEnum.ROLE) && UIManager.getInstance().roleWnd.visible) {
+						return;
+					}
+
+					UILayoutManager.getInstance().show_II(WindowEnum.ROLE);
+
+					TweenLite.delayedCall(0.3, function():void {
+						UIManager.getInstance().roleWnd.setTabIndex(2);
+					});
+				} else if (this.taskDtype == TaskEnum.taskType_UpgradeGem) {
+
+					if (UIManager.getInstance().isCreate(WindowEnum.GEM_LV) && UIManager.getInstance().gemLvWnd.visible) {
+						return;
+					}
+
+					UILayoutManager.getInstance().show(WindowEnum.GEM_LV);
+				} else if (this.taskDtype == TaskEnum.taskType_Guild) {
+
+					if (UIManager.getInstance().isCreate(WindowEnum.GUILD) && UIManager.getInstance().guildWnd.visible) {
+						return;
+					}
+
+					UILayoutManager.getInstance().show_II(WindowEnum.GUILD);
+				} else if (this.taskDtype == TaskEnum.taskType_Fram) {
+
+					if (UIManager.getInstance().isCreate(WindowEnum.FARM) && UIManager.getInstance().farmWnd.visible) {
+						return;
+					}
+
+					UIOpenBufferManager.getInstance().open(WindowEnum.FARM);
+				} else if (this.taskDtype == TaskEnum.taskType_EquipUpgrade) {
+
+					if (UIManager.getInstance().isCreate(WindowEnum.EQUIP) && UIManager.getInstance().equipWnd.visible) {
+						return;
+					}
+
+					UILayoutManager.getInstance().show(WindowEnum.EQUIP);
+					TweenLite.delayedCall(0.3, function():void {
+						UIManager.getInstance().equipWnd.changeTable(5);
+					});
+
+				} else if (this.taskDtype == TaskEnum.taskType_SaveElement) {
+
+					if (UIManager.getInstance().isCreate(WindowEnum.ELEMENT) && UIManager.getInstance().elementWnd.visible) {
+						return;
+					}
+
+
+					if (!UIManager.getInstance().isCreate(WindowEnum.ELEMENT) || !UIManager.getInstance().getWindow(WindowEnum.ELEMENT).visible)
+						UIOpenBufferManager.getInstance().open(WindowEnum.ELEMENT);
+
+				} else {
+					stateTxt="ee2211";
+
+					//&& this.taskInfo["var"] == 0
+					if (this.linkArr[TaskEnum.taskLevel_switchLine][0] != null)
+						this.autoAstarLoop(this.linkArr[TaskEnum.taskLevel_switchLine][0]);
+				}
+
+			} else if (int(this.taskLoopInfo.st) == 1) {
+				stateTxt="00ff9c";
+
+				if (int(this.taskLoopInfo.st) == 1 && this.linkArr[TaskEnum.taskLevel_switchLine][this.linkArr[TaskEnum.taskLevel_switchLine].length - 1] != null)
+					this.autoAstarLoop(this.linkArr[TaskEnum.taskLevel_switchLine][this.linkArr[TaskEnum.taskLevel_switchLine].length - 1]);
+
+			} else if (int(this.taskLoopInfo.st) == -1) {
+				var minfo:TMissionDate=TableManager.getInstance().getMissionDataByID(this.taskLoopInfo.tid);
+				this.autoAstarLoop("npc_id--" + minfo.anpc);
+			}
+
+//			GuideManager.getInstance().removeGuide(19);
+//			this.autoAstar=true;
+		}
+
+		 
 
 		private function autoAstar(link:String):void {
 			this.taskTargetLbl.dispatchEvent(new TextEvent(TextEvent.LINK, false, false, link));
+		}
+		
+		private function autoAstarLoop(link:String):void {
+			this.taskTargetLbl0.dispatchEvent(new TextEvent(TextEvent.LINK, false, false, link));
 		}
 
 		public function updateDailyInfo(o:Object):void {
@@ -1400,10 +1733,10 @@ package com.leyou.ui.task.child {
 					this.updateStar(o.star);
 				}
 
-				if (int(o.star) == 5)
-					this.rewardBtn.setActive(false, .6, true);
-				else
-					this.rewardBtn.setActive(true, 1, true);
+//				if (int(o.star) == 5)
+//					this.rewardBtn.setActive(false, .6, true);
+//				else
+				this.rewardBtn.setActive(true, 1, true);
 
 				this.currentStar=o.star;
 			}

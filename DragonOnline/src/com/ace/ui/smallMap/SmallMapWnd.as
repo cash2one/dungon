@@ -21,7 +21,8 @@ package com.ace.ui.smallMap {
 	import com.ace.ui.setting.AssistWnd;
 	import com.ace.utils.DebugUtil;
 	import com.ace.utils.StringUtil;
-	
+	import com.leyou.enum.ConfigEnum;
+
 	import flash.display.StageDisplayState;
 	import flash.events.Event;
 	import flash.events.FullScreenEvent;
@@ -79,6 +80,8 @@ package com.ace.ui.smallMap {
 
 			shieldViewImg.visible=false;
 			shieldSoundImg.visible=false;
+
+			this.rankBtn.setToolTip(TableManager.getInstance().getSystemNotice(10185).content);
 
 			this.logBtn.addEventListener(MouseEvent.CLICK, onCLick);
 			this.mapBtn.addEventListener(MouseEvent.CLICK, onCLick);
@@ -158,14 +161,27 @@ package com.ace.ui.smallMap {
 		private var preTile:Point=new Point();
 
 		public function updatePs(livingBase:LivingBase):void {
+
 			if (!this.isInit || !livingBase || livingBase != Core.me)
 				return;
+ 
 			if (this.preTile.equals(livingBase.nowTilePt()))
 				return;
 			this.preTile=livingBase.nowTilePt();
 			this.tileXLbl.text="X:" + SceneUtil.screenXToTileX(livingBase.x);
 			this.tileYLbl.text="Y:" + SceneUtil.screenYToTileY(livingBase.y);
 			MapWnd.getInstance().updatePs(SceneUtil.screenXToTileX(livingBase.x), SceneUtil.screenYToTileY(livingBase.y));
+
+		}
+		
+		public function setRankState():void{
+			
+			if (Core.me.info.level >= ConfigEnum.RankOpenLevel) {
+				this.rankBtn.setActive(true, 1, true);
+				this.rankBtn.setToolTip("");
+			} else
+				this.rankBtn.setActive(false, 0.6, true);
+			
 		}
 
 		public function switchToType(type:int):void {
@@ -186,7 +202,7 @@ package com.ace.ui.smallMap {
 		}
 
 		private function onCLick(evt:Event):void {
-			
+
 			var mod:int;
 			switch (evt.target.name) {
 				case "mapBtn":
@@ -203,12 +219,12 @@ package com.ace.ui.smallMap {
 					UIManager.getInstance().postWnd.open();
 					break;
 				case "rankBtn":
-					
+
 					if (!UIManager.getInstance().isCreate(WindowEnum.RANK))
 						UIManager.getInstance().creatWindow(WindowEnum.RANK);
-					
+
 					var wd:AutoWindow=UIManager.getInstance().getWindow(WindowEnum.RANK) as AutoWindow;
-					
+
 					mod=wd.visible ? 2 : 1;
 					UILayoutManager.getInstance().singleMove(wd, "RANK", mod, evt.target.localToGlobal(new Point(0, 0)));
 //					UIOpenBufferManager.getInstance().open(WindowEnum.RANK);

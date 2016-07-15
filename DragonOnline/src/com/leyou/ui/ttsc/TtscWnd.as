@@ -114,7 +114,7 @@ package com.leyou.ui.ttsc {
 
 			if (o.st == 0) {
 				UIManager.getInstance().rightTopWnd.active("firstPayBtn");
-				UIManager.getInstance().rightTopWnd.updateDDSC(false);
+				UIManager.getInstance().rightTopWnd.updateDDSC(false,true);
 				this.topupBtn.updataBmd("ui/ttsc/btn_cdxq.jpg");
 
 				this.topupBtn.visible=true;
@@ -125,7 +125,7 @@ package com.leyou.ui.ttsc {
 				this.topupBtn.updataBmd("ui/ttsc/btn_lqjl.jpg");
 				this.topupBtn.visible=false;
 				UIManager.getInstance().rightTopWnd.active("firstPayBtn");
-				UIManager.getInstance().rightTopWnd.updateDDSC(false);
+				UIManager.getInstance().rightTopWnd.updateDDSC(false,false);
 				this.bgImg.updateBmp("ui/ttsc/mrsc_bg3.png");
 
 				if (this.succst == -1 && this.visible) {
@@ -151,7 +151,7 @@ package com.leyou.ui.ttsc {
 				this.topupBtn.visible=true;
 				UIManager.getInstance().rightTopWnd.active("firstPayBtn");
 
-				UIManager.getInstance().rightTopWnd.updateDDSC(true);
+				UIManager.getInstance().rightTopWnd.updateDDSC(true,true);
 				this.bgImg.updateBmp("ui/ttsc/mrsc_bg1.png");
 			}
 		}

@@ -4,12 +4,10 @@ package com.ace.game.scene.player {
 	import com.ace.enum.ItemEnum;
 	import com.ace.enum.PlayerEnum;
 	import com.ace.game.core.SceneCore;
-	import com.ace.game.manager.LogManager;
 	import com.ace.game.manager.SceneMouseManager;
 	import com.ace.game.proxy.ModuleProxy;
 	import com.ace.game.scene.player.part.LivingBase;
 	import com.ace.game.scene.player.part.LivingModel;
-	import com.ace.game.scene.ui.SceneTipUI;
 	import com.ace.game.scene.ui.child.Item;
 	import com.ace.game.utils.SceneUtil;
 	import com.ace.game.utils.TableUtil;
@@ -24,12 +22,11 @@ package com.ace.game.scene.player {
 	import com.ace.manager.KeysManager;
 	import com.ace.manager.UIManager;
 	import com.ace.tools.FPS;
-	import com.ace.ui.setting.AssistWnd;
 	import com.ace.utils.AreaUtil;
 	import com.ace.utils.DebugUtil;
 	import com.leyou.net.cmd.Cmd_Attack;
 	import com.leyou.net.cmd.Cmd_Scene;
-
+	
 	import flash.events.KeyboardEvent;
 	import flash.geom.Point;
 	import flash.ui.Keyboard;

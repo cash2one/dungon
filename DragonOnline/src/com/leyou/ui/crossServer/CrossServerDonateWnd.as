@@ -46,7 +46,7 @@ package com.leyou.ui.crossServer
 			cancelBtn = getUIbyID("cancelBtn") as NormalButton;
 			grid = new MarketGrid();
 			grid.x = 26;
-			grid.y = 55;
+			grid.y = 66;
 			pane.addChild(grid);
 			
 			confirmBtn.addEventListener(MouseEvent.CLICK, onBtnClick);

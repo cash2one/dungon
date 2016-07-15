@@ -37,6 +37,7 @@ package com.ace.gameData.manager {
 	import com.ace.gameData.table.TGuildBattleInfo;
 	import com.ace.gameData.table.THallows;
 	import com.ace.gameData.table.TIcebattleReward;
+	import com.ace.gameData.table.TIntro;
 	import com.ace.gameData.table.TInvestInfo;
 	import com.ace.gameData.table.TItemInfo;
 	import com.ace.gameData.table.TKeep_7;
@@ -67,6 +68,7 @@ package com.ace.gameData.manager {
 	import com.ace.gameData.table.TQQVipNewRewardInfo;
 	import com.ace.gameData.table.TQuestion;
 	import com.ace.gameData.table.TRankRewardInfo;
+	import com.ace.gameData.table.TRed_package;
 	import com.ace.gameData.table.TRing_intensify;
 	import com.ace.gameData.table.TSeGuild;
 	import com.ace.gameData.table.TServerListInfo;
@@ -91,6 +93,7 @@ package com.ace.gameData.manager {
 	import com.ace.gameData.table.TWing_Trade;
 	import com.ace.gameData.table.TZdlElement;
 	import com.ace.manager.LibManager;
+	import com.leyou.data.celebrate.AreaCelebrateData;
 	import com.leyou.utils.PropUtils;
 
 
@@ -196,9 +199,15 @@ package com.ace.gameData.manager {
 		private var elementTransDic:Object;
 		private var seGuideDic:Object;
 		private var dropPackDic:Object;
+		private var redPackDic:Object;
+		private var introDic:Object;
 
 		public function TableManager() {
 			super();
+//			var info:XML=LibManager.getInstance().getXML("config/table/resTable.xml");
+//
+//			trace(info);
+//			trace(11);
 		}
 
 		public function get cserverLvDic():Object
@@ -332,6 +341,8 @@ package com.ace.gameData.manager {
 			this.elementTransDic={};
 			this.seGuideDic={};
 			this.dropPackDic={};
+			this.redPackDic={};
+			this.introDic={};
 			
 			var info:XML;
 			var render:XML;
@@ -910,6 +921,19 @@ package com.ace.gameData.manager {
 			for each(render in info.children()){
 				this.seGuideDic[render.@id]=new TSeGuild(render); 
 			}
+			
+			//指向引导
+			info=LibManager.getInstance().getXML("config/table/Red_package.xml");
+			for each(render in info.children()){
+				this.redPackDic[render.@Red_ID]=new TRed_package(render); 
+			}
+			
+			 
+			//指向引导
+			info=LibManager.getInstance().getXML("config/table/intro.xml");
+			for each(render in info.children()){
+				this.introDic[render.@id]=new TIntro(render); 
+			}
 		}
 
 		//=====================================获取===================================================================
@@ -992,6 +1016,16 @@ package com.ace.gameData.manager {
 			for(var key:String in petDic){
 				var petInfo:TPetInfo = petDic[key];
 				if(petInfo.id == id){
+					return petInfo;
+				}
+			}
+			return null;
+		}
+		
+		public function getPetInfoByItemid(itemid:int):TPetInfo{
+			for(var key:String in petDic){
+				var petInfo:TPetInfo = petDic[key];
+				if(petInfo.activeItem == itemid){
 					return petInfo;
 				}
 			}
@@ -1180,11 +1214,11 @@ package com.ace.gameData.manager {
 			return arr;
 		}
 		
-		public function getPayPromotionByType(type:int):Array{
+		public function getPayPromotionByType(type:int,st:int):Array{
 			var arr:Array = [];
 			for(var key:String in payPromotionDic){
 				var info:TPayPromotion = payPromotionDic[key];
-				if(info.type == type){
+				if(info.type == type && info.type2==st){
 					arr.push(info);
 				}
 			}
@@ -1867,6 +1901,19 @@ package com.ace.gameData.manager {
 			return arr;
 		}
 		
+		public function getTttCopyInfoBySceneId(sid:int):TDungeon_Base{
+			
+			var arr:Array=[];
+			var tdb:TDungeon_Base;
+			
+			for each(tdb in this.guildCopyDic){
+				if(tdb.Dungeon_Type==12 && tdb.Dungeon_Scene==sid)
+				 	return tdb;
+			}
+			
+			return null;;
+		}
+		
 		
 
 		public function getTzActiveAll():Object {
@@ -2054,25 +2101,46 @@ package com.ace.gameData.manager {
 			return this.seGuideDic;
 		}
 		
-//		public function getseGuideByType(type:int):TSeGuild{
-//			
-//			var tinfo:TSeGuild;
-//			for each(tinfo in this.seGuideDic){
-//				
-//				if(tinfo.type==type){
-//					
-//					switch(type){
-//						case 1:
-//							break;
-//						case 2:
-//							break;
-//					}
-//					
-//				}
-//				
-//			}
-//			
-//		}
+		public function getRedPackageById(id:int):TRed_package{
+			return this.redPackDic[id];
+		}
+		
+		public function getIntroById(id:int):TIntro{
+			return this.introDic[id];
+		}
+		
+		public function getIntroAll():Object{
+			return this.introDic;
+		}
+		
+		public function getIntroByType(i:int):Array{
+			
+			var arr:Array=[];
+			var tinfo:TIntro;
+			
+			for each(tinfo in this.introDic){
+				if(tinfo.type==i)
+					arr.push(tinfo);
+			}
+			
+			return arr;
+		}
+		
+		public function getIntroType():Array{
+			
+			var arr:Array=[];
+			var arr1:Array=[];
+			var tinfo:TIntro;
+			
+			for each(tinfo in this.introDic){
+				if(arr.indexOf(tinfo.type)==-1){
+					arr.push(tinfo.type);
+					arr1.push(tinfo);
+				}
+			}
+			
+			return arr1;
+		}
 		
 	}
 }

@@ -149,6 +149,10 @@ package com.leyou.ui.pet.children
 			}
 		}
 		
+		public function dispAutoEvent():void {
+			this.buyBtn.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+		}
+		
 		public function updateInfo($petTId:int):void{
 			petTId = $petTId;
 			var petInfo:TPetInfo = TableManager.getInstance().getPetInfo(petTId);

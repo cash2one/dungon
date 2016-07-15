@@ -246,6 +246,7 @@ package com.leyou.net {
 				dict[CmdEnum.SM_MAK_A]=Cmd_Market.sm_Mak_A;
 				dict[CmdEnum.SM_MAK_F]=Cmd_Market.sm_Mak_F;
 				dict[CmdEnum.SM_MAK_W]=Cmd_Market.sm_Mak_W;
+				dict[CmdEnum.SM_MAK_N]=Cmd_Market.sm_Mak_N;
 
 				// 积分
 				dict[CmdEnum.SM_CLI_I]=Cmd_CLI.sm_CLI_I;
@@ -269,6 +270,7 @@ package com.leyou.net {
 				dict[CmdEnum.SM_FANL_J]=Cmd_Fanl.sm_Fanl_J;
 				dict[CmdEnum.SM_FANL_D]=Cmd_Fanl.sm_Fanl_D;
 				dict[CmdEnum.SM_FANL_K]=Cmd_Fanl.sm_Fanl_K;
+				dict[CmdEnum.SM_FANL_M]=Cmd_Fanl.sm_Fanl_M;
 
 				// 寄售
 				dict[CmdEnum.SM_CGT_I]=Cmd_Aution.sm_Aution_I;
@@ -642,6 +644,11 @@ package com.leyou.net {
 				
 				//微端
 				dict[CmdEnum.SM_DLJL_I]=Cmd_WeiDuan.sm_dljl_I;
+				
+				//红包
+				dict[CmdEnum.SM_PACKAGE_D]=Cmd_Package.sm_package_D;
+				dict[CmdEnum.SM_PACKAGE_I]=Cmd_Package.sm_package_I;
+				dict[CmdEnum.SM_PACKAGE_H]=Cmd_Package.sm_package_H;
 			}
 		}
 
@@ -653,7 +660,7 @@ package com.leyou.net {
 				return;
 			}
 
-//			trace("收到协议【[" + cmd + "]" + data + "】");
+			trace("收到协议【[" + cmd + "]" + data + "】");
 
 			fun(data);
 		}

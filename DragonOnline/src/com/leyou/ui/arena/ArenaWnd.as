@@ -8,6 +8,7 @@ package com.leyou.ui.arena {
 	import com.ace.enum.UIEnum;
 	import com.ace.enum.WindowEnum;
 	import com.ace.gameData.manager.MapInfoManager;
+	import com.ace.gameData.manager.MyInfoManager;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.manager.CursorManager;
 	import com.ace.manager.EventManager;
@@ -42,7 +43,7 @@ package com.leyou.ui.arena {
 	import com.leyou.utils.ArenaUtil;
 	import com.leyou.utils.PropUtils;
 	import com.leyou.utils.TimeUtil;
-	
+
 	import flash.display.DisplayObject;
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
@@ -142,7 +143,7 @@ package com.leyou.ui.arena {
 
 			this.addFreeCountLbl.styleSheet=FontEnum.DEFAULT_LINK_STYLE;
 			this.addFreeCountLbl.visible=false;
-			
+
 			this.ruleLbl.mouseEnabled=true;
 			this.ruleLbl.setToolTip(TableManager.getInstance().getSystemNotice(10169).content);
 
@@ -232,7 +233,7 @@ package com.leyou.ui.arena {
 
 			this.chalWnd.mask=this.maskSpr;
 			this.chalWnd.visible=false;
-			
+
 			this.freeTimeTxt.visible=false;
 		}
 
@@ -590,6 +591,14 @@ package com.leyou.ui.arena {
 			GuideManager.getInstance().removeGuide(32);
 
 			UIManager.getInstance().taskTrack.setGuideViewhide(TaskEnum.taskType_ArenaPkNum);
+
+			if (!MyInfoManager.getInstance().isTaskOk && MyInfoManager.getInstance().currentTaskId == 59)
+				TweenLite.delayedCall(ConfigEnum.autoTask3, this.autoTaskComplete);
+		}
+
+		private function autoTaskComplete():void {
+			if (this.visible)
+				this.playVec[1].dispatAutoTaskEvent();
 		}
 
 		override public function sendOpenPanelProtocol(... parameters):void {

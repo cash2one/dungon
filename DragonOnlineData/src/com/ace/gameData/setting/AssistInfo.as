@@ -67,6 +67,8 @@ package com.ace.gameData.setting {
 		public var isHideScene:Boolean=false;
 		public var isHideTitle:Boolean=false; //隐藏称号
 		public var isHideGuid:Boolean=false; //隐藏同行会
+		public var isHideShake:Boolean=false;//屏蔽震屏
+		public var isHidePet:Boolean;// 
 		
 		private var isInit:Boolean=false;
 

@@ -20,6 +20,7 @@ package com.leyou.ui.pkCopy {
 	import com.ace.ui.lable.Label;
 	import com.ace.ui.notice.NoticeManager;
 	import com.ace.ui.scrollPane.children.ScrollPane;
+	import com.greensock.TweenLite;
 	import com.leyou.enum.ConfigEnum;
 	import com.leyou.manager.TimerManager;
 	import com.leyou.net.cmd.Cmd_Act;
@@ -29,7 +30,7 @@ package com.leyou.ui.pkCopy {
 	import com.leyou.ui.pkCopy.child.DungeonTzGrid;
 	import com.leyou.utils.TaskUtil;
 	import com.leyou.utils.TimeUtil;
-	
+
 	import flash.events.MouseEvent;
 
 	public class DungeonTZWnd extends AutoSprite {
@@ -70,6 +71,8 @@ package com.leyou.ui.pkCopy {
 		private var o:Object;
 
 		private var tzBar:TzBar;
+
+		private var currentSpaceTime:int=0;
 
 		public function DungeonTZWnd() {
 //			super(LibManager.getInstance().getXML("config/ui/pkCopy/dungeonTZWnd.xml"));
@@ -131,7 +134,7 @@ package com.leyou.ui.pkCopy {
 			TimerManager.getInstance().add(exePkCopyTime);
 
 			this.tzBar=new TzBar();
-			LayerManager.getInstance().mainLayer.addChildAt(this.tzBar,0);
+			LayerManager.getInstance().mainLayer.addChildAt(this.tzBar, 0);
 
 			this.tzBar.hide();
 			this.tzBar.x=(UIEnum.WIDTH - 150) - 80;
@@ -176,8 +179,16 @@ package com.leyou.ui.pkCopy {
 
 		private function onAccpetClick(e:MouseEvent):void {
 
-			if (this.selectId != -1)
-				Cmd_Act.cmActNowAccept(selectId);
+			if (this.selectId != -1) {
+				if (this.selectId == 25) {
+					UILayoutManager.getInstance().show_II(WindowEnum.DUNGEON_TEAM);
+					TweenLite.delayedCall(0.3, UIManager.getInstance().teamCopyWnd.setTabIndex, [2]);
+				} else if (this.selectId == 26 || this.selectId == 27) {
+					UILayoutManager.getInstance().show_II(WindowEnum.DUNGEON_TEAM);
+					TweenLite.delayedCall(0.3, UIManager.getInstance().teamCopyWnd.setTabIndex, [4]);
+				} else
+					Cmd_Act.cmActNowAccept(selectId);
+			}
 		}
 
 		private function exePkCopyTime(_i:int):void {
@@ -188,6 +199,7 @@ package com.leyou.ui.pkCopy {
 			this.timerLbl.x=(UIEnum.WIDTH - this.timerLbl.width) - 120;
 			this.timerLbl.y=6;
 
+			this.currentSpaceTime=_i;
 
 			this.updateList();
 
@@ -282,7 +294,7 @@ package com.leyou.ui.pkCopy {
 			this.itemsList.length=0;
 
 			var obj:Object=TableManager.getInstance().getTzActiveAll();
-			var o:TTzActiive;
+			var oinfo:TTzActiive;
 			var i:int=0;
 //			var render:DungeonTZRender;
 
@@ -291,17 +303,17 @@ package com.leyou.ui.pkCopy {
 
 			var week:Array=[];
 
-			for each (o in oarr) {
-				if (o != null) {
+			for each (oinfo in oarr) {
+				if (oinfo != null) {
 
-					week=o.week.replace("7", "0").split(",");
+					week=oinfo.week.replace("7", "0").split(",");
 
 					if (week.indexOf(date.day.toString()) == -1) {
 						continue;
 					}
 
 					render=new DungeonTZRender();
-					render.updateInfo(o);
+					render.updateInfo(oinfo);
 
 					render.y=i * render.height;
 
@@ -326,6 +338,10 @@ package com.leyou.ui.pkCopy {
 			var arr2:Array=[];
 			var arr3:Array=[];
 
+
+			/**
+			 * 时间顺序排序
+			 * */
 			arr=item.time.split("|");
 			arr1=arr[0].split(":");
 
@@ -342,6 +358,27 @@ package com.leyou.ui.pkCopy {
 			else //if (date1 > date2)
 				return 1;
 
+
+		/**
+		* 开启时间排序
+			arr=item.time.split("|");
+			arr1=arr[0].split(":");
+			arr2=arr[1].split(":");
+
+ * date.time=(TimerManager.CurrentServerTime + TimerManager.currentTime) * 1000;
+*
+date1=new Date(date.fullYear, date.month, date.date, arr1[0], arr1[1], arr1[2]);
+date2=new Date(date.fullYear, date.month, date.date, arr2[0], arr2[1], arr2[2]);
+
+if (date >= date1 && date < date2) {
+return -1;
+} else if (date < date1) {
+		return 0;
+			} else if (date > date2)
+				return 1;
+
+			return 1;
+			   **/
 		}
 
 		private function updateList():void {
@@ -445,11 +482,41 @@ package com.leyou.ui.pkCopy {
 
 			}
 
+//			if (this.currentSpaceTime % 10 == 0) {
+			var tmp1:Vector.<DungeonTZRender>=this.itemsList.filter(function(item:DungeonTZRender, i:int, vec:Vector.<DungeonTZRender>):Boolean {
+				if (item.state == -1)
+					return true;
+				return false;
+			});
+
+			var tmp2:Vector.<DungeonTZRender>=this.itemsList.filter(function(item:DungeonTZRender, i:int, vec:Vector.<DungeonTZRender>):Boolean {
+				if (item.state == 0)
+					return true;
+				return false;
+			});
+
+			var tmp3:Vector.<DungeonTZRender>=this.itemsList.filter(function(item:DungeonTZRender, i:int, vec:Vector.<DungeonTZRender>):Boolean {
+				if (item.state == 1)
+					return true;
+				return false;
+			});
+
+			tmp1.sort(sortOnTimeII);
+			tmp2.sort(sortOnTimeII);
+			tmp3.sort(sortOnTimeII);
+
+			var tmp4:Vector.<DungeonTZRender>=tmp1.concat(tmp2, tmp3);
+
+			for (i=0; i < tmp4.length; i++) {
+				render=tmp4[i] as DungeonTZRender;
+				render.y=i * render.height;
+			}
+//			}
 
 			if (okopen || date > date2 || this.tzId == -1) {
 				this.tzBar.hide();
 			} else {
- 
+
 				var infot:TTzActiive=TableManager.getInstance().getTzActiveByID(this.itemsList[this.tzId].id);
 				if (Core.me == null || infot.lv > Core.me.info.level) {
 					this.tzBar.hide();
@@ -458,6 +525,35 @@ package com.leyou.ui.pkCopy {
 
 				this.tzBar.updateInfo(this.itemsList[this.tzId].id, this.itemsList[this.tzId - 1].id, this.itemsList[1].id);
 			}
+
+		}
+
+		private function sortOnTimeII(item:DungeonTZRender, item1:DungeonTZRender):int {
+
+			var arr:Array=[];
+			var arr1:Array=[];
+
+			var arr2:Array=[];
+			var arr3:Array=[];
+
+			var tinfo1:TTzActiive=TableManager.getInstance().getTzActiveByID(item.id);
+			var tinfo2:TTzActiive=TableManager.getInstance().getTzActiveByID(item1.id);
+
+			arr=tinfo1.time.split("|");
+			arr1=arr[0].split(":");
+
+			arr3=tinfo2.time.split("|");
+			arr2=arr3[0].split(":");
+
+			date1=new Date(date.fullYear, date.month, date.date, arr1[0], arr1[1], arr1[2]);
+			date2=new Date(date.fullYear, date.month, date.date, arr2[0], arr2[1], arr2[2]);
+
+			if (date1 < date2)
+				return -1;
+			else if (date1 == date2)
+				return 0;
+			else //if (date1 > date2)
+				return 1;
 
 		}
 
@@ -536,8 +632,8 @@ package com.leyou.ui.pkCopy {
 		override public function get height():Number {
 			return 482;
 		}
-		
-		public function setTzBarState(v:Boolean):void{
+
+		public function setTzBarState(v:Boolean):void {
 			this.tzBar.setScalePanel(v);
 		}
 

@@ -3,8 +3,8 @@ package com.leyou.ui.badge {
 	import com.ace.config.Core;
 	import com.ace.enum.UIEnum;
 	import com.ace.enum.WindowEnum;
+	import com.ace.gameData.manager.MyInfoManager;
 	import com.ace.manager.GuideArrowDirectManager;
-	import com.ace.manager.GuideDirectManager;
 	import com.ace.manager.GuideManager;
 	import com.ace.manager.LibManager;
 	import com.ace.manager.SoundManager;
@@ -18,7 +18,6 @@ package com.leyou.ui.badge {
 	import com.greensock.TweenLite;
 	import com.leyou.enum.ConfigEnum;
 	import com.leyou.enum.TaskEnum;
-	import com.leyou.net.NetGate;
 	import com.leyou.net.cmd.Cmd_Bld;
 	import com.leyou.ui.badge.child.BadgeBg01;
 	import com.leyou.ui.badge.child.BadgeBtn;
@@ -162,7 +161,7 @@ package com.leyou.ui.badge {
 				this.badgeBg01.updateData(this.currentIndex);
 
 //			TweenLite.delayedCall(2.2,GuideDirectManager.getInstance().getGuideOrBadgeByType,[2]);
-			
+
 			UIManager.getInstance().showPanelCallback(WindowEnum.BADAGE);
 		}
 
@@ -210,6 +209,9 @@ package com.leyou.ui.badge {
 			UIManager.getInstance().taskTrack.setGuideViewhide(TaskEnum.taskType_BadgeNodeNum);
 
 			this.iconImg.updateBmp(PlayerUtil.getPlayerHeadImg(Core.me.info.profession, Core.me.info.sex));
+
+			if (!MyInfoManager.getInstance().isTaskOk && MyInfoManager.getInstance().currentTaskId == 19)
+				TweenLite.delayedCall(ConfigEnum.autoTask3, this.autoTaskComplete);
 		}
 
 		override public function sendOpenPanelProtocol(... parameters):void {
@@ -272,6 +274,29 @@ package com.leyou.ui.badge {
 			}
 
 			return ds;
+		}
+
+		private function autoTaskComplete():void {
+
+			if (!this.visible)
+				return ;
+			
+			var ds:DisplayObject;
+
+			if (ds == null) {
+
+				var ibtn:MovieClip;
+				for (var i:int=0; i < 10; i++) {
+					ibtn=badgeBg01.getPoint(i) as MovieClip;
+					if (ibtn.currentFrame != 3) {
+						ds=badgeBg01.getPoint(i);
+						ds.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+						break;
+					}
+				}
+
+			}
+
 		}
 
 		public function resise():void {

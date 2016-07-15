@@ -15,7 +15,7 @@ package com.leyou.ui.convenientuse {
 	import com.leyou.manager.TimerManager;
 	import com.leyou.net.cmd.Cmd_Bag;
 	import com.leyou.ui.convenientuse.children.ConvenientGrid;
-
+	
 	import flash.events.MouseEvent;
 
 	/**
@@ -94,6 +94,7 @@ package com.leyou.ui.convenientuse {
 				onMouseClick(null);
 			}
 
+			TimerManager.getInstance().remove(exeTime);
 			TimerManager.getInstance().add(exeTime);
 		}
 

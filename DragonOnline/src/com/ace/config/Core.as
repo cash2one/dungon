@@ -11,20 +11,40 @@ package com.ace.config {
 	import com.leyou.enum.ConfigEnum;
 
 	public class Core {
+
 		public static var stg:DragonOnline;
 		public static var serverIp:String="192.168.10.88";
-//		public static var serverIp:String="120.26.13.239";
-//		public static var serverIp:String="202.55.225.226";
-//				public static var serverIp:String="202.55.225.235";
-		public static var loginPort:int=9932;//简体
+//		public static var serverIp:String="101.198.161.235"; // 360
+//		public static var serverIp:String="101.198.162.172";
+//		public static var serverIp:String="202.55.225.235";
+//		public static var serverIp:String="123.206.200.34";
+ 
+//		public static var serverIp:String="101.198.161.235";
+		public static var loginPort:int=9932; //简体
+//		public static var loginPort:int=9922; //简体 360 
+ 
+//		public static var loginPort:int=9932; //简体
+ 
 //		public static var loginPort:int=9992;//繁体
 		public static var isFirstLogin:Boolean=true;
 		public static var isDvt:Boolean=false;
-		public static var isChangeIp:Boolean=false;	
-		
+ 
+ 
+		public static var isChangeIp:Boolean=false;
+ 
+//		public static var isAuto:Boolean=false;
+ 
+ 
+//		public static var isChangeIp:Boolean=false;
+//		public static var isAuto:Boolean=false;
 
+ 
+
+		public static var isFromWeb:Boolean;
+ 
 		//		public static var serverName:String="S3";
 		public static var serverName:String="dev1";
+
 
 		public static var gameName:String="sog";
 		public static var userId:String;
@@ -48,7 +68,10 @@ package com.ace.config {
 		public static var URL_BUG:String="http://bbs.360safe.com/forum.php?mod=post&action=newthread&fid=2457"; //问题提交
 		public static var URL_BBS:String="http://bbs.no2.cn/forumdisplay.php?fid=66"; //论坛
 		public static var URL_WEIDUAN:String="http://bbs.no2.cn/forumdisplay.php?fid=66"; //论坛
+		public static var URL_LOG:String="gkey={gkey}&qid={qid}&skey={skey}&time={loginTime}&togame_time={loadedTime}&sign={sign}"; //日志
+		public static var LOGIN_KEY:String;
 		public static var IS_RE_LOGIN:Boolean=false; //重复登录
+		public static var isOpenPay:Boolean;//是否开放支付
 
 		//		上行：tx|Iopenid,openkey,appid,sig,pf,pfkey,zoneid
 		public static var TX_OPENID:String;
@@ -62,10 +85,10 @@ package com.ace.config {
 		public static var TX_VIPTIP:Boolean;
 
 		public static var KEYWORD_OPEN:Boolean=false;
-		
+
 
 		private static var sf_arr:Array=["jl588", "987q", "10yi", "yiyimm", "cb007", "66lou"];
-		
+
 //		var flashvars = {};
 //		flashvars.url = location.href;
 //		flashvars.version="V1.5.45.51";
@@ -75,8 +98,27 @@ package com.ace.config {
 //		flashvars.strlgn = "lgn|Puserid=U381389023427,svrid=S6,fcm=1,timestamp=1441967736,sign=652a5344d379d2dd1b067ec7d770ae3e";
 //		flashvars.autoCreatTime = "0";
 
+
+//		flashvars.gkey = "lzgol";
+//		flashvars.skey = "S1";
+//		flashvars.qid = "21";
+//		flashvars.time = "1463645569";
+
+		public static var gkey:String;
+//		public static var skey:String;//serverName
+		public static var qid:String;
+		public static var loginTime:String;
+
+		static private function on360(obj:Object):void {
+			Core.gkey=obj.gkey;
+			Core.serverName=obj.skey;
+			Core.qid=obj.qid;
+			Core.loginTime=obj.time;
+		}
+
 		public static function setup(obj:Object):void {
 			if (obj.hasOwnProperty("version")) {
+				Core.isFromWeb=true;
 				(!UIEnum.IS_USE_CDN) && (UIEnum.DATAROOT=obj.dataRoot);
 				UIEnum.VERSIONCM=obj.version;
 				UIEnum.MULTI_LAN=obj.language;
@@ -95,7 +137,11 @@ package com.ace.config {
 				Core.userId=Core.userId.split("Puserid=")[1];
 				Core.serverName=Core.webId.split(",")[1];
 				Core.serverName=Core.serverName.split("svrid=")[1];
+				Core.loginTime=Core.webId.split(",")[3];
+				Core.loginTime=Core.userId.split("timestamp=")[1];
 				Core.isWeiduan=StringUtil.intToBoolean(obj.weiduan);
+
+				on360(obj);
 
 				Core.TX_OPENID=obj.openid;
 				Core.TX_OPENKEY=obj.openkey;
@@ -110,11 +156,17 @@ package com.ace.config {
 					UIEnum.PLAT_FORM_ID=PlatformEnum.ID_SF;
 				}
 			} else {
-				UIEnum.PLAT_FORM_ID=PlatformEnum.ID_AOYI;
+				UIEnum.PLAT_FORM_ID=PlatformEnum.ID_360_OPEN;
 				//调试要登陆的服务器和ip
 				//				(!UIEnum.IS_USE_CDN) && UIEnum.DATAROOT="http://sogres.oss-cn-hangzhou.aliyuncs.com/webData/dragonResII/";
 				//				(!UIEnum.IS_USE_CDN) && (UIEnum.DATAROOT="http://192.168.10.106/webData/dragonResEn/");
-				(!UIEnum.IS_USE_CDN) && (UIEnum.DATAROOT="http://192.168.10.16/webData/dragonResCN/");
+ 
+//				(!UIEnum.IS_USE_CDN) && (UIEnum.DATAROOT="http://192.168.10.16/webData/dragonResAuto/");
+				(!UIEnum.IS_USE_CDN) && (UIEnum.DATAROOT="http://192.168.10.66/webData/dragonResCN/");
+ 
+//				(!UIEnum.IS_USE_CDN) && (UIEnum.DATAROOT="http://192.168.10.66/webData/dragonResCN/");
+//				(!UIEnum.IS_USE_CDN) && (UIEnum.DATAROOT="http://192.168.10.106/webData/dragonResAuto/");
+ 
 //				(!UIEnum.IS_USE_CDN) && (UIEnum.DATAROOT="http://sogres3.leyou365.com/webData/dragonResCN/");
 //				(!UIEnum.IS_USE_CDN) && (UIEnum.DATAROOT="http://192.168.10.16/webData/dragonResTW/");
 					//				(!UIEnum.IS_USE_CDN) && (UIEnum.DATAROOT="http://sogres2.leyou365.com/webData/dragonResEn/");
@@ -126,10 +178,10 @@ package com.ace.config {
 			}
 
 			//
-						var key:String;
-						for (key in obj) {
-							trace(((("属性值：" + key) + "=") + obj[key]));
-						}
+			var key:String;
+			for (key in obj) {
+				trace(((("属性值：" + key) + "=") + obj[key]));
+			}
 		}
 
 		static public function initRes(obj:Object):void {
@@ -147,6 +199,10 @@ package com.ace.config {
 
 			}
 
+			if (obj.hasOwnProperty("logUrl")) {
+				Core.URL_LOG=obj.logUrl + Core.URL_LOG;
+				Core.LOGIN_KEY=obj.login_key;
+			}
 			if (obj.hasOwnProperty("payUrl")) {
 				Core.URL_HOME=obj.homeUrl;
 				Core.URL_REGISTER=obj.resUrl;
@@ -159,6 +215,7 @@ package com.ace.config {
 			Core.URL_HOME=serInfo.homeUrl;
 			Core.URL_REGISTER=serInfo.resUrl;
 			Core.URL_BBS=serInfo.bbsUrl;
+
 
 
 			if (UIEnum.PLAT_FORM_ID == PlatformEnum.ID_1360) {
@@ -184,7 +241,8 @@ package com.ace.config {
 		}
 
 		static public function get isTencent():Boolean {
-			return (UIEnum.PLAT_FORM_ID == PlatformEnum.ID_TENCENT) || (UIEnum.PLAT_FORM_ID == PlatformEnum.ID_AOYI);
+			return (true);
+//			return (UIEnum.PLAT_FORM_ID == PlatformEnum.ID_TENCENT) || (UIEnum.PLAT_FORM_ID == PlatformEnum.ID_AOYI);
 		}
 
 		static public function get isAOYI():Boolean {
@@ -202,13 +260,17 @@ package com.ace.config {
 		static public function get isSF2():Boolean {
 			return (UIEnum.PLAT_FORM_ID == PlatformEnum.ID_SF2);
 		}
-		
-		static public function get isTaiwan():Boolean{
+
+		static public function get isTaiwan():Boolean {
 			return (UIEnum.MULTI_LAN == PlatformEnum.LAN_TW);
 		}
 
 		static public function resetLogin():void {
 			Core.IS_RE_LOGIN=false;
+		}
+
+		static public function get isAuto():Boolean {
+			return UIEnum.IS_AUTO;
 		}
 	}
 }

@@ -8,10 +8,13 @@ package com.ace.ui.notice {
 	import com.ace.config.Core;
 	import com.ace.enum.NoticeEnum;
 	import com.ace.enum.PlayerEnum;
+	import com.ace.enum.WindowEnum;
 	import com.ace.game.tools.TimeCounter;
+	import com.ace.gameData.manager.MyInfoManager;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.table.TNoticeInfo;
 	import com.ace.manager.SoundManager;
+	import com.ace.manager.UILayoutManager;
 	import com.ace.manager.UIManager;
 	import com.ace.reuse.ReuseDic;
 	import com.ace.ui.notice.child.NoticeIcon;
@@ -26,6 +29,8 @@ package com.ace.ui.notice {
 	import com.ace.ui.notice.message.Message6;
 	import com.ace.ui.notice.message.Message7;
 	import com.ace.ui.notice.message.Message8;
+	import com.greensock.TweenLite;
+	import com.leyou.enum.ConfigEnum;
 
 	import flash.display.Sprite;
 
@@ -128,6 +133,35 @@ package com.ace.ui.notice {
 
 			if (Core.me)
 				SoundManager.getInstance().play(Core.me.info.sex == PlayerEnum.SEX_BOY ? info.soundM : info.soundF);
+
+			if (info.Low_Money > 0) {
+
+				if (info.Low_Money == 5 && (MyInfoManager.getInstance().firstItem.fst == 0 || MyInfoManager.getInstance().firstItem.st == 0)) {
+					if (MyInfoManager.getInstance().firstItem.fst == 0) {
+
+						if (UIManager.getInstance().firstPay == null || !UIManager.getInstance().firstPay.visible) {
+							UILayoutManager.getInstance().open(WindowEnum.FIRST_PAY);
+						}
+
+					} else if (MyInfoManager.getInstance().firstItem.st == 0) {
+
+						if (UIManager.getInstance().topUpWnd == null || !UIManager.getInstance().topUpWnd.visible) {
+							UILayoutManager.getInstance().open_II(WindowEnum.TOPUP);
+						}
+					}
+				} else {
+
+					if (Core.me.info.level < ConfigEnum.common9)
+						return;
+
+					UILayoutManager.getInstance().show(WindowEnum.INTROWND);
+
+					TweenLite.delayedCall(0.3, function():void {
+						UIManager.getInstance().introWnd.setTabIndex(info.Low_Money);
+					});
+				}
+			}
+
 		}
 
 		public function broadcastMap(sceneId:String):void {

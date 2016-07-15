@@ -9,9 +9,12 @@ package com.ace.gameData.table {
 		public var content:String;
 		public var broadcast:int; //是否广播,服务器用
 		public var imgSign:int; //图标标志
+		public var Low_Money:int; //图标标志
 		
 		public var soundM:int;
 		public var soundF:int;
+		public var time:int;
+		public var txt:String;
 
 		public function TNoticeInfo(xml:XML=null) {
 			if (xml == null)
@@ -24,6 +27,7 @@ package com.ace.gameData.table {
 			this.content=xml.@note;
 			this.broadcast=xml.@broadcast;
 			this.imgSign=xml.@imgSign;
+			this.Low_Money=xml.@Low_Money;
 			
 			this.soundM=xml.@sound_male;
 			this.soundF=xml.@sound_female;

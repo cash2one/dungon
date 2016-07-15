@@ -292,6 +292,7 @@ package com.leyou.enum {
 		public static const SM_MAK_W:String="mak_w";
 		public static const CM_MAK_W:String="mak|W";
 		public static const CM_MAK_G:String="mak|G";
+		public static const SM_MAK_N:String="mak_n";
 
 		// QQVip奖励
 		public static const CM_TX_N:String="tx|N";
@@ -866,6 +867,8 @@ package com.leyou.enum {
 		public static const CM_FANL_I:String="fanl|I";
 		public static const SM_FANL_K:String="fanl_k";
 		public static const CM_FANL_K:String="fanl|K";
+		public static const SM_FANL_M:String="fanl_m";
+		public static const CM_FANL_M:String="fanl|M";
 		public static const SM_FANL_J:String="fanl_j";
 		public static const CM_FANL_J:String="fanl|J";
 		public static const SM_FANL_D:String="fanl_d";
@@ -984,7 +987,16 @@ package com.leyou.enum {
 		public static const CM_SYJ_B:String="syj|B";
 		public static const CM_SYJ_U:String="syj|U";
 		public static const CM_SYJ_D:String="syj|D";
-	 
+		
+		//红包
+		public static const CM_PACKAGE_I:String="hb|I";
+		public static const SM_PACKAGE_I:String="hb_i";
+		public static const CM_PACKAGE_D:String="hb|D";
+		public static const SM_PACKAGE_D:String="hb_d";
+		public static const CM_PACKAGE_H:String="hb|H";
+		public static const SM_PACKAGE_H:String="hb_h";
+		
+		
 		/**
 		 *背包
 		 */

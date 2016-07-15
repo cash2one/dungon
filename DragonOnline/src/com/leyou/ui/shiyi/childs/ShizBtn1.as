@@ -20,6 +20,7 @@ package com.leyou.ui.shiyi.childs {
 		private var priceImg:Image;
 		private var useCb:CheckBox;
 		private var bgImg:Image;
+		private var stImg:Image;
 
 		public var sortIndex:int=0;
 		public var sortId:int=0;
@@ -39,17 +40,20 @@ package com.leyou.ui.shiyi.childs {
 			this.nameLbl=this.getUIbyID("nameLbl") as Label;
 			this.priceImg=new Image();
 			this.bgImg=this.getUIbyID("bgImg") as Image;
-			this.useCb=this.getUIbyID("useCb") as CheckBox;
+			this.stImg=this.getUIbyID("stImg") as Image;
+//			this.useCb=this.getUIbyID("useCb") as CheckBox;
 
 			this.addChild(this.priceImg);
 
-			this.priceImg.x=36;
+			this.priceImg.x=6;
 			this.priceImg.y=5;
 
-			this.useCb.addEventListener(MouseEvent.CLICK, onClick);
+			this.stImg.visible=false;
+//			this.useCb.addEventListener(MouseEvent.CLICK, onClick);
 			this.addEventListener(MouseEvent.CLICK, onClick);
 			this.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
 			this.addEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
+			this.setSt(false);
 		}
 
 		private function onMouseOver(e:MouseEvent):void {
@@ -108,10 +112,12 @@ package com.leyou.ui.shiyi.childs {
 		}
 
 		public function setBgState(v:Boolean):void {
-			if (v)
-				this.useCb.turnOn();
-			else
-				this.useCb.turnOff();
+//			if (v)
+//				this.useCb.turnOn();
+//			else
+//				this.useCb.turnOff();
+			
+			this.stImg.visible=v;
 
 			if (v && info.Sz_type == 7) {
 

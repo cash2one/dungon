@@ -5,6 +5,7 @@ package com.leyou.net.cmd {
 	import com.ace.manager.UIOpenBufferManager;
 	import com.leyou.enum.CmdEnum;
 	import com.leyou.net.NetGate;
+	import com.leyou.ui.ttsc.KfAndHfAwardWnd;
 	import com.leyou.ui.ttsc.KfhdWnd;
 
 	public class Cmd_Fanl {
@@ -50,6 +51,26 @@ package com.leyou.net.cmd {
 		
 		public static function cm_Fanl_K():void {
 			NetGate.getInstance().send(CmdEnum.CM_FANL_K);
+		}
+		
+		/**
+		 *fanl|{"mk":"M", "retype":[ [fid,st,cc,mc,dc],,,],  } 
+		 * @param obj
+		 * 
+		 */		
+		public static function sm_Fanl_M(obj:Object):void {
+			
+			DataManager.getInstance().payPromotionData_IIII.loadData_I(obj);
+			
+			if (!UIManager.getInstance().isCreate(WindowEnum.KF_HF_AWARD)) {
+				UIManager.getInstance().creatWindow(WindowEnum.KF_HF_AWARD);
+			}
+			
+			UIManager.getInstance().kfhfAwardWnd.updateInfo(obj);
+		}
+		
+		public static function cm_Fanl_M():void {
+			NetGate.getInstance().send(CmdEnum.CM_FANL_M);
 		}
 
 		/**

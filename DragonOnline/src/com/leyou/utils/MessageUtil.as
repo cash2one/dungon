@@ -8,6 +8,7 @@ package com.leyou.utils {
 	import com.ace.config.Core;
 	import com.ace.enum.NoticeEnum;
 	import com.ace.enum.WindowEnum;
+	import com.ace.gameData.manager.MyInfoManager;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.table.TEquipInfo;
 	import com.ace.gameData.table.TItemInfo;
@@ -24,10 +25,11 @@ package com.leyou.utils {
 	import com.leyou.net.cmd.Cmd_Duel;
 	import com.leyou.net.cmd.Cmd_Friend;
 	import com.leyou.net.cmd.Cmd_Guild;
+	import com.leyou.net.cmd.Cmd_Package;
 	import com.leyou.net.cmd.Cmd_Tm;
 	import com.leyou.ui.arena.childs.ArenaMsgWnd;
 	import com.leyou.util.DateUtil;
-
+	
 	import flash.events.TextEvent;
 	import flash.utils.getTimer;
 
@@ -185,6 +187,9 @@ package com.leyou.utils {
 						var duc:String=TableManager.getInstance().getSystemNotice(3512).content;
 						duc=com.leyou.utils.StringUtil_II.translate(duc, data[0]);
 						PopupManager.showConfirm(duc, onDuelConfirm, onDuelCancel, false, "notice.duel");
+						break;
+					case NoticeEnum.ICON_LINK_REDPACKAGE:
+						Cmd_Package.cm_package_H(values[1][0]);
 						break;
 					default:
 						throw new Error("Message util has unknow case");

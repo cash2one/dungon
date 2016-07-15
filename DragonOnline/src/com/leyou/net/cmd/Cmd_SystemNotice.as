@@ -10,15 +10,17 @@ package com.leyou.net.cmd {
 	import com.ace.gameData.table.TEquipInfo;
 	import com.ace.gameData.table.TItemInfo;
 	import com.ace.gameData.table.TNoticeInfo;
+	import com.ace.manager.UILayoutManager;
 	import com.ace.manager.UIManager;
 	import com.ace.ui.FlyManager;
 	import com.ace.ui.notice.NoticeManager;
 	import com.ace.utils.DebugUtil;
 	import com.ace.utils.StringUtil;
+	import com.greensock.TweenLite;
 	import com.leyou.utils.EffectUtil;
 	import com.leyou.utils.ItemUtil;
 	import com.leyou.utils.StringUtil_II;
-	
+
 	import flash.geom.Point;
 
 
@@ -38,18 +40,18 @@ package com.leyou.net.cmd {
 				DebugUtil.throwError("没有该消息提示：" + obj["msgid"]);
 			}
 
+
 			if (notice.viewPsIs(10)) {
 				var arr:Array=com.ace.utils.StringUtil.substitute(notice.content, obj["var"]).split("|");
-				var etype:int = 0;
-				if(20 == arr[0]){
-					etype = 1;
-				}else if(29 == arr[0]){
-					etype = 2;
+				var etype:int=0;
+				if (20 == arr[0]) {
+					etype=1;
+				} else if (29 == arr[0]) {
+					etype=2;
 				}
-				if(0 == etype){
-					SceneUIManager.getInstance().addEffect(Core.me, EffectEnum.BUBBLE_LINE, arr[1],
-						EffectEnum.COLOR_GREEN, EffectUtil.getPropName(arr[0]), "", null, true);
-				}else{
+				if (0 == etype) {
+					SceneUIManager.getInstance().addEffect(Core.me, EffectEnum.BUBBLE_LINE, arr[1], EffectEnum.COLOR_GREEN, EffectUtil.getPropName(arr[0]), "", null, true);
+				} else {
 //					var pt:Point = Core.me.localToGlobal(new Point());
 //					pt.y -= Core.me.bInfo.radius;
 //					FlyManager.getInstance().flyExpOrHonour(2, arr[1], etype, pt);
@@ -68,14 +70,14 @@ package com.leyou.net.cmd {
 				if (!UIManager.getInstance().isCreate(WindowEnum.DELIVERYPANEL))
 					UIManager.getInstance().creatWindow(WindowEnum.DELIVERYPANEL);
 
-				UIManager.getInstance().deliveryPanel.updateDesc(com.ace.utils.StringUtil.substitute(notice.content,replaceItem(obj["var"])));
+				UIManager.getInstance().deliveryPanel.updateDesc(com.ace.utils.StringUtil.substitute(notice.content, replaceItem(obj["var"])));
 			}
-			
-			if(MapInfoManager.getInstance().type == SceneEnum.SCENE_TYPE_ACROSS){
-				var content:String = notice.content;
-				var flag:int = content.indexOf("|");
-				var type:int = int(content.substring(0, flag));
-				if(type == NoticeEnum.ICON_LINK_MAIL || type == NoticeEnum.ICON_LINK_GUILD || type == NoticeEnum.ICON_LINK_FARM){
+
+			if (MapInfoManager.getInstance().type == SceneEnum.SCENE_TYPE_ACROSS) {
+				var content:String=notice.content;
+				var flag:int=content.indexOf("|");
+				var type:int=int(content.substring(0, flag));
+				if (type == NoticeEnum.ICON_LINK_MAIL || type == NoticeEnum.ICON_LINK_GUILD || type == NoticeEnum.ICON_LINK_FARM) {
 					return;
 				}
 			}
@@ -98,9 +100,9 @@ package com.leyou.net.cmd {
 			var count:int=values.length;
 			for (var n:int=0; n < count; n++) {
 				var value:Object=values[n];
-				if(null == value){
-					copy[n] = "null string given by server";
-					//throw new Error("无效对象,要替换的属性数组为:"+values.join(","));
+				if (null == value) {
+					copy[n]="null string given by server";
+						//throw new Error("无效对象,要替换的属性数组为:"+values.join(","));
 				}
 				var index:int=value.toString().indexOf("#");
 				if (-1 != index) {

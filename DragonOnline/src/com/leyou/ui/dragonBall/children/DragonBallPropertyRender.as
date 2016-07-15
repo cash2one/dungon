@@ -1,5 +1,6 @@
 package com.leyou.ui.dragonBall.children {
 
+	import com.ace.ICommon.ISort;
 	import com.ace.enum.WindowEnum;
 	import com.ace.gameData.manager.DataManager;
 	import com.ace.gameData.manager.TableManager;
@@ -15,13 +16,13 @@ package com.leyou.ui.dragonBall.children {
 	import com.leyou.data.dargonball.DragonBallData;
 	import com.leyou.net.cmd.Cmd_Longz;
 	import com.leyou.util.ZDLUtil;
-	
+
 	import flash.events.MouseEvent;
 
 	public class DragonBallPropertyRender extends AutoSprite {
 
+		public var allProperitys:Vector.<DragonBallPropertyItem>;
 		public var attackProperitys:Vector.<DragonBallPropertyItem>;
-
 		public var defentProperitys:Vector.<DragonBallPropertyItem>;
 
 		private var plusImg:Image;
@@ -31,6 +32,7 @@ package com.leyou.ui.dragonBall.children {
 		private var addZdlNum:RollNumWidget;
 
 		private var saveBtn:NormalButton;
+		private var autoBtn:NormalButton;
 
 //		private var shortcutBtn:NormalButton;
 
@@ -52,6 +54,7 @@ package com.leyou.ui.dragonBall.children {
 			plusImg=getUIbyID("plusImg") as Image;
 			lhLbl=getUIbyID("lhLbl") as Label;
 			saveBtn=getUIbyID("saveBtn") as NormalButton;
+			autoBtn=getUIbyID("autoBtn") as NormalButton;
 //			shortcutBtn = getUIbyID("shortcutBtn") as NormalButton;
 			plusImg.visible=false;
 			zdlNum=new RollNumWidget();
@@ -73,6 +76,7 @@ package com.leyou.ui.dragonBall.children {
 			var dIndex:int;
 			attackProperitys=new Vector.<DragonBallPropertyItem>();
 			defentProperitys=new Vector.<DragonBallPropertyItem>();
+			allProperitys=new Vector.<DragonBallPropertyItem>();
 
 			var properityDic:Object=TableManager.getInstance().getDragonBallPropertyDic();
 
@@ -100,11 +104,13 @@ package com.leyou.ui.dragonBall.children {
 					properityItem.y=36 + dIndex * 65;
 					dIndex++;
 				}
+				allProperitys.push(properityItem);
 
 			}
 
 			lhLbl.x=385;
 			saveBtn.addEventListener(MouseEvent.CLICK, onMouseClick);
+			autoBtn.addEventListener(MouseEvent.CLICK, onMouseClick);
 //			shortcutBtn.addEventListener(MouseEvent.CLICK, onMouseClick);
 //			shortcutBtn.visible = false;
 
@@ -114,12 +120,92 @@ package com.leyou.ui.dragonBall.children {
 		protected function onMouseClick(event:MouseEvent):void {
 			switch (event.target.name) {
 				case "saveBtn":
-					GuideArrowDirectManager.getInstance().delArrow(WindowEnum.ROLE+"");
+					GuideArrowDirectManager.getInstance().delArrow(WindowEnum.ROLE + "");
 					addProperty();
 					break;
 //				case "shortcutBtn":
 //					Cmd_Longz.cm_Longz_Z();
 //					break;
+				case "autoBtn":
+					this.onAutoClick();
+					break;
+			}
+		}
+
+		/**排序比较1*/
+		private function compare(a:DragonBallPropertyItem, b:DragonBallPropertyItem):Number {
+			return a.recordNum - b.recordNum;
+		}
+
+		private function onAutoClick():void {
+			this.allProperitys.sort(this.compare);
+
+//			for (var i2:int=0; i2 < this.allProperitys.length; i2++) {
+//				trace(this.allProperitys[i2].recordNum);
+//			}
+
+			var lh:int=UIManager.getInstance().backpackWnd.lh;
+			var render:DragonBallPropertyItem;
+			var add:int;
+			var j:int;
+			var add2:int;
+			while (lh > 0) {
+				j++;
+				if (j >= this.allProperitys.length) {
+					add=int(lh / 9);
+					if (add == 0)
+						add=1;
+					for (var k:int=0; k < this.allProperitys.length; k++) {
+						this.allProperitys[k].preAdd(add);
+						lh-=add;
+					}
+				} else {
+//					trace("大循环");
+					var currentValue:int=this.allProperitys[j].recordNum;
+					if (lh < (currentValue - this.allProperitys[i].preTotal) * j) {
+						add2=lh / j;
+					}
+
+					for (var i:int=0; i < j; i++) {
+						render=this.allProperitys[i];
+						add=add2 ? add2 : (currentValue - render.preTotal);
+//						trace("小循环：", i, add);
+						render.preAdd(add);
+						lh-=add;
+					}
+				}
+
+			}
+		}
+
+
+		private function onAutoClick2():void {
+			var total:int=UIManager.getInstance().backpackWnd.lh;
+			if (total == 0)
+				return;
+
+			var saitem:DragonBallPropertyItem;
+			for each (saitem in attackProperitys) {
+				total+=saitem.getPropertyValue();
+			}
+			for each (saitem in defentProperitys) {
+				total+=saitem.getPropertyValue();
+			}
+
+			var average:int=int(total / 9);
+			if (average == 0)
+				average=1;
+
+
+			for each (saitem in attackProperitys) {
+				if (saitem.getPropertyValue() < average) {
+					saitem.preAdd(average - saitem.getPropertyValue());
+				}
+			}
+			for each (saitem in defentProperitys) {
+				if (saitem.getPropertyValue() < average) {
+					saitem.preAdd(average - saitem.getPropertyValue());
+				}
 			}
 		}
 
@@ -215,6 +301,12 @@ package com.leyou.ui.dragonBall.children {
 			}
 		}
 
+		public function get costHL():int{
+			return int(this.costLbl.text);
+		}
+		public function get resultHL():int{
+			return UIManager.getInstance().backpackWnd.lh-this.costHL;
+		}
 		public function updateLh():void {
 			if (otherPlay)
 				lhLbl.text="???";

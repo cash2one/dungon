@@ -259,6 +259,7 @@ package com.leyou.ui.farm {
 			if (length <= 1) {
 				throw new Error("seed less")
 			}
+
 			for (var n:int=3; n < length; n++) {
 				shopRenders[n].updataInfo(arr[n - 3]);
 			}

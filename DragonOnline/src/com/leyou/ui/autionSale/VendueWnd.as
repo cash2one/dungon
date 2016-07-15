@@ -46,7 +46,7 @@ package com.leyou.ui.autionSale
 		private function init():void{
 			hideBg();
 //			clsBtn.x += 4;
-//			clsBtn.y += 13;
+			clsBtn.y += 30;
 			
 			vendueCurrent = new VendueCurrentPage();
 			vendueNext = new VendueNextPage();

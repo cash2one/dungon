@@ -18,7 +18,7 @@ package com.leyou.ui.worship {
 	import com.leyou.enum.ConfigEnum;
 	import com.leyou.net.cmd.Cmd_Worship;
 	import com.leyou.utils.PropUtils;
-	
+
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 
@@ -121,9 +121,6 @@ package com.leyou.ui.worship {
 			pane.swapChildren(nameLbl, big);
 		}
 
-		public override function get width():Number {
-			return 544;
-		}
 
 		private function onMouseMove(target:Image):void {
 			var content:String="";
@@ -159,8 +156,8 @@ package com.leyou.ui.worship {
 			super.show(toTop, $layer, toCenter);
 //			Cmd_Worship.cm_WSP_I();
 		}
-		
-		override public function hide():void{
+
+		override public function hide():void {
 			super.hide();
 			TweenManager.getInstance().lightingCompnent(UIManager.getInstance().toolsWnd.getUIbyID("worshipBtn"));
 		}
@@ -241,5 +238,14 @@ package com.leyou.ui.worship {
 				ybABtn.setActive(true, 1, true);
 			}
 		}
+
+		override public function get height():Number {
+			return 544;
+		}
+
+		override public function get width():Number {
+			return 384;
+		}
+
 	}
 }

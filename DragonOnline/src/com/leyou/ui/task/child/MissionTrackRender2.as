@@ -378,7 +378,7 @@ package com.leyou.ui.task.child {
 						if (!UIManager.getInstance().isCreate(WindowEnum.DELIVERYPANEL))
 							UIManager.getInstance().creatWindow(WindowEnum.DELIVERYPANEL);
 
-						if (!UIManager.getInstance().deliveryPanel.visible && this.visible)
+						if (!UIManager.getInstance().deliveryPanel.visible)
 							UIManager.getInstance().deliveryPanel.show();
 
 						UIManager.getInstance().deliveryPanel.updateInfo(o);

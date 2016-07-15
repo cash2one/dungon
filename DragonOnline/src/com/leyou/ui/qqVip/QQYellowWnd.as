@@ -31,7 +31,7 @@ package com.leyou.ui.qqVip
 			grid.isShowPrice = false;
 			addChild(grid);
 			grid.x = 120;
-			grid.y = 88;
+			grid.y = 98;
 			grid.updataById(ConfigEnum.qqvip4);
 		}
 		

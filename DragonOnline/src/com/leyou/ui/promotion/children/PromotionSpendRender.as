@@ -20,7 +20,7 @@ package com.leyou.ui.promotion.children {
 	import flash.geom.Point;
 
 	public class PromotionSpendRender extends AutoSprite {
-		private static const SPAN_NUM:int=6;
+		private static const SPAN_NUM:int=5;
 
 		private var titleLbl:Label;
 

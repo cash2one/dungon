@@ -187,8 +187,8 @@ package com.leyou.ui.abidePay {
 			receive2Btn.addEventListener(MouseEvent.CLICK, onMouseClick);
 			receive3Btn.addEventListener(MouseEvent.CLICK, onMouseClick);
 
-			clsBtn.x+=5;
-			clsBtn.y+=15;
+//			clsBtn.x+=0;
+			clsBtn.y+=30;
 
 			emask=new Shape();
 			emask.x=effect.x;
@@ -301,11 +301,9 @@ package com.leyou.ui.abidePay {
 			content=StringUtil.substitute(PropUtils.getStringById(1580), day);
 			cpl3Lbl.htmlText=StringUtil_II.getColorStr(content, "#ffd200", 13);
 
-			for (var n:int=0; n < 9; n++) {
-				var box:AbidePayRewardBox=boxes[n];
-				box.reset();
-				box.updateInfo(data);
-			}
+			this.checkLing(0, data);
+			this.checkLing(3, data);
+			this.checkLing(6, data);
 
 			var rate:Number=data.cpayValue / tData1.ib;
 			if (rate > 1) {
@@ -320,6 +318,16 @@ package com.leyou.ui.abidePay {
 			rateLbl.text=data.cpayValue + PropUtils.getStringById(40);
 			lineImg.y=emask.y;
 			rateLbl.y=lineImg.y - 17 - 4;
+		}
+
+
+		private function checkLing(i:int, data:AbidePayData):void {
+			for (var n:int=i; n < 9; n++) {
+				var box:AbidePayRewardBox=boxes[n];
+				box.reset();
+				if (box.updateInfo(data))
+					return;
+			}
 		}
 
 		public override function get width():Number {

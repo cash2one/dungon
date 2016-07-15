@@ -375,6 +375,9 @@ manaRevive	5	法力回复速度/S
 		public static var union37:int;
 		public static var union38:int;
 		public static var union39:int;
+		public static var union41:int;
+		public static var union42:int;
+		public static var union43:int;
 		public static var union40:int;
 		public static var union31:int;
 		public static var union44:String;
@@ -825,6 +828,7 @@ manaRevive	5	法力回复速度/S
 		public static var worship7:int;
 		public static var worship8:int;
 		public static var worship9:int;
+		public static var worship10:int;
 
 		
 		public static var manaRevive:int;
@@ -985,12 +989,23 @@ manaRevive	5	法力回复速度/S
 		public static var V3exp37Open:int;
 
 		public static var common7:int;
+		public static var common9:int;
+		public static var common10:int;
 		
 		public static var kfqd1:int;
 		public static var kfqd2:int;
 		public static var kfqd3:int;
 		public static var kfqd4:int;
 		public static var kfqd5:int;
+		
+		public static var RedBag1:int;
+		public static var RedBag2:int;
+		public static var RedBag3:int;
+		
+		public static var function1:int;
+		public static var function2:int;
+		public static var function3:int;
+		public static var function4:int;
 		
 		public static var weiDuanJL:Array;
 		
@@ -1051,6 +1066,9 @@ manaRevive	5	法力回复速度/S
 			union37=xml.syscfg.(@Id == "union37")[0].@val;
 			union38=xml.syscfg.(@Id == "union38")[0].@val;
 			union39=xml.syscfg.(@Id == "union39")[0].@val;
+			union41=xml.syscfg.(@Id == "union41")[0].@val;
+			union42=xml.syscfg.(@Id == "union42")[0].@val;
+			union43=xml.syscfg.(@Id == "union43")[0].@val;
 			union40=xml.syscfg.(@Id == "union40")[0].@val;
 			union44=xml.syscfg.(@Id == "union44")[0].@val;
 			union45=xml.syscfg.(@Id == "union45")[0].@val;
@@ -1191,6 +1209,7 @@ manaRevive	5	法力回复速度/S
 			worship7 = xml.syscfg.(@Id == "worship7")[0].@val;
 			worship8 = xml.syscfg.(@Id == "worship8")[0].@val;
 			worship9 = xml.syscfg.(@Id == "worship9")[0].@val;
+			worship10 = xml.syscfg.(@Id == "worship10")[0].@val;
 			tobeStr1 = xml.syscfg.(@Id == "tobestr1")[0].@val;
 			tobeStr2 = xml.syscfg.(@Id == "tobestr1")[0].@val;
 			
@@ -1624,14 +1643,25 @@ manaRevive	5	法力回复速度/S
 			marry7=xml.syscfg.(@Id == "marry7")[0].@val;
 			
 			common7=xml.syscfg.(@Id == "common7")[0].@val;
+			common9=xml.syscfg.(@Id == "common9")[0].@val;
+			common10=xml.syscfg.(@Id == "common10")[0].@val;
 			
 			kfqd1=xml.syscfg.(@Id == "kfqd1")[0].@val;
 			kfqd2=xml.syscfg.(@Id == "kfqd2")[0].@val;
 			kfqd3=xml.syscfg.(@Id == "kfqd3")[0].@val;
 			kfqd4=xml.syscfg.(@Id == "kfqd4")[0].@val;
 			kfqd5=xml.syscfg.(@Id == "kfqd5")[0].@val;
+			
+			RedBag1=xml.syscfg.(@Id == "RedBag1")[0].@val;
+			RedBag2=xml.syscfg.(@Id == "RedBag2")[0].@val;
+			RedBag3=xml.syscfg.(@Id == "RedBag3")[0].@val;
 
 			dayMoney1=xml.syscfg.(@Id == "dayMoney1")[0].@val;
+			
+			function1=xml.syscfg.(@Id == "function1")[0].@val;
+			function2=xml.syscfg.(@Id == "function2")[0].@val;
+			function3=xml.syscfg.(@Id == "function3")[0].@val;
+			function4=xml.syscfg.(@Id == "function4")[0].@val;
 			
 			weiDuanJL=String(xml.syscfg.(@Id == "client1")[0].@val).split("|");
 			 

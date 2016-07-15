@@ -72,6 +72,10 @@ package com.leyou.ui.client {
 			!this.isGot && Cmd_WeiDuan.cm_dljl_I(Core.isWeiduan);
 		}
 
+		override public function setToCenter():void {
+			super.setToCenter();
+			this.x+=10;
+		}
 		private var isGot:Boolean;
 
 		public function sm_xxx($isGot:Boolean, isFirst:Boolean):void {

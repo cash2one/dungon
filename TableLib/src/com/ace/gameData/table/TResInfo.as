@@ -33,7 +33,7 @@ package com.ace.gameData.table {
 		static public function defaultInfo():TResInfo {
 			if (!info) {
 				info=new TResInfo();
-				info.width=100, info.height=99, info.rpColor="0xFF0000";
+				info.width=3, info.height=3, info.rpColor="0xFF0000";
 			}
 			return info;
 		}

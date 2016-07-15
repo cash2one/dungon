@@ -16,7 +16,7 @@ package com.leyou.ui.ttsc.childs {
 	import com.leyou.data.tips.TipsInfo;
 	import com.leyou.utils.PlayerUtil;
 	import com.leyou.utils.PropUtils;
-
+	
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
@@ -188,9 +188,9 @@ package com.leyou.ui.ttsc.childs {
 			ToolTipManager.getInstance().hide();
 		}
 
-		public function updateInfo(arr:Array):void {
-
-			var payarr:Array=TableManager.getInstance().getPayPromotionByType(arr[0]);
+		public function updateInfo(arr:Array,st:int):void {
+ 
+			var payarr:Array=TableManager.getInstance().getPayPromotionByType(arr[0],st);
 
 			payarr.sortOn("id", Array.CASEINSENSITIVE | Array.NUMERIC);
 
@@ -268,7 +268,7 @@ package com.leyou.ui.ttsc.childs {
 			this.kfcbrender2.updateInfo(payarr[1]);
 			this.kfcbrender3.updateInfo(payarr[2]);
 			this.kfcbrender4.updateInfo(payarr[3]);
-
+ 
 		}
 
 	}

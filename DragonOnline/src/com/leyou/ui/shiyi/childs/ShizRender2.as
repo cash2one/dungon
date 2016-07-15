@@ -20,6 +20,7 @@ package com.leyou.ui.shiyi.childs {
 	import com.ace.ui.lable.Label;
 	import com.ace.utils.StringUtil;
 	import com.leyou.data.tips.TipsInfo;
+	import com.leyou.manager.PopupManager;
 	import com.leyou.net.cmd.Cmd_Syj;
 	import com.leyou.utils.ItemUtil;
 	import com.leyou.utils.PropUtils;
@@ -62,6 +63,8 @@ package com.leyou.ui.shiyi.childs {
 		private var swfloader:Loader;
 
 		private var dis:DisplayObject;
+
+		private var st:int;
 
 		public function ShizRender2() {
 			super(LibManager.getInstance().getXML("config/ui/shiyi/shizRender2.xml"));
@@ -138,8 +141,22 @@ package com.leyou.ui.shiyi.childs {
 		}
 
 		private function onClick(e:MouseEvent):void {
-			if (this.selectIndex > 0)
-				Cmd_Syj.cmBuy(this.selectIndex);
+			if (this.st == 0) {
+				if (this.selectIndex > 0)
+					Cmd_Syj.cmBuy(this.selectIndex);
+			} else if (this.st == 1) {
+				
+				var arr:Array=UIManager.getInstance().shiyeWnd.getOtherCount();
+				if (arr.length > 0) {
+					Cmd_Syj.cmUninstall(arr[0]);
+				}
+				
+				Cmd_Syj.cmInstall(this.selectIndex);
+				
+//				Cmd_Syj.cmInstall(this.selectIndex);
+			} else if (this.st == 2) {
+				Cmd_Syj.cmUninstall(this.selectIndex);
+			}
 		}
 
 		private function onMouseMove(e:MouseEvent):void {
@@ -162,8 +179,7 @@ package com.leyou.ui.shiyi.childs {
 		public function updateInfo(o:Object):void {
 
 			this.selectIndex=o.sinfo[0];
-
-
+			this.st=o.sinfo[1];
 
 			if (o.sinfo[2] > 0) {
 				var d:Date=new Date();
@@ -357,6 +373,18 @@ package com.leyou.ui.shiyi.childs {
 
 			} else {
 				this.buyBtn.visible=false;
+			}
+
+			if (o.sinfo[1] > 0) {
+
+				this.buyBtn.visible=true;
+
+				if (o.sinfo[1] == 1) {
+					this.buyBtn.text="" + PropUtils.getStringById(2492);
+				} else {
+					this.buyBtn.text="" + PropUtils.getStringById(2493);
+				}
+
 			}
 
 			UIManager.getInstance().shiyeWnd.reAddChild();

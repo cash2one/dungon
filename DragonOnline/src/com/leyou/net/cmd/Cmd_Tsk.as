@@ -104,6 +104,7 @@ mk(“A” --接受任务 , "D" --交付任务 , "T" --任务追踪面板 )
 
 
 //			UIManager.getInstance().taskWnd.updateData(o);
+			 
 			UIManager.getInstance().taskTrack2.updateInfo(o);
 			UIManager.getInstance().taskTrack.updateList(o);
 //			UIManager.getInstance().taskTrack3.updateList(o);
@@ -171,6 +172,22 @@ var -- 任务当前完成进度变量num
 
 		public static function cmTaskQuest():void {
 			NetGate.getInstance().send("tsk|T");
+		}
+		
+		/**
+		 *tsk|R -- 重置环任务 
+		 */		
+		public static function cmTaskReset():void {
+			NetGate.getInstance().send("tsk|R");
+		}
+		
+		/**
+		 * tsk|Ltaskid
+		 * @param tid
+		 * 
+		 */		
+		public static function cmTaskLevel(tid:int):void {
+			NetGate.getInstance().send("tsk|L"+tid);
 		}
 
 	}

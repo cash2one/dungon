@@ -113,6 +113,7 @@ package com.leyou.data.paypromotion {
 					}
 
 				} else {
+					
 					if (tinfo.value.indexOf("|") > -1) {
 						v=int(tinfo.value.split("|")[1]) - info.dc;
 					} else {
@@ -400,7 +401,7 @@ package com.leyou.data.paypromotion {
 				}
 			} else {
 				var serverTick:Number=Number(obj.stime) * 1000;
-				var darr:Array=TableManager.getInstance().getPayPromotionByType(type);
+				var darr:Array=TableManager.getInstance().getPayPromotionByType(type,1);
 				for each (var vnInfo:TPayPromotion in darr) {
 					var bdate:Date=new Date();
 					var edate:Date=new Date();

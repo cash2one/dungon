@@ -1,5 +1,7 @@
 package com.ace.gameData.table
 {
+	import com.ace.utils.DebugUtil;
+
 	public class TAbidePayInfo
 	{
 		public var id:int;
@@ -39,8 +41,10 @@ package com.ace.gameData.table
 					return day2;
 				case 6:
 					return day3;
-				default:
+				default:{
+					DebugUtil.throwError("日期不正确");			
 					return day1;
+				}
 			}
 			return day1;
 		}
@@ -53,22 +57,26 @@ package com.ace.gameData.table
 					return day2;
 				case 7:
 					return day3;
-				default:
+				default:{
+					DebugUtil.throwError("日期不正确");			
 					return day1;
+				}
 			}
 			return day1;
 		}
 		
 		public function getRewardByDay($day:int):int{
 			switch($day){
+				case 2:
+					return day1;
 				case 3:
-					return day1;
-				case 6:
 					return day2;
-				case 9:
+				case 4:
 					return day3;
-				default:
+				default:{
+					DebugUtil.throwError("日期不正确");			
 					return day1;
+				}
 			}
 			return day1;
 		}

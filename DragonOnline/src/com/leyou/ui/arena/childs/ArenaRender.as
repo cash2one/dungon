@@ -9,7 +9,6 @@ package com.leyou.ui.arena.childs {
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.player.LivingInfo;
 	import com.ace.gameData.player.child.FeatureInfo;
-	import com.ace.gameData.table.TTitle;
 	import com.ace.manager.GuideManager;
 	import com.ace.manager.LibManager;
 	import com.ace.manager.MouseManagerII;
@@ -32,7 +31,6 @@ package com.leyou.ui.arena.childs {
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
-	import flash.text.Font;
 
 	public class ArenaRender extends AutoSprite {
 
@@ -429,6 +427,10 @@ package com.leyou.ui.arena.childs {
 
 		}
 
+		public function dispatAutoTaskEvent():void{
+			this.pkImgBtn.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+		}
+		
 		public function get index():int {
 			return this._index;
 		}

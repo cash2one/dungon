@@ -28,7 +28,7 @@ package com.leyou.ui.element {
 	import com.leyou.ui.quickBuy.QuickBuyWnd;
 	import com.leyou.utils.PropUtils;
 	import com.leyou.utils.StringUtil_II;
-
+	
 	import flash.events.MouseEvent;
 	import flash.events.TextEvent;
 	import flash.geom.Point;
@@ -141,6 +141,9 @@ package com.leyou.ui.element {
 
 			costDesLbl.textColor=0xff00;
 			costDesLbl1.textColor=0xff00;
+			
+			clickLbl.styleSheet=style;
+			clickLbl.htmlText=StringUtil_II.addEventString("clickLbl", clickLbl.text, true);
 		}
 
 		public override function get width():Number {
@@ -159,6 +162,7 @@ package com.leyou.ui.element {
 				case "clickLbl":
 					UILayoutManager.getInstance().show_II(WindowEnum.SHIYI);
 					TweenLite.delayedCall(0.3, UIManager.getInstance().shiyeWnd.setTabIndex, [4]);
+					TweenLite.delayedCall(0.5, UIManager.getInstance().shiyeWnd.setSelectItem, [data.ctype]);
 					break;
 				case "levelUpLbl":
 //					Cmd_ELEP.cm_ELEP_U(data.ctype, 2);

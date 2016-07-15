@@ -1,5 +1,6 @@
 package com.leyou.ui.equip.child {
 
+	import com.ace.config.Core;
 	import com.ace.enum.PlayerEnum;
 	import com.ace.enum.WindowEnum;
 	import com.ace.game.backpack.GridBase;
@@ -18,7 +19,7 @@ package com.leyou.ui.equip.child {
 	import com.ace.ui.lable.Label;
 	import com.ace.ui.notice.NoticeManager;
 	import com.leyou.net.cmd.Cmd_Equip;
-	
+
 	import flash.events.MouseEvent;
 	import flash.utils.clearInterval;
 	import flash.utils.setInterval;
@@ -62,7 +63,7 @@ package com.leyou.ui.equip.child {
 			this.ruleLbl=this.getUIbyID("ruleLbl") as Label;
 			this.succeffSwf=this.getUIbyID("succeffSwf") as SwfLoader;
 			this.succeffSwf.visible=false;
-			
+
 //			this.confirmBtn=new TaskTrackBtn(); //this.getUIbyID("confirmBtn") as ImgButton;
 			this.confirmBtn=this.getUIbyID("confirmBtn") as ImgButton;
 //			this.confirmBtn.updateIcons("ui/equip/btn_qh.jpg");
@@ -99,7 +100,7 @@ package com.leyou.ui.equip.child {
 //				img.visible=false;
 				this.lvStarArr.push(img);
 			}
-			
+
 			this.succEffect=new SwfLoader(99977, null, false);
 			this.addChild(this.succEffect);
 			this.succEffect.x=160;
@@ -123,7 +124,7 @@ package com.leyou.ui.equip.child {
 			this.startEffect.visible=false;
 
 			this.addChild(this.succeffSwf);
-			
+
 			this.confirmBtn.setActive(false, .6, true);
 			this.confirmBtn.setToolTip(TableManager.getInstance().getSystemNotice(2407).content);
 
@@ -136,8 +137,8 @@ package com.leyou.ui.equip.child {
 
 		private function onClick(e:MouseEvent):void {
 
-			GuideArrowDirectManager.getInstance().delArrow(WindowEnum.EQUIP+"");
-			
+			GuideArrowDirectManager.getInstance().delArrow(WindowEnum.EQUIP + "");
+
 			if (autoStrengid > 0) {
 				clearInterval(autoStrengid);
 				autoStrengid=0;
@@ -173,6 +174,44 @@ package com.leyou.ui.equip.child {
 			}
 
 
+		}
+
+		public function dispatAutoTaskEvent():void {
+			if (!Core.isAuto) {
+				this.confirmBtn.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+			} else {
+
+				var pos:int=-1;
+				var type:int=-1;
+
+				if (this.equipgrid.data.hasOwnProperty("pos")) {
+
+					if (this.equipgrid.data.num == 0) {
+						pos=equipgrid.data.info.subclassid - 13;
+						type=40;
+					} else {
+						pos=equipgrid.data.pos;
+						type=1;
+					}
+				} else {
+					pos=equipgrid.data.position;
+					type=3;
+				}
+
+				UIManager.getInstance().equipWnd.BagRender.mouseChildren=false;
+
+				if (MyInfoManager.getInstance().getBagItemNumByName(this.intensifyBar.needItems()[0]) < int(this.intensifyBar.needItems()[1]) && UIManager.getInstance().quickBuyWnd.isAutoBuy(this.intensifyBar.getitems()[1], this.intensifyBar.getitems()[0])) {
+//				startEffect.playAct(PlayerEnum.ACT_STAND, -1, false, function():void {
+//					startEffect.visible=false;
+					Cmd_Equip.cm_EquipStrengthen(type, pos, (UIManager.getInstance().quickBuyWnd.getCost(intensifyBar.getitems()[1], intensifyBar.getitems()[0]) == 0 ? 2 : 1));
+//				});
+				} else {
+//				startEffect.playAct(PlayerEnum.ACT_STAND, -1, false, function():void {
+//					startEffect.visible=false;
+					Cmd_Equip.cm_EquipStrengthen(type, pos);
+//				});
+				}
+			}
 		}
 
 		/**
@@ -369,7 +408,7 @@ package com.leyou.ui.equip.child {
 			function stopplay2():void {
 				succEffect.visible=false;
 			}
-			
+
 			function stopplay3():void {
 				succeffSwf.visible=false;
 			}
@@ -391,7 +430,7 @@ package com.leyou.ui.equip.child {
 
 				this.succeffSwf.visible=true;
 				succeffSwf.playAct(PlayerEnum.ACT_STAND, -1, false, stopplay3);
-				
+
 				this.succEffect.visible=true;
 				this.succEffect.update(99902);
 				succEffect.playAct(PlayerEnum.ACT_STAND, -1, false, stopplay2);

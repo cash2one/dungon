@@ -423,7 +423,12 @@ package com.ace.gameData.table {
 		 */
 		public var ef_id:int;
 
-
+		/**
+		 *	断档任务时直接升级价格
+		 *	Cutout_Price
+		 */
+		public var Cutout_Price:int;
+		
 
 		public function TMissionDate(data:XML=null) {
 			if (data == null)
@@ -486,7 +491,7 @@ package com.ace.gameData.table {
 			this.P_Love=data.@P_Love;
 			this.Hallows_TeamID=data.@Hallows_TeamID;
 			this.ef_id=data.@ef_id;
-
+			this.Cutout_Price=data.@Cutout_Price;
 
 		}
 

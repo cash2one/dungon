@@ -432,6 +432,8 @@ package com.leyou.net.cmd {
 					if (UIManager.getInstance().teamCopyWnd) {
 						UIManager.getInstance().teamCopyWnd.storyCopy.updateVipLv();
 					}
+					
+					UIManager.getInstance().smallMapWnd.setRankState();
 				} else {
 					IS_FIRST_LOGIN=true; // 读取缓存配置
 					UIManager.getInstance().roleHeadWnd.setMode(living.info.pkMode);

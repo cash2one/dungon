@@ -38,6 +38,7 @@ package com.leyou.ui.tools {
 	import com.leyou.net.cmd.Cmd_Bag;
 	import com.leyou.net.cmd.Cmd_Link;
 	import com.leyou.net.cmd.Cmd_Wig;
+	import com.leyou.ui.tools.child.RightTopWidget;
 	import com.leyou.ui.tools.child.ShortcutsGrid;
 	import com.leyou.ui.tools.child.ToolsGridItemRender;
 	import com.leyou.ui.tools.child.ToolsHpAndMpProgress;
@@ -84,6 +85,7 @@ package com.leyou.ui.tools {
 		private var restBtn:ImgButton;
 		public var eleBtn:ImgButton;
 		private var fittingBtn:ImgButton;
+		private var redPackage:ImgButton;
 
 		private var expImg:Image;
 		private var hunImg:Image;
@@ -154,6 +156,7 @@ package com.leyou.ui.tools {
 			this.restBtn=this.getUIbyID("restBtn") as ImgButton;
 			this.eleBtn=this.getUIbyID("eleBtn") as ImgButton;
 			this.fittingBtn=this.getUIbyID("fittingBtn") as ImgButton;
+			this.redPackage=this.getUIbyID("redPackage") as ImgButton;
 
 			this.friendBtn=this.getUIbyID("friendBtn") as ImgButton;
 			this.teamBtn=this.getUIbyID("teamBtn") as ImgButton;
@@ -201,6 +204,7 @@ package com.leyou.ui.tools {
 			this.fittingBtn.addEventListener(MouseEvent.CLICK, onBtnClick);
 			this.worshipBtn.addEventListener(MouseEvent.CLICK, onBtnClick);
 			this.alchmyBtn.addEventListener(MouseEvent.CLICK, onBtnClick);
+			this.redPackage.addEventListener(MouseEvent.CLICK, onBtnClick);
 
 			this.worshipBtn.setToolTip(TableManager.getInstance().getSystemNotice(10033).content);
 			this.alchmyBtn.setToolTip(TableManager.getInstance().getSystemNotice(10048).content);
@@ -262,11 +266,12 @@ package com.leyou.ui.tools {
 			this.mountBtn.setActive(false, .6, true);
 			this.wenZBtn.setActive(false, .6, true);
 			this.shopBtn.setActive(false, .6, true);
+			this.worshipBtn.setActive(false, .6, true);
 
 			this.fittEff=new SwfLoader(100029);
 			this.addChild(this.fittEff);
-			this.fittEff.x=this.fittingBtn.x-19;
-			this.fittEff.y=this.fittingBtn.y-10;
+			this.fittEff.x=this.fittingBtn.x - 19;
+			this.fittEff.y=this.fittingBtn.y - 10;
 		}
 
 		private function onClick(e:MouseEvent):void {
@@ -342,6 +347,32 @@ package com.leyou.ui.tools {
 
 		public function updatePropPoint():void {
 			this.updataPropUI();
+		}
+
+		public function setRedPackageBtnEffect(c:int):void {
+
+			var btnWidget:RightTopWidget;
+
+			if (c > 0) {
+				btnWidget=this.redPackage.getChildByName("btnWidget") as RightTopWidget;
+				if (btnWidget == null) {
+					btnWidget=new RightTopWidget();
+					btnWidget.setpushContent();
+					this.redPackage.addChild(btnWidget);
+					btnWidget.x=this.redPackage.width - 55;
+
+					btnWidget.name="btnWidget";
+				}
+
+				btnWidget.mouseEnabled=btnWidget.mouseChildren=false;
+				btnWidget.setNum(c);
+			} else {
+
+				btnWidget=this.redPackage.getChildByName("btnWidget") as RightTopWidget;
+				if (btnWidget != null)
+					this.redPackage.removeChild(btnWidget);
+			}
+
 		}
 
 		public function updataPropUI():void {
@@ -1122,6 +1153,9 @@ package com.leyou.ui.tools {
 				case "fittingBtn":
 					UILayoutManager.getInstance().open(WindowEnum.SHIYI);
 					break;
+				case "redPackage":
+					UILayoutManager.getInstance().open_II(WindowEnum.REDPACKAGE);
+					break;
 				case "worshipBtn":
 					UIOpenBufferManager.getInstance().open(WindowEnum.WORSHIP);
 					break;
@@ -1141,7 +1175,7 @@ package com.leyou.ui.tools {
 			}
 
 			UIManager.getInstance().chatWnd.reversePanelVisible(!this.pkState);
-			if (MapInfoManager.getInstance().type == SceneEnum.SCENE_TYPE_PTCJ && !Core.me.info.isTransport) {
+			if (MapInfoManager.getInstance().type == SceneEnum.SCENE_TYPE_PTCJ && !Core.me.info.hasFollowOwner()) {
 				UIManager.getInstance().rightTopWnd.reverseBarVisible(1, !this.pkState);
 			}
 
@@ -1579,6 +1613,8 @@ package com.leyou.ui.tools {
 			guildBtn.setActive(false, 1, true);
 			framBtn.setActive(false, 1, true);
 			friendBtn.setActive(false, 1, true);
+			worshipBtn.setActive(false, 1, true);
+			redPackage.setActive(false, 1, true);
 		}
 
 		public function switchToNormal():void {
@@ -1601,6 +1637,11 @@ package com.leyou.ui.tools {
 				framBtn.setActive(true, 1, true);
 			}
 
+			if (level >= ConfigEnum.worship10) {
+				worshipBtn.setActive(true, 1, true);
+			}
+
+			redPackage.setActive(true, 1, true);
 			friendBtn.setActive(true, 1, true);
 		}
 

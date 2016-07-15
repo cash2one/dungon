@@ -2,6 +2,7 @@ package com.leyou.ui.pet.children {
 	import com.ace.config.Core;
 	import com.ace.enum.TipEnum;
 	import com.ace.enum.WindowEnum;
+	import com.ace.gameData.manager.MyInfoManager;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.table.TItemInfo;
 	import com.ace.gameData.table.TPetInfo;
@@ -27,7 +28,7 @@ package com.leyou.ui.pet.children {
 	import com.leyou.ui.tips.childs.TipsSkillGrid;
 	import com.leyou.utils.ItemUtil;
 	import com.leyou.utils.PropUtils;
-
+	
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
@@ -110,7 +111,25 @@ package com.leyou.ui.pet.children {
 		}
 
 		protected function onBtnClick(event:MouseEvent):void {
-			Cmd_Pet.cm_PET_S(_petId, gpid, index + 1);
+
+			var petSkill:TPetSkillInfo=TableManager.getInstance().getPetSkill(gpid);
+			var num:int=int(petSkill["itemNum" + (this.level + 1)]);
+			//			var money:int=int(petSkill["money" + (this.level + 1)]);
+
+			var tinfo:TItemInfo=TableManager.getInstance().getItemInfo(petSkill.item);
+			var bnum:int=MyInfoManager.getInstance().getBagItemNumByName(tinfo.name)
+			if (bnum < num) {
+				
+				if (ConfigEnum.MarketOpenLevel <= Core.me.info.level)
+					UILayoutManager.getInstance().show(WindowEnum.PET, WindowEnum.QUICK_BUY);
+				
+				trace(UIManager.getInstance().quickBuyWnd.isAutoBuy(tinfo.id, tinfo.id + 1));
+//				var swnd:QuickBuyWnd=UIManager.getInstance().creatWindow(WindowEnum.QUICK_BUY) as QuickBuyWnd;
+//				swnd.pushItem(tinfo.id, tinfo.id + 1,num);
+				UIManager.getInstance().quickBuyWnd.pushItem(tinfo.id, tinfo.id + 1,num);
+				
+			} else
+				Cmd_Pet.cm_PET_S(_petId, gpid, index + 1);
 		}
 
 		protected function onMouseOver(event:MouseEvent):void {
@@ -137,6 +156,7 @@ package com.leyou.ui.pet.children {
 		}
 
 		private function onConfirm():void {
+
 			Cmd_Pet.cm_PET_F(_petId, index + 1);
 		}
 
@@ -154,6 +174,7 @@ package com.leyou.ui.pet.children {
 		}
 
 		private function callBack(target:AssistSkillGrid):void {
+			this.level=0;
 			gpid=target.gid;
 			updateSkill(target.dataId);
 			var petSkilInfo:TPetSkillInfo=TableManager.getInstance().getPetSkill(gpid);
@@ -297,7 +318,10 @@ package com.leyou.ui.pet.children {
 				return;
 			}
 
-			proLbl.text=TableManager.getInstance().getItemInfo(petSkill.item).name + "x" + petSkill["itemNum" + (lv + 1)];
+			var tinfo:TItemInfo=TableManager.getInstance().getItemInfo(petSkill.item);
+			proLbl.htmlText="<font color='#" + ItemUtil.getColorByQuality2(tinfo.quality) + "'><u><a href='event:item--" + tinfo.id + "'>" + tinfo.name + "</a></u></font>x" + petSkill["itemNum" + (lv + 1)];
+
+//			proLbl.text=TableManager.getInstance().getItemInfo(petSkill.item).name + "x" + petSkill["itemNum" + (lv + 1)];
 			costLbl.text=petSkill["money" + (lv + 1)];
 		}
 	}

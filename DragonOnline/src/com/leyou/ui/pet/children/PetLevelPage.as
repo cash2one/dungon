@@ -30,7 +30,7 @@ package com.leyou.ui.pet.children {
 	import com.leyou.ui.market.child.MarketGrid;
 	import com.leyou.utils.PropUtils;
 	import com.leyou.utils.StringUtil_II;
-	
+
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
@@ -170,7 +170,8 @@ package com.leyou.ui.pet.children {
 					Cmd_Pet.cm_PET_U(1, petTId, int(numInput.text));
 					var itemId:int=ConfigEnum.servent12.split(",")[0];
 					var rnum:int=MyInfoManager.getInstance().getBagItemNumById(itemId);
-					if (rnum < int(numInput.text)) {
+					var rnum1:int=MyInfoManager.getInstance().getBagItemNumById(ConfigEnum.servent12.split(",")[1]);
+					if (rnum < int(numInput.text) && rnum1 < int(numInput.text)) {
 						UILayoutManager.getInstance().open(WindowEnum.QUICK_BUY);
 						UIManager.getInstance().quickBuyWnd.pushItem(itemId, itemId);
 					}
@@ -262,6 +263,8 @@ package com.leyou.ui.pet.children {
 				receiveBtn.text=PropUtils.getStringById(1892);
 				receiveBtn.setActive((1 == petData.lvTaskStatus), 1, true);
 			}
+			
+			
 			if (petEntry.lvMissionComplete) {
 				receiveBtn.setActive(false, 1, true);
 			}

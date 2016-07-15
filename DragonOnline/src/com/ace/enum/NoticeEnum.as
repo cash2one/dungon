@@ -110,5 +110,6 @@ package com.ace.enum {
 		public static const ICON_LINK_THOUGHT:int = 9;
 		public static const ICON_LINK_INTEAM:int = 10;
 		public static const ICON_LINK_DUEL:int = 13;
+		public static const ICON_LINK_REDPACKAGE:int = 14;
 	}
 }

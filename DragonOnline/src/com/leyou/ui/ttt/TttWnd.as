@@ -7,6 +7,7 @@ package com.leyou.ui.ttt {
 	import com.ace.manager.LibManager;
 	import com.ace.manager.UILayoutManager;
 	import com.ace.manager.UIManager;
+	import com.ace.manager.UIOpenBufferManager;
 	import com.ace.ui.auto.AutoWindow;
 	import com.ace.ui.button.children.ImgButton;
 	import com.ace.ui.button.children.NormalButton;
@@ -69,6 +70,8 @@ package com.leyou.ui.ttt {
 		private var sBtn:TttSmallBtn;
 		private var bBtn:TttBigBtn;
 
+		private var copyRBtn:ImgButton;
+
 		private var msgBox:MessageCnSeWnd;
 		private var tttlog:TttLog;
 
@@ -90,6 +93,8 @@ package com.leyou.ui.ttt {
 			this.totalCurBtn=this.getUIbyID("totalCurBtn") as NormalButton;
 			this.totalBtn=this.getUIbyID("totalBtn") as NormalButton;
 
+			this.copyRBtn=this.getUIbyID("copyRBtn") as ImgButton;
+
 			this.downBtn=this.getUIbyID("downBtn") as ImgButton;
 			this.upBtn=this.getUIbyID("upBtn") as ImgButton;
 
@@ -108,6 +113,7 @@ package com.leyou.ui.ttt {
 			this.resetBtn.addEventListener(MouseEvent.CLICK, onClick);
 			this.totalCurBtn.addEventListener(MouseEvent.CLICK, onClick);
 			this.totalBtn.addEventListener(MouseEvent.CLICK, onClick);
+			this.copyRBtn.addEventListener(MouseEvent.CLICK, onClick);
 
 			this.downBtn.addEventListener(MouseEvent.CLICK, onMoveClick);
 			this.upBtn.addEventListener(MouseEvent.CLICK, onMoveClick);
@@ -281,6 +287,15 @@ package com.leyou.ui.ttt {
 			switch (e.target.name) {
 				case "pkBtn":
 					Cmd_Ttt.cmEnterCopy(currentLv);
+					break;
+				case "copyRBtn":
+					if (!UIManager.getInstance().copyRankWnd || !UIManager.getInstance().copyRankWnd.visible)
+						UIOpenBufferManager.getInstance().open(WindowEnum.COPY_RANK);
+
+					TweenLite.delayedCall(0.3, function():void {
+						UIManager.getInstance().copyRankWnd.setTabIndex(3);
+					});
+
 					break;
 				case "resetBtn":
 //					PopupManager.showConfirm(TableManager.getInstance().getSystemNotice(10057).content, function():void {

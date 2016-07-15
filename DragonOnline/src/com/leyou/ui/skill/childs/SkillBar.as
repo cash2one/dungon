@@ -27,7 +27,7 @@ package com.leyou.ui.skill.childs {
 	import com.leyou.net.cmd.Cmd_Skill;
 	import com.leyou.utils.FilterUtil;
 	import com.leyou.utils.PropUtils;
-	
+
 	import flash.display.DisplayObject;
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
@@ -53,6 +53,11 @@ package com.leyou.ui.skill.childs {
 		private var upgradeBtn:NormalButton;
 		private var succeffSwf:SwfLoader;
 
+		private var moneyIco:Image;
+		private var hunIco:Image;
+		private var moneyLbl:Label;
+		private var hunLbl:Label;
+
 		private var grid:SkillGrid;
 
 		private var state:Boolean=false;
@@ -64,8 +69,12 @@ package com.leyou.ui.skill.childs {
 
 		private var runeindex:int=0;
 
+		private var money:int=0;
+		private var hun:int=0;
+
+
 		public function SkillBar(iscancel:Boolean=false) {
-			super(LibManager.getInstance().getXML("config/ui/skill/skillBar.xml"),iscancel);
+			super(LibManager.getInstance().getXML("config/ui/skill/skillBar.xml"), iscancel);
 			this.init();
 			this.mouseChildren=true;
 			this.mouseEnabled=true;
@@ -84,8 +93,13 @@ package com.leyou.ui.skill.childs {
 			this.fwLbl2=this.getUIbyID("fwLbl2") as Label;
 			this.fwLbl3=this.getUIbyID("fwLbl3") as Label;
 			this.fwLbl4=this.getUIbyID("fwLbl4") as Label;
-			
+
 			this.desLbl=this.getUIbyID("desLbl") as Label;
+
+			this.moneyIco=this.getUIbyID("moneyIco") as Image;
+			this.hunIco=this.getUIbyID("hunIco") as Image;
+			this.moneyLbl=this.getUIbyID("moneyLbl") as Label;
+			this.hunLbl=this.getUIbyID("hunLbl") as Label;
 
 			this.bgImg=this.getUIbyID("bgImg") as Image;
 			this.succeffSwf=this.getUIbyID("succeffSwf") as SwfLoader;
@@ -120,9 +134,9 @@ package com.leyou.ui.skill.childs {
 				} else {
 					spr.x=430;
 				}
-				
+
 				spr.y=3;
-				
+
 				spr.name="tips" + i;
 				spr.alpha=0;
 
@@ -133,6 +147,34 @@ package com.leyou.ui.skill.childs {
 
 			this.upgradeBtn.addEventListener(MouseEvent.CLICK, onClick);
 			this.upgradeBtn.mouseChildren=this.upgradeBtn.mouseEnabled=true;
+
+			var einfo:MouseEventInfo;
+
+			einfo=new MouseEventInfo();
+			einfo.onMouseMove=onTips1MouseOver;
+			einfo.onMouseOut=onTips1MouseOut;
+
+			MouseManagerII.getInstance().addEvents(this.hunIco, einfo);
+
+			einfo=new MouseEventInfo();
+			einfo.onMouseMove=onTips1MouseOver;
+			einfo.onMouseOut=onTips1MouseOut;
+
+			MouseManagerII.getInstance().addEvents(this.moneyIco, einfo);
+
+		}
+
+		public function onTips1MouseOver(e:DisplayObject):void {
+
+			if (e == this.hunIco) {
+				ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, PropUtils.getStringById(29) + (this.hun == 0 ? "" : ":" + hun), this.parent.localToGlobal(new Point(this.x, this.y)));
+			} else
+				ToolTipManager.getInstance().show(TipEnum.TYPE_DEFAULT, PropUtils.getStringById(32) + (this.money == 0 ? "" : ":" + this.money), this.parent.localToGlobal(new Point(this.x, this.y)));
+
+		}
+
+		public function onTips1MouseOut(e:DisplayObject):void {
+			ToolTipManager.getInstance().hide();
 		}
 
 		public function onMouseClick(e:MouseEvent):void {
@@ -235,7 +277,7 @@ package com.leyou.ui.skill.childs {
 
 
 		public function onClick(e:MouseEvent):void {
-			
+
 			GuideArrowDirectManager.getInstance().delArrow(WindowEnum.SKILL + "");
 			Cmd_Skill.cm_sklUpgrade(this.skillid);
 		}
@@ -245,14 +287,16 @@ package com.leyou.ui.skill.childs {
 		 */
 		public function updateInfo(arr:Array):void {
 
+
+
 			this.skillid=MyInfoManager.getInstance().skilldata.skillItems.indexOf(arr);
-			
+
 			var skill:Array=TableManager.getInstance().getSkillArr(arr[1]);
 			skill.sortOn("id", Array.CASEINSENSITIVE | Array.NUMERIC);
 
 			this.nameLbl.text="" + skill[0].name;
-			this.desLbl.text="" + skill[0].autoLv+PropUtils.getStringById(2300);
-			
+			this.desLbl.text="" + skill[0].autoLv + PropUtils.getStringById(2300);
+
 			if (arr[0] == 1) {
 				this.desLbl.visible=false;
 				this.lvLbl.visible=true;
@@ -267,17 +311,23 @@ package com.leyou.ui.skill.childs {
 				}
 
 				this.curLv=arr[2];
-				
-			} else{
+
+			} else {
 				this.lvLbl.text="LV:0";
 				this.lvLbl.visible=false;
 				this.desLbl.visible=true;
 			}
-			
+
 //			this.fuwenImg1.updateBmp("ico/skills/" + skill[6].runeIcon + ".png");
 			this.fuwenImg2.updateBmp("ico/skills/" + skill[1].runeIcon + ".png");
 			this.fuwenImg3.updateBmp("ico/skills/" + skill[2].runeIcon + ".png");
 			this.fuwenImg4.updateBmp("ico/skills/" + skill[3].runeIcon + ".png");
+
+			this.money=TableManager.getInstance().getSkillLvInfo(int(arr[2])).money;
+			this.hun=TableManager.getInstance().getSkillLvInfo(int(arr[2])).energy;
+
+			this.moneyLbl.text="" + this.money;
+			this.hunLbl.text="" + this.hun;
 
 			for (var i:int=3; i < arr.length; i++) {
 
@@ -394,6 +444,9 @@ package com.leyou.ui.skill.childs {
 			}
 		}
 
+		public function dispAutoEvent():void {
+			this.upgradeBtn.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+		}
 
 	}
 }

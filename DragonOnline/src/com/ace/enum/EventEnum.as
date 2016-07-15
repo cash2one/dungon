@@ -40,6 +40,7 @@ package com.ace.enum {
 		//设置
 		static public const SETTING_HIDE_ALL:String="hideAll";
 		static public const SETTING_HIDE_OTHER:String="hideOther";
+		static public const SETTING_HIDE_RACE:String="hideRace";
 		static public const SETTING_HIDE_MONSTER:String="hideMonster";
 		static public const SETTING_STOP_AUTO:String="stopAutoMonster";
 		static public const SETTING_HIDE_SCENE_EFFECT:String="hideSceneEffect";

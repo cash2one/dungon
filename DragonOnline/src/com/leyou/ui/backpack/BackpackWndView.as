@@ -252,7 +252,8 @@ package com.leyou.ui.backpack {
 			MouseManagerII.getInstance().addEvents(this.ybImg, einfo);
 
 			this.neatenBtn.scrollRect=new Rectangle(0, 0, 101, 31);
-
+			this.neatenBtn.text=PropUtils.getStringById(1623);
+			
 			TweenPlugin.activate([TransformAroundCenterPlugin, TransformAroundPointPlugin]);
 
 		}

@@ -21,6 +21,7 @@ package com.leyou.ui.skill {
 	import com.ace.ui.button.children.ImgButton;
 	import com.ace.ui.tabbar.children.TabBar;
 	import com.ace.utils.StringUtil;
+	import com.greensock.TweenLite;
 	import com.leyou.data.playerSkill.SkillInfo;
 	import com.leyou.data.playerSkill.TipSkillInfo;
 	import com.leyou.enum.ConfigEnum;
@@ -30,7 +31,7 @@ package com.leyou.ui.skill {
 	import com.leyou.ui.skill.childs.PassiveSkill;
 	import com.leyou.ui.skill.childs.SkillBar;
 	import com.leyou.utils.PropUtils;
-	
+
 	import flash.display.DisplayObject;
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
@@ -172,7 +173,23 @@ package com.leyou.ui.skill {
 //			this.renderArr[this.selectIndex].hight=true;
 //			UIManager.getInstance().skillFuWnd.updateInfo(MyInfoManager.getInstance().skilldata.skillItems[this.selectIndex]);
 
+			if (!MyInfoManager.getInstance().isTaskOk && MyInfoManager.getInstance().currentTaskId == 16)
+				TweenLite.delayedCall(ConfigEnum.autoTask3, this.autoTaskComplete);
 
+			if (!MyInfoManager.getInstance().isTaskOk && MyInfoManager.getInstance().currentTaskId == 77)
+				TweenLite.delayedCall(ConfigEnum.autoTask3, this.autoTaskComplete);
+		}
+
+		private function autoTaskComplete():void {
+			if (this.visible) {
+
+				if (!MyInfoManager.getInstance().isTaskOk && MyInfoManager.getInstance().currentTaskId == 16)
+					SkillBar(this.renderArr[1]).dispAutoEvent();
+				else if (!MyInfoManager.getInstance().isTaskOk && MyInfoManager.getInstance().currentTaskId == 77) {
+					this.passSkill.upgradeBtn.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+				}
+
+			}
 		}
 
 		override public function sendOpenPanelProtocol(... parameters):void {
@@ -522,7 +539,7 @@ package com.leyou.ui.skill {
 		}
 
 		override public function get width():Number {
-			return 888;
+			return 888 + 67;
 		}
 
 	}

@@ -18,6 +18,7 @@ package com.leyou.ui.guild.child {
 	import com.ace.ui.window.children.SimpleWindow;
 	import com.ace.utils.StringUtil;
 	import com.leyou.enum.ChatEnum;
+	import com.leyou.enum.ConfigEnum;
 	import com.leyou.enum.GuildEnum;
 	import com.leyou.manager.PopupManager;
 	import com.leyou.net.cmd.Cmd_Duel;
@@ -25,7 +26,7 @@ package com.leyou.ui.guild.child {
 	import com.leyou.net.cmd.Cmd_Guild;
 	import com.leyou.net.cmd.Cmd_Tm;
 	import com.leyou.utils.PropUtils;
-
+	
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	import flash.system.System;
@@ -122,6 +123,8 @@ package com.leyou.ui.guild.child {
 			this.arrowImg.push(this.getUIbyID("arrowJob") as Image);
 			this.arrowImg.push(this.getUIbyID("arrowLastTime") as Image);
 
+			this.impeachBtn.setToolTip(StringUtil.substitute(TableManager.getInstance().getSystemNotice(10197).content,[ConfigEnum.union42,ConfigEnum.union41,ConfigEnum.union43]))
+			
 			this.y+=5;
 			this.x=-14;
 		}

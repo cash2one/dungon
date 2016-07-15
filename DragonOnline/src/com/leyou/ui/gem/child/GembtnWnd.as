@@ -42,8 +42,6 @@ package com.leyou.ui.gem.child {
 		}
 
 		public function updateInfo(tinfo:TAlchemy):void {
-
-			 
 			
 			var num:int=int.MAX_VALUE;
 			var d:int=0;

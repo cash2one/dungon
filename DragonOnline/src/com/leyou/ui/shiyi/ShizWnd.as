@@ -20,12 +20,12 @@ package com.leyou.ui.shiyi {
 	import com.leyou.ui.shiyi.childs.ShizBtn2;
 	import com.leyou.ui.shiyi.childs.ShizRender1;
 	import com.leyou.ui.shiyi.childs.ShizRender2;
-	
+
 	import flash.display.DisplayObject;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 
-	public class ShizWnd extends AutoWindow{
+	public class ShizWnd extends AutoWindow {
 
 		private var shiyitabbar:TabBar;
 		private var itemList:ScrollPane;
@@ -237,6 +237,21 @@ package com.leyou.ui.shiyi {
 			shiyitabbar.turnToTab(i);
 		}
 
+		public function setSelectItem(i:int):void {
+
+			var render3:Object;
+
+			for each (render3 in this.itemArr) {
+
+//				trace(render3.sortId)
+				if (render3.sortId == (i - 1 + 5000)) {
+					render3.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+					break;
+				}
+			}
+
+		}
+
 		override public function get height():Number {
 			return 544;
 		}
@@ -269,7 +284,7 @@ package com.leyou.ui.shiyi {
 		}
 
 		public function getOtherCount():Array {
-			if (this.currentTabInfo.stype != 1) {
+//			if (this.currentTabInfo.stype != 1) {
 				var count:int=0;
 				var tmp:Array=[];
 
@@ -278,7 +293,7 @@ package com.leyou.ui.shiyi {
 						return tmp;
 				}
 
-			}
+//			}
 
 			return [];
 		}

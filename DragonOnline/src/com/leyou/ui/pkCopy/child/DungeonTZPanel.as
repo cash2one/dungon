@@ -15,12 +15,13 @@ package com.leyou.ui.pkCopy.child {
 	import com.ace.ui.lable.Label;
 	import com.ace.ui.lable.children.TextArea;
 	import com.ace.utils.StringUtil;
+	import com.greensock.TweenLite;
 	import com.leyou.enum.PkCopyEnum;
 	import com.leyou.enum.TaskEnum;
 	import com.leyou.net.cmd.Cmd_Act;
 	import com.leyou.ui.task.child.TaskTrackBtn;
 	import com.leyou.utils.PropUtils;
-	
+
 	import flash.events.MouseEvent;
 
 	public class DungeonTZPanel extends AutoWindow {
@@ -80,7 +81,16 @@ package com.leyou.ui.pkCopy.child {
 //				return;
 //			}
 
-			Cmd_Act.cmActNowAccept(this.actid);
+			if (this.actid == 25) {
+				UILayoutManager.getInstance().show_II(WindowEnum.DUNGEON_TEAM);
+				TweenLite.delayedCall(0.3, UIManager.getInstance().teamCopyWnd.setTabIndex, [2]);
+			} else if (this.actid == 26 || this.actid == 27) {
+				UILayoutManager.getInstance().show_II(WindowEnum.DUNGEON_TEAM);
+				TweenLite.delayedCall(0.3, UIManager.getInstance().teamCopyWnd.setTabIndex, [4]);
+			} else
+				Cmd_Act.cmActNowAccept(this.actid);
+
+
 			this.hide();
 		}
 
@@ -131,7 +141,7 @@ package com.leyou.ui.pkCopy.child {
 //					UIManager.getInstance().taskTrack.delOtherTrack(TaskEnum.taskLevel_doubleLine);
 //				}
 			//} else
-				this.show();
+			this.show();
 
 			this.reSize();
 		}

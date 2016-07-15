@@ -580,5 +580,30 @@ package com.ace.enum {
 		
 		
 		public static const CLIENT_WND:int = 158;
+		
+		/**o
+		 * 红包 
+		 */		
+		public static const REDPACKAGE:int = 159;
+		
+		/**
+		 * 红包拆 
+		 */		
+		public static const REDPACKAGE_OPEN:int = 160;
+		
+		/**
+		 * 红包 列表 
+		 */		
+		public static const REDPACKAGE_OPENLIST:int = 161;
+		
+		/**
+		 * 贴心指导
+		 */		
+		public static const INTROWND:int = 162;
+		
+		/**
+		 * 开服和服有礼
+		 */		
+		public static const KF_HF_AWARD:int = 163;
 	}
 }

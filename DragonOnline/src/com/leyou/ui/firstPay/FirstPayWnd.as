@@ -1,19 +1,22 @@
 package com.leyou.ui.firstPay {
 	import com.ace.config.Core;
 	import com.ace.enum.PlayerEnum;
+	import com.ace.enum.TipEnum;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.table.TVIPDetailInfo;
 	import com.ace.loader.child.SwfLoader;
 	import com.ace.manager.LibManager;
+	import com.ace.manager.ToolTipManager;
 	import com.ace.manager.UIManager;
 	import com.ace.ui.FlyManager;
 	import com.ace.ui.auto.AutoWindow;
 	import com.ace.ui.button.children.ImgButton;
 	import com.ace.ui.img.child.Image;
+	import com.leyou.data.tips.TipsInfo;
 	import com.leyou.net.cmd.Cmd_ddsc;
 	import com.leyou.ui.market.child.MarketGrid;
 	import com.leyou.utils.PayUtil;
-
+	
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 
@@ -40,7 +43,7 @@ package com.leyou.ui.firstPay {
 
 		private var btnImg:Image;
 
-//		private var tipsInfo:TipVipEquipInfo;
+		private var tipsInfo:TipsInfo;
 
 		public function FirstPayWnd() {
 			super(LibManager.getInstance().getXML("config/ui/xqqdWnd.xml"));
@@ -86,7 +89,7 @@ package com.leyou.ui.firstPay {
 			} else if (PlayerEnum.PRO_WARLOCK == Core.me.info.profession) {
 				effectMovie1.update(99957);
 			}
-			
+
 //			effectMovie2.x = 260;
 //			effectMovie2.y = 260;
 //			
@@ -107,16 +110,30 @@ package com.leyou.ui.firstPay {
 			}
 			clsBtn.x-=40;
 			clsBtn.y+=15;
-			
-//			tipsInfo = new TipVipEquipInfo();
-//			sptMovie.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
+
+			tipsInfo=new TipsInfo();
+
+			effectMovie1.mouseEnabled=true;
+			effectMovie1.addEventListener(MouseEvent.MOUSE_MOVE, onMouseOver);
 		}
 
-//		protected function onMouseOver(event:MouseEvent):void{
-//			tipsInfo.lv = Core.me.info.level;
-//			tipsInfo.vipLv = 1;
-//			ToolTipManager.getInstance().show(TipEnum.TYPE_VIP_QUEIP, tipsInfo, new Point(stage.mouseX, stage.mouseY));
-//		}
+		protected function onMouseOver(event:MouseEvent):void {
+
+
+			if (PlayerEnum.PRO_MASTER == Core.me.info.profession) {
+				tipsInfo.itemid=2130;
+			} else if (PlayerEnum.PRO_RANGER == Core.me.info.profession) {
+				tipsInfo.itemid=3130;
+			} else if (PlayerEnum.PRO_SOLDIER == Core.me.info.profession) {
+				tipsInfo.itemid=1130;
+			} else if (PlayerEnum.PRO_WARLOCK == Core.me.info.profession) {
+				tipsInfo.itemid=4130;
+			}
+
+			tipsInfo.itemid=Core.me.info.profession * 1000 + 130;
+
+			ToolTipManager.getInstance().show(TipEnum.TYPE_EQUIP_ITEM, tipsInfo, new Point(stage.mouseX, stage.mouseY));
+		}
 
 		public function flyItem():Boolean {
 			if (flyIds.length > 0) {
@@ -177,5 +194,15 @@ package com.leyou.ui.firstPay {
 				payBtn.setActive(false, 1, true);
 			}
 		}
+
+		override public function get height():Number {
+			return 479;
+		}
+
+		override public function get width():Number {
+			return 1030;
+		}
+
+
 	}
 }

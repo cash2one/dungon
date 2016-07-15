@@ -1,6 +1,7 @@
 package com.leyou.ui.pet {
 
 	import com.ace.gameData.manager.DataManager;
+	import com.ace.gameData.manager.MyInfoManager;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.table.TPetAttackInfo;
 	import com.ace.gameData.table.TPetFriendlyInfo;
@@ -20,6 +21,7 @@ package com.leyou.ui.pet {
 	import com.greensock.TweenLite;
 	import com.leyou.data.pet.PetData;
 	import com.leyou.data.pet.PetEntryData;
+	import com.leyou.enum.ConfigEnum;
 	import com.leyou.net.cmd.Cmd_Pet;
 	import com.leyou.ui.pet.children.PetBosomPage;
 	import com.leyou.ui.pet.children.PetCallInPage;
@@ -140,6 +142,14 @@ package com.leyou.ui.pet {
 			}
 			selectItem(petList[0]);
 
+			if (!MyInfoManager.getInstance().isTaskOk && MyInfoManager.getInstance().currentTaskId == 73)
+				TweenLite.delayedCall(ConfigEnum.autoTask3, this.autoTaskComplete);
+		}
+
+		private function autoTaskComplete():void {
+			if (this.visible) {
+				 this.petCallPage.dispAutoEvent();
+			}
 		}
 
 		public override function hide():void {
@@ -394,6 +404,24 @@ package com.leyou.ui.pet {
 			petImg.flyQmGift();
 		}
 
+		public function selectPetItem(pid:int):void {
+
+			for each (var petRender:PetListRender in petList) {
+				if (null != petRender) {
+					if ((pid == 0 && DataManager.getInstance().petData.containsPet(petRender.petTId)) || petRender.petTId == pid) { // || petRender.lvStatus != 2){
+						selectItem(petRender);
+					} else {
+						petRender.setSelection(false);
+					}
+				}
+			}
+		}
+
+		public function selectPetTabItem(i:int):void {
+			if (petBar.getTabButton(i).visible)
+				petBar.turnToTab(i);
+		}
+
 		public function updateLv(pid:int):void {
 
 			for each (var petRender:PetListRender in petList) {
@@ -420,6 +448,10 @@ package com.leyou.ui.pet {
 			}
 
 			TweenLite.delayedCall(0.5, petBar.turnToTab, [3]);
+		}
+
+		public function changeToIndex(i:int):void {
+			this.petBar.turnToTab(i);
 		}
 
 		public function getBuyBtn():NormalButton {

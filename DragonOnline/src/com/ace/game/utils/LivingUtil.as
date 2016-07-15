@@ -84,6 +84,8 @@ package com.ace.game.utils {
 		static public function updataPropUI():void {
 			UIManager.getInstance().roleHeadWnd.updataInfo(Core.me.info);
 			UIManager.getInstance().toolsWnd.updataPropUI();
+			if (UIManager.getInstance().expCopyTrack != null)
+				UIManager.getInstance().expCopyTrack.updateExpTime();
 			//			Core.me.updataHealth(1, 2);
 		}
 	}

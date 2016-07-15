@@ -125,6 +125,8 @@ package com.leyou.ui.welfare.child.page {
 				}
 			}
 			receiveBtn.setActive(hReward, 1, true);
+			
+			UIManager.getInstance().welfareWnd.updateAwardIcon(1,hReward);
 		}
 
 		public function hasReward():Boolean {

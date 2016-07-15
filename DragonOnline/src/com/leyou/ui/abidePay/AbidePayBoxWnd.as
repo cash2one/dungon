@@ -68,7 +68,7 @@ package com.leyou.ui.abidePay
 				var grid:MaillGrid = new MaillGrid();
 				addChild(grid);
 				grid.x = 23 + n*54;
-				grid.y = 106;
+				grid.y = 114;
 				grids.push(grid);
 			}
 //			grid = new MarketGrid();

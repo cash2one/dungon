@@ -7,7 +7,7 @@ package com.leyou.ui.copy {
 	import com.leyou.enum.TaskEnum;
 	import com.leyou.ui.copy.child.CopyItem;
 	import com.leyou.ui.copy.child.CopyRewardGrid;
-
+	
 	import flash.display.DisplayObject;
 	import flash.display.Sprite;
 	import flash.events.Event;
@@ -25,6 +25,7 @@ package com.leyou.ui.copy {
 		protected var nextBtn:ImgButton;
 
 		protected var allPastBtn:ImgButton;
+		protected var copyRBtn:ImgButton;
 
 		protected var copyPannel:Sprite;
 
@@ -47,6 +48,8 @@ package com.leyou.ui.copy {
 			prevBtn=getUIbyID("prevBtn") as ImgButton;
 			nextBtn=getUIbyID("nextBtn") as ImgButton;
 			allPastBtn=getUIbyID("allPastBtn") as ImgButton;
+			this.copyRBtn=this.getUIbyID("copyRBtn") as ImgButton;
+			copyRBtn.addEventListener(MouseEvent.CLICK, onButtonClick);
 			prevBtn.addEventListener(MouseEvent.CLICK, onButtonClick);
 			nextBtn.addEventListener(MouseEvent.CLICK, onButtonClick);
 			allPastBtn.addEventListener(MouseEvent.CLICK, onButtonClick);
@@ -164,6 +167,8 @@ package com.leyou.ui.copy {
 		}
 
 		protected function onButtonClick(event:MouseEvent):void {
+
+
 		}
 
 		override public function getUIbyID(id:String):DisplayObject {

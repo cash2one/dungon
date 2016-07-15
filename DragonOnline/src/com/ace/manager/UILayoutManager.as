@@ -101,6 +101,7 @@ package com.ace.manager {
 			StartObjs[WindowEnum.FARM]=toolsWnd.getUIbyID("framBtn");
 			StartObjs[WindowEnum.ELEMENT]=toolsWnd.getUIbyID("eleBtn");
 			StartObjs[WindowEnum.WORSHIP]=toolsWnd.getUIbyID("worshipBtn");
+			StartObjs[WindowEnum.REDPACKAGE]=toolsWnd.getUIbyID("redPackage");
 			StartObjs[WindowEnum.MAILL]=UIManager.getInstance().smallMapWnd.getUIbyID("mailBtn");
 //			StartObjs[WindowEnum.FARM]=rightTopWnd.getWidget("farmBtn");
 			StartObjs[WindowEnum.COPY_RANK]=rightTopWnd.getWidget("copyRBtn");
@@ -137,6 +138,9 @@ package com.ace.manager {
 			StartObjs[WindowEnum.COLLECTION]=rightTopWnd.getWidget("collectBtn");
 			StartObjs[WindowEnum.INTEGRAL]=rightTopWnd.getWidget("costBtn");
 			StartObjs[WindowEnum.ABIDE_PAY]=rightTopWnd.getWidget("abidePayBtn");
+			StartObjs[WindowEnum.KFHD]=rightTopWnd.getWidget("kfhdBtn");
+			StartObjs[WindowEnum.KFCB]=rightTopWnd.getWidget("kfjjBtn");
+			StartObjs[WindowEnum.KF_HF_AWARD]=rightTopWnd.getWidget("todayAwardBtn");
 			StartObjs[WindowEnum.DUNGEON_TEAM]=rightTopWnd.getWidget("teamCopyBtn");
 			StartObjs[WindowEnum.GROUP_BUY]=rightTopWnd.getWidget("groupBuyBtn");
 			StartObjs[WindowEnum.VENDUE]=rightTopWnd.getWidget("saleBtn");

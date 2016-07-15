@@ -26,7 +26,7 @@ package {
 		public function DragonOnline() {
 //			UIEnum.LOGIN_SERVER="16";
 //			UIEnum.LOGIN_SERVER="360";
-//			UIEnum.VERSIONCM="V1.0.12.2";
+//			UIEnum.VERSIONCM="V1.0.37.35";
 			UIEnum.IS_USE_CDN=UIEnum.IS_DE_FILE=UIEnum.IS_RELEASE=false;
 			super();
 		}
@@ -63,7 +63,7 @@ package {
 		
 		private function switchShow():void {
 //			GuideManager.getInstance().show(159);
-			GuideManager.getInstance().show(152);
+			GuideManager.getInstance().show(83);
 			//			GuideManager.getInstance().autoGuide();
 		}
 

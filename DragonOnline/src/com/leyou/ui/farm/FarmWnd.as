@@ -1,17 +1,19 @@
 package com.leyou.ui.farm {
 	import com.ace.config.Core;
+	import com.ace.gameData.manager.MyInfoManager;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.manager.GuideManager;
 	import com.ace.manager.TweenManager;
 	import com.ace.manager.UIManager;
 	import com.ace.utils.StringUtil;
+	import com.greensock.TweenLite;
 	import com.leyou.enum.ConfigEnum;
 	import com.leyou.enum.FarmEnum;
 	import com.leyou.manager.PopupManager;
 	import com.leyou.net.cmd.Cmd_Farm;
 	import com.leyou.utils.PropUtils;
 	import com.leyou.utils.TimeUtil;
-	
+
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 
@@ -20,6 +22,8 @@ package com.leyou.ui.farm {
 		protected var treeStatus:int;
 
 		protected var tickCD:uint;
+
+		private var seedid:int=0;
 
 		public function FarmWnd() {
 			super();
@@ -46,6 +50,8 @@ package com.leyou.ui.farm {
 			friendRender.updataGuildInfo(obj.utb, obj.utc);
 			friendRender.updataFriendInfo(obj.ftb, obj.ftc);
 			friendRender.ownFarm=true;
+
+			this.seedid=obj.ntb[0];
 			UIManager.getInstance().farmShopWnd.updataInfo(obj.ntb);
 			UIManager.getInstance().farmShopWnd.updataVipInfo(obj.ytb);
 			UIManager.getInstance().farmShopWnd.updataTime(obj.rt);
@@ -264,20 +270,20 @@ package com.leyou.ui.farm {
 					break;
 				case "accelerateBtn":
 					// 神树加速
-					var ybv:int = 0;
-					var bybv:int = 0;
-					var interval:int=new Date().time/1000 - tickCD;
+					var ybv:int=0;
+					var bybv:int=0;
+					var interval:int=new Date().time / 1000 - tickCD;
 					var remain:int=ConfigEnum.FarmCDTime - interval;
 					var content:String=TableManager.getInstance().getSystemNotice(2716).content;
 					if (FarmEnum.TREE_RIPE_CD == treeStatus) {
-						ybv = ConfigEnum.FarmCatalyticBoxCDCost.split("|")[0];
-						bybv = ConfigEnum.FarmCatalyticBoxCDCost.split("|")[1];
+						ybv=ConfigEnum.FarmCatalyticBoxCDCost.split("|")[0];
+						bybv=ConfigEnum.FarmCatalyticBoxCDCost.split("|")[1];
 					} else if (FarmEnum.TREE_WATER_CD == treeStatus) {
-						ybv = Math.ceil(remain/60/5)*int(ConfigEnum.FarmCatalyticCDCost.split("|")[0]);
-						bybv = Math.ceil(remain/60/5)*int(ConfigEnum.FarmCatalyticCDCost.split("|")[1]);
+						ybv=Math.ceil(remain / 60 / 5) * int(ConfigEnum.FarmCatalyticCDCost.split("|")[0]);
+						bybv=Math.ceil(remain / 60 / 5) * int(ConfigEnum.FarmCatalyticCDCost.split("|")[1]);
 					}
 //					content=StringUtil.substitute(content, value);
-					PopupManager.showRadioConfirm(content, ybv+"", bybv+"", treeAccelerate, null, false, "farm.tree.accelerate");
+					PopupManager.showRadioConfirm(content, ybv + "", bybv + "", treeAccelerate, null, false, "farm.tree.accelerate");
 					break;
 			}
 		}
@@ -287,7 +293,7 @@ package com.leyou.ui.farm {
 		 *
 		 */
 		public function treeAccelerate(type:int):void {
-			var ctype:int = ((0 == type) ? 2 : 1);
+			var ctype:int=((0 == type) ? 2 : 1);
 			Cmd_Farm.cm_FAM_S(0, ctype);
 		}
 
@@ -296,6 +302,15 @@ package com.leyou.ui.farm {
 			setOwner(PropUtils.getStringById(1700));
 //			Cmd_Farm.cm_FAM_I();
 			GuideManager.getInstance().removeGuide(24);
+
+			if (!MyInfoManager.getInstance().isTaskOk && MyInfoManager.getInstance().currentTaskId == 68)
+				TweenLite.delayedCall(ConfigEnum.autoTask3, this.autoTaskComplete);
+		}
+
+		private function autoTaskComplete():void {
+			if (this.visible) {
+				Cmd_Farm.cm_FAM_G(1, this.seedid);
+			}
 		}
 
 		public override function hide():void {
@@ -303,8 +318,8 @@ package com.leyou.ui.farm {
 			removeGuide();
 			TweenManager.getInstance().lightingCompnent(UIManager.getInstance().toolsWnd.getUIbyID("framBtn"));
 		}
-		
-		public override function get height():Number{
+
+		public override function get height():Number {
 			return 544;
 		}
 

@@ -8,6 +8,7 @@ package com.leyou.ui.otherPlayer {
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.player.child.FeatureInfo;
 	import com.ace.gameData.table.TMarry_ring;
+	import com.ace.gameData.table.TPnfInfo;
 	import com.ace.loader.child.SwfLoader;
 	import com.ace.manager.LibManager;
 	import com.ace.manager.ToolTipManager;
@@ -97,10 +98,12 @@ package com.leyou.ui.otherPlayer {
 		private var marryName:String;
 		private var img1SSwf:Sprite;
 
+		private var ava9:int;
+
 		private var tipinfo:TipsInfo;
 
 		public function OtherPlayerWnd() {
-			super(LibManager.getInstance().getXML("config/ui/RoleWnd.xml"),true);
+			super(LibManager.getInstance().getXML("config/ui/RoleWnd.xml"), true);
 			this.init();
 		}
 
@@ -143,7 +146,7 @@ package com.leyou.ui.otherPlayer {
 			this.addChild(this.equipBackEffect);
 
 			this.equipBackEffect.x=160;
-			this.equipBackEffect.y=408;
+			this.equipBackEffect.y=428;
 
 			this.roleEquipUp=new RoleEquipUpWnd(otherPlayer);
 			this.addChild(this.roleEquipUp);
@@ -176,12 +179,13 @@ package com.leyou.ui.otherPlayer {
 			this.wingAvatar.y=448;
 
 			this.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove, true);
+			this.addEventListener(MouseEvent.MOUSE_OUT, onMouseMove, true);
 
 			this.equipEffect=new SwfLoader();
 			this.addChild(this.equipEffect);
 
-			this.equipEffect.x=155;
-			this.equipEffect.y=248;
+			this.equipEffect.x=165;
+			this.equipEffect.y=258;
 
 			this.equipEffect.mouseChildren=false;
 			this.equipEffect.mouseEnabled=false;
@@ -277,35 +281,42 @@ package com.leyou.ui.otherPlayer {
 
 		private function onMouseMove(e:MouseEvent):void {
 
-			e.stopImmediatePropagation();
-			e.stopPropagation();
-			e.preventDefault();
+			if (e.target is PropertyNum || e.target is EquipGrid || e.target is RoleEquipUpWnd) {
 
-			if (e.target is PropertyNum) {
 
-				this.setChildIndex(this.marryiconImgbg, 3);
-				this.setChildIndex(this.marryiconImg, 4);
-				this.setChildIndex(this.marryiconImgSwf, 5);
+				e.stopImmediatePropagation();
+				e.stopPropagation();
+				e.preventDefault();
 
-				this.setChildIndex(this.propertyNum, 8);
-				this.setChildIndex(this.roleEquipUp, 6);
-				this.setChildIndex(this.bigAvatar, 7);
+				if (e.target is PropertyNum) {
 
-			} else if (e.target is EquipGrid || e.target is RoleEquipUpWnd) {
+					this.setChildIndex(this.marryiconImgbg, 3);
+					this.setChildIndex(this.marryiconImg, 4);
+					this.setChildIndex(this.marryiconImgSwf, 5);
+//					this.setChildIndex(this.equipBackEffect, 11);
 
-				this.addChild(this.marryiconImgbg);
-				this.addChild(this.marryiconImg);
-				this.addChild(this.marryiconImgSwf);
+					this.setChildIndex(this.propertyNum, 14);
+					this.setChildIndex(this.roleEquipUp, 12);
+					this.setChildIndex(this.bigAvatar, 13);
 
-				this.setChildIndex(this.propertyNum, 6);
-				this.setChildIndex(this.roleEquipUp, 8);
-				this.setChildIndex(this.bigAvatar, 7);
+				} else {
 
-			} else {
+					if (e.target is EquipGrid || e.target is RoleEquipUpWnd) {
 
-				this.setChildIndex(this.propertyNum, 6);
-				this.setChildIndex(this.roleEquipUp, 7);
-				this.setChildIndex(this.bigAvatar, 8);
+						this.addChild(this.marryiconImgbg);
+						this.addChild(this.marryiconImg);
+						this.addChild(this.marryiconImgSwf);
+
+						this.setChildIndex(this.propertyNum, 6);
+						this.setChildIndex(this.roleEquipUp, 8);
+						this.setChildIndex(this.bigAvatar, 7);
+
+					} else {
+
+						this.setChildIndex(this.propertyNum, 6);
+						this.setChildIndex(this.roleEquipUp, 7);
+						this.setChildIndex(this.bigAvatar, 8);
+
 
 //				this.addChild(this.lvImg);
 //				this.addChild(this.qulityImg);
@@ -313,9 +324,17 @@ package com.leyou.ui.otherPlayer {
 //				this.addChild(this.marryiconImgbg);
 //				this.addChild(this.marryiconImg);
 
+					}
+				}
 			}
 
+		}
 
+		private function onMouseOut(e:MouseEvent):void {
+
+			this.setChildIndex(this.propertyNum, 6);
+			this.setChildIndex(this.roleEquipUp, 7);
+			this.setChildIndex(this.bigAvatar, 8);
 		}
 
 		public function showPanel(playName:String):void {
@@ -354,7 +373,7 @@ package com.leyou.ui.otherPlayer {
 //			Cmd_Mount.cmMouInit();
 //			Cmd_Wig.cm_WigInit();
 
-			this.updateWingEffect(this.roleEquipUp.currentEquip);
+//			this.updateWingEffect(this.roleEquipUp.currentEquip);
 //			this.updateWingEffect([99933, 99935]);
 
 		}
@@ -407,7 +426,7 @@ package com.leyou.ui.otherPlayer {
 				this.roleEquipUp.visible=true;
 				this.propertyNum.visible=true;
 
-				this.updateWingEffect(this.roleEquipUp.currentEquip);
+//				this.updateWingEffect(this.roleEquipUp.currentEquip);
 
 //				this.bgsp.visible=true;
 				this.marryBtn.visible=false;
@@ -419,6 +438,19 @@ package com.leyou.ui.otherPlayer {
 				this.wardrobeBtn.visible=false;
 				this.lvImg.visible=true;
 				this.qulityImg.visible=true;
+
+				if (this.ava9 != 0) {
+
+					var pid:int=int(ava9) + 5;
+
+					var pinfo:TPnfInfo=TableManager.getInstance().getPnfInfo(pid);
+
+					if (pinfo.type == 10) {
+						this.setBackEffect(pid);
+					} else if (pinfo.type == 3) {
+						this.setEffect(pid);
+					}
+				}
 
 			} else {
 
@@ -480,8 +512,51 @@ package com.leyou.ui.otherPlayer {
 			}
 
 			this.bigAvatar.showII(this.feachInfo, false, info.race);
+
+			this.ava9=avtArr[9];
+			if (int(avtArr[9]) == 0)
+				return;
+
+			var pid:int=int(avtArr[9]) + 5;
+
+			var pinfo:TPnfInfo=TableManager.getInstance().getPnfInfo(pid);
+
+			if (pinfo.type == 10) {
+				this.setBackEffect(pid);
+			} else if (pinfo.type == 3) {
+				this.setEffect(pid);
+			}
+
 		}
 
+		public function setBackEffect(pid:int):void {
+			this.equipEffect.visible=false;
+
+			this.equipBackEffect.visible=true;
+			this.equipBackEffect.update(pid, play1);
+
+			function play1():void {
+				equipBackEffect.playAct(PlayerEnum.ACT_STAND, -1, true);
+			}
+
+		}
+
+		/**
+		 * 身上特效
+		 * @param pid
+		 *
+		 */
+		public function setEffect(pid:int):void {
+			this.equipBackEffect.visible=false;
+
+			this.equipEffect.visible=true;
+			this.equipEffect.update(pid, play2);
+
+			function play2():void {
+				equipEffect.playAct(PlayerEnum.ACT_STAND, -1, true);
+			}
+
+		}
 
 		public function updateWingAvatar(pnfid:int):void {
 //			var pnid:int=38000 + (pnfid - 1);
@@ -656,6 +731,7 @@ package com.leyou.ui.otherPlayer {
 		}
 
 		public function updateWingEffect(pid:Array):void {
+			return;
 			this.equipBackEffect.visible=false;
 			this.equipEffect.visible=false;
 

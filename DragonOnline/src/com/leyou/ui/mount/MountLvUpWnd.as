@@ -12,7 +12,6 @@ package com.leyou.ui.mount {
 	import com.ace.gameData.table.TMount;
 	import com.ace.loader.child.SwfLoader;
 	import com.ace.manager.GuideArrowDirectManager;
-	import com.ace.manager.GuideDirectManager;
 	import com.ace.manager.GuideManager;
 	import com.ace.manager.LibManager;
 	import com.ace.manager.MouseManagerII;
@@ -36,13 +35,12 @@ package com.leyou.ui.mount {
 	import com.leyou.data.tips.TipsInfo;
 	import com.leyou.enum.ConfigEnum;
 	import com.leyou.enum.TaskEnum;
-	import com.leyou.manager.PopupManager;
 	import com.leyou.net.cmd.Cmd_Mount;
 	import com.leyou.ui.quickBuy.QuickBuyWnd;
 	import com.leyou.ui.role.child.children.ImgRolling;
 	import com.leyou.utils.EffectUtil;
 	import com.leyou.utils.PropUtils;
-	
+
 	import flash.display.Bitmap;
 	import flash.display.DisplayObject;
 	import flash.display.Sprite;
@@ -316,6 +314,40 @@ package com.leyou.ui.mount {
 //			GuideManager.getInstance().showGuide(5, this.autoUpBtn);
 
 			UIManager.getInstance().taskTrack.setGuideViewhide(TaskEnum.taskType_MountLv);
+
+			if (!MyInfoManager.getInstance().isTaskOk && MyInfoManager.getInstance().currentTaskId == 25)
+				TweenLite.delayedCall(ConfigEnum.autoTask3, this.autoTaskComplete);
+		}
+
+		private function autoTaskComplete():void {
+			if (this.visible) {
+				if (Core.isAuto) {
+
+					if (this.buyItem()) {
+						NoticeManager.getInstance().broadcast(TableManager.getInstance().getSystemNotice(1102));
+						return;
+					}
+					
+					if (UIManager.getInstance().backpackWnd.jb < int(this.moneyLbl.text)) {
+						NoticeManager.getInstance().broadcast(TableManager.getInstance().getSystemNotice(1101));
+						return;
+					}
+					
+					var rate:int=this.getRate();
+					
+					if (rate > 0) {
+						var arr:Array=this.needNumLbl.text.split(" x ");
+						if (MyInfoManager.getInstance().getBagItemNumByName(this.itemNameLbl.text) < int(arr[1]) && UIManager.getInstance().quickBuyWnd.isAutoBuy(ConfigEnum.MountItem, ConfigEnum.MountbindItem)) {
+							Cmd_Mount.cmMouEvo(rate, (UIManager.getInstance().quickBuyWnd.getCost(ConfigEnum.MountItem, ConfigEnum.MountbindItem) == 0 ? 2 : 1));
+						} else {
+							Cmd_Mount.cmMouEvo(rate);
+						}
+					}
+					
+					
+				} else
+					this.autoUpBtn.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+			}
 		}
 
 		override public function hide():void {
@@ -443,7 +475,7 @@ package com.leyou.ui.mount {
 			if (evt.target.name == "autoEvoBtn") {
 
 				GuideArrowDirectManager.getInstance().delArrow(WindowEnum.ROLE + "," + WindowEnum.MOUTLVUP);
-				
+
 //				GuideManager.getInstance().removeGuide(5);
 				GuideManager.getInstance().removeGuide(89);
 

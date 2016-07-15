@@ -28,16 +28,23 @@ package com.leyou.net.cmd {
 					TweenLite.delayedCall(1, UIManager.getInstance().firstPay.hide);
 
 				if (UIManager.getInstance().isCreate(WindowEnum.VIP3EXP)) {
-					TweenLite.delayedCall(1, UIManager.getInstance().vip3exp.hide);
+					TweenLite.delayedCall(0.3, UIManager.getInstance().vip3exp.hide);
+//					UIManager.getInstance().vip3exp.hide();
+//					UILayoutManager.getInstance().hide(WindowEnum.VIP3EXP);
 				}
-			} else
-				UILayoutManager.getInstance().open(WindowEnum.VIP3EXP);
+			}  
 
 			if (o.buffst == 1) {
-				if (!UIManager.getInstance().isCreate(WindowEnum.VIP3EXP))
-					UIManager.getInstance().creatWindow(WindowEnum.VIP3EXP);
+//				if (!UIManager.getInstance().isCreate(WindowEnum.VIP3EXP))
+//					UIManager.getInstance().creatWindow(WindowEnum.VIP3EXP);
+
+				if (UIManager.getInstance().vip3exp == null || !UIManager.getInstance().vip3exp.visible)
+					UILayoutManager.getInstance().open(WindowEnum.VIP3EXP);
 
 				UIManager.getInstance().vip3exp.setNoGet();
+			}else{
+//				if (ConfigEnum.V3exp37Open == level) 
+//				UIManager.getInstance().vip3exp.hide();
 			}
 		}
 

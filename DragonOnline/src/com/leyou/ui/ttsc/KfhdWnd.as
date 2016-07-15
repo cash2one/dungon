@@ -19,9 +19,10 @@ package com.leyou.ui.ttsc {
 	import com.leyou.ui.promotion.children.PromotionExchangeRender;
 	import com.leyou.ui.promotion.children.PromotionLotteryRender;
 	import com.leyou.ui.promotion.children.PromotionSpendRender;
+	import com.leyou.ui.tools.child.RightTopWidget;
 	import com.leyou.utils.PayUtil;
 	import com.leyou.utils.TimeUtil;
-
+	
 	import flash.events.MouseEvent;
 
 	public class KfhdWnd extends AutoWindow {
@@ -116,48 +117,48 @@ package com.leyou.ui.ttsc {
 
 		}
 
-		private function onClick(e:MouseEvent):void {
-
-			this.setState(false);
-			e.target.turnOn();
-
-			var str:String=e.target.name;
-			var type:int=int(str.split("_")[1]);
-
-			var payarr:Array=TableManager.getInstance().getPayPromotionByType(type);
-			payarr.sortOn("id", Array.CASEINSENSITIVE | Array.NUMERIC);
-
-			var pay:TPayPromotion=payarr[0];
-
-			this.ruleLbl.htmlText="" + pay.des3;
-
-			var d:Date=new Date();
-			d.time=this.minfo.opentime * 1000;
-
-			var startime:String=TimeUtil.getDateToString2(d);
-
-			d.date+=pay.day_end;
-			var endtime:String=TimeUtil.getDateToString2(d);
-
-			this.timeLbl.htmlText="" + StringUtil.substitute(pay.des2, [startime, endtime]);
-
-			var stime:int=this.minfo.stime;
-
-			d.time=d.time - this.minfo.stime * 1000;
-
-			if (d.time > 0) {
-				this.dayLbl.text="" + int(d.time / 1000 / 60 / 60 / 24);
-				this.hourLbl.text="" + int(d.time / 1000 / 60 / 60 % 24);
-				this.monLbl.text="" + int(d.time / 1000 / 60 % 60);
-				this.secLbl.text="" + int(d.time / 1000 % 60);
-			} else {
-				this.dayLbl.text="0";
-				this.hourLbl.text="0";
-				this.monLbl.text="0";
-				this.secLbl.text="0";
-			}
-
-		}
+//		private function onClick(e:MouseEvent):void {
+//
+//			this.setState(false);
+//			e.target.turnOn();
+//
+//			var str:String=e.target.name;
+//			var type:int=int(str.split("_")[1]);
+//
+//			var payarr:Array=TableManager.getInstance().getPayPromotionByType(type);
+//			payarr.sortOn("id", Array.CASEINSENSITIVE | Array.NUMERIC);
+//
+//			var pay:TPayPromotion=payarr[0];
+//
+//			this.ruleLbl.htmlText="" + pay.des3;
+//
+//			var d:Date=new Date();
+//			d.time=this.minfo.opentime * 1000;
+//
+//			var startime:String=TimeUtil.getDateToString2(d);
+//
+//			d.date+=pay.day_end;
+//			var endtime:String=TimeUtil.getDateToString2(d);
+//
+//			this.timeLbl.htmlText="" + StringUtil.substitute(pay.des2, [startime, endtime]);
+//
+//			var stime:int=this.minfo.stime;
+//
+//			d.time=d.time - this.minfo.stime * 1000;
+//
+//			if (d.time > 0) {
+//				this.dayLbl.text="" + int(d.time / 1000 / 60 / 60 / 24);
+//				this.hourLbl.text="" + int(d.time / 1000 / 60 / 60 % 24);
+//				this.monLbl.text="" + int(d.time / 1000 / 60 % 60);
+//				this.secLbl.text="" + int(d.time / 1000 % 60);
+//			} else {
+//				this.dayLbl.text="0";
+//				this.hourLbl.text="0";
+//				this.monLbl.text="0";
+//				this.secLbl.text="0";
+//			}
+//
+//		}
 
 		protected function onMouseClick(event:MouseEvent):void {
 
@@ -194,7 +195,7 @@ package com.leyou.ui.ttsc {
 //				}
 //			}
 
-			var parr:Array=TableManager.getInstance().getPayPromotionByType(type);
+			var parr:Array=TableManager.getInstance().getPayPromotionByType(type, this.minfo.st);
 			parr.sortOn("id", Array.CASEINSENSITIVE | Array.NUMERIC);
 			pInfo=parr[0];
 			return pInfo;
@@ -222,11 +223,20 @@ package com.leyou.ui.ttsc {
 				dArr.push(promotionData[key]);
 			}
 
+			var imgbtn:ImgButton=UIManager.getInstance().rightTopWnd.getUIbyID("kfhdBtn") as ImgButton;
+			if (this.minfo.st == 1) {
+				imgbtn.updataBmd("ui/mainUI/main_button_kfhd.png");
+			} else if (this.minfo.st == 2) {
+				imgbtn.updataBmd("ui/mainUI/main_button_hfhd.png");
+			}
+
 			if (dArr.length == 0) {
 				UIManager.getInstance().rightTopWnd.deactive("kfhdBtn");
-				return ;
+				UIManager.getInstance().rightTopWnd.setEffect("kfhdBtn", false);
+				return;
 			} else {
 				UIManager.getInstance().rightTopWnd.active("kfhdBtn");
+				UIManager.getInstance().rightTopWnd.setEffect("kfhdBtn", true);
 			}
 
 			var j:int=0;
@@ -242,11 +252,15 @@ package com.leyou.ui.ttsc {
 			}
 
 
+			var js:int=0;
+
 			for (i=0; i < dArr.length; i++) {
 
 				count++;
 				items=dArr[i];
 				var length:int=items.length;
+
+				js=0;
 				for (var n:int=0; n < length; n++) {
 					var info:PayPromotionItem=items[n];
 					if (-1 == currentType) {
@@ -254,10 +268,13 @@ package com.leyou.ui.ttsc {
 					}
 					var tinfo:TPayPromotion=TableManager.getInstance().getPayPromotion(info.id);
 					generateRender(info);
+
+					if (info.status == 1 && tinfo.showType == 1)
+						js++;
 				}
 				// 生成按钮
 				var btnInfo:TPayPromotion=TableManager.getInstance().getPayPromotion(items[0].id);
-				generateButton(btnInfo);
+				generateButton(btnInfo, js);
 			}
 
 			/**
@@ -319,18 +336,40 @@ package com.leyou.ui.ttsc {
 			}
 		}
 
-		private function generateButton(btnInfo:TPayPromotion):void {
+		private function generateButton(btnInfo:TPayPromotion, js:int=0):void {
 			var btn:ImgLabelButton=getButton(btnInfo.type);
 			if (null == btn) {
 //				var nbtn:TabButton = new TabButton("", "promotionTab", 0, null, "ui/wybq/"+btnInfo.btnUrl);
 //				var nbtn:TabButton=new TabButton("" + btnInfo.btn_des, "promotionTab", 0, null, "ui/common/" + btnInfo.btnUrl);
 //				var nbtn:TabButton=new TabButton("" + btnInfo.btn_des, "promotionTab", 0, null, "ui/common/" + btnInfo.btnUrl);
-				var nbtn:ImgLabelButton=new ImgLabelButton("ui/common/" + btnInfo.btnUrl, btnInfo.btn_des, 0, 0, FontEnum.getTextFormat("message2"));
+				btn=new ImgLabelButton("ui/common/" + btnInfo.btnUrl, btnInfo.btn_des, 0, 0, FontEnum.getTextFormat("message2"));
 
-				nbtn.addEventListener(MouseEvent.CLICK, onMouseClick);
-				nbtn.name="type" + btnInfo.type;
-				pane.addChild(nbtn);
-				tbuttons.push(nbtn);
+				btn.addEventListener(MouseEvent.CLICK, onMouseClick);
+				btn.name="type" + btnInfo.type;
+				pane.addChild(btn);
+				tbuttons.push(btn);
+			}
+
+			var btnWidget:RightTopWidget;
+
+			if (js > 0) {
+				btnWidget=btn.getChildByName("btnWidget") as RightTopWidget;
+				if (btnWidget == null) {
+					btnWidget=new RightTopWidget();
+					btnWidget.setpushContent();
+					btn.addChild(btnWidget);
+					btnWidget.x=btn.width - 55;
+//					btnWidget.y=0;
+
+					btnWidget.name="btnWidget";
+				}
+
+				btnWidget.setNum(js);
+			} else {
+
+				btnWidget=btn.getChildByName("btnWidget") as RightTopWidget;
+				if (btnWidget != null)
+					btn.removeChild(btnWidget);
 			}
 		}
 
@@ -401,7 +440,8 @@ package com.leyou.ui.ttsc {
 					break;
 			}
 
-			var payarr:Array=TableManager.getInstance().getPayPromotionByType(type);
+
+			var payarr:Array=TableManager.getInstance().getPayPromotionByType(type, this.minfo.st);
 			payarr.sortOn("id", Array.CASEINSENSITIVE | Array.NUMERIC);
 
 			var pay:TPayPromotion=payarr[0];

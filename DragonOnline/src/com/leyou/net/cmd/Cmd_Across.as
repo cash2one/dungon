@@ -2,6 +2,8 @@ package com.leyou.net.cmd {
 	import com.ace.config.Core;
 	import com.ace.enum.WindowEnum;
 	import com.ace.gameData.manager.DataManager;
+	import com.ace.gameData.manager.MapInfoManager;
+	import com.ace.gameData.manager.MyInfoManager;
 	import com.ace.manager.UIManager;
 	import com.ace.manager.UIOpenBufferManager;
 	import com.leyou.enum.CmdEnum;
@@ -113,15 +115,20 @@ package com.leyou.net.cmd {
 		}
 
 		public static function sm_ACROSS_K(obj:Object):void {
+			
+//			trace(MapInfoManager.getInstance().type,MapInfoManager.getInstance().sceneId)
+			if(MapInfoManager.getInstance().type==18)
+				return ;
+			
 			DataManager.getInstance().crossServerData.loadData_K(obj);
 			UIOpenBufferManager.getInstance().removeCmd(WindowEnum.CROSS_SERVER, CmdEnum.SM_ACROSS_K, !DataManager.getInstance().crossServerData.isOpen());
 			if (UIManager.getInstance().isCreate(WindowEnum.CROSS_SERVER)) {
 				UIManager.getInstance().crossServerWnd.setMoudle(DataManager.getInstance().crossServerData.isOpen() || Core.isTaiwan);
-				if (DataManager.getInstance().crossServerData.isOpen()) {
-					UIOpenBufferManager.getInstance().open(WindowEnum.CROSS_SERVER);
-				} else {
+//				if (DataManager.getInstance().crossServerData.isOpen()) {
+//					UIOpenBufferManager.getInstance().open(WindowEnum.CROSS_SERVER);
+//				} else {
 					UIManager.getInstance().crossServerWnd.updateServerOpenPage();
-				}
+//				}
 			}
 		}
 

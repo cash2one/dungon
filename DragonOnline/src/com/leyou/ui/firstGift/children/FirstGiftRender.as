@@ -1,11 +1,6 @@
 package com.leyou.ui.firstGift.children
 {
 	import com.ace.ui.auto.AutoSprite;
-	import com.greensock.TweenMax;
-	import com.greensock.easing.Back;
-	import com.leyou.ui.firstGift.FirstGiftWnd;
-	
-	import flash.events.MouseEvent;
 	
 	public class FirstGiftRender extends AutoSprite
 	{

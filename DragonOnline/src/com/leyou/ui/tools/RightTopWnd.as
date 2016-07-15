@@ -159,17 +159,19 @@ package com.leyou.ui.tools {
 			packButton("blackStoreBtn", btnIdx++, 3);
 			packButton("kfjjBtn", btnIdx++, 3);
 			packButton("kfhdBtn", btnIdx++, 3);
-			packButton("firstPayBtn", btnIdx++, 3);
-			packButton("areaFirstPayBtn", btnIdx++, 3);
+			packButton("groupBuyBtn", btnIdx++, 3);
 			packButton("abidePayBtn", btnIdx++, 3);
 			packButton("saleBtn", btnIdx++, 3);
-
-
+			
 			packButton("superReturnBtn", btnIdx++, 3);
 			packButton("firstReturnBtn", btnIdx++, 3);
-			packButton("groupBuyBtn", btnIdx++, 3);
+			
 			packButton("payRankBtn", btnIdx++, 3);
 			packButton("qqYellowBtn", btnIdx++, 3);
+			packButton("firstPayBtn", btnIdx++, 3);
+			packButton("todayAwardBtn", btnIdx++, 3);
+			packButton("areaFirstPayBtn", btnIdx++, 3);
+			
 			packButton("taiwanBtn", btnIdx++, 3);
 			packButton("costBtn", btnIdx++, 3);
 			packButton("combineBtn", btnIdx++, 3);
@@ -396,14 +398,18 @@ package com.leyou.ui.tools {
 		 * @param v
 		 *
 		 */
-		public function updateDDSC(v:Boolean):void {
+		public function updateDDSC(v:Boolean, v2:Boolean):void {
 			var fuliW:RightTopWidget=getWidget("firstPayBtn");
 
 			if (v) {
 				fuliW.setText(PropUtils.getStringById(1964));
-				fuliW.setEffect(true)
 			} else {
 				fuliW.setText("");
+			}
+
+			if (v2) {
+				fuliW.setEffect(true)
+			} else {
 				fuliW.setEffect(false)
 			}
 		}
@@ -459,6 +465,9 @@ package com.leyou.ui.tools {
 					break;
 				case "wybq":
 					UIOpenBufferManager.getInstance().open(WindowEnum.TASK_MARKET);
+					break;
+				case "wsp":
+					UIOpenBufferManager.getInstance().open(WindowEnum.WORSHIP);
 					break;
 			}
 		}
@@ -777,6 +786,14 @@ package com.leyou.ui.tools {
 					} else
 						UIManager.getInstance().taskTrack.delOtherTrack(TaskEnum.taskLevel_tttLine);
 					break;
+				case "wsp":
+					if (count > 0) {
+						var wsp:String=StringUtil.substitute(PropUtils.getStringById(2448), count);
+						arr=[PropUtils.getStringById(2425), "<a href='event:other_wsp--wsp'>" + PropUtils.getStringById(2475) + "</a>", wsp, "", callback];
+						UIManager.getInstance().taskTrack.updateOtherTrack(TaskEnum.taskLevel_worshipLine, arr);
+					} else
+						UIManager.getInstance().taskTrack.delOtherTrack(TaskEnum.taskLevel_worshipLine);
+					break;
 				case "pet":
 
 					MyInfoManager.getInstance().mercenaryClose=values[1][1];
@@ -784,6 +801,9 @@ package com.leyou.ui.tools {
 					MyInfoManager.getInstance().mercenaryCount=count;
 
 					Cmd_Tsk.cmTaskQuest();
+					break;
+				case "hb":
+					UIManager.getInstance().toolsWnd.setRedPackageBtnEffect(count);
 					break;
 			}
 		}
@@ -1088,6 +1108,9 @@ package com.leyou.ui.tools {
 				case "v0":
 					UILayoutManager.getInstance().open(WindowEnum.CLIENT_WND);
 					break;
+				case "todayAwardBtn":
+					UILayoutManager.getInstance().open(WindowEnum.KF_HF_AWARD);
+					break;
 			}
 		}
 
@@ -1197,17 +1220,30 @@ package com.leyou.ui.tools {
 		 */
 		public function checkActiveIcon():void {
 			active("achievementBtn");
-//			active("keyBtn");
+			active("keyBtn");
 			active("lotteryBtn");
 			active("shopBtn");
 			active("investBtn");
 			active("guildBattleBtn");
-//			active("groupBuyBtn");
+//			active("todayAwardBtn");
+
+			if (ConfigEnum.function1 == 1)
+				active("groupBuyBtn");
+			else
+				deactive("groupBuyBtn");
+
+			if (ConfigEnum.function4 == 1)
+				active("saleBtn");
+			else
+				deactive("saleBtn");
+
 			active("sevenDayBtn");
 //			active("costBtn");
 //			active("saleBtn");
 //			active("kfhdBtn");
-			active("v0");
+//			active("v0");
+			
+			this.setEffect("areaFirstPayBtn",true);
 
 			// 腾讯平台
 			if (Core.isTencent) {
@@ -1216,6 +1252,7 @@ package com.leyou.ui.tools {
 					active("qqYellowBtn");
 				}
 			}
+			
 			var level:int=Core.me.info.level;
 			// 收集
 			if (level >= ConfigEnum.setin1) {
@@ -1265,7 +1302,7 @@ package com.leyou.ui.tools {
 			}
 			// 我要变强
 			if (level >= ConfigEnum.tobeStr1) {
-				active("tobeStrong");
+//				active("tobeStrong");
 			}
 			// 农场
 			if (level >= ConfigEnum.FarmOpenLevel) {
@@ -1383,7 +1420,7 @@ package com.leyou.ui.tools {
 			}
 
 			if (level >= ConfigEnum.FastTop1) {
-				active("copyRBtn");
+//				active("copyRBtn");
 			}
 
 			// 任务集市

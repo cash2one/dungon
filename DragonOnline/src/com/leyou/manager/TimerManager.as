@@ -24,6 +24,8 @@ package com.leyou.manager {
 		private var _timer:Timer;
 
 		public static var currentTime:int=0;
+		
+		public static var loginTime:int=getTimer();
 
 		public function TimerManager() {
 			_timer=new Timer(1000);

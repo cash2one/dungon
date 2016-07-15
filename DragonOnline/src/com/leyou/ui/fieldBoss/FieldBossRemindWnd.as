@@ -83,7 +83,7 @@ package com.leyou.ui.fieldBoss {
 						var content:String="        {1}<font color='#ff00'><u><a href='event:other_ycp--{2}'>" + PropUtils.getStringById(1570) + "</a></u></font>";
 						content=StringUtil.substitute(content, monsterInfo.name, bossId);
 						content=StringUtil.substitute(PropUtils.getStringById(2452),DataManager.getInstance().fieldBossData.lastCount);
-						var arr:Array=[PropUtils.getStringById(2423),"<a href='event:other_ycp--"+monsterInfo.name+"'>" + PropUtils.getStringById(2439) + "</a>", content, "", Cmd_YBS.callBack];
+						var arr:Array=[PropUtils.getStringById(2423),"<a href='event:other_ycp--"+monsterInfo.name+"'>" + PropUtils.getStringById(2439) + "</a>", content, "", Cmd_YBS.callBack2];
 						UIManager.getInstance().taskTrack.updateOtherTrack(TaskEnum.taskLevel_fieldbossCopyLine, arr);
 					} else {
 						DataManager.getInstance().fieldBossData.setRemind(0);

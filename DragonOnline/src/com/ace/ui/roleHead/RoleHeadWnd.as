@@ -195,7 +195,7 @@ package com.ace.ui.roleHead {
 			freshImg=getUIbyID("freshImg") as Image;
 			safeImg=getUIbyID("safeImg") as Image;
 			worldExpImg=getUIbyID("worldExpImg") as Image;
-			icons = new Vector.<Image>();
+			icons=new Vector.<Image>();
 			packContainer(vipImg);
 			icons.push(vipImg);
 //			packContainer(ifunImg);
@@ -238,6 +238,11 @@ package com.ace.ui.roleHead {
 				payBtn.addEventListener(MouseEvent.CLICK, onMouseClick);
 			}
 
+//			if(Core.isTencent){
+//				payBtn.setActive(false, 1, true);
+//				vipBtn.setActive(false, 1, true);
+//			}
+			
 			pfImgContainer=new Sprite();
 			pfImgContainer.addChild(pfVipImg);
 			addChild(pfImgContainer);
@@ -336,15 +341,15 @@ package com.ace.ui.roleHead {
 			img.parent.addChild(container);
 			container.addChild(img);
 		}
-		
-		public function resetPosition():void{
+
+		public function resetPosition():void {
 			var index:int;
-			var l:int = icons.length;
-			for(var n:int = 0; n < l; n++){
-				var spt:Image = icons[n];
-				if(null != spt && spt.visible){ 
-					spt.x = 91 + 31*index;
-					spt.y = 118;
+			var l:int=icons.length;
+			for (var n:int=0; n < l; n++) {
+				var spt:Image=icons[n];
+				if (null != spt && spt.visible) {
+					spt.x=91 + 31 * index;
+					spt.y=118;
 					index++;
 				}
 			}

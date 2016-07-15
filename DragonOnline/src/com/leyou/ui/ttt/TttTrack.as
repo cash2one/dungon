@@ -3,7 +3,9 @@ package com.leyou.ui.ttt {
 	import com.ace.enum.FontEnum;
 	import com.ace.enum.UIEnum;
 	import com.ace.gameData.manager.MapInfoManager;
+	import com.ace.gameData.manager.MyInfoManager;
 	import com.ace.gameData.manager.TableManager;
+	import com.ace.gameData.table.TDungeon_Base;
 	import com.ace.manager.EventManager;
 	import com.ace.manager.LibManager;
 	import com.ace.ui.auto.AutoSprite;
@@ -35,6 +37,11 @@ package com.leyou.ui.ttt {
 
 		private var currentLv:int=0;
 		private var time:int=0;
+
+		/**
+		 *通关时间
+		 */
+		private var Ttime:int=0;
 
 		public function TttTrack() {
 			super(LibManager.getInstance().getXML("config/ui/ttt/tttTrack.xml"));
@@ -75,7 +82,7 @@ package com.leyou.ui.ttt {
 
 
 		private function onNextClick(e:MouseEvent):void {
-			Cmd_Ttt.cmEnterCopy(this.currentLv + 1);
+			Cmd_Ttt.cmEnterCopy(this.currentLv);
 		}
 
 		/**
@@ -115,9 +122,10 @@ package com.leyou.ui.ttt {
 				this.monster2Lbl.text="";
 			}
 
-			if (this.currentLv != o.cfloor) {
-				TimerManager.getInstance().remove(exePkTime);
-			}
+//			if (this.currentLv == 0) {
+//				TimerManager.getInstance().remove(exePkTime);
+//				this.pkTimeLbl.text="00:00";
+//			}
 
 			this.timeLbl.text="" + com.leyou.utils.TimeUtil.getIntToTime(o.rt);
 
@@ -143,14 +151,11 @@ package com.leyou.ui.ttt {
 			if (this.time <= o.rt - 1 || this.time >= o.rt + 1)
 				this.time=o.rt;
 
+			this.Ttime=TableManager.getInstance().getTttCopyInfoBySceneId(int(MapInfoManager.getInstance().sceneId)).D_Lasttime;
 //			trace(this.time,"7777777777",getTimer(),getTimer()/1000);
 
 			TimerManager.getInstance().remove(exeTime);
 			TimerManager.getInstance().add(exeTime);
-
-			this.pkTimeLbl.text="00:00";
-			TimerManager.getInstance().add(exePkTime);
-
 
 			this.pkNextBtn.visible=false;
 
@@ -159,6 +164,10 @@ package com.leyou.ui.ttt {
 			if (this.currentLv < ConfigEnum.Babel2 && ((o.m.length == 1 && o.m[0].cc == o.m[0].mc) || (o.m.length > 1 && o.m[1].cc == o.m[1].mc))) {
 				TimerManager.getInstance().add(exeBtnTime);
 				this.pkNextBtn.visible=true;
+
+//				TimerManager.getInstance().remove(exePkTime);
+			} else {
+//				TimerManager.getInstance().add(exePkTime);
 			}
 
 		}
@@ -170,7 +179,7 @@ package com.leyou.ui.ttt {
 			} else {
 				this.pkNextBtn.text=PropUtils.getStringById(2202) + "";
 				TimerManager.getInstance().remove(exeBtnTime);
-				Cmd_Ttt.cmEnterCopy(this.currentLv + 1);
+				Cmd_Ttt.cmEnterCopy(this.currentLv);
 			}
 
 		}
@@ -179,9 +188,11 @@ package com.leyou.ui.ttt {
 
 			if (this.time - i > 0) {
 				this.timeLbl.text="" + TimeUtil.getIntToTime(this.time - i);
+				this.pkTimeLbl.text="" + TimeUtil.getIntToTime(this.Ttime - (this.time - i));
 			} else {
 				this.time=0;
 				this.timeLbl.text="00:00";
+				this.pkTimeLbl.text="" + TimeUtil.getIntToTime(this.Ttime);
 				TimerManager.getInstance().remove(exeTime);
 			}
 
@@ -189,7 +200,8 @@ package com.leyou.ui.ttt {
 
 
 		private function exePkTime(i:int):void {
-			this.pkTimeLbl.text="" + TimeUtil.getIntToTime(i);
+			if (i > 0)
+				this.pkTimeLbl.text="" + TimeUtil.getIntToTime(this.time - i);
 		}
 
 		public function reSize():void {
@@ -201,8 +213,9 @@ package com.leyou.ui.ttt {
 
 		override public function hide():void {
 			super.hide();
-
+			TimerManager.getInstance().remove(exeTime);
 			TimerManager.getInstance().remove(exeBtnTime);
+			this.currentLv=0;
 		}
 
 	}

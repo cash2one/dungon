@@ -1,6 +1,7 @@
 package com.leyou.ui.convenientuse {
 	import com.ace.enum.UIEnum;
 	import com.ace.gameData.manager.DataManager;
+	import com.ace.gameData.manager.MyInfoManager;
 	import com.ace.manager.GuideManager;
 	import com.ace.manager.LibManager;
 	import com.ace.manager.TimeManager;
@@ -14,8 +15,9 @@ package com.leyou.ui.convenientuse {
 	import com.leyou.enum.ConfigEnum;
 	import com.leyou.manager.TimerManager;
 	import com.leyou.net.cmd.Cmd_Bag;
+	import com.leyou.net.cmd.Cmd_Longz;
 	import com.leyou.ui.convenientuse.children.ConvenientGrid;
-
+	
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 
@@ -128,6 +130,9 @@ package com.leyou.ui.convenientuse {
 			switch (n) {
 				case "useBtn":
 					Cmd_Bag.cm_bagUse(grid.dataId, int(numLbl.text));
+					if (MyInfoManager.getInstance().bagItems[grid.dataId].aid == 32059) {
+						Cmd_Longz.cm_Longz_H(MyInfoManager.getInstance().name)
+					}
 					hide();
 					break;
 				case "maxBtn":
@@ -174,11 +179,11 @@ package com.leyou.ui.convenientuse {
 			x=UIEnum.WIDTH - width;
 			y=UIEnum.HEIGHT - height; // - 100;
 		}
-		
+
 		override public function get width():Number {
 			return 308;
 		}
-		
+
 		override public function get height():Number {
 			return 249;
 		}

@@ -94,11 +94,11 @@ package com.leyou.ui.guildBattle {
 		}
 
 		public override function get width():Number {
-			return 778;
+			return 858;
 		}
 
 		public override function get height():Number {
-			return 482;
+			return 544;
 		}
 
 		public function changeToIndex(index:int):void {

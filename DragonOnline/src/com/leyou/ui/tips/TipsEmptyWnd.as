@@ -1,13 +1,16 @@
 package com.leyou.ui.tips {
 
 	import com.ace.ICommon.ITip;
+	import com.ace.config.Core;
 	import com.ace.enum.FontEnum;
 	import com.ace.enum.ItemEnum;
+	import com.ace.enum.PlayerEnum;
 	import com.ace.gameData.manager.MyInfoManager;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.gameData.table.TEquipInfo;
 	import com.ace.gameData.table.TItemInfo;
 	import com.ace.gameData.table.TSuit;
+	import com.ace.loader.child.SwfLoader;
 	import com.ace.manager.LibManager;
 	import com.ace.tools.ScaleBitmap;
 	import com.ace.ui.auto.AutoSprite;
@@ -107,6 +110,7 @@ package com.leyou.ui.tips {
 		private var standlineImg:Image;
 		private var gemlineImg:Image;
 		private var eleBg:Image;
+		private var modeSwf:SwfLoader;
 
 		/**
 		 * 基础模型
@@ -130,6 +134,8 @@ package com.leyou.ui.tips {
 
 		private var labelHeight:Number=16;
 		private var lineHeight:Number=5;
+		private var priceY:Number=5;
+
 
 		public function TipsEmptyWnd() {
 			super(LibManager.getInstance().getXML("config/ui/tips/TipsEquipWnd.xml"));
@@ -339,6 +345,8 @@ package com.leyou.ui.tips {
 
 			this.addChild(this.bindImg);
 
+			this.modeSwf=new SwfLoader();
+			this.addChild(this.modeSwf);
 		}
 
 		private function setArrawDown(v:Boolean):void {
@@ -559,6 +567,8 @@ package com.leyou.ui.tips {
 				this.dtimeLbl.visible=false;
 				this.dtimeLbl.y=this.getFunLbl.y + this.getFunLbl.height - this.dtimeLbl.height;
 			}
+			
+			this.priceY=this.dtimeLbl.y + this.dtimeLbl.height + 10;
 
 //			this.dtimeLbl.visible=true;
 //			this.dtimeLbl.border=true;
@@ -990,6 +1000,48 @@ package com.leyou.ui.tips {
 					this.dtimeLbl.y=this.getFunLbl.y + this.getFunLbl.height - this.dtimeLbl.height;
 				}
 
+//				this.dtimeLbl.visible=true;
+//				this.dtimeLbl.opaqueBackground=0xff0000;
+				this.priceY=this.dtimeLbl.y + this.dtimeLbl.height + 10;
+				this.modeSwf.visible=false;
+
+				if (tinfo.pnfId != "") {
+					this.modeSwf.visible=true;
+
+					var pstr:String;
+					var pid:int;
+					var h:int;
+					if (tinfo.pnfId.indexOf("|") > -1) {
+
+						pstr=tinfo.pnfId.split(",")[1];
+						pid=pstr.split("|")[Core.me.info.profession - 1];
+						h=tinfo.pnfId.split(",")[0];
+
+						this.priceY+=h;
+
+						this.modeSwf.y=this.priceY; // - 60;
+						priceY+=20;
+					} else {
+
+						pid=tinfo.pnfId.split(",")[1];
+						h=tinfo.pnfId.split(",")[0];
+
+						this.priceY+=h;
+
+						if (String(tinfo.id).substring(0, 2) == "41")
+							this.modeSwf.y=this.priceY - 80;
+						else
+							this.modeSwf.y=this.priceY - 60;
+					}
+
+					this.modeSwf.update(pid);
+					this.modeSwf.playAct(PlayerEnum.ACT_STAND, 4);
+
+					if (String(tinfo.id).substring(0, 2) == "41")
+						this.modeSwf.x=30;
+					else
+						this.modeSwf.x=120;
+				}
 
 				var num:int=int(this.tipsInfo.moneyNum);
 				if (num == 0) {
@@ -998,7 +1050,8 @@ package com.leyou.ui.tips {
 
 				this.updatePrice(num, this.tipsInfo.moneyType, this.tipsInfo.istype);
 
-				this.bgSc.height=this.priceSc.y;
+				this.bgSc.height=priceY;
+//				this.bgSc.height=this.priceSc.y;
 			}
 		}
 
@@ -1072,7 +1125,7 @@ package com.leyou.ui.tips {
 				this.moneyNameLbl.text=PropUtils.getStringById(1919) + ":";
 			}
 
-			this.priceSc.y=this.dtimeLbl.y + this.dtimeLbl.height + 10;
+			this.priceSc.y=this.priceY;
 //			this.priceSc.y=this.getFunLbl.y + 40;
 			this.moneyNameLbl.y=this.priceSc.y + 4;
 			this.priceLbl.y=this.priceSc.y + 7;

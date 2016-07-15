@@ -83,6 +83,8 @@ package com.ace.gameData.manager {
 		
 		public var payPromotionData_III:PayPromotionDataII; // 开服活动
 		
+		public var payPromotionData_IIII:PayPromotionDataII; // 开服每日有礼    7.合服每日有礼
+		
 		public var tobeStrongData:TobeStrongData; // 我要变强
 		
 		public var sevenDayData:SevenDayData; // 七日任务
@@ -205,6 +207,7 @@ package com.ace.gameData.manager {
 //			this.payPromotionData=new PayPromotionData();
 			this.payPromotionData_II=new PayPromotionDataII();
 			this.payPromotionData_III=new PayPromotionDataII();
+			this.payPromotionData_IIII=new PayPromotionDataII();
 			this.tobeStrongData=new TobeStrongData();
 			this.sevenDayData=new SevenDayData();
 			this.investData=new InvestData();

@@ -22,6 +22,7 @@ package com.leyou.ui.shiyi.childs {
 		private var priceImg:Image;
 		private var useCb:CheckBox;
 		private var bgImg:Image;
+		private var stImg:Image;
 		private var swfloader:SwfLoader;
 
 		public var sortIndex:int=0;
@@ -40,14 +41,17 @@ package com.leyou.ui.shiyi.childs {
 		private function init():void {
 
 			this.priceImg=this.getUIbyID("priceImg") as Image;
-			this.useCb=this.getUIbyID("useCb") as CheckBox;
+//			this.useCb=this.getUIbyID("useCb") as CheckBox;
 			this.bgImg=this.getUIbyID("bgImg") as Image;
+			this.stImg=this.getUIbyID("stImg") as Image;
 			this.swfloader=this.getUIbyID("swfloader") as SwfLoader;
 
-			this.useCb.addEventListener(MouseEvent.CLICK, onClick);
+			this.stImg.visible=false;
+//			this.useCb.addEventListener(MouseEvent.CLICK, onClick);
 			this.addEventListener(MouseEvent.CLICK, onClick);
 			this.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
 			this.addEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
+			this.setSt(false);
 		}
 
 		private function onMouseOver(e:MouseEvent):void {
@@ -61,28 +65,38 @@ package com.leyou.ui.shiyi.childs {
 		}
 
 		private function onClick(e:MouseEvent):void {
-			
+
 			if (selectStid != null && selectStid != this)
 				selectStid.setSt(false);
-			
+
 			selectStid=this;
 			this.setSt(true);
-			
+
 			if (e.target == this.useCb) {
 
 				if (this.useCb.isOn) {
 
-					if (UIManager.getInstance().shiyeWnd.getTitleCount() >= 3) {
-						var str:String=StringUtil.substitute(TableManager.getInstance().getSystemNotice(23400).content, [TableManager.getInstance().getVipInfo(27).getVipValue(Core.me.info.vipLv)]);
+					var cnum:int=TableManager.getInstance().getVipInfo(27).getVipValue(Core.me.info.vipLv);
+					if (cnum > 1 && UIManager.getInstance().shiyeWnd.getTitleCount() >= cnum) {
+//						if (cnum > 1) {
+						var str:String=StringUtil.substitute(TableManager.getInstance().getSystemNotice(23400).content, [cnum]);
 						PopupManager.showAlert(str, null, false, "shiyialert");
+//						}
 						this.useCb.turnOff();
-					} else
+					} else {
+
+						var arr:Array=UIManager.getInstance().shiyeWnd.getOtherCount();
+						if (arr.length > 0 && cnum == 1) {
+							Cmd_Syj.cmUninstall(arr[0]);
+						}
+
 						Cmd_Syj.cmInstall(this.info.typeId);
+					}
 				} else
 					Cmd_Syj.cmUninstall(this.info.typeId);
 
 			} else {
-				
+
 				Cmd_Syj.cmOpen(this.info.typeId);
 			}
 
@@ -126,11 +140,12 @@ package com.leyou.ui.shiyi.childs {
 		}
 
 		public function setBgState(v:Boolean):void {
-			if (v)
-				this.useCb.turnOn();
-			else
-				this.useCb.turnOff();
+//			if (v)
+//				this.useCb.turnOn();
+//			else
+//				this.useCb.turnOff();
 
+			this.stImg.visible=v;
 
 //			this.setSt(v);
 		}

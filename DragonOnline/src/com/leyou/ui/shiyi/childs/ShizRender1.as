@@ -21,6 +21,7 @@ package com.leyou.ui.shiyi.childs {
 	import com.ace.utils.PnfUtil;
 	import com.ace.utils.StringUtil;
 	import com.leyou.data.tips.TipsInfo;
+	import com.leyou.manager.PopupManager;
 	import com.leyou.net.cmd.Cmd_Syj;
 	import com.leyou.utils.ItemUtil;
 	import com.leyou.utils.PropUtils;
@@ -53,6 +54,8 @@ package com.leyou.ui.shiyi.childs {
 		private var bigAvater:BigAvatar;
 
 		private var currentTabInfo:Object;
+
+		private var st:int;
 
 		public function ShizRender1() {
 			super(LibManager.getInstance().getXML("config/ui/shiyi/shizRender1.xml"));
@@ -122,8 +125,43 @@ package com.leyou.ui.shiyi.childs {
 		}
 
 		private function onClick(e:MouseEvent):void {
-			if (this.selectIndex > 0)
-				Cmd_Syj.cmBuy(this.selectIndex);
+			if (this.st == 0) {
+				if (this.selectIndex > 0)
+					Cmd_Syj.cmBuy(this.selectIndex);
+			} else if (this.st == 1) {
+
+				var cnum:int=TableManager.getInstance().getVipInfo(27).getVipValue(Core.me.info.vipLv);
+				if (cnum > 1 && UIManager.getInstance().shiyeWnd.getTitleCount() >= cnum) {
+					//						if (cnum > 1) {
+					var str:String=StringUtil.substitute(TableManager.getInstance().getSystemNotice(23400).content, [cnum]);
+					PopupManager.showAlert(str, null, false, "shiyialert");
+						//						}
+						//					this.useCb.turnOff();
+				} else {
+
+					var tinfo:TTitle=TableManager.getInstance().getTitleByID(this.selectIndex);
+					var arr:Array=UIManager.getInstance().shiyeWnd.getOtherCount();
+					if (tinfo.Sz_type != 1) {
+						if (arr.length > 0) {
+							Cmd_Syj.cmUninstall(arr[0]);
+						}
+					} else {
+						if (arr.length >= 0 && UIManager.getInstance().shiyeWnd.getTitleCount() >= cnum) {
+							Cmd_Syj.cmUninstall(arr[0]);
+						}
+					}
+
+
+
+//					}
+
+					Cmd_Syj.cmInstall(this.selectIndex);
+				}
+
+
+			} else if (this.st == 2) {
+				Cmd_Syj.cmUninstall(this.selectIndex);
+			}
 		}
 
 		private function onMouseMove(e:MouseEvent):void {
@@ -146,6 +184,7 @@ package com.leyou.ui.shiyi.childs {
 		public function updateInfo(o:Object):void {
 
 			this.selectIndex=o.sinfo[0];
+			this.st=o.sinfo[1];
 
 			var obj:Object;
 			for each (obj in this.itemArr) {
@@ -215,7 +254,7 @@ package com.leyou.ui.shiyi.childs {
 						this.effSwf.visible=false;
 						this.priceImg.updateBmp("scene/title/" + tinfo.Bottom_Pic + ".png");
 					}
-					
+
 					this.addChild(this.priceImg);
 					this.addChild(this.effSwf);
 
@@ -392,6 +431,18 @@ package com.leyou.ui.shiyi.childs {
 
 			} else {
 				this.buyBtn.visible=false;
+			}
+
+			if (o.sinfo[1] > 0) {
+
+				this.buyBtn.visible=true;
+
+				if (o.sinfo[1] == 1) {
+					this.buyBtn.text="" + PropUtils.getStringById(2492);
+				} else {
+					this.buyBtn.text="" + PropUtils.getStringById(2493);
+				}
+
 			}
 
 			if (tinfo.Sz_type == 1)

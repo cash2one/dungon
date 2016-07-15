@@ -82,8 +82,8 @@ package com.ace.manager {
 				gmsg=new GuildMessage();
 				this.gmsgArr[tinfo.id]=(gmsg);
 				LayerManager.getInstance().windowLayer.addChild(gmsg);
-				gmsg.show();
-				gmsg.updateInfo(tinfo);
+				 
+				gmsg.showPanel(tinfo);
 
 			}
 
@@ -101,8 +101,8 @@ package com.ace.manager {
 				gmsg=new GuildMessage();
 				this.gmsgArr[tinfo.id]=(gmsg);
 				LayerManager.getInstance().windowLayer.addChild(gmsg);
-				gmsg.show();
-				gmsg.updateInfo(tinfo);
+				 
+				gmsg.showPanel(tinfo);
 
 //			}
 
@@ -117,8 +117,7 @@ package com.ace.manager {
 			gmsg=new GuildMessage();
 			this.gmsgArr[tinfo.id]=(gmsg);
 			LayerManager.getInstance().windowLayer.addChild(gmsg);
-			gmsg.show();
-			gmsg.updateInfo(tinfo);
+			gmsg.showPanel(tinfo);
 
 		}
 
@@ -133,8 +132,7 @@ package com.ace.manager {
 				gmsg=new GuildMessage();
 				this.gmsgArr[tinfo.id]=(gmsg);
 				LayerManager.getInstance().windowLayer.addChild(gmsg);
-				gmsg.show();
-				gmsg.updateInfo(tinfo);
+				gmsg.showPanel(tinfo);
 			}
 
 		}
@@ -151,8 +149,7 @@ package com.ace.manager {
 				gmsg=new GuildMessage();
 				this.gmsgArr[tinfo.id]=(gmsg);
 				LayerManager.getInstance().windowLayer.addChild(gmsg);
-				gmsg.show();
-				gmsg.updateInfo(tinfo);
+				gmsg.showPanel(tinfo);
 			}
 
 		}
@@ -174,8 +171,7 @@ package com.ace.manager {
 				gmsg=new GuildMessage();
 				this.gmsgArr[tinfo.id]=(gmsg);
 				LayerManager.getInstance().windowLayer.addChild(gmsg);
-				gmsg.show();
-				gmsg.updateInfo(tinfo);
+				gmsg.showPanel(tinfo);
 			}
 		}
 

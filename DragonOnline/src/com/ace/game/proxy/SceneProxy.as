@@ -50,6 +50,8 @@ package com.ace.game.proxy {
 			if (Core.me.info.idTag != living.info.idTag) {
 				return;
 			}
+			
+			UIManager.getInstance().smallMapWnd.setRankState();
 			// 便捷换装
 			ConvenientUseManager.getInstance().checkAvailable();
 			// 右上角图标激活

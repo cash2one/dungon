@@ -52,12 +52,12 @@ package com.leyou.enum {
 		 *剧情副本 ------------附加
 		 */
 		public static var taskLevel_storeCopyLine:int=9;
-		
+
 		/**
 		 *  剧情抽奖-----------
-		 */		
+		 */
 		public static var taskLevel_storeCopylotteryLine:int=10;
-		
+
 		/**
 		 *签到 ------------附加
 		 */
@@ -67,27 +67,27 @@ package com.leyou.enum {
 		 *在线奖励 ------------附加
 		 */
 		public static var taskLevel_lineRewardLine:int=12;
-		
+
 		/**
 		 *变强奖励 ------------附加
 		 */
 		public static var taskLevel_powerfulRewardLine:int=13;
-		
+
 		/**
 		 *通天挑战 ------------附加
 		 */
 		public static var taskLevel_tttLine:int=14;
-		
+
 		/**
 		 *组队副本 ------------附加
 		 */
 		public static var taskLevel_teamCopyLine:int=15;
-		
+
 		/**
 		 *boss ------------附加
 		 */
 		public static var taskLevel_bossCopyLine:int=16;
-		
+
 		/**
 		 *普通boss ------------附加
 		 */
@@ -102,17 +102,17 @@ package com.leyou.enum {
 		 *竞技场 ------------附加
 		 */
 		public static var taskLevel_arenaLine:int=19;
-		
+
 		/**
 		 *军衔奖励 ------------附加
 		 */
 		public static var taskLevel_militaryLine:int=20;
-		
+
 		/**
 		 *押运 ------------附加
 		 */
 		public static var taskLevel_deliveryLine:int=21;
-		
+
 		/**
 		 *灌溉神树 ------------附加
 		 */
@@ -122,28 +122,33 @@ package com.leyou.enum {
 		 *农场 ------------附加
 		 */
 		public static var taskLevel_farmGetLine:int=23;
-		
+
 		/**
 		 * 收集----------------附加
 		 */
 		public static var taskLevel_collectLine:int=24;
-		
+
 		/**
 		 *练级 ------------附加
 		 */
 		public static var taskLevel_levelingLine:int=25;
-		
+
 		/**
 		 *离线经验 ------------附加
 		 */
 		public static var taskLevel_offlineExpLine:int=26;
-		
+
 		/**
 		 *农场 种植------------附加
 		 */
 		public static var taskLevel_farmPlantLine:int=27;
-		
-		
+
+		/**
+		 * 膜拜------------附加
+		 */
+		public static var taskLevel_worshipLine:int=28;
+
+
 		/**==========================================下面是过期的===================================================================*/
 
 		/**

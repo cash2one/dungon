@@ -68,6 +68,14 @@ package com.leyou.ui.boss {
 			this.x=UIEnum.WIDTH - this.width >> 1;
 			this.y=UIEnum.HEIGHT - this.height >> 1;
 		}
+		
+		override public function get width():Number {
+			return 884;
+		}
+		
+		override public function get height():Number {
+			return 544;
+		}
 
 		protected function onTabChange(event:Event):void {
 			if (bossTabBar.turnOnIndex == _currentIndex) {
@@ -100,6 +108,8 @@ package com.leyou.ui.boss {
 			
 			Cmd_Act.cmActInit();
 			UIManager.getInstance().pkCopyWnd.show();
+			
+			this.bossTabBar.turnToTab(0);
 		}
 
 		public function updateLowBoss():void {

@@ -7,13 +7,15 @@ package com.leyou.ui.welfare {
 	import com.ace.ui.tabbar.TabbarModel;
 	import com.ace.ui.tabbar.children.TabBar;
 	import com.leyou.net.cmd.Cmd_Welfare;
+	import com.leyou.ui.tools.child.RightTopWidget;
 	import com.leyou.ui.welfare.child.page.WelfareGetBackPage;
 	import com.leyou.ui.welfare.child.page.WelfareKeyPage;
 	import com.leyou.ui.welfare.child.page.WelfareLoginPage;
 	import com.leyou.ui.welfare.child.page.WelfareLvPage;
 	import com.leyou.ui.welfare.child.page.WelfareOfflinePage;
 	import com.leyou.ui.welfare.child.page.WelfareTimePage;
-	
+	import com.leyou.utils.PropUtils;
+
 	import flash.display.DisplayObject;
 	import flash.events.Event;
 
@@ -49,6 +51,8 @@ package com.leyou.ui.welfare {
 
 		private var lock:Boolean;
 
+		private var awardArr:Array=[];
+
 		public function WelfareView() {
 			super(LibManager.getInstance().getXML("config/ui/welfareWnd.xml"));
 			init();
@@ -78,6 +82,21 @@ package com.leyou.ui.welfare {
 			tabBar.addToTab(welfareOutline, 3);
 			tabBar.addToTab(welfareGetBack, 4);
 			tabBar.addToTab(welfareKey, 5);
+
+
+			var awardIcon:RightTopWidget;
+
+			for (var i:int=0; i < 4; i++) {
+
+				awardIcon=new RightTopWidget();
+				awardIcon.setpushContent();
+				tabBar.getTabButton(i).addChild(awardIcon);
+				awardIcon.x=tabBar.getTabButton(i).width - 25;
+
+				awardIcon.setText(PropUtils.getStringById(1964));
+				this.awardArr.push(awardIcon);
+			}
+
 		}
 
 		public override function get width():Number {
@@ -93,20 +112,24 @@ package com.leyou.ui.welfare {
 			tabBar.turnToTab(tindex);
 		}
 		
+		public function updateAwardIcon(i:int, v:Boolean):void {
+			this.awardArr[i].visible=v;
+		}
+
 		override public function getUIbyID(id:String):DisplayObject {
 			var ds:DisplayObject=super.getUIbyID(id);
-			
+
 			if (ds == null)
 				ds=welfareTime.getUIbyID(id);
-			
+
 			return ds;
 		}
-		
+
 		public function getUIbyID2(id:String):DisplayObject {
 			var ds:DisplayObject;
-			 
+
 			ds=welfareLv.gethasReward().getUIbyID(id);
-			 
+
 			return ds;
 		}
 
@@ -186,8 +209,8 @@ package com.leyou.ui.welfare {
 
 		public override function hide():void {
 			super.hide();
-			
-			GuideArrowDirectManager.getInstance().delArrow(WindowEnum.WELFARE+"");
+
+			GuideArrowDirectManager.getInstance().delArrow(WindowEnum.WELFARE + "");
 			GuideManager.getInstance().removeGuide(48);
 //			GuideManager.getInstance().removeGuide(49);
 		}

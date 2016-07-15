@@ -13,7 +13,7 @@ package com.leyou.net.cmd {
 
 		private static var movePos:int=-1;
 		public static var moveTPos:int=-1;
-		
+
 		public function Cmd_Store() {
 
 		}
@@ -198,16 +198,22 @@ package com.leyou.net.cmd {
 
 					MyInfoManager.getInstance().storeItems[oitem.pos]=null;
 					UIManager.getInstance().storageWnd.updatOneGrid(oitem.pos);
-				}
+				} else {
 
-				MyInfoManager.getInstance().addStore(tinfo);
-				UIManager.getInstance().storageWnd.updatOneGrid(tinfo.pos);
+					if (o.s.length == 2) {
+						movePos=-1;
+							//						moveTPos2=moveTPos=movePos2=-1;
+					}
+
+					MyInfoManager.getInstance().addStore(tinfo);
+					UIManager.getInstance().storageWnd.updatOneGrid(tinfo.pos);
+				}
 			}
 
 			UIManager.getInstance().storageWnd.currentItemCount=MyInfoManager.getInstance().getStoreNum();
 			UIManager.getInstance().storageWnd.updateItemCount();
 
-//			UIManager.getInstance().storageWnd.refresh();
+			UIManager.getInstance().storageWnd.refresh();
 		}
 
 		public static function sm_store_Q(o:Object):void {
@@ -221,22 +227,22 @@ package com.leyou.net.cmd {
 				}
 			}
 		}
-		
+
 		/**
 		 *--------------------------------------------------------------------------------
 开启格子成功
 下行:bag|{"mk":"Z",  "t":num, "hp":num, "exp":num}
-    --  t： 背包类型 (1 :人物背包  2：仓库)
-    -- hp 生命
-    -- exp 经验
- 
-		 * @param o
-		 * 
-		 */		
+--  t： 背包类型 (1 :人物背包  2：仓库)
+-- hp 生命
+-- exp 经验
+
+	 * @param o
+		  *
+		 */
 		public static function sm_store_Z(o:Object):void {
 			if (o != null) {
 				UIManager.getInstance().openFun(FunOpenEnum.STORAGE_GRID); //,openFunc);
-				
+
 //				function openFunc():void{
 //					UILayoutManager.getInstance().show(WindowEnum.STOREGE);
 //				}
@@ -256,8 +262,8 @@ package com.leyou.net.cmd {
 		 * @param num
 		 *@param st 0,非绑定元宝;1,绑定元宝
 		 */
-		public static function cm_storeExtendsGrid(num:int=1,st:int=0):void {
-			NetGate.getInstance().send("bag|2|K" + num+","+st);
+		public static function cm_storeExtendsGrid(num:int=1, st:int=0):void {
+			NetGate.getInstance().send("bag|2|K" + num + "," + st);
 		}
 
 		/**

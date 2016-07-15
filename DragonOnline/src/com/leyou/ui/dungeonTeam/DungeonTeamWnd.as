@@ -5,6 +5,7 @@ package com.leyou.ui.dungeonTeam {
 	import com.ace.enum.UIEnum;
 	import com.ace.enum.WindowEnum;
 	import com.ace.gameData.manager.MapInfoManager;
+	import com.ace.gameData.manager.MyInfoManager;
 	import com.ace.gameData.manager.TableManager;
 	import com.ace.manager.GuideManager;
 	import com.ace.manager.LayerManager;
@@ -163,11 +164,11 @@ package com.leyou.ui.dungeonTeam {
 			Cmd_SCP.cm_SCP_I();
 			//------------------------------------------------------------
 			// WFH添加
-			storyCopy.showGuide();
-			bossCopy.removeGuide();
-			expCopy.removeGuide();
-			GuideManager.getInstance().showGuide(116, dungeonTeamTabbar.getTabButton(1));
-			GuideManager.getInstance().showGuide(118, dungeonTeamTabbar.getTabButton(4));
+//			storyCopy.showGuide();
+//			bossCopy.removeGuide();
+//			expCopy.removeGuide();
+//			GuideManager.getInstance().showGuide(116, dungeonTeamTabbar.getTabButton(1));
+//			GuideManager.getInstance().showGuide(118, dungeonTeamTabbar.getTabButton(4));
 			//------------------------------------------------------------
 
 			if (Core.me.info.level >= ConfigEnum.TeamDungeon1) {
@@ -180,6 +181,15 @@ package com.leyou.ui.dungeonTeam {
 			this.dungeonTeamTabbar.setTabVisible(3, false);
 
 			GuideManager.getInstance().removeGuide(111);
+			this.dungeonTeamTabbar.turnToTab(0);
+			
+			if (!MyInfoManager.getInstance().isTaskOk && MyInfoManager.getInstance().currentTaskId == 29)
+				TweenLite.delayedCall(ConfigEnum.autoTask3, this.autoTaskComplete);
+		}
+		
+		private function autoTaskComplete():void {
+			if (this.dungeonTeamTabbar.turnOnIndex == 0 && this.visible)
+				this.storyCopy.dispatAutoTaskEvent();
 		}
 
 		override public function sendOpenPanelProtocol(... parameters):void {

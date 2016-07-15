@@ -1,5 +1,6 @@
 package com.leyou.net.cmd {
 
+	import com.ace.config.Core;
 	import com.ace.enum.WindowEnum;
 	import com.ace.gameData.manager.MyInfoManager;
 	import com.ace.manager.UILayoutManager;
@@ -56,7 +57,7 @@ st  -- 状态(0不可领取,1可领取,2已领取)
 
 			if (UIManager.getInstance().isCreate(WindowEnum.FIRST_PAY)) {
 				if (UIManager.getInstance().firstPay.flyItem()) {
-//					UIManager.getInstance().rightTopWnd.deactive("areaFirstPayBtn");
+					UIManager.getInstance().rightTopWnd.deactive("areaFirstPayBtn");
 					UIManager.getInstance().leftTopWnd.setFirstGift(false);
 //					return;
 				}
@@ -64,7 +65,8 @@ st  -- 状态(0不可领取,1可领取,2已领取)
 
 			if (0 == o.vst || ((1 == o.vst) && (1 == o.fst))) {
 
-//				UIManager.getInstance().rightTopWnd.active("areaFirstPayBtn");
+				UIManager.getInstance().rightTopWnd.active("areaFirstPayBtn");
+				UIManager.getInstance().rightTopWnd.setEffect("areaFirstPayBtn",true);
 				UIManager.getInstance().leftTopWnd.setFirstGift(true);
 
 				if (!UIManager.getInstance().isCreate(WindowEnum.FIRST_PAY)) {
@@ -88,9 +90,8 @@ st  -- 状态(0不可领取,1可领取,2已领取)
 					UIManager.getInstance().marketWnd.setADStateVip(true);
 				}
 
-//				UIManager.getInstance().rightTopWnd.deactive("areaFirstPayBtn");
+				UIManager.getInstance().rightTopWnd.deactive("areaFirstPayBtn");
 				UIManager.getInstance().leftTopWnd.setFirstGift(false);
-
 
 				if (!o.hasOwnProperty("jlist"))
 					return;
@@ -101,6 +102,12 @@ st  -- 状态(0不可领取,1可领取,2已领取)
 				UIManager.getInstance().topUpWnd.updateInfo(o);
 
 			}
+			
+			
+//			if(Core.isTencent)
+//				UIManager.getInstance().rightTopWnd.deactive("areaFirstPayBtn");
+				
+				UIManager.getInstance().leftTopWnd.setFirstGift(false);
 		}
 
 		public static function cm_DdscInit():void {

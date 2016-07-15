@@ -15,7 +15,8 @@ package com.leyou.ui.v3exp {
 
 		private var btnArr:Array=[];
 
-
+		private var cfst:int=-1;
+		private var cst:int=-1;
 
 		public function SellExpEffect() {
 			super(new XML());
@@ -23,6 +24,7 @@ package com.leyou.ui.v3exp {
 			this.hideBg();
 //			this.clsBtn.visible=false;
 			this.mouseChildren=true;
+			this.mouseEnabled=false;
 			this.allowDrag=false;
 		}
 
@@ -67,7 +69,7 @@ package com.leyou.ui.v3exp {
 
 			this.addChild(clsBtn);
 			this.clsBtn.x=288 - 40;
-			
+
 		}
 
 		private function onClick(e:MouseEvent):void {
@@ -101,6 +103,10 @@ package com.leyou.ui.v3exp {
 
 			if (DataManager.getInstance().vipData.status == null || o == null)
 				return;
+			
+			
+			if (this.cfst == o.fst && this.cst == DataManager.getInstance().vipData.status[0])
+				return;
 
 
 			if (2 != o.fst || DataManager.getInstance().vipData.status[0] == 0) {
@@ -130,6 +136,9 @@ package com.leyou.ui.v3exp {
 				this.btnArr[1].dispatchEvent(new MouseEvent(MouseEvent.CLICK));
 			}
 
+
+			this.cfst=o.fst;
+			this.cst=DataManager.getInstance().vipData.status[0];
 		}
 
 		public function updateBlackStore(o:Object):void {
